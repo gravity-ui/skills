@@ -49,12 +49,12 @@ Do not guess a name from memory.
 
   ```tsx
   import { Icon } from '@gravity-ui/uikit';
-  import { CheckIcon } from '@gravity-ui/icons';
+  import { ShieldCheck } from '@gravity-ui/icons';
   import '@gravity-ui/uikit/styles/styles.css';
 
-  <Icon data={CheckIcon} size={16} />
+  <Icon data={ShieldCheck} size={16} />
   ```
 
-- Pass the icon as an **object** (`data={CheckIcon}`), never as a string key.
+- Pass the icon as an **object** (`data={ShieldCheck}`), never as a string key.
 - For a custom or brand icon not in the set, import your own SVG and pass it to
   `Icon` — do not expect it to live in `@gravity-ui/icons`.
