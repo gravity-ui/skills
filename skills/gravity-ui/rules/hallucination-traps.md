@@ -169,7 +169,7 @@ import {ThemeProvider} from '@gravity-ui/uikit';
 every component renders unstyled. A custom theme file imported *before*
 `styles.css` is overwritten by it in the cascade — custom always comes after.
 
-### `theme` has four values — no `"default"`
+### `theme` takes five values — no `"default"` or `"auto"`
 
 ❌ `<ThemeProvider theme="default">`
 ❌ `<ThemeProvider theme="auto">`
