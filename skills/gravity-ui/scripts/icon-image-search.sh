@@ -29,18 +29,22 @@ shift || true
 
 # Content type: explicit flag wins, else infer from extension, default png.
 CTYPE="image/png"
+EXPLICIT=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
-    --png)        CTYPE="image/png" ;;
-    --jpeg|--jpg) CTYPE="image/jpeg" ;;
+    --png)        CTYPE="image/png";  EXPLICIT=1 ;;
+    --jpeg|--jpg) CTYPE="image/jpeg"; EXPLICIT=1 ;;
     *) echo "Unknown option: $1" >&2; exit 64 ;;
   esac
   shift
 done
-case "${IMAGE##*.}" in
-  jpg|JPG|jpeg|JPEG) CTYPE="image/jpeg" ;;
-  png|PNG)           CTYPE="image/png" ;;
-esac
+# Infer from extension only when no explicit flag was passed.
+if [ "$EXPLICIT" -eq 0 ]; then
+  case "${IMAGE##*.}" in
+    jpg|JPG|jpeg|JPEG) CTYPE="image/jpeg" ;;
+    png|PNG)           CTYPE="image/png" ;;
+  esac
+fi
 
 if [ ! -f "$IMAGE" ]; then
   echo "File not found: $IMAGE" >&2
