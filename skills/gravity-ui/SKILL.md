@@ -41,6 +41,8 @@ installed version and API.
    (a) **LOCAL** — start with `node_modules/@gravity-ui/<pkg>/dist/docs/INDEX.md` or `node_modules/@gravity-ui/<pkg>/build/docs/INDEX.md`.
       If `INDEX.md` is absent for this package, fall back to the package's root `node_modules/@gravity-ui/<pkg>/README.md`.
       This is the *exact* installed version — always preferred for version-sensitive questions.
+      Note: bundled docs are a recent addition — `uikit` ships `build/docs` only from **7.45.0**;
+      older installs have no local docs at all, and that is expected, not an error. Go to (b).
    (b) **ONLINE** — per-package llms.txt at the **major line**:
       `https://gravity-ui.com/llms/<pkg>/<major>/llms.txt`
       (e.g. `/llms/uikit/7/llms.txt` for `^7.2.1`). The major-line URL serves the
@@ -94,6 +96,12 @@ installed version and API.
      sketch it", "quick prototype", "no need to check"), you may skip the
      typecheck — but state this plainly in your reply: *"typecheck skipped by
      user request — code is not verified"*. Do not skip silently.
+   - **Know what typecheck does not cover.** A green `tsc` proves the API is
+     real; it says nothing about layout or contrast. Before reporting done,
+     say so, and either check or list for the user to check by hand: the
+     screen in both `light` and `dark` themes (text and controls on colored
+     fills especially), narrow (~375px) and wide (~1400px) viewports for
+     horizontal overflow, and empty / loading / error states.
 
 ## Hard rules
 

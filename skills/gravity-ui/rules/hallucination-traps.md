@@ -61,21 +61,24 @@ with the browser default.
 <Box padding="16px" marginTop={2}>…</Box>
 ```
 
-✓ **Correct** — use `gap` between children, `spacing()` / `sp()` for offsets:
+✓ **Correct** — use `gap` between children, `Box spacing` for offsets on a
+`Box`, `spacing()` / `sp()` for any other element:
 
 ```tsx
-import {Flex, sp} from '@gravity-ui/uikit';
+import {Box, Flex, sp} from '@gravity-ui/uikit';
 
 <Flex gap={4}>                       {/* 16px between children */}
   <Button />
   <Button />
 </Flex>
 
-<div className={sp({p: 4, mb: 3})}>…</div>   {/* padding + margin-bottom */}
+<Box spacing={{p: 4, mb: 3}}>…</Box>          {/* padding + margin-bottom */}
+<div className={sp({p: 4, mb: 3})}>…</div>   {/* same, for a non-Box element */}
 ```
 
-**Why:** `Flex`/`Box` only expose `gap` (a spacing-scale step `0…10`, halves
-allowed: `0.5`, `1.5`…). For everything else use the `spacing()` (or `sp()`)
+**Why:** `Flex`/`Box` take `gap` (a spacing-scale step `0…10`; the only
+half-step is `0.5`), and `Box` additionally takes `spacing={{…}}` with the
+same `m*`/`p*` shortcuts. For everything else use the `spacing()` (or `sp()`)
 utility, which returns a className, or the raw `--g-spacing-*` variables in
 CSS. Never hard-code pixel values.
 
@@ -253,23 +256,25 @@ manually: `<div className={getRootClassName({theme: 'dark'})}>`.
 </section>
 ```
 
-✓ **Correct** — pick a `view` with its own contrasting surface, or scope a CSS
-override fixing contrast for both themes:
+✓ **Correct** — use a `*-contrast` view, which is built for a contrast
+background, or scope a CSS override fixing contrast for both themes:
 
 ```tsx
 <section style={{background: 'var(--g-color-base-brand)'}}>
-  <Button view="raised">Sign up</Button>   {/* solid contrasting surface */}
+  <Button view="normal-contrast">Sign up</Button>   {/* also outlined-contrast, flat-contrast */}
 </section>
 ```
 
 **Why:** a brand-colored fill is usually the *same* color in light and dark
 (it's a fill, not a themed surface), so the control on top should keep a fixed
-contrast in both themes rather than lightening/darkening with the theme. Try a
-`view` with its own surface (`raised`, `action`); if none fits, override the
-component's CSS API (`--g-button-background-color`, `--g-button-text-color`, …)
-scoped to the section, with contrast values for both themes. This is distinct
-from `--g-color-text-brand-contrast`, which is about text on a *brand button*
-(`view="action"`).
+contrast in both themes rather than lightening/darkening with the theme.
+`normal-contrast` / `outlined-contrast` / `flat-contrast` do exactly that.
+Do **not** reach for `raised` here — its surface is themed (light in light,
+dark in dark), so it does not hold contrast on a fixed fill. If no `*-contrast`
+view fits, override the component's CSS API (`--g-button-background-color`,
+`--g-button-text-color`, …) scoped to the section, with contrast values for
+both themes. This is distinct from `--g-color-text-brand-contrast`, which is
+about text on a *brand button* (`view="action"`).
 
 ### Customization ladder — descend only when there's no higher handle
 
@@ -336,8 +341,11 @@ component without moving the global scale. Use a token, always.
 ### `Button` uses `view`, not `variant` / `color`
 
 ❌ `<Button variant="primary">` / `<Button color="primary">`
-✓ `<Button view="action">` (also `outlined`, `flat`, `raised`, `normal`,
-   `special`, `clear`)
+✓ `<Button view="action">` (also `normal`, `outlined`, `flat`, `raised`;
+   semantic `outlined-{info|success|warning|danger|utility|action}` and
+   `flat-{secondary|info|success|warning|danger|utility|action}`; and
+   `normal-contrast` / `outlined-contrast` / `flat-contrast` for colored
+   backgrounds). There is no `special` or `clear` view.
 
 ### `Icon` takes an object via `data`, never a string name
 
