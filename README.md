@@ -26,6 +26,16 @@ This skill fixes all three.
 - Building dashboards, tables, charts, forms, navigation shells, or landing pages on Gravity UI.
 - Any prompt (EN or RU) mentioning gravity-ui, гравити, дизайн-система, компоненты, дашборд, таблица, график, or форма.
 
+### `gravity-ui-v8-migration`
+
+Upgrades `@gravity-ui/uikit` from v7 to v8 in an app or a library. The migration guides ship inside the v8 package; the skill adds what they leave to the agent:
+
+1. **Preflight** — React 18+, and the third-party dependencies that still pin uikit v7 (`scripts/check-uikit-peers.mjs`).
+2. **Inventory and decisions** — the affected code grouped by guide section, and the choices that belong to the user: `/legacy` or a rewrite, the `l` breakpoint.
+3. **Verification past `tsc`** — many v8 changes compile cleanly and show only on screen or in tests.
+
+**Use when:** bumping uikit to 8, estimating that upgrade, or finishing a half-done one.
+
 ## Activation tip
 
 Skill auto-activation across agents sits around ~50% in public evals — the skill exists, the agent just doesn't always invoke it.
