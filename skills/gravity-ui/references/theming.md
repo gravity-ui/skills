@@ -11,7 +11,7 @@
 > here, prefer the version-matched source over this snapshot.
 
 For the **traps** — what goes wrong when theming a Gravity UI app (partial
-overrides, brand-on-brand contrast, scoped vs nested `ThemeProvider`, the
+overrides, brand-on-brand contrast, a `ThemeProvider` that themes the whole page, the
 customization ladder) — see [`../rules/hallucination-traps.md`](../rules/hallucination-traps.md).
 That file complements this reference rather than duplicating it.
 

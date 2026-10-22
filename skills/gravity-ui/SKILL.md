@@ -125,7 +125,7 @@ installed version and API.
 - **Theming uses semantic `--g-*` tokens.** Never hardcode colors (`#fff`,
   `blue-500`); never hand-write `dark:` overrides. Full token tables live in
   `references/theming.md`; the cross-cutting traps (partial brand overrides,
-  scoped vs nested `ThemeProvider`, controls on a brand background) live in
+  a `ThemeProvider` that themes the whole page, controls on a brand background) live in
   `rules/hallucination-traps.md`.
 - **Required setup is package-specific** (style imports, `ThemeProvider`,
   peer-deps). It lives in each package's root README under "Required setup" —
@@ -178,6 +178,6 @@ These files live alongside this SKILL.md and load only when relevant:
 - `rules/hallucination-traps.md` — Incorrect/Correct pairs for the most
   commonly invented APIs: typography variants (`header-3..6` don't exist, no
   `Heading`), the flex contract (`min-width:0`, who shrinks), theming traps
-  (partial brand overrides, scoped vs nested `ThemeProvider`, customization
+  (partial brand overrides, a `ThemeProvider` that themes the whole page, customization
   ladder), `Button view` not `variant`, `Icon data` not `name`. Per-component
   traps live in each package's `dist/docs`, not here.
