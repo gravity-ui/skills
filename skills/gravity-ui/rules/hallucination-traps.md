@@ -221,12 +221,14 @@ Better than hand-writing: generate the full set with the
 [`@gravity-ui/uikit-themer`](https://github.com/gravity-ui/uikit-themer) — both
 recalculate the dependent palette from a single base color.
 
-### A nested `ThemeProvider` without `scoped` does not scope
+### A section `ThemeProvider` with no provider above it themes the whole page
 
-❌ **Incorrect** — expects a local dark section:
+❌ **Incorrect** — a dark widget mounted where no `ThemeProvider` (or v8
+`Provider`) wraps it: an embedded widget, a micro-frontend, a separate React
+root:
 
 ```tsx
-<ThemeProvider theme="dark">   {/* no scoped → writes to document.body globally */}
+<ThemeProvider theme="dark">   {/* no provider above → writes to document.body */}
   <Toolbar />
 </ThemeProvider>
 ```
@@ -239,12 +241,14 @@ recalculate the dependent palette from a single base color.
 </ThemeProvider>
 ```
 
-**Why:** an un-scoped `ThemeProvider` writes the theme class to `document.body`
-— globally, last-wins — not into the subtree. The `scoped` prop renders a
-dedicated `<div class="g-root g-root_theme_dark">` around the children *and*
-updates the theme React context (so `useTheme` inside the section sees the
-section's theme). For a CSS-only region without context, apply the class
-manually: `<div className={getRootClassName({theme: 'dark'})}>`.
+**Why:** only the outermost `ThemeProvider` writes the theme class to
+`document.body` — globally, last-wins. One nested inside another
+`ThemeProvider` (or a v8 `Provider`) is always scoped, with or without the prop,
+so a dark section inside the app needs no `scoped`. With no provider above,
+`scoped` renders a dedicated `<div class="g-root g-root_theme_dark">` around the
+children *and* updates the theme React context (so `useTheme` inside the
+section sees the section's theme). For a CSS-only region without context, apply
+the class manually: `<div className={getRootClassName({theme: 'dark'})}>`.
 
 ### Controls on a brand/colored background: fixed contrast, both themes
 
