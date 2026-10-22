@@ -171,7 +171,8 @@ Done when: every decision the inventory raised has an answer.
       `MobileProvider`. Nested ones stay `ThemeProvider`, for theme and
       direction; a nested `Provider` takes `mobile` explicitly, or it resets the
       mobile mode of the whole page. In an app, put
-      `<ListVirtualizer minItemsCount={50}>` next to `Provider`: it brings back
+      `<ListVirtualizer minItemsCount={50}>` from `@gravity-ui/uikit/virtualizer`
+      (peer: `@tanstack/react-virtual`) next to `Provider`: it brings back
       the v7 virtualization of every `Select` from 50 options. A library
       rendered only by apps with that wrapper relies on it; any other library
       follows *Which Selects to virtualize*.
