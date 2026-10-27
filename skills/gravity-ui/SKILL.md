@@ -18,12 +18,12 @@ Before doing anything else, work out which `@gravity-ui/*` library the task
 needs. Do not guess from training data — the ecosystem has look-alike packages
 (`charts` vs `chartkit`, uikit `Table` vs `@gravity-ui/table`, `date-components`
 vs `date-utils`, …) and picking the wrong one is the #1 failure.
-
 Open [`references/package-routing.md`](references/package-routing.md) and read
-its top: it is the ecosystem catalog, with the live-vs-offline source order,
-the "painful pairs" disambiguation, and a one-line "what it's for / what to use
-instead" per package. Use it to choose the package, then come back here for
-Step 1.
+its top **first**: it opens with a task → package decision table that settles the
+common cases (landing page, dashboard, data grid, calendar, charts, editor, app
+shell, i18n), followed by the ecosystem catalog with a one-line "what it's for /
+what to use instead" per package for everything else. Use it to choose the
+package, then come back here for Step 1.
 
 Only after the package is chosen, run Step 1 to ground in that package's
 installed version and API.

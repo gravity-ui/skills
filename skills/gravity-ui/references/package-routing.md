@@ -7,8 +7,30 @@ is unreachable (air-gapped, corporate proxy, timeout).
 **Online is primary.** This snapshot may lag the site by one release — if you can
 fetch `https://gravity-ui.com/llms.txt`, prefer it. Refresh this file at each
 skill release by re-copying the catalog verbatim (generator = fetch the URL →
-prepend this header → write the file). Do not hand-edit the catalog body below;
-edit the source `llms.txt` instead.
+keep everything above the `---` line → write the file). Do not hand-edit the
+catalog body below the line; edit the source `llms.txt` instead. The decision
+table above the line is hand-maintained and survives the sync.
+
+## Decision table — read this before the catalog
+
+Settle the common tasks here; the catalog below is the reference for everything else (and it is long:
+its decisive entries sit near the end, so do not skim its top and default to `uikit`).
+
+| The task is… | Use | Not |
+|---|---|---|
+| A marketing / landing / promo page assembled from blocks (hero, features, CTA) | `@gravity-ui/page-constructor` (`PageConstructor` + `PageConstructorProvider`, block config) | hand-written sections from uikit primitives |
+| A dashboard of freely arrangeable widgets | `@gravity-ui/dashkit` | a hand-rolled CSS grid, `react-grid-layout` |
+| A table with sorting, checkbox selection, pagination | uikit `Table` + `withTableSorting` / `withTableSelection` + `Pagination` | `@gravity-ui/table` |
+| A data grid that needs virtualization, column resizing / reordering, grouping, tree rows | `@gravity-ui/table` (TanStack-based) | uikit `Table` |
+| A calendar, date / time / range picker | `@gravity-ui/date-components` (peer: `date-utils`) | a `Calendar` from uikit (does not exist), `react-datepicker` |
+| Charts and data visualization | `@gravity-ui/charts` (`<Chart>`); `@gravity-ui/yagr` only for dense realtime series | `chartkit` (legacy wrapper), `recharts`, raw canvas |
+| A Markdown / WYSIWYG editor | `@gravity-ui/markdown-editor` | `<textarea>` + custom preview |
+| The app shell: aside navigation, header, footer | `@gravity-ui/navigation` (`AsideHeader`) | a hand-rolled `<aside>` |
+| Interface language switching | uikit `configure({lang})` + `@gravity-ui/i18n` for app strings | `i18next`, `react-intl` |
+
+Everything not listed — buttons, forms, dialogs, toasts, menus, tabs, theming — is `@gravity-ui/uikit`.
+If the package from the table is not installed yet, **install it** with the project's package manager (and
+its documented peer deps) — a project that only has `uikit` is not a reason to build the thing by hand.
 
 ---
 
