@@ -19,6 +19,25 @@ needs. Do not guess from training data — the ecosystem has look-alike packages
 (`charts` vs `chartkit`, uikit `Table` vs `@gravity-ui/table`, `date-components`
 vs `date-utils`, …) and picking the wrong one is the #1 failure.
 
+**Decide from this table first; open the catalog only when the task is not on it.** The catalog is
+long and its decisive entries sit near the end — agents that skim its top pick `uikit` for everything.
+
+| The task is… | Use | Not |
+|---|---|---|
+| A marketing / landing / promo page assembled from blocks (hero, features, CTA) | `@gravity-ui/page-constructor` (`PageConstructor` + `PageConstructorProvider`, block config) | hand-written sections from uikit primitives |
+| A dashboard of freely arrangeable widgets | `@gravity-ui/dashkit` | a hand-rolled CSS grid, `react-grid-layout` |
+| A table with sorting, checkbox selection, pagination | uikit `Table` + `withTableSorting` / `withTableSelection` + `Pagination` | `@gravity-ui/table` |
+| A data grid that needs virtualization, column resizing / reordering, grouping, tree rows | `@gravity-ui/table` (TanStack-based) | uikit `Table` |
+| A calendar, date / time / range picker | `@gravity-ui/date-components` (peer: `date-utils`) | a `Calendar` from uikit (does not exist), `react-datepicker` |
+| Charts and data visualization | `@gravity-ui/charts` (`<Chart>`); `@gravity-ui/yagr` only for dense realtime series | `chartkit` (legacy wrapper), `recharts`, raw canvas |
+| A Markdown / WYSIWYG editor | `@gravity-ui/markdown-editor` | `<textarea>` + custom preview |
+| The app shell: aside navigation, header, footer | `@gravity-ui/navigation` (`AsideHeader`) | a hand-rolled `<aside>` |
+| Interface language switching | uikit `configure({lang})` + `@gravity-ui/i18n` for app strings | `i18next`, `react-intl` |
+| Buttons, forms, dialogs, toasts, menus, tabs, theming | `@gravity-ui/uikit` | any other kit, raw HTML |
+
+If the package from the table is not installed yet, **install it** with the project's package manager (and
+its documented peer deps) — the fixture having only `uikit` is not a reason to build the thing by hand.
+
 Open [`references/package-routing.md`](references/package-routing.md) and read
 its top: it is the ecosystem catalog, with the live-vs-offline source order,
 the "painful pairs" disambiguation, and a one-line "what it's for / what to use
