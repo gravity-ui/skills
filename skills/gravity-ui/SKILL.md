@@ -74,7 +74,8 @@ installed version and API.
    ask the user.
 
 2. **Apply the cross-cutting rules** in `rules/hallucination-traps.md` while
-   writing: typography variants, the flex contract, theming/ladders,
+   writing: typography variants, the flex contract, the spacing scale (no
+   pixel values; a `gap` wherever fields or cards stack), theming/ladders,
    `Button view`, `Icon data`. Per-component traps live in the package's own
    `dist/docs`.
 

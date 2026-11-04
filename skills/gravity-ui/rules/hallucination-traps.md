@@ -82,6 +82,51 @@ same `m*`/`p*` shortcuts. For everything else use the `spacing()` (or `sp()`)
 utility, which returns a className, or the raw `--g-spacing-*` variables in
 CSS. Never hard-code pixel values.
 
+### Spacing is a scale — no pixel values, and no stacked fields without a gap
+
+❌ **Incorrect** — pixels in CSS / style objects, and fields that touch:
+
+```tsx
+<Card style={{padding: 16, marginBottom: 12}}>…</Card>
+<form>                      {/* TextInput / Select have no outer margin: they stick together */}
+  <TextInput label="Name" />
+  <TextInput label="Email" />
+  <Select label="Role" … />
+</form>
+```
+
+```css
+.settings__section { padding: 16px 24px; margin-bottom: 12px; }
+```
+
+✓ **Correct** — scale steps everywhere, and a `gap` wherever siblings stack:
+
+```tsx
+<Card>
+  <Box spacing={{p: 4}}>
+    <Flex as="form" direction="column" gap={4}>   {/* 16px between fields */}
+      <TextInput label="Name" />
+      <TextInput label="Email" />
+      <Select label="Role" … />
+    </Flex>
+  </Box>
+</Card>
+```
+
+```css
+.settings__section { padding: var(--g-spacing-4) var(--g-spacing-6); margin-bottom: var(--g-spacing-3); }
+```
+
+**Why:** the scale (`--g-spacing-1…10`, 4px steps) is the same one `gap`
+counts in, so a `padding: 16px` next to a `gap={4}` only looks aligned until
+`--g-spacing-base` changes. It is also the trap `tsc` cannot catch: raw pixels
+compile. And no uikit control adds its own outer margin — `Dialog.Body`,
+`Card` and `Modal` pad *themselves*, nothing pads *between* the fields inside
+them — so a column of inputs, cards or sections always needs an explicit
+`Flex direction="column" gap={…}` (or `spacing({mb: …})` per item). Typical
+steps: `2` between a label and its control, `4` between fields, `6`–`8`
+between sections.
+
 ### In a row, explicitly assign who flexes and who holds
 
 ❌ **Incorrect** — relying on flex defaults:
