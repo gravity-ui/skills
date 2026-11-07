@@ -224,6 +224,40 @@ every component renders unstyled. A custom theme file imported *before*
 ✓ `<ThemeProvider theme="light">` / `"dark"` / `"light-hc"` / `"dark-hc"`
 ✓ `<ThemeProvider theme="system">` (resolves to light/dark from OS preference)
 
+### A theme switch must change the `theme` prop — state lives where `ThemeProvider` renders
+
+❌ **Incorrect** — the switch updates state (or localStorage) that never reaches the provider:
+
+```tsx
+// main.tsx
+const initial = localStorage.getItem('theme') ?? 'light';
+root.render(<ThemeProvider theme={initial}><App /></ThemeProvider>); // read once, never updates
+
+// App.tsx
+const [theme, setTheme] = useState('light');                         // local copy, provider never sees it
+<Switch checked={theme === 'dark'} onUpdate={(on) => { setTheme(on ? 'dark' : 'light'); localStorage.setItem('theme', on ? 'dark' : 'light'); }} />
+```
+
+✓ **Correct** — one state, owned by the component that renders `ThemeProvider`, passed down:
+
+```tsx
+function Root() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => (localStorage.getItem('theme') as 'light' | 'dark') ?? 'light');
+  useEffect(() => localStorage.setItem('theme', theme), [theme]);
+  return (
+    <ThemeProvider theme={theme}>
+      <App theme={theme} onThemeChange={setTheme} />   {/* or a context */}
+    </ThemeProvider>
+  );
+}
+```
+
+**Why:** `ThemeProvider` re-themes only when its `theme` prop changes. A value read once in
+`main.tsx`, or a second `useState` inside the app, compiles and renders the first theme
+correctly, then the toggle silently does nothing. Read the active theme back with
+`useThemeValue()` / `useThemeType()`, but the source of truth is the prop. Persisting to
+`localStorage` is a side effect of that state, never a replacement for it.
+
 ### Branding means a full token set, on both themes — never 2–4 tokens
 
 ❌ **Incorrect** — partial override:
@@ -406,6 +440,38 @@ in `@gravity-ui/icons` as React components. There is no `name` prop. Pass the
 imported component object through `data`. Never guess an icon name — use
 `scripts/icon-image-search.sh` (reverse image search) or look it up at
 `gravity-ui.com/icons`. See `references/icons.md`.
+
+### A confirm/modal window is `Dialog`, not the bare `Modal`
+
+❌ **Incorrect** — the low-level primitive with hand-built header and buttons:
+
+```tsx
+<Modal open={open} onClose={close}>
+  <Text variant="subheader-3">Delete the project?</Text>
+  <Button onClick={close}>Cancel</Button>
+  <Button view="action" onClick={confirm}>Delete</Button>
+</Modal>
+```
+
+✓ **Correct** — `Dialog` with its slots (or `ConfirmDialog` from `@gravity-ui/components`):
+
+```tsx
+<Dialog open={open} onClose={close} size="s">
+  <Dialog.Header caption="Delete the project?" />
+  <Dialog.Body>This cannot be undone.</Dialog.Body>
+  <Dialog.Footer
+    textButtonApply="Delete"
+    textButtonCancel="Cancel"
+    onClickButtonApply={confirm}
+    onClickButtonCancel={close}
+  />
+</Dialog>
+```
+
+**Why:** `Modal` is the overlay primitive `Dialog` is built on: no header, body padding,
+footer layout, close button or apply/cancel wiring. `Dialog` gives the design-system spacing,
+the button order and `loading`/`propsButtonApply` for async confirms. Reach for `Modal` only
+for a custom overlay that is not a dialog (a lightbox, a full-screen sheet).
 
 ---
 

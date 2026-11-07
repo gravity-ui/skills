@@ -75,8 +75,9 @@ installed version and API.
 
 2. **Apply the cross-cutting rules** in `rules/hallucination-traps.md` while
    writing: typography variants, the flex contract, the spacing scale (no
-   pixel values; a `gap` wherever fields or cards stack), theming/ladders,
-   `Button view`, `Icon data`. Per-component traps live in the package's own
+   pixel values; a `gap` wherever fields or cards stack), theming/ladders (a
+   theme switch must change the `ThemeProvider` prop, not a copy of it),
+   `Button view`, `Icon data`, `Dialog` over the bare `Modal`. Per-component traps live in the package's own
    `dist/docs`.
 
 3. **Typecheck before declaring done.** Run the project's typecheck command
