@@ -1,6 +1,6 @@
 ---
 name: gravity-ui
-description: Builds, fixes, styles, and composes UI with the Gravity UI design system — the React ecosystem of @gravity-ui/* packages (uikit, charts, table, navigation, date-components, icons, and more). Routes to the correct package when look-alikes exist, applies theming and required setup, and prevents invented component APIs. Applies when working with @gravity-ui imports, uikit, ThemeProvider, --g- CSS tokens, or any prompt (EN or RU) mentioning gravity-ui, гравити, дизайн-система, компоненты, дашборд, таблица, график, or форма.
+description: Builds, fixes, styles, and composes UI with the Gravity UI design system — the React ecosystem of @gravity-ui/* packages (uikit, charts, table, navigation, date-components, icons, and more). Routes to the correct package when look-alikes exist, applies theming and required setup, and prevents invented component APIs. Applies when working with @gravity-ui imports, uikit, ThemeProvider, --g- CSS tokens, or any prompt (EN or RU) mentioning gravity-ui, гравити, дизайн-система, компоненты, дашборд, таблица, график, or форма. Also installs required specialized Gravity UI packages when they are absent.
 ---
 
 # Building UI with Gravity UI
@@ -12,18 +12,36 @@ This skill routes you to the right package, grounds you in the installed
 version, and stops you from inventing APIs — match the installed versions and
 follow the ecosystem catalog instead of guessing.
 
+## Efficiency guardrails
+
+- Do not read the same file twice. Reuse evidence already present in the session.
+- Do not dump a reference file wholesale. Use targeted `rg -n -C 4` searches and keep each result below
+  200 lines unless the whole file is necessary to resolve the task.
+- Batch package, component, and symbol lookups into as few commands as possible.
+- Stop documentation research as soon as package choice, import path, required setup, and uncertain props
+  are confirmed. Documentation is evidence for decisions, not a checklist to read in full.
+- Do not query unpkg, package source repositories, or alternative documentation mirrors.
+- Do not install browsers or screenshot tooling, and do not start a dev server for routine verification,
+  unless the user explicitly requests visual or browser verification.
+- Run typecheck/build after implementation. If it fails, inspect only the failing API, fix it, and rerun
+  the check. Do not repeatedly rebuild unchanged code.
+
 ## Step 0 — pick the right package first (ecosystem routing)
 
 Before doing anything else, work out which `@gravity-ui/*` library the task
 needs. Do not guess from training data — the ecosystem has look-alike packages
 (`charts` vs `chartkit`, uikit `Table` vs `@gravity-ui/table`, `date-components`
 vs `date-utils`, …) and picking the wrong one is the #1 failure.
+Choose from the task's functionality, not only from dependencies already present in the project.
 Open [`references/package-routing.md`](references/package-routing.md) and read
 its top **first**: it opens with a task → package decision table that settles the
 common cases (landing page, dashboard, data grid, calendar, charts, editor, app
 shell, i18n), followed by the ecosystem catalog with a one-line "what it's for /
 what to use instead" per package for everything else. Use it to choose the
 package, then come back here for Step 1.
+
+Search the catalog for the task's relevant terms and read the matching package entries. Do not read the
+entire catalog when its top and those entries are sufficient.
 
 Only after the package is chosen, run Step 1 to ground in that package's
 installed version and API.
@@ -35,6 +53,12 @@ installed version and API.
    Resolve ranges from `node_modules` (`<pkg>/package.json` `version` field), not
    the range string in the root `package.json`.
 
+   If the chosen specialized package other than `@gravity-ui/uikit` is absent, add it with the project's
+   existing package manager before importing it. Install its documented peer dependencies too, then
+   resolve the installed version and continue with the local evidence below. Do not fall back to uikit,
+   raw HTML, or a foreign library merely because the specialized package was initially absent. If
+   installation is blocked, report the exact failure.
+
 2. **Fetch the docs for the package you are about to use, in this order,
    stopping at the first source that answers your question:**
 
@@ -43,6 +67,8 @@ installed version and API.
       This is the *exact* installed version — always preferred for version-sensitive questions.
       Note: bundled docs are a recent addition — `uikit` ships `build/docs` only from **7.45.0**;
       older installs have no local docs at all, and that is expected, not an error. Go to (b).
+      If an import, component, hook, or prop remains uncertain, inspect only its exact installed `.d.ts`
+      before moving online. Batch all uncertain symbol lookups for that package.
    (b) **ONLINE** — per-package llms.txt at the **major line**:
       `https://gravity-ui.com/llms/<pkg>/<major>/llms.txt`
       (e.g. `/llms/uikit/7/llms.txt` for `^7.2.1`). The major-line URL serves the
@@ -62,6 +88,16 @@ installed version and API.
      LOCAL, not "latest".
    - If BOTH are unreachable for a package → STOP and tell the user the
      package's docs are unreachable. Do not guess its API from training data.
+
+For a bounded local inspection, run this skill's `scripts/inspect-package.sh` from the project root
+(the path is relative to the skill's directory):
+
+```sh
+<skill-dir>/scripts/inspect-package.sh uikit Button Card Switch ThemeProvider
+```
+
+The script reports the resolved version, available local documentation, and declaration files matching
+the requested symbols. Read only the returned files needed to confirm an uncertain API.
 
 ## Step 2 — implement on the chosen packages, then typecheck
 
