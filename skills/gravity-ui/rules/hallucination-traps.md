@@ -7,7 +7,7 @@ ground truth (full token tables, prop lists); this file is the shortcut to not
 falling into the common holes.
 
 Per-component traps (a specific `Table`, `Button`, `Chart` prop) live in each
-package's own `dist/docs/INDEX.md` — read that for component detail. This file
+package's own `dist/docs/INDEX.md` or `build/docs/INDEX.md` (the layout differs per package) — read that for component detail. This file
 covers the **cross-cutting** traps that affect every `@gravity-ui/*` package.
 
 ---
@@ -479,6 +479,6 @@ for a custom overlay that is not a dialog (a lightbox, a full-screen sheet).
 
 1. Read `references/theming.md` (full token tables) and
    `references/layout.md` (spacing scale, breakpoints).
-2. Read the chosen package's `dist/docs/INDEX.md` for component-specific props.
+2. Read the chosen package's `dist/docs/INDEX.md` or `build/docs/INDEX.md` for component-specific props.
 3. If still unsure, ask the user rather than guessing — invented APIs are the
    single biggest source of broken Gravity UI code.

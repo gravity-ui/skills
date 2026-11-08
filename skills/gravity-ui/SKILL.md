@@ -114,7 +114,7 @@ the requested symbols. Read only the returned files needed to confirm an uncerta
    pixel values; a `gap` wherever fields or cards stack), theming/ladders (a
    theme switch must change the `ThemeProvider` prop, not a copy of it),
    `Button view`, `Icon data`, `Dialog` over the bare `Modal`. Per-component traps live in the package's own
-   `dist/docs`.
+   `dist/docs` or `build/docs`.
 
 3. **Typecheck before declaring done.** Run the project's typecheck command
    (typically `tsc --noEmit`; for monorepos, the workspace's typecheck script).
@@ -125,7 +125,7 @@ the requested symbols. Read only the returned files needed to confirm an uncerta
    - If the typecheck surfaces a prop/path that contradicts the docs you read
      in Step 1, trust the **installed version** (the typechecker), not the
      docs snapshot — the docs may be from a different minor. Re-ground: read
-     the package's `dist/docs/INDEX.md` in `node_modules` for the exact
+     the package's `dist/docs/INDEX.md` or `build/docs/INDEX.md` in `node_modules` for the exact
      installed types.
    - If the typecheck is unavailable (no TS in the project), say so
      explicitly and ask the user how they want to verify; do not silently
@@ -152,7 +152,7 @@ the requested symbols. Read only the returned files needed to confirm an uncerta
   assume a package is installed; never assume its major version.
 - **Do not invent props or components.** Before using a component API you are
   not 100% sure of, check `rules/hallucination-traps.md` (ecosystem patterns)
-  and the component's README in `dist/docs`. If still unsure, ask the user
+  and the component's README in `dist/docs` or `build/docs`. If still unsure, ask the user
   rather than guessing.
 - **Never guess icon names** — they are hallucinated more often than not. To
   match an icon from a screenshot/photo/mock, run `scripts/icon-image-search.sh`
@@ -218,4 +218,4 @@ These files live alongside this SKILL.md and load only when relevant:
   `Heading`), the flex contract (`min-width:0`, who shrinks), theming traps
   (partial brand overrides, a `ThemeProvider` that themes the whole page, customization
   ladder), `Button view` not `variant`, `Icon data` not `name`. Per-component
-  traps live in each package's `dist/docs`, not here.
+  traps live in each package's `dist/docs` or `build/docs`, not here.
