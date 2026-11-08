@@ -1,0 +1,2263 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 5 failed) 17359ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   × no react-markdown DIY preview 0ms
+     → expected true to be false // Object.is equality
+   × no raw textarea input 1ms
+     → expected 'import { useEffect, useRef, useState …' not to match /<textarea[\s/>]/>]
+   ✓ no dangerouslySetInnerHTML preview 0ms
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 17352ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The project does not declare @gravity-ui/markdown-editor, and src/App.tsx imports react-markdown and renders a raw <textarea> for the Markdown input with a separate preview. There is no useMarkdownEditor hook or MarkdownEditorView, so the required editor is absent.
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  17:33:42
+   Duration  17.54s (transform 30ms, setup 13ms, collect 18ms, tests 17.36s, environment 0ms, prepare 41ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  EVAL.ts > no react-markdown DIY preview
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:72:44
+     70| // Pulling react-markdown signals a DIY textarea+preview build instead…
+     71| test("no react-markdown DIY preview", () => {
+     72|   expect(dependsOn(src, "react-markdown")).toBe(false);
+       |                                            ^
+     73| });
+     74| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  EVAL.ts > no raw textarea input
+AssertionError: expected 'import { useEffect, useRef, useState …' not to match /<textarea[\s/>]/>]
+
+[32m- Expected:[39m 
+/<textarea[\s/>]/
+
+[31m+ Received:[39m 
+"import { useEffect, useRef, useState } from \"react\";
+import { Button } from \"@gravity-ui/uikit\";
+import ReactMarkdown from \"react-markdown\";
+import remarkGfm from \"remark-gfm\";
+import {
+  ArrowDownToLine,
+  ArrowLeft,
+  ArrowRight,
+  Bold,
+  BookOpen,
+  Check,
+  CheckCheck,
+  ChevronDown,
+  ChevronRight,
+  CircleHelp,
+  Code2,
+  FileText,
+  FolderOpen,
+  Heading2,
+  Italic,
+  LayoutTemplate,
+  Link,
+  List,
+  ListOrdered,
+  MoreHorizontal,
+  PanelLeftClose,
+  Plus,
+  Quote,
+  Search,
+  Sparkles,
+  SplitSquareHorizontal,
+  X,
+} from \"lucide-react\";
+import \"./styles.css\";
+
+const initialText = `## Рады видеть вас в команде! 👋
+
+Этот небольшой гид поможет освоиться
+и почувствовать себя как дома.
+
+### С чего начать
+
+- Познакомьтесь с командой
+- Настройте рабочее пространство
+- Загляните в нашу базу знаний
+
+### Наш подход
+
+Мы верим, что **лучшие идеи рождаются вместе**.
+Задавайте вопросы, делитесь мыслями
+и не бойтесь пробовать новое.
+
+> Большие вещи начинаются с маленьких шагов.
+
+Полезные ссылки и инструкции — в [базе знаний](https://www.wikipedia.org/).
+
+---
+
+С заботой, *ваша команда* 💚`;
+type Draft = { title: string; category: string; body: string };
+const emptyDraft: Draft = {
+  title: \"Добро пожаловать в команду\",
+  category: \"Команда\",
+  body: initialText,
+};
+const key = \"forma-material-draft\";
+function readDraft(): Draft {
+  try {
+    const d = JSON.parse(localStorage.getItem(key) || \"null\");
+    return d &&
+      typeof d.title === \"string\" &&
+      typeof d.body === \"string\" &&
+      typeof d.category === \"string\"
+      ? d
+      : emptyDraft;
+  } catch {
+    return emptyDraft;
+  }
+}
+
+export function App() {
+  const [draft, setDraft] = useState<Draft>(readDraft);
+  const [mode, setMode] = useState<\"split\" | \"write\" | \"preview\">(\"split\");
+  const [section, setSection] = useState<\"editor\" | \"materials\">(\"editor\");
+  const [modal, setModal] = useState<\"help\" | \"templates\" | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [toast, setToast] = useState(\"\");
+  const [menu, setMenu] = useState(false);
+  const [query, setQuery] = useState(\"\");
+  const [sidebar, setSidebar] = useState(true);
+  const editor = useRef<HTMLTextAreaElement>(null);
+  const modalRef = useRef<HTMLElement>(null);
+  const setField = (field: keyof Draft, value: string) => {
+    setDraft((d) => ({ ...d, [field]: value }));
+    setSaved(false);
+  };
+  const save = () => {
+    try {
+      localStorage.setItem(key, JSON.stringify(draft));
+      setSaved(true);
+      setToast(\"Материал сохранён в этом браузере\");
+    } catch {
+      setToast(\"Не удалось сохранить материал: хранилище браузера недоступно.\");
+    }
+  };
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(\"\"), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
+  useEffect(() => {
+    if (!modal) return;
+    const keepFocus = (event: KeyboardEvent) => {
+      if (event.key !== \"Tab\") return;
+      const buttons = modalRef.current?.querySelectorAll<HTMLButtonElement>(\"button\");
+      if (!buttons?.length) return;
+      const first = buttons[0];
+      const last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener(\"keydown\", keepFocus);
+    return () => document.removeEventListener(\"keydown\", keepFocus);
+  }, [modal]);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === \"Escape\") {
+        setModal(null);
+        setMenu(false);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === \"s\") {
+        e.preventDefault();
+        save();
+      }
+    };
+    window.addEventListener(\"keydown\", onKey);
+    return () => window.removeEventListener(\"keydown\", onKey);
+  }, [draft]);
+  const format = (before: string, after = \"\", placeholder = \"текст\") => {
+    const el = editor.current;
+    const start = el?.selectionStart ?? draft.body.length;
+    const end = el?.selectionEnd ?? start;
+    const selection = draft.body.slice(start, end) || placeholder;
+    setField(
+      \"body\",
+      draft.body.slice(0, start) +
+        before +
+        selection +
+        after +
+        draft.body.slice(end),
+    );
+    if (mode === \"preview\") setMode(\"split\");
+    requestAnimationFrame(() => {
+      editor.current?.focus();
+      editor.current?.setSelectionRange(
+        start + before.length,
+        start + before.length + selection.length,
+      );
+    });
+  };
+  const exportFile = () => {
+    const url = URL.createObjectURL(
+      new Blob([`# ${draft.title}\\n\\n${draft.body}`], {
+        type: \"text/markdown;charset=utf-8\",
+      }),
+    );
+    const a = document.createElement(\"a\");
+    a.href = url;
+    a.download = `${draft.title || \"material\"}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setMenu(false);
+  };
+  const tools = [
+    {
+      icon: Heading2,
+      label: \"Заголовок\",
+      action: () => format(\"\\n## \", \"\", \"Заголовок\"),
+    },
+    {
+      icon: Bold,
+      label: \"Полужирный (Ctrl+B)\",
+      action: () => format(\"**\", \"**\"),
+    },
+    { icon: Italic, label: \"Курсив (Ctrl+I)\", action: () => format(\"*\", \"*\") },
+    {
+      icon: Link,
+      label: \"Ссылка\",
+      action: () => format(\"[\", \"](https://example.com)\", \"текст ссылки\"),
+    },
+    {
+      icon: List,
+      label: \"Маркированный список\",
+      action: () => format(\"\\n- \", \"\", \"Пункт списка\"),
+    },
+    {
+      icon: ListOrdered,
+      label: \"Нумерованный список\",
+      action: () => format(\"\\n1. \", \"\", \"Пункт списка\"),
+    },
+    {
+      icon: Quote,
+      label: \"Цитата\",
+      action: () => format(\"\\n> \", \"\", \"Цитата\"),
+    },
+    { icon: Code2, label: \"Код\", action: () => format(\"`\", \"`\", \"код\") },
+  ];
+  return (
+    <div className={`app ${sidebar ? \"\" : \"sidebar-hidden\"}`}>
+      <aside className=\"sidebar\">
+        <a
+          className=\"brand\"
+          href=\"#\"
+          onClick={(e) => {
+            e.preventDefault();
+            setSection(\"editor\");
+          }}
+        >
+          <span className=\"brand-symbol\">
+            <span />
+            <span />
+            <span />
+          </span>
+          forma<span className=\"brand-dot\">.</span>
+        </a>
+        <div className=\"workspace\">
+          <span className=\"workspace-avatar\">S</span>
+          <span>
+            Моё пространство<small>Личное пространство</small>
+          </span>
+          <span className=\"workspace-dot\" />
+        </div>
+        <div className=\"nav-label\">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+        <nav>
+          <button
+            className=\"nav-item active\"
+            onClick={() => setSection(\"materials\")}
+          >
+            <FolderOpen size={19} />
+            Материалы<span className=\"nav-count\">1</span>
+          </button>
+          <button className=\"nav-item\" onClick={() => setModal(\"templates\")}>
+            <LayoutTemplate size={19} />
+            Шаблоны
+            <span className=\"new-dot\" />
+          </button>
+        </nav>
+        <button
+          className=\"sidebar-new\"
+          onClick={() => {
+            setDraft({ title: \"\", category: \"Без категории\", body: \"\" });
+            setSaved(false);
+            setSection(\"editor\");
+          }}
+        >
+          <Plus size={17} />
+          Новый материал
+        </button>
+        <div className=\"sidebar-bottom\">
+          <div className=\"tip-card\">
+            <span className=\"tip-icon\">
+              <Sparkles size={19} />
+            </span>
+            <h3>
+              Меньше отвлечений.
+              <br />
+              Больше хороших идей.
+            </h3>
+            <p>
+              Сосредоточьтесь на тексте,
+              <br />а оформление оставьте нам.
+            </p>
+            <button onClick={() => setModal(\"help\")}>
+              Знакомство с Markdown <ArrowRight size={14} />
+            </button>
+          </div>
+          <button className=\"help-nav\" onClick={() => setModal(\"help\")}>
+            <CircleHelp size={18} />
+            Помощь и подсказки
+          </button>
+          <div className=\"profile\">
+            <div className=\"avatar\">АК</div>
+            <div>
+              Александр<small>Личное пространство</small>
+            </div>
+            <span className=\"profile-status\" title=\"Работа в браузере\" />
+          </div>
+        </div>
+      </aside>
+      <main>
+        <header className=\"topbar\">
+          <div className=\"breadcrumbs\">
+            <button
+              className=\"collapse-button\"
+              aria-label={sidebar ? \"Скрыть меню\" : \"Показать меню\"}
+              onClick={() => setSidebar(!sidebar)}
+            >
+              <PanelLeftClose size={19} />
+            </button>
+            <span className=\"breadcrumb-divider\" />
+            <button onClick={() => setSection(\"materials\")}>Материалы</button>
+            <ChevronRight size={14} />
+            <span>
+              {section === \"editor\" ? \"Новый материал\" : \"Все материалы\"}
+            </span>
+          </div>
+          <div className=\"topbar-right\">
+            <span className=\"private-dot\" />
+            Личное пространство
+            <button
+              className=\"help-icon\"
+              onClick={() => setModal(\"help\")}
+              aria-label=\"Помощь\"
+            >
+              <CircleHelp size={17} />
+            </button>
+          </div>
+        </header>
+        <div className=\"page-content\">
+          <div className=\"page-heading\">
+            <div>
+              <div className=\"eyebrow\">ВАШИ ИДЕИ. В НУЖНОЙ ФОРМЕ.</div>
+              <h1>
+                {section === \"editor\" ? \"Новый материал\" : \"Мои материалы\"}
+                <span className=\"draft-badge\">Черновик</span>
+              </h1>
+              <p>
+                {section === \"editor\"
+                  ? \"Запишите главное. Красивое оформление получится само.\"
+                  : \"Все ваши тексты и идеи в одном месте.\"}
+              </p>
+            </div>
+            <div className=\"heading-actions\">
+              <div className=\"more-wrap\">
+                <button
+                  className=\"more-button\"
+                  aria-label=\"Дополнительные действия\"
+                  onClick={() => setMenu(!menu)}
+                >
+                  <MoreHorizontal size={21} />
+                </button>
+                {menu && (
+                  <div className=\"dropdown\">
+                    <button onClick={exportFile}>
+                      <ArrowDownToLine size={15} />
+                      Скачать Markdown
+                    </button>
+                  </div>
+                )}
+              </div>
+              <Button
+                view=\"action\"
+                size=\"l\"
+                className=\"save-button\"
+                onClick={save}
+              >
+                <Check size={16} />
+                <span>{saved ? \"Сохранено\" : \"Сохранить\"}</span>
+              </Button>
+            </div>
+          </div>
+          {section === \"materials\" ? (
+            <section className=\"materials\">
+              <div className=\"search-field\">
+                <Search size={18} />
+                <input
+                  aria-label=\"Поиск материалов\"
+                  placeholder=\"Найти материал…\"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+              {draft.title.toLowerCase().includes(query.toLowerCase()) ? (
+                <button
+                  className=\"material-card\"
+                  onClick={() => setSection(\"editor\")}
+                >
+                  <span className=\"material-icon\">
+                    <FileText size={24} />
+                  </span>
+                  <div>
+                    <h3>{draft.title || \"Без названия\"}</h3>
+                    <p>{draft.category} · Черновик</p>
+                  </div>
+                  <ArrowRight size={20} />
+                </button>
+              ) : (
+                <p className=\"no-results\">Материалы не найдены</p>
+              )}
+            </section>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                save();
+              }}
+            >
+              <section className=\"details-card\">
+                <div className=\"section-heading\">
+                  <span className=\"section-icon\">
+                    <FileText size={18} />
+                  </span>
+                  <h2>О материале</h2>
+                  <span>Начнём с самого важного</span>
+                </div>
+                <div className=\"details-fields\">
+                  <label className=\"title-field\">
+                    Название материала
+                    <input
+                      placeholder=\"Как назовём ваш материал?\"
+                      value={draft.title}
+                      onChange={(e) => setField(\"title\", e.target.value)}
+                    />
+                  </label>
+                  <label className=\"category-field\">
+                    Категория
+                    <span className=\"select-wrap\">
+                      <span className=\"category-dot\" />
+                      <select
+                        value={draft.category}
+                        onChange={(e) => setField(\"category\", e.target.value)}
+                      >
+                        <option>Команда</option>
+                        <option>Заметки</option>
+                        <option>Проекты</option>
+                        <option>Без категории</option>
+                      </select>
+                      <ChevronDown size={15} />
+                    </span>
+                  </label>
+                </div>
+              </section>
+              <div className=\"content-heading\">
+                <div>
+                  <h2>Содержание</h2>
+                  <span>
+                    Просто пишите — Markdown позаботится об остальном.
+                  </span>
+                </div>
+                <button
+                  type=\"button\"
+                  className=\"text-help\"
+                  onClick={() => setModal(\"help\")}
+                >
+                  <CircleHelp size={15} />
+                  Шпаргалка по Markdown
+                </button>
+              </div>
+              <section className=\"editor-card\">
+                <div className=\"editor-toolbar\">
+                  <div className=\"format-tools\">
+                    {tools.map(({ icon: Icon, label, action }, i) => (
+                      <span
+                        className={i === 3 || i === 6 ? \"tool-group-start\" : \"\"}
+                        key={label}
+                      >
+                        <button
+                          type=\"button\"
+                          title={label}
+                          aria-label={label}
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={action}
+                        >
+                          <Icon size={18} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <div className=\"view-modes\" aria-label=\"Режим редактора\">
+                    <button
+                      type=\"button\"
+                      title=\"Только редактор\"
+                      className={mode === \"write\" ? \"selected\" : \"\"}
+                      onClick={() => setMode(\"write\")}
+                    >
+                      Редактор
+                    </button>
+                    <button
+                      type=\"button\"
+                      title=\"Только предпросмотр\"
+                      className={mode === \"preview\" ? \"selected\" : \"\"}
+                      onClick={() => setMode(\"preview\")}
+                    >
+                      Просмотр
+                    </button>
+                    <button
+                      type=\"button\"
+                      title=\"Редактор и предпросмотр\"
+                      aria-label=\"Редактор и предпросмотр\"
+                      className={
+                        mode === \"split\"
+                          ? \"selected split-button\"
+                          : \"split-button\"
+                      }
+                      onClick={() => setMode(\"split\")}
+                    >
+                      <SplitSquareHorizontal size={17} />
+                    </button>
+                  </div>
+                </div>
+                <div className={`editor-columns mode-${mode}`}>
+                  {mode !== \"preview\" && (
+                    <div className=\"source-panel\">
+                      <div className=\"panel-heading\">
+                        <span>
+                          <Code2 size={14} />
+                          MARKDOWN
+                        </span>
+                        <span className=\"source-indicator\">Исходный текст</span>
+                      </div>
+                      <textarea
+                        name=\"content\"
+                        ref={editor}
+                        aria-label=\"Содержание в формате Markdown\"
+                        spellCheck={false}
+                        value={draft.body}
+                        placeholder=\"Начните писать здесь… Используйте # для заголовка и ** для жирного текста.\"
+                        onChange={(e) => setField(\"body\", e.target.value)}
+                        onKeyDown={(e) => {
+                          if (
+                            (e.metaKey || e.ctrlKey) &&
+                            [\"b\", \"i\"].includes(e.key.toLowerCase())
+                          ) {
+                            e.preventDefault();
+                            format(
+                              e.key.toLowerCase() === \"b\" ? \"**\" : \"*\",
+                              e.key.toLowerCase() === \"b\" ? \"**\" : \"*\",
+                            );
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+                  {mode !== \"write\" && (
+                    <div className=\"preview-panel\">
+                      <div className=\"panel-heading\">
+                        <span>
+                          <BookOpen size={14} />
+                          ПРЕДПРОСМОТР
+                        </span>
+                        <span className=\"live-label\">
+                          <i />В реальном времени
+                        </span>
+                      </div>
+                      <div
+                        className=\"markdown-preview\"
+                        role=\"region\"
+                        aria-label=\"Предпросмотр Markdown\"
+                      >
+                        {draft.body ? (
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              a: (props) => (
+                                <a
+                                  {...props}
+                                  target=\"_blank\"
+                                  rel=\"noopener noreferrer\"
+                                />
+                              ),
+                            }}
+                          >
+                            {draft.body}
+                          </ReactMarkdown>
+                        ) : (
+                          <div className=\"empty-preview\">
+                            <FileText size={30} />
+                            <p>Здесь появится ваш текст</p>
+                            <span>Начните писать в редакторе</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className=\"editor-footer\">
+                  <span>
+                    <span className=\"markdown-mark\">
+                      M<span>↓</span>
+                    </span>
+                    Markdown поддерживается
+                  </span>
+                  <span>
+                    {draft.body.trim()
+                      ? draft.body.trim().split(/\\s+/).length
+                      : 0}{\" \"}
+                    слов<span className=\"count-divider\">·</span>
+                    {draft.body.length} символов
+                  </span>
+                </div>
+              </section>
+              <div className=\"below-editor\">
+                <span>
+                  <CheckCheck size={16} />
+                  Изменения отображаются в предпросмотре сразу
+                </span>
+                <span>Ваша мысль — ваше оформление.</span>
+              </div>
+              <footer className=\"form-footer\">
+                <button
+                  type=\"button\"
+                  className=\"back-button\"
+                  onClick={() => setSection(\"materials\")}
+                >
+                  <ArrowLeft size={16} />К материалам
+                </button>
+                <div>
+                  <span className=\"save-note\">
+                    {saved
+                      ? \"Все изменения сохранены\"
+                      : \"Сохраните, чтобы не потерять изменения\"}
+                  </span>
+                  <Button
+                    view=\"action\"
+                    size=\"l\"
+                    className=\"save-button\"
+                    type=\"submit\"
+                  >
+                    Сохранить материал
+                    <ArrowRight size={16} />
+                  </Button>
+                </div>
+              </footer>
+            </form>
+          )}
+          <div className=\"page-bottom\">
+            <span className=\"little-brand\">forma.</span>
+            <span>Пространство для ясных мыслей</span>
+            <span>
+              Сделано с вниманием к деталям{\" \"}
+              <span className=\"little-star\">✳</span>
+            </span>
+          </div>
+        </div>
+      </main>
+      {toast && (
+        <div className=\"toast\" role=\"status\">
+          <Check size={18} />
+          {toast}
+        </div>
+      )}
+      {modal && (
+        <div className=\"modal-backdrop\" onClick={() => setModal(null)}>
+          <section
+            className=\"modal\"
+            ref={modalRef}
+            role=\"dialog\"
+            aria-modal=\"true\"
+            aria-labelledby=\"modal-title\"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              autoFocus
+              className=\"close-modal\"
+              aria-label=\"Закрыть\"
+              onClick={() => setModal(null)}
+            >
+              <X size={21} />
+            </button>
+            <span className=\"modal-icon\">
+              {modal === \"help\" ? (
+                <BookOpen size={23} />
+              ) : (
+                <LayoutTemplate size={23} />
+              )}
+            </span>
+            <h2 id=\"modal-title\">
+              {modal === \"help\"
+                ? \"Немного символов. Много возможностей.\"
+                : \"Начните с готовой структуры\"}
+            </h2>
+            <p>
+              {modal === \"help\"
+                ? \"Добавляйте разметку прямо в текст — результат появится рядом.\"
+                : \"Шаблон заменит текущее содержание материала.\"}
+            </p>
+            {modal === \"help\" ? (
+              <>
+                <div className=\"syntax-list\">
+                  {[
+                    [\"## Заголовок\", \"Заголовок раздела\"],
+                    [\"**Важная мысль**\", \"Полужирный текст\"],
+                    [\"*Небольшой акцент*\", \"Курсив\"],
+                    [\"- Пункт списка\", \"Маркированный список\"],
+                    [\"> Цитата\", \"Блок цитаты\"],
+                    [\"[Текст](https://example.com)\", \"Ссылка\"],
+                    [\"`код`\", \"Фрагмент кода\"],
+                    [\"- [ ] Задача\", \"Список задач\"],
+                  ].map(([syntax, description]) => (
+                    <div key={syntax}>
+                      <code>{syntax}</code>
+                      <span>{description}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className=\"modal-note\">
+                  Ctrl / ⌘ + B — полужирный · Ctrl / ⌘ + I — курсив
+                  <br />
+                  Ctrl / ⌘ + S — сохранить материал
+                </div>
+              </>
+            ) : (
+              <div className=\"template-list\">
+                {[
+                  {
+                    title: \"Заметки встречи\",
+                    body: \"## О встрече\\n\\nДата: \\nУчастники: \\n\\n### Обсудили\\n\\n- Первый вопрос\\n\\n### Следующие шаги\\n\\n- [ ] Первая задача\",
+                  },
+                  {
+                    title: \"План проекта\",
+                    body: \"## Наша цель\\n\\nОпишите, чего хотите достичь.\\n\\n### Этапы\\n\\n1. Подготовка\\n2. Работа над проектом\\n3. Запуск\\n\\n### Важные ссылки\\n\\n[Документация](https://example.com)\",
+                  },
+                ].map((t) => (
+                  <button
+                    key={t.title}
+                    onClick={() => {
+                      setDraft({
+                        title: t.title,
+                        body: t.body,
+                        category: \"Проекты\",
+                      });
+                      setSaved(false);
+                      setSection(\"editor\");
+                      setModal(null);
+                    }}
+                  >
+                    <FileText size={20} />
+                    {t.title}
+                    <ArrowRight size={17} />
+                  </button>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+@import url(\"https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;450;500;550;600;650;700;750;800&family=Manrope:wght@600;700;800&display=swap\");
+:root {
+  font-family: \"Golos Text\", sans-serif;
+  color: #29342e;
+  background: #f8f9f6;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  --green: #37694a;
+  --border: #e4e7e0;
+  --g-color-base-brand: #37694a;
+  --g-color-base-brand-hover: #2c583d;
+  --g-color-text-brand-contrast: #fff;
+  --g-font-family-sans: \"Golos Text\", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+  border: 0;
+  background: none;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #72a485;
+  outline-offset: 4px;
+}
+a {
+  color: inherit;
+}
+button svg {
+  flex-shrink: 0;
+}
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 236px;
+  flex-shrink: 0;
+  background: #f0f2ec;
+  border-right: 1px solid #e2e6dc;
+  padding: 35px 19px 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 10;
+}
+.brand {
+  font-family: \"Manrope\", sans-serif;
+  font-weight: 800;
+  font-size: 35px;
+  letter-spacing: -1.8px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  line-height: 40px;
+}
+.brand-dot {
+  color: #6d9163;
+}
+.brand-symbol {
+  width: 29px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-right: 11px;
+  transform: skewY(-9deg);
+}
+.brand-symbol span {
+  height: 7px;
+  border-radius: 1px;
+  background: #3c6144;
+}
+.brand-symbol span:nth-child(2) {
+  width: 22px;
+}
+.brand-symbol span:nth-child(3) {
+  width: 13px;
+}
+.workspace {
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 9px;
+  background: #fafbf8;
+  border: 1px solid #e1e5da;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.workspace-avatar {
+  height: 30px;
+  width: 30px;
+  border-radius: 7px;
+  background: #e6ebdc;
+  color: #607446;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+.workspace small,
+.profile small {
+  display: block;
+  font-size: 9px;
+  color: #969c91;
+  margin-top: 4px;
+  font-weight: 400;
+}
+.workspace-dot {
+  height: 5px;
+  width: 5px;
+  background: #6b895a;
+  border-radius: 50%;
+  margin-left: auto;
+}
+.nav-label {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1.15px;
+  color: #949b8e;
+  margin: 31px 12px 13px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  padding: 12px 14px;
+  margin: 4px 0;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #747c6e;
+  text-align: left;
+}
+.nav-item.active {
+  color: #3d5c3f;
+  background: #e2e9db;
+  font-weight: 550;
+}
+.nav-count {
+  margin-left: auto;
+  font-size: 10px;
+  border-radius: 4px;
+  background: #d3dfca;
+  padding: 1px 6px;
+}
+.new-dot {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #93a184;
+  margin-left: auto;
+}
+.sidebar-new {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  margin: 15px 12px;
+  font-size: 11px;
+  color: #6d7867;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 60px;
+}
+.tip-card {
+  background: linear-gradient(120deg, #e5ebdc, #edf0e7);
+  border: 1px solid #dce3d2;
+  border-radius: 9px;
+  padding: 17px 15px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.tip-card:after {
+  content: \"\";
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px solid #d5dec9;
+  position: absolute;
+  right: -75px;
+  top: -30px;
+  box-shadow:
+    0 0 0 10px #dce4d16b,
+    0 0 0 20px #dce4d144;
+}
+.tip-icon {
+  color: #698352;
+}
+.tip-card h3 {
+  font-size: 12px;
+  line-height: 1.7;
+  font-weight: 550;
+  margin: 10px 0 7px;
+}
+.tip-card p {
+  font-size: 10px;
+  color: #839077;
+  line-height: 1.8;
+  margin: 0 0 17px;
+}
+.tip-card button {
+  padding: 0;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #537044;
+}
+.help-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 10px;
+  color: #7f8778;
+  padding: 4px 10px 23px;
+}
+.profile {
+  border-top: 1px solid #dde2d5;
+  padding: 20px 2px 24px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e2ddcf;
+  color: #756f5e;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+.profile-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #7f956a;
+  margin-left: auto;
+  margin-right: 8px;
+}
+main {
+  margin-left: 236px;
+  flex: 1;
+  min-width: 0;
+}
+.topbar {
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding: 0 42px;
+  background: #fbfcf9;
+  font-size: 11px;
+}
+.breadcrumbs {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  color: #92998d;
+}
+.breadcrumbs button {
+  padding: 0;
+  color: #868d80;
+}
+.breadcrumbs > span:last-child {
+  color: #465140;
+}
+.collapse-button {
+  display: flex;
+}
+.breadcrumb-divider {
+  height: 16px;
+  width: 1px;
+  background: #dfe3d9;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8e9688;
+  font-size: 10px;
+}
+.private-dot {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #84986f;
+}
+.help-icon {
+  margin-left: 19px;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+}
+.page-content {
+  max-width: 1320px;
+  margin: auto;
+  padding: 37px 43px 20px;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 29px;
+  gap: 15px;
+}
+.eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #8c9a80;
+  font-weight: 550;
+  margin-bottom: 13px;
+}
+h1 {
+  font-size: 29px;
+  letter-spacing: -1.1px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #29382b;
+}
+.draft-badge {
+  font-size: 9px;
+  letter-spacing: 0;
+  font-weight: 400;
+  background: #ecede7;
+  border: 1px solid #e2e5da;
+  border-radius: 5px;
+  padding: 4px 8px;
+  color: #8b927f;
+}
+.page-heading p {
+  font-size: 11px;
+  color: #909687;
+  margin: 12px 0 0;
+}
+.heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 13px;
+}
+.save-button {
+  --g-button-background-color: #3d6b4a;
+  --g-button-background-color-hover: #315a3d;
+  --g-button-text-color: #fff;
+  --g-button-text-color-hover: #fff;
+  --g-button-border-radius: 6px;
+  font-size: 11px;
+  font-weight: 450;
+}
+.save-button .g-button__text {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.more-button {
+  border: 1px solid #dfe4da;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 36px;
+  background: #fbfcf9;
+  color: #75806c;
+}
+.more-wrap {
+  position: relative;
+}
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  z-index: 30;
+  background: white;
+  box-shadow: 0 6px 25px #24331f15;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px;
+  white-space: nowrap;
+}
+.dropdown button {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+}
+.details-card {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fff;
+  padding: 21px 23px 24px;
+  box-shadow: 0 2px 2px #2e3e2002;
+}
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 22px;
+}
+.section-icon {
+  display: flex;
+  color: #819073;
+}
+.section-heading h2,
+.content-heading h2 {
+  font-size: 12px;
+  font-weight: 550;
+  margin: 0;
+}
+.section-heading > span:last-child {
+  margin-left: auto;
+  font-size: 9px;
+  color: #a2a79b;
+}
+.details-fields {
+  display: flex;
+  gap: 20px;
+}
+.details-fields label {
+  font-size: 10px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.title-field {
+  flex: 1;
+}
+.details-fields input,
+.select-wrap {
+  border: 1px solid #dfe4d9;
+  background: #fcfdfa;
+  border-radius: 5px;
+  height: 39px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #4b5444;
+}
+.details-fields input {
+  padding: 0 12px;
+  width: 100%;
+  outline: none;
+}
+.details-fields input:focus,
+.select-wrap:focus-within {
+  border-color: #7c9b6c;
+  box-shadow: 0 0 0 3px #7c9b6c12;
+}
+.category-field {
+  width: 224px;
+}
+.select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.select-wrap select {
+  background: none;
+  position: relative;
+  z-index: 1;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  appearance: none;
+  padding: 0 30px 0 33px;
+  cursor: pointer;
+}
+.select-wrap svg {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+  color: #909b86;
+}
+.category-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9bab7b;
+  position: absolute;
+  left: 13px;
+}
+.content-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 29px 0 14px;
+  gap: 10px;
+}
+.content-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.content-heading > div > span {
+  font-size: 9px;
+  color: #979e8f;
+}
+.text-help {
+  font-size: 9px;
+  color: #7b8a6e;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0;
+}
+.editor-card {
+  border: 1px solid #dce2d5;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 3px 5px #33432203;
+}
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 51px;
+  padding: 0 13px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+.format-tools {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.format-tools button {
+  width: 30px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #737d69;
+  border-radius: 4px;
+}
+.format-tools button:hover {
+  background: #eef2e9;
+  color: #355b3c;
+}
+.tool-group-start {
+  border-left: 1px solid #e5e9df;
+  margin-left: 5px;
+  padding-left: 7px;
+}
+.view-modes {
+  display: flex;
+  background: #f2f4ee;
+  border: 1px solid #e9ece3;
+  border-radius: 5px;
+  padding: 3px;
+  align-items: center;
+  gap: 2px;
+}
+.view-modes button {
+  font-size: 9px;
+  padding: 6px 10px;
+  color: #909888;
+  border-radius: 3px;
+  line-height: 13px;
+}
+.view-modes button.selected {
+  background: #fff;
+  color: #4c6741;
+  box-shadow: 0 1px 4px #30421c10;
+}
+.view-modes .split-button {
+  display: flex;
+  padding: 4px 7px;
+  margin-left: 2px;
+  border-left: 1px solid #e1e6da;
+}
+.editor-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 540px;
+}
+.source-panel {
+  border-right: 1px solid var(--border);
+  background: #fafbf8;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.panel-heading {
+  height: 44px;
+  flex-shrink: 0;
+  padding: 0 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #8f9983;
+  letter-spacing: 0.8px;
+  border-bottom: 1px solid #edf0e7;
+}
+.panel-heading > span:first-child {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.panel-heading .source-indicator {
+  font-size: 8px;
+  letter-spacing: 0;
+  color: #a0a797;
+}
+.panel-heading .live-label {
+  font-size: 8px;
+  letter-spacing: 0;
+  color: #839674;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.live-label i {
+  width: 5px;
+  height: 5px;
+  background: #89a471;
+  border-radius: 50%;
+}
+.source-panel textarea {
+  padding: 20px 23px 25px;
+  resize: vertical;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #727c67;
+  line-height: 1.9;
+  font-family: \"SFMono-Regular\", Consolas, \"Liberation Mono\", monospace;
+  font-size: 10.5px;
+  min-height: 495px;
+  flex: 1;
+  width: 100%;
+  tab-size: 2;
+}
+.source-panel textarea:focus {
+  box-shadow: inset 0 0 0 1px #adc29b;
+}
+.preview-panel {
+  min-width: 0;
+}
+.markdown-preview {
+  padding: 21px 26px 27px;
+  font-size: 11px;
+  color: #6b7461;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.markdown-preview > *:first-child {
+  margin-top: 0;
+}
+.markdown-preview h2 {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #354830;
+  margin: 0 0 15px;
+}
+.markdown-preview h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3f5038;
+  margin: 19px 0 7px;
+}
+.markdown-preview p {
+  margin: 0 0 14px;
+  white-space: normal;
+}
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 19px;
+  margin: 6px 0 17px;
+}
+.markdown-preview li {
+  padding-left: 3px;
+  margin: 3px 0;
+}
+.markdown-preview li::marker {
+  color: #90a977;
+}
+.markdown-preview strong {
+  font-weight: 600;
+  color: #4f6045;
+}
+.markdown-preview blockquote {
+  margin: 15px 0 18px;
+  background: #f3f6ee;
+  border-left: 3px solid #a2b48d;
+  padding: 11px 15px;
+  color: #7c8a6d;
+  border-radius: 0 4px 4px 0;
+  font-size: 10.5px;
+}
+.markdown-preview blockquote p {
+  margin: 0;
+}
+.markdown-preview a {
+  color: #668653;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.markdown-preview hr {
+  height: 1px;
+  border: 0;
+  background: #e6eadd;
+  margin: 21px 0 16px;
+}
+.markdown-preview em {
+  color: #758568;
+}
+.markdown-preview pre {
+  overflow: auto;
+  background: #f0f3eb;
+  padding: 12px;
+  border-radius: 4px;
+}
+.markdown-preview code {
+  background: #edf1e6;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.markdown-preview pre code {
+  padding: 0;
+}
+.markdown-preview img {
+  max-width: 100%;
+}
+.markdown-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+  overflow: auto;
+}
+.markdown-preview th,
+.markdown-preview td {
+  border: 1px solid #dfe5d6;
+  padding: 5px 9px;
+}
+.mode-write,
+.mode-preview {
+  grid-template-columns: 1fr;
+}
+.mode-write .source-panel {
+  border-right: 0;
+}
+.mode-preview .markdown-preview {
+  max-width: 800px;
+}
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  height: 36px;
+  padding: 0 19px;
+  font-size: 8px;
+  color: #9aa18f;
+}
+.editor-footer > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.markdown-mark {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #9ba58e;
+  border-radius: 2px;
+  font-size: 9px;
+  line-height: 11px;
+  font-weight: 700;
+  padding: 0 3px;
+  color: #879575;
+}
+.markdown-mark span {
+  font-size: 11px;
+}
+.count-divider {
+  padding: 0 9px;
+  color: #bbc2b2;
+}
+.below-editor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  color: #9da48f;
+  margin-top: 12px;
+}
+.below-editor > span:first-child {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.below-editor > span:last-child {
+  color: #a6ac9c;
+  font-style: italic;
+}
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.back-button {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 10px;
+  color: #838e77;
+  padding: 0;
+}
+.form-footer > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.save-note {
+  font-size: 9px;
+  color: #a1a894;
+}
+.page-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #a5ac9b;
+  margin-top: 37px;
+  font-size: 8px;
+  padding-bottom: 4px;
+}
+.little-brand {
+  font-size: 15px;
+  font-family: \"Manrope\", sans-serif;
+  letter-spacing: -0.7px;
+  font-weight: 800;
+  color: #89977f;
+}
+.page-bottom > span:last-child {
+  margin-left: auto;
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.little-star {
+  font-size: 16px;
+  color: #9aaa86;
+}
+.sidebar-hidden .sidebar {
+  display: none;
+}
+.sidebar-hidden main {
+  margin-left: 0;
+}
+.materials {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 25px;
+  min-height: 400px;
+}
+.search-field {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  color: #91a083;
+}
+.search-field input {
+  border: 0;
+  outline: none;
+  width: 100%;
+  font-size: 12px;
+}
+.material-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 18px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+.material-icon {
+  padding: 14px;
+  border-radius: 7px;
+  background: #eef3e7;
+  color: #719459;
+}
+.material-card h3 {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+.material-card p {
+  font-size: 11px;
+  color: #939e89;
+  margin: 0;
+}
+.material-card > svg {
+  margin-left: auto;
+  color: #7f906d;
+}
+.no-results {
+  text-align: center;
+  color: #8b9681;
+  padding: 40px;
+}
+.toast {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #345741;
+  color: white;
+  padding: 15px 23px;
+  border-radius: 8px;
+  box-shadow: 0 6px 25px #263b2425;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
+  font-size: 12px;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #1e2e2455;
+  backdrop-filter: blur(3px);
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.modal {
+  background: #fbfcf9;
+  padding: 33px;
+  border-radius: 14px;
+  width: 540px;
+  max-width: 100%;
+  position: relative;
+  box-shadow: 0 20px 80px #26382630;
+  max-height: 90vh;
+  overflow: auto;
+}
+.close-modal {
+  position: absolute;
+  right: 17px;
+  top: 17px;
+  color: #8b977e;
+}
+.modal-icon {
+  display: inline-flex;
+  padding: 12px;
+  background: #e9efdf;
+  border-radius: 10px;
+  color: #6f8b59;
+}
+.modal h2 {
+  font-size: 21px;
+  letter-spacing: -0.6px;
+  line-height: 1.4;
+  margin: 20px 0 9px;
+}
+.modal > p {
+  font-size: 12px;
+  color: #8c9680;
+  line-height: 1.7;
+}
+.syntax-list {
+  margin-top: 22px;
+}
+.syntax-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e6eadf;
+  padding: 12px 0;
+  gap: 10px;
+  font-size: 11px;
+  color: #879279;
+}
+.syntax-list code {
+  font-size: 11px;
+  color: #567344;
+}
+.modal-note {
+  margin-top: 22px;
+  font-size: 11px;
+  color: #8b967f;
+  line-height: 1.9;
+}
+.template-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 25px;
+}
+.template-list button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #dce4d1;
+  border-radius: 7px;
+  padding: 18px;
+  font-size: 12px;
+}
+.template-list button svg:last-child {
+  margin-left: auto;
+}
+.empty-preview {
+  text-align: center;
+  color: #a0ad92;
+  padding: 100px 0;
+}
+.empty-preview p {
+  font-size: 15px;
+  margin: 12px 0 4px;
+}
+.empty-preview span {
+  font-size: 11px;
+}
+@media (min-width: 1500px) {
+  .page-content {
+    padding-top: 48px;
+  }
+  .editor-columns {
+    min-height: 580px;
+  }
+  .source-panel textarea {
+    font-size: 12px;
+  }
+  .markdown-preview {
+    font-size: 12px;
+  }
+  .markdown-preview h2 {
+    font-size: 21px;
+  }
+  .markdown-preview h3 {
+    font-size: 14px;
+  }
+  .sidebar {
+    width: 252px;
+  }
+  main {
+    margin-left: 252px;
+  }
+}
+@media (max-width: 1100px) {
+  .sidebar {
+    width: 205px;
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+  main {
+    margin-left: 205px;
+  }
+  .page-content {
+    padding: 30px 26px 20px;
+  }
+  .topbar {
+    padding: 0 26px;
+  }
+  .content-heading > div > span {
+    display: none;
+  }
+  .category-field {
+    width: 180px;
+  }
+  .source-panel textarea {
+    padding: 18px 17px;
+    font-size: 10px;
+  }
+  .markdown-preview {
+    padding: 20px;
+    font-size: 10.5px;
+  }
+  .panel-heading {
+    padding: 0 15px;
+  }
+  .source-indicator {
+    display: none;
+  }
+  .format-tools {
+    gap: 0;
+  }
+  .format-tools button {
+    width: 27px;
+  }
+  .view-modes button {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+  .section-heading > span:last-child {
+    display: none;
+  }
+  .save-note {
+    display: none;
+  }
+}
+@media (max-width: 800px) {
+  .sidebar {
+    width: 180px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .brand {
+    font-size: 30px;
+  }
+  .workspace {
+    gap: 6px;
+    padding: 10px 6px;
+    font-size: 9px;
+  }
+  .workspace small {
+    font-size: 8px;
+  }
+  .workspace-avatar {
+    width: 25px;
+    height: 25px;
+  }
+  .nav-label {
+    font-size: 7px;
+    letter-spacing: 0.7px;
+  }
+  .nav-item {
+    font-size: 11px;
+    padding: 12px 10px;
+  }
+  .tip-card {
+    padding: 13px 10px;
+  }
+  .tip-card button {
+    font-size: 8px;
+  }
+  .tip-card h3 {
+    font-size: 11px;
+  }
+  main {
+    margin-left: 180px;
+  }
+  .page-content {
+    padding: 27px 20px 18px;
+  }
+  .topbar {
+    padding: 0 20px;
+  }
+  .topbar-right {
+    display: none;
+  }
+  .page-heading {
+    align-items: flex-start;
+  }
+  h1 {
+    font-size: 24px;
+    gap: 8px;
+  }
+  .heading-actions {
+    padding-top: 24px;
+    gap: 6px;
+  }
+  .page-heading p {
+    font-size: 10px;
+    max-width: 230px;
+    line-height: 1.7;
+  }
+  .heading-actions .save-button {
+    display: none;
+  }
+  .details-card {
+    padding: 18px;
+  }
+  .category-field {
+    width: 145px;
+  }
+  .details-fields {
+    gap: 12px;
+  }
+  .details-fields input,
+  .select-wrap {
+    font-size: 10px;
+  }
+  .editor-toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px;
+    gap: 8px;
+  }
+  .view-modes {
+    margin-left: auto;
+  }
+  .editor-columns {
+    grid-template-columns: 1fr;
+  }
+  .source-panel {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .source-panel textarea {
+    min-height: 280px;
+    max-height: 400px;
+    font-size: 11px;
+  }
+  .markdown-preview {
+    font-size: 12px;
+  }
+  .markdown-preview h2 {
+    font-size: 20px;
+  }
+  .markdown-preview h3 {
+    font-size: 14px;
+  }
+  .mode-split .source-panel textarea {
+    height: 300px;
+  }
+  .below-editor > span:last-child {
+    display: none;
+  }
+  .page-bottom > span:last-child {
+    display: none;
+  }
+  .form-footer {
+    margin-top: 20px;
+  }
+  .editor-footer {
+    font-size: 7px;
+    padding: 0 10px;
+  }
+  .count-divider {
+    padding: 0 4px;
+  }
+  .panel-heading .source-indicator {
+    display: block;
+  }
+}
+@media (max-width: 580px) {
+  .sidebar {
+    display: none;
+  }
+  main {
+    margin-left: 0;
+  }
+  .topbar {
+    height: 58px;
+  }
+  .page-content {
+    padding: 24px 17px 18px;
+  }
+  .page-heading {
+    margin-bottom: 22px;
+  }
+  .page-heading p {
+    max-width: none;
+  }
+  .details-fields {
+    flex-direction: column;
+  }
+  .category-field {
+    width: 100%;
+  }
+  .section-heading {
+    margin-bottom: 18px;
+  }
+  .content-heading {
+    margin-top: 24px;
+  }
+  .text-help {
+    font-size: 8px;
+  }
+  .source-panel textarea {
+    font-size: 11px;
+  }
+  .sidebar-hidden .sidebar {
+    display: flex;
+    width: 220px;
+    box-shadow: 10px 0 40px #23351b20;
+    top: 58px;
+  }
+  .sidebar-hidden main {
+    margin-left: 0;
+  }
+  .sidebar-hidden .brand {
+    display: none;
+  }
+  .sidebar-hidden .workspace {
+    margin-top: 10px;
+  }
+  .form-footer .save-button {
+    font-size: 10px;
+  }
+  .modal {
+    padding: 26px 21px;
+  }
+  .modal h2 {
+    font-size: 19px;
+  }
+  .syntax-list > div {
+    font-size: 9px;
+  }
+  .syntax-list code {
+    font-size: 10px;
+  }
+  .toast {
+    font-size: 10px;
+    width: calc(100% - 32px);
+    justify-content: center;
+  }
+  .draft-badge {
+    font-size: 8px;
+  }
+  .eyebrow {
+    font-size: 7px;
+  }
+}
+.app {
+  background: #f8f9f6;
+  font-family: \"Golos Text\", sans-serif;
+}
+.markdown-preview h1 {
+  display: block;
+  font-size: 24px;
+  line-height: 1.45;
+  color: #354830;
+  margin: 0 0 17px;
+  letter-spacing: -0.5px;
+}
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  color: #3f5038;
+  line-height: 1.5;
+  margin: 16px 0 8px;
+}
+.markdown-preview .contains-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+.markdown-preview .task-list-item input {
+  accent-color: #63824e;
+  margin-right: 6px;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:77:19
+     75| // A hand-rolled <textarea> as the markdown input is the forbidden raw…
+     76| test("no raw textarea input", () => {
+     77|   expect(src).not.toMatch(new RegExp("<textarea[\\s/>]"));
+       |                   ^
+     78| });
+     79| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The project does not declare @gravity-ui/markdown-editor, and src/App.tsx imports react-markdown and renders a raw <textarea> for the Markdown input with a separate preview. There is no useMarkdownEditor hook or MarkdownEditorView, so the required editor is absent.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

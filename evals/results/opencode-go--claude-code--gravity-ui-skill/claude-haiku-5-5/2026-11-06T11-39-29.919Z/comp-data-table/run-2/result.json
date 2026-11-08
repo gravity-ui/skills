@@ -1,0 +1,143 @@
+{
+  "status": "passed",
+  "duration": 393.002,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 56,
+    "outputTokens": 27544,
+    "cacheReadTokens": 1663750,
+    "cacheWriteTokens": 75188,
+    "totalTokens": 1766538
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 19,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 3,
+      "shell": 21,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 27,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/data.ts",
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----\" && find .agents -type f | head -100 && echo \"-----\" && cat AGENTS.md && echo \"-----\" && ls -la && cat package.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "head -80 .agents/skills/gravity-ui/references/package-routing.md && echo \"-----TRAPS\" && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo \"-----SRC\" && find src -type f | xargs -I{} sh -c 'echo \"== {}\"; cat \"{}\"' && echo \"-----INSTALLED\" && ls node_modules/@gravity-ui/ && for p in node_modules/@gravity-ui/*/package.json; do node -e \"const p=require('./$p');console.log(p.name,p.version)\"; done; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/dist/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination Checkbox 2>&1 | head -150; echo \"-----README\"; ls node_modules/@gravity-ui/uikit/; (curl -sS -m 20 https://gravity-ui.com/llms/uikit/7/llms.txt -o /tmp/uikit7.txt -w \"%{http_code}\\n\" || echo \"curl failed\") ",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination Checkbox 2>&1 | head -150; echo \"-----LLMS size\"; wc -l /tmp/uikit7.txt; grep -n -i \"table\\|pagination\" /tmp/uikit7.txt | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -n -i \"table\\|pagination\" README.md | head -30; echo \"-----DTS\"; ls build | head -50; grep -rl \"withTableSorting\\|withTableSelection\" build --include=*.d.ts | head; echo \"----PAG\"; grep -rl \"export declare const Pagination\\|PaginationProps\" build --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls Table Table/hoc; echo \"-----TABLE INDEX\"; cat Table/index.d.ts; echo \"-----TABLE TYPES\"; cat Table/types.d.ts 2>/dev/null; echo \"-----HOC\"; cat Table/hoc/withTableSorting/withTableSorting.d.ts Table/hoc/withTableSelection/withTableSelection.d.ts Table/hoc/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat Table/Table.d.ts; echo \"-----PAG\"; cat Pagination/Pagination.d.ts; echo \"----- index\"; cat Pagination/index.d.ts; echo \"-----CHECKBOX\"; cat Checkbox/Checkbox.d.ts 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cat Pagination/types.d.ts; echo \"-----SORT JS\"; cat Table/hoc/withTableSorting/withTableSorting.js | head -150; echo \"-----SEL JS\"; cat Table/hoc/withTableSelection/withTableSelection.js | head -200",
+        "success": true
+      },
+      {
+        "command": "grep -n -A12 \"static getRowId\" Table/Table.js; echo \"-----PAG\"; grep -n \"page\" Pagination/Pagination.js | head -40; echo \"-----tsc\"; ls /home/sandbox/workspace/node_modules/.bin | grep -E \"^(tsc|vite|vitest)$\"; cat /home/sandbox/workspace/tsconfig.json",
+        "success": true
+      },
+      {
+        "command": "sed -n 12,30p Pagination/Pagination.js; ls Pagination/utils 2>/dev/null; grep -rn \"resultPage\\s*=\\|const getPaginationItems\\|function getPaginationItems\" Pagination | head; sed -n 45,52p Table/Table.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Pagination && ls utils* 2>/dev/null; f=$(ls utils.js utils/index.js 2>/dev/null | head -1); echo \"file=$f\"; grep -n -A10 \"getResultPage\" utils.js 2>/dev/null | head -30 || true; grep -rn -A8 \"export const getResultPage\\|export function getResultPage\" . --include=*.js | grep -v map | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"Table\\|Pagination\\|withTable\\|Checkbox\\|export \\* from \\\"./components/Flex\\|Text\\|Button\" index.d.ts components/index.d.ts 2>/dev/null | head -30; echo \"-----FLEX\"; sed -n 1,60p components/Flex/Flex.d.ts 2>/dev/null | head -60; echo \"-----BUTTON VIEW/PROPS\"; grep -n \"view\\|disabled\\|size\" components/Button/Button.d.ts | head -20; echo \"-----TEXT\"; grep -n \"variant\" components/Text/Text.d.ts | head -10",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"direction\\|alignItems\\|gap\" components/Layout/Flex/*.d.ts components/Flex/*.d.ts 2>/dev/null | head; find . -name \"Flex*.d.ts\" | head; grep -n \"ButtonView\\b\" -A3 components/Button/types.d.ts 2>/dev/null | head -12; grep -rn \"export type ButtonView\" components/Button | head -3; grep -n \"export type TextVariant\\|header-2\\|caption-2\" -r components/Text/*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat layout/Flex/Flex.d.ts | head -40; echo \"-----BV\"; cat Button/constants.d.ts | head -30; echo \"-----TEXT\"; grep -n \"variant\" Text/Text.d.ts Text/types.d.ts 2>/dev/null | head -8; ls Text",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npx tsc --noEmit 2>&1 | head -60; echo \"EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -E \"^(jsdom|happy-dom|@testing-library)$\"; ls node_modules/@testing-library 2>/dev/null; cat .gitignore; echo \"-----\"; npx vite build 2>&1 | grep -v \"npm warn\" | tail -15; echo \"EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cat > src/__smoke.test.tsx <<'EOF'\nimport * as React from 'react';\nimport {renderToString} from 'react-dom/server';\nimport {describe, expect, it} from 'vitest';\nimport {ThemeProvider} from '@gravity-ui/uikit';\nimport {App} from './App';\n\ndescribe('smoke', () => {\n  it('renders the table with page 1 of 42 rows and selection/sort UI', () => {\n    const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n    const bodyRows = (html.match(/<tbody[\\s\\S]*<\\/tbody>/)?.[0].match(/<tr/g) || []).length;\n    const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n    console.log('bodyRows', bodyRows, 'checkboxes', checkboxes);\n    console.log('hasSelectedCounter', html.includes('Выбрано строк: 0'));\n    console.log('hasSortHeader', html.includes('Сотрудник') && html.includes('Зарплата'));\n    console.log('paginationText', (html.match(/Страница[^<]*|of[^<]*|\\b1\\b[^<]{0,20}/g) || []).slice(0,5));\n    console.log('sampleRow', html.match(/Анна Иванов[\\s\\S]{0,400}/)?.[0].replace(/<[^>]+>/g,' | ').slice(0,300));\n    expect(bodyRows).toBe(10);\n    expect(checkboxes).toBeGreaterThanOrEqual(11);\n  });\n});\nEOF\nnpx vitest run src/__smoke.test.tsx 2>&1 | grep -v \"npm warn\" | tail -40; rm -f src/__smoke.test.tsx; echo \"cleaned: $(ls src)\"",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.smoke.config.mts <<'EOF'\nimport {defineConfig} from 'vitest/config';\nexport default defineConfig({test: {server: {deps: {inline: [/@gravity-ui/]}}, css: false}});\nEOF\ncat > src/__smoke.test.tsx <<'EOF'\nimport * as React from 'react';\nimport {renderToString} from 'react-dom/server';\nimport {describe, expect, it} from 'vitest';\nimport {ThemeProvider} from '@gravity-ui/uikit';\nimport {App} from './App';\n\ndescribe('smoke', () => {\n  it('renders the table with page 1 of 42 rows and selection/sort UI', () => {\n    const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n    const tbody = html.match(/<tbody[\\s\\S]*?<\\/tbody>/)?.[0] ?? '';\n    const bodyRows = (tbody.match(/<tr/g) || []).length;\n    const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n    console.log('RESULT bodyRows', bodyRows, 'checkboxes', checkboxes);\n    console.log('RESULT counter', html.includes('Выбрано строк: 0'));\n    console.log('RESULT sampleRow', tbody.replace(/<[^>]+>/g, ' | ').replace(/\\s+\\|/g,' |').slice(0, 300));\n    console.log('RESULT pagination', (html.match(/class=\"g-pagination[^\"]*\"/g)||[]).length, html.includes('Нет данных'));\n    expect(bodyRows).toBe(10);\n  });\n});\nEOF\nnpx vitest run --config vitest.smoke.config.mts src/__smoke.test.tsx 2>&1 | grep -E \"RESULT|PASS|FAIL|Tests|Error|expected\" | head -30; rm -f src/__smoke.test.tsx vitest.smoke.config.mts; echo \"cleaned: $(ls src | tr '\\n' ' ') | root: $(ls | tr '\\n' ' ')\"",
+        "success": true
+      },
+      {
+        "command": "git status --short && git diff --stat && npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"TSC_EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 56,
+      "outputTokens": 27544,
+      "cacheReadTokens": 1663750,
+      "cacheWriteTokens": 75188,
+      "totalTokens": 1766538
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

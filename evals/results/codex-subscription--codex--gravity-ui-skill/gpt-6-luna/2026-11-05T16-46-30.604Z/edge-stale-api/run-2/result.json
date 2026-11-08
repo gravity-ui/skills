@@ -1,0 +1,112 @@
+{
+  "status": "passed",
+  "duration": 245.805,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 59353,
+    "outputTokens": 3891,
+    "cacheReadTokens": 371456,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1249,
+    "totalTokens": 434700
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 1,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 11,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g '*.{tsx,ts,jsx,js,css,scss}' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md; rg -n -i -C 3 'theme|switch|uikit' .agents/skills/gravity-ui/references/package-routing.md; cat package.json; printf '\\\\n--- files ---\\\\n'; cat src/main.tsx; cat src/App.tsx; printf '\\\\n--- trap references ---\\\\n'; rg -n -C 3 'ThemeProvider|theme|Button|Switch' .agents/skills/gravity-ui/rules/hallucination-traps.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Switch ThemeProvider useTheme && rg --files node_modules/@gravity-ui/uikit | rg 'docs/INDEX.md|README.md|ThemeProvider|Switch.*d.ts|Button.*d.ts' | head -80\"",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc \"bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Switch ThemeProvider useTheme; rg --files node_modules/@gravity-ui/uikit | rg 'docs/INDEX.md|README.md|ThemeProvider|Switch.*d.ts|Button.*d.ts' | head -80; test -f node_modules/@gravity-ui/uikit/package.json && node -p \\\"require('./node_modules/@gravity-ui/uikit/package.json').version\\\" || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 4 'Required setup|ThemeProvider|theme|Switch' node_modules/@gravity-ui/uikit/README.md; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts; cat .agents/skills/gravity-ui/references/theming.md | sed -n '1,180p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,200p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeValue.d.ts; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts; rg -n 'interface ControlProps|type ControlProps' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | head; rg -n -C 3 'useThemeValue|setTheme|ThemeProvider' node_modules/@gravity-ui/uikit/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,50p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts; cat tsconfig.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff -- src/main.tsx src/App.tsx src/App.css; git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -type f -delete && find dist -depth -type d -empty -delete'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 59353,
+      "outputTokens": 3891,
+      "cacheReadTokens": 371456,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1249,
+      "totalTokens": 434700
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T17:15:01.015Z",
+    "by": "codex-subscription--codex--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

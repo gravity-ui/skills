@@ -1,0 +1,134 @@
+.cpu-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0; /* даём графику сжиматься внутри flex/grid-родителей */
+  height: 100%;
+  min-height: 320px;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: var(--g-border-radius-l, 8px);
+  background: var(--g-color-base-background);
+}
+
+.cpu-chart__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px 24px;
+}
+
+.cpu-chart__title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.cpu-chart__stats {
+  display: flex;
+  gap: 24px;
+  margin: 0;
+}
+
+.cpu-chart__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cpu-chart__stat dt,
+.cpu-chart__stat dd {
+  margin: 0;
+}
+
+/* Область графика занимает всё оставшееся место карточки; хост абсолютный,
+   чтобы размер графика не влиял на размер контейнера (иначе ресайз зациклится). */
+.cpu-chart__plot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 220px;
+  min-width: 0;
+}
+
+.cpu-chart__host {
+  position: absolute;
+  inset: 0;
+}
+
+/* Цвета графика под тему. Yagr переключает класс yagr_theme_* синхронно в setTheme(),
+   а переменные читает прямо при отрисовке канваса. */
+.cpu-chart__host.yagr {
+  background-color: transparent;
+}
+
+.cpu-chart__host.yagr_theme_light {
+  --yagr-background: transparent;
+  --yagr-grid: #e1e0d9;
+  --yagr-axis-stroke: #6b6a66;
+  --cpu-chart-crosshair: #898781;
+}
+
+.cpu-chart__host.yagr_theme_dark {
+  --yagr-background: transparent;
+  --yagr-grid: #3a3a37;
+  --yagr-axis-stroke: #a3a198;
+  --cpu-chart-crosshair: #a3a198;
+}
+
+/* Тултип Yagr живёт в document.body, вне нашего контейнера и вне scoped-тем,
+   поэтому его тема задаётся классом, а не CSS-переменными Gravity. */
+.yagr-tooltip.cpu-tooltip {
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: 6px;
+  font-family: var(--g-font-family-sans, system-ui, sans-serif);
+  font-size: 12px;
+  line-height: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+}
+
+.cpu-tooltip_light {
+  background-color: #fff;
+  color: #52514e;
+  border-color: rgba(11, 11, 11, 0.1);
+}
+
+.cpu-tooltip_dark {
+  background-color: #2b2b29;
+  color: #c3c2b7;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.cpu-tooltip__time {
+  margin-bottom: 4px;
+}
+
+.cpu-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.cpu-tooltip__key {
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* Значение — главный элемент, имя серии вторично. */
+.cpu-tooltip__value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cpu-tooltip_light .cpu-tooltip__value {
+  color: #0b0b0b;
+}
+
+.cpu-tooltip_dark .cpu-tooltip__value {
+  color: #f0efec;
+}

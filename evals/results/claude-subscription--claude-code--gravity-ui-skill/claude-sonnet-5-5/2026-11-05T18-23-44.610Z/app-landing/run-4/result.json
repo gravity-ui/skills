@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "duration": 359.855,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 30,
+    "outputTokens": 5294,
+    "cacheReadTokens": 575367,
+    "cacheWriteTokens": 38816,
+    "totalTokens": 619507
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 1,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/vite.config.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json AGENTS.md 2>/dev/null; find .agents -type f | head -50",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md; echo ------; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ------; cat index.html tsconfig.json vite.config.ts .gitignore; find src __agent_eval__ -type f | xargs ls -la",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx; grep -n -i -B2 -A8 \"page-constructor\" .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,80p; ls node_modules/@gravity-ui; npm view @gravity-ui/page-constructor version peerDependencies 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/page-constructor @diplodoc/transform 2>&1 | tail -15; cat node_modules/@gravity-ui/page-constructor/package.json | grep '\"version\"'; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/page-constructor/ node_modules/@gravity-ui/page-constructor/build/docs 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor && sed -n 1,80p build/docs/INDEX.md; ls build/docs/blocks build/docs/guides; grep -n -i -A25 \"required setup\\|## Usage\\|Quick start\" README.md | head -90",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/build/docs/blocks && sed -n 1,80p Header.md; echo =====; sed -n 1,70p Banner.md; echo =====; sed -n 1,60p PromoFeaturesBlock.md; echo ====; sed -n 1,50p ExtendedFeatures.md",
+        "success": true
+      },
+      {
+        "command": "sed -n 50,90p ExtendedFeatures.md; grep -n -i \"dynamic-import\\|sass\" ../../../README.md | head; cd /home/sandbox/workspace; ls node_modules | grep -i \"^sass\\|dynamic-import\"; npm view vite-plugin-dynamic-import version peerDependencies 2>&1|head",
+        "success": true
+      },
+      {
+        "command": "sed -n 505,560p node_modules/@gravity-ui/page-constructor/README.md; npm install -D sass vite-plugin-dynamic-import 2>&1 | grep -v \"^npm warn\" | tail -5",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\nimport dynamicImport from 'vite-plugin-dynamic-import';\n\nexport default defineConfig({\n  plugins: [\n    react(),\n    // Required by page-constructor: its blocks are loaded via dynamic imports.\n    dynamicImport({\n      filter: (id) => id.includes('/node_modules/@gravity-ui/page-constructor'),\n    }),\n  ],\n});\nEOF\ncat > src/App.css <<'EOF'\n/* page-constructor's grid does not ship a box-sizing reset */\n*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\nimport type { PageContent } from '@gravity-ui/page-constructor';\nimport '@gravity-ui/page-constructor/styles/styles.scss';\nimport './App.css';\n\nconst CTA_URL = '#';\n\nconst content: PageContent = {\n  blocks: [\n    {\n      type: 'header-block',\n      title: 'Учёт времени для команд — без лишней рутины',\n      description:\n        'Понятно, на что уходит время команды: фиксируйте задачи в пару кликов и видите общую картину по проектам.',\n      width: 'm',\n      buttons: [{ text: 'Попробовать бесплатно', theme: 'action', url: CTA_URL }],\n    },\n    {\n      type: 'extended-features-block',\n      items: [\n        {\n          title: 'Быстрый старт',\n          text: 'Запускайте и останавливайте таймер в один клик — команде не нужно долго привыкать.',\n        },\n        {\n          title: 'Прозрачность по проектам',\n          text: 'Сколько времени ушло на каждый проект и задачу — всё в одном месте и без ручных таблиц.',\n        },\n        {\n          title: 'Работа всей командой',\n          text: 'Общие проекты и единая картина по загрузке помогают планировать сроки и распределять работу.',\n        },\n      ],\n    },\n    {\n      type: 'banner-block',\n      title: 'Начните учитывать время уже сегодня',\n      subtitle: 'Подключите команду за несколько минут.',\n      button: { text: 'Попробовать бесплатно', theme: 'action', url: CTA_URL },\n    },\n  ],\n};\n\nexport function App() {\n  return (\n    <PageConstructorProvider>\n      <PageConstructor content={content} />\n    </PageConstructorProvider>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='vite.config.ts'\ns=open(p).read()\ns=s.replace(\"export default defineConfig({\\n\",\"export default defineConfig({\\n  resolve: {\\n    // page-constructor CSS uses webpack-style `~pkg` imports\\n    alias: [{ find: /^~/, replacement: '' }],\\n  },\\n\",1)\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | grep -v -i \"deprecat\\|@import\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|root stylesheet\\|@use\\|More info\" | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v -i \"deprecat\\|@import\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|root stylesheet\\|@use\\|More info\\|node_modules/@gravity\" | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm install url 2>&1 | grep -v \"^npm warn\" | tail -2 && sed -i \"s#alias: \\[{ find: /^~/, replacement: '' }\\],#alias: [\\n      { find: /^~/, replacement: '' },\\n      // page-constructor imports Node's \\`url\\` in browser code\\n      { find: /^url\\$/, replacement: 'url/' },\\n    ],#\" vite.config.ts && cat vite.config.ts && npm run build 2>&1 | grep -v -i \"deprecat\\|@import\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|root stylesheet\\|@use\\|More info\\|node_modules/@gravity\" | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 30,
+      "outputTokens": 5294,
+      "cacheReadTokens": 575367,
+      "cacheWriteTokens": 38816,
+      "totalTokens": 619507
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

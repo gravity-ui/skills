@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 897.894,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 418,
+    "outputTokens": 7371,
+    "cacheReadTokens": 423903,
+    "cacheWriteTokens": 24629,
+    "totalTokens": 456321
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo ---- && ls -R .agents/skills/gravity-ui | head -50 && echo ---- && cat AGENTS.md && echo ---- && ls && cat package.json",
+        "success": true
+      },
+      {
+        "command": "find src -type f | head -50 && echo ---- && for f in $(find src -type f); do echo \"=== $f\"; cat \"$f\"; done && echo ---- && cat index.html tsconfig.json vite.config.ts && echo ---- && ls __agent_eval__ 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "rg -n -i -C 3 \"dropdown|menu|action\" .agents/skills/gravity-ui/references/package-routing.md | head -80; echo ----; rg -n -C 4 -i \"Button view|Icon data\" .agents/skills/gravity-ui/rules/hallucination-traps.md | head -80",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit DropdownMenu Button Icon 2>&1 | head -60; echo ----; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; ls node_modules/@gravity-ui/icons 2>&1 | head -3",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit DropdownMenu Button Icon 2>&1 | head -60; echo ----; node -e \"const p=require('./node_modules/@gravity-ui/uikit/package.json');console.log(p.version, 'deps icons:', p.dependencies?.['@gravity-ui/icons'], 'peer icons:', p.peerDependencies?.['@gravity-ui/icons'])\"; node -e \"console.log(require('./node_modules/@gravity-ui/icons/package.json').version)\"; echo ----; ls node_modules/@gravity-ui/uikit/; ls node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/ 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu && cat DropdownMenu.d.ts types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && curl -sS -m 20 -L \"https://gravity-ui.com/llms/uikit/7/llms.txt\" -o /tmp/uikit7.txt; echo \"exit=$? size=$(wc -c </tmp/uikit7.txt 2>/dev/null)\"; head -c 300 /tmp/uikit7.txt; echo; echo ----; rg -n -i -m 60 \"dropdownmenu|renderSwitcher\" /tmp/uikit7.txt | head -60; echo ----; cat node_modules/@gravity-ui/uikit/build/esm/components/Menu/MenuItem.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "node -e \"fetch('https://gravity-ui.com/llms/uikit/7/llms.txt',{signal:AbortSignal.timeout(15000)}).then(r=>r.text()).then(t=>{require('fs').writeFileSync('/tmp/uikit7.txt',t);console.log('ok',t.length)}).catch(e=>console.log('FAIL',e.message))\"; echo ----; rg -n -i -C 2 \"renderSwitcher|## DropdownMenu|# DropdownMenu\" /tmp/uikit7.txt 2>/dev/null | head -80; echo ----; rg -n -i -C 6 \"required setup\" node_modules/@gravity-ui/uikit/README.md | head -60",
+        "success": true
+      },
+      {
+        "command": "timeout 90 npm install @gravity-ui/icons@^2.23.1 --no-audit --no-fund 2>&1 | tail -5; echo \"exit=${PIPESTATUS[0]}\"; grep -n icons package.json; ls node_modules/@gravity-ui/icons/ | grep -E \"^(ChevronDown|Pencil|Copy|TrashBin|ArrowDownToLine|Link)\\.d\\.ts$\"",
+        "success": true
+      },
+      {
+        "command": "rg -n \"variant\\?|color\\?\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/colorText.d.ts 2>/dev/null | head; rg -n \"TEXT_VARIANTS|body-1\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head -5; rg -n \"TEXT_COLORS|secondary\" node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/colorText.d.ts | head -5; rg -n \"size\\?|view\\?\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -4",
+        "success": true
+      },
+      {
+        "command": "cat > src/ActionsMenu.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, DropdownMenu, Icon } from '@gravity-ui/uikit';\nimport type { DropdownMenuItem } from '@gravity-ui/uikit';\nimport { ArrowDownToLine, ChevronDown, Copy, Link, Pencil, TrashBin } from '@gravity-ui/icons';\n\nexport type ActionId = 'edit' | 'duplicate' | 'copy-link' | 'download' | 'delete';\n\nexport interface ActionsMenuProps {\n  /** Called with the id of the chosen action. */\n  onAction?: (action: ActionId) => void;\n  /** Disables the switcher button and prevents the menu from opening. */\n  disabled?: boolean;\n}\n\nexport function ActionsMenu({ onAction, disabled }: ActionsMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const run = (action: ActionId) => () => onAction?.(action);\n\n  // Nested arrays render as visually separated groups.\n  const items: (DropdownMenuItem | DropdownMenuItem[])[] = [\n    [\n      { text: 'Редактировать', iconStart: <Icon data={Pencil} size={16} />, action: run('edit') },\n      { text: 'Дублировать', iconStart: <Icon data={Copy} size={16} />, action: run('duplicate') },\n      { text: 'Скопировать ссылку', iconStart: <Icon data={Link} size={16} />, action: run('copy-link') },\n      { text: 'Скачать', iconStart: <Icon data={ArrowDownToLine} size={16} />, action: run('download') },\n    ],\n    [\n      {\n        text: 'Удалить',\n        theme: 'danger',\n        iconStart: <Icon data={TrashBin} size={16} />,\n        action: run('delete'),\n      },\n    ],\n  ];\n\n  return (\n    <DropdownMenu\n      open={open}\n      onOpenToggle={setOpen}\n      disabled={disabled}\n      size=\"m\"\n      items={items}\n      renderSwitcher={(switcherProps) => (\n        <Button\n          {...switcherProps}\n          view=\"action\"\n          size=\"m\"\n          disabled={disabled}\n          aria-haspopup=\"menu\"\n          aria-expanded={open}\n        >\n          Действия\n          <Icon data={ChevronDown} size={16} />\n        </Button>\n      )}\n    />\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Flex, Text } from '@gravity-ui/uikit';\n\nimport { ActionsMenu, type ActionId } from './ActionsMenu';\n\nconst ACTION_LABELS: Record<ActionId, string> = {\n  edit: 'Редактировать',\n  duplicate: 'Дублировать',\n  'copy-link': 'Скопировать ссылку',\n  download: 'Скачать',\n  delete: 'Удалить',\n};\n\nexport function App() {\n  const [lastAction, setLastAction] = useState<ActionId | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 24 }}>\n      <Flex gap={3} alignItems=\"center\">\n        <ActionsMenu onAction={setLastAction} />\n        <Text variant=\"body-1\" color=\"secondary\">\n          {lastAction ? `Выбрано: ${ACTION_LABELS[lastAction]}` : 'Нажмите кнопку, чтобы открыть список действий'}\n        </Text>\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nrg -n \"gap\\?|direction\\?|alignItems\\?\" node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts | head -5; echo ---- ; npx tsc --noEmit 2>&1 | tail -20; echo \"tsc exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "timeout 180 npm run build 2>&1 | tail -12; echo \"exit=${PIPESTATUS[0]}\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 418,
+      "outputTokens": 7371,
+      "cacheReadTokens": 423903,
+      "cacheWriteTokens": 24629,
+      "totalTokens": 456321
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

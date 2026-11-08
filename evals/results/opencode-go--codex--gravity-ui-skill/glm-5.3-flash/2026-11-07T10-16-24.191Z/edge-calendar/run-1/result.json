@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "duration": 271.714,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 297287,
+    "outputTokens": 3681,
+    "cacheReadTokens": 160000,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 699,
+    "totalTokens": 460968
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- FILES ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package.json ---\\\\n'; cat package.json; printf '\\\\n--- App ---\\\\n'; cat src/App.tsx; printf '\\\\n--- main ---\\\\n'; cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- routing entry ---'; rg -n -A18 -B4 'date-components|date-utils' .agents/skills/gravity-ui/references/package-routing.md | head -100; printf '%s\\\\n' '--- local docs ---'; ls node_modules/@gravity-ui/date-components 2>/dev/null || true; find node_modules/@gravity-ui/date-components -maxdepth 3 -iname 'INDEX.md' -o -iname 'README.md' 2>/dev/null | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json > /tmp/package.json.bak && npm install --save @gravity-ui/date-components @gravity-ui/date-utils && printf '\\\\n--- versions ---\\\\n' && node -e \\\"for (const p of ['@gravity-ui/uikit','@gravity-ui/date-components','@gravity-ui/date-utils']) console.log(p, require(p+'/package.json').version)\\\" && printf '\\\\n--- setup/readme ---\\\\n' && (rg -n -A35 -B5 'Required setup|Getting started|Installation|Calendar' node_modules/@gravity-ui/date-components/README.md node_modules/@gravity-ui/date-components/dist/docs/INDEX.md 2>/dev/null | head -180 || true) && printf '\\\\n--- exports ---\\\\n' && (rg -n 'Calendar' node_modules/@gravity-ui/date-components/dist/index.d.ts node_modules/@gravity-ui/date-components/dist/*.d.ts 2>/dev/null | head -80 || true)\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"npm view @gravity-ui/date-components@3 version peerDependencies --json && printf '\\\\n--- majors ---\\\\n' && npm view @gravity-ui/date-components versions --json | tail -60 && printf '\\\\n--- uikit major ---\\\\n' && npm view @gravity-ui/uikit@7 version --json | tail -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --save @gravity-ui/date-components@3.4.2 @gravity-ui/date-utils@''^2.6.0 && printf '\"'\\\\n--- versions ---\\\\n' && node -e \\\"for (const p of ['@gravity-ui/uikit','@gravity-ui/date-components','@gravity-ui/date-utils']) console.log(p, require(p+'/package.json').version)\\\" && printf '\\\\n--- setup/readme ---\\\\n' && (rg -n -A35 -B5 'Required setup|Getting started|Installation|Calendar' node_modules/@gravity-ui/date-components/README.md node_modules/@gravity-ui/date-components/dist/docs/INDEX.md 2>/dev/null | head -220 || true) && printf '\\\\n--- exports ---\\\\n' && (rg -n 'Calendar' node_modules/@gravity-ui/date-components/dist/index.d.ts node_modules/@gravity-ui/date-components/dist/**/*.d.ts 2>/dev/null | head -120 || true)\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['@gravity-ui/uikit','@gravity-ui/date-components','@gravity-ui/date-utils']) { const j=JSON.parse(require('fs').readFileSync('node_modules/'+p+'/package.json')); console.log(p,j.version)}\\\"; printf '\\\\n--- docs files ---\\\\n'; find node_modules/@gravity-ui/date-components -maxdepth 3 \\\\( -iname 'INDEX.md' -o -iname 'README.md' \\\\) -print; printf '\\\\n--- setup/readme ---\\\\n'; rg -n -A30 -B5 'Required setup|Getting started|Installation|Calendar' node_modules/@gravity-ui/date-components/README.md node_modules/@gravity-ui/date-components/dist/docs/INDEX.md 2>/dev/null | head -220; printf '\\\\n--- exports ---\\\\n'; rg -n 'Calendar' node_modules/@gravity-ui/date-components/dist/index.d.ts node_modules/@gravity-ui/date-components/dist 2>/dev/null | head -140\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- package setup ---'; node -e \\\"const j=require('fs').readFileSync('node_modules/@gravity-ui/date-components/package.json');const x=JSON.parse(j); console.log(JSON.stringify({exports:x.exports, peerDependencies:x.peerDependencies, dependencies:x.dependencies},null,2))\\\"; printf '%s\\\\n' '--- Calendar d.ts ---'; find node_modules/@gravity-ui/date-components/dist/esm/components/Calendar -maxdepth 2 -name '*.d.ts' -print; sed -n '1,220p' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/index.d.ts; printf '%s\\\\n' '--- Calendar props ---'; find node_modules/@gravity-ui/date-components/dist/esm/components/Calendar -type f -name '*.d.ts' -exec rg -n 'interface|type .*Props|onUpdate|onValueChange|value|defaultValue|focusedValue|disabled|isDateUnavailable' {} +\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts; printf '\\\\n--- state options ---\\\\n'; rg -n 'interface CalendarStateOptions|interface RangeCalendarStateOptions' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/*.d.ts -A45; printf '\\\\n--- Calendar js ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.js; printf '\\\\n--- readme setup grep ---\\\\n'; rg -n -A20 -B5 'setup|style|ThemeProvider|import' node_modules/@gravity-ui/date-components/README.md | head -180\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '20,120p' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/types.d.ts; printf '\\\\n--- base props ---\\\\n'; rg -n 'interface ValueBase|interface InputBase|onChange|onUpdate' node_modules/@gravity-ui/date-components/dist/esm/components/types/*.d.ts -A18; printf '\\\\n--- date utils API ---\\\\n'; find node_modules/@gravity-ui/date-utils -maxdepth 3 -name '*.d.ts' | head -20; rg -n 'export declare function dateTime|export declare const dateTime|function parseDateTime|const parseDateTime' node_modules/@gravity-ui/date-utils/dist/esm -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,45p' node_modules/@gravity-ui/date-components/dist/esm/components/types/inputs.d.ts; printf '\\\\n--- date utils exports ---\\\\n'; cat node_modules/@gravity-ui/date-utils/build/typings/index.d.ts; sed -n '1,100p' node_modules/@gravity-ui/date-utils/build/typings/dateTime.d.ts; printf '\\\\n--- parse d.ts ---\\\\n'; cat node_modules/@gravity-ui/date-utils/build/typings/parser.d.ts | head -100; printf '\\\\n--- package exports ---\\\\n'; node -e \\\"const x=JSON.parse(require('fs').readFileSync('node_modules/@gravity-ui/date-utils/package.json')); console.log(JSON.stringify(x.exports,null,2))\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/date-utils/build/typings/common.d.ts; rg -n 'declare (function|const) (dateTime|parse)' node_modules/@gravity-ui/date-utils/build -g '*.d.ts' -A8; cat node_modules/@gravity-ui/date-utils/package.json | head -80; rg -n 'loadLocale' node_modules/@gravity-ui/date-utils/build -g '*.d.ts' -A4\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && git diff -- package.json src/App.tsx | sed -n '1,220p'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 297287,
+      "outputTokens": 3681,
+      "cacheReadTokens": 160000,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 699,
+      "totalTokens": 460968
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

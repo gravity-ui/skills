@@ -1,0 +1,92 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 17401ms
+   × depends on @gravity-ui/markdown-editor 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   × no react-markdown DIY preview 0ms
+     → expected true to be false // Object.is equality
+   ✓ no raw textarea input 0ms
+   ✓ no dangerouslySetInnerHTML preview 0ms
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 17397ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx renders the markdown input with @gravity-ui/uikit TextArea and a separate ReactMarkdown preview; package.json depends on react-markdown and does not include @gravity-ui/markdown-editor. There is no useMarkdownEditor hook or MarkdownEditorView, so the required live-formatting editor is absent.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  21:17:42
+   Duration  17.55s (transform 31ms, setup 14ms, collect 18ms, tests 17.40s, environment 0ms, prepare 26ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no react-markdown DIY preview
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:72:44
+     70| // Pulling react-markdown signals a DIY textarea+preview build instead…
+     71| test("no react-markdown DIY preview", () => {
+     72|   expect(dependsOn(src, "react-markdown")).toBe(false);
+       |                                            ^
+     73| });
+     74| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx renders the markdown input with @gravity-ui/uikit TextArea and a separate ReactMarkdown preview; package.json depends on react-markdown and does not include @gravity-ui/markdown-editor. There is no useMarkdownEditor hook or MarkdownEditorView, so the required live-formatting editor is absent.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

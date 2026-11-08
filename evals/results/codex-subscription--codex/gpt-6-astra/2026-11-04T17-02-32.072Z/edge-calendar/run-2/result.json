@@ -1,0 +1,82 @@
+{
+  "status": "failed",
+  "duration": 985.875,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 5614,
+    "outputTokens": 7910,
+    "cacheReadTokens": 147200,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 179,
+    "totalTokens": 160724
+  },
+  "model": "gpt-6-astra",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g AGENTS.md /home/sandbox 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg 'Calendar|DatePicker' node_modules/@gravity-ui/uikit/build/esm/index.d.ts; cat tsconfig.json; ls node_modules/@gravity-ui/uikit/build/esm/components/Button; cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -100; cat node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.d.ts | head -55\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {useRef, useState} from 'react';\nimport {Button, Select} from '@gravity-ui/uikit';\nimport './App.css';\n\nconst months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];\nconst weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];\nconst fullDate = new Intl.DateTimeFormat('ru-RU', {day: 'numeric', month: 'long', year: 'numeric'});\nconst dateKey = (date: Date) => \"'`${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;\nconst sameDay = (a: Date, b: Date) => dateKey(a) === dateKey(b);\n\nfunction CalendarIcon() {\n  return <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><rect x=\"3.5\" y=\"5\" width=\"17\" height=\"16\" rx=\"3\" stroke=\"currentColor\" strokeWidth=\"1.6\"/><path d=\"M7.5 3v4M16.5 3v4M4 10h16\" stroke=\"currentColor\" strokeWidth=\"1.6\" strokeLinecap=\"round\"/><path d=\"M8 14h2v2H8zM14 14h2v2h-2z\" fill=\"currentColor\"/></svg>;\n}\n\nexport function App() {\n  const today = new Date();\n  const [visible, setVisible] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));\n  const [selected, setSelected] = useState<Date | null>(null);\n  const [focused, setFocused] = useState(today);\n  const dayRefs = useRef(new Map<string, HTMLButtonElement>());\n  const year = visible.getFullYear();\n  const month = visible.getMonth();\n  const offset = (new Date(year, month, 1).getDay() + 6) % 7;\n  const days = Array.from({length: 42}, (_, index) => new Date(year, month, index - offset + 1));\n  const years = Array.from({length: 201}, (_, index) => today.getFullYear() - 100 + index);\n  if (!years.includes(year)) years.push(year);\n  years.sort((a, b) => a - b);\n\n  function showMonth(nextYear: number, nextMonth: number) {\n    const next = new Date(nextYear, nextMonth, 1);\n    setVisible(next);\n    setFocused(next);\n  }\n\n  function choose(date: Date) {\n    setSelected(date);\n    setFocused(date);\n    setVisible(new Date(date.getFullYear(), date.getMonth(), 1));\n  }\n\n  function moveFocus(event: React.KeyboardEvent<HTMLButtonElement>, date: Date) {\n    const next = new Date(date);\n    const shifts: Record<string, number> = {ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7};\n    if (event.key in shifts) next.setDate(date.getDate() + shifts[event.key]);\n    else if (event.key === '\"'Home') next.setDate(date.getDate() - (date.getDay() + 6) % 7);\n    else if (event.key === 'End') next.setDate(date.getDate() + 6 - (date.getDay() + 6) % 7);\n    else if (event.key === 'PageUp' || event.key === 'PageDown') {\n      next.setDate(1);\n      next.setMonth(date.getMonth() + (event.key === 'PageUp' ? -1 : 1));\n      next.setDate(Math.min(date.getDate(), new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate()));\n    } else return;\n    event.preventDefault();\n    setFocused(next);\n    setVisible(new Date(next.getFullYear(), next.getMonth(), 1));\n    requestAnimationFrame(() => dayRefs.current.get(dateKey(next))?.focus());\n  }\n\n  return (\n    <main className=\\\"page\\\">\n      <header className=\\\"page-heading\\\">\n        <div className=\\\"eyebrow\\\"><span className=\\\"small-mark\\\" /> ПЛАНИРУЙТЕ СВОЁ ВРЕМЯ</div>\n        <h1>Календарь</h1>\n        <p>Хорошие планы начинаются с даты.</p>\n      </header>\n      <section className=\\\"calendar-card\\\" aria-labelledby=\\\"calendar-title\\\">\n        <div className=\\\"card-heading\\\">\n          <div className=\\\"icon-tile\\\"><CalendarIcon /></div>\n          <div><h2 id=\\\"calendar-title\\\">Выберите дату</h2><p>Найдите подходящий день в календаре</p></div>\n        </div>\n        <div className=\\\"calendar-body\\\">\n          <div className=\\\"calendar-toolbar\\\">\n            <div className=\\\"month-selectors\\\">\n              <Select aria-label=\\\"Месяц\\\" value={[String(month)]} onUpdate={([value]) => showMonth(year, Number(value))} options={months.map((label, value) => ({value: String(value), content: label}))} size=\\\"l\\\" />\n              <Select aria-label=\\\"Год\\\" value={[String(year)]} onUpdate={([value]) => showMonth(Number(value), month)} options={years.map(value => ({value: String(value), content: String(value)}))} size=\\\"l\\\" />\n            </div>\n            <div className=\\\"month-navigation\\\">\n              <Button view=\\\"flat\\\" size=\\\"l\\\" aria-label=\\\"Предыдущий месяц\\\" onClick={() => showMonth(year, month - 1)}><span className=\\\"chevron\\\">‹</span></Button>\n              <Button view=\\\"flat\\\" size=\\\"l\\\" aria-label=\\\"Следующий месяц\\\" onClick={() => showMonth(year, month + 1)}><span className=\\\"chevron\\\">›</span></Button>\n            </div>\n          </div>\n          <span className=\\\"sr-only\\\" aria-live=\\\"polite\\\">{months[month]} {year}</span>\n          <div className=\\\"weekdays\\\" aria-hidden=\\\"true\\\">{weekdays.map(day => <span key={day}>{day}</span>)}</div>\n          <div className=\\\"days\\\" role=\\\"group\\\" aria-label={\"'`${months[month]} ${year}`}>\n            {days.map(date => {\n              const isSelected = selected !== null && sameDay(date, selected);\n              const isToday = sameDay(date, today);\n              return <button\n                key={dateKey(date)}\n                ref={element => {if (element) dayRefs.current.set(dateKey(date), element); else dayRefs.current.delete(dateKey(date));}}\n                type=\"button\"\n                className={`day ${date.getMonth() !== month ? '\"'outside' : ''} \"'${isToday ? '\"'today' : ''} \"'${isSelected ? '\"'selected' : ''}\"'`}\n                aria-label={fullDate.format(date)}\n                aria-pressed={isSelected}\n                aria-current={isToday ? '\"'date' : undefined}\n                tabIndex={sameDay(date, focused) ? 0 : -1}\n                onClick={() => choose(date)}\n                onKeyDown={event => moveFocus(event, date)}\n              >{date.getDate()}{isToday && <span className=\\\"today-dot\\\" />}</button>;\n            })}\n          </div>\n          <div className=\\\"calendar-footer\\\">\n            <span className=\\\"today-legend\\\"><span /> Сегодня, {today.toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})}</span>\n            <Button view=\\\"outlined\\\" size=\\\"m\\\" onClick={() => choose(new Date())}>Сегодня</Button>\n          </div>\n        </div>\n        <div className=\\\"selection-panel\\\">\n          <div aria-live=\\\"polite\\\" aria-atomic=\\\"true\\\"><span className=\\\"selection-label\\\">ВЫБРАННАЯ ДАТА</span><div className={\"'`selection-value ${selected ? '\"'has-selection' : ''}\"'`}>{selected ? fullDate.format(selected) : '\"'Дата пока не выбрана'}</div></div>\n          {selected && <Button view=\\\"flat-secondary\\\" aria-label=\\\"Сбросить выбранную дату\\\" onClick={() => setSelected(null)}>Сбросить</Button>}\n        </div>\n      </section>\n      <p className=\\\"page-note\\\">Нажмите на день в календаре, чтобы выбрать дату</p>\n    </main>\n  );\n}\nEOF\ncat > src/App.css <<'EOF'\n:root { font-family: 'Inter', 'Arial', sans-serif; color: #252b35; background: #f6f7f9; font-synthesis: none; }\n* { box-sizing: border-box; }\nbody { margin: 0; min-width: 320px; background: #f6f7f9; }\n.page { max-width: 520px; margin: 0 auto; padding: 76px 20px 40px; }\n.eyebrow { display: flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; color: #7d8390; }\n.small-mark { height: 7px; width: 7px; border-radius: 50%; background: #8264db; }\nh1 { font-size: 36px; line-height: 1.25; letter-spacing: -1.1px; font-weight: 650; margin: 16px 0 10px; }\n.page-heading > p { margin: 0; color: #7a818d; font-size: 15px; line-height: 1.6; }\n.calendar-card { margin-top: 30px; background: white; border: 1px solid #e7e9ee; border-radius: 20px; box-shadow: 0 8px 30px #26334d06, 0 2px 4px #26334d03; overflow: hidden; }\n.card-heading { display: flex; gap: 14px; align-items: center; padding: 26px 28px; border-bottom: 1px solid #eff0f3; }\n.icon-tile { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 13px; background: #f1edfb; color: #8061cc; }\nh2 { margin: 0 0 5px; font-size: 17px; font-weight: 600; }\n.card-heading p { font-size: 12px; margin: 0; color: #8a8e99; }\n.calendar-body { padding: 24px 28px 18px; }\n.calendar-toolbar, .month-selectors, .month-navigation { display: flex; align-items: center; }\n.calendar-toolbar { justify-content: space-between; gap: 8px; margin-bottom: 24px; }\n.month-selectors { gap: 8px; }\n.month-selectors .g-select { --g-button-border-radius: 8px; }\n.chevron { display: inline-block; font-family: Arial, sans-serif; font-size: 25px; line-height: 22px; color: #747b88; }\n.weekdays, .days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; }\n.weekdays { margin-bottom: 12px; font-size: 11px; color: #9297a2; font-weight: 500; }\n.days { gap: 5px 3px; }\n.day { font: inherit; font-size: 14px; border: 0; background: transparent; color: #39404e; border-radius: 11px; min-width: 0; height: 46px; position: relative; cursor: pointer; transition: background .15s, color .15s; }\n.day:hover { background: #f1edf9; }\n.day.outside { color: #c2c5cd; }\n.day.today { color: #7958c5; font-weight: 650; background: #f5f1fc; }\n.day.selected { background: #8262cf; color: white; font-weight: 600; box-shadow: 0 3px 7px #8262cf25; }\n.day.selected:hover { background: #7252bd; }\n.day:focus-visible { outline: 2px solid #8262cf; outline-offset: 2px; }\n.today-dot { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: currentColor; bottom: 5px; left: calc(50% - 2px); }\n.calendar-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; padding-top: 18px; border-top: 1px solid #eff0f3; }\n.today-legend { display: flex; align-items: center; gap: 7px; color: #9397a1; font-size: 11px; }\n.today-legend > span { width: 5px; height: 5px; background: #9478d7; border-radius: 50%; }\n.selection-panel { min-height: 91px; background: #faf9fc; border-top: 1px solid #eeecf3; padding: 22px 28px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }\n.selection-label { font-size: 9px; color: #9a93aa; letter-spacing: 1.1px; font-weight: 600; }\n.selection-value { font-size: 14px; margin-top: 7px; color: #96919f; }\n.has-selection { color: #6648a5; font-weight: 600; }\n.page-note { text-align: center; font-size: 11px; color: #a0a4ae; margin-top: 22px; line-height: 1.6; }\n.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }\n@media (max-width: 480px) { .page { padding: 36px 16px 24px; } h1 { font-size: 31px; } .card-heading { padding: 22px 18px; } .calendar-body { padding: 20px 16px 16px; } .selection-panel { padding: 20px 18px; } .day { height: 40px; } .month-selectors { gap: 4px; } .month-navigation .g-button { min-width: 28px; } }\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat index.html && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 5614,
+      "outputTokens": 7910,
+      "cacheReadTokens": 147200,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 179,
+      "totalTokens": 160724
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

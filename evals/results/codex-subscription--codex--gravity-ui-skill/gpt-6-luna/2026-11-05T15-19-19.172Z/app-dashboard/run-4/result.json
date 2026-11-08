@@ -1,0 +1,167 @@
+{
+  "status": "passed",
+  "duration": 1197.62,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 71808,
+    "outputTokens": 13402,
+    "cacheReadTokens": 1407360,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2789,
+    "totalTokens": 1492570
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 22,
+      "web_fetch": 0,
+      "web_search": 1,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 23,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!node_modules'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- catalog matches ---\\\\n' && rg -n -i -C 2 'dashboard|data grid|table|app shell|navigation' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- project ---\\\\n' && cat package.json && printf '\\\\n--- app ---\\\\n' && cat src/App.tsx && cat src/main.tsx && printf '\\\\n--- traps ---\\\\n' && sed -n '1,220p' .agents/skills/gravity-ui/rules/hallucination-traps.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/table @gravity-ui/navigation'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['@gravity-ui/uikit','@gravity-ui/table','@gravity-ui/navigation']) console.log(p,require(p+'/package.json').version)\\\" && printf '\\\\n--- table docs candidates ---\\\\n' && ls node_modules/@gravity-ui/table/{dist/docs,build/docs} 2>/dev/null && printf '\\\\n--- navigation docs candidates ---\\\\n' && ls node_modules/@gravity-ui/navigation/{dist/docs,build/docs} 2>/dev/null && printf '\\\\n--- package routing entries ---\\\\n' && sed -n '367,385p' .agents/skills/gravity-ui/references/package-routing.md && sed -n '452,469p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- readmes ---\\\\n' && rg -n -C 3 'Required setup|ColumnReorderingProvider|group|selection|AsideHeader|menuItems|styles' node_modules/@gravity-ui/table/README.md node_modules/@gravity-ui/navigation/README.md\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"for p in uikit table navigation; do node -p \\\"require('./node_modules/@gravity-ui/\"'$p/package.json'\"').version\\\"; done\nprintf '\\\\n--- table docs ---\\\\n'\nfind node_modules/@gravity-ui/table -path '*/docs/INDEX.md' -o -name README.md | head -12\nprintf '\\\\n--- navigation docs ---\\\\n'\nfind node_modules/@gravity-ui/navigation -path '*/docs/INDEX.md' -o -name README.md | head -12\nprintf '\\\\n--- readmes matches ---\\\\n'\nrg -n -C 3 'Required setup|ColumnReorderingProvider|group|selection|AsideHeader|menuItems|styles' node_modules/@gravity-ui/table/README.md node_modules/@gravity-ui/navigation/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- package peer/setup ---' && sed -n '1,75p' node_modules/@gravity-ui/table/README.md && sed -n '20,70p' node_modules/@gravity-ui/navigation/README.md && printf '%s\\\\n' '--- table docs grouping / reordering / table render ---' && rg -n -C 4 'getGroupedRowModel|Grouping|ColumnReorderingProvider|selectionColumn|<Table|Table table|Table className|TableProps' node_modules/@gravity-ui/table/build/docs/INDEX.md | head -180 && printf '%s\\\\n' '--- navigation docs index ---' && rg -n -C 4 'AsideHeader|renderContent|menuItems|compact|onChangeCompact|styles' node_modules/@gravity-ui/navigation/build/docs/INDEX.md | head -160 && printf '%s\\\\n' '--- icons dependencies ---' && cat node_modules/@gravity-ui/navigation/package.json | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm ls @gravity-ui/icons @bem-react/classname --depth=0; sed -n '288,354p' node_modules/@gravity-ui/table/README.md; sed -n '482,508p' node_modules/@gravity-ui/table/README.md; sed -n '1,180p' node_modules/@gravity-ui/navigation/build/docs/components/AsideHeader.md; rg -n 'export.*(House|Person|Package|Gear|List|Cart|Box|Users|ShoppingCart|HandTruck|CreditCard)' node_modules/@gravity-ui/icons/build/esm/index.d.ts node_modules/@gravity-ui/icons -g 'index.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,45p' node_modules/@gravity-ui/navigation/README.md; sed -n '288,350p' node_modules/@gravity-ui/table/README.md; sed -n '1,65p' node_modules/@gravity-ui/table/build/docs/INDEX.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 3 'getGroupedRowModel|grouping:|GroupingState|groupBy' node_modules/@gravity-ui/table/README.md node_modules/@gravity-ui/table/build/docs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '2488,2595p' node_modules/@gravity-ui/table/build/docs/guides/migration-from-uikit-table/migration-from-uikit-table.md; sed -n '1,100p' node_modules/@gravity-ui/table/build/docs/components/Table.md 2>/dev/null;\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/icons @bem-react/classname && cat node_modules/@gravity-ui/uikit/README.md | head -110 && rg -n 'export.*(Button|Text|Label|Icon|Checkbox|TextInput)' node_modules/@gravity-ui/uikit/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'styles.css|Table styles|@gravity-ui/table/styles' node_modules/@gravity-ui/table/README.md node_modules/@gravity-ui/table/package.json; rg -n 'export.*TextInput|export.*Button|export.*Text' node_modules/@gravity-ui/uikit/index.d.ts; rg -n 'interface TextInputProps|type TextInputProps|interface ButtonProps|type ButtonProps' node_modules/@gravity-ui/uikit -g '*.d.ts' | head -30; cat node_modules/@gravity-ui/table/package.json | sed -n '1,100p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 2 'base-background|base-float|line-generic|text-primary|text-secondary|status-positive|status-warning|status-danger|base-simple-hover' .agents/skills/gravity-ui/references/theming.md | head -90; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.d.ts; sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; rg -n 'export.*TextInput|export.*Text,' node_modules/@gravity-ui/uikit/build/esm/index.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,150p' .agents/skills/gravity-ui/references/icons.md; rg -n 'TableProps|className|table:' node_modules/@gravity-ui/table/build/esm/components/Table -g '*.d.ts' | head -40; rg -n 'getGroupedRowModel|getCoreRowModel' node_modules/@gravity-ui/table/build/esm -g '*.d.ts' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 4 'useRowSelectionFixedHandler' node_modules/@gravity-ui/table/README.md node_modules/@gravity-ui/table/build/docs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'useRowSelectionFixedHandler|SelectionCheckbox|selectionColumn' node_modules/@gravity-ui/table/build/esm/index.d.ts node_modules/@gravity-ui/table/build/esm -g '*.d.ts' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -- '--g-color-base-(info|positive|warning|misc|danger)-light|--g-color-text-(positive|warning|info|misc|danger)' node_modules/@gravity-ui/uikit/styles .agents/skills/gravity-ui/references/theming.md | head -60; git status --short; cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"require('node:fs').rmSync('dist',{recursive:true,force:true})\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --stat && git status --short && nl -ba src/App.tsx | sed -n '1,30p' && nl -ba src/App.css | sed -n '1,30p'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 71808,
+      "outputTokens": 13402,
+      "cacheReadTokens": 1407360,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2789,
+      "totalTokens": 1492570
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

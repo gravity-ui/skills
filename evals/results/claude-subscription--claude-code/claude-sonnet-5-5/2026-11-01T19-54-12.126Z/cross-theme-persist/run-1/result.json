@@ -1,0 +1,85 @@
+{
+  "status": "passed",
+  "duration": 311.179,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 16,
+    "outputTokens": 3743,
+    "cacheReadTokens": 157741,
+    "cacheWriteTokens": 12403,
+    "totalTokens": 173903
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 1,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 8,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/useStoredTheme.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files && ls -la && grep -rniE \"theme|dark|localStorage\" --include=*.{html,js,jsx,ts,tsx,css,vue,svelte} -l . --exclude-dir=node_modules | head -30",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html package.json; ls __agent_eval__",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm/components/theme/ && cat build/esm/components/theme/ThemeProvider/ThemeProvider.d.ts build/esm/components/theme/ThemeProvider/ThemeProvider.js build/esm/components/theme/useTheme.d.ts build/esm/components/theme/ThemeContext.d.ts 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.d.ts types.d.ts; cat ThemeProvider.js | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/useStoredTheme.ts <<'EOF'\nimport { useCallback, useState } from 'react';\n\nexport type AppTheme = 'light' | 'dark';\n\nexport const THEME_STORAGE_KEY = 'theme';\nconst DEFAULT_THEME: AppTheme = 'light';\n\nfunction readTheme(): AppTheme {\n  try {\n    const value = window.localStorage.getItem(THEME_STORAGE_KEY);\n    return value === 'dark' || value === 'light' ? value : DEFAULT_THEME;\n  } catch {\n    // localStorage может быть недоступен (приватный режим, запрет cookies)\n    return DEFAULT_THEME;\n  }\n}\n\nfunction writeTheme(theme: AppTheme) {\n  try {\n    window.localStorage.setItem(THEME_STORAGE_KEY, theme);\n  } catch {\n    // не удалось сохранить — тема всё равно переключится в рамках сессии\n  }\n}\n\nexport function useStoredTheme() {\n  // Ленивая инициализация: тема читается синхронно до первого рендера, без мигания.\n  const [theme, setThemeState] = useState<AppTheme>(readTheme);\n\n  const setTheme = useCallback((next: AppTheme) => {\n    setThemeState(next);\n    writeTheme(next);\n  }, []);\n\n  const toggleTheme = useCallback(() => {\n    setThemeState((prev) => {\n      const next: AppTheme = prev === 'dark' ? 'light' : 'dark';\n      writeTheme(next);\n      return next;\n    });\n  }, []);\n\n  return { theme, setTheme, toggleTheme };\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Switch, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { useStoredTheme } from './useStoredTheme';\n\nexport function App() {\n  const { theme, setTheme } = useStoredTheme();\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div style={{ padding: 24 }}>\n        <Switch\n          size=\"l\"\n          checked={theme === 'dark'}\n          onUpdate={(checked) => setTheme(checked ? 'dark' : 'light')}\n          content=\"Тёмная тема\"\n        />\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\n// ThemeProvider находится в App: там живёт состояние темы, сохранённое в localStorage.\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\np='src/useStoredTheme.ts'\ns=open(p).read()\ni=s.index('  const toggleTheme')\nj=s.index('  return {')\ns=s[:i]+s[j:]\ns=s.replace('{ theme, setTheme, toggleTheme }','{ theme, setTheme }')\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -3; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && npx tsc --noEmit && echo TSC_OK; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 16,
+      "outputTokens": 3743,
+      "cacheReadTokens": 157741,
+      "cacheWriteTokens": 12403,
+      "totalTokens": 173903
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

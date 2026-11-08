@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "duration": 429.249,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 10,
+    "outputTokens": 6459,
+    "cacheReadTokens": 92496,
+    "cacheWriteTokens": 12109,
+    "totalTokens": 111074
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 4,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 4,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -30 && node -v && npm -v",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html vite.config.ts tsconfig.json .gitignore && find src __agent_eval__ -type f | head -50 && for f in $(find src -type f); do echo \"--- $f\"; cat $f; done; ls node_modules | grep -i -E \"router|gravity\"; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/pages && \ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\nimport './app.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\ncat > src/useLocalStorage.ts <<'EOF'\nimport { useCallback, useState } from 'react';\n\nexport function useLocalStorage<T>(key: string, initial: () => T) {\n  const [value, setValue] = useState<T>(() => {\n    try {\n      const raw = localStorage.getItem(key);\n      if (raw !== null) return JSON.parse(raw) as T;\n    } catch {\n      // повреждённое значение или недоступный storage — берём значение по умолчанию\n    }\n    return initial();\n  });\n\n  const set = useCallback(\n    (next: T | ((prev: T) => T)) => {\n      setValue((prev) => {\n        const resolved = typeof next === 'function' ? (next as (p: T) => T)(prev) : next;\n        try {\n          localStorage.setItem(key, JSON.stringify(resolved));\n        } catch {\n          // storage может быть недоступен (приватный режим) — не критично\n        }\n        return resolved;\n      });\n    },\n    [key],\n  );\n\n  return [value, set] as const;\n}\nEOF\ncat > src/router.ts <<'EOF'\nimport { useSyncExternalStore } from 'react';\n\nexport const ROUTES = [\n  { path: '/', title: 'Главная' },\n  { path: '/tasks', title: 'Задачи' },\n  { path: '/about', title: 'О приложении' },\n] as const;\n\nexport type RoutePath = (typeof ROUTES)[number]['path'];\n\nfunction currentPath(): RoutePath {\n  const hash = window.location.hash.replace(/^#/, '') || '/';\n  return (ROUTES.find((r) => r.path === hash)?.path ?? '/') as RoutePath;\n}\n\nfunction subscribe(cb: () => void) {\n  window.addEventListener('hashchange', cb);\n  return () => window.removeEventListener('hashchange', cb);\n}\n\nexport function useRoute(): RoutePath {\n  return useSyncExternalStore(subscribe, currentPath);\n}\n\nexport const href = (path: RoutePath) => `#${path}`;\nEOF\ncat > src/app.css <<'EOF'\n.app {\n  min-height: 100vh;\n  display: flex;\n  flex-direction: column;\n}\n\n.app__header {\n  position: sticky;\n  top: 0;\n  z-index: 1;\n  display: flex;\n  align-items: center;\n  gap: 16px;\n  flex-wrap: wrap;\n  padding: 12px 24px;\n  background: var(--g-color-base-background);\n  border-bottom: 1px solid var(--g-color-line-generic);\n}\n\n.app__brand {\n  font-weight: 600;\n  font-size: 18px;\n  margin-right: 8px;\n}\n\n.app__nav {\n  display: flex;\n  gap: 4px;\n  flex: 1;\n}\n\n.app__theme {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.app__main {\n  flex: 1;\n  width: 100%;\n  max-width: 720px;\n  margin: 0 auto;\n  padding: 32px 24px;\n  box-sizing: border-box;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n\n.tasks__form {\n  display: flex;\n  gap: 8px;\n}\n\n.tasks__form > :first-child {\n  flex: 1;\n}\n\n.tasks__list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n.tasks__item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 8px;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Button, Switch, Text, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { About } from './pages/About';\nimport { Home } from './pages/Home';\nimport { Tasks } from './pages/Tasks';\nimport { ROUTES, href, useRoute, type RoutePath } from './router';\nimport { useLocalStorage } from './useLocalStorage';\n\ntype Theme = 'light' | 'dark';\n\nconst PAGES: Record<RoutePath, () => JSX.Element> = {\n  '/': Home,\n  '/tasks': Tasks,\n  '/about': About,\n};\n\nconst systemTheme = (): Theme =>\n  window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n\nexport function App() {\n  const [theme, setTheme] = useLocalStorage<Theme>('theme', systemTheme);\n  const route = useRoute();\n  const Page = PAGES[route];\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div className=\"app\">\n        <header className=\"app__header\">\n          <span className=\"app__brand\">Мини-приложение</span>\n          <nav className=\"app__nav\" aria-label=\"Основная навигация\">\n            {ROUTES.map((r) => (\n              <Button\n                key={r.path}\n                href={href(r.path)}\n                view={r.path === route ? 'normal' : 'flat'}\n                selected={r.path === route}\n                extraProps={r.path === route ? { 'aria-current': 'page' } : undefined}\n              >\n                {r.title}\n              </Button>\n            ))}\n          </nav>\n          <div className=\"app__theme\">\n            <Switch\n              size=\"m\"\n              checked={theme === 'dark'}\n              onUpdate={(on) => setTheme(on ? 'dark' : 'light')}\n              content=\"Тёмная тема\"\n            />\n          </div>\n        </header>\n        <main className=\"app__main\">\n          <Page />\n        </main>\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\ncat > src/pages/Home.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Card, Text } from '@gravity-ui/uikit';\n\nimport { href } from '../router';\n\nexport function Home() {\n  const [count, setCount] = useState(0);\n\n  return (\n    <>\n      <Text variant=\"display-1\">Привет!</Text>\n      <Text variant=\"body-2\" color=\"secondary\">\n        Небольшое приложение из трёх страниц: переключайтесь между ними в шапке и меняйте светлую\n        или тёмную тему — выбор запоминается.\n      </Text>\n      <Card view=\"outlined\" type=\"container\" style={{ padding: 16 }}>\n        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>\n          <Button view=\"action\" onClick={() => setCount((c) => c + 1)}>\n            Нажато: {count}\n          </Button>\n          <Button view=\"outlined\" disabled={count === 0} onClick={() => setCount(0)}>\n            Сбросить\n          </Button>\n        </div>\n      </Card>\n      <div>\n        <Button view=\"outlined\" href={href('/tasks')}>\n          Перейти к задачам →\n        </Button>\n      </div>\n    </>\n  );\n}\nEOF\ncat > src/pages/Tasks.tsx <<'EOF'\nimport { useState, type FormEvent } from 'react';\nimport { Button, Card, Checkbox, Text, TextInput } from '@gravity-ui/uikit';\n\nimport { useLocalStorage } from '../useLocalStorage';\n\ninterface Task {\n  id: number;\n  text: string;\n  done: boolean;\n}\n\nexport function Tasks() {\n  const [tasks, setTasks] = useLocalStorage<Task[]>('tasks', () => []);\n  const [text, setText] = useState('');\n\n  const add = (e: FormEvent) => {\n    e.preventDefault();\n    const value = text.trim();\n    if (!value) return;\n    setTasks((prev) => [...prev, { id: Date.now(), text: value, done: false }]);\n    setText('');\n  };\n\n  const toggle = (id: number) =>\n    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));\n  const remove = (id: number) => setTasks((prev) => prev.filter((t) => t.id !== id));\n\n  const left = tasks.filter((t) => !t.done).length;\n\n  return (\n    <>\n      <Text variant=\"display-1\">Задачи</Text>\n      <form className=\"tasks__form\" onSubmit={add}>\n        <TextInput\n          value={text}\n          onUpdate={setText}\n          placeholder=\"Что нужно сделать?\"\n          size=\"l\"\n          controlProps={{ 'aria-label': 'Новая задача' }}\n        />\n        <Button type=\"submit\" view=\"action\" size=\"l\" disabled={!text.trim()}>\n          Добавить\n        </Button>\n      </form>\n\n      {tasks.length === 0 ? (\n        <Text color=\"secondary\">Пока пусто — добавьте первую задачу.</Text>\n      ) : (\n        <>\n          <Text color=\"secondary\">Осталось: {left} из {tasks.length}</Text>\n          <ul className=\"tasks__list\">\n            {tasks.map((t) => (\n              <li key={t.id}>\n                <Card view=\"outlined\" type=\"container\" className=\"tasks__item\" style={{ padding: 12 }}>\n                  <Checkbox checked={t.done} onUpdate={() => toggle(t.id)} size=\"l\">\n                    <span style={{ textDecoration: t.done ? 'line-through' : undefined }}>\n                      {t.text}\n                    </span>\n                  </Checkbox>\n                  <Button view=\"flat-danger\" onClick={() => remove(t.id)} aria-label=\"Удалить задачу\">\n                    Удалить\n                  </Button>\n                </Card>\n              </li>\n            ))}\n          </ul>\n        </>\n      )}\n    </>\n  );\n}\nEOF\ncat > src/pages/About.tsx <<'EOF'\nimport { Text } from '@gravity-ui/uikit';\n\nexport function About() {\n  return (\n    <>\n      <Text variant=\"display-1\">О приложении</Text>\n      <Text variant=\"body-2\">\n        Демо на React, Vite и Gravity UI. Навигация построена на hash-адресах (\n        <code>#/</code>, <code>#/tasks</code>, <code>#/about</code>), поэтому работает без сервера\n        и без отдельной библиотеки роутинга.\n      </Text>\n      <Text variant=\"body-2\">\n        Тема по умолчанию берётся из настроек системы, а ручной выбор сохраняется в localStorage.\n        Список задач тоже сохраняется между перезагрузками.\n      </Text>\n    </>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && sed -i \"s/import { Button, Switch, Text, ThemeProvider }/import { Button, Switch, ThemeProvider }/\" src/App.tsx && sed -i 's/<html lang=\"en\">/<html lang=\"ru\">/; s#<title>.*</title>#<title>Мини-приложение</title>#' index.html && npx tsc --noEmit && echo OK",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10,
+      "outputTokens": 6459,
+      "cacheReadTokens": 92496,
+      "cacheWriteTokens": 12109,
+      "totalTokens": 111074
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

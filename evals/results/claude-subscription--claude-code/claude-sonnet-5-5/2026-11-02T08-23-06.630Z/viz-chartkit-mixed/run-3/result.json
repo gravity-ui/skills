@@ -1,0 +1,143 @@
+{
+  "status": "passed",
+  "duration": 469.356,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 48,
+    "outputTokens": 16873,
+    "cacheReadTokens": 782501,
+    "cacheWriteTokens": 38403,
+    "totalTokens": 837825
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 22,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 23,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && git ls-files && cat package.json 2>/dev/null; head -c 600 package-lock.json",
+        "success": true
+      },
+      {
+        "command": "cat index.html src/*.ts* tsconfig.json vite.config.ts .gitignore; ls __agent_eval__; ls node_modules | head -80; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cat __agent_eval__/run.mjs | head -50; ls node_modules/@gravity-ui/*/package.json; ls node_modules | grep -iE \"chart|yagr|uplot|d3|highcharts\"; npm view @gravity-ui/chartkit version peerDependencies 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/chartkit@8.11.0 dependencies optionalDependencies peerDependenciesMeta exports 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/chartkit@8.11.0 2>&1 | tail -8; ls node_modules/@gravity-ui; ls node_modules/@gravity-ui/chartkit/build/plugins/yagr node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/chartkit/node_modules 2>&1; npm ls @gravity-ui/charts 2>&1 | head; cat node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/index.d.ts node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/types.d.ts node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.d.ts node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts; cat node_modules/@gravity-ui/chartkit/build/index.d.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat plugins/yagr/index.js plugins/gravity-charts/index.js; cat types.d.ts | head -90; grep -n \"registerPlugins\\|plugins\" libs/settings/settings.d.ts; cat components/ChartKit.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "ls; ls types; cat types/widget.d.ts 2>/dev/null | head -60; cat components/ChartKit.js | head -80; cat libs/settings/settings.js | head -40; ls components/ ; cat types/index.d.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && cat chartkit/build/libs/settings/mergeSettingStrategy.js; grep -n \"SegmentedRadioGroup\\|RadioButton\" uikit/build/esm/components/index.d.ts; ls /tmp/claude-1000/bundled-skills/*/*/dataviz/references; sed -n 1,80p /tmp/claude-1000/bundled-skills/*/*/dataviz/references/palette.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && node /tmp/claude-1000/bundled-skills/*/*/dataviz/scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a\" --mode light 2>&1 | tail -25; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && ls chartkit/build/docs 2>/dev/null; grep -rn \"libraryConfig\" chartkit/README.md chartkit/build/docs 2>/dev/null | head; cat chartkit/build/plugins/yagr/renderer/YagrWidget.js | head -90; grep -n \"export type ChartData\\b\" -A 40 charts/build/types/chart/chart.d.ts | head -70",
+        "success": true
+      },
+      {
+        "command": "ls chartkit/build/docs/guides; find charts -name \"*.d.ts\" -path \"*types*\" | head -20; grep -rn \"type: 'datetime'\\|ChartXAxis = \" charts/build --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui && ls charts/build; grep -rln \"interface ChartXAxis\\|type ChartXAxis\" charts/build --include=*.d.ts | head; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts && ls; grep -rln \"ChartXAxis\" --include=*.d.ts . | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/cjs && grep -rn \"export type ChartXAxis = \\|export type ChartData = \\|export type LineSeries\\b\\|export type LineSeriesData\\|export type ChartLegend\\b\" types | head; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && mkdir -p src/chart-widget && cat > src/chart-widget/types.ts <<'EOF'\nexport type ChartMode = 'sales' | 'monitoring';\n\n/** [timestamp in ms, value]. `null` means a gap in the series. */\nexport type TimePoint = readonly [timestamp: number, value: number | null];\n\nexport interface TimeSeries {\n  id: string;\n  name: string;\n  /** Explicit color; by default the widget assigns palette slots in series order. */\n  color?: string;\n  points: readonly TimePoint[];\n}\n\nexport interface ChartDataset {\n  /** Y axis title, e.g. \"₽ тыс.\" or \"мс\". */\n  unit?: string;\n  series: readonly TimeSeries[];\n}\n\n/**\n * The single API of the widget. The same time-series model feeds both modes;\n * `mode` only selects how it is rendered (and which chart engine gets loaded).\n */\nexport interface ChartWidgetProps {\n  title?: string;\n  /** One dataset per mode. The switcher only offers the modes that have data. */\n  datasets: Partial<Record<ChartMode, ChartDataset>>;\n  /** Controlled mode. */\n  mode?: ChartMode;\n  /** Initial mode when uncontrolled. */\n  defaultMode?: ChartMode;\n  onModeChange?: (mode: ChartMode) => void;\n  /** Chart area height in px. */\n  height?: number;\n  /** IANA time zone for axis and tooltip, e.g. \"Europe/Moscow\". */\n  timeZone?: string;\n}\nEOF\ncat > src/chart-widget/engines.ts <<'EOF'\nimport {settings} from '@gravity-ui/chartkit';\nimport type {ChartKitPlugin} from '@gravity-ui/chartkit';\n\nimport type {ChartMode} from './types';\n\n/** ChartKit plugin type that renders each widget mode. */\nexport type EngineType = 'gravity-charts' | 'yagr';\n\nexport const MODE_ENGINE: Record<ChartMode, EngineType> = {\n  sales: 'gravity-charts',\n  monitoring: 'yagr',\n};\n\n// Each loader is a dynamic import, so every engine (and its heavy dependency:\n// @gravity-ui/charts / uPlot) lands in its own chunk. The plugin entry modules are\n// imported dynamically on purpose: the gravity-charts entry re-exports from\n// @gravity-ui/charts, so a static import would pull the engine into the main bundle.\nconst LOADERS: Record<EngineType, () => Promise<ChartKitPlugin>> = {\n  'gravity-charts': () =>\n    import('@gravity-ui/chartkit/gravity-charts').then((m) => m.GravityChartsPlugin),\n  yagr: () => import('@gravity-ui/chartkit/yagr').then((m) => m.YagrPlugin),\n};\n\nconst pending = new Map<EngineType, Promise<void>>();\nconst registered = new Set<EngineType>();\n\nexport function isEngineReady(engine: EngineType): boolean {\n  return registered.has(engine);\n}\n\n/** Loads the engine once and registers it in ChartKit. Safe to call repeatedly. */\nexport function loadEngine(engine: EngineType): Promise<void> {\n  if (registered.has(engine)) {\n    return Promise.resolve();\n  }\n\n  let promise = pending.get(engine);\n  if (!promise) {\n    promise = LOADERS[engine]()\n      .then((plugin) => {\n        settings.set({plugins: [plugin]});\n        registered.add(engine);\n      })\n      .finally(() => {\n        // On failure the next call retries instead of replaying the rejection.\n        pending.delete(engine);\n      });\n    pending.set(engine, promise);\n  }\n  return promise;\n}\nEOF\ncat > src/chart-widget/useEngine.ts <<'EOF'\nimport React from 'react';\n\nimport {isEngineReady, loadEngine} from './engines';\nimport type {EngineType} from './engines';\n\nexport type EngineState = {status: 'loading'} | {status: 'ready'} | {status: 'error'; error: unknown};\n\nexport function useEngine(engine: EngineType) {\n  const [attempt, setAttempt] = React.useState(0);\n  const [state, setState] = React.useState<{engine: EngineType; value: EngineState}>(() => ({\n    engine,\n    value: isEngineReady(engine) ? {status: 'ready'} : {status: 'loading'},\n  }));\n\n  React.useEffect(() => {\n    if (isEngineReady(engine)) {\n      setState({engine, value: {status: 'ready'}});\n      return;\n    }\n\n    let cancelled = false;\n    setState({engine, value: {status: 'loading'}});\n    loadEngine(engine).then(\n      () => !cancelled && setState({engine, value: {status: 'ready'}}),\n      (error: unknown) => !cancelled && setState({engine, value: {status: 'error', error}}),\n    );\n    return () => {\n      cancelled = true;\n    };\n  }, [engine, attempt]);\n\n  // Right after `engine` changes, the state still describes the previous engine.\n  const value: EngineState =\n    state.engine === engine ? state.value : isEngineReady(engine) ? {status: 'ready'} : {status: 'loading'};\n\n  const retry = React.useCallback(() => setAttempt((n) => n + 1), []);\n  return {...value, retry} as EngineState & {retry: () => void};\n}\nEOF",
+        "success": true
+      },
+      {
+        "command": "cat > src/chart-widget/adapters.ts <<'EOF'\nimport type {GravityChartsWidgetData} from '@gravity-ui/chartkit/gravity-charts';\nimport type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\n\nimport type {ChartDataset, TimeSeries} from './types';\n\n// Categorical slots 1-3 of the reference palette (validated, adjacent CVD ΔE >= 9).\n// Color follows the series by its position in the dataset, not by what is visible.\nconst PALETTE = ['#2a78d6', '#eb6834', '#1baf7a'];\n\nconst colorOf = (series: TimeSeries, index: number) =>\n  series.color ?? PALETTE[index % PALETTE.length];\n\n/** Regular line chart: few points, markers, Gravity Charts. */\nexport function toGravityChartsData(\n  dataset: ChartDataset,\n  timeZone?: string,\n): GravityChartsWidgetData['data'] {\n  return {\n    series: {\n      data: dataset.series.map((series, index) => ({\n        type: 'line' as const,\n        name: series.name,\n        color: colorOf(series, index),\n        lineWidth: 2,\n        data: series.points.map(([x, y]) => ({x, y})),\n      })),\n    },\n    xAxis: {type: 'datetime', timestamps: undefined, ...(timeZone ? {} : {})},\n    yAxis: [{title: {text: dataset.unit}}],\n    legend: {enabled: dataset.series.length > 1},\n  };\n}\n\n/** Dense monitoring chart: Yagr (uPlot) on a shared, sorted timeline. */\nexport function toYagrData(dataset: ChartDataset, timeZone?: string): YagrWidgetData {\n  const timeline = [\n    ...new Set(dataset.series.flatMap((series) => series.points.map(([ts]) => ts))),\n  ].sort((a, b) => a - b);\n  const index = new Map(timeline.map((ts, i) => [ts, i]));\n\n  const graphs = dataset.series.map((series, i) => {\n    const data: (number | null)[] = new Array(timeline.length).fill(null);\n    for (const [ts, value] of series.points) {\n      data[index.get(ts)!] = value;\n    }\n    return {\n      id: series.id,\n      name: series.name,\n      color: colorOf(series, i),\n      data,\n      lineWidth: 1.5,\n    };\n  });\n\n  return {\n    data: {graphs, timeline, timeZone},\n    libraryConfig: {\n      chart: {type: 'line'},\n      axes: {y: {label: dataset.unit}},\n      legend: {show: dataset.series.length > 1},\n    },\n  };\n}\nEOF\ncat > src/chart-widget/ChartWidget.tsx <<'EOF'\nimport React from 'react';\nimport ChartKit from '@gravity-ui/chartkit';\nimport {Alert, Button, Loader, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';\n\nimport {toGravityChartsData, toYagrData} from './adapters';\nimport {MODE_ENGINE, loadEngine} from './engines';\nimport {useEngine} from './useEngine';\nimport type {ChartMode, ChartWidgetProps} from './types';\n\nconst MODE_LABEL: Record<ChartMode, string> = {\n  sales: 'Продажи',\n  monitoring: 'Мониторинг',\n};\nconst MODE_ORDER: ChartMode[] = ['sales', 'monitoring'];\n\nexport function ChartWidget({\n  title,\n  datasets,\n  mode: controlledMode,\n  defaultMode,\n  onModeChange,\n  height = 360,\n  timeZone,\n}: ChartWidgetProps) {\n  const availableModes = MODE_ORDER.filter((m) => datasets[m]);\n  const [innerMode, setInnerMode] = React.useState<ChartMode>(\n    defaultMode ?? availableModes[0] ?? 'sales',\n  );\n  const mode = controlledMode ?? innerMode;\n  const dataset = datasets[mode];\n  const engine = MODE_ENGINE[mode];\n  const state = useEngine(engine);\n\n  const handleModeChange = (next: string) => {\n    setInnerMode(next as ChartMode);\n    onModeChange?.(next as ChartMode);\n  };\n\n  // Warm up the other engine when the user is about to switch to it.\n  const prefetch = (next: ChartMode) => {\n    loadEngine(MODE_ENGINE[next]).catch(() => {});\n  };\n\n  const chartData = React.useMemo(() => {\n    if (!dataset) return undefined;\n    return mode === 'sales' ? toGravityChartsData(dataset, timeZone) : toYagrData(dataset, timeZone);\n  }, [dataset, mode, timeZone]);\n\n  let body: React.ReactNode;\n  if (!dataset || !chartData) {\n    body = <Centered>Нет данных для режима «{MODE_LABEL[mode]}»</Centered>;\n  } else if (state.status === 'error') {\n    body = (\n      <Alert\n        theme=\"danger\"\n        title=\"Не удалось загрузить график\"\n        message=\"Проверьте соединение и попробуйте ещё раз.\"\n        actions={<Button onClick={state.retry}>Повторить</Button>}\n      />\n    );\n  } else if (state.status === 'loading') {\n    body = (\n      <Centered>\n        <Loader size=\"m\" />\n      </Centered>\n    );\n  } else if (mode === 'sales') {\n    body = <ChartKit type=\"gravity-charts\" data={chartData as ReturnType<typeof toGravityChartsData>} />;\n  } else {\n    body = <ChartKit type=\"yagr\" data={chartData as ReturnType<typeof toYagrData>} />;\n  }\n\n  return (\n    <section style={{display: 'flex', flexDirection: 'column', gap: 16}}>\n      <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16}}>\n        <Text variant=\"subheader-2\">{title}</Text>\n        {availableModes.length > 1 && (\n          <SegmentedRadioGroup value={mode} onUpdate={handleModeChange} aria-label=\"Режим графика\">\n            {availableModes.map((m) => (\n              <SegmentedRadioGroup.Option\n                key={m}\n                value={m}\n                content={MODE_LABEL[m]}\n                onMouseEnter={() => prefetch(m)}\n                onFocus={() => prefetch(m)}\n              />\n            ))}\n          </SegmentedRadioGroup>\n        )}\n      </div>\n      {/* key: a fresh chart instance per mode, never a morph between engines */}\n      <div key={mode} style={{height, position: 'relative'}}>\n        {body}\n      </div>\n    </section>\n  );\n}\n\nfunction Centered({children}: {children: React.ReactNode}) {\n  return (\n    <div style={{height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>\n      {children}\n    </div>\n  );\n}\nEOF\ncat > src/chart-widget/index.ts <<'EOF'\nexport {ChartWidget} from './ChartWidget';\nexport type {\n  ChartDataset,\n  ChartMode,\n  ChartWidgetProps,\n  TimePoint,\n  TimeSeries,\n} from './types';\nEOF\ncat > src/App.tsx <<'EOF'\nimport {ChartWidget} from './chart-widget';\nimport type {ChartDataset} from './chart-widget';\n\nconst DAY = 24 * 3600 * 1000;\nconst START = Date.UTC(2026, 9, 1);\n\n// Deterministic pseudo-noise so the demo looks the same on every load.\nconst noise = (i: number, seed: number) => Math.sin(i * 12.9898 + seed * 78.233) * 0.5 + 0.5;\n\nconst sales: ChartDataset = {\n  unit: 'тыс. ₽',\n  series: [\n    {\n      id: 'online',\n      name: 'Онлайн',\n      points: Array.from({length: 30}, (_, i) => [\n        START + i * DAY,\n        Math.round(120 + i * 2.5 + noise(i, 1) * 40),\n      ]),\n    },\n    {\n      id: 'retail',\n      name: 'Розница',\n      points: Array.from({length: 30}, (_, i) => [\n        START + i * DAY,\n        Math.round(90 + (i % 7 > 4 ? 35 : 0) + noise(i, 2) * 25),\n      ]),\n    },\n  ],\n};\n\n// 3 hours of latency at 10-second resolution, 3 services.\nconst POINTS = 3 * 360;\nconst STEP = 10_000;\nconst NOW = Date.UTC(2026, 10, 2, 9, 0, 0);\nconst monitoring: ChartDataset = {\n  unit: 'мс',\n  series: ['api', 'auth', 'search'].map((name, s) => ({\n    id: name,\n    name,\n    points: Array.from({length: POINTS}, (_, i) => {\n      const spike = i % 540 > 520 ? 60 : 0;\n      return [\n        NOW - (POINTS - i) * STEP,\n        Math.round(40 + s * 25 + noise(i, s + 3) * 20 + spike),\n      ] as const;\n    }),\n  })),\n};\n\nexport function App() {\n  return (\n    <div style={{padding: 24, maxWidth: 960}}>\n      <ChartWidget\n        title=\"Показатели\"\n        datasets={{sales, monitoring}}\n        defaultMode=\"sales\"\n        timeZone=\"Europe/Moscow\"\n      />\n    </div>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\np='src/chart-widget/adapters.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export function toGravityChartsData(\n  dataset: ChartDataset,\n  timeZone?: string,\n): GravityChartsWidgetData['data'] {\"\"\",\"\"\"export function toGravityChartsData(dataset: ChartDataset): GravityChartsWidgetData['data'] {\"\"\")\ns=s.replace(\"xAxis: {type: 'datetime', timestamps: undefined, ...(timeZone ? {} : {})},\",\"xAxis: {type: 'datetime'},\")\ns=s.replace(\"      chart: {type: 'line'},\\n\",\"\")\nopen(p,'w').write(s)\np='src/chart-widget/ChartWidget.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"  // Warm up the other engine when the user is about to switch to it.\n  const prefetch = (next: ChartMode) => {\n    loadEngine(MODE_ENGINE[next]).catch(() => {});\n  };\n\"\"\",\"\"\"  // Warm up the other engines when the user is about to use the switcher.\n  const prefetch = () => {\n    availableModes.forEach((m) => loadEngine(MODE_ENGINE[m]).catch(() => {}));\n  };\n\"\"\")\ns=s.replace(\"toGravityChartsData(dataset, timeZone) :\",\"toGravityChartsData(dataset) :\")\ns=s.replace(\"\"\"                onMouseEnter={() => prefetch(m)}\n                onFocus={() => prefetch(m)}\n\"\"\",\"\")\ns=s.replace(\"\"\"          <SegmentedRadioGroup value={mode} onUpdate={handleModeChange} aria-label=\"Режим графика\">\"\"\",\"\"\"          <div onPointerEnter={prefetch} onFocus={prefetch}>\n          <SegmentedRadioGroup value={mode} onUpdate={handleModeChange} aria-label=\"Режим графика\">\"\"\")\ns=s.replace(\"\"\"          </SegmentedRadioGroup>\n        )}\"\"\",\"\"\"          </SegmentedRadioGroup>\n          </div>\n        )}\"\"\")\nopen(p,'w').write(s)\nEOF\nnpx tsc --noEmit 2>&1 | head; grep -rn \"timeZone\\|timezone\" node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/cjs/types --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "node - <<'EOF'\nconst fs=require('fs');\nconst edit=(p,pairs)=>{let s=fs.readFileSync(p,'utf8');for(const [a,b] of pairs){if(!s.includes(a))throw new Error(p+': '+a);s=s.replace(a,b)}fs.writeFileSync(p,s)};\nedit('src/chart-widget/adapters.ts',[\n[\"export function toGravityChartsData(\\n  dataset: ChartDataset,\\n  timeZone?: string,\\n): GravityChartsWidgetData['data'] {\",\"export function toGravityChartsData(dataset: ChartDataset): GravityChartsWidgetData['data'] {\"],\n[\"xAxis: {type: 'datetime', timestamps: undefined, ...(timeZone ? {} : {})},\",\"xAxis: {type: 'datetime'},\"],\n[\"      chart: {type: 'line'},\\n\",\"\"],\n[\"toYagrData(dataset: ChartDataset, timeZone?: string)\",\"toYagrData(dataset: ChartDataset)\"],\n[\"data: {graphs, timeline, timeZone},\",\"data: {graphs, timeline},\"],\n]);\nedit('src/chart-widget/ChartWidget.tsx',[\n[\"  height = 360,\\n  timeZone,\\n\",\"  height = 360,\\n\"],\n[\"  // Warm up the other engine when the user is about to switch to it.\\n  const prefetch = (next: ChartMode) => {\\n    loadEngine(MODE_ENGINE[next]).catch(() => {});\\n  };\",\"  // Warm up the engines when the user reaches for the switcher.\\n  const prefetch = () => {\\n    availableModes.forEach((m) => loadEngine(MODE_ENGINE[m]).catch(() => {}));\\n  };\"],\n[\"toGravityChartsData(dataset, timeZone) : toYagrData(dataset, timeZone);\",\"toGravityChartsData(dataset) : toYagrData(dataset);\"],\n[\"[dataset, mode, timeZone]\",\"[dataset, mode]\"],\n[\"                onMouseEnter={() => prefetch(m)}\\n                onFocus={() => prefetch(m)}\\n\",\"\"],\n[\"          <SegmentedRadioGroup value={mode} onUpdate={handleModeChange} aria-label=\\\"Режим графика\\\">\",\"          <div onPointerEnter={prefetch} onFocus={prefetch}>\\n          <SegmentedRadioGroup value={mode} onUpdate={handleModeChange} aria-label=\\\"Режим графика\\\">\"],\n[\"          </SegmentedRadioGroup>\\n        )}\",\"          </SegmentedRadioGroup>\\n          </div>\\n        )}\"],\n]);\nedit('src/chart-widget/types.ts',[[\"  /** IANA time zone for axis and tooltip, e.g. \\\"Europe/Moscow\\\". */\\n  timeZone?: string;\\n\",\"\"]]);\nedit('src/App.tsx',[[\"        timeZone=\\\"Europe/Moscow\\\"\\n\",\"\"]]);\nEOF\nnpx tsc --noEmit 2>&1 | head -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -30; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "grep -o 'src=\"[^\"]*\"\\|href=\"[^\"]*\"' dist/index.html; ls -S dist/assets | head -5; E=$(grep -o 'assets/index-[^\"]*\\.js' dist/index.html); echo entry=$E; grep -c \"uPlot\\|u-over\" dist/$E; grep -o 'import(\"[^\"]*\\(Yagr\\|GravityCharts\\)[^\"]*\")' dist/assets/*.js | sort -u; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 48,
+      "outputTokens": 16873,
+      "cacheReadTokens": 782501,
+      "cacheWriteTokens": 38403,
+      "totalTokens": 837825
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

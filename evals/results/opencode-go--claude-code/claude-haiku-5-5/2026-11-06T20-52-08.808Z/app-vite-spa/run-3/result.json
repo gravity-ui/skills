@@ -1,0 +1,146 @@
+{
+  "status": "passed",
+  "duration": 572.802,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 52,
+    "outputTokens": 29463,
+    "cacheReadTokens": 1090629,
+    "cacheWriteTokens": 49002,
+    "totalTokens": 1169146
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 18,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 10,
+      "file_edit": 4,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 34,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/hooks.ts",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/App.css",
+      "/home/sandbox/workspace/src/pages/HomePage.tsx",
+      "/home/sandbox/workspace/src/pages/TasksPage.tsx",
+      "/home/sandbox/workspace/src/pages/AboutPage.tsx",
+      "/tmp/pwcheck/check.mjs",
+      "/tmp/pwcheck/harness.tsx",
+      "/tmp/pwcheck/run-jsdom.mjs"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5",
+        "success": true
+      },
+      {
+        "command": "cat package.json tsconfig.json vite.config.ts index.html .gitignore && echo ---- && find src __agent_eval__ -type f | xargs -I{} sh -c 'echo \"== {}\"; cat \"{}\"' && echo ---- && ls node_modules | head -50",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/esm/components | head -80 && find node_modules/@gravity-ui/uikit/build/esm/components/theme -name '*.js' | head; ls node_modules/react-router* 2>/dev/null | head -2; (npm run build 2>&1 | tail -15)",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/getRootClassName.js | head -30 && grep -n \"ThemeProvider\\|ThemeType\\|export type Theme\" node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts 2>/dev/null | head; grep -rn \"theme\" node_modules/@gravity-ui/uikit/build/esm/components/theme/types.js | head -5; ls node_modules/@gravity-ui/uikit/build/esm/components/theme/ ; grep -n \"rem\\|body\" node_modules/@gravity-ui/uikit/build/esm/styles/styles.css 2>/dev/null | head -3; ls node_modules/@gravity-ui/uikit/styles/ 2>/dev/null; rm -rf dist",
+        "success": true
+      },
+      {
+        "command": "grep -n \"href\\|view?\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head; grep -n \"onUpdate\\|checked\\|content\" node_modules/@gravity-ui/uikit/build/esm/components/controls/Switch/Switch.d.ts 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/build/esm/components/Switch/; cat node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts 2>/dev/null | head -40; ls node_modules/@gravity-ui/icons/ 2>/dev/null | head; ls node_modules/@gravity-ui/icons/dist 2>/dev/null | head -3; grep -o \"Moon[A-Za-z]*\\|Sun[A-Za-z]*\" -r node_modules/@gravity-ui/icons/*.d.ts 2>/dev/null | sort -u | head; grep -n \"\\\"@gravity-ui/icons\\\"\" node_modules/@gravity-ui/uikit/package.json",
+        "success": true
+      },
+      {
+        "command": "grep -n \"ControlProps\" -A8 node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -20; grep -n \"export\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts | head -5; grep -n \"variant\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts | head -3; grep -n \"view\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i \"^playwright\\|^puppeteer\" ; npm ls -g --depth=0 2>/dev/null | grep -i \"playwright\\|puppeteer\"; python3 -c \"import playwright; print('py playwright ok')\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pwcheck && cd /tmp/pwcheck && npm init -y >/dev/null 2>&1 && timeout 240 npm i playwright@1 --silent 2>&1 | tail -3; timeout 300 npx playwright install chromium 2>&1 | tail -5; echo EXIT=$?",
+        "success": true
+      },
+      {
+        "command": "(npx vite preview --port 4173 --strictPort > /tmp/pwcheck/preview.log 2>&1 &) ; sleep 3; cat > /tmp/pwcheck/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 900, height: 700 }, colorScheme: 'light' });\nconst errors = [];\npage.on('pageerror', e => errors.push('pageerror: ' + e.message));\npage.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });\nconst base = 'http://localhost:4173/';\nconst bodyBg = () => page.evaluate(() => ({ cls: document.body.className, bg: getComputedStyle(document.body).backgroundColor, appBg: getComputedStyle(document.querySelector('.app')).backgroundColor }));\nconst h1 = () => page.textContent('h1');\n\nawait page.goto(base);\nconsole.log('home h1:', await h1(), '| initial:', JSON.stringify(await bodyBg()));\nawait page.screenshot({ path: '/tmp/pwcheck/home-light.png' });\n\n// navigation\nawait page.click('text=Задачи');\nconsole.log('after click Задачи: url', page.url(), 'h1:', await h1());\nawait page.click('text=О проекте');\nconsole.log('after click О проекте: url', page.url(), 'h1:', await h1());\nawait page.goBack();\nconsole.log('goBack -> url', page.url(), 'h1:', await h1());\nawait page.goto(base + '#/nonexistent');\nconsole.log('unknown route h1:', await h1());\n\n// tasks\nawait page.goto(base + '#/tasks');\nawait page.fill('input[placeholder=\"Новая задача\"]', 'Тестовая задача');\nawait page.click('button[type=submit]');\nconst items = await page.$$eval('.task-list__item', els => els.map(e => e.textContent.trim()));\nconsole.log('tasks after add:', JSON.stringify(items));\nawait page.click('.task-list__item:has-text(\"Тестовая задача\") input[type=checkbox]', { force: true }).catch(e => console.log('checkbox click err', e.message));\nconsole.log('done class count:', await page.$$eval('.task-list__title--done', e => e.length));\nawait page.click('.task-list__item:has-text(\"Тестовая задача\") button');\nconsole.log('tasks after delete:', (await page.$$('.task-list__item')).length);\nawait page.screenshot({ path: '/tmp/pwcheck/tasks-light.png' });\n\n// theme toggle\nawait page.goto(base);\nawait page.click('text=Тёмная тема');\nawait page.waitForTimeout(300);\nconsole.log('after toggle dark:', JSON.stringify(await bodyBg()));\nawait page.screenshot({ path: '/tmp/pwcheck/home-dark.png' });\nawait page.reload();\nawait page.waitForTimeout(300);\nconsole.log('after reload (persisted):', JSON.stringify(await bodyBg()), 'stored=', await page.evaluate(() => localStorage.getItem('app-theme')));\nawait page.click('text=Тёмная тема');\nawait page.waitForTimeout(300);\nconsole.log('toggled back light:', JSON.stringify(await bodyBg()));\nawait browser.close();\nconsole.log('ERRORS:', JSON.stringify(errors));\nEOF\ncd /tmp/pwcheck && timeout 120 node check.mjs",
+        "success": true
+      },
+      {
+        "command": "(npx vite preview --port 4173 --strictPort > /tmp/pwcheck/preview.log 2>&1 &) ; sleep 4; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:4173/",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && timeout 120 node check.mjs",
+        "success": false
+      },
+      {
+        "command": "id -u; (sudo -n true 2>/dev/null && echo SUDO_OK) || echo NO_SUDO; (timeout 120 sudo -n apt-get install -y -q libglib2.0-0 >/tmp/pwcheck/apt.log 2>&1 && echo APT_OK) || (tail -2 /tmp/pwcheck/apt.log; echo APT_FAILED)",
+        "success": true
+      },
+      {
+        "command": "find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell 2>/dev/null | grep \"not found\"",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite preview\" 2>/dev/null; cd /tmp/pwcheck && timeout 200 npm i jsdom@24 --silent 2>&1 | tail -2; echo JSDOM_DONE",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && NODE_PATH=/home/sandbox/workspace/node_modules /home/sandbox/workspace/node_modules/.bin/esbuild harness.tsx --bundle --format=esm --platform=browser --jsx=automatic --loader:.css=empty --define:process.env.NODE_ENV='\"development\"' --outfile=bundle.mjs --log-level=warning && timeout 120 node run-jsdom.mjs; echo EXIT=$?",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && NODE_PATH=/home/sandbox/workspace/node_modules /home/sandbox/workspace/node_modules/.bin/esbuild harness.tsx --bundle --format=esm --platform=browser --jsx=automatic --loader:.css=empty --define:process.env.NODE_ENV='\"development\"' --outfile=bundle.mjs --log-level=warning && timeout 120 node run-jsdom.mjs 2>&1 | head -80; echo EXIT=$?",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && timeout 120 node run-jsdom.mjs 2>&1 | head -80; echo EXIT=${PIPESTATUS[0]}",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && timeout 120 node run-jsdom.mjs 2>&1 | head -80; echo EXIT=${PIPESTATUS[0]}",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -6 && rm -rf dist && pkill -f \"vite preview\" 2>/dev/null; cd /tmp/pwcheck && NODE_PATH=/home/sandbox/workspace/node_modules /home/sandbox/workspace/node_modules/.bin/esbuild harness.tsx --bundle --format=esm --platform=browser --jsx=automatic --loader:.css=empty --define:process.env.NODE_ENV='\"development\"' --outfile=bundle.mjs --log-level=warning && timeout 120 node run-jsdom.mjs 2>&1 | grep -c \"^PASS\"; timeout 120 node run-jsdom.mjs 2>&1 | grep \"^FAIL\" ; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 52,
+      "outputTokens": 29463,
+      "cacheReadTokens": 1090629,
+      "cacheWriteTokens": 49002,
+      "totalTokens": 1169146
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

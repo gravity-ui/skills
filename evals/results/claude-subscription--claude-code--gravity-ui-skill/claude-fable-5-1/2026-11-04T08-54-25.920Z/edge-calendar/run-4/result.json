@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "duration": 1035.541,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 322,
+    "outputTokens": 4711,
+    "cacheReadTokens": 374881,
+    "cacheWriteTokens": 33934,
+    "totalTokens": 413848
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ----; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui; echo ----; cat /home/sandbox/workspace/AGENTS.md; echo ----; ls /home/sandbox/workspace; cat /home/sandbox/workspace/package.json",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ----; rg -n -C 4 -i 'calendar|date-components|date-utils' .agents/skills/gravity-ui/references/package-routing.md | head -120; echo ----; find src -type f | xargs -I{} sh -c 'echo \"== {}\"; cat {}'; echo ----; cat index.html tsconfig.json vite.config.ts; ls __agent_eval__ 2>/dev/null; ls node_modules/@gravity-ui; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/date-components @gravity-ui/date-utils 2>&1 | tail -15; grep -A3 '\"@gravity-ui' package.json; cat node_modules/@gravity-ui/date-components/package.json | grep -E '\"version\"|peerDependencies' -A6 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json | tail -15; for v in 3.3.0 3.4.0 3.5.0 3.6.0 4.0.0 4.1.0 4.2.0; do echo \"== $v\"; npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null; done",
+        "success": false
+      },
+      {
+        "command": "npm install @gravity-ui/date-components@^4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -5; grep -A4 '\"@gravity-ui' package.json | head -8; grep '\"version\"' node_modules/@gravity-ui/date-components/package.json node_modules/@gravity-ui/date-utils/package.json; ls node_modules/@gravity-ui/date-components/; ls node_modules/@gravity-ui/date-components/dist/docs node_modules/@gravity-ui/date-components/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components; cat $D/dist/docs/INDEX.md | head -80; echo \"---- README setup\"; rg -n -i -C 6 'required setup|install|import .*css|styles' $D/README.md | head -60; echo \"---- components\"; ls $D/dist/docs/components; echo \"---- Calendar doc\"; cat $D/dist/docs/components/Calendar/README.md 2>/dev/null || find $D/dist/docs -iname '*calendar*'; echo \"---- traps\"; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components; cat $D/dist/docs/components/Calendar.md; echo \"---- date-utils exports\"; rg -n 'export' node_modules/@gravity-ui/date-utils/build/index.d.ts 2>/dev/null | head -20; rg -n -C 2 'Russian|loadLocale|ru' node_modules/@gravity-ui/date-utils/README.md | head -30",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Calendar } from '@gravity-ui/date-components';\nimport type { DateTime } from '@gravity-ui/date-utils';\nimport { Button, Card, Flex, Text } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [date, setDate] = useState<DateTime | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 'var(--g-spacing-6)', maxWidth: 480 }}>\n      <Text variant=\"header-1\">Pick a date</Text>\n\n      <Card view=\"outlined\" style={{ padding: 'var(--g-spacing-4)', alignSelf: 'flex-start' }}>\n        <Calendar\n          aria-label=\"Date picker\"\n          size=\"l\"\n          value={date}\n          onUpdate={setDate}\n        />\n      </Card>\n\n      <Flex alignItems=\"center\" gap={3}>\n        <Text variant=\"body-2\" style={{ flex: 1, minWidth: 0 }}>\n          {date ? (\n            <>\n              Selected date: <Text variant=\"subheader-2\">{date.format('LL')}</Text>\n            </>\n          ) : (\n            <Text color=\"secondary\">No date selected</Text>\n          )}\n        </Text>\n        <Button view=\"flat\" disabled={!date} onClick={() => setDate(null)} style={{ flexShrink: 0 }}>\n          Clear\n        </Button>\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit && echo TSC_OK && npx vite build 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore 2>/dev/null; git status --short | head",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 322,
+      "outputTokens": 4711,
+      "cacheReadTokens": 374881,
+      "cacheWriteTokens": 33934,
+      "totalTokens": 413848
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

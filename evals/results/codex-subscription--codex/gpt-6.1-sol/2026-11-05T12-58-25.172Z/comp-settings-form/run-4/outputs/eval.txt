@@ -1,0 +1,2519 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 2 failed) 22314ms
+   ✓ imports @gravity-ui/uikit 1ms
+   × no raw HTML select 3ms
+     → expected 'import {\n  useEffect,\n  useRef,\n  …' not to match /<select[\s>]/
+   ✓ no raw text input 0ms
+   ✓ no Toggle component 0ms
+   ✓ no foreign UI libs 0ms
+   ✓ no Dropdown component 0ms
+   × judge: implements the task with the intended Gravity UI API 22310ms
+     → [judge:environment] FAIL — The profile settings form is built from @gravity-ui/uikit controls: TextInput for name and email, Select for interface language and timezone, Switch for the two-factor toggle, Checkbox for each email-notification option, and Button for Save and Cancel. Raw HTML text inputs/selects or hand-rolled toggles fail. The avatar upload is the exception: a native file input (ideally hidden behind uikit's useFileInput and a Gravity Button) is the documented way and passes.
+  reason: The profile fields use raw HTML <input> elements in src/App.tsx (name around line 493 and email around line 510), and language/timezone use raw <select> elements around lines 548 and 572. The two-factor control and notification options are raw checkbox inputs styled with custom CSS, while Cancel and Save are native <button> elements; no required Gravity UI controls are used.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  14:53:36
+   Duration  22.48s (transform 32ms, setup 17ms, collect 18ms, tests 22.31s, environment 0ms, prepare 34ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no raw HTML select
+AssertionError: expected 'import {\n  useEffect,\n  useRef,\n  …' not to match /<select[\s>]/
+
+[32m- Expected:[39m 
+/<select[\s>]/
+
+[31m+ Received:[39m 
+"import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from \"react\";
+import \"./styles.css\";
+
+type IconName =
+  | \"user\"
+  | \"globe\"
+  | \"shield\"
+  | \"bell\"
+  | \"chevron\"
+  | \"arrow\"
+  | \"check\"
+  | \"upload\"
+  | \"mail\"
+  | \"help\"
+  | \"close\"
+  | \"sparkles\"
+  | \"lock\"
+  | \"menu\";
+function Icon({
+  name,
+  size = 20,
+  ...props
+}: {
+  name: IconName;
+  size?: number;
+  className?: string;
+}) {
+  const paths: Record<IconName, React.ReactNode> = {
+    user: (
+      <>
+        <circle cx=\"12\" cy=\"8\" r=\"3.5\" />
+        <path d=\"M5 21v-2a7 7 0 0 1 14 0v2\" />
+      </>
+    ),
+    globe: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <ellipse cx=\"12\" cy=\"12\" rx=\"4\" ry=\"9\" />
+        <path d=\"M3 12h18\" />
+      </>
+    ),
+    shield: (
+      <>
+        <path d=\"m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6z\" />
+        <path d=\"m8.5 12 2.5 2.5 4.5-5\" />
+      </>
+    ),
+    bell: (
+      <>
+        <path d=\"M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9V8M10 21h4\" />
+      </>
+    ),
+    chevron: <path d=\"m9 5 7 7-7 7\" />,
+    arrow: <path d=\"M5 12h14m-5-5 5 5-5 5\" />,
+    check: <path d=\"m5 12 4 4L19 6\" />,
+    upload: <path d=\"M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5\" />,
+    mail: (
+      <>
+        <rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\" />
+        <path d=\"m3 7 9 6 9-6\" />
+      </>
+    ),
+    help: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <path d=\"M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-1 .5-1 1.2-1 2M12 17h.01\" />
+      </>
+    ),
+    close: <path d=\"m6 6 12 12M6 18 18 6\" />,
+    sparkles: (
+      <path d=\"m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5zM20 2v4m-2-2h4\" />
+    ),
+    lock: (
+      <>
+        <rect x=\"5\" y=\"10\" width=\"14\" height=\"11\" rx=\"3\" />
+        <path d=\"M8 10V7a4 4 0 0 1 8 0v3M12 14v3\" />
+      </>
+    ),
+    menu: <path d=\"M4 6h16M4 12h16M4 18h16\" />,
+  };
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox=\"0 0 24 24\"
+      fill=\"none\"
+      stroke=\"currentColor\"
+      strokeWidth=\"1.65\"
+      strokeLinecap=\"round\"
+      strokeLinejoin=\"round\"
+      aria-hidden=\"true\"
+      {...props}
+    >
+      {paths[name]}
+    </svg>
+  );
+}
+
+type Profile = {
+  name: string;
+  email: string;
+  avatar: string;
+  language: string;
+  timezone: string;
+  twoFactor: boolean;
+  productNews: boolean;
+  systemAlerts: boolean;
+  weeklyDigest: boolean;
+};
+const initialProfile: Profile = {
+  name: \"Александра Морозова\",
+  email: \"alexandra.morozova@gmail.com\",
+  avatar: \"/avatar.jpg\",
+  language: \"ru\",
+  timezone: \"Europe/Moscow\",
+  twoFactor: false,
+  productNews: true,
+  systemAlerts: true,
+  weeklyDigest: false,
+};
+const storageKey = \"orbit-profile-settings\";
+function readProfile(): Profile {
+  try {
+    const value = JSON.parse(localStorage.getItem(storageKey) || \"null\");
+    if (
+      value &&
+      Object.keys(initialProfile).every(
+        (key) =>
+          typeof value[key] === typeof initialProfile[key as keyof Profile],
+      )
+    )
+      return value;
+  } catch {
+    /* Use the initial profile if browser storage is unavailable. */
+  }
+  return initialProfile;
+}
+
+const navigation: { id: string; icon: IconName; label: string }[] = [
+  { id: \"profile\", icon: \"user\", label: \"Мой профиль\" },
+  { id: \"preferences\", icon: \"globe\", label: \"Язык и регион\" },
+  { id: \"security\", icon: \"shield\", label: \"Безопасность\" },
+  { id: \"notifications\", icon: \"bell\", label: \"Уведомления\" },
+];
+
+function Avatar({
+  profile,
+  small = false,
+}: {
+  profile: Profile;
+  small?: boolean;
+}) {
+  return (
+    <span className={`avatar ${small ? \"avatar-small\" : \"\"}`}>
+      {profile.avatar ? (
+        <img src={profile.avatar} alt={profile.name} />
+      ) : (
+        <span>
+          {profile.name
+            .trim()
+            .split(/\\s+/)
+            .slice(0, 2)
+            .map((part) => part[0])
+            .join(\"\")
+            .toUpperCase() || \"А\"}
+        </span>
+      )}
+    </span>
+  );
+}
+
+export function App() {
+  const [saved, setSaved] = useState<Profile>(readProfile);
+  const [profile, setProfile] = useState<Profile>(saved);
+  const [activeSection, setActiveSection] = useState(\"profile\");
+  const [toast, setToast] = useState<{ text: string; error?: boolean } | null>(
+    null,
+  );
+  const [avatarError, setAvatarError] = useState(\"\");
+  const [dialog, setDialog] = useState<\"help\" | \"upgrade\" | null>(null);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const dirty = JSON.stringify(profile) !== JSON.stringify(saved);
+  const update = <K extends keyof Profile>(key: K, value: Profile[K]) =>
+    setProfile((current) => ({ ...current, [key]: value }));
+
+  useEffect(() => {
+    if (!toast) return;
+    const timeout = window.setTimeout(() => setToast(null), 4500);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
+
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {
+      if (dirty) event.preventDefault();
+    };
+    window.addEventListener(\"beforeunload\", warn);
+    return () => window.removeEventListener(\"beforeunload\", warn);
+  }, [dirty]);
+
+  useEffect(() => {
+    if (!dialog) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === \"Escape\") setDialog(null);
+    };
+    window.addEventListener(\"keydown\", onKey);
+    return () => window.removeEventListener(\"keydown\", onKey);
+  }, [dialog]);
+
+  async function uploadAvatar(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = \"\";
+    if (!file) return;
+    if (![\"image/jpeg\", \"image/png\", \"image/webp\"].includes(file.type)) {
+      setAvatarError(\"Выберите изображение в формате JPG, PNG или WebP.\");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setAvatarError(\"Размер изображения не должен превышать 2 МБ.\");
+      return;
+    }
+    try {
+      const avatar = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      await new Promise<void>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = reject;
+        image.src = avatar;
+      });
+      update(\"avatar\", avatar);
+      setAvatarError(\"\");
+    } catch {
+      setAvatarError(\"Не удалось открыть изображение. Выберите другой файл.\");
+    }
+  }
+
+  function saveProfile(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!profile.name.trim()) {
+      document.getElementById(\"name\")?.focus();
+      setToast({ text: \"Пожалуйста, укажите имя.\", error: true });
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const next = {
+        ...profile,
+        name: profile.name.trim(),
+        email: profile.email.trim(),
+      };
+      localStorage.setItem(storageKey, JSON.stringify(next));
+      setSaved(next);
+      setProfile(next);
+      setAvatarError(\"\");
+      setToast({ text: \"Настройки профиля сохранены\" });
+    } catch {
+      setToast({
+        text: \"Не удалось сохранить настройки. Проверьте доступность хранилища браузера.\",
+        error: true,
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function cancelChanges() {
+    setProfile({ ...saved });
+    setAvatarError(\"\");
+    setToast({
+      text: dirty ? \"Изменения отменены\" : \"Нет несохранённых изменений\",
+    });
+  }
+
+  return (
+    <div className=\"app-shell\">
+      <aside className={`sidebar ${mobileMenu ? \"sidebar-open\" : \"\"}`}>
+        <a className=\"brand\" href=\"#\" aria-label=\"Orbit — настройки профиля\">
+          <span className=\"brand-symbol\">
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
+          orbit<span className=\"brand-dot\">.</span>
+        </a>
+        <div className=\"workspace\">
+          <span className=\"workspace-icon\">
+            А<span />
+          </span>
+          <div>
+            <strong>Личное пространство</strong>
+            <span>Ваш маленький порядок</span>
+          </div>
+          <Icon name=\"chevron\" size={15} />
+        </div>
+        <div className=\"nav-heading\">НАСТРОЙКИ АККАУНТА</div>
+        <nav aria-label=\"Настройки аккаунта\">
+          {navigation.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className={`nav-item ${activeSection === item.id ? \"active\" : \"\"}`}
+              onClick={() => {
+                setActiveSection(item.id);
+                setMobileMenu(false);
+              }}
+              aria-current={activeSection === item.id ? \"page\" : undefined}
+            >
+              <Icon name={item.icon} size={19} />
+              <span>{item.label}</span>
+              {activeSection === item.id && <span className=\"nav-dot\" />}
+            </a>
+          ))}
+        </nav>
+        <div className=\"sidebar-bottom\">
+          <div className=\"upgrade-card\">
+            <div className=\"upgrade-art\" aria-hidden=\"true\">
+              <span />
+              <span />
+              <span />
+              <Icon name=\"sparkles\" size={23} />
+            </div>
+            <span className=\"plan-label\">БОЛЬШЕ С ORBIT</span>
+            <h3>Место для больших идей</h3>
+            <p>
+              Больше возможностей для всего,
+              <br />
+              что для вас важно.
+            </p>
+            <button type=\"button\" onClick={() => setDialog(\"upgrade\")}>
+              Узнать о Pro <Icon name=\"arrow\" size={16} />
+            </button>
+          </div>
+          <button className=\"support-link\" onClick={() => setDialog(\"help\")}>
+            <Icon name=\"help\" size={18} />
+            Помощь и поддержка
+            <Icon name=\"arrow\" size={15} />
+          </button>
+          <div className=\"sidebar-user\">
+            <Avatar profile={saved} small />
+            <div>
+              <strong>{saved.name}</strong>
+              <span>Личный аккаунт</span>
+            </div>
+            <span className=\"online-dot\" title=\"Аккаунт активен\" />
+          </div>
+        </div>
+        <button
+          className=\"mobile-close icon-button\"
+          aria-label=\"Закрыть меню\"
+          onClick={() => setMobileMenu(false)}
+        >
+          <Icon name=\"close\" />
+        </button>
+      </aside>
+      {mobileMenu && (
+        <button
+          className=\"sidebar-backdrop\"
+          aria-label=\"Закрыть меню\"
+          onClick={() => setMobileMenu(false)}
+        />
+      )}
+      <div className=\"main-shell\">
+        <header className=\"topbar\">
+          <div className=\"breadcrumbs\">
+            <button
+              className=\"mobile-menu icon-button\"
+              onClick={() => setMobileMenu(true)}
+              aria-label=\"Открыть меню\"
+            >
+              <Icon name=\"menu\" />
+            </button>
+            <span>Настройки</span>
+            <Icon name=\"chevron\" size={13} />
+            <strong>Мой профиль</strong>
+          </div>
+          <div className=\"topbar-actions\">
+            <span className=\"private-label\">
+              <Icon name=\"lock\" size={14} />
+              Личный аккаунт
+            </span>
+            <span className=\"topbar-divider\" />
+            <button
+              className=\"icon-button\"
+              aria-label=\"Помощь\"
+              onClick={() => setDialog(\"help\")}
+            >
+              <Icon name=\"help\" size={20} />
+            </button>
+            <a
+              href=\"#notifications\"
+              className=\"icon-button notification-button\"
+              aria-label=\"Настройки уведомлений\"
+              onClick={() => setActiveSection(\"notifications\")}
+            >
+              <Icon name=\"bell\" size={20} />
+              <span />
+            </a>
+            <Avatar profile={saved} small />
+          </div>
+        </header>
+        <main>
+          <div className=\"page-heading\">
+            <div>
+              <div className=\"eyebrow\">ВАШ АККАУНТ, ВАШИ ПРАВИЛА</div>
+              <h1>Настройки профиля</h1>
+              <p>Немного о вас и о том, как вам удобно работать.</p>
+            </div>
+            <span className=\"secure-badge\">
+              <span />
+              Всё под вашим контролем
+            </span>
+          </div>
+          <form className=\"settings-card\" onSubmit={saveProfile}>
+            <section id=\"profile\" className=\"settings-section profile-section\">
+              <div className=\"section-heading\">
+                <span className=\"section-icon\">
+                  <Icon name=\"user\" />
+                </span>
+                <h2>Личные данные</h2>
+                <p>
+                  Так вас будут видеть
+                  <br className=\"desktop-br\" /> другие участники.
+                </p>
+              </div>
+              <div className=\"section-content\">
+                <div className=\"avatar-row\">
+                  <div className=\"avatar-wrap\">
+                    <Avatar profile={profile} />
+                    <span className=\"avatar-check\">
+                      <Icon name=\"check\" size={11} />
+                    </span>
+                  </div>
+                  <div className=\"avatar-controls\">
+                    <div className=\"avatar-buttons\">
+                      <button
+                        className=\"button button-outline button-small\"
+                        type=\"button\"
+                        onClick={() => fileInput.current?.click()}
+                      >
+                        <Icon name=\"upload\" size={15} />
+                        Загрузить фото
+                      </button>
+                      <button
+                        className=\"text-button\"
+                        type=\"button\"
+                        disabled={!profile.avatar}
+                        onClick={() => {
+                          update(\"avatar\", \"\");
+                          setAvatarError(\"\");
+                        }}
+                      >
+                        Удалить
+                      </button>
+                    </div>
+                    <span className=\"field-hint\">
+                      JPG, PNG или WebP. Не больше 2 МБ.
+                    </span>
+                    <input
+                      className=\"visually-hidden\"
+                      type=\"file\"
+                      ref={fileInput}
+                      accept=\"image/jpeg,image/png,image/webp\"
+                      aria-label=\"Загрузить аватар\"
+                      onChange={uploadAvatar}
+                    />
+                  </div>
+                </div>
+                {avatarError && (
+                  <p className=\"field-error\" role=\"alert\">
+                    {avatarError}
+                  </p>
+                )}
+                <div className=\"field-grid\">
+                  <label className=\"field\" htmlFor=\"name\">
+                    <span>
+                      Имя <span className=\"required\">*</span>
+                    </span>
+                    <div className=\"input-wrap\">
+                      <Icon name=\"user\" size={17} />
+                      <input
+                        id=\"name\"
+                        name=\"name\"
+                        autoComplete=\"name\"
+                        maxLength={80}
+                        required
+                        value={profile.name}
+                        onChange={(event) => update(\"name\", event.target.value)}
+                      />
+                    </div>
+                  </label>
+                  <label className=\"field\" htmlFor=\"email\">
+                    <span>
+                      Email <span className=\"required\">*</span>
+                    </span>
+                    <div className=\"input-wrap\">
+                      <Icon name=\"mail\" size={17} />
+                      <input
+                        id=\"email\"
+                        name=\"email\"
+                        type=\"email\"
+                        autoComplete=\"email\"
+                        required
+                        maxLength={254}
+                        value={profile.email}
+                        onChange={(event) =>
+                          update(\"email\", event.target.value)
+                        }
+                      />
+                    </div>
+                  </label>
+                </div>
+                <p className=\"email-hint\">
+                  <Icon name=\"lock\" size={12} />
+                  Ваш email виден только вам.
+                </p>
+              </div>
+            </section>
+            <section id=\"preferences\" className=\"settings-section\">
+              <div className=\"section-heading\">
+                <span className=\"section-icon\">
+                  <Icon name=\"globe\" />
+                </span>
+                <h2>Язык и регион</h2>
+                <p>
+                  Привычный язык.
+                  <br className=\"desktop-br\" /> Правильное время.
+                </p>
+              </div>
+              <div className=\"section-content\">
+                <div className=\"field-grid\">
+                  <label className=\"field\" htmlFor=\"language\">
+                    <span>Язык интерфейса</span>
+                    <div className=\"select-wrap\">
+                      <Icon name=\"globe\" size={17} />
+                      <select
+                        id=\"language\"
+                        value={profile.language}
+                        onChange={(event) =>
+                          update(\"language\", event.target.value)
+                        }
+                      >
+                        <option value=\"ru\">Русский</option>
+                        <option value=\"en\">English</option>
+                        <option value=\"de\">Deutsch</option>
+                        <option value=\"fr\">Français</option>
+                        <option value=\"es\">Español</option>
+                        <option value=\"zh\">中文</option>
+                      </select>
+                      <Icon
+                        name=\"chevron\"
+                        className=\"select-chevron\"
+                        size={14}
+                      />
+                    </div>
+                  </label>
+                  <label className=\"field\" htmlFor=\"timezone\">
+                    <span>Часовой пояс</span>
+                    <div className=\"select-wrap\">
+                      <select
+                        id=\"timezone\"
+                        value={profile.timezone}
+                        onChange={(event) =>
+                          update(\"timezone\", event.target.value)
+                        }
+                      >
+                        <option value=\"Europe/Kaliningrad\">
+                          (UTC+02:00) Калининград
+                        </option>
+                        <option value=\"Europe/Moscow\">
+                          (UTC+03:00) Москва
+                        </option>
+                        <option value=\"Europe/Samara\">
+                          (UTC+04:00) Самара
+                        </option>
+                        <option value=\"Asia/Yekaterinburg\">
+                          (UTC+05:00) Екатеринбург
+                        </option>
+                        <option value=\"Asia/Omsk\">(UTC+06:00) Омск</option>
+                        <option value=\"Asia/Novosibirsk\">
+                          (UTC+07:00) Новосибирск
+                        </option>
+                        <option value=\"Asia/Irkutsk\">
+                          (UTC+08:00) Иркутск
+                        </option>
+                        <option value=\"Asia/Yakutsk\">(UTC+09:00) Якутск</option>
+                        <option value=\"Asia/Vladivostok\">
+                          (UTC+10:00) Владивосток
+                        </option>
+                        <option value=\"Asia/Magadan\">
+                          (UTC+11:00) Магадан
+                        </option>
+                        <option value=\"Asia/Kamchatka\">
+                          (UTC+12:00) Камчатка
+                        </option>
+                        <option value=\"UTC\">(UTC+00:00) UTC</option>
+                        <option value=\"Europe/London\">
+                          Лондон · Europe/London
+                        </option>
+                        <option value=\"Europe/Berlin\">
+                          Берлин · Europe/Berlin
+                        </option>
+                        <option value=\"Asia/Almaty\">(UTC+05:00) Алматы</option>
+                        <option value=\"America/New_York\">
+                          Нью-Йорк · America/New_York
+                        </option>
+                        <option value=\"America/Los_Angeles\">
+                          Лос-Анджелес · America/Los_Angeles
+                        </option>
+                      </select>
+                      <Icon
+                        name=\"chevron\"
+                        className=\"select-chevron\"
+                        size={14}
+                      />
+                    </div>
+                  </label>
+                </div>
+                <p className=\"field-hint region-hint\">
+                  Используем для отображения дат и времени в вашем аккаунте.
+                </p>
+              </div>
+            </section>
+            <section
+              id=\"security\"
+              className=\"settings-section security-section\"
+            >
+              <div className=\"section-heading\">
+                <span className=\"section-icon\">
+                  <Icon name=\"shield\" />
+                </span>
+                <h2>Безопасность</h2>
+                <p>
+                  Дополнительная забота
+                  <br className=\"desktop-br\" /> о вашем аккаунте.
+                </p>
+              </div>
+              <div className=\"section-content\">
+                <label className=\"security-control\" htmlFor=\"two-factor\">
+                  <span className=\"security-shield\">
+                    <Icon name=\"shield\" size={23} />
+                  </span>
+                  <span className=\"control-copy\">
+                    <span className=\"control-title\">
+                      Двухфакторная авторизация{\" \"}
+                      <span
+                        className={`status-tag ${profile.twoFactor ? \"enabled\" : \"\"}`}
+                      >
+                        {profile.twoFactor ? \"Включена\" : \"Выключена\"}
+                      </span>
+                    </span>
+                    <span className=\"field-hint\">
+                      Дополнительный уровень защиты при входе.
+                    </span>
+                  </span>
+                  <span className=\"toggle\">
+                    <input
+                      id=\"two-factor\"
+                      type=\"checkbox\"
+                      role=\"switch\"
+                      checked={profile.twoFactor}
+                      onChange={(event) =>
+                        update(\"twoFactor\", event.target.checked)
+                      }
+                    />
+                    <span className=\"toggle-track\" />
+                  </span>
+                </label>
+              </div>
+            </section>
+            <section
+              id=\"notifications\"
+              className=\"settings-section notifications-section\"
+            >
+              <div className=\"section-heading\">
+                <span className=\"section-icon\">
+                  <Icon name=\"bell\" />
+                </span>
+                <h2>Email-уведомления</h2>
+                <p>
+                  Только то, что вам
+                  <br className=\"desktop-br\" /> действительно интересно.
+                </p>
+              </div>
+              <div className=\"section-content notification-options\">
+                {(
+                  [
+                    {
+                      key: \"productNews\",
+                      title: \"Новости продукта\",
+                      description:
+                        \"Новые функции, улучшения и важные обновления.\",
+                    },
+                    {
+                      key: \"systemAlerts\",
+                      title: \"Системные алерты\",
+                      description:
+                        \"Безопасность аккаунта и важные системные события.\",
+                    },
+                    {
+                      key: \"weeklyDigest\",
+                      title: \"Дайджест за неделю\",
+                      description: \"Всё самое важное за неделю в одном письме.\",
+                    },
+                  ] as const
+                ).map((item) => (
+                  <label className=\"checkbox-row\" key={item.key}>
+                    <span className=\"checkbox\">
+                      <input
+                        type=\"checkbox\"
+                        checked={profile[item.key]}
+                        onChange={(event) =>
+                          update(item.key, event.target.checked)
+                        }
+                      />
+                      <span className=\"checkbox-visual\">
+                        <Icon name=\"check\" size={13} />
+                      </span>
+                    </span>
+                    <span className=\"control-copy\">
+                      <span className=\"control-title\">{item.title}</span>
+                      <span className=\"field-hint\">{item.description}</span>
+                    </span>
+                  </label>
+                ))}
+                <div className=\"notification-note\">
+                  <Icon name=\"mail\" size={14} />
+                  <span>Никакого спама. Обещаем.</span>
+                </div>
+              </div>
+            </section>
+            <footer className=\"form-footer\">
+              <span className={`save-hint ${dirty ? \"unsaved\" : \"\"}`}>
+                <Icon name={dirty ? \"user\" : \"check\"} size={15} />
+                {dirty
+                  ? \"Есть несохранённые изменения\"
+                  : \"Все изменения сохранены\"}
+              </span>
+              <div className=\"form-actions\">
+                <button
+                  className=\"button button-outline\"
+                  type=\"button\"
+                  onClick={cancelChanges}
+                >
+                  Отмена
+                </button>
+                <button
+                  className=\"button button-primary\"
+                  type=\"submit\"
+                  disabled={isSaving}
+                >
+                  <Icon name=\"check\" size={17} />
+                  {isSaving ? \"Сохранение…\" : \"Сохранить\"}
+                </button>
+              </div>
+            </footer>
+          </form>
+          <div className=\"page-footer\">
+            <span>
+              <Icon name=\"lock\" size={13} />
+              Ваши данные в надёжных руках.
+            </span>
+            <span>
+              С заботой о вашем пространстве{\" \"}
+              <span className=\"little-flower\">✳</span>
+            </span>
+          </div>
+        </main>
+      </div>
+      {toast && (
+        <div
+          className={`toast ${toast.error ? \"toast-error\" : \"\"}`}
+          role={toast.error ? \"alert\" : \"status\"}
+        >
+          <span className=\"toast-icon\">
+            <Icon name={toast.error ? \"help\" : \"check\"} size={18} />
+          </span>
+          {toast.text}
+          <button
+            className=\"icon-button\"
+            aria-label=\"Закрыть уведомление\"
+            onClick={() => setToast(null)}
+          >
+            <Icon name=\"close\" size={16} />
+          </button>
+        </div>
+      )}
+      {dialog && (
+        <div className=\"modal-backdrop\" onClick={() => setDialog(null)}>
+          <dialog
+            open
+            aria-modal=\"true\"
+            className=\"modal\"
+            aria-labelledby=\"dialog-title\"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              autoFocus
+              className=\"icon-button modal-close\"
+              aria-label=\"Закрыть\"
+              onClick={() => setDialog(null)}
+            >
+              <Icon name=\"close\" />
+            </button>
+            <span className=\"modal-icon\">
+              <Icon name={dialog === \"help\" ? \"help\" : \"sparkles\"} size={28} />
+            </span>
+            <h2 id=\"dialog-title\">
+              {dialog === \"help\"
+                ? \"Всё о настройках\"
+                : \"Больше пространства с Pro\"}
+            </h2>
+            {dialog === \"help\" ? (
+              <>
+                <p>
+                  Измените личные данные, выберите язык и часовой пояс,
+                  настройте безопасность и письма от Orbit.
+                </p>
+                <p>
+                  Нажмите «Сохранить», чтобы сохранить настройки в этом
+                  браузере. «Отмена» вернёт последние сохранённые значения.
+                </p>
+                <p className=\"field-hint\">
+                  Для аватара подойдёт JPG, PNG или WebP размером до 2 МБ.
+                </p>
+              </>
+            ) : (
+              <>
+                <p>
+                  Соберите все ваши идеи в одном месте: больше проектов, больше
+                  места для файлов и расширенные возможности для команды.
+                </p>
+                <div className=\"coming-soon\">
+                  <Icon name=\"sparkles\" size={17} />
+                  Orbit Pro скоро появится
+                </div>
+                <p className=\"field-hint\">
+                  А пока все настройки вашего профиля доступны бесплатно.
+                </p>
+              </>
+            )}
+            <button
+              type=\"button\"
+              className=\"button button-primary modal-done\"
+              onClick={() => setDialog(null)}
+            >
+              Понятно
+            </button>
+          </dialog>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+@import url(\"https://fonts.googleapis.com/css2?family=Manrope:wght@400;450;500;550;600;650;700;750;800&display=swap\");
+
+:root {
+  font-family: \"Manrope\", sans-serif;
+  color: #292e2c;
+  background: #f7f8fa;
+  font-synthesis: none;
+  font-weight: 450;
+  --green: #39765b;
+  --muted: #929793;
+  --line: #eceeec;
+  --sidebar: 248px;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  color: inherit;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #8fbaa3;
+  outline-offset: 3px;
+}
+button {
+  transition:
+    background 0.16s,
+    box-shadow 0.16s,
+    transform 0.16s;
+}
+svg {
+  flex-shrink: 0;
+}
+input,
+select {
+  min-width: 0;
+}
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.app-shell {
+  min-height: 100vh;
+  background: #f7f8fa;
+  font-family: Manrope, sans-serif;
+  font-weight: 450;
+  color: #292e2c;
+}
+.sidebar {
+  overflow-y: auto;
+  width: var(--sidebar);
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 20;
+  background: #fff;
+  border-right: 1px solid #e9ece9;
+  padding: 34px 19px 0;
+  display: flex;
+  flex-direction: column;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 10px;
+  font-size: 33px;
+  font-weight: 800;
+  letter-spacing: -1.8px;
+  line-height: 38px;
+  margin-left: 12px;
+}
+.brand-dot {
+  color: var(--green);
+  margin-left: -10px;
+}
+.brand-symbol {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  transform: rotate(-7deg);
+  margin-right: 1px;
+}
+.brand-symbol i {
+  background: var(--green);
+  border-radius: 8px 8px 3px 8px;
+}
+.brand-symbol i:nth-child(2) {
+  transform: rotate(90deg);
+  opacity: 0.75;
+}
+.brand-symbol i:nth-child(3) {
+  transform: rotate(-90deg);
+  opacity: 0.75;
+}
+.brand-symbol i:nth-child(4) {
+  transform: rotate(180deg);
+}
+.workspace {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 10px;
+  margin-top: 35px;
+  border: 1px solid #e9ece9;
+  border-radius: 9px;
+}
+.workspace-icon {
+  width: 31px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #efeee8;
+  border: 1px solid #e1dfd5;
+  border-radius: 7px;
+  font-size: 14px;
+  color: #73786b;
+  font-weight: 700;
+  position: relative;
+}
+.workspace-icon > span {
+  width: 7px;
+  height: 7px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #61997b;
+  position: absolute;
+  bottom: -2px;
+  right: -3px;
+}
+.workspace > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.workspace strong {
+  font-size: 10.5px;
+  font-weight: 750;
+  white-space: nowrap;
+}
+.workspace > div > span {
+  font-size: 9px;
+  color: #949993;
+}
+.workspace > svg {
+  color: #9ba199;
+  transform: rotate(90deg);
+}
+.nav-heading {
+  font-size: 9px;
+  letter-spacing: 1.35px;
+  font-weight: 700;
+  color: #969e97;
+  margin: 33px 12px 13px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 550;
+  padding: 13px 13px;
+  margin: 4px 0;
+  border-radius: 7px;
+  color: #737a75;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.nav-item:hover {
+  background: #f7f8f6;
+}
+.nav-item.active {
+  color: #367657;
+  background: #edf4ef;
+  font-weight: 700;
+}
+.nav-dot {
+  width: 5px;
+  height: 5px;
+  background: #467c5e;
+  border-radius: 50%;
+  margin-left: auto;
+}
+.sidebar-bottom {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 50px;
+}
+.upgrade-card {
+  background: #f0f4ee;
+  border: 1px solid #e6ece2;
+  overflow: hidden;
+  border-radius: 9px;
+  padding: 18px 15px 14px;
+  position: relative;
+}
+.upgrade-art {
+  height: 62px;
+  position: relative;
+  width: 100%;
+  color: #5b896b;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+}
+.upgrade-art > span {
+  width: 65px;
+  height: 65px;
+  border: 1px solid #cddacb;
+  border-radius: 50%;
+  position: absolute;
+  top: -5px;
+  left: 1px;
+  transform: rotate(-35deg) scaleX(0.48);
+}
+.upgrade-art > span:nth-child(2) {
+  transform: rotate(28deg) scaleX(0.48);
+}
+.upgrade-art > span:nth-child(3) {
+  transform: rotate(90deg) scaleX(0.48);
+}
+.upgrade-art > svg {
+  position: absolute;
+  right: 15px;
+  top: 4px;
+  width: 17px;
+}
+.plan-label {
+  display: block;
+  color: #81927d;
+  font-weight: 750;
+  font-size: 8px;
+  letter-spacing: 1.7px;
+  margin-top: 8px;
+}
+.upgrade-card h3 {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: -0.15px;
+  margin: 9px 0 7px;
+}
+.upgrade-card p {
+  font-size: 10px;
+  color: #85907e;
+  line-height: 1.8;
+  margin: 0 0 15px;
+}
+.upgrade-card button {
+  border: 1px solid #d8e0d3;
+  background: #ffffff9e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-radius: 5px;
+  padding: 9px 10px;
+  font-size: 10px;
+  font-weight: 650;
+  color: #4d6952;
+}
+.upgrade-card button:hover {
+  background: #fff;
+}
+.support-link {
+  border: 0;
+  background: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #828981;
+  font-size: 10px;
+  padding: 22px 11px;
+}
+.support-link > svg:last-child {
+  margin-left: auto;
+}
+.support-link:hover {
+  color: var(--green);
+}
+.sidebar-user {
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 5px 22px;
+}
+.sidebar-user > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  flex: 1;
+}
+.sidebar-user strong {
+  font-size: 10px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-user > div > span {
+  font-size: 9px;
+  color: #9a9f99;
+}
+.online-dot {
+  width: 6px;
+  height: 6px;
+  background: #699475;
+  border-radius: 50%;
+}
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 67px;
+  height: 67px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e8eddf;
+  color: #54765b;
+  overflow: hidden;
+  font-size: 23px;
+  font-weight: 700;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px #eeede8;
+}
+.avatar img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+.avatar-small {
+  width: 33px;
+  height: 33px;
+  border-width: 2px;
+  font-size: 12px;
+}
+.main-shell {
+  margin-left: var(--sidebar);
+}
+.topbar {
+  height: 73px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffffd9;
+  border-bottom: 1px solid #e9ece9;
+  padding: 0 43px;
+}
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 11px;
+  color: #8a918b;
+}
+.breadcrumbs > svg {
+  color: #afb5ae;
+}
+.breadcrumbs strong {
+  color: #4d554f;
+  font-weight: 600;
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+}
+.private-label {
+  font-size: 10px;
+  color: #878f87;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.topbar-divider {
+  width: 1px;
+  height: 20px;
+  background: #eaede9;
+  margin: 0 0 0 3px;
+}
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  padding: 5px;
+  color: #7d867d;
+  border-radius: 5px;
+}
+.icon-button:hover {
+  background: #f0f4ef;
+  color: var(--green);
+}
+.notification-button {
+  position: relative;
+}
+.notification-button > span {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: #729878;
+  position: absolute;
+  right: 6px;
+  top: 5px;
+  border: 1px solid #fff;
+}
+.topbar-actions > .avatar {
+  margin-left: 3px;
+}
+main {
+  max-width: 1190px;
+  padding: 36px 43px 21px;
+  margin: auto;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 27px;
+}
+.eyebrow {
+  font-size: 8px;
+  letter-spacing: 1.55px;
+  font-weight: 700;
+  color: #8e9a8e;
+  margin-bottom: 10px;
+}
+h1 {
+  font-size: 28px;
+  line-height: 1.3;
+  letter-spacing: -1.15px;
+  font-weight: 750;
+  margin: 0 0 8px;
+}
+.page-heading p {
+  font-size: 11px;
+  color: #919791;
+  margin: 0;
+  line-height: 1.8;
+}
+.secure-badge {
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #7e907e;
+  padding: 8px 11px;
+  border: 1px solid #e3e9df;
+  border-radius: 5px;
+  background: #f2f5ef;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+.secure-badge > span {
+  width: 5px;
+  height: 5px;
+  background: #7c9b74;
+  border-radius: 50%;
+}
+.settings-card {
+  background: #fff;
+  border: 1px solid #e5e8e4;
+  border-radius: 11px;
+  box-shadow: 0 3px 8px #253b2703;
+  overflow: hidden;
+}
+.settings-section {
+  display: grid;
+  grid-template-columns: 205px minmax(0, 1fr);
+  gap: 16px;
+  padding: 25px 28px;
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 22px;
+}
+.section-heading {
+  position: relative;
+  padding-left: 0;
+}
+.section-icon {
+  height: 32px;
+  width: 32px;
+  background: #f4f6f2;
+  color: #7d8a7d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #edf0e9;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.section-icon svg {
+  width: 17px;
+  height: 17px;
+}
+.section-heading h2 {
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.5;
+  margin: 0 0 5px;
+  letter-spacing: -0.13px;
+}
+.section-heading p {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #969c95;
+  margin: 0;
+}
+.section-content {
+  min-width: 0;
+}
+.profile-section {
+  padding-top: 27px;
+  padding-bottom: 21px;
+}
+.avatar-row {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 21px;
+}
+.avatar-wrap {
+  position: relative;
+  display: flex;
+}
+.avatar-check {
+  position: absolute;
+  bottom: 1px;
+  right: 0;
+  background: #5e8a68;
+  color: white;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 19px;
+  width: 19px;
+  border-radius: 50%;
+}
+.avatar-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.avatar-buttons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.button {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 650;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 9px 17px;
+  white-space: nowrap;
+}
+.button-outline {
+  background: #fff;
+  border-color: #e2e6df;
+  box-shadow: 0 1px 2px #242d2410;
+  color: #596257;
+}
+.button-outline:hover {
+  background: #f7f9f5;
+  border-color: #c3d0c2;
+}
+.button-small {
+  min-height: 30px;
+  font-size: 10px;
+  padding: 7px 10px;
+}
+.button-primary {
+  background: var(--green);
+  border-color: #347054;
+  color: #fff;
+  box-shadow: 0 2px 3px #2d5a4220;
+}
+.button-primary:hover {
+  background: #2c654b;
+  box-shadow: 0 3px 7px #2d5a4230;
+}
+.text-button {
+  border: none;
+  background: none;
+  color: #959c93;
+  font-size: 10px;
+  padding: 5px 0;
+}
+.text-button:hover {
+  color: #a35f51;
+}
+.field-hint {
+  font-size: 9px;
+  line-height: 1.7;
+  color: #989f95;
+  font-weight: 400;
+  display: block;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.field > span {
+  font-size: 10px;
+  font-weight: 650;
+  color: #646c62;
+}
+.required {
+  color: #a2aaa0;
+  font-weight: 400;
+  margin-left: 2px;
+}
+.input-wrap,
+.select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #e3e7df;
+  border-radius: 5px;
+  min-height: 37px;
+  background: #fff;
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s;
+}
+.input-wrap:focus-within,
+.select-wrap:focus-within {
+  border-color: #8ba993;
+  box-shadow: 0 0 0 3px #6c9b6e10;
+}
+.input-wrap > svg,
+.select-wrap > svg:first-child:not(:last-child) {
+  position: absolute;
+  left: 11px;
+  color: #a1a89c;
+  pointer-events: none;
+}
+.input-wrap input,
+.select-wrap select {
+  border: none;
+  outline: none;
+  width: 100%;
+  background: transparent;
+  font-size: 10px;
+  color: #4c5549;
+  padding: 10px 10px 10px 36px;
+  line-height: 16px;
+  border-radius: 5px;
+  height: 37px;
+}
+.input-wrap input:focus-visible,
+.select-wrap select:focus-visible {
+  outline: none;
+}
+.select-wrap select {
+  appearance: none;
+  cursor: pointer;
+  padding-left: 11px;
+  padding-right: 31px;
+}
+.select-wrap > svg:first-child + select {
+  padding-left: 36px;
+}
+.select-chevron {
+  position: absolute;
+  right: 11px;
+  top: 12px;
+  transform: rotate(90deg);
+  pointer-events: none;
+  color: #8d9987;
+}
+.email-hint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin: 8px 0 0;
+  font-size: 8px;
+  color: #a5aba0;
+}
+.region-hint {
+  margin: 10px 0 0;
+}
+.security-section {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+.security-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  cursor: pointer;
+}
+.security-shield {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 43px;
+  background: #f3f6ef;
+  color: #8da07f;
+  border: 1px solid #e8eee2;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+.control-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.control-title {
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.5;
+  color: #505b4c;
+}
+.status-tag {
+  font-size: 7px;
+  border: 1px solid #e6e9e2;
+  background: #f6f7f4;
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: #969f8f;
+  display: inline-block;
+  margin-left: 5px;
+  font-weight: 500;
+  vertical-align: 1px;
+}
+.status-tag.enabled {
+  color: #39765b;
+  background: #edf5ef;
+  border-color: #d6e6d9;
+}
+.toggle {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 33px;
+  height: 19px;
+  margin-left: 9px;
+}
+.toggle input,
+.checkbox input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  z-index: 2;
+  cursor: pointer;
+}
+.toggle-track {
+  height: 19px;
+  width: 33px;
+  border-radius: 20px;
+  background: #e2e6dc;
+  transition: background 0.2s;
+}
+.toggle-track:after {
+  content: \"\";
+  position: absolute;
+  height: 15px;
+  width: 15px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 1px 3px #00000012;
+  transition: transform 0.2s;
+}
+.toggle input:checked + .toggle-track {
+  background: var(--green);
+}
+.toggle input:checked + .toggle-track:after {
+  transform: translateX(14px);
+}
+.toggle input:focus-visible + .toggle-track,
+.checkbox input:focus-visible + .checkbox-visual {
+  outline: 3px solid #8fbaa3;
+  outline-offset: 3px;
+}
+.notifications-section {
+  padding-top: 24px;
+  padding-bottom: 21px;
+}
+.notification-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 1px;
+}
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.checkbox {
+  position: relative;
+  display: inline-flex;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.checkbox-visual {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #dce2d5;
+  border-radius: 4px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.checkbox-visual svg {
+  color: white;
+  opacity: 0;
+}
+.checkbox input:checked + .checkbox-visual {
+  background: var(--green);
+  border-color: var(--green);
+}
+.checkbox input:checked + .checkbox-visual svg {
+  opacity: 1;
+}
+.checkbox-row .control-copy {
+  gap: 3px;
+}
+.notification-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 8px;
+  color: #96a18f;
+  margin-top: 0;
+  padding-top: 2px;
+}
+.notification-note > svg {
+  color: #a3ad9d;
+}
+.form-footer {
+  padding: 18px 28px;
+  background: #fcfdfa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.save-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  color: #98a28f;
+}
+.save-hint > svg {
+  color: #8da27b;
+}
+.save-hint.unsaved {
+  color: #a8894b;
+}
+.save-hint.unsaved > svg {
+  color: #b29c70;
+}
+.form-actions {
+  display: flex;
+  gap: 9px;
+}
+.form-actions > .button-outline {
+  min-width: 88px;
+}
+.form-actions > .button-primary {
+  min-width: 119px;
+}
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #a7afa2;
+  padding: 19px 2px 0;
+}
+.page-footer > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.little-flower {
+  color: #849c76;
+  font-size: 17px;
+  margin-left: 3px;
+}
+.field-error {
+  font-size: 10px;
+  color: #b45848;
+  margin: 0 0 14px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: calc(50% + var(--sidebar) / 2);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  max-width: calc(100% - 32px);
+  background: #fff;
+  border: 1px solid #dde6da;
+  box-shadow: 0 8px 32px #34453320;
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 12px;
+  z-index: 60;
+  animation: toast-in 0.2s ease-out;
+}
+.toast-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #edf4e8;
+  color: var(--green);
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+}
+.toast-error .toast-icon {
+  background: #fbede6;
+  color: #b05e47;
+}
+.toast > .icon-button {
+  margin-left: 10px;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #20332666;
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal {
+  position: relative;
+  inset: auto;
+  margin: 0;
+  max-width: 440px;
+  width: 100%;
+  border: 1px solid #e0e7dc;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 20px 80px #142e2840;
+  color: #3d4c3d;
+  animation: toast-in 0.2s ease-out;
+}
+.modal-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+}
+.modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef4e8;
+  color: var(--green);
+  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+}
+.modal h2 {
+  font-size: 22px;
+  letter-spacing: -0.7px;
+  line-height: 1.4;
+  margin: 20px 0 15px;
+}
+.modal p {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #828e7b;
+}
+.modal .field-hint {
+  font-size: 11px;
+}
+.modal-done {
+  margin-top: 15px;
+  width: 100%;
+}
+.coming-soon {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px;
+  border-radius: 7px;
+  background: #f1f6ed;
+  font-size: 12px;
+  color: #69885c;
+  margin: 20px 0;
+}
+.mobile-menu,
+.mobile-close {
+  display: none;
+}
+.sidebar-backdrop {
+  display: none;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    margin-bottom: -6px;
+  }
+  to {
+    opacity: 1;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 1450px) {
+  :root {
+    --sidebar: 270px;
+  }
+  .sidebar {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .settings-section {
+    grid-template-columns: 225px minmax(0, 1fr);
+  }
+  main {
+    padding-top: 43px;
+  }
+  .settings-section {
+    padding-top: 29px;
+    padding-bottom: 27px;
+  }
+  .topbar {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+  .workspace strong {
+    font-size: 11px;
+  }
+  .nav-item {
+    font-size: 13px;
+  }
+  .section-heading h2 {
+    font-size: 13px;
+  }
+  .section-heading p {
+    font-size: 11px;
+  }
+  .field > span,
+  .control-title {
+    font-size: 11px;
+  }
+  .field-hint,
+  .input-wrap input,
+  .select-wrap select {
+    font-size: 10px;
+  }
+  .notifications-section {
+    padding-bottom: 25px;
+  }
+  .notification-options {
+    gap: 19px;
+  }
+}
+@media (max-width: 1150px) {
+  :root {
+    --sidebar: 218px;
+  }
+  .sidebar {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .topbar {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  main {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .settings-section {
+    grid-template-columns: 155px minmax(0, 1fr);
+    padding-left: 22px;
+    padding-right: 22px;
+    gap: 14px;
+  }
+  .secure-badge {
+    display: none;
+  }
+  .field-grid {
+    gap: 12px;
+  }
+  .status-tag {
+    margin-left: 0;
+  }
+  .control-title .status-tag {
+    display: none;
+  }
+  .security-shield {
+    display: none;
+  }
+  .workspace strong {
+    font-size: 9px;
+  }
+  .workspace > div > span {
+    font-size: 8px;
+  }
+  .sidebar-user strong {
+    font-size: 9px;
+  }
+  .form-footer {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  .input-wrap input {
+    padding-left: 30px;
+    font-size: 9px;
+  }
+  .input-wrap > svg {
+    left: 8px;
+    width: 14px;
+  }
+  .select-wrap select {
+    font-size: 9px;
+  }
+}
+@media (max-width: 900px) and (min-width: 701px) {
+  .settings-section {
+    grid-template-columns: 125px minmax(0, 1fr);
+    padding-left: 18px;
+    padding-right: 18px;
+    gap: 12px;
+  }
+  .field-grid {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+  .email-hint {
+    justify-content: flex-start;
+  }
+  .section-heading h2 {
+    font-size: 11px;
+  }
+  .section-heading p {
+    font-size: 9px;
+  }
+  .avatar-row {
+    gap: 10px;
+  }
+  .avatar {
+    width: 56px;
+    height: 56px;
+  }
+  .avatar-small {
+    width: 31px;
+    height: 31px;
+  }
+  .avatar-buttons {
+    gap: 10px;
+  }
+  .avatar-controls .field-hint {
+    font-size: 8px;
+  }
+  .private-label {
+    display: none;
+  }
+  .form-footer {
+    flex-wrap: wrap;
+  }
+  .form-actions {
+    margin-left: auto;
+  }
+  .save-hint {
+    font-size: 8px;
+  }
+  .topbar-actions {
+    gap: 12px;
+  }
+  .page-footer {
+    font-size: 7px;
+  }
+}
+@media (max-height: 850px) and (min-width: 701px) {
+  .sidebar {
+    padding-top: 25px;
+  }
+  .workspace {
+    margin-top: 25px;
+  }
+  .nav-heading {
+    margin-top: 27px;
+  }
+  .sidebar-bottom {
+    padding-top: 24px;
+  }
+  .upgrade-art {
+    height: 44px;
+  }
+  .upgrade-card {
+    padding-top: 12px;
+  }
+  .upgrade-art > span {
+    height: 50px;
+    width: 50px;
+    top: -3px;
+  }
+  .upgrade-card p {
+    margin-bottom: 10px;
+  }
+  .support-link {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  .sidebar-user {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+}
+@media (max-width: 700px) {
+  :root {
+    --sidebar: 0px;
+  }
+  .sidebar {
+    width: 250px;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    padding-top: 28px;
+  }
+  .sidebar-open {
+    transform: translateX(0);
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #213d2960;
+    backdrop-filter: blur(2px);
+    border: 0;
+    z-index: 15;
+  }
+  .sidebar-open .mobile-close {
+    display: flex;
+    position: absolute;
+    right: 14px;
+    top: 32px;
+  }
+  .mobile-menu {
+    display: flex;
+    margin-left: -5px;
+  }
+  .main-shell {
+    margin-left: 0;
+  }
+  .topbar {
+    height: 62px;
+    padding: 0 20px;
+  }
+  .breadcrumbs {
+    gap: 10px;
+    font-size: 10px;
+  }
+  .private-label,
+  .topbar-divider {
+    display: none;
+  }
+  .topbar-actions {
+    gap: 11px;
+  }
+  .topbar-actions > .icon-button:first-of-type {
+    display: none;
+  }
+  .topbar-actions .avatar {
+    width: 30px;
+    height: 30px;
+  }
+  .topbar-actions > .avatar {
+    margin-left: 0;
+  }
+  main {
+    padding: 28px 18px 20px;
+  }
+  .page-heading {
+    margin-bottom: 22px;
+  }
+  .eyebrow {
+    font-size: 7px;
+    letter-spacing: 1.2px;
+    margin-bottom: 9px;
+  }
+  h1 {
+    font-size: 26px;
+  }
+  .page-heading p {
+    font-size: 10px;
+  }
+  .settings-section {
+    display: block;
+    padding: 23px 20px;
+  }
+  .section-heading {
+    padding-left: 43px;
+    min-height: 35px;
+    margin-bottom: 21px;
+  }
+  .section-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .section-heading h2 {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+  .section-heading p {
+    font-size: 9px;
+    line-height: 1.6;
+  }
+  .desktop-br {
+    display: none;
+  }
+  .avatar-row {
+    margin-bottom: 23px;
+  }
+  .avatar {
+    width: 61px;
+    height: 61px;
+  }
+  .avatar-small {
+    width: 32px;
+    height: 32px;
+  }
+  .field-grid {
+    gap: 15px;
+  }
+  .input-wrap input {
+    font-size: 10px;
+    padding-left: 31px;
+  }
+  .select-wrap select {
+    font-size: 10px;
+  }
+  .input-wrap,
+  .select-wrap {
+    min-height: 40px;
+  }
+  .input-wrap input,
+  .select-wrap select {
+    height: 40px;
+  }
+  .select-chevron {
+    top: 13px;
+  }
+  .email-hint {
+    font-size: 8px;
+  }
+  .security-section .section-heading {
+    margin-bottom: 10px;
+  }
+  .security-shield {
+    display: flex;
+    width: 34px;
+    height: 38px;
+  }
+  .security-control {
+    gap: 10px;
+    min-height: 55px;
+  }
+  .control-title {
+    font-size: 10px;
+  }
+  .field-hint {
+    font-size: 9px;
+  }
+  .notification-options {
+    gap: 19px;
+  }
+  .notification-note {
+    margin-top: 2px;
+    font-size: 8px;
+  }
+  .form-footer {
+    padding: 17px 20px;
+    flex-wrap: wrap;
+    gap: 17px;
+  }
+  .save-hint {
+    font-size: 8px;
+  }
+  .form-actions {
+    margin-left: auto;
+  }
+  .button {
+    font-size: 10px;
+    min-height: 36px;
+  }
+  .form-actions > .button-outline {
+    min-width: 72px;
+  }
+  .form-actions > .button-primary {
+    min-width: 105px;
+  }
+  .page-footer {
+    font-size: 7px;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .page-footer > span:last-child {
+    display: none;
+  }
+  .toast {
+    left: 50%;
+    font-size: 11px;
+    width: max-content;
+    max-width: calc(100% - 28px);
+  }
+  .modal {
+    padding: 27px;
+  }
+  .modal h2 {
+    font-size: 21px;
+  }
+}
+@media (max-width: 430px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+    gap: 17px;
+  }
+  .email-hint {
+    justify-content: flex-start;
+  }
+  .avatar-controls .field-hint {
+    font-size: 8px;
+  }
+  .avatar-buttons {
+    gap: 14px;
+  }
+  .save-hint {
+    width: 100%;
+  }
+  .form-actions {
+    width: 100%;
+    gap: 10px;
+  }
+  .form-actions > .button {
+    flex: 1;
+  }
+  .security-shield {
+    display: none;
+  }
+  .status-tag {
+    display: none;
+  }
+  .settings-section {
+    padding: 22px 19px;
+  }
+  .profile-section {
+    padding-bottom: 20px;
+  }
+  .page-footer {
+    padding-top: 16px;
+  }
+  .control-title {
+    font-size: 11px;
+  }
+  .field > span {
+    font-size: 11px;
+  }
+  .field-hint {
+    font-size: 9px;
+  }
+}
+.section-heading h2 {
+  font-size: 14px;
+}
+.section-heading p {
+  font-size: 11px;
+}
+.field > span,
+.input-wrap input,
+.select-wrap select,
+.control-title {
+  font-size: 12px;
+}
+.field-hint {
+  font-size: 10px;
+}
+.email-hint {
+  font-size: 9px;
+}
+.notification-note,
+.save-hint {
+  font-size: 10px;
+}
+.button {
+  font-size: 12px;
+}
+.button-small {
+  font-size: 11px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:65:19
+     63| // A raw <select> means the model skipped the Gravity Select component.
+     64| test("no raw HTML select", () => {
+     65|   expect(src).not.toMatch(new RegExp("<select[\\s>]"));
+       |                   ^
+     66| });
+     67| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The profile settings form is built from @gravity-ui/uikit controls: TextInput for name and email, Select for interface language and timezone, Switch for the two-factor toggle, Checkbox for each email-notification option, and Button for Save and Cancel. Raw HTML text inputs/selects or hand-rolled toggles fail. The avatar upload is the exception: a native file input (ideally hidden behind uikit's useFileInput and a Gravity Button) is the documented way and passes.
+  reason: The profile fields use raw HTML <input> elements in src/App.tsx (name around line 493 and email around line 510), and language/timezone use raw <select> elements around lines 548 and 572. The two-factor control and notification options are raw checkbox inputs styled with custom CSS, while Cancel and Save are native <button> elements; no required Gravity UI controls are used.
+ ❯ EVAL.ts:92:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

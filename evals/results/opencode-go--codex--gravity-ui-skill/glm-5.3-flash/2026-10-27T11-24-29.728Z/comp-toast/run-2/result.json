@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 312.89,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.164.0"
+  },
+  "usage": {
+    "inputTokens": 25815,
+    "outputTokens": 3973,
+    "cacheReadTokens": 226304,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1344,
+    "totalTokens": 256092
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App ---\\\\n' && sed -n '1,220p' src/App.tsx && printf '\\\\n--- main ---\\\\n' && sed -n '1,160p' src/main.tsx && printf '\\\\n--- routing/top ---\\\\n' && sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- toast docs ---\\\\n' && rg -n -i -C 5 'toast' node_modules/@gravity-ui/uikit/build/docs node_modules/@gravity-ui/uikit/dist/docs 2>/dev/null | head -160\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- package dirs ---'; find node_modules/@gravity-ui/uikit -maxdepth 3 -type d \\\\( -name docs -o -iname '*toast*' \\\\) -print; printf '%s\\\\n' '--- toast symbols ---'; rg -n --glob '*.d.ts' --glob '*.md' --glob '*.js' 'Toast|toast\\\\(' node_modules/@gravity-ui/uikit/build node_modules/@gravity-ui/uikit/dist 2>/dev/null | head -220; printf '%s\\\\n' '--- trap button ---'; rg -n -C 4 'Button view|toast' .agents/skills/gravity-ui/rules/hallucination-traps.md .agents/skills/gravity-ui/references/icons.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts; printf '\\\\n--- provider/provider dts ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.d.ts 2>/dev/null; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterProvider/ToasterProvider.d.ts 2>/dev/null; printf '\\\\n--- root exports ---\\\\n'; rg -n 'ToasterProvider|toaster' node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts; printf '\\\\n--- versioned docs ---\\\\n'; curl -L --max-time 15 -s https://gravity-ui.com/llms/uikit/7/llms.txt | rg -n -i -C 8 'ToasterProvider|useToaster|toaster\\\\.' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'export .*toaster|toaster-singleton' node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/*.d.ts; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.js; printf '\\\\n--- component positioning/biding ---\\\\n'; sed -n '1,240p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.js; printf '\\\\n--- button api ---\\\\n'; rg -n 'button.*@gravity|@gravity.*Button|toaster' node_modules/@gravity-ui/uikit/build/esm/components/Button/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Button/index.js\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'toaster-singleton|ToasterProvider|ToasterComponent' node_modules/@gravity-ui/uikit/build/esm --glob '*.d.ts'; printf '\\\\n--- package exports/read me setup ---\\\\n'; sed -n '1,220p' node_modules/@gravity-ui/uikit/package.json; find . -path '*node_modules*' -prune -o -type f \\\\( -iname '*toast*' -o -name 'README.md' \\\\) -print 2>/dev/null | head -30; jq '.peerDependencies,.dependencies,.exports' node_modules/@gravity-ui/uikit/package.json 2>/dev/null\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterContext.js node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToastsContext.js; printf '\\\\n--- Button dts ---\\\\n'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, ToasterComponent, ToasterProvider, toaster } from '@gravity-ui/uikit';\n@@\n     <ThemeProvider theme=\\\"light\\\">\n-      <App />\n+      <ToasterProvider toaster={toaster}>\n+        <App />\n+        <ToasterComponent />\n+      </ToasterProvider>\n     </ThemeProvider>\n*** Update File: src/App.tsx\n@@\n+import { Button, toaster } from '@gravity-ui/uikit';\n+\n+const NOTIFICATION_TOAST_NAME = 'screen-corner-notification';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const showNotification = () => {\n+    toaster.add({\n+      autoHiding: 4000,\n+      content: 'Это всплывающее уведомление исчезнет через 4 секунды.',\n+      isClosable: true,\n+      name: NOTIFICATION_TOAST_NAME,\n+      title: 'Уведомление',\n+    });\n+  };\n+\n+  return (\n+    <Button\n+      size=\\\"l\\\"\n+      style={{ bottom: 'var(--g-spacing-8)', position: 'fixed', right: 'var(--g-spacing-8)' }}\n+      view=\\\"action\\\"\n+      onClick={showNotification}\n+    >\n+      Показать уведомление\n+    </Button>\n+  );\n }\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apply_patch || true; find / -type f -name 'apply_patch*' 2>/dev/null | head -20; git status --short; sed -n '1,80p' src/main.tsx; sed -n '1,80p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('fs');\nlet main = fs.readFileSync('src/main.tsx', 'utf8');\nmain = main.replace(\n  \\\"import { ThemeProvider } from '@gravity-ui/uikit';\\\",\n  \\\"import { ThemeProvider, ToasterComponent, ToasterProvider, toaster } from '@gravity-ui/uikit';\\\",\n).replace(\n  \\\"    <ThemeProvider theme=\\\\\\\"light\\\\\\\">\\\\n      <App />\\\\n    </ThemeProvider>\\\",\n  \\\"    <ThemeProvider theme=\\\\\\\"light\\\\\\\">\\\\n      <ToasterProvider toaster={toaster}>\\\\n        <App />\\\\n        <ToasterComponent />\\\\n      </ToasterProvider>\\\\n    </ThemeProvider>\\\",\n);\nfs.writeFileSync('src/main.tsx', main);\n\nfs.writeFileSync('src/App.tsx', \"'`import { Button, toaster } from '\"'@gravity-ui/uikit';\n\nconst NOTIFICATION_TOAST_NAME = 'screen-corner-notification';\n\nexport function App() {\n  const showNotification = () => {\n    toaster.add({\n      autoHiding: 4000,\n      content: 'Это всплывающее уведомление исчезнет через 4 секунды.',\n      isClosable: true,\n      name: NOTIFICATION_TOAST_NAME,\n      title: 'Уведомление',\n    });\n  };\n\n  return (\n    <Button\n      size=\\\"l\\\"\n      style={{ bottom: 'var(--g-spacing-8)', position: 'fixed', right: 'var(--g-spacing-8)' }}\n      view=\\\"action\\\"\n      onClick={showNotification}\n    >\n      Показать уведомление\n    </Button>\n  );\n}\n\"'`);\nNODE\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('fs');\nlet main = fs.readFileSync('src/main.tsx', 'utf8');\nmain = main.replace(\n  \\\"import { ThemeProvider, ToasterComponent, ToasterProvider, toaster } from '@gravity-ui/uikit';\\\",\n  \\\"import { ThemeProvider, ToasterComponent, ToasterProvider } from '@gravity-ui/uikit';\\\\nimport { toaster } from '@gravity-ui/uikit/toaster-singleton';\\\",\n);\nfs.writeFileSync('src/main.tsx', main);\nlet app = fs.readFileSync('src/App.tsx', 'utf8');\napp = app.replace(\n  \\\"import { Button, toaster } from '@gravity-ui/uikit';\\\",\n  \\\"import { Button } from '@gravity-ui/uikit';\\\\nimport { toaster } from '@gravity-ui/uikit/toaster-singleton';\\\",\n);\nfs.writeFileSync('src/App.tsx', app);\nNODE\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' src/main.tsx; sed -n '1,100p' src/App.tsx; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 11,
+    "usage": {
+      "inputTokens": 25815,
+      "outputTokens": 3973,
+      "cacheReadTokens": 226304,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1344,
+      "totalTokens": 256092
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "duration": 196.346,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 9612,
+    "outputTokens": 3245,
+    "cacheReadTokens": 157696,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1222,
+    "totalTokens": 170553
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'components/**' | head -100 && printf '\\\\n--- package ---\\\\n' && cat package.json 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for f in src/main.tsx src/App.tsx src/vite-env.d.ts index.html; do echo \"--- $f\"; sed -n '\"'1,240p' \\\"\"'$f\" 2>/dev/null; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"ThemeProvider|useTheme\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | head -40; rg -n \\\"direction|theme\\\" node_modules/@gravity-ui/uikit/build/esm/ThemeProvider -g '*.d.ts'\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts && rg -n \"const theme|theme =\" node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts && sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export interface ControlProps|ControlStateProps|onUpdate\\\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -30 && sed -n '20,90p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/ThemeToggle.tsx\n+import { useTheme, Switch } from '@gravity-ui/uikit';\n+import type { RealTheme } from '@gravity-ui/uikit';\n+\n+interface ThemeToggleProps {\n+  onThemeChange: (theme: RealTheme) => void;\n+}\n+\n+export function ThemeToggle({ onThemeChange }: ThemeToggleProps) {\n+  const theme = useTheme();\n+\n+  return (\n+    <Switch\n+      checked={theme === 'dark'}\n+      onUpdate={(checked) => onThemeChange(checked ? 'dark' : 'light')}\n+    >\n+      Dark theme\n+    </Switch>\n+  );\n+}\n*** Update File: src/App.tsx\n@@+import { ThemeToggle } from './ThemeToggle';\n+import type { Theme } from '@gravity-ui/uikit';\n+\n+interface AppProps {\n+  theme: Theme;\n+  onThemeChange: (theme: RealTheme) => void;\n+}\n+\n+export function App({ theme, onThemeChange }: AppProps) {\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <ThemeToggle onThemeChange={onThemeChange} />\n+    </div>\n+  );\n+}\n*** Update File: src/main.tsx\n@@+import React, { useState } from 'react';\n+import { ThemeProvider, type Theme, type RealTheme } from '@gravity-ui/uikit';\n+\n+import { App } from './App';\n+\n+function Root() {\n+  const [theme, setTheme] = useState<Theme>('light');\n+\n+  return (\n+    <ThemeProvider theme={theme}>\n+      <App\n+        theme={theme}\n+        onThemeChange={(nextTheme: RealTheme) => setTheme(nextTheme)}\n+      />\n+    </ThemeProvider>\n+  );\n+}\n*** End Patch\nPATCH\nsed -n '1,160p' src/main.tsx && sed -n '1,120p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply-patch || command -v patch || echo none'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/theme.patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/ThemeToggle.tsx\n+import { useTheme, Switch } from '@gravity-ui/uikit';\n+import type { RealTheme } from '@gravity-ui/uikit';\n+\n+interface ThemeToggleProps {\n+  onThemeChange: (theme: RealTheme) => void;\n+}\n+\n+export function ThemeToggle({ onThemeChange }: ThemeToggleProps) {\n+  const theme = useTheme();\n+\n+  return (\n+    <Switch\n+      checked={theme === 'dark'}\n+      onUpdate={(checked) => onThemeChange(checked ? 'dark' : 'light')}\n+    >\n+      Dark theme\n+    </Switch>\n+  );\n+}\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+import { useTheme, Switch } from '@gravity-ui/uikit';\n+\n+interface AppProps {\n+  onThemeChange: (checked: boolean) => void;\n+}\n+\n+export function App({ onThemeChange }: AppProps) {\n+  const theme = useTheme();\n+\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <Switch\n+        checked={theme === 'dark'}\n+        onUpdate={onThemeChange}\n+      >\n+        Dark theme\n+      </Switch>\n+    </div>\n+  );\n }\n*** Update File: src/main.tsx\n@@\n-import React from 'react';\n+import React, { useState } from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider } from '@gravity-ui/uikit';\n+import type { Theme } from '@gravity-ui/uikit';\n@@\n-    <ThemeProvider theme=\\\"light\\\">\n-      <App />\n-    </ThemeProvider>\n+    <Root />\n@@\n   </React.StrictMode>,\n );\n+\n+function Root() {\n+  const [theme, setTheme] = useState<Theme>('light');\n+\n+  return (\n+    <ThemeProvider theme={theme}>\n+      <App onThemeChange={(checked) => setTheme(checked ? 'dark' : 'light')} />\n+    </ThemeProvider>\n+  );\n+}\n*** End Patch\nPATCH\napply_patch < /tmp/theme.patch || true\ngit diff -- src\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find / -name apply_patch -perm -111 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc '/home/node/.codex/tmp/arg0-linux/codex-arg0m7JvEV/apply_patch < /tmp/theme.patch && git diff -- src'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 9612,
+      "outputTokens": 3245,
+      "cacheReadTokens": 157696,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1222,
+      "totalTokens": 170553
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T17:29:30.381Z",
+    "by": "openrouter--codex",
+    "previousStatus": "passed"
+  }
+}

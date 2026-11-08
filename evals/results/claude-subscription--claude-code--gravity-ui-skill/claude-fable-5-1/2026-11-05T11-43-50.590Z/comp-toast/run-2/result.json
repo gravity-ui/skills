@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "duration": 420.143,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 4587,
+    "cacheReadTokens": 176537,
+    "cacheWriteTokens": 27128,
+    "totalTokens": 208414
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo ---- && ls -la && cat package.json && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "rg -n -i -C 3 'toast|notif|уведомл' .agents/skills/gravity-ui/references/package-routing.md | head -80; echo ----HEAD; sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts AGENTS.md; echo ----; cat __agent_eval__/run.mjs | head -60",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Toaster ToasterProvider ToasterComponent useToaster Button ThemeProvider 2>&1 | head -80; echo ----; ls node_modules/@gravity-ui/uikit/; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; rg -n -i -C 2 'required setup|styles\\.css|ThemeProvider' node_modules/@gravity-ui/uikit/README.md | head -60",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ && cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/hooks/useToaster.d.ts 2>&1",
+        "success": true
+      },
+      {
+        "command": "curl -sS -m 25 -o /tmp/uikit7.md -w 'http=%{http_code} size=%{size_download}\\n' https://gravity-ui.com/llms/uikit/7/llms.txt; rg -n -i -C 3 'toaster' /tmp/uikit7.md | head -120",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toaster.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/constants.d.ts; echo ----; rg -n -i 'autoHiding|DEFAULT_TIMEOUT|TOAST_THEMES' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/constants.js node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toast/Toast.js | head; echo ----; rg -n 'Toaster' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { Button, Toaster, ToasterComponent, ToasterProvider, useToaster } from '@gravity-ui/uikit';\n\n// Единственный экземпляр тостера на всё приложение.\nconst toaster = new Toaster();\n\n// Через сколько миллисекунд уведомление исчезает само.\nconst TOAST_AUTO_HIDE_MS = 4000;\n\nfunction NotifyButton() {\n  const { add } = useToaster();\n  const counterRef = React.useRef(0);\n\n  const handleClick = React.useCallback(() => {\n    counterRef.current += 1;\n    const id = counterRef.current;\n\n    add({\n      name: `notification-${id}`,\n      title: 'Уведомление',\n      content: `Сообщение №${id}. Исчезнет через ${TOAST_AUTO_HIDE_MS / 1000} с.`,\n      theme: 'success',\n      autoHiding: TOAST_AUTO_HIDE_MS,\n    });\n  }, [add]);\n\n  return (\n    <div\n      style={{\n        position: 'fixed',\n        bottom: 'var(--g-spacing-6)',\n        left: 'var(--g-spacing-6)',\n      }}\n    >\n      <Button view=\"action\" size=\"l\" onClick={handleClick}>\n        Показать уведомление\n      </Button>\n    </div>\n  );\n}\n\nexport function App() {\n  return (\n    <ToasterProvider toaster={toaster}>\n      <NotifyButton />\n      {/* Контейнер тостов; по умолчанию рендерится в правом нижнем углу экрана. */}\n      <ToasterComponent />\n    </ToasterProvider>\n  );\n}\nEOF\nnpx tsc --noEmit && echo TSC_OK && npx vite build 2>&1 | tail -5",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 4587,
+      "cacheReadTokens": 176537,
+      "cacheWriteTokens": 27128,
+      "totalTokens": 208414
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

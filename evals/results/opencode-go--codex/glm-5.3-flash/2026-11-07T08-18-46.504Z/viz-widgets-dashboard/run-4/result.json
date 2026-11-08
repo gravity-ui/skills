@@ -1,0 +1,305 @@
+{
+  "status": "failed",
+  "duration": 541.458,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 49691,
+    "outputTokens": 19281,
+    "cacheReadTokens": 1522752,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1647,
+    "totalTokens": 1591724
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 33,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 50,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 50,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la && find . -maxdepth 2 -type f -name \"AGENTS.md\" -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- files ---\\\\n' && rg --files src && printf '\\\\n--- index.html ---\\\\n' && cat index.html && printf '\\\\n--- src ---\\\\n' && for f in src/*; do echo \\\"### \"'$f\"; cat \"$f\"; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install react-grid-layout@1.5.3 && npm install -D @types/react-grid-layout@1.5.2'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install react-grid-layout@1.5.4 && npm install -D @types/react-grid-layout@1.5.4 && npm pkg delete scripts.audit && npm pkg set scripts.dev=\"vite --host\" scripts.build=\"tsc --noEmit && vite build\" scripts.test=\"vitest run\"'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @types/react-grid-layout versions --json | tail -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install -D @types/react-grid-layout@2.1.0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm uninstall -D @types/react-grid-layout && find node_modules/react-grid-layout -maxdepth 2 -name '*.d.ts' -o -name 'package.json' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/react-grid-layout/package.json | sed -n '1,80p' && ls node_modules/react-grid-layout | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/react-grid-layout/index.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/dashboard.patch <<'PATCH'\n*** Begin Patch\n*** Delete File: src/App.tsx\n*** Add File: src/App.tsx\n+import React, { useCallback, useEffect, useMemo, useState } from 'react';\n+import { Button, Card, Flex, SegmentedRadioGroup } from '@gravity-ui/uikit';\n+import GridLayout, { Layout, WidthProvider, Responsive } from 'react-grid-layout';\n+import 'react-grid-layout/css/styles.css';\n+import 'react-resizable/css/styles.css';\n+import { Widgets, widgetMeta } from './widgets';\n+import './dashboard.css';\n+\n+const ResponsiveGrid = WidthProvider(Responsive);\n+\n+type WidgetId = keyof typeof Widgets;\n+type Layouts = Record<string, Layout[]>;\n+type Mode = 'view' | 'edit';\n+\n+const storageKey = 'dashboard-grid-layout-v1';\n+const breakpoints = { lg: 1080, md: 760, sm: 480 };\n+const columns = { lg: 12, md: 8, sm: 4 };\n+\n+const defaultLayout: Layout[] = [\n+  { i: 'revenue', x: 0, y: 0, w: 4, h: 6, minW: 3, minH: 5 },\n+  { i: 'traffic', x: 4, y: 0, w: 8, h: 8, minW: 4, minH: 6 },\n+  { i: 'tasks', x: 0, y: 6, w: 6, h: 9, minW: 3, minH: 6 },\n+  { i: 'activity', x: 6, y: 6, w: 6, h: 9, minW: 3, minH: 6 },\n+];\n+\n+function compactLayouts(layout: Layout[]): Layouts {\n+  return {\n+    lg: layout,\n+    md: layout.map((item) => ({ ...item, w: Math.min(item.w, columns.md) })),\n+    sm: layout.map((item) => ({ ...item, w: Math.min(item.w, columns.sm) })),\n+  };\n+}\n+\n+function readLayouts(): Layouts {\n+  try {\n+    const raw = localStorage.getItem(storageKey);\n+    if (\"'!raw) return compactLayouts(defaultLayout);\n+\n+    const parsed = JSON.parse(raw) as Partial<Layouts>;\n+    const knownIds = new Set(Object.keys(Widgets));\n+    if (!parsed.lg?.every((item) => knownIds.has(item.i as WidgetId))) {\n+      return compactLayouts(defaultLayout);\n+    }\n+    return {\n+      lg: parsed.lg,\n+      md: parsed.md ?? compactLayouts(parsed.lg).md,\n+      sm: parsed.sm ?? compactLayouts(parsed.lg).sm,\n+    };\n+  } catch {\n+    return compactLayouts(defaultLayout);\n+  }\n+}\n+\n+function WidgetShell({ id, title, mode, onRemove }: {\n+  id: WidgetId;\n+  title: string;\n+  mode: Mode;\n+  onRemove: (id: WidgetId) => void;\n+}) {\n+  const Widget = Widgets[id];\n+\n+  return (\n+    <Card view=\"raised\" className=\"dashboard-widget\">\n+      <header className=\"dashboard-widget__header\">\n+        <div>\n+          <h2 className=\"dashboard-widget__title\">{title}</h2>\n+          <span className=\"dashboard-widget__hint\">Перетащите за заголовок в режиме настройки</span>\n+        </div>\n+        {mode === '\"'edit' && (\n+          <Button size=\\\"s\\\" view=\\\"flat-danger\\\" onClick={() => onRemove(id)}>\n+            Удалить\n+          </Button>\n+        )}\n+      </header>\n+      <div className=\\\"dashboard-widget__body\\\">\n+        <Widget />\n+      </div>\n+      <span className=\\\"dashboard-widget__handle\\\" aria-hidden=\\\"true\\\" />\n+    </Card>\n+  );\n+}\n+\n+export function App() {\n+  const [layouts, setLayouts] = useState<Layouts>(readLayouts);\n+  const [visible, setVisible] = useState<WidgetId[]>(() => Object.keys(Widgets) as WidgetId[]);\n+  const [mode, setMode] = useState<Mode>('view');\n+\n+  useEffect(() => {\n+    localStorage.setItem(storageKey, JSON.stringify(layouts));\n+  }, [layouts]);\n+\n+  const handleLayoutChange = useCallback((_current: Layout[], allLayouts: Layouts) => {\n+    setLayouts(allLayouts);\n+  }, []);\n+\n+  const removeWidget = useCallback((id: WidgetId) => {\n+    setVisible((current) => current.filter((widgetId) => widgetId \"'!== id));\n+  }, []);\n+\n+  const resetLayout = useCallback(() => {\n+    setLayouts(compactLayouts(defaultLayout));\n+    setVisible(Object.keys(Widgets) as WidgetId[]);\n+  }, []);\n+\n+  const hiddenWidgets = useMemo(\n+    () => (Object.keys(widgetMeta) as WidgetId[]).filter((id) => !visible.includes(id)),\n+    [visible],\n+  );\n+\n+  const currentLayout = layouts.lg.filter((item) => visible.includes(item.i as WidgetId));\n+\n+  return (\n+    <div className=\"dashboard\">\n+      <header className=\"dashboard__toolbar\">\n+        <div>\n+          <h1>Операционный дашборд</h1>\n+          <p>Свободно перемещайте виджеты по сетке и меняйте их размер.</p>\n+        </div>\n+        <Flex gap=\"4\" alignItems=\"center\" wrap=\"wrap\">\n+          <SegmentedRadioGroup<Mode>\n+            value={mode}\n+            onValueUpdate={setMode}\n+            name=\"dashboard-mode\"\n+            size=\"m\"\n+          >\n+            <SegmentedRadioGroup.Radio value=\"view\">Просмотр</SegmentedRadioGroup.Radio>\n+            <SegmentedRadioGroup.Radio value=\"edit\">Настройка</SegmentedRadioGroup.Radio>\n+          </SegmentedRadioGroup>\n+          <Button view=\"outlined\" size=\"m\" onClick={resetLayout}>Сбросить</Button>\n+        </Flex>\n+      </header>\n+\n+      {mode === '\"'edit' && (\n+        <section className=\\\"dashboard__palette\\\" aria-label=\\\"Скрытые виджеты\\\">\n+          {hiddenWidgets.length === 0 ? (\n+            <span>Все доступные виджеты уже на дашборде.</span>\n+          ) : (\n+            hiddenWidgets.map((id) => (\n+              <Button\n+                key={id}\n+                size=\\\"s\\\"\n+                view=\\\"outlined\\\"\n+                onClick={() => setVisible((current) => [...current, id])}\n+              >\n+                Вернуть «{widgetMeta[id].title}»\n+              </Button>\n+            ))\n+          )}\n+        </section>\n+      )}\n+\n+      <ResponsiveGrid\n+        className={mode === 'edit' ? 'dashboard__grid dashboard__grid--edit' : 'dashboard__grid'}\n+        layouts={layouts}\n+        breakpoints={breakpoints}\n+        cols={columns}\n+        rowHeight={28}\n+        margin={[16, 16]}\n+        containerPadding={[0, 0]}\n+        isDraggable={mode === 'edit'}\n+        isResizable={mode === 'edit'}\n+        draggableHandle=\\\".dashboard-widget__header\\\"\n+        onLayoutChange={handleLayoutChange}\n+      >\n+        {visible.map((id) => (\n+          <div key={id}>\n+            <WidgetShell\n+              id={id}\n+              title={widgetMeta[id].title}\n+              mode={mode}\n+              onRemove={removeWidget}\n+            />\n+          </div>\n+        ))}\n+      </ResponsiveGrid>\n+    </div>\n+  );\n+}\n*** Add File: src/widgets.tsx\n+import React from 'react';\n+\n+type Widget = () => React.ReactElement;\n+\n+const KpiWidget: Widget = () => (\n+  <div className=\\\"metric\\\">\n+    <strong>₽8 245 000</strong>\n+    <span>Выручка за неделю</span>\n+    <em>+12,4%</em>\n+  </div>\n+);\n+\n+const TrafficWidget: Widget = () => (\n+  <svg viewBox=\\\"0 0 300 120\\\" className=\\\"sparkline\\\" role=\\\"img\\\" aria-label=\\\"График трафика\\\">\n+    <defs>\n+      <linearGradient id=\\\"traffic\\\" x1=\\\"0\\\" x2=\\\"0\\\" y1=\\\"0\\\" y2=\\\"1\\\">\n+        <stop offset=\\\"0%\\\" stopColor=\\\"var(--g-color-brand)\\\" stopOpacity=\\\".36\\\" />\n+        <stop offset=\\\"100%\\\" stopColor=\\\"var(--g-color-brand)\\\" stopOpacity=\\\"0\\\" />\n+      </linearGradient>\n+    </defs>\n+    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30 V116 H4Z\\\" fill=\\\"url(#traffic)\\\" />\n+    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30\\\" fill=\\\"none\\\" stroke=\\\"var(--g-color-brand)\\\" strokeWidth=\\\"3\\\" strokeLinecap=\\\"round\\\" />\n+  </svg>\n+);\n+\n+const TasksWidget: Widget = () => (\n+  <ul className=\\\"compact-list\\\">\n+    {[\n+      ['Подготовить релиз', 'Сегодня, 15:00'],\n+      ['Обновить отчёт', 'Завтра, 10:00'],\n+      ['Разобрать инцидент', 'Вчера'],\n+      ['Пригласить команду', 'В пятницу'],\n+    ].map(([title, date]) => (\n+      <li key={title}>\n+        <span>{title}</span>\n+        <small>{date}</small>\n+      </li>\n+    ))}\n+  </ul>\n+);\n+\n+const ActivityWidget: Widget = () => (\n+  <div className=\\\"activity\\\" aria-label=\\\"Активность по дням\\\">\n+    {[36, 74, 48, 96, 58, 82, 68].map((value, index) => (\n+      <div key={index} className=\\\"activity__bar\\\" style={{ height: \"'`${value}%` }}>\n+        <span>{['\"'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][index]}</span>\n+      </div>\n+    ))}\n+  </div>\n+);\n+\n+const AlertsWidget: Widget = () => (\n+  <div className=\\\"metric metric--warning\\\">\n+    <strong>3</strong>\n+    <span>Активных оповещения</span>\n+    <em>Проверьте платежный шлюз</em>\n+  </div>\n+);\n+\n+const UptimeWidget: Widget = () => (\n+  <div className=\\\"metric metric--positive\\\">\n+    <strong>99,98%</strong>\n+    <span>Доступность сервисов</span>\n+    <em>SLA выполняется</em>\n+  </div>\n+);\n+\n+export const Widgets = {\n+  revenue: KpiWidget,\n+  traffic: TrafficWidget,\n+  tasks: TasksWidget,\n+  activity: ActivityWidget,\n+  alerts: AlertsWidget,\n+  uptime: UptimeWidget,\n+} as const;\n+\n+export const widgetMeta = {\n+  revenue: { title: 'Выручка' },\n+  traffic: { title: 'Трафик' },\n+  tasks: { title: 'Задачи' },\n+  activity: { title: 'Активность' },\n+  alerts: { title: 'Оповещения' },\n+  uptime: { title: 'Доступность' },\n+} as const;\n*** Add File: src/dashboard.css\n+.dashboard {\n+  max-width: 1280px;\n+  margin: 0 auto;\n+  padding: 24px 24px 40px;\n+  box-sizing: border-box;\n+}\n+\n+.dashboard__toolbar,\n+.dashboard__palette {\n+  display: flex;\n+  align-items: center;\n+  justify-content: space-between;\n+  gap: 16px;\n+  margin-bottom: 20px;\n+}\n+\n+.dashboard__toolbar {\n+  flex-wrap: wrap;\n+}\n+\n+.dashboard__toolbar h1,\n+.dashboard-widget__title {\n+  margin: 0;\n+  color: var(--g-color-text-primary);\n+}\n+\n+.dashboard__toolbar h1 {\n+  font-size: 26px;\n+  line-height: 1.2;\n+}\n+\n+.dashboard__toolbar p,\n+.dashboard-widget__hint,\n+.dashboard__palette {\n+  margin: 0;\n+  color: var(--g-color-text-secondary);\n+}\n+\n+.dashboard__palette {\n+  justify-content: flex-start;\n+  flex-wrap: wrap;\n+  min-height: 42px;\n+  padding: 8px 12px;\n+  border: 1px dashed var(--g-color-line-generic);\n+  border-radius: 10px;\n+  background: var(--g-color-base-generic);\n+}\n+\n+.dashboard__grid--edit .dashboard-widget {\n+  cursor: default;\n+}\n+\n+.dashboard-widget {\n+  height: 100%;\n+  overflow: hidden;\n+  border-radius: 14px \"'!important;\n+  box-sizing: border-box;\n+}\n+\n+.dashboard-widget__header {\n+  display: flex;\n+  align-items: flex-start;\n+  justify-content: space-between;\n+  gap: 12px;\n+  padding: 14px 16px 8px;\n+  cursor: grab;\n+}\n+\n+.dashboard__grid:not(.dashboard__grid--edit) .dashboard-widget__header {\n+  cursor: default;\n+}\n+\n+.dashboard-widget__header:active {\n+  cursor: grabbing;\n+}\n+\n+.dashboard-widget__title {\n+  font-size: 17px;\n+}\n+\n+.dashboard-widget__hint {\n+  display: none;\n+  font-size: 12px;\n+}\n+\n+.dashboard__grid--edit .dashboard-widget__hint {\n+  display: block;\n+}\n+\n+.dashboard-widget__body {\n+  height: calc(100% - 54px);\n+  padding: 4px 16px 16px;\n+  overflow: auto;\n+}\n+\n+.dashboard-widget__handle {\n+  position: absolute;\n+  right: 5px;\n+  bottom: 5px;\n+  width: 14px;\n+  height: 14px;\n+  background: linear-gradient(-45deg, transparent 62%, var(--g-color-line-generic) 62%, var(--g-color-line-generic) 68%, transparent 68%, transparent 78%, var(--g-color-line-generic) 78%, var(--g-color-line-generic) 84%, transparent 84%);\n+  opacity: 0;\n+  transition: opacity 0.2s ease;\n+}\n+\n+.dashboard__grid--edit .dashboard-widget__handle {\n+  opacity: 1;\n+}\n+\n+.metric {\n+  display: flex;\n+  flex-direction: column;\n+  gap: 6px;\n+  height: 100%;\n+  justify-content: center;\n+}\n+\n+.metric strong {\n+  font-size: clamp(26px, 5cqw, 44px);\n+  line-height: 1;\n+  color: var(--g-color-text-primary);\n+}\n+\n+.metric span,\n+.metric em,\n+.compact-list small {\n+  color: var(--g-color-text-secondary);\n+}\n+\n+.metric em {\n+  font-style: normal;\n+  font-size: 14px;\n+}\n+\n+.metric--warning strong {\n+  color: var(--g-color-text-danger);\n+}\n+\n+.metric--positive strong {\n+  color: var(--g-color-text-positive);\n+}\n+\n+.sparkline {\n+  width: 100%;\n+  height: calc(100% - 8px);\n+}\n+\n+.compact-list {\n+  display: grid;\n+  gap: 10px;\n+  margin: 0;\n+  padding: 0;\n+  list-style: none;\n+}\n+\n+.compact-list li {\n+  display: flex;\n+  align-items: center;\n+  justify-content: space-between;\n+  gap: 12px;\n+  padding: 10px 12px;\n+  border-radius: 8px;\n+  background: var(--g-color-base-generic);\n+}\n+\n+.activity {\n+  display: grid;\n+  grid-auto-flow: column;\n+  grid-auto-columns: 1fr;\n+  align-items: end;\n+  gap: 10px;\n+  height: calc(100% - 6px);\n+}\n+\n+.activity__bar {\n+  position: relative;\n+  min-height: 22px;\n+  border-radius: 6px 6px 3px 3px;\n+  background: var(--g-color-brand);\n+  opacity: 0.8;\n+}\n+\n+.activity__bar span {\n+  position: absolute;\n+  right: 0;\n+  bottom: -20px;\n+  font-size: 11px;\n+  color: var(--g-color-text-secondary);\n+}\n*** Add File: src/react-grid-layout.d.ts\n+declare module '\"'react-grid-layout' {\n+  export type Layout = {\n+    i: string;\n+    x: number;\n+    y: number;\n+    w: number;\n+    h: number;\n+    minW?: number;\n+    maxW?: number;\n+    minH?: number;\n+    maxH?: number;\n+    static?: boolean;\n+  };\n+\n+  export type Layouts = Record<string, Layout[]>;\n+\n+  export const WidthProvider: (\n+    component: unknown,\n+  ) => React.ComponentType<Record<string, unknown>>;\n+\n+  export const Responsive: unknown;\n+\n+  const GridLayout: unknown;\n+  export default GridLayout;\n+}\n*** Update File: index.html\n@@\n-    <title>Gravity UI eval</title>\n+    <title>Операционный дашборд</title>\n*** End Patch\nPATCH\napply_patch < /tmp/dashboard.patch\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'which apply_patch || find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /usr/local/bin | head -50 && ls /home/node/.codex/bin 2>/dev/null || true'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git apply --check /tmp/dashboard.patch && git apply /tmp/dashboard.patch'",
+        "success": false,
+        "exitCode": 128
+      },
+      {
+        "command": "/bin/bash -lc 'head -30 /tmp/dashboard.patch && wc -c /tmp/dashboard.patch'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i '1d;\"'$d'\"' /tmp/dashboard.patch && git apply --check /tmp/dashboard.patch && git apply /tmp/dashboard.patch\"",
+        "success": false,
+        "exitCode": 128
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport React, { useCallback, useEffect, useMemo, useState } from 'react';\nimport { Button, Card, Flex, SegmentedRadioGroup } from '@gravity-ui/uikit';\nimport GridLayout, { Layout, WidthProvider, Responsive } from 'react-grid-layout';\nimport 'react-grid-layout/css/styles.css';\nimport 'react-resizable/css/styles.css';\nimport { Widgets, widgetMeta } from './widgets';\nimport './dashboard.css';\n\nconst ResponsiveGrid = WidthProvider(Responsive);\n\ntype WidgetId = keyof typeof Widgets;\ntype Layouts = Record<string, Layout[]>;\ntype Mode = 'view' | 'edit';\n\nconst storageKey = 'dashboard-grid-layout-v1';\nconst breakpoints = { lg: 1080, md: 760, sm: 480 };\nconst columns = { lg: 12, md: 8, sm: 4 };\n\nconst defaultLayout: Layout[] = [\n  { i: 'revenue', x: 0, y: 0, w: 4, h: 6, minW: 3, minH: 5 },\n  { i: 'traffic', x: 4, y: 0, w: 8, h: 8, minW: 4, minH: 6 },\n  { i: 'tasks', x: 0, y: 6, w: 6, h: 9, minW: 3, minH: 6 },\n  { i: 'activity', x: 6, y: 6, w: 6, h: 9, minW: 3, minH: 6 },\n];\n\nfunction compactLayouts(layout: Layout[]): Layouts {\n  return {\n    lg: layout,\n    md: layout.map((item) => ({ ...item, w: Math.min(item.w, columns.md) })),\n    sm: layout.map((item) => ({ ...item, w: Math.min(item.w, columns.sm) })),\n  };\n}\n\nfunction readLayouts(): Layouts {\n  try {\n    const raw = localStorage.getItem(storageKey);\n    if (\"'!raw) return compactLayouts(defaultLayout);\n\n    const parsed = JSON.parse(raw) as Partial<Layouts>;\n    const knownIds = new Set(Object.keys(Widgets));\n    if (!parsed.lg?.every((item) => knownIds.has(item.i as WidgetId))) {\n      return compactLayouts(defaultLayout);\n    }\n    return {\n      lg: parsed.lg,\n      md: parsed.md ?? compactLayouts(parsed.lg).md,\n      sm: parsed.sm ?? compactLayouts(parsed.lg).sm,\n    };\n  } catch {\n    return compactLayouts(defaultLayout);\n  }\n}\n\nfunction WidgetShell({ id, title, mode, onRemove }: {\n  id: WidgetId;\n  title: string;\n  mode: Mode;\n  onRemove: (id: WidgetId) => void;\n}) {\n  const Widget = Widgets[id];\n\n  return (\n    <Card view=\"raised\" className=\"dashboard-widget\">\n      <header className=\"dashboard-widget__header\">\n        <div>\n          <h2 className=\"dashboard-widget__title\">{title}</h2>\n          <span className=\"dashboard-widget__hint\">Перетащите за заголовок в режиме настройки</span>\n        </div>\n        {mode === '\"'edit' && (\n          <Button size=\\\"s\\\" view=\\\"flat-danger\\\" onClick={() => onRemove(id)}>\n            Удалить\n          </Button>\n        )}\n      </header>\n      <div className=\\\"dashboard-widget__body\\\">\n        <Widget />\n      </div>\n      <span className=\\\"dashboard-widget__handle\\\" aria-hidden=\\\"true\\\" />\n    </Card>\n  );\n}\n\nexport function App() {\n  const [layouts, setLayouts] = useState<Layouts>(readLayouts);\n  const [visible, setVisible] = useState<WidgetId[]>(() => Object.keys(Widgets) as WidgetId[]);\n  const [mode, setMode] = useState<Mode>('view');\n\n  useEffect(() => {\n    localStorage.setItem(storageKey, JSON.stringify(layouts));\n  }, [layouts]);\n\n  const handleLayoutChange = useCallback((_current: Layout[], allLayouts: Layouts) => {\n    setLayouts(allLayouts);\n  }, []);\n\n  const removeWidget = useCallback((id: WidgetId) => {\n    setVisible((current) => current.filter((widgetId) => widgetId \"'!== id));\n  }, []);\n\n  const resetLayout = useCallback(() => {\n    setLayouts(compactLayouts(defaultLayout));\n    setVisible(Object.keys(Widgets) as WidgetId[]);\n  }, []);\n\n  const hiddenWidgets = useMemo(\n    () => (Object.keys(widgetMeta) as WidgetId[]).filter((id) => !visible.includes(id)),\n    [visible],\n  );\n\n  const currentLayout = layouts.lg.filter((item) => visible.includes(item.i as WidgetId));\n\n  return (\n    <div className=\"dashboard\">\n      <header className=\"dashboard__toolbar\">\n        <div>\n          <h1>Операционный дашборд</h1>\n          <p>Свободно перемещайте виджеты по сетке и меняйте их размер.</p>\n        </div>\n        <Flex gap=\"4\" alignItems=\"center\" wrap=\"wrap\">\n          <SegmentedRadioGroup<Mode>\n            value={mode}\n            onValueUpdate={setMode}\n            name=\"dashboard-mode\"\n            size=\"m\"\n          >\n            <SegmentedRadioGroup.Radio value=\"view\">Просмотр</SegmentedRadioGroup.Radio>\n            <SegmentedRadioGroup.Radio value=\"edit\">Настройка</SegmentedRadioGroup.Radio>\n          </SegmentedRadioGroup>\n          <Button view=\"outlined\" size=\"m\" onClick={resetLayout}>Сбросить</Button>\n        </Flex>\n      </header>\n\n      {mode === '\"'edit' && (\n        <section className=\\\"dashboard__palette\\\" aria-label=\\\"Скрытые виджеты\\\">\n          {hiddenWidgets.length === 0 ? (\n            <span>Все доступные виджеты уже на дашборде.</span>\n          ) : (\n            hiddenWidgets.map((id) => (\n              <Button\n                key={id}\n                size=\\\"s\\\"\n                view=\\\"outlined\\\"\n                onClick={() => setVisible((current) => [...current, id])}\n              >\n                Вернуть «{widgetMeta[id].title}»\n              </Button>\n            ))\n          )}\n        </section>\n      )}\n\n      <ResponsiveGrid\n        className={mode === 'edit' ? 'dashboard__grid dashboard__grid--edit' : 'dashboard__grid'}\n        layouts={layouts}\n        breakpoints={breakpoints}\n        cols={columns}\n        rowHeight={28}\n        margin={[16, 16]}\n        containerPadding={[0, 0]}\n        isDraggable={mode === 'edit'}\n        isResizable={mode === 'edit'}\n        draggableHandle=\\\".dashboard-widget__header\\\"\n        onLayoutChange={handleLayoutChange}\n      >\n        {visible.map((id) => (\n          <div key={id}>\n            <WidgetShell\n              id={id}\n              title={widgetMeta[id].title}\n              mode={mode}\n              onRemove={removeWidget}\n            />\n          </div>\n        ))}\n      </ResponsiveGrid>\n    </div>\n  );\n}\nEOF\ncat > src/widgets.tsx <<'EOF'\nimport React from 'react';\n\ntype Widget = () => React.ReactElement;\n\nconst KpiWidget: Widget = () => (\n  <div className=\\\"metric\\\">\n    <strong>₽8 245 000</strong>\n    <span>Выручка за неделю</span>\n    <em>+12,4%</em>\n  </div>\n);\n\nconst TrafficWidget: Widget = () => (\n  <svg viewBox=\\\"0 0 300 120\\\" className=\\\"sparkline\\\" role=\\\"img\\\" aria-label=\\\"График трафика\\\">\n    <defs>\n      <linearGradient id=\\\"traffic\\\" x1=\\\"0\\\" x2=\\\"0\\\" y1=\\\"0\\\" y2=\\\"1\\\">\n        <stop offset=\\\"0%\\\" stopColor=\\\"var(--g-color-brand)\\\" stopOpacity=\\\".36\\\" />\n        <stop offset=\\\"100%\\\" stopColor=\\\"var(--g-color-brand)\\\" stopOpacity=\\\"0\\\" />\n      </linearGradient>\n    </defs>\n    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30 V116 H4Z\\\" fill=\\\"url(#traffic)\\\" />\n    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30\\\" fill=\\\"none\\\" stroke=\\\"var(--g-color-brand)\\\" strokeWidth=\\\"3\\\" strokeLinecap=\\\"round\\\" />\n  </svg>\n);\n\nconst TasksWidget: Widget = () => (\n  <ul className=\\\"compact-list\\\">\n    {[\n      ['Подготовить релиз', 'Сегодня, 15:00'],\n      ['Обновить отчёт', 'Завтра, 10:00'],\n      ['Разобрать инцидент', 'Вчера'],\n      ['Пригласить команду', 'В пятницу'],\n    ].map(([title, date]) => (\n      <li key={title}>\n        <span>{title}</span>\n        <small>{date}</small>\n      </li>\n    ))}\n  </ul>\n);\n\nconst ActivityWidget: Widget = () => (\n  <div className=\\\"activity\\\" aria-label=\\\"Активность по дням\\\">\n    {[36, 74, 48, 96, 58, 82, 68].map((value, index) => (\n      <div key={index} className=\\\"activity__bar\\\" style={{ height: \"'`${value}%` }}>\n        <span>{['\"'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][index]}</span>\n      </div>\n    ))}\n  </div>\n);\n\nconst AlertsWidget: Widget = () => (\n  <div className=\\\"metric metric--warning\\\">\n    <strong>3</strong>\n    <span>Активных оповещения</span>\n    <em>Проверьте платежный шлюз</em>\n  </div>\n);\n\nconst UptimeWidget: Widget = () => (\n  <div className=\\\"metric metric--positive\\\">\n    <strong>99,98%</strong>\n    <span>Доступность сервисов</span>\n    <em>SLA выполняется</em>\n  </div>\n);\n\nexport const Widgets = {\n  revenue: KpiWidget,\n  traffic: TrafficWidget,\n  tasks: TasksWidget,\n  activity: ActivityWidget,\n  alerts: AlertsWidget,\n  uptime: UptimeWidget,\n} as const;\n\nexport const widgetMeta = {\n  revenue: { title: 'Выручка' },\n  traffic: { title: 'Трафик' },\n  tasks: { title: 'Задачи' },\n  activity: { title: 'Активность' },\n  alerts: { title: 'Оповещения' },\n  uptime: { title: 'Доступность' },\n} as const;\nEOF\ncat > src/dashboard.css <<'EOF'\n.dashboard {\n  max-width: 1280px;\n  margin: 0 auto;\n  padding: 24px 24px 40px;\n  box-sizing: border-box;\n}\n\n.dashboard__toolbar,\n.dashboard__palette {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 16px;\n  margin-bottom: 20px;\n}\n\n.dashboard__toolbar {\n  flex-wrap: wrap;\n}\n\n.dashboard__toolbar h1,\n.dashboard-widget__title {\n  margin: 0;\n  color: var(--g-color-text-primary);\n}\n\n.dashboard__toolbar h1 {\n  font-size: 26px;\n  line-height: 1.2;\n}\n\n.dashboard__toolbar p,\n.dashboard-widget__hint,\n.dashboard__palette {\n  margin: 0;\n  color: var(--g-color-text-secondary);\n}\n\n.dashboard__palette {\n  justify-content: flex-start;\n  flex-wrap: wrap;\n  min-height: 42px;\n  padding: 8px 12px;\n  border: 1px dashed var(--g-color-line-generic);\n  border-radius: 10px;\n  background: var(--g-color-base-generic);\n}\n\n.dashboard__grid--edit .dashboard-widget {\n  cursor: default;\n}\n\n.dashboard-widget {\n  height: 100%;\n  overflow: hidden;\n  border-radius: 14px \"'!important;\n  box-sizing: border-box;\n}\n\n.dashboard-widget__header {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 8px;\n  cursor: grab;\n}\n\n.dashboard__grid:not(.dashboard__grid--edit) .dashboard-widget__header {\n  cursor: default;\n}\n\n.dashboard-widget__header:active {\n  cursor: grabbing;\n}\n\n.dashboard-widget__title {\n  font-size: 17px;\n}\n\n.dashboard-widget__hint {\n  display: none;\n  font-size: 12px;\n}\n\n.dashboard__grid--edit .dashboard-widget__hint {\n  display: block;\n}\n\n.dashboard-widget__body {\n  height: calc(100% - 54px);\n  padding: 4px 16px 16px;\n  overflow: auto;\n}\n\n.dashboard-widget__handle {\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n  width: 14px;\n  height: 14px;\n  background: linear-gradient(-45deg, transparent 62%, var(--g-color-line-generic) 62%, var(--g-color-line-generic) 68%, transparent 68%, transparent 78%, var(--g-color-line-generic) 78%, var(--g-color-line-generic) 84%, transparent 84%);\n  opacity: 0;\n  transition: opacity 0.2s ease;\n}\n\n.dashboard__grid--edit .dashboard-widget__handle {\n  opacity: 1;\n}\n\n.metric {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  height: 100%;\n  justify-content: center;\n}\n\n.metric strong {\n  font-size: clamp(26px, 5cqw, 44px);\n  line-height: 1;\n  color: var(--g-color-text-primary);\n}\n\n.metric span,\n.metric em,\n.compact-list small {\n  color: var(--g-color-text-secondary);\n}\n\n.metric em {\n  font-style: normal;\n  font-size: 14px;\n}\n\n.metric--warning strong {\n  color: var(--g-color-text-danger);\n}\n\n.metric--positive strong {\n  color: var(--g-color-text-positive);\n}\n\n.sparkline {\n  width: 100%;\n  height: calc(100% - 8px);\n}\n\n.compact-list {\n  display: grid;\n  gap: 10px;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n.compact-list li {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 10px 12px;\n  border-radius: 8px;\n  background: var(--g-color-base-generic);\n}\n\n.activity {\n  display: grid;\n  grid-auto-flow: column;\n  grid-auto-columns: 1fr;\n  align-items: end;\n  gap: 10px;\n  height: calc(100% - 6px);\n}\n\n.activity__bar {\n  position: relative;\n  min-height: 22px;\n  border-radius: 6px 6px 3px 3px;\n  background: var(--g-color-brand);\n  opacity: 0.8;\n}\n\n.activity__bar span {\n  position: absolute;\n  right: 0;\n  bottom: -20px;\n  font-size: 11px;\n  color: var(--g-color-text-secondary);\n}\nEOF\ncat > src/react-grid-layout.d.ts <<'\"'EOF'\ndeclare module 'react-grid-layout' {\n  export type Layout = {\n    i: string;\n    x: number;\n    y: number;\n    w: number;\n    h: number;\n    minW?: number;\n    maxW?: number;\n    minH?: number;\n    maxH?: number;\n    static?: boolean;\n  };\n\n  export type Layouts = Record<string, Layout[]>;\n\n  export const WidthProvider: (\n    component: unknown,\n  ) => React.ComponentType<Record<string, unknown>>;\n\n  export const Responsive: unknown;\n\n  const GridLayout: unknown;\n  export default GridLayout;\n}\nEOF\nsed -i 's/<title>Gravity UI eval<\\\\/title>/<title>Операционный дашборд<\\\\/title>/' index.html\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"SegmentedRadioGroup\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -20 && rg \\\"onValueUpdate|Radio\\\" node_modules/@gravity-ui/uikit/components/SegmentedRadioGroup -g '*.d.ts' 2>/dev/null | head -40 || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts && rg \\\"ControlGroupProps\\\" node_modules/@gravity-ui/uikit/build/esm/components -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '30,90p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,40p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0777 -i -pe 's/<SegmentedRadioGroup<Mode>\\\\n\\\\s*value=\\\\{mode\\\\}\\\\n\\\\s*onValueUpdate=\\\\{setMode\\\\}\\\\n\\\\s*name=\\\"dashboard-mode\\\"\\\\n\\\\s*size=\\\"m\\\"\\\\n\\\\s*>\\\\n\\\\s*<SegmentedRadioGroup\\\\.Radio value=\\\"view\\\">Просмотр<\\\\/SegmentedRadioGroup\\\\.Radio>\\\\n\\\\s*<SegmentedRadioGroup\\\\.Radio value=\\\"edit\\\">Настройка<\\\\/SegmentedRadioGroup\\\\.Radio>\\\\n\\\\s*<\\\\/SegmentedRadioGroup>/<SegmentedRadioGroup<Mode>\\\\n            value={mode}\\\\n            onUpdate={setMode}\\\\n            name=\\\"dashboard-mode\\\"\\\\n            size=\\\"m\\\"\\\\n            options={[\\\\n              { value: \\\"view\\\", content: \\\"Просмотр\\\" },\\\\n              { value: \\\"edit\\\", content: \\\"Настройка\\\" },\\\\n            ]}\\\\n          \\\\/>/s' src/App.tsx\nrg -n \\\"SegmentedRadioGroup\\\" src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host --port 5173 > /tmp/dashboard-dev.log 2>&1 & echo $! > /tmp/dashboard-dev.pid\nsleep 2\ncurl -sS http://127.0.0.1:5173/ | sed -n '\"'1,30p'\necho '--- dev log ---'\ncat /tmp/dashboard-dev.log\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"curl -sS http://127.0.0.1:5174/ | head -20 && echo '--- app.js ---' && curl -sS http://127.0.0.1:5174/src/App.tsx | sed -n '1,80p' && echo '--- runtime ---' && tail -20 /tmp/dashboard-dev.log\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host --port 5173'"
+      },
+      {
+        "command": "/bin/bash -lc \"curl -sS -o /tmp/dashboard.html -D /tmp/dashboard.headers http://127.0.0.1:5174/ && cat /tmp/dashboard.headers && sed -n '1,30p' /tmp/dashboard.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -o -- \\\"--g-color[a-z-]*brand[a-z-]*\\\" node_modules/@gravity-ui/uikit/styles/styles.css | sort -u | head -20 && sed -i 's/var(--g-color-brand)/var(--g-color-base-brand-accent)/g' src/widgets.tsx && perl -0777 -i -pe 's/\\\\.dashboard-widget__handle \\\\{\\\\n  position: absolute;/.dashboard__grid:not(.dashboard__grid--edit) .react-resizable-handle {\\\\n  display: none;\\\\n}\\\\n\\\\n.dashboard-widget__handle {\\\\n  position: absolute;/' src/dashboard.css\nrg -n \\\"resizable-handle|base-brand\\\" src/dashboard.css src/widgets.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/var(--g-color-base-brand-accent)/var(--g-color-base-brand)/g' src/widgets.tsx\nsed -i 's/background: var(--g-color-brand);/background: var(--g-color-base-brand);/' src/dashboard.css\ncurl -sS \\\"http://127.0.0.1:5174/src/App.tsx\\\" | tail -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i '/const currentLayout = layouts.lg.filter/d' src/App.tsx\ncat > /tmp/visibility-test <<'EOF'\nimport { describe, expect, it } from 'vitest';\nimport { readLayouts } from './dashboard-utils';\nimport { Widgets } from './widgets';\n\nconst validLayout = {\n  lg: Object.keys(Widgets).map((id, index) => ({ i: id, x: 0, y: index * 8, w: 4, h: 8 })),\n};\n\ndescribe('readLayouts', () => {\n  it('returns the default layout when storage is empty', () => {\n    localStorage.clear();\n    const layouts = readLayouts();\n    expect(layouts.lg).toHaveLength(4);\n    expect(layouts.md.every((item) => item.w <= 8)).toBe(true);\n    expect(layouts.sm.every((item) => item.w <= 4)).toBe(true);\n  });\n\n  it('rejects unknown widget identifiers', () => {\n    localStorage.setItem('dashboard-grid-layout-v1', JSON.stringify({\n      lg: [{ ...validLayout.lg[0], i: 'unknown' }],\n    }));\n    expect(readLayouts().lg).toHaveLength(4);\n  });\n\n  it('accepts persisted layouts with known widget identifiers', () => {\n    localStorage.setItem('dashboard-grid-layout-v1', JSON.stringify(validLayout));\n    expect(readLayouts().lg).toEqual(validLayout.lg);\n  });\n});\nEOF\nmv /tmp/visibility-test src/dashboard-utils.test.ts\ncat > src/dashboard-utils.ts <<'EOF'\nexport type DashboardLayout = {\n  i: string;\n  x: number;\n  y: number;\n  w: number;\n  h: number;\n};\n\nexport type DashboardLayouts = Record<string, DashboardLayout[]>;\n\nexport const dashboardStorageKey = 'dashboard-grid-layout-v1';\nEOF\nsed -i \\\"s/import { readLayouts } from '.\\\\/dashboard-utils';/import { readLayouts } from '.\\\\/App';/\\\" src/dashboard-utils.test.ts\nsed -i \\\"s/import { readLayouts } from '.\\\\/App';/import { readLayouts } from '.\\\\/App';/\\\" src/dashboard-utils.test.ts\nsed -i 's/localStorage.clear();/localStorage.removeItem(dashboardStorageKey);/' src/dashboard-utils.test.ts\nsed -i \\\"s/localStorage.setItem('dashboard-grid-layout-v1'/localStorage.setItem(dashboardStorageKey'/\\\" src/dashboard-utils.test.ts\nsed -i \\\"s/localStorage.setItem(dashboardStorageKey'/localStorage.setItem(dashboardStorageKey, /\\\" src/dashboard-utils.test.ts\nsed -i \\\"s/import { readLayouts } from '.\\\\/App';/import { readLayouts } from '.\\\\/App';\\\\nimport { dashboardStorageKey } from '.\\\\/dashboard-utils';/\\\" src/dashboard-utils.test.ts\nsed -i \\\"s/import { Widgets, widgetMeta } from '.\\\\/widgets';/import { Widgets, widgetMeta } from '.\\\\/widgets';\\\\nimport { storageKey } from '.\\\\/App';/\\\" src/App.tsx\nsed -i \\\"s/const storageKey = 'dashboard-grid-layout-v1';/import { dashboardStorageKey as storageKey } from '.\\\\/dashboard-utils';/\\\" src/App.tsx\nnpm test -- --run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json','utf8'));p.scripts.test='vitest run';fs.writeFileSync('package.json',JSON.stringify(p,null,2)+'\\\\n')\\\" && npx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/localStorage.setItem(dashboardStorageKey, , JSON.stringify({/localStorage.setItem(dashboardStorageKey, JSON.stringify({/' src/dashboard-utils.test.ts\ncat > vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\n\nexport default defineConfig({\n  test: {\n    environment: 'jsdom',\n  },\n});\nEOF\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install -D jsdom@latest && npx vitest run src/dashboard-utils.test.ts'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/localStorage.setItem(dashboardStorageKey, , JSON.stringify(validLayout));/localStorage.setItem(dashboardStorageKey, JSON.stringify(validLayout));/' src/dashboard-utils.test.ts\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"mv src/widgets.tsx src/widgets.tsx.bak\ncat > src/widgets.tsx <<'EOF'\nimport React from 'react';\n\nconst KpiWidget = () => <div>Revenue</div>;\nconst TrafficWidget = () => <div>Traffic</div>;\nconst TasksWidget = () => <div>Tasks</div>;\nconst ActivityWidget = () => <div>Activity</div>;\nconst AlertsWidget = () => <div>Alerts</div>;\nconst UptimeWidget = () => <div>Uptime</div>;\n\nexport const Widgets = {\n  revenue: KpiWidget,\n  traffic: TrafficWidget,\n  tasks: TasksWidget,\n  activity: ActivityWidget,\n  alerts: AlertsWidget,\n  uptime: UptimeWidget,\n} as const;\n\nexport const widgetMeta = {\n  revenue: { title: 'Выручка' },\n  traffic: { title: 'Трафик' },\n  tasks: { title: 'Задачи' },\n  activity: { title: 'Активность' },\n  alerts: { title: 'Оповещения' },\n  uptime: { title: 'Доступность' },\n} as const;\nEOF\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"mv src/widgets.tsx.bak src/widgets.tsx\ncat > vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\n\nexport default defineConfig({\n  test: {\n    environment: 'jsdom',\n    css: true,\n  },\n});\nEOF\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'mv src/widgets.tsx.bak src/widgets.tsx\nnpx vitest run src/dashboard-utils.test.ts'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/import { readLayouts } from '.\\\\/App';/import { readLayouts } from '.\\\\/dashboard-utils';/' src/dashboard-utils.test.ts 2>/dev/null || true\nsed -i \\\"s/import { readLayouts } from '.\\\\/App';/import { readLayouts } from '.\\\\/dashboard-utils';/\\\" src/dashboard-utils.test.ts\nrg -n \\\"import\\\" src/dashboard-utils.test.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mv src/widgets.tsx.bak src/widgets.tsx 2>/dev/null || true\nls src\ncat >> src/dashboard-utils.ts <<'EOF'\n\nexport const defaultLayout: DashboardLayout[] = [\n  { i: 'revenue', x: 0, y: 0, w: 4, h: 6 },\n  { i: 'traffic', x: 4, y: 0, w: 8, h: 8 },\n  { i: 'tasks', x: 0, y: 6, w: 6, h: 9 },\n  { i: 'activity', x: 6, y: 6, w: 6, h: 9 },\n];\n\nexport const dashboardBreakpoints = { lg: 1080, md: 760, sm: 480 };\nexport const dashboardColumns = { lg: 12, md: 8, sm: 4 };\n\nexport function compactLayouts(layout: DashboardLayout[]): DashboardLayouts {\n  return {\n    lg: layout,\n    md: layout.map((item) => ({ ...item, w: Math.min(item.w, dashboardColumns.md) })),\n    sm: layout.map((item) => ({ ...item, w: Math.min(item.w, dashboardColumns.sm) })),\n  };\n}\n\nexport function isValidDashboardLayout(layout: DashboardLayout[], knownIds: string[]): boolean {\n  const known = new Set(knownIds);\n  return layout.length > 0 && layout.every((item) => known.has(item.i));\n}\nEOF\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat >> src/dashboard-utils.ts <<'EOF'\n\nexport function readLayouts(widgetIds: string[]): DashboardLayouts {\n  try {\n    const raw = localStorage.getItem(dashboardStorageKey);\n    if (\"'!raw) return compactLayouts(defaultLayout);\n\n    const parsed = JSON.parse(raw) as Partial<DashboardLayouts>;\n    if (!parsed.lg || !isValidDashboardLayout(parsed.lg, widgetIds)) {\n      return compactLayouts(defaultLayout);\n    }\n    return {\n      lg: parsed.lg,\n      md: parsed.md ?? compactLayouts(parsed.lg).md,\n      sm: parsed.sm ?? compactLayouts(parsed.lg).sm,\n    };\n  } catch {\n    return compactLayouts(defaultLayout);\n  }\n}\nEOF\ncat > src/widgets.tsx <<'\"'EOF'\nimport React from 'react';\n\ntype Widget = () => React.ReactElement;\n\nconst KpiWidget: Widget = () => (\n  <div className=\\\"metric\\\">\n    <strong>₽8 245 000</strong>\n    <span>Выручка за неделю</span>\n    <em>+12,4%</em>\n  </div>\n);\n\nconst TrafficWidget: Widget = () => (\n  <svg viewBox=\\\"0 0 300 120\\\" className=\\\"sparkline\\\" role=\\\"img\\\" aria-label=\\\"График трафика\\\">\n    <defs>\n      <linearGradient id=\\\"traffic\\\" x1=\\\"0\\\" x2=\\\"0\\\" y1=\\\"0\\\" y2=\\\"1\\\">\n        <stop offset=\\\"0%\\\" stopColor=\\\"var(--g-color-base-brand)\\\" stopOpacity=\\\".36\\\" />\n        <stop offset=\\\"100%\\\" stopColor=\\\"var(--g-color-base-brand)\\\" stopOpacity=\\\"0\\\" />\n      </linearGradient>\n    </defs>\n    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30 V116 H4Z\\\" fill=\\\"url(#traffic)\\\" />\n    <path d=\\\"M4 92 C48 58, 72 100, 108 70 C142 42, 168 82, 202 48 C236 20, 260 54, 296 30\\\" fill=\\\"none\\\" stroke=\\\"var(--g-color-base-brand)\\\" strokeWidth=\\\"3\\\" strokeLinecap=\\\"round\\\" />\n  </svg>\n);\n\nconst TasksWidget: Widget = () => (\n  <ul className=\\\"compact-list\\\">\n    {[\n      ['Подготовить релиз', 'Сегодня, 15:00'],\n      ['Обновить отчёт', 'Завтра, 10:00'],\n      ['Разобрать инцидент', 'Вчера'],\n      ['Пригласить команду', 'В пятницу'],\n    ].map(([title, date]) => (\n      <li key={title}>\n        <span>{title}</span>\n        <small>{date}</small>\n      </li>\n    ))}\n  </ul>\n);\n\nconst ActivityWidget: Widget = () => (\n  <div className=\\\"activity\\\" aria-label=\\\"Активность по дням\\\">\n    {[36, 74, 48, 96, 58, 82, 68].map((value, index) => (\n      <div key={index} className=\\\"activity__bar\\\" style={{ height: \"'`${value}%` }}>\n        <span>{['\"'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][index]}</span>\n      </div>\n    ))}\n  </div>\n);\n\nconst AlertsWidget: Widget = () => (\n  <div className=\\\"metric metric--warning\\\">\n    <strong>3</strong>\n    <span>Активных оповещения</span>\n    <em>Проверьте платежный шлюз</em>\n  </div>\n);\n\nconst UptimeWidget: Widget = () => (\n  <div className=\\\"metric metric--positive\\\">\n    <strong>99,98%</strong>\n    <span>Доступность сервисов</span>\n    <em>SLA выполняется</em>\n  </div>\n);\n\nexport const Widgets = {\n  revenue: KpiWidget,\n  traffic: TrafficWidget,\n  tasks: TasksWidget,\n  activity: ActivityWidget,\n  alerts: AlertsWidget,\n  uptime: UptimeWidget,\n} as const;\n\nexport const widgetMeta = {\n  revenue: { title: 'Выручка' },\n  traffic: { title: 'Трафик' },\n  tasks: { title: 'Задачи' },\n  activity: { title: 'Активность' },\n  alerts: { title: 'Оповещения' },\n  uptime: { title: 'Доступность' },\n} as const;\nEOF\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/readLayouts()/readLayouts(widgetIds)/' src/dashboard-utils.test.ts\nsed -i \\\"/const validLayout = {/i\\\\  const widgetIds = Object.keys(Widgets);\\\" src/dashboard-utils.test.ts\nnpx vitest run src/dashboard-utils.test.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"/const storageKey = 'dashboard-grid-layout-v1';/d\\\" src/App.tsx\nsed -i \\\"/const breakpoints = { lg: 1080, md: 760, sm: 480 };/d\\\" src/App.tsx\nsed -i \\\"/const columns = { lg: 12, md: 8, sm: 4 };/d\\\" src/App.tsx\npython3 - <<'PY'\nfrom pathlib import Path\np=Path('src/App.tsx')\ns=p.read_text()\nstart=s.index('const defaultLayout: Layout[] = [')\nend=s.index('function WidgetShell')\ns=s[:start]+s[end:]\ns=s.replace('const [layouts, setLayouts] = useState<Layouts>(readLayouts);', 'const [layouts, setLayouts] = useState<Layouts>(() => readLayouts(Object.keys(Widgets)));')\np.write_text(s)\nPY\nrg -n \\\"defaultLayout|readLayouts|breakpoints|columns\\\" src/App.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,110p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'sed -i \"/''^import { storageKey } from '\"'.\\\\/App';\"'$/d\" src/App.tsx\nsed -i \"/''^import { dashboardStorageKey as storageKey } from '\"'.\\\\/dashboard-utils';\"'$/d\" src/App.tsx\nsed -i \"/''^type Mode = '\"'view' | 'edit';\"'$/a'\"\\\\\\\\\n\\\\\\\\\nimport { compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, defaultLayout, readLayouts, storageKey } from './dashboard-utils';\\\" src/App.tsx\nsed -i \\\"/\"'^const defaultLayout: Layout'\"\\\\[\\\\] = \\\\[\"'$/,/''^];$/d\" src/App.tsx\nsed -i \"/''^function compactLayouts(layout: Layout'\"\\\\[\\\\]): Layouts {\"'$/,/''^}$/d\" src/App.tsx\nsed -i \"/''^function readLayouts(): Layouts {$/,/''^}$/d\" src/App.tsx\nsed -i '\"'s/useState<Layouts>(readLayouts)/useState<Layouts>(() => readLayouts(Object.keys(Widgets)))/' src/App.tsx\nrg -n \\\"storageKey|compactLayouts|defaultLayout|readLayouts|breakpoints|columns\\\" src/App.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/  localStorage.setItem(storageKey, JSON.stringify(layouts));/  localStorage.setItem(dashboardStorageKey, JSON.stringify(layouts));/' src/App.tsx\nsed -i \\\"s/ compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, defaultLayout, readLayouts, storageKey }/ compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, dashboardStorageKey, defaultLayout, readLayouts }/\\\" src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm test -- --run src/dashboard-utils.test.ts\nrg -n \"TODO|Gravity UI eval|currentLayout|storageKey\" src index.html\ngit diff --stat'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ps -eo pid,cmd | rg \\\"[v]ite --host\\\" || true\ngit status --short\nprintf '\\\\n--- App imports and grid ---\\\\n'; sed -n '1,30p;115,145p' src/App.tsx\nprintf '\\\\n--- utils ---\\\\n'; sed -n '1,120p' src/dashboard-utils.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n import { compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, dashboardStorageKey, defaultLayout, readLayouts } from './dashboard-utils';\n-\n-\n-\n-\n-\n*** Update File: src/dashboard-utils.ts\n@@\n export const defaultLayout: DashboardLayout[] = [\n   { i: 'revenue', x: 0, y: 0, w: 4, h: 6 },\n   { i: 'traffic', x: 4, y: 0, w: 8, h: 8 },\n   { i: 'tasks', x: 0, y: 6, w: 6, h: 9 },\n   { i: 'activity', x: 6, y: 6, w: 6, h: 9 },\n+  { i: 'alerts', x: 0, y: 15, w: 4, h: 5 },\n+  { i: 'uptime', x: 4, y: 15, w: 4, h: 5 },\n ];\n*** End Patch\nPATCH\nnpm run build && npm test -- --run src/dashboard-utils.test.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/import \\\\{ compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, dashboardStorageKey, defaultLayout, readLayouts \\\\} from '\\\\.\\\\/dashboard-utils';\\\\n\\\\n\\\\n\\\\n\\\\n\\\\n/import { compactLayouts, dashboardBreakpoints as breakpoints, dashboardColumns as columns, dashboardStorageKey, defaultLayout, readLayouts } from '.\\\\/dashboard-utils';\\\\n/\\\" src/App.tsx\nperl -0pi -e \\\"s/(export const defaultLayout: DashboardLayout\\\\[\\\\] = \\\\[\\\\n  \\\\{ i: 'revenue', x: 0, y: 0, w: 4, h: 6 \\\\},\\\\n  \\\\{ i: 'traffic', x: 4, y: 0, w: 8, h: 8 \\\\},\\\\n  \\\\{ i: 'tasks', x: 0, y: 6, w: 6, h: 9 \\\\},\\\\n  \\\\{ i: 'activity', x: 6, y: 6, w: 6, h: 9 \\\\},\\\\n)/\\\\\"'$1  { i: '\"'alerts', x: 0, y: 15, w: 4, h: 5 },\\\\n  { i: 'uptime', x: 4, y: 15, w: 4, h: 5 },\\\\n/\\\" src/dashboard-utils.ts\nsed -n '1,25p' src/App.tsx\nsed -n '8,25p' src/dashboard-utils.ts\nnpm run build && npm test -- --run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/expect(layouts.lg).toHaveLength(4);/expect(layouts.lg).toHaveLength(6);/' src/dashboard-utils.test.ts\nsed -i 's/expect(readLayouts(widgetIds).lg).toHaveLength(4);/expect(readLayouts(widgetIds).lg).toHaveLength(6);/' src/dashboard-utils.test.ts\nsed -i \\\"s|from './dashboard-utils';|from './dashboard-utils';\\\\n\\\\nfunction WidgetShell|\\\" src/App.tsx\nsed -i '/\"'^function WidgetShell$/!b;0,/function WidgetShell'\"\\\\nfunction WidgetShell/{s/function WidgetShell\\\\nfunction WidgetShell/function WidgetShell/}' src/App.tsx\nsed -i 's/\"'^function WidgetShell$/'\"\\\\nfunction WidgetShell/' src/App.tsx\nsed -i 'N;/\"'^'\"\\\\nfunction WidgetShell\"'$/!P;D'\"' src/App.tsx\nsed -n '12,22p' src/App.tsx\nnpm run build && npm test -- --run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"head -80 src/App.tsx > /tmp/app-head\ntail -n +82 src/App.tsx > /tmp/app-tail\nprintf '%s\\\\n%s\\\\n%s\\\\n' \\\"\"'$(sed -n '\"'14p' src/App.tsx)\\\" '' \\\"\"'$(sed -n '\"'19p' src/App.tsx)\\\" > /tmp/final-head\ncat /tmp/final-head > src/App.tsx\ncat /tmp/app-tail >> src/App.tsx\nsed -n '1,25p' src/App.tsx\nnpm run build && npm test -- --run src/dashboard-utils.test.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport React, { useCallback, useEffect, useMemo, useState } from 'react';\nimport { Button, Card, Flex, SegmentedRadioGroup } from '@gravity-ui/uikit';\nimport GridLayout, { Layout, WidthProvider, Responsive } from 'react-grid-layout';\nimport 'react-grid-layout/css/styles.css';\nimport 'react-resizable/css/styles.css';\nimport { Widgets, widgetMeta } from './widgets';\nimport {\n  compactLayouts,\n  dashboardBreakpoints as breakpoints,\n  dashboardColumns as columns,\n  dashboardStorageKey,\n  defaultLayout,\n  readLayouts,\n} from './dashboard-utils';\nimport './dashboard.css';\n\nconst ResponsiveGrid = WidthProvider(Responsive);\n\ntype WidgetId = keyof typeof Widgets;\ntype Layouts = Record<string, Layout[]>;\ntype Mode = 'view' | 'edit';\n\nfunction WidgetShell({ id, title, mode, onRemove }: {\n  id: WidgetId;\n  title: string;\n  mode: Mode;\n  onRemove: (id: WidgetId) => void;\n}) {\n  const Widget = Widgets[id];\n\n  return (\n    <Card view=\\\"raised\\\" className=\\\"dashboard-widget\\\">\n      <header className=\\\"dashboard-widget__header\\\">\n        <div>\n          <h2 className=\\\"dashboard-widget__title\\\">{title}</h2>\n          <span className=\\\"dashboard-widget__hint\\\">Перетащите за заголовок в режиме настройки</span>\n        </div>\n        {mode === 'edit' && (\n          <Button size=\\\"s\\\" view=\\\"flat-danger\\\" onClick={() => onRemove(id)}>\n            Удалить\n          </Button>\n        )}\n      </header>\n      <div className=\\\"dashboard-widget__body\\\">\n        <Widget />\n      </div>\n      <span className=\\\"dashboard-widget__handle\\\" aria-hidden=\\\"true\\\" />\n    </Card>\n  );\n}\n\nexport function App() {\n  const [layouts, setLayouts] = useState<Layouts>(() => readLayouts(Object.keys(Widgets)));\n  const [visible, setVisible] = useState<WidgetId[]>(() => Object.keys(Widgets) as WidgetId[]);\n  const [mode, setMode] = useState<Mode>('view');\n\n  useEffect(() => {\n    localStorage.setItem(dashboardStorageKey, JSON.stringify(layouts));\n  }, [layouts]);\n\n  const handleLayoutChange = useCallback((_current: Layout[], allLayouts: Layouts) => {\n    setLayouts(allLayouts);\n  }, []);\n\n  const removeWidget = useCallback((id: WidgetId) => {\n    setVisible((current) => current.filter((widgetId) => widgetId \"'!== id));\n  }, []);\n\n  const resetLayout = useCallback(() => {\n    setLayouts(compactLayouts(defaultLayout));\n    setVisible(Object.keys(Widgets) as WidgetId[]);\n  }, []);\n\n  const hiddenWidgets = useMemo(\n    () => (Object.keys(widgetMeta) as WidgetId[]).filter((id) => !visible.includes(id)),\n    [visible],\n  );\n\n  return (\n    <div className=\"dashboard\">\n      <header className=\"dashboard__toolbar\">\n        <div>\n          <h1>Операционный дашборд</h1>\n          <p>Свободно перемещайте виджеты по сетке и меняйте их размер.</p>\n        </div>\n        <Flex gap=\"4\" alignItems=\"center\" wrap=\"wrap\">\n          <SegmentedRadioGroup<Mode>\n            value={mode}\n            onUpdate={setMode}\n            name=\"dashboard-mode\"\n            size=\"m\"\n            options={[\n              { value: '\"'view', content: 'Просмотр' },\n              { value: 'edit', content: 'Настройка' },\n            ]}\n          />\n          <Button view=\\\"outlined\\\" size=\\\"m\\\" onClick={resetLayout}>Сбросить</Button>\n        </Flex>\n      </header>\n\n      {mode === 'edit' && (\n        <section className=\\\"dashboard__palette\\\" aria-label=\\\"Скрытые виджеты\\\">\n          {hiddenWidgets.length === 0 ? (\n            <span>Все доступные виджеты уже на дашборде.</span>\n          ) : (\n            hiddenWidgets.map((id) => (\n              <Button\n                key={id}\n                size=\\\"s\\\"\n                view=\\\"outlined\\\"\n                onClick={() => setVisible((current) => [...current, id])}\n              >\n                Вернуть «{widgetMeta[id].title}»\n              </Button>\n            ))\n          )}\n        </section>\n      )}\n\n      <ResponsiveGrid\n        className={mode === 'edit' ? 'dashboard__grid dashboard__grid--edit' : 'dashboard__grid'}\n        layouts={layouts}\n        breakpoints={breakpoints}\n        cols={columns}\n        rowHeight={28}\n        margin={[16, 16]}\n        containerPadding={[0, 0]}\n        isDraggable={mode === 'edit'}\n        isResizable={mode === 'edit'}\n        draggableHandle=\\\".dashboard-widget__header\\\"\n        onLayoutChange={handleLayoutChange}\n      >\n        {visible.map((id) => (\n          <div key={id}>\n            <WidgetShell\n              id={id}\n              title={widgetMeta[id].title}\n              mode={mode}\n              onRemove={removeWidget}\n            />\n          </div>\n        ))}\n      </ResponsiveGrid>\n    </div>\n  );\n}\nEOF\nnpm run build && npm test -- --run src/dashboard-utils.test.ts\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 49691,
+      "outputTokens": 19281,
+      "cacheReadTokens": 1522752,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1647,
+      "totalTokens": 1591724
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

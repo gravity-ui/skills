@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "duration": 279.757,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 38,
+    "outputTokens": 14372,
+    "cacheReadTokens": 816610,
+    "cacheWriteTokens": 47818,
+    "totalTokens": 878838
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 22,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme-storage.ts",
+      "/home/sandbox/workspace/src/Root.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----FILES-----\" && find .agents -type f | head -100 && echo \"-----REPO-----\" && git status --short && ls -la && cat AGENTS.md | head -100",
+        "success": true
+      },
+      {
+        "command": "cat package.json tsconfig.json vite.config.ts index.html .gitignore && echo \"-----SRC-----\" && find src -type f && echo \"-----\" && for f in $(find src -type f); do echo \"=== $f\"; cat \"$f\"; done && echo \"----- ROUTING (top) -----\" && head -80 .agents/skills/gravity-ui/references/package-routing.md && echo \"----- THEMING -----\" && cat .agents/skills/gravity-ui/references/theming.md && echo \"----- TRAPS -----\" && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo \"----- INSPECT -----\" && cat .agents/skills/gravity-ui/scripts/inspect-package.sh",
+        "success": true
+      },
+      {
+        "command": "cat src/main.tsx && echo \"----- vite-env -----\" && cat src/vite-env.d.ts && echo \"----- ROUTING TOP -----\" && head -60 .agents/skills/gravity-ui/references/package-routing.md && echo \"----- TRAPS -----\" && cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/references/theming.md | head -250",
+        "success": true
+      },
+      {
+        "command": "node -p \"require('@gravity-ui/uikit/package.json').version\" && ls node_modules/@gravity-ui/uikit/ && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head -50; ls node_modules/@gravity-ui/uikit/dist/docs 2>/dev/null | head; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -30",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme useThemeValue && echo ---- && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null; ls node_modules/@gravity-ui/uikit/build | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -n -i \"theme\" README.md | head -40; echo ----; grep -rl \"ThemeProvider\" build/esm --include=*.d.ts | head; echo ----; find build/esm -name \"*.d.ts\" | grep -i theme | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && for f in ThemeProvider.d.ts types.d.ts useTheme.d.ts useThemeValue.d.ts useThemeContext.d.ts ThemeContext.d.ts index.d.ts; do echo \"=== $f\"; cat $f; done; echo \"=== getRootClassName\"; cat getRootClassName.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"theme\\|RadioButton\\|Select\\b\\|Text\\|Flex\\|Card\" index.d.ts components/index.d.ts 2>/dev/null | head -30; echo ----; ls components | tr '\\n' ' '; echo; echo ----; cat components/controls/RadioButton/RadioButton.d.ts 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat SegmentedRadioGroup/SegmentedRadioGroup.d.ts; echo ----; cat SegmentedRadioGroup/index.d.ts 2>/dev/null; echo ----; cat Text/Text.d.ts | head -40; echo ----; cat Card/Card.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "cat controls/types.d.ts 2>/dev/null | head -60; grep -rn \"ControlGroupOption\\b\" --include=*.d.ts . | head -5; echo ----; cat SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; echo ----; cat Text/text/text.d.ts 2>/dev/null | head -30; ls Text",
+        "success": true
+      },
+      {
+        "command": "sed -n 10,40p controls/types.d.ts; echo ----; grep -n \"SegmentedRadio\\|Text\\|Card\\|Flex\\|layout\" index.d.ts; grep -n \"export\" layout/index.d.ts | head; echo ----; ls ../ | head -30; grep -n \"export\" ../index.d.ts",
+        "success": true
+      },
+      {
+        "command": "grep -n \"ControlGroupProps\" -A 14 controls/types.d.ts; echo ----; grep -n \"ControlProps\\b\" -A 6 controls/types.d.ts | head -20; echo ----; grep -rn \"Flex\" layout/Flex/Flex.d.ts | head -5; cat ../../../../../uikit/package.json | grep -n '\"./' | head -3 >/dev/null; echo; ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/RadioGroup/",
+        "success": true
+      },
+      {
+        "command": "grep -n \"ControlGroupProps\\|ControlGroupOption\\|export interface ControlProps\\|export type ControlProps\" -A 12 types.d.ts | head -60; echo ----; cat RadioGroup/RadioGroup.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -30",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -E \"^(jsdom|happy-dom)$\"; mkdir -p /tmp/theme-check && cat > /tmp/theme-check/theme-storage.check.test.ts <<'EOF'\nimport { describe, it, expect, beforeEach, vi } from 'vitest';\nimport { loadSavedTheme, saveTheme, THEME_STORAGE_KEY } from '/home/sandbox/workspace/src/theme-storage';\n\nfunction installWindow(store: Record<string, string> | 'throw') {\n  const ls = store === 'throw'\n    ? { getItem: () => { throw new Error('denied'); }, setItem: () => { throw new Error('denied'); } }\n    : {\n        getItem: (k: string) => (k in store ? store[k] : null),\n        setItem: (k: string, v: string) => { store[k] = v; },\n      };\n  (globalThis as any).window = { localStorage: ls };\n  return store;\n}\n\ndescribe('theme storage', () => {\n  beforeEach(() => { delete (globalThis as any).window; });\n\n  it('defaults to light when nothing is saved', () => {\n    installWindow({});\n    expect(loadSavedTheme()).toBe('light');\n  });\n\n  it('restores each valid saved theme', () => {\n    for (const t of ['light', 'dark', 'system']) {\n      installWindow({ [THEME_STORAGE_KEY]: t });\n      expect(loadSavedTheme()).toBe(t);\n    }\n  });\n\n  it('ignores invalid stored values', () => {\n    for (const bad of ['', 'Dark', 'auto', 'default', 'light-hc', '{\"a\":1}']) {\n      installWindow({ [THEME_STORAGE_KEY]: bad });\n      expect(loadSavedTheme()).toBe('light');\n    }\n  });\n\n  it('falls back to default when storage throws', () => {\n    installWindow('throw');\n    expect(loadSavedTheme()).toBe('light');\n    expect(() => saveTheme('dark')).not.toThrow();\n  });\n\n  it('saves the theme under the key and round-trips', () => {\n    const store = installWindow({});\n    saveTheme('dark');\n    expect(store[THEME_STORAGE_KEY]).toBe('dark');\n    expect(loadSavedTheme()).toBe('dark');\n  });\n});\nEOF\ncp /tmp/theme-check/theme-storage.check.test.ts src/__theme_check.test.ts && npx vitest run src/__theme_check.test.ts 2>&1 | tail -25; rm -f src/__theme_check.test.ts; rm -rf /tmp/theme-check; ls src",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 38,
+      "outputTokens": 14372,
+      "cacheReadTokens": 816610,
+      "cacheWriteTokens": 47818,
+      "totalTokens": 878838
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

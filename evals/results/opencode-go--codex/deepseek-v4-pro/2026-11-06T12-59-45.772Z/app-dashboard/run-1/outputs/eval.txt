@@ -1,0 +1,53 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 2 failed) 15022ms
+   ✓ imports @gravity-ui/navigation 1ms
+   × imports @gravity-ui/table 3ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   ✓ no hand-rolled <aside> sidebar 0ms
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 15017ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: src/Sidebar.tsx is a custom div/nav/button sidebar rather than @gravity-ui/navigation AsideHeader, and src/OrdersTable.tsx renders a hand-written HTML table without @gravity-ui/table, useTable, ColumnReorderingProvider, or row grouping; @gravity-ui/table is not even in package.json dependencies.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 6 passed (8)
+   Start at  13:09:54
+   Duration  15.18s (transform 31ms, setup 14ms, collect 14ms, tests 15.02s, environment 0ms, prepare 40ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: src/Sidebar.tsx is a custom div/nav/button sidebar rather than @gravity-ui/navigation AsideHeader, and src/OrdersTable.tsx renders a hand-written HTML table without @gravity-ui/table, useTable, ColumnReorderingProvider, or row grouping; @gravity-ui/table is not even in package.json dependencies.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

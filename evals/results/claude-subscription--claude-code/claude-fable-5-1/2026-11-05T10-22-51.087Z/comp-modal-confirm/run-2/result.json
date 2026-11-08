@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "duration": 564.673,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 2142,
+    "cacheReadTokens": 133756,
+    "cacheWriteTokens": 12625,
+    "totalTokens": 148685
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts __agent_eval__/run.mjs; echo ---; ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -iE 'dialog|modal|button' ; echo ---; sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Dialog, Text } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [open, setOpen] = useState(false);\n  const [result, setResult] = useState<'confirmed' | 'cancelled' | null>(null);\n\n  const handleConfirm = () => {\n    setResult('confirmed');\n    setOpen(false);\n  };\n\n  const handleCancel = () => {\n    setResult('cancelled');\n    setOpen(false);\n  };\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>\n      <Button view=\"action\" size=\"l\" onClick={() => setOpen(true)}>\n        Открыть окно\n      </Button>\n\n      {result && (\n        <Text color={result === 'confirmed' ? 'positive' : 'secondary'}>\n          {result === 'confirmed' ? 'Действие подтверждено' : 'Действие отменено'}\n        </Text>\n      )}\n\n      <Dialog\n        open={open}\n        onClose={handleCancel}\n        size=\"s\"\n        aria-labelledby=\"confirm-dialog-title\"\n        aria-describedby=\"confirm-dialog-text\"\n        initialFocus=\"cancel\"\n      >\n        <Dialog.Header id=\"confirm-dialog-title\" caption=\"Подтверждение действия\" />\n        <Dialog.Body>\n          <Text id=\"confirm-dialog-text\">\n            Вы уверены, что хотите выполнить это действие? Отменить его после подтверждения будет нельзя.\n          </Text>\n        </Dialog.Body>\n        <Dialog.Footer\n          textButtonApply=\"Подтвердить\"\n          textButtonCancel=\"Отменить\"\n          onClickButtonApply={handleConfirm}\n          onClickButtonCancel={handleCancel}\n          preset=\"default\"\n        />\n      </Dialog>\n    </div>\n  );\n}\nEOF\nsed -n 1,30p node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts; echo ---; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 2142,
+      "cacheReadTokens": 133756,
+      "cacheWriteTokens": 12625,
+      "totalTokens": 148685
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

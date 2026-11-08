@@ -1,0 +1,188 @@
+/* Хром виджета: красится через CSS-переменные, которые ChartWidget выставляет
+   из палитры текущей темы (единый swap-point — colors.ts). */
+
+.viz-widget {
+  background: var(--viz-surface);
+  border: 1px solid var(--viz-border);
+  border-radius: 12px;
+  padding: 16px 20px 12px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.viz-widget__header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 10px;
+}
+
+.viz-widget__title {
+  margin: 0;
+  color: var(--viz-text-primary);
+}
+
+.viz-widget__subtitle {
+  margin: 0;
+}
+
+.viz-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.viz-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Легенда зеркалит маркер: для линий — штрих с точкой, текст — чернильный. */
+.viz-legend__line {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.viz-legend__line::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: inherit;
+  transform: translate(-50%, -50%);
+}
+
+.viz-legend__name {
+  font-size: 13px;
+  color: var(--viz-text-secondary);
+}
+
+.viz-widget__plot {
+  position: relative;
+}
+
+.viz-widget__loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viz-plot__hitbox {
+  position: absolute;
+  inset: 0;
+  outline: none;
+}
+
+.viz-plot__hitbox:focus-visible {
+  outline: 2px solid var(--viz-baseline);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.viz-tooltip {
+  position: absolute;
+  z-index: 2;
+  min-width: 140px;
+  padding: 8px 10px;
+  background: var(--viz-surface);
+  border: 1px solid var(--viz-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.viz-tooltip__title {
+  color: var(--viz-text-muted);
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.viz-tooltip__key {
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  flex: none;
+}
+
+.viz-tooltip__name {
+  color: var(--viz-text-secondary);
+}
+
+.viz-tooltip__value {
+  margin-left: auto;
+  padding-left: 16px;
+  font-weight: 600;
+  color: var(--viz-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-table-toggle {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--viz-text-secondary);
+}
+
+.viz-table-toggle > summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.viz-table-scroll {
+  max-height: 280px;
+  overflow: auto;
+  margin-top: 8px;
+  border: 1px solid var(--viz-border);
+  border-radius: 8px;
+}
+
+.viz-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--viz-text-primary);
+}
+
+.viz-table th,
+.viz-table td {
+  padding: 5px 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.viz-table th:first-child,
+.viz-table td:first-child {
+  text-align: left;
+}
+
+.viz-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--viz-surface);
+  color: var(--viz-text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--viz-border);
+}
+
+.viz-table tbody tr + tr td {
+  border-top: 1px solid var(--viz-border);
+}

@@ -1,0 +1,79 @@
+{
+  "status": "failed",
+  "duration": 704.583,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 194,
+    "outputTokens": 3368,
+    "cacheReadTokens": 146228,
+    "cacheWriteTokens": 11193,
+    "totalTokens": 160983
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git log --oneline | head",
+        "success": true
+      },
+      {
+        "command": "cat index.html; echo ---; find src -type f | xargs -I{} sh -c 'echo \"=== {}\"; cat {}'; echo ---; cat vite.config.ts tsconfig.json .gitignore; ls __agent_eval__; ls node_modules/@gravity-ui/uikit/build 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components | tr '\\n' ' '; echo; grep -o \"variant?: [^;]*\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head -3; grep -rho \"'[a-z-]*'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | sort -u | tr '\\n' ' '; echo; grep -o \"view?: [^;]*\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; grep -o \"size?: [^;]*\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head -40; grep -rn \"TEXT_VARIANTS\" node_modules/@gravity-ui/uikit/build/esm/components/Text/constants.d.ts; echo ---; grep -n \"ButtonView\\|ButtonSize\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -4; echo ---; ls node_modules/@gravity-ui/uikit/build/esm/components/layout; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { Button, Card, Container, Flex, Text } from '@gravity-ui/uikit';\n\nconst SIGNUP_URL = '/signup';\n\nconst BENEFITS = [\n  {\n    title: 'Учёт в один клик',\n    text: 'Таймер запускается из любого проекта или задачи. Забытые записи можно добавить вручную задним числом.',\n  },\n  {\n    title: 'Вся команда на одном экране',\n    text: 'Кто над чем работает и сколько часов уже потрачено по каждому проекту — видно без отчётов и созвонов.',\n  },\n  {\n    title: 'Отчёты для клиентов и зарплат',\n    text: 'Экспорт по проектам, людям и периодам в CSV и PDF. Данные готовы для счетов и расчёта оплаты.',\n  },\n];\n\nexport function App() {\n  return (\n    <main>\n      <Container maxWidth=\"m\" spaceRow=\"10\" style={{ paddingTop: 64, paddingBottom: 64 }}>\n        {/* Hero */}\n        <Flex direction=\"column\" alignItems=\"center\" gap=\"4\" style={{ textAlign: 'center' }}>\n          <Text as=\"h1\" variant=\"display-3\" style={{ margin: 0 }}>\n            Учёт времени команды без лишней бюрократии\n          </Text>\n          <Text as=\"p\" variant=\"body-3\" color=\"secondary\" style={{ margin: 0, maxWidth: 560 }}>\n            Отмечайте время, следите за загрузкой людей и выгружайте отчёты для клиентов.\n            Настройка занимает пять минут.\n          </Text>\n        </Flex>\n\n        {/* Benefits */}\n        <section aria-label=\"Преимущества\">\n          <div\n            style={{\n              display: 'grid',\n              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',\n              gap: 16,\n              marginTop: 48,\n            }}\n          >\n            {BENEFITS.map((item) => (\n              <Card key={item.title} view=\"filled\" size=\"l\">\n                <Flex direction=\"column\" gap=\"2\">\n                  <Text as=\"h2\" variant=\"subheader-3\" style={{ margin: 0 }}>\n                    {item.title}\n                  </Text>\n                  <Text as=\"p\" variant=\"body-2\" color=\"secondary\" style={{ margin: 0 }}>\n                    {item.text}\n                  </Text>\n                </Flex>\n              </Card>\n            ))}\n          </div>\n        </section>\n\n        {/* CTA */}\n        <Flex direction=\"column\" alignItems=\"center\" gap=\"3\" style={{ marginTop: 64, textAlign: 'center' }}>\n          <Text as=\"h2\" variant=\"header-2\" style={{ margin: 0 }}>\n            Начните считать время уже сегодня\n          </Text>\n          <Text as=\"p\" variant=\"body-2\" color=\"secondary\" style={{ margin: 0 }}>\n            Бесплатно для команд до пяти человек. Карта не нужна.\n          </Text>\n          <Button view=\"action\" size=\"xl\" href={SIGNUP_URL}>\n            Попробовать бесплатно\n          </Button>\n        </Flex>\n      </Container>\n    </main>\n  );\n}\nEOF\nsed -i 's/lang=\"en\"/lang=\"ru\"/; s|<title>Gravity UI eval</title>|<title>Учёт времени команды</title>|' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 194,
+      "outputTokens": 3368,
+      "cacheReadTokens": 146228,
+      "cacheWriteTokens": 11193,
+      "totalTokens": 160983
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

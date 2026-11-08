@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "duration": 398.105,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 194,
+    "outputTokens": 2433,
+    "cacheReadTokens": 163476,
+    "cacheWriteTokens": 13609,
+    "totalTokens": 179712
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore && echo ---- && cat __agent_eval__/run.mjs && echo ---- && ls node_modules/@gravity-ui/uikit/build/esm/components | grep -i toast && cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/uikit/build/esm/components/Toaster && cat $D/Provider/ToasterProvider.d.ts $D/ToasterComponent/ToasterComponent.d.ts $D/hooks/useToaster.d.ts $D/constants.d.ts && grep -n \"autoHiding\\|DEFAULT_TIMEOUT\\|timeout\" $D/Toast/Toast.js $D/constants.js $D/Toaster.js | head -20 && grep -n \"Toaster\\|useToaster\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { Button, Toaster, ToasterComponent, ToasterProvider, useToaster } from '@gravity-ui/uikit';\n\n// Единый экземпляр тостера на всё приложение.\nconst toaster = new Toaster();\n\n// Через сколько миллисекунд уведомление исчезнет само.\nconst TOAST_AUTO_HIDE_MS = 4000;\n\nfunction NotifyButton() {\n  const { add } = useToaster();\n\n  const handleClick = () => {\n    add({\n      // Уникальное имя, чтобы каждый клик показывал отдельное уведомление,\n      // а не обновлял уже открытое.\n      name: `notification-${Date.now()}`,\n      title: 'Уведомление',\n      content: 'Это всплывающее уведомление исчезнет само через несколько секунд.',\n      theme: 'info',\n      autoHiding: TOAST_AUTO_HIDE_MS,\n    });\n  };\n\n  return (\n    <Button\n      view=\"action\"\n      size=\"l\"\n      onClick={handleClick}\n      style={{ position: 'fixed', right: 24, bottom: 24 }}\n    >\n      Показать уведомление\n    </Button>\n  );\n}\n\nexport function App() {\n  return (\n    <ToasterProvider toaster={toaster}>\n      <NotifyButton />\n      <ToasterComponent />\n    </ToasterProvider>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; echo \"browser check done\") && git status --short && git diff --stat",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 194,
+      "outputTokens": 2433,
+      "cacheReadTokens": 163476,
+      "cacheWriteTokens": 13609,
+      "totalTokens": 179712
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

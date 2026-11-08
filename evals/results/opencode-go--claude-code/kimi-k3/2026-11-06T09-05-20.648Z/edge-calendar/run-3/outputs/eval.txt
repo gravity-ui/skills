@@ -1,0 +1,72 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 3 failed) 11257ms
+   × deps @gravity-ui/date-components 5ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/date-components 1ms
+     → expected false to be true // Object.is equality
+   ✓ no Calendar imported from @gravity-ui/uikit 0ms
+   ✓ no react-datepicker dep 0ms
+   ✓ no react-calendar dep 0ms
+   ✓ no react-day-picker dep 0ms
+   × judge: implements the task with the intended Gravity UI API 11250ms
+     → [judge:environment] FAIL — The date is picked with a calendar component from @gravity-ui/date-components (Calendar, RangeCalendar or a DatePicker from that package). A Calendar imported from @gravity-ui/uikit does not exist and fails; third-party date pickers fail.
+  reason: The app hand-rolls its own Calendar in src/Calendar.tsx and imports it via `import {Calendar} from './Calendar'` in src/App.tsx; `@gravity-ui/date-components` appears nowhere in package.json, package-lock.json, node_modules, or any source file, so no calendar component from that package is used.
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  09:08:29
+   Duration  11.68s (transform 59ms, setup 22ms, collect 19ms, tests 11.26s, environment 0ms, prepare 85ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > deps @gravity-ui/date-components
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The only Gravity library that provides a calendar; must be added to…
+     54| test("deps @gravity-ui/date-components", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/date-components")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/date-components
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Source must actually import from the correct package, not just list…
+     59| test("imports @gravity-ui/date-components", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/date-components")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The date is picked with a calendar component from @gravity-ui/date-components (Calendar, RangeCalendar or a DatePicker from that package). A Calendar imported from @gravity-ui/uikit does not exist and fails; third-party date pickers fail.
+  reason: The app hand-rolls its own Calendar in src/Calendar.tsx and imports it via `import {Calendar} from './Calendar'` in src/App.tsx; `@gravity-ui/date-components` appears nowhere in package.json, package-lock.json, node_modules, or any source file, so no calendar component from that package is used.
+ ❯ EVAL.ts:88:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

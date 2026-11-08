@@ -1,0 +1,72 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 3 failed) 7864ms
+   × imports @gravity-ui/dashkit 7ms
+     → expected false to be true // Object.is equality
+   × @gravity-ui/dashkit in package.json 1ms
+     → expected false to be true // Object.is equality
+   ✓ no direct react-grid-layout import 0ms
+   ✓ react-grid-layout not a direct dep 1ms
+   ✓ no hand-rolled CSS grid layout 0ms
+   ✓ no hand-rolled CSS-file grid 0ms
+   × judge: implements the task with the intended Gravity UI API 7854ms
+     → [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: No widget grid was implemented at all: src/App.tsx is the untouched stub returning a TODO div, and @gravity-ui/dashkit is absent from imports, package.json, package-lock.json, and node_modules (only uikit/i18n/icons installed). The only DashKit/<DashKit>/editMode references in the repo are inside EVAL.ts itself, so there is no DashKit component, config, plugin registration, or editMode prop.
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  09:27:14
+   Duration  8.07s (transform 31ms, setup 14ms, collect 18ms, tests 7.86s, environment 0ms, prepare 46ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/dashkit
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:54
+     53| // DashKit is the canonical Gravity library for a configurable, drag-a…
+     54| test("imports @gravity-ui/dashkit", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                      ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  EVAL.ts > @gravity-ui/dashkit in package.json
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:49
+     58| // The dashboard-grid dependency must be declared, confirming the mode…
+     59| test("@gravity-ui/dashkit in package.json", () => {
+     60|   expect(dependsOn(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                 ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: No widget grid was implemented at all: src/App.tsx is the untouched stub returning a TODO div, and @gravity-ui/dashkit is absent from imports, package.json, package-lock.json, and node_modules (only uikit/i18n/icons installed). The only DashKit/<DashKit>/editMode references in the repo are inside EVAL.ts itself, so there is no DashKit component, config, plugin registration, or editMode prop.
+ ❯ EVAL.ts:94:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

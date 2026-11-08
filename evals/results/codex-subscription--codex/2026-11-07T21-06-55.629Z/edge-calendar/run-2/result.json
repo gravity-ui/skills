@@ -1,0 +1,97 @@
+{
+  "status": "failed",
+  "duration": 282.223,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 14036,
+    "outputTokens": 5363,
+    "cacheReadTokens": 218880,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 592,
+    "totalTokens": 238279
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 8,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 8,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'index.html' -g 'README*' -g 'vite.config.*' -g 'components/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!pnpm-lock.yaml'\"' -g '\"'!yarn.lock'\"' -g '\"'!'\"\\\\.git/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx && cat tsconfig.json && cat index.html && git status --short && for path in /AGENTS.md /home/AGENTS.md /home/sandbox/AGENTS.md /home/sandbox/workspace/AGENTS.md; do if [ -f \"$path\" ]; then cat \"$path\"; fi; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm ls --depth=0 && git diff --check && node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) { try { console.log(p, import.meta.resolve(p)) } catch {} }\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /tmp /opt /usr/bin/chrom* /root/.cache/ms-playwright /home/node/.cache/ms-playwright 2>/dev/null'",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/calendar-check jsdom --no-audit --no-fund'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport { JSDOM } from '/tmp/calendar-check/node_modules/jsdom/lib/api.js';\nimport { createServer } from 'vite';\nimport React, { act } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport assert from 'node:assert/strict';\nconst dom = new JSDOM('<div id=\\\"root\\\"></div>', { pretendToBeVisual: true });\nObject.assign(globalThis, { window: dom.window, document: dom.window.document, HTMLElement: dom.window.HTMLElement, requestAnimationFrame: dom.window.requestAnimationFrame.bind(dom.window), IS_REACT_ACT_ENVIRONMENT: true });\nconst server = await createServer({ server: { middlewareMode: true } });\ntry {\n  const { App } = await server.ssrLoadModule('/src/App.tsx');\n  const root = createRoot(document.getElementById('root'));\n  await act(async () => root.render(React.createElement(App)));\n  const click = async element => act(async () => { element.click(); await new Promise(resolve => setTimeout(resolve, 30)); });\n  const byLabel = label => document.querySelector(\"'`[aria-label=\"${label}\"]`);\n  assert.match(document.querySelector('\"'[role=\\\"status\\\"]').textContent, /Дата не выбрана/);\n  const firstMonth = document.querySelector('h2').textContent;\n  await click(byLabel('Следующий месяц'));\n  assert.notEqual(document.querySelector('h2').textContent, firstMonth);\n  await click(byLabel('Предыдущий месяц'));\n  assert.equal(document.querySelector('h2').textContent, firstMonth);\n  await click(document.querySelector('.calendar-day:not(.outside-month)'));\n  assert.equal(document.querySelectorAll('[aria-pressed=\\\"true\\\"]').length, 1);\n  assert.doesNotMatch(document.querySelector('[role=\\\"status\\\"]').textContent, /Дата не выбрана/);\n  const focusedBefore = document.activeElement;\n  await act(async () => {\n    focusedBefore.dispatchEvent(new dom.window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));\n    await new Promise(resolve => setTimeout(resolve, 30));\n  });\n  assert.notEqual(document.activeElement, focusedBefore);\n  assert.equal(document.activeElement.textContent.trim(), '2');\n  await click(document.querySelector('.clear-action'));\n  assert.match(document.querySelector('[role=\\\"status\\\"]').textContent, /Дата не выбрана/);\n  await click([...document.querySelectorAll('button')].find(button => button.textContent === 'Сегодня'));\n  assert.equal(document.querySelector('[aria-current=\\\"date\\\"]').getAttribute('aria-pressed'), 'true');\n  const adjacent = document.querySelector('.outside-month');\n  if (adjacent) {\n    const label = adjacent.getAttribute('aria-label');\n    await click(adjacent);\n    assert.equal(document.querySelector('[aria-pressed=\\\"true\\\"]').getAttribute('aria-label'), label);\n    assert.equal(document.querySelector('[aria-pressed=\\\"true\\\"]').classList.contains('outside-month'), false);\n  }\n  await act(async () => root.unmount());\n  console.log('PASS: month navigation, date selection, keyboard navigation, clear, today, adjacent-month selection.');\n} finally { await server.close(); dom.window.close(); }\nJS\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 14036,
+      "outputTokens": 5363,
+      "cacheReadTokens": 218880,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 592,
+      "totalTokens": 238279
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

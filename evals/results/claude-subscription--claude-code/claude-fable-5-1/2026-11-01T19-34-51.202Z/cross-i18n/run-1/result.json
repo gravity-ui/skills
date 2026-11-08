@@ -1,0 +1,115 @@
+{
+  "status": "failed",
+  "duration": 541.866,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 484,
+    "outputTokens": 14198,
+    "cacheReadTokens": 629683,
+    "cacheWriteTokens": 35002,
+    "totalTokens": 679367
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -type f -not -path './node_modules/*' -not -path './.git/*' | head -100",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; echo ---; cat __agent_eval__/run.mjs; echo ---; ls node_modules/@gravity-ui/; ls node_modules/@gravity-ui/uikit/build/esm/components/settings 2>/dev/null; cat node_modules/@gravity-ui/uikit/build/esm/i18n/index.d.ts 2>/dev/null; cat node_modules/@gravity-ui/uikit/package.json | grep -A30 '\"exports\"' | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat build/esm/components/utils/configure.d.ts; echo ---; cat build/esm/i18n/addComponentKeysets.d.ts build/esm/i18n/addLanguageKeysets.d.ts build/esm/i18n/types.d.ts; echo ---; ls build/esm/components | tr '\\n' ' '; echo; echo ---; cat build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -40; echo ---; cat build/esm/components/Select/types.d.ts | grep -nE \"export type SelectProps|onUpdate|value\\?|options\\?|SelectOption<\" | head; echo ---; grep -rn \"lang\" build/esm/components/theme/ThemeProvider.d.ts build/esm/components/theme/types.d.ts 2>/dev/null | head; echo ---; cat build/esm/components/Pagination/Pagination.d.ts | head -30; grep -n \"export\" build/esm/index.d.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "cat build/esm/utils/configure.d.ts; echo ---; cat build/esm/components/theme/ThemeProvider.d.ts; echo ---; cat build/esm/components/theme/useLang.d.ts 2>/dev/null; ls build/esm/components/theme/; echo ---; grep -n \"lang\\|Lang\" build/esm/components/theme/ThemeProvider.js | head -40; echo ---; cat build/esm/components/Pagination/i18n/en.json build/esm/components/Select/i18n/ru.json 2>/dev/null; cat build/esm/components/Pagination/types.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -n 15,60p build/esm/components/theme/ThemeProvider.js; echo ---; cat build/esm/components/Select/i18n/en.json build/esm/components/ClipboardButton/i18n/en.json build/esm/components/Alert/i18n/en.json; echo ---; cat build/esm/components/ClipboardButton/ClipboardButton.d.ts | head -30; ls /home/sandbox/workspace/node_modules | grep -i -E \"jsdom|happy|testing-library\"; cat build/esm/components/Alert/types.d.ts | grep -nE \"onClose|title|message|theme\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && mkdir -p src/i18n src/components && cat > src/i18n/en.ts <<'EOF'\nexport const en = {\n  'app.title': 'Language switcher demo',\n  'app.description':\n    'Pick a language in the top-right corner. Both the application texts and the built-in Gravity UI component texts (filter, clear, pagination, tooltips) will switch.',\n  'language.label': 'Interface language',\n  'language.en': 'English',\n  'language.ru': 'Russian',\n  'language.current': 'Current language: {lang}',\n  'greeting.title': 'Hello, {name}!',\n  'greeting.message': 'Your settings are saved in this browser and will be restored after reload.',\n  'form.title': 'Example form',\n  'form.name': 'Name',\n  'form.name.placeholder': 'Enter your name',\n  'form.city': 'City',\n  'form.city.placeholder': 'Choose a city',\n  'form.city.moscow': 'Moscow',\n  'form.city.london': 'London',\n  'form.city.berlin': 'Berlin',\n  'form.city.tokyo': 'Tokyo',\n  'form.submit': 'Save',\n  'form.saved': 'Saved',\n  'table.title': 'Items',\n  'table.item': 'Item',\n  'table.count': 'Quantity',\n  'table.item.apples': 'Apples',\n  'table.item.bread': 'Bread',\n  'table.item.milk': 'Milk',\n  'table.item.cheese': 'Cheese',\n  'table.item.coffee': 'Coffee',\n  'table.item.tea': 'Tea',\n  'table.item.eggs': 'Eggs',\n  'clipboard.label': 'Copy the language code',\n  'theme.light': 'Light theme',\n} as const;\n\nexport type TranslationKey = keyof typeof en;\nEOF\ncat > src/i18n/ru.ts <<'EOF'\nimport type {TranslationKey} from './en';\n\nexport const ru: Record<TranslationKey, string> = {\n  'app.title': 'Демо переключения языка',\n  'app.description':\n    'Выберите язык в правом верхнем углу. Переключатся и тексты приложения, и встроенные тексты компонентов Gravity UI (фильтр, очистка, пагинация, подсказки).',\n  'language.label': 'Язык интерфейса',\n  'language.en': 'Английский',\n  'language.ru': 'Русский',\n  'language.current': 'Текущий язык: {lang}',\n  'greeting.title': 'Привет, {name}!',\n  'greeting.message': 'Ваши настройки сохраняются в этом браузере и восстановятся после перезагрузки.',\n  'form.title': 'Пример формы',\n  'form.name': 'Имя',\n  'form.name.placeholder': 'Введите имя',\n  'form.city': 'Город',\n  'form.city.placeholder': 'Выберите город',\n  'form.city.moscow': 'Москва',\n  'form.city.london': 'Лондон',\n  'form.city.berlin': 'Берлин',\n  'form.city.tokyo': 'Токио',\n  'form.submit': 'Сохранить',\n  'form.saved': 'Сохранено',\n  'table.title': 'Товары',\n  'table.item': 'Товар',\n  'table.count': 'Количество',\n  'table.item.apples': 'Яблоки',\n  'table.item.bread': 'Хлеб',\n  'table.item.milk': 'Молоко',\n  'table.item.cheese': 'Сыр',\n  'table.item.coffee': 'Кофе',\n  'table.item.tea': 'Чай',\n  'table.item.eggs': 'Яйца',\n  'clipboard.label': 'Скопировать код языка',\n  'theme.light': 'Светлая тема',\n};\nEOF\ncat > src/i18n/index.ts <<'EOF'\nimport {en} from './en';\nimport type {TranslationKey} from './en';\nimport {ru} from './ru';\n\nexport type {TranslationKey};\n\nexport const LANGUAGES = ['en', 'ru'] as const;\nexport type Lang = (typeof LANGUAGES)[number];\n\nexport const DEFAULT_LANG: Lang = 'en';\nexport const LANG_STORAGE_KEY = 'app.lang';\n\nexport const dictionaries: Record<Lang, Record<TranslationKey, string>> = {en, ru};\n\nexport type TranslateParams = Record<string, string | number>;\n\nexport function isLang(value: unknown): value is Lang {\n  return typeof value === 'string' && (LANGUAGES as readonly string[]).includes(value);\n}\n\n/**\n * Looks up `key` in the dictionary for `lang`, falls back to English,\n * and finally to the key itself. `{placeholders}` are replaced with values from `params`.\n */\nexport function translate(lang: Lang, key: TranslationKey, params?: TranslateParams): string {\n  const template = dictionaries[lang]?.[key] ?? dictionaries[DEFAULT_LANG][key] ?? key;\n  if (!params) {\n    return template;\n  }\n  return template.replace(/\\{(\\w+)\\}/g, (match, name: string) =>\n    name in params ? String(params[name]) : match,\n  );\n}\n\n/** Reads the saved language, otherwise picks one from the browser settings. */\nexport function detectInitialLang(\n  storage: Pick<Storage, 'getItem'> | undefined = typeof localStorage === 'undefined'\n    ? undefined\n    : localStorage,\n  navigatorLanguages: readonly string[] = typeof navigator === 'undefined'\n    ? []\n    : navigator.languages ?? [navigator.language],\n): Lang {\n  try {\n    const saved = storage?.getItem(LANG_STORAGE_KEY);\n    if (isLang(saved)) {\n      return saved;\n    }\n  } catch {\n    // localStorage may be unavailable (private mode, disabled storage) — ignore.\n  }\n\n  for (const tag of navigatorLanguages) {\n    const base = tag.toLowerCase().split('-')[0];\n    if (isLang(base)) {\n      return base;\n    }\n  }\n\n  return DEFAULT_LANG;\n}\nEOF\ncat > src/i18n/I18nProvider.tsx <<'EOF'\nimport React from 'react';\nimport {ThemeProvider} from '@gravity-ui/uikit';\n\nimport {DEFAULT_LANG, LANG_STORAGE_KEY, detectInitialLang, translate} from './index';\nimport type {Lang, TranslateParams, TranslationKey} from './index';\n\nexport interface I18nContextValue {\n  lang: Lang;\n  setLang: (lang: Lang) => void;\n  t: (key: TranslationKey, params?: TranslateParams) => string;\n}\n\nconst I18nContext = React.createContext<I18nContextValue | undefined>(undefined);\n\nexport interface I18nProviderProps {\n  children: React.ReactNode;\n  /** Overrides the detected language (useful in tests). */\n  initialLang?: Lang;\n}\n\nexport function I18nProvider({children, initialLang}: I18nProviderProps) {\n  const [lang, setLangState] = React.useState<Lang>(() => initialLang ?? detectInitialLang());\n\n  React.useEffect(() => {\n    document.documentElement.lang = lang;\n    try {\n      localStorage.setItem(LANG_STORAGE_KEY, lang);\n    } catch {\n      // Storage may be unavailable — the language still works for the current session.\n    }\n  }, [lang]);\n\n  const value = React.useMemo<I18nContextValue>(\n    () => ({\n      lang,\n      setLang: setLangState,\n      t: (key, params) => translate(lang, key, params),\n    }),\n    [lang],\n  );\n\n  return (\n    <I18nContext.Provider value={value}>\n      {/* Nested ThemeProvider passes the language to Gravity UI components\n          (Select filter, clear buttons, Pagination, ClipboardButton tooltips, …). */}\n      <ThemeProvider lang={lang} fallbackLang={DEFAULT_LANG}>\n        {children}\n      </ThemeProvider>\n    </I18nContext.Provider>\n  );\n}\n\nexport function useI18n(): I18nContextValue {\n  const context = React.useContext(I18nContext);\n  if (!context) {\n    throw new Error('useI18n must be used inside <I18nProvider>');\n  }\n  return context;\n}\nEOF\ncat > src/components/LanguageSwitcher.tsx <<'EOF'\nimport {SegmentedRadioGroup} from '@gravity-ui/uikit';\n\nimport {LANGUAGES} from '../i18n';\nimport type {Lang} from '../i18n';\nimport {useI18n} from '../i18n/I18nProvider';\n\nconst LANGUAGE_NAMES: Record<Lang, string> = {\n  en: 'English',\n  ru: 'Русский',\n};\n\nexport interface LanguageSwitcherProps {\n  size?: 's' | 'm' | 'l' | 'xl';\n}\n\nexport function LanguageSwitcher({size = 'm'}: LanguageSwitcherProps) {\n  const {lang, setLang, t} = useI18n();\n\n  return (\n    <SegmentedRadioGroup<Lang>\n      size={size}\n      value={lang}\n      onUpdate={setLang}\n      aria-label={t('language.label')}\n      qa=\"language-switcher\"\n    >\n      {LANGUAGES.map((code) => (\n        <SegmentedRadioGroup.Option key={code} value={code} qa={`language-switcher-${code}`}>\n          {LANGUAGE_NAMES[code]}\n        </SegmentedRadioGroup.Option>\n      ))}\n    </SegmentedRadioGroup>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {\n  Alert,\n  Button,\n  Card,\n  ClipboardButton,\n  Flex,\n  Pagination,\n  Select,\n  Table,\n  Text,\n  TextInput,\n} from '@gravity-ui/uikit';\nimport type {TableColumnConfig} from '@gravity-ui/uikit';\n\nimport {LanguageSwitcher} from './components/LanguageSwitcher';\nimport {I18nProvider, useI18n} from './i18n/I18nProvider';\nimport type {TranslationKey} from './i18n';\n\nconst CITY_KEYS = ['moscow', 'london', 'berlin', 'tokyo'] as const;\nconst ITEM_KEYS = ['apples', 'bread', 'milk', 'cheese', 'coffee', 'tea', 'eggs'] as const;\nconst ITEM_COUNTS: Record<(typeof ITEM_KEYS)[number], number> = {\n  apples: 12,\n  bread: 2,\n  milk: 3,\n  cheese: 1,\n  coffee: 5,\n  tea: 8,\n  eggs: 30,\n};\nconst PAGE_SIZE = 3;\n\ninterface Row {\n  id: string;\n  item: string;\n  count: number;\n}\n\nfunction Page() {\n  const {lang, t} = useI18n();\n  const [name, setName] = React.useState('');\n  const [city, setCity] = React.useState<string[]>([]);\n  const [saved, setSaved] = React.useState(false);\n  const [page, setPage] = React.useState(1);\n\n  const cityOptions = CITY_KEYS.map((key) => ({\n    value: key,\n    content: t(`form.city.${key}` as TranslationKey),\n  }));\n\n  const rows: Row[] = ITEM_KEYS.map((key) => ({\n    id: key,\n    item: t(`table.item.${key}` as TranslationKey),\n    count: ITEM_COUNTS[key],\n  }));\n  const pageRows = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);\n\n  const columns: TableColumnConfig<Row>[] = [\n    {id: 'item', name: t('table.item')},\n    {id: 'count', name: t('table.count'), align: 'end'},\n  ];\n\n  const handleSubmit = (event: React.FormEvent) => {\n    event.preventDefault();\n    setSaved(true);\n  };\n\n  return (\n    <Flex direction=\"column\" gap={6} style={{padding: 24, maxWidth: 720, margin: '0 auto'}}>\n      <Flex as=\"header\" justifyContent=\"space-between\" alignItems=\"center\" gap={4}>\n        <Text variant=\"header-2\" as=\"h1\">\n          {t('app.title')}\n        </Text>\n        <LanguageSwitcher />\n      </Flex>\n\n      <Text color=\"secondary\">{t('app.description')}</Text>\n\n      <Alert\n        theme=\"info\"\n        title={t('greeting.title', {name: name.trim() || (lang === 'ru' ? 'гость' : 'guest')})}\n        message={t('greeting.message')}\n      />\n\n      <Card view=\"outlined\" style={{padding: 20}}>\n        <form onSubmit={handleSubmit}>\n          <Flex direction=\"column\" gap={4}>\n            <Text variant=\"subheader-2\">{t('form.title')}</Text>\n\n            <Flex direction=\"column\" gap={1}>\n              <Text as=\"label\" htmlFor=\"name-input\">{t('form.name')}</Text>\n              <TextInput\n                id=\"name-input\"\n                value={name}\n                onUpdate={(value) => {\n                  setName(value);\n                  setSaved(false);\n                }}\n                placeholder={t('form.name.placeholder')}\n                hasClear\n              />\n            </Flex>\n\n            <Flex direction=\"column\" gap={1}>\n              <Text as=\"label\" id=\"city-label\">{t('form.city')}</Text>\n              <Select\n                aria-labelledby=\"city-label\"\n                value={city}\n                onUpdate={(value) => {\n                  setCity(value);\n                  setSaved(false);\n                }}\n                options={cityOptions}\n                placeholder={t('form.city.placeholder')}\n                filterable\n                hasClear\n                width=\"max\"\n              />\n            </Flex>\n\n            <Flex gap={3} alignItems=\"center\">\n              <Button type=\"submit\" view=\"action\">\n                {t('form.submit')}\n              </Button>\n              {saved && <Text color=\"positive\">{t('form.saved')}</Text>}\n            </Flex>\n          </Flex>\n        </form>\n      </Card>\n\n      <Card view=\"outlined\" style={{padding: 20}}>\n        <Flex direction=\"column\" gap={4}>\n          <Text variant=\"subheader-2\">{t('table.title')}</Text>\n          <Table data={pageRows} columns={columns} getRowId={(row) => row.id} />\n          <Pagination\n            page={page}\n            pageSize={PAGE_SIZE}\n            total={rows.length}\n            compact={false}\n            showInput\n            onUpdate={(nextPage) => setPage(nextPage)}\n          />\n        </Flex>\n      </Card>\n\n      <Flex gap={2} alignItems=\"center\">\n        <Text color=\"secondary\">{t('language.current', {lang: t(`language.${lang}`)})}</Text>\n        <ClipboardButton text={lang} size=\"s\" aria-label={t('clipboard.label')} />\n      </Flex>\n    </Flex>\n  );\n}\n\nexport function App() {\n  return (\n    <I18nProvider>\n      <Page />\n    </I18nProvider>\n  );\n}\nEOF\ncat > src/i18n/i18n.test.ts <<'EOF'\nimport {describe, expect, it} from 'vitest';\n\nimport {en} from './en';\nimport {DEFAULT_LANG, LANG_STORAGE_KEY, detectInitialLang, isLang, translate} from './index';\nimport {ru} from './ru';\n\ndescribe('dictionaries', () => {\n  it('ru covers every key from en', () => {\n    expect(Object.keys(ru).sort()).toEqual(Object.keys(en).sort());\n  });\n\n  it('has no empty translations', () => {\n    for (const dict of [en, ru]) {\n      for (const [key, value] of Object.entries(dict)) {\n        expect(value.trim(), key).not.toBe('');\n      }\n    }\n  });\n});\n\ndescribe('translate', () => {\n  it('returns strings for the requested language', () => {\n    expect(translate('en', 'form.submit')).toBe('Save');\n    expect(translate('ru', 'form.submit')).toBe('Сохранить');\n  });\n\n  it('substitutes placeholders', () => {\n    expect(translate('en', 'greeting.title', {name: 'Ann'})).toBe('Hello, Ann!');\n    expect(translate('ru', 'greeting.title', {name: 'Аня'})).toBe('Привет, Аня!');\n  });\n\n  it('keeps unknown placeholders untouched', () => {\n    expect(translate('en', 'greeting.title', {})).toBe('Hello, {name}!');\n  });\n});\n\ndescribe('detectInitialLang', () => {\n  const storageWith = (value: string | null) => ({getItem: () => value});\n\n  it('prefers the saved language', () => {\n    expect(detectInitialLang(storageWith('ru'), ['en-US'])).toBe('ru');\n  });\n\n  it('ignores invalid saved values and falls back to navigator languages', () => {\n    expect(detectInitialLang(storageWith('xx'), ['de-DE', 'ru-RU'])).toBe('ru');\n    expect(detectInitialLang(storageWith(null), ['en-GB'])).toBe('en');\n  });\n\n  it('falls back to the default language', () => {\n    expect(detectInitialLang(storageWith(null), ['de-DE'])).toBe(DEFAULT_LANG);\n  });\n\n  it('survives a throwing storage', () => {\n    const broken = {\n      getItem: () => {\n        throw new Error('blocked');\n      },\n    };\n    expect(detectInitialLang(broken, ['ru'])).toBe('ru');\n  });\n\n  it('exposes helpers', () => {\n    expect(isLang('en')).toBe(true);\n    expect(isLang('fr')).toBe(false);\n    expect(LANG_STORAGE_KEY).toBe('app.lang');\n  });\n});\nEOF\nnode -e '\nconst fs=require(\"fs\");const p=JSON.parse(fs.readFileSync(\"package.json\",\"utf8\"));\np.scripts.test=\"vitest run\";fs.writeFileSync(\"package.json\",JSON.stringify(p,null,2)+\"\\n\");'\nnpx tsc --noEmit && npx vitest run 2>&1 | tail -15",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -i 's| qa={`language-switcher-${code}`}||' src/components/LanguageSwitcher.tsx && npx tsc --noEmit && npx vitest run 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -12",
+        "success": true
+      },
+      {
+        "command": "ls .claude/skills 2>/dev/null; which chromium-cli chromium google-chrome playwright 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; sed -n 1,80p /tmp/claude-1000/bundled-skills/2.1.316/caf38a1176ffd6ec61b5da903fa6bfc7/run/examples/playwright.md",
+        "success": true
+      },
+      {
+        "command": "(find / -maxdepth 4 \\( -iname 'chrom*' -o -iname 'playwright*' -o -iname 'puppeteer*' \\) -not -path '*/proc/*' 2>/dev/null | head; echo \"--- network:\"; curl -sS -m 8 -o /dev/null -w '%{http_code}\\n' https://registry.npmjs.org/playwright 2>&1; echo \"--- jsdom/happy-dom installed:\"; ls node_modules | grep -iE '^(jsdom|happy-dom)$' || echo none)",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.ssr.test.tsx <<'EOF'\nimport {renderToStaticMarkup} from 'react-dom/server';\nimport {describe, expect, it} from 'vitest';\n\nimport {App} from './App';\nimport {I18nProvider} from './i18n/I18nProvider';\nimport {LanguageSwitcher} from './components/LanguageSwitcher';\n\ndescribe('App rendering', () => {\n  it('renders in English by default (no browser language)', () => {\n    const html = renderToStaticMarkup(<App />);\n    expect(html).toContain('Language switcher demo');\n    expect(html).toContain('Previous'); // built-in Gravity UI Pagination text\n    expect(html).not.toContain('Демо переключения языка');\n  });\n\n  it('renders in Russian when the language is ru', () => {\n    const html = renderToStaticMarkup(\n      <I18nProvider initialLang=\"ru\">\n        <LanguageSwitcher />\n      </I18nProvider>,\n    );\n    expect(html).toContain('aria-label=\"Язык интерфейса\"');\n    expect(html).toMatch(/value=\"ru\"[^>]*checked/);\n  });\n});\nEOF\nnpx vitest run 2>&1 | tail -25; echo \"--- npm network:\"; timeout 20 npm view playwright version 2>&1 | tail -2",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\n/// <reference types=\"vitest/config\" />\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    // Process Gravity UI through Vite so its CSS imports resolve in tests.\n    server: { deps: { inline: ['@gravity-ui/uikit'] } },\n  },\n});\nEOF\nnpx vitest run 2>&1 | tail -15; echo \"--- env:\"; id -u; which apt-get sudo; ls /usr/lib/x86_64-linux-gnu 2>/dev/null | grep -cE 'libnss3|libatk|libgbm|libxkbcommon'",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/dump.test.tsx <<'EOF'\nimport {renderToStaticMarkup} from 'react-dom/server';\nimport {it} from 'vitest';\nimport {I18nProvider} from '/home/sandbox/workspace/src/i18n/I18nProvider';\nimport {LanguageSwitcher} from '/home/sandbox/workspace/src/components/LanguageSwitcher';\nit('dump', () => { console.log(renderToStaticMarkup(<I18nProvider initialLang=\"ru\"><LanguageSwitcher /></I18nProvider>)); });\nEOF\ncp /tmp/dump.test.tsx src/__dump.test.tsx && npx vitest run src/__dump.test.tsx 2>&1 | grep -o '<input[^>]*>' ; rm src/__dump.test.tsx",
+        "success": true
+      },
+      {
+        "command": "sed -i 's|expect(html).toMatch(/value=\"ru\"\\[^>\\]\\*checked/);|expect(html).toMatch(/<input[^>]*checked=\"\"[^>]*value=\"ru\"/);|' src/App.ssr.test.tsx && npx tsc --noEmit && npx vitest run 2>&1 | tail -8 && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && printf 'dist/\\n' >> .gitignore && cat .gitignore && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 484,
+      "outputTokens": 14198,
+      "cacheReadTokens": 629683,
+      "cacheWriteTokens": 35002,
+      "totalTokens": 679367
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

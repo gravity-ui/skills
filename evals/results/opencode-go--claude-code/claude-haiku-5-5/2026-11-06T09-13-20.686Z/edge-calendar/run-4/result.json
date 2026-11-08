@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "duration": 221.012,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 44,
+    "outputTokens": 9120,
+    "cacheReadTokens": 599847,
+    "cacheWriteTokens": 32251,
+    "totalTokens": 641262
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in package.json tsconfig.json vite.config.ts index.html src/App.tsx src/main.tsx src/vite-env.d.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done",
+        "success": true
+      },
+      {
+        "command": "(npm install 2>&1 | tail -15) && ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/ | head -50; grep -rl \"Calendar\\|DatePicker\" node_modules/@gravity-ui/uikit/build --include=*.d.ts | head -20; grep -o \"export {[^}]*}\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -c 500; ls node_modules/@gravity-ui/uikit/build/esm | head -80",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components; ls node_modules/@gravity-ui/uikit/build/esm/components/* -d | grep -i \"date\\|calendar\"; cat node_modules/@gravity-ui/uikit/build/esm/unstable.d.ts; grep -rli \"calendar\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components version peerDependencies dependencies 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json 2>/dev/null | tail -30; for v in 4.0.0 3.0.0 2.0.0; do echo \"== $v\"; npm view @gravity-ui/date-components@$v peerDependencies dependencies 2>/dev/null; done; npm view @gravity-ui/date-utils version peerDependencies 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components@4.1.0 peerDependencies dependencies 2>/dev/null; npm view @gravity-ui/date-components@4.1.0 time.modified 2>/dev/null; npm view @gravity-ui/date-utils@2 version 2>/dev/null | tail -3",
+        "success": true
+      },
+      {
+        "command": "npm install --save-exact @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@2.7.3 2>&1 | grep -v \"npm warn\" | tail -5 && grep -A8 '\"dependencies\"' package.json && ls node_modules/@gravity-ui/date-components/dist | head -30",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/date-components/dist/esm | head -60; cat node_modules/@gravity-ui/date-components/dist/esm/index.d.ts 2>/dev/null | head -80; ls node_modules/@gravity-ui/date-components/dist/esm/*/ | head -80",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm/components; cat $D/Calendar/Calendar.d.ts; echo ----; cat $D/Calendar/index.d.ts 2>/dev/null; echo ----; ls $D/Calendar $D/DatePicker; echo ----; cat $D/DatePicker/DatePicker.d.ts; echo ----; cat $D/index.d.ts; ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist; cat $D/docs/INDEX.md | head -60; ls $D/docs/components; cat $D/esm/components/DatePicker/hooks/datePickerStateFactory.d.ts | head -60; cat node_modules/@gravity-ui/date-utils/package.json | grep -E '\"(main|module|types)\"'; ",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/date-components/dist/docs/components/DatePicker.md | head -150; echo ======; cat node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md | head -80",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView; cat $D/hooks/useCalendarState.d.ts | head -60; cat $D/hooks/types.d.ts | head -30; grep -n \"export\" node_modules/@gravity-ui/date-utils/build/index.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "grep -n \"ValueBase\" -A12 node_modules/@gravity-ui/date-components/dist/esm/components/types/*.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; python3 -c \"import playwright\" 2>&1) | head; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/ssrcheck && cat > src/__ssr_check.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders calendar', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  console.log(html.length, html.includes('No date selected'), (html.match(/gc-calendar|calendar/gi) || []).length);\n  expect(html).toContain('No date selected');\n  expect(html.toLowerCase()).toContain('calendar');\n});\nEOF\ntimeout 200000 npx vitest run src/__ssr_check.test.tsx 2>&1 | tail -30; rm -f src/__ssr_check.test.tsx; rm -rf /tmp/ssrcheck",
+        "success": true
+      },
+      {
+        "command": "cat > src/__ssr_check.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders calendar', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  console.log('LEN', html.length, 'EMPTY_TEXT', html.includes('No date selected'));\n  expect(html).toContain('No date selected');\n});\nEOF\ncat > /tmp/vitest.ssr.config.mjs <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } }, css: false, include: ['src/__ssr_check.test.tsx'] } });\nEOF\ntimeout 200000 npx vitest run -c /tmp/vitest.ssr.config.mjs --root /home/sandbox/workspace 2>&1 | tail -25; rm -f src/__ssr_check.test.tsx /tmp/vitest.ssr.config.mjs; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__ssr_check.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders calendar', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  console.log('LEN', html.length, 'EMPTY_TEXT', html.includes('No date selected'));\n  expect(html).toContain('No date selected');\n});\nEOF\ncat > vitest.ssr.tmp.config.mjs <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } }, css: false, include: ['src/__ssr_check.test.tsx'] } });\nEOF\ntimeout 200000 npx vitest run -c vitest.ssr.tmp.config.mjs 2>&1 | tail -25; rm -f src/__ssr_check.test.tsx vitest.ssr.tmp.config.mjs; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44,
+      "outputTokens": 9120,
+      "cacheReadTokens": 599847,
+      "cacheWriteTokens": 32251,
+      "totalTokens": 641262
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "status": "passed",
+  "duration": 473.295,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 48,
+    "outputTokens": 34091,
+    "cacheReadTokens": 1046168,
+    "cacheWriteTokens": 57784,
+    "totalTokens": 1138091
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 11,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 23,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/data.ts",
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5 && cat package.json 2>/dev/null; ls -la src 2>/dev/null; find . -path ./node_modules -prune -o -type f -print | grep -v '/.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; echo \"=== uikit\"; ls node_modules/@gravity-ui/ ; cat node_modules/@gravity-ui/uikit/package.json | head -20; ls node_modules/@gravity-ui/uikit/build 2>/dev/null | head -50",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm | head -80; echo ---; grep -o \"export \\* from[^;]*\\|export {[^}]*}\" build/esm/index.d.ts 2>/dev/null | head; ls build/esm/components | head -100; echo ---; ls build/esm/components/Table 2>/dev/null; ls build/esm/components/Pagination 2>/dev/null; ls build/esm/components/Checkbox 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Table/Table.d.ts; echo ===; cat Pagination/Pagination.d.ts; echo ===; cat Checkbox/Checkbox.d.ts; echo ===; cat Table/index.d.ts; echo ===; cat index.d.ts | grep -i \"table\\|pagination\\|checkbox\"",
+        "success": true
+      },
+      {
+        "command": "ls Table/hoc; echo ===; cat Table/hoc/index.d.ts; echo ===; cat Table/hoc/withTableSorting/*.d.ts 2>/dev/null; echo ===; cat Table/hoc/withTableSelection/*.d.ts 2>/dev/null; echo ===; cat Pagination/types.d.ts; echo ===; cat Checkbox/index.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc && cat withTableSorting/withTableSorting.js; echo ======; cat withTableSelection/withTableSelection.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"getRowId\\|getRowDescriptor\" components/Table/Table.js | head -20; echo ===; grep -n \"static getRowId\" -A 12 components/Table/Table.js; echo ===; grep -rn \"page - 1\\|page + 1\\|currentPage\\|useState\" components/Pagination/Pagination.js | head -15; echo ===; ls i18n | head -40; grep -rn \"export\" i18n/index.d.ts | head; echo ===; cat components/Table/i18n/*.json 2>/dev/null | head -5; ls components/Table/i18n",
+        "success": true
+      },
+      {
+        "command": "cat components/Table/i18n/ru.json; echo ===; grep -n \"page\" components/Pagination/Pagination.js | head -30; echo ===; cat components/Table/hoc/withTableSorting/SortIndicator/*.d.ts 2>/dev/null | head -20; echo ===; grep -n \"Lang\\b\\|configure\" index.d.ts lang* i18n/*.d.ts 2>/dev/null | head; grep -rn \"export declare function configure\\|export declare const configure\" . --include=*.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "cat utils/configure.d.ts; echo ===; sed -n 1,40p components/Pagination/utils.js | head -60; echo ===; grep -rn \"page\" components/Pagination/hooks/*.js 2>/dev/null | head -20; ls components/Pagination/hooks 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && ls node_modules/.bin | grep -E \"^(tsc|vite|vitest)$\"; npx tsc --noEmit 2>&1 | head -60; echo \"TSC EXIT: ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cp src/DataTable.tsx /tmp/DataTable.bak && sed -i 's/ as TableDataItem\\[\\]//; s/ as TableColumnConfig<TableDataItem>\\[\\]//; s/ as (item: TableDataItem) => DescriptorType//' src/DataTable.tsx && npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"TSC EXIT: ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cp /tmp/DataTable.bak src/DataTable.tsx && rm /tmp/DataTable.bak && npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"TSC EXIT: ${PIPESTATUS[0]}\"; npx vite build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i -E \"^(playwright|puppeteer|jsdom|happy-dom|@testing-library)$\"; npm ls -g --depth=0 2>/dev/null | grep -i -E \"playwright|puppeteer\") ; echo done",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -i dom; ls node_modules/.bin | grep -i -E \"playwright|jsdom\"; timeout 60 npm view jsdom version 2>&1 | tail -2",
+        "success": true
+      },
+      {
+        "command": "set -e; rm -rf /tmp/dt-verify && mkdir -p /tmp/dt-verify && cd /home/sandbox/workspace && cp -r src index.html tsconfig.json vite.config.ts package.json package-lock.json /tmp/dt-verify/ && cd /tmp/dt-verify && timeout 400 npm install --no-audit --no-fund --loglevel=error 2>&1 | grep -v \"npm warn\" | tail -5; timeout 300 npm install --no-save --no-audit --no-fund --loglevel=error jsdom@26 @testing-library/react@16 @testing-library/dom@10 2>&1 | grep -v \"npm warn\" | tail -5; ls node_modules | grep -E \"^(jsdom|react|react-dom|@testing-library)$\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/dt-verify && cat > vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { environment: 'jsdom', setupFiles: ['./setup.ts'] },\n});\nEOF\ncat > setup.ts <<'EOF'\nclass RO { observe() {} unobserve() {} disconnect() {} }\n(globalThis as any).ResizeObserver = (globalThis as any).ResizeObserver ?? RO;\nwindow.matchMedia = window.matchMedia ?? ((q: string) => ({ matches: false, media: q, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; } }) as any);\nEOF\ncat > src/verify.test.tsx <<'EOF'\nimport { describe, it, expect, afterEach } from 'vitest';\nimport { render, screen, fireEvent, cleanup, within } from '@testing-library/react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nimport { DataTable, DataTableColumn } from './DataTable';\nimport { EMPLOYEES, Employee } from './data';\n\nafterEach(() => cleanup());\n\nconst rowsOf = () => Array.from(document.querySelectorAll('tbody tr'));\nconst cellText = (tr: Element, i: number) => tr.querySelectorAll('td')[i].textContent ?? '';\nconst footer = () => document.body.textContent!.match(/\\d+–\\d+ из \\d+/)?.[0];\nconst selectedLabel = () => document.body.textContent!.match(/Выбрано: \\d+/)?.[0];\nconst rowCheckboxes = () => Array.from(document.querySelectorAll<HTMLInputElement>('tbody input[type=\"checkbox\"]'));\nconst headerCheckbox = () => document.querySelector<HTMLInputElement>('thead input[type=\"checkbox\"]')!;\nconst headerSort = (label: string) => screen.getByText(label).closest('[role=\"button\"]') as HTMLElement;\nconst parseMoney = (s: string) => Number(s.replace(/\\D/g, ''));\nconst collator = new Intl.Collator('ru', { numeric: true, sensitivity: 'base' });\n\nfunction renderApp() {\n  return render(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n}\n\ndescribe('DataTable', () => {\n  it('renders first page with footer and empty selection', () => {\n    renderApp();\n    expect(rowsOf().length).toBe(10);\n    expect(footer()).toBe('1–10 из 53');\n    expect(selectedLabel()).toBe('Выбрано: 0');\n  });\n\n  it('sorts by salary asc/desc/none across the whole dataset', () => {\n    renderApp();\n    const salaries = EMPLOYEES.map((e) => e.salary);\n    const min = Math.min(...salaries), max = Math.max(...salaries);\n    fireEvent.click(headerSort('Зарплата'));\n    expect(parseMoney(cellText(rowsOf()[0], 5))).toBe(min);\n    const asc = rowsOf().map((r) => parseMoney(cellText(r, 5)));\n    expect([...asc].sort((a, b) => a - b)).toEqual(asc);\n    fireEvent.click(headerSort('Зарплата'));\n    expect(parseMoney(cellText(rowsOf()[0], 5))).toBe(max);\n    const desc = rowsOf().map((r) => parseMoney(cellText(r, 5)));\n    expect([...desc].sort((a, b) => b - a)).toEqual(desc);\n    fireEvent.click(headerSort('Зарплата'));\n    expect(cellText(rowsOf()[0], 1)).toBe(EMPLOYEES[0].name);\n  });\n\n  it('sorts strings with ru collation', () => {\n    renderApp();\n    fireEvent.click(headerSort('Сотрудник'));\n    const names = EMPLOYEES.map((e) => e.name).sort((a, b) => collator.compare(a, b));\n    expect(cellText(rowsOf()[0], 1)).toBe(names[0]);\n    fireEvent.click(headerSort('Сотрудник'));\n    expect(cellText(rowsOf()[0], 1)).toBe(names[names.length - 1]);\n  });\n\n  it('sorts boolean status (active first)', () => {\n    renderApp();\n    fireEvent.click(headerSort('Статус'));\n    expect(cellText(rowsOf()[0], 7)).toBe('Активен');\n    const statuses = rowsOf().map((r) => cellText(r, 7));\n    const firstInactive = statuses.indexOf('Неактивен');\n    if (firstInactive !== -1) expect(statuses.slice(firstInactive).every((s) => s === 'Неактивен')).toBe(true);\n  });\n\n  it('paginates and keeps order', () => {\n    renderApp();\n    fireEvent.click(headerSort('Сотрудник'));\n    const sortedNames = EMPLOYEES.map((e) => e.name).sort((a, b) => collator.compare(a, b));\n    fireEvent.click(screen.getByRole('button', { name: '2' }));\n    expect(footer()).toBe('11–20 из 53');\n    expect(rowsOf().length).toBe(10);\n    expect(cellText(rowsOf()[0], 1)).toBe(sortedNames[10]);\n    fireEvent.click(screen.getByRole('button', { name: '6' }));\n    expect(footer()).toBe('51–53 из 53');\n    expect(rowsOf().length).toBe(3);\n  });\n\n  it('selects rows across pages and keeps selection on sort', () => {\n    renderApp();\n    fireEvent.click(headerCheckbox()); // select all on page 1\n    expect(selectedLabel()).toBe('Выбрано: 10');\n    expect(rowCheckboxes().every((c) => c.checked)).toBe(true);\n\n    fireEvent.click(screen.getByRole('button', { name: '2' }));\n    expect(rowCheckboxes().some((c) => c.checked)).toBe(false);\n    fireEvent.click(rowCheckboxes()[0]);\n    expect(selectedLabel()).toBe('Выбрано: 11');\n\n    fireEvent.click(screen.getByRole('button', { name: '1' }));\n    expect(rowCheckboxes().filter((c) => c.checked).length).toBe(10);\n\n    fireEvent.click(headerSort('Зарплата'));\n    expect(selectedLabel()).toBe('Выбрано: 11');\n    expect(rowCheckboxes().filter((c) => c.checked).length).toBe(10 - 0 >= 0 ? rowCheckboxes().filter((c) => c.checked).length : 0);\n  });\n\n  it('header checkbox deselects current page only', () => {\n    renderApp();\n    fireEvent.click(headerCheckbox());\n    fireEvent.click(screen.getByRole('button', { name: '2' }));\n    fireEvent.click(rowCheckboxes()[3]);\n    fireEvent.click(screen.getByRole('button', { name: '1' }));\n    fireEvent.click(headerCheckbox()); // uncheck page 1\n    expect(selectedLabel()).toBe('Выбрано: 1');\n  });\n\n  it('reset selection clears everything', () => {\n    renderApp();\n    fireEvent.click(headerCheckbox());\n    fireEvent.click(screen.getByRole('button', { name: '3' }));\n    fireEvent.click(rowCheckboxes()[0]);\n    expect(selectedLabel()).toBe('Выбрано: 11');\n    fireEvent.click(screen.getByText('Сбросить выбор'));\n    expect(selectedLabel()).toBe('Выбрано: 0');\n    expect(rowCheckboxes().some((c) => c.checked)).toBe(false);\n  });\n\n  it('respects initialPageSize and custom render', () => {\n    const cols: DataTableColumn<{ id: string; v: number }>[] = [\n      { id: 'v', name: 'Value', sortValue: (r) => r.v, render: (r) => `#${r.v}` },\n    ];\n    const data = Array.from({ length: 12 }, (_, i) => ({ id: `x${i}`, v: (i * 7) % 12 }));\n    render(<ThemeProvider theme=\"light\"><DataTable data={data} columns={cols} initialPageSize={5} /></ThemeProvider>);\n    expect(rowsOf().length).toBe(5);\n    expect(footer()).toBe('1–5 из 12');\n    fireEvent.click(headerSort('Value'));\n    expect(cellText(rowsOf()[0], 1)).toBe('#0');\n    fireEvent.click(screen.getByRole('button', { name: '3' }));\n    expect(footer()).toBe('11–12 из 12');\n    expect(rowsOf().length).toBe(2);\n  });\n});\nEOF\ntimeout 300 npx vitest run 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/dt-verify && sed -i \"s/test: { environment: 'jsdom', setupFiles: \\['.\\/setup.ts'\\] },/test: { environment: 'jsdom', setupFiles: ['.\\/setup.ts'], css: true, server: { deps: { inline: [\\/@gravity-ui\\/] } } },/\" vitest.config.ts && sed -i '/10 - 0 >= 0/d' src/verify.test.tsx && cat vitest.config.ts && timeout 300 npx vitest run 2>&1 | grep -v \"npm warn\" | tail -120",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/dt-verify && python3 - <<'EOF'\nimport re\np='src/verify.test.tsx'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"const footer = () => document.body.textContent!.match(/\\\\d+–\\\\d+ из \\\\d+/)?.[0];\",\n\"const textOf = (re: RegExp) => Array.from(document.querySelectorAll('*')).map((el) => el.textContent ?? '').find((t) => re.test(t) && el_exact(t));\\nconst el_exact = (t: string) => true;\\nconst footer = () => Array.from(document.querySelectorAll('*')).filter((el) => el.children.length === 0 && /^\\\\d+–\\\\d+ из \\\\d+$/.test(el.textContent ?? '')).map((el) => el.textContent)[0];\")\ns=s.replace(\"const selectedLabel = () => document.body.textContent!.match(/Выбрано: \\\\d+/)?.[0];\",\n\"const selectedLabel = () => Array.from(document.querySelectorAll('*')).filter((el) => el.children.length === 0 && /^Выбрано: \\\\d+$/.test(el.textContent ?? '')).map((el) => el.textContent)[0];\")\ns=s.replace(\"const textOf = (re: RegExp) => Array.from(document.querySelectorAll('*')).map((el) => el.textContent ?? '').find((t) => re.test(t) && el_exact(t));\\nconst el_exact = (t: string) => true;\\n\",\"\")\nopen(p,'w',encoding='utf-8').write(s)\nEOF\ngrep -n \"const footer\\|const selectedLabel\" src/verify.test.tsx; timeout 300 npx vitest run 2>&1 | grep -v \"npm warn\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/dt-verify && cat > /tmp/helpers.txt <<'EOF'\nconst leafTexts = () => Array.from(document.querySelectorAll('*')).filter((el) => el.children.length === 0).map((el) => el.textContent ?? '');\nconst footer = () => leafTexts().find((t) => /^\\d+–\\d+ из \\d+$/.test(t));\nconst selectedLabel = () => leafTexts().find((t) => /^Выбрано: \\d+$/.test(t));\nEOF\nsed -i -e '12,13d' src/verify.test.tsx && sed -i -e '11r /tmp/helpers.txt' src/verify.test.tsx && sed -n 8,16p src/verify.test.tsx && timeout 300 npx vitest run 2>&1 | grep -v \"npm warn\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist /tmp/helpers.txt && git status --short && npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"TSC EXIT: ${PIPESTATUS[0]}\"; wc -l src/*.ts src/*.tsx",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 48,
+      "outputTokens": 34091,
+      "cacheReadTokens": 1046168,
+      "cacheWriteTokens": 57784,
+      "totalTokens": 1138091
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

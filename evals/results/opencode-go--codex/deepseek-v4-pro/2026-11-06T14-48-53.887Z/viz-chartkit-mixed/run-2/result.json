@@ -1,0 +1,152 @@
+{
+  "status": "failed",
+  "duration": 372.712,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 29399,
+    "outputTokens": 8214,
+    "cacheReadTokens": 312944,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1608,
+    "totalTokens": 350557
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 19,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la /home/sandbox/workspace/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find /home/sandbox/workspace -type f -not -path '*/node_modules/*' -not -path '*/.git/*' | sort\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/package.json && echo \"---\" && cat /home/sandbox/workspace/tsconfig.json && echo \"---\" && cat /home/sandbox/workspace/index.html && echo \"---\" && cat /home/sandbox/workspace/src/main.tsx && echo \"---\" && cat /home/sandbox/workspace/src/App.tsx && echo \"---\" && cat /home/sandbox/workspace/vite.config.ts && echo \"---\" && cat /home/sandbox/workspace/__agent_eval__/run.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /home/sandbox/workspace/src/engines'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/types.ts << 'ENDOFFILE'\nexport interface ChartDataPoint {\n  timestamp: number;\n  value: number;\n  label?: string;\n}\n\nexport type ChartMode = 'sales' | 'monitoring';\n\nexport interface ChartWidgetProps {\n  data: ChartDataPoint[];\n  mode?: ChartMode;\n  title?: string;\n  height?: number;\n}\n\nexport interface ChartEngineProps {\n  data: ChartDataPoint[];\n  width: number;\n  height: number;\n  title?: string;\n}\nENDOFFILE\necho \\\"OK\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/engines/SalesChart.tsx << 'ENDOFFILE'\nimport React, { useMemo } from 'react';\nimport type { ChartEngineProps } from '../types';\n\nconst PADDING = { top: 20, right: 20, bottom: 40, left: 60 };\nconst COLORS = {\n  line: 'var(--g-color-line-positive, #3f86fa)',\n  fill: 'rgba(63, 134, 250, 0.12)',\n  axis: 'var(--g-color-line-generic, #ddd)',\n  text: 'var(--g-color-text-secondary, #888)',\n  grid: 'var(--g-color-line-generic, #eee)',\n};\n\nexport const SalesChart: React.FC<ChartEngineProps> = ({ data, width, height, title }) => {\n  const chartW = width - PADDING.left - PADDING.right;\n  const chartH = height - PADDING.top - PADDING.bottom;\n\n  const { path, areaPath, xTicks, yTicks } = useMemo(() => {\n    if (data.length < 2) return { path: '', areaPath: '', xTicks: [], yTicks: [] };\n\n    const xs = data.map((d) => d.timestamp);\n    const ys = data.map((d) => d.value);\n    const xMin = Math.min(...xs);\n    const xMax = Math.max(...xs);\n    const yMin = Math.min(...ys);\n    const yMax = Math.max(...ys);\n    const yRange = yMax - yMin || 1;\n\n    const scaleX = (v: number) => ((v - xMin) / (xMax - xMin || 1)) * chartW;\n    const scaleY = (v: number) => chartH - ((v - yMin) / yRange) * chartH;\n\n    const points = data.map((d) => \"'`${scaleX(d.timestamp).toFixed(2)},${scaleY(d.value).toFixed(2)}`);\n\n    const pathD = '\"'M' + points.join(' L');\n    const areaD = pathD + \"'` L${scaleX(data[data.length - 1].timestamp).toFixed(2)},${chartH} L${scaleX(data[0].timestamp).toFixed(2)},${chartH} Z`;\n\n    const tickCount = Math.min(6, data.length);\n    const xStep = (xMax - xMin) / (tickCount - 1 || 1);\n    const xTicksArr = Array.from({ length: tickCount }, (_, i) => xMin + i * xStep);\n\n    const yStep = yRange / (tickCount - 1 || 1);\n    const yTicksArr = Array.from({ length: tickCount }, (_, i) => yMin + i * yStep);\n\n    return { path: pathD, areaPath: areaD, xTicks: xTicksArr, yTicks: yTicksArr };\n  }, [data, chartW, chartH]);\n\n  return (\n    <div style={{ width, height, position: '\"'relative' }}>\n      {title && (\n        <div style={{ textAlign: 'center', fontWeight: 600, marginBottom: 8, fontSize: 14 }}>\n          {title}\n        </div>\n      )}\n      <svg width={width} height={height - (title ? 24 : 0)} viewBox={\"'`0 0 ${width} ${height - (title ? 24 : 0)}`}>\n        <g transform={`translate(${PADDING.left},${PADDING.top})`}>\n          {/* Y axis */}\n          <line x1={0} y1={0} x2={0} y2={chartH} stroke={COLORS.axis} strokeWidth={1} />\n          {/* X axis */}\n          <line x1={0} y1={chartH} x2={chartW} y2={chartH} stroke={COLORS.axis} strokeWidth={1} />\n\n          {/* Y ticks + grid */}\n          {yTicks.map((val, i) => {\n            const y = chartH - ((val - Math.min(...data.map((d) => d.value))) / (Math.max(...data.map((d) => d.value)) - Math.min(...data.map((d) => d.value)) || 1)) * chartH;\n            return (\n              <g key={`y-${i}`}>\n                <line x1={0} y1={y} x2={chartW} y2={y} stroke={COLORS.grid} strokeWidth={1} strokeDasharray=\"4 4\" />\n                <text x={-8} y={y + 4} textAnchor=\"end\" fontSize={11} fill={COLORS.text}>\n                  {val % 1 === 0 ? val : val.toFixed(1)}\n                </text>\n              </g>\n            );\n          })}\n\n          {/* X ticks */}\n          {xTicks.map((val, i) => {\n            const x = ((val - Math.min(...data.map((d) => d.timestamp))) / (Math.max(...data.map((d) => d.timestamp)) - Math.min(...data.map((d) => d.timestamp)) || 1)) * chartW;\n            return (\n              <text key={`x-${i}`} x={x} y={chartH + 20} textAnchor=\"middle\" fontSize={10} fill={COLORS.text}>\n                {new Date(val).toLocaleDateString('\"'ru-RU', { month: 'short', day: 'numeric' })}\n              </text>\n            );\n          })}\n\n          {/* Area fill */}\n          <path d={areaPath} fill={COLORS.fill} />\n\n          {/* Line */}\n          <path d={path} fill=\\\"none\\\" stroke={COLORS.line} strokeWidth={2} strokeLinejoin=\\\"round\\\" />\n\n          {/* Dots */}\n          {data.map((d, i) => {\n            const x = ((d.timestamp - Math.min(...data.map((dp) => dp.timestamp))) / (Math.max(...data.map((dp) => dp.timestamp)) - Math.min(...data.map((dp) => dp.timestamp)) || 1)) * chartW;\n            const y = chartH - ((d.value - Math.min(...data.map((dp) => dp.value))) / (Math.max(...data.map((dp) => dp.value)) - Math.min(...data.map((dp) => dp.value)) || 1)) * chartH;\n            return <circle key={i} cx={x} cy={y} r={3} fill={COLORS.line} />;\n          })}\n        </g>\n      </svg>\n    </div>\n  );\n};\nENDOFFILE\necho \\\"SalesChart done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/engines/MonitoringChart.tsx << 'ENDOFFILE'\nimport React, { useMemo } from 'react';\nimport type { ChartEngineProps } from '../types';\n\nconst PADDING = { top: 16, right: 16, bottom: 32, left: 56 };\nconst COLORS = {\n  area: 'rgba(255, 109, 80, 0.18)',\n  line: '#ff6d50',\n  axis: 'var(--g-color-line-generic, #ddd)',\n  text: 'var(--g-color-text-secondary, #888)',\n  grid: 'var(--g-color-line-generic, #eee)',\n  spike: 'rgba(255, 109, 80, 0.35)',\n};\n\nexport const MonitoringChart: React.FC<ChartEngineProps> = ({ data, width, height, title }) => {\n  const chartW = width - PADDING.left - PADDING.right;\n  const chartH = height - PADDING.top - PADDING.bottom;\n\n  const { path, areaPath, xTicks, yTicks, stats } = useMemo(() => {\n    if (data.length < 2) return { path: '', areaPath: '', xTicks: [], yTicks: [], stats: null };\n\n    const timestamps = data.map((d) => d.timestamp);\n    const values = data.map((d) => d.value);\n    const xMin = Math.min(...timestamps);\n    const xMax = Math.max(...timestamps);\n    const yMin = Math.min(...values);\n    const yMax = Math.max(...values);\n    const yRange = yMax - yMin || 1;\n\n    const scaleX = (v: number) => ((v - xMin) / (xMax - xMin || 1)) * chartW;\n    const scaleY = (v: number) => chartH - ((v - yMin) / yRange) * chartH;\n\n    const points = data.map((d) => \"'`${scaleX(d.timestamp).toFixed(2)},${scaleY(d.value).toFixed(2)}`);\n    const pathD = '\"'M' + points.join(' L');\n    const areaD = pathD + \"'` L${scaleX(data[data.length - 1].timestamp).toFixed(2)},${chartH} L${scaleX(data[0].timestamp).toFixed(2)},${chartH} Z`;\n\n    const tickCount = 5;\n    const yStep = yRange / (tickCount - 1 || 1);\n    const yTicksArr = Array.from({ length: tickCount }, (_, i) => yMin + i * yStep);\n\n    const xTickCount = Math.min(6, data.length);\n    const xStep = (xMax - xMin) / (xTickCount - 1 || 1);\n    const xTicksArr = Array.from({ length: xTickCount }, (_, i) => xMin + i * xStep);\n\n    const avg = values.reduce((s, v) => s + v, 0) / values.length;\n    const peak = Math.max(...values);\n    const peakIdx = values.indexOf(peak);\n\n    return { path: pathD, areaPath: areaD, xTicks: xTicksArr, yTicks: yTicksArr, stats: { avg, peak, peakIdx } };\n  }, [data, chartW, chartH]);\n\n  const headerH = title ? 22 : 0;\n\n  return (\n    <div style={{ width, height, position: '\"'relative', fontFamily: 'monospace' }}>\n      {stats && (\n        <div\n          style={{\n            display: 'flex',\n            gap: 16,\n            fontSize: 11,\n            padding: '2px 4px',\n            color: 'var(--g-color-text-secondary, #888)',\n            position: 'absolute',\n            top: 0,\n            right: PADDING.right,\n            zIndex: 1,\n          }}\n        >\n          <span>avg: {stats.avg.toFixed(1)}</span>\n          <span>peak: {stats.peak}</span>\n        </div>\n      )}\n      <svg width={width} height={height - headerH} viewBox={\"'`0 0 ${width} ${height - headerH}`}>\n        <g transform={`translate(${PADDING.left},${PADDING.top})`}>\n          {/* Y axis */}\n          <line x1={0} y1={0} x2={0} y2={chartH} stroke={COLORS.axis} strokeWidth={1} />\n\n          {/* Y ticks + dense grid */}\n          {yTicks.map((val, i) => {\n            const y = chartH - ((val - Math.min(...data.map((d) => d.value))) / (Math.max(...data.map((d) => d.value)) - Math.min(...data.map((d) => d.value)) || 1)) * chartH;\n            return (\n              <g key={`y-${i}`}>\n                <line x1={0} y1={y} x2={chartW} y2={y} stroke={COLORS.grid} strokeWidth={0.5} strokeDasharray=\"2 4\" />\n                <text x={-6} y={y + 4} textAnchor=\"end\" fontSize={10} fill={COLORS.text}>\n                  {val % 1 === 0 ? val : val.toFixed(1)}\n                </text>\n              </g>\n            );\n          })}\n\n          {/* X ticks */}\n          {xTicks.map((val, i) => {\n            const x = ((val - Math.min(...data.map((d) => d.timestamp))) / (Math.max(...data.map((d) => d.timestamp)) - Math.min(...data.map((d) => d.timestamp)) || 1)) * chartW;\n            return (\n              <text key={`x-${i}`} x={x} y={chartH + 16} textAnchor=\"middle\" fontSize={9} fill={COLORS.text}>\n                {new Date(val).toLocaleTimeString('\"'ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}\n              </text>\n            );\n          })}\n\n          {/* Area fill */}\n          <path d={areaPath} fill={COLORS.area} />\n\n          {/* Line */}\n          <path d={path} fill=\\\"none\\\" stroke={COLORS.line} strokeWidth={1.5} strokeLinejoin=\\\"round\\\" />\n\n          {/* Spike marker at peak */}\n          {stats && (\n            <g>\n              <line\n                x1={((data[stats.peakIdx].timestamp - Math.min(...data.map((d) => d.timestamp))) / (Math.max(...data.map((d) => d.timestamp)) - Math.min(...data.map((d) => d.timestamp)) || 1)) * chartW}\n                y1={chartH - ((stats.peak - Math.min(...data.map((d) => d.value))) / (Math.max(...data.map((d) => d.value)) - Math.min(...data.map((d) => d.value)) || 1)) * chartH}\n                x2={((data[stats.peakIdx].timestamp - Math.min(...data.map((d) => d.timestamp))) / (Math.max(...data.map((d) => d.timestamp)) - Math.min(...data.map((d) => d.timestamp)) || 1)) * chartW}\n                y2={chartH}\n                stroke={COLORS.spike}\n                strokeWidth={1}\n                strokeDasharray=\\\"3 2\\\"\n              />\n            </g>\n          )}\n        </g>\n      </svg>\n    </div>\n  );\n};\nENDOFFILE\necho \\\"MonitoringChart done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/ChartWidget.tsx << 'ENDOFFILE'\nimport React, { Suspense, useState, useMemo } from 'react';\nimport { RadioButton } from '@gravity-ui/uikit';\nimport type { ChartWidgetProps, ChartMode } from './types';\n\nconst SalesEngine = React.lazy(() =>\n  import('./engines/SalesChart').then((m) => ({ default: m.SalesChart })),\n);\n\nconst MonitoringEngine = React.lazy(() =>\n  import('./engines/MonitoringChart').then((m) => ({ default: m.MonitoringChart })),\n);\n\nconst FALLBACK = (\n  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 260 }}>\n    <span style={{ color: 'var(--g-color-text-secondary, #888)', fontSize: 13 }}>Загрузка…</span>\n  </div>\n);\n\nexport const ChartWidget: React.FC<ChartWidgetProps> = ({\n  data,\n  mode: initialMode = 'sales',\n  title = 'Продажи по дням',\n  height = 300,\n}) => {\n  const [mode, setMode] = useState<ChartMode>(initialMode);\n\n  const width = 800;\n\n  const options = useMemo(\n    () => [\n      { value: 'sales' as const, content: 'Продажи' },\n      { value: 'monitoring' as const, content: 'Мониторинг' },\n    ],\n    [],\n  );\n\n  const engineTitle = mode === 'sales' ? title : title.replace('Продажи', 'Мониторинг');\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n      <RadioButton value={mode} onUpdate={(v) => setMode(v as ChartMode)} options={options} />\n      <Suspense fallback={FALLBACK}>\n        {mode === 'sales' ? (\n          <SalesEngine data={data} width={width} height={height} title={engineTitle} />\n        ) : (\n          <MonitoringEngine data={data} width={width} height={height} title={engineTitle} />\n        )}\n      </Suspense>\n    </div>\n  );\n};\nENDOFFILE\necho \\\"ChartWidget done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'ENDOFFILE'\nimport React, { useMemo } from 'react';\nimport { ChartWidget } from './ChartWidget';\nimport type { ChartDataPoint } from './types';\n\nconst NOW = Date.now();\nconst DAY = 86_400_000;\nconst HOUR = 3_600_000;\n\nfunction makeSalesData(): ChartDataPoint[] {\n  return Array.from({ length: 14 }, (_, i) => ({\n    timestamp: NOW - (13 - i) * DAY,\n    value: Math.round(120 + Math.random() * 80 + Math.sin(i * 0.6) * 30),\n    label: \"'`День ${i + 1}`,\n  }));\n}\n\nfunction makeMonitoringData(): ChartDataPoint[] {\n  return Array.from({ length: 60 }, (_, i) => ({\n    timestamp: NOW - (59 - i) * HOUR,\n    value: Math.round(50 + Math.random() * 40 + Math.sin(i * 0.4) * 15),\n    label: `T${i}`,\n  }));\n}\n\nexport function App() {\n  const salesData = useMemo(makeSalesData, []);\n  const monitoringData = useMemo(makeMonitoringData, []);\n\n  return (\n    <div style={{ padding: 24, display: '\"'flex', flexDirection: 'column', gap: 32 }}>\n      <ChartWidget data={salesData} mode=\\\"sales\\\" title=\\\"Продажи по дням\\\" height={300} />\n      <ChartWidget data={monitoringData} mode=\\\"monitoring\\\" title=\\\"Загрузка CPU (мониторинг)\\\" height={260} />\n    </div>\n  );\n}\nENDOFFILE\necho \\\"App done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cd /home/sandbox/workspace && node -e \\\"const u=require('@gravity-ui/uikit'); console.log(Object.keys(u).filter(k=>k.includes('adio')).join('\\\\n'))\\\" 2>&1 || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && grep -r \"export\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cd /home/sandbox/workspace && grep -i \\\"radio\\\\|button\\\\|switch\\\\|toggle\\\\|segment\\\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && grep -A 15 \"ControlGroupProps\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -25'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/ChartWidget.tsx << 'ENDOFFILE'\nimport React, { Suspense, useState, useMemo } from 'react';\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\nimport type { ChartWidgetProps, ChartMode } from './types';\n\nconst SalesEngine = React.lazy(() =>\n  import('./engines/SalesChart').then((m) => ({ default: m.SalesChart })),\n);\n\nconst MonitoringEngine = React.lazy(() =>\n  import('./engines/MonitoringChart').then((m) => ({ default: m.MonitoringChart })),\n);\n\nconst FALLBACK = (\n  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 260 }}>\n    <span style={{ color: 'var(--g-color-text-secondary, #888)', fontSize: 13 }}>Загрузка…</span>\n  </div>\n);\n\nexport const ChartWidget: React.FC<ChartWidgetProps> = ({\n  data,\n  mode: initialMode = 'sales',\n  title = 'Продажи по дням',\n  height = 300,\n}) => {\n  const [mode, setMode] = useState<ChartMode>(initialMode);\n\n  const options = useMemo(\n    () => [\n      { value: 'sales', content: 'Продажи' },\n      { value: 'monitoring', content: 'Мониторинг' },\n    ],\n    [],\n  );\n\n  const engineTitle = mode === 'sales' ? title : title.replace('Продажи', 'Мониторинг');\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>\n      <SegmentedRadioGroup value={mode} onUpdate={(value) => setMode(value as ChartMode)} options={options} />\n      <Suspense fallback={FALLBACK}>\n        {mode === 'sales' ? (\n          <SalesEngine data={data} width={800} height={height} title={engineTitle} />\n        ) : (\n          <MonitoringEngine data={data} width={800} height={height} title={engineTitle} />\n        )}\n      </Suspense>\n    </div>\n  );\n};\nENDOFFILE\necho \\\"done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/src -type f | sort'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 29399,
+      "outputTokens": 8214,
+      "cacheReadTokens": 312944,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1608,
+      "totalTokens": 350557
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

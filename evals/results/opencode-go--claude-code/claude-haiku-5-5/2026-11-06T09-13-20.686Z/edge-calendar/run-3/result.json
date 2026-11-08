@@ -1,0 +1,154 @@
+{
+  "status": "passed",
+  "duration": 415.129,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 52,
+    "outputTokens": 11616,
+    "cacheReadTokens": 722476,
+    "cacheWriteTokens": 27434,
+    "totalTokens": 761578
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 17,
+    "toolCalls": {
+      "file_read": 4,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 23,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 28,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/index.html",
+      "/home/sandbox/workspace/vite.config.ts"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git ls-files | head -100 && cat package.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "ls node_modules 2>/dev/null | head -5; echo \"---\"; ls node_modules/@gravity-ui 2>/dev/null; echo \"---\"; cat tsconfig.json; echo \"---\"; cat .gitignore; echo \"---\"; node -v; npm -v",
+        "success": true
+      },
+      {
+        "command": "grep -o '\"[A-Za-z]*Calendar[A-Za-z]*\"\\|DatePicker' -r node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null | sort -u; ls node_modules/@gravity-ui/uikit/build/esm/components | head -80; echo \"---\"; ls node_modules/@gravity-ui | cat; ls node_modules | grep -i -E \"date|calendar|dayjs\" ",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/lab; timeout 60 npm view @gravity-ui/date-components version peerDependencies dependencies 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "timeout 90 npm view @gravity-ui/date-components versions --json 2>/dev/null | tail -40; for v in $(timeout 90 npm view @gravity-ui/date-components versions --json 2>/dev/null | tr -d '[],\"' | grep -E '^[0-9]' | sort -V | tail -40); do echo -n \"$v: \"; timeout 30 npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null | tr -d '\\n ' ; echo; done 2>/dev/null | grep -E \"uikit\" | head -40",
+        "success": true
+      },
+      {
+        "command": "for v in 2.12.0 3.0.3 3.2.4 3.4.2 4.0.0 4.1.0; do echo \"== $v\"; timeout 30 npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null | grep -E \"uikit|date-utils|react\\\"\" ; done",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -15; echo \"---\"; grep -A12 '\"dependencies\"' package.json",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components && cat package.json | grep -E '\"(main|module|types|style|exports)\"' ; ls; ls build 2>/dev/null | head; find . -name \"*.d.ts\" -path \"*DatePicker*\" | head -5; find . -name \"index.d.ts\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cat dist/esm/components/DatePicker/DatePicker.d.ts; echo \"=== index\"; cat dist/esm/index.d.ts; echo \"=== components\"; cat dist/esm/components/index.d.ts; echo \"=== css\"; grep -o '\"./[^\"]*css[^\"]*\"' package.json; ls dist/esm | head -30; echo \"=== peer/readme sample\"; grep -n -i -A12 \"DatePicker\" README.md | head -60",
+        "success": true
+      },
+      {
+        "command": "cat dist/esm/components/Calendar/Calendar.d.ts; echo \"=== common\"; cat dist/esm/components/Calendar/types.d.ts 2>/dev/null | head -80; ls dist/esm/components/Calendar/",
+        "success": true
+      },
+      {
+        "command": "cat dist/esm/components/CalendarView/hooks/useCalendarState.d.ts; echo \"=== types\"; cat dist/esm/components/CalendarView/hooks/types.d.ts | head -40; echo \"=== dateutils exports\"; cd /home/sandbox/workspace/node_modules/@gravity-ui/date-utils && grep -E '\"(main|types)\"' package.json; grep -rho \"export declare function dateTime[^;]*\" dist/esm 2>/dev/null | head -3; grep -rn \"export.*settings\" dist/esm/index.d.ts | head; grep -rho \"loadLocale[^;]*\" dist/esm/*.d.ts dist/esm/**/*.d.ts 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "grep -n \"dateTime\\|settings\" build/index.d.ts | head -20; echo \"---\"; grep -rn \"export declare const settings\\|loadLocale\" build/*.d.ts build/**/*.d.ts 2>/dev/null | head -5; echo \"--- uikit ThemeProvider lang\"; grep -n \"lang\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts 2>/dev/null | head; grep -rn \"lang\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme/*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components && grep -rn -A8 \"interface ValueBase\" dist/esm/components/types/*.d.ts | head -20; echo \"--- DateTime\"; cd ../date-utils && grep -rn \"format(\" build/dateTime/*.d.ts 2>/dev/null | head -5; ls build | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-utils/build && ls typings dateTime | head -30; grep -rn \"format\\|toDate\\|toISOString\" typings/*.d.ts | head -10",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 300 npx tsc --noEmit 2>&1 | tail -30; echo \"tsc exit: ${PIPESTATUS[0]}\"; timeout 300 npx vite build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; python3 -c \"import playwright\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && timeout 300 npm init -y >/dev/null && timeout 300 npm install playwright@1.49.1 2>&1 | tail -2 && timeout 400 npx playwright install chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 400 npx playwright install chromium 2>&1 | grep -v \"^\\s*at \" | head -15",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/ssr-check && cat > /tmp/ssr-check/entry.tsx <<'EOF'\nimport React from 'react';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\n\nconst html = renderToString(\n  <ThemeProvider theme=\"light\">\n    <App />\n  </ThemeProvider>,\n);\nconsole.log(html.length, 'chars rendered');\nconsole.log('has calendar grid:', /role=\"grid\"|gridcell/.test(html));\nconsole.log('has empty-state text:', html.includes('No date selected'));\nconsole.log('has heading:', html.includes('Select a date'));\nEOF\ntimeout 120 node node_modules/esbuild/bin/esbuild /tmp/ssr-check/entry.tsx --bundle --platform=node --format=esm --jsx=automatic --loader:.css=empty --outfile=/tmp/ssr-check/out.mjs --log-level=warning && timeout 60 node /tmp/ssr-check/out.mjs",
+        "success": false
+      },
+      {
+        "command": "cat > /tmp/ssr-check/build.mjs <<'EOF'\nimport { build } from '/home/sandbox/workspace/node_modules/esbuild/lib/main.js';\nawait build({\n  entryPoints: ['/tmp/ssr-check/entry.tsx'],\n  bundle: true,\n  platform: 'node',\n  format: 'esm',\n  jsx: 'automatic',\n  loader: { '.css': 'empty' },\n  outfile: '/tmp/ssr-check/out.mjs',\n  nodePaths: ['/home/sandbox/workspace/node_modules'],\n  logLevel: 'warning',\n});\nEOF\ntimeout 120 node /tmp/ssr-check/build.mjs && timeout 60 node /tmp/ssr-check/out.mjs 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s/format: 'esm'/format: 'cjs'/; s#outfile: '/tmp/ssr-check/out.mjs'#outfile: '/tmp/ssr-check/out.cjs'#\" /tmp/ssr-check/build.mjs && timeout 120 node /tmp/ssr-check/build.mjs && timeout 60 node /tmp/ssr-check/out.cjs 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/ssr-check/entry2.tsx <<'EOF'\nimport { dateTime } from '@gravity-ui/date-utils';\nconst d = dateTime({ input: new Date(2026, 10, 6) });\nconsole.log('formatted:', d.format('LL'));\nEOF\nsed \"s#/tmp/ssr-check/entry.tsx#/tmp/ssr-check/entry2.tsx#; s#/tmp/ssr-check/out.cjs#/tmp/ssr-check/out2.cjs#\" /tmp/ssr-check/build.mjs > /tmp/ssr-check/build2.mjs && timeout 120 node /tmp/ssr-check/build2.mjs && timeout 60 node /tmp/ssr-check/out2.cjs",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short && git diff --stat && git diff -- package.json && cat src/App.tsx",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 52,
+      "outputTokens": 11616,
+      "cacheReadTokens": 722476,
+      "cacheWriteTokens": 27434,
+      "totalTokens": 761578
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,439 @@
+/* ---------- Оболочка: боковая панель + контент ---------- */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-primary);
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ---------- Боковая навигация ---------- */
+
+.sidebar {
+  flex: 0 0 240px;
+  width: 240px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 8px;
+  border-right: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-background);
+  overflow: hidden;
+  transition: width 0.2s ease, flex-basis 0.2s ease;
+}
+
+.sidebar--collapsed {
+  flex-basis: 64px;
+  width: 64px;
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 8px;
+  margin-bottom: 12px;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.sidebar--collapsed .sidebar__brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar__logo {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--g-color-base-brand);
+  color: #fff;
+  font-weight: 700;
+}
+
+.sidebar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__item,
+.sidebar__toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--g-color-text-secondary);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sidebar__item:hover,
+.sidebar__toggle:hover {
+  background: var(--g-color-base-simple-hover);
+  color: var(--g-color-text-primary);
+}
+
+.sidebar__item[aria-current='page'] {
+  background: var(--g-color-base-selection);
+  color: var(--g-color-text-primary);
+  font-weight: 600;
+}
+
+.sidebar__item:focus-visible,
+.sidebar__toggle:focus-visible,
+.sidebar__logo:focus-visible {
+  outline: 2px solid var(--g-color-base-brand);
+  outline-offset: 2px;
+}
+
+.sidebar__toggle {
+  margin-top: auto;
+}
+
+/* В свёрнутом виде — только иконки по центру */
+.sidebar--collapsed .sidebar__item,
+.sidebar--collapsed .sidebar__toggle {
+  justify-content: center;
+  padding: 0;
+  gap: 0;
+}
+
+/* ---------- Страницы ---------- */
+
+.page {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px 28px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.page__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.page__subtitle {
+  margin: 0;
+  color: var(--g-color-text-secondary);
+  font-size: 14px;
+}
+
+/* Секция с таблицей забирает оставшуюся высоту экрана */
+.page__section {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.page__section-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.page__fill {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- KPI-плитки ---------- */
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.kpi__label {
+  color: var(--g-color-text-secondary);
+  font-size: 13px;
+}
+
+/* Крупное значение: пропорциональные цифры, без tabular-nums */
+.kpi__value {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.kpi__delta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.kpi__delta--good {
+  color: var(--g-color-text-positive);
+}
+
+.kpi__delta--bad {
+  color: var(--g-color-text-danger);
+}
+
+.kpi__delta--neutral {
+  color: var(--g-color-text-secondary);
+}
+
+.kpi__hint {
+  color: var(--g-color-text-secondary);
+  font-weight: 400;
+}
+
+/* ---------- Таблица заказов ---------- */
+
+.orders {
+  flex: 1 0 480px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  background: var(--g-color-base-background);
+  overflow: hidden;
+}
+
+.orders__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.orders__count {
+  color: var(--g-color-text-secondary);
+  font-size: 13px;
+}
+
+.orders__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.orders-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.orders-table th.is-draggable {
+  cursor: grab;
+}
+
+.orders-table th.is-draggable:focus-visible {
+  outline: 2px solid var(--g-color-base-brand);
+  outline-offset: -2px;
+}
+
+.orders-table th.is-dragging {
+  opacity: 0.45;
+}
+
+.orders-table th.drop-before {
+  box-shadow: inset 2px 0 0 var(--g-color-base-brand);
+}
+
+.orders-table th.drop-after {
+  box-shadow: inset -2px 0 0 var(--g-color-base-brand);
+}
+
+.th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.th-grip {
+  opacity: 0.35;
+}
+
+.orders-table th:hover .th-grip {
+  opacity: 0.8;
+}
+
+.align-end {
+  text-align: right !important;
+}
+
+/* Колонки с числами выравниваем по цифрам */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.orders-table tbody {
+  user-select: none;
+}
+
+.orders-table tbody tr {
+  cursor: pointer;
+}
+
+.orders-table tbody tr:hover td {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders-table tbody tr.is-selected td {
+  background: var(--g-color-base-selection);
+}
+
+.orders-table tbody tr.is-selected:hover td {
+  background: var(--g-color-base-selection-hover);
+}
+
+.cell-select,
+.orders-table thead th.cell-select {
+  width: 40px;
+  padding-right: 0;
+  cursor: default;
+}
+
+.select-box {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--g-color-base-brand);
+  cursor: pointer;
+}
+
+.empty-row {
+  padding: 32px;
+  text-align: center;
+  color: var(--g-color-text-secondary);
+  cursor: default;
+}
+
+/* Строка-заголовок группы */
+.orders-table tr.group-row,
+.orders-table tr.group-row:hover {
+  cursor: default;
+}
+
+.orders-table tr.group-row td,
+.orders-table tr.group-row:hover td {
+  padding: 0;
+  background: var(--g-color-base-neutral-light);
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.group-row__content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+}
+
+.group-row__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--g-color-text-primary);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.group-row__toggle:hover {
+  background: var(--g-color-base-simple-hover);
+}
+
+.group-row__toggle:focus-visible {
+  outline: 2px solid var(--g-color-base-brand);
+  outline-offset: 1px;
+}
+
+.group-row__title {
+  font-weight: 600;
+}
+
+.group-row__meta {
+  color: var(--g-color-text-secondary);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,152 @@
+{
+  "status": "passed",
+  "duration": 411.804,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 39975,
+    "outputTokens": 14992,
+    "cacheReadTokens": 445083,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 9303,
+    "totalTokens": 500050
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 12,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 19,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '\"'!node_modules'\"' | sed -n '1,80p' && printf '\\\\n--- top files ---\\\\n' && rg --files -g '\"'!node_modules'\"' | sed -n '1,80p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- config ---\\\\n' && cat vite.config.ts tsconfig.json index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' src/App.tsx && rg \\\"export .*Table\\\" node_modules/@gravity-ui/uikit/types/components -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"type TableColumnSortOrder|TableColumnSortState|type PaginationPage|onUpdate.*page|TableColumnSortOrder\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -40 && printf '\\\\n--- table types ---\\\\n' && rg \\\"ColumnConfig|sortState|onSortChange|useCheckboxForSelection|selectedIds\\\" node_modules/@gravity-ui/uikit/types -g '*.d.ts' | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.d.ts && printf '\\\\n--- selection ---\\\\n' && cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection/withTableSelection.d.ts && printf '\\\\n--- Table ---\\\\n' && cat node_modules/@gravity-ui/uikit/build/esm/components/Table/Table.d.ts && printf '\\\\n--- pagination types ---\\\\n' && cat node_modules/@gravity-ui/uikit/build/esm/components/Pagination/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Table/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"useCheckboxForSelection|selectionColumnId|onSelectionChange\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table -g '*.js' -n | head -40 && rg \\\"row.*selection|onSelectionChange\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection -g '*.js' -n\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection/withTableSelection.js | sed -n '70,125p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"withTableSelection|withTableSorting\" node_modules/@gravity-ui/uikit/build/esm/components/Table/index.js node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/index.js -n && cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/index.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.js | sed -n '1,220p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"tail -8 src/App.tsx && apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  return null;\n }\n*** End Patch\nPATCH\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || ls /usr/bin/apply_patch /usr/local/bin/apply_patch 2>/dev/null || true'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la /home/oai/bin 2>/dev/null || ls -la /root/bin 2>/dev/null || echo \"no extra bin\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find / -type f -name \"apply_patch\" -print 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i '130,133d' src/App.tsx && tail -8 src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 39975,
+      "outputTokens": 14992,
+      "cacheReadTokens": 445083,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 9303,
+      "totalTokens": 500050
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

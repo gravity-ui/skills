@@ -1,0 +1,18 @@
+// Gravity UI CSS imports are wired here; ThemeProvider lives inside I18nProvider
+// so that the selected language is also passed to Gravity UI components.
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+import { App } from './App';
+import { I18nProvider } from './i18n';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <I18nProvider>
+      <App />
+    </I18nProvider>
+  </React.StrictMode>,
+);

@@ -1,0 +1,128 @@
+{
+  "status": "passed",
+  "duration": 466.426,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 36,
+    "outputTokens": 15411,
+    "cacheReadTokens": 604115,
+    "cacheWriteTokens": 36113,
+    "totalTokens": 655675
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 17,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/ThemeRoot.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -100",
+        "success": true
+      },
+      {
+        "command": "grep -rniE \"theme|тема|dark|light\" --exclude-dir=node_modules --exclude-dir=.git . | head -50",
+        "success": true
+      },
+      {
+        "command": "for f in package.json index.html src/main.tsx src/App.tsx src/vite-env.d.ts vite.config.ts tsconfig.json .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; echo \"=== run.mjs\"; cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "node -v && npm -v && (npm ci 2>&1 | tail -5) && ls node_modules/@gravity-ui/uikit/build 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep -E '\"version\"' && ls build/esm/components/theme 2>/dev/null; find build/esm -iname \"*ThemeProvider*\" | head; find build/esm -path \"*theme*\" -name \"*.d.ts\" | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.js types.d.ts ThemeProvider.d.ts getRootClassName.js dom-helpers.js constants.js 2>/dev/null; cat index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat components/controls/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -60; ls components/controls | head -50; grep -rn \"SegmentedRadioGroup\" components/index.d.ts components/controls/index.d.ts 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup && ls && cat SegmentedRadioGroup.d.ts | head -60 && cat types.d.ts 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat controls/types.d.ts | head -60; cat SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i -E \"playwright|puppeteer\" ; echo \"---\") ; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && (npm init -y >/dev/null) && timeout 300 npm i playwright@1 2>&1 | tail -2 && timeout 300 npx playwright install --with-deps chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 400 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite preview --port 4173 --strictPort > /tmp/e2e/preview.log 2>&1 &) ; sleep 4; cat /tmp/e2e/preview.log; cat > /tmp/e2e/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\n\nconst URL = 'http://localhost:4173/';\nconst browser = await chromium.launch();\nconst page = await browser.newPage();\nconst errors = [];\npage.on('pageerror', (e) => errors.push(String(e)));\npage.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });\n\nconst bodyTheme = () => page.evaluate(() => [...document.body.classList].filter((c) => c.includes('theme')).join(' '));\nconst checked = () => page.evaluate(() => {\n  const el = document.querySelector('input[name=\"theme\"]:checked');\n  return el ? el.value : null;\n});\nconst stored = () => page.evaluate(() => localStorage.getItem('theme'));\nconst results = [];\nconst check = (name, cond, extra = '') => results.push(`${cond ? 'PASS' : 'FAIL'} ${name} ${extra}`);\n\nawait page.goto(URL);\nawait page.waitForSelector('input[name=\"theme\"]', { state: 'attached' });\ncheck('initial: default light body class', (await bodyTheme()).includes('root_theme_light'), `[${await bodyTheme()}]`);\ncheck('initial: light option checked', (await checked()) === 'light', `[${await checked()}]`);\ncheck('initial: nothing stored yet', (await stored()) === null);\n\nawait page.locator('label', { hasText: 'Тёмная' }).click();\nawait page.waitForTimeout(200);\ncheck('click dark: body class dark', (await bodyTheme()).includes('root_theme_dark'), `[${await bodyTheme()}]`);\ncheck('click dark: stored', (await stored()) === 'dark', `[${await stored()}]`);\nconst bgDark = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);\ncheck('click dark: body background changed', bgDark !== 'rgb(255, 255, 255)', bgDark);\n\nawait page.reload();\nawait page.waitForSelector('input[name=\"theme\"]', { state: 'attached' });\ncheck('reload: dark restored on body', (await bodyTheme()).includes('root_theme_dark'), `[${await bodyTheme()}]`);\ncheck('reload: dark option checked', (await checked()) === 'dark', `[${await checked()}]`);\n\nawait page.locator('label', { hasText: 'Системная' }).click();\nawait page.waitForTimeout(200);\ncheck('click system: stored', (await stored()) === 'system');\nawait page.reload();\nawait page.waitForSelector('input[name=\"theme\"]', { state: 'attached' });\ncheck('reload: system restored', (await checked()) === 'system', `[${await checked()}]`);\n\nawait page.evaluate(() => localStorage.setItem('theme', 'purple'));\nawait page.reload();\nawait page.waitForSelector('input[name=\"theme\"]', { state: 'attached' });\ncheck('invalid stored value: falls back to light', (await checked()) === 'light' && (await bodyTheme()).includes('root_theme_light'), `[${await checked()}]`);\n\ncheck('no page/console errors', errors.length === 0, errors.join(' | '));\n\nconsole.log(results.join('\\n'));\nawait browser.close();\nEOF\ncd /tmp/e2e && node check.mjs",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/e2e && H=/home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell; ldd $H | grep \"not found\"; mkdir -p /tmp/e2e/libs && cd /tmp/e2e/libs && timeout 120 apt-get download libglib2.0-0t64 libglib2.0-0 2>&1 | tail -2; ls",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite preview\" 2>/dev/null; cat > /tmp/e2e/storage-check.mjs <<'EOF'\nconst mem = new Map();\nglobalThis.localStorage = {\n  getItem: (k) => (mem.has(k) ? mem.get(k) : null),\n  setItem: (k, v) => mem.set(k, String(v)),\n};\nconst { loadThemeChoice, saveThemeChoice, THEME_STORAGE_KEY } = await import('/home/sandbox/workspace/src/theme.ts');\nconst out = [];\nconst eq = (name, a, b) => out.push(`${a === b ? 'PASS' : 'FAIL'} ${name}: got ${JSON.stringify(a)}`);\neq('empty storage -> light', loadThemeChoice(), 'light');\nsaveThemeChoice('dark');\neq('stored dark is persisted under key', mem.get(THEME_STORAGE_KEY), 'dark');\neq('load after save -> dark', loadThemeChoice(), 'dark');\nsaveThemeChoice('system');\neq('load after save -> system', loadThemeChoice(), 'system');\nmem.set(THEME_STORAGE_KEY, 'purple');\neq('invalid value -> light', loadThemeChoice(), 'light');\nglobalThis.localStorage = { getItem() { throw new Error('denied'); }, setItem() { throw new Error('denied'); } };\neq('storage throws on read -> light', loadThemeChoice(), 'light');\nlet threw = false; try { saveThemeChoice('dark'); } catch { threw = true; }\neq('storage throws on write -> no exception', threw, false);\nconsole.log(out.join('\\n'));\nEOF\ncd /tmp/e2e && node --experimental-strip-types storage-check.mjs 2>&1 | grep -v ExperimentalWarning",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && pkill -f \"vite preview\" 2>/dev/null; git status --short && git diff --stat && npx tsc --noEmit && echo TSC_OK",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36,
+      "outputTokens": 15411,
+      "cacheReadTokens": 604115,
+      "cacheWriteTokens": 36113,
+      "totalTokens": 655675
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

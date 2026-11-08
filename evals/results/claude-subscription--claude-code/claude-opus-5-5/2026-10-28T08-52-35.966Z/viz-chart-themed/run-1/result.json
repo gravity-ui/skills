@@ -1,0 +1,110 @@
+{
+  "status": "failed",
+  "duration": 373.419,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.312 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 13885,
+    "cacheReadTokens": 411820,
+    "cacheWriteTokens": 34085,
+    "totalTokens": 459816
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 2,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/ThemedLineChart.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files | head -100 && cat package.json 2>/dev/null && cat CLAUDE.md README* 2>/dev/null | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore; ls node_modules | head -50; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "S=/tmp/claude-1000/bundled-skills/2.1.312/00bafcfd17c86a083078e55677845021/dataviz; cat $S/references/palette.md; sed -n 1,200p $S/references/marks-and-anatomy.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls; ls build/esm/components/theme 2>/dev/null; grep -o -- '--g-color-[a-z0-9-]*' styles/styles.css | sort -u | grep -E 'text-(primary|secondary|complementary|hint)|line-generic|base-background|base-float|private-(blue|orange|green|purple|red|yellow|cool-grey)-[0-9]+-solid' | head -80",
+        "success": true
+      },
+      {
+        "command": "cat build/esm/components/theme/useThemeType.d.ts build/esm/components/theme/types.d.ts build/esm/components/theme/getThemeType.js; grep -n \"useThemeType\\|useTheme\\b\" build/esm/index.d.ts build/esm/components/theme/index.d.ts | head; grep -oE '\\.g-root_theme_(light|dark)[^{]*\\{[^}]*' styles/styles.css | grep -oE '(g-root_theme_[a-z-]+|--g-color-(base-background|text-(primary|secondary|complementary|hint)|line-generic|line-generic-solid|base-float|line-generic-accent):[^;]+)' | head -60",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\ncss=open('styles/styles.css').read()\nfor m in re.finditer(r'([^{}]*g-root_theme_(?:light|dark)\\b[^{}]*)\\{([^}]*)\\}',css):\n    sel=m.group(1).strip()[-80:]\n    body=m.group(2)\n    for v in ['base-background','text-primary','text-secondary','text-complementary','text-hint','line-generic','line-generic-solid','base-generic']:\n        mm=re.search(r'--g-color-'+v+r':\\s*([^;]+);',body)\n        if mm: print(sel,'|',v,mm.group(1))\nEOF",
+        "success": false
+      },
+      {
+        "command": "node -e '\nconst css=require(\"fs\").readFileSync(\"styles/styles.css\",\"utf8\");\nconst re=/([^{}]*g-root_theme_(?:light|dark)\\b[^{}]*)\\{([^}]*)\\}/g;let m;\nwhile((m=re.exec(css))){const sel=m[1].trim().slice(-70);for(const v of [\"base-background\",\"text-primary\",\"text-secondary\",\"text-complementary\",\"text-hint\",\"line-generic\",\"line-generic-solid\",\"base-float\",\"private-blue-550-solid\",\"private-orange-550-solid\"]){const r=new RegExp(\"--g-color-\"+v+\":\\\\s*([^;]+);\");const mm=m[2].match(r);if(mm)console.log(sel,\"|\",v,mm[1]);}}\n'",
+        "success": true
+      },
+      {
+        "command": "S=/tmp/claude-1000/bundled-skills/2.1.312/00bafcfd17c86a083078e55677845021/dataviz/scripts; node $S/validate_palette.js \"#2a78d6,#eb6834\" --mode light --surface \"#ffffff\"; node $S/validate_palette.js \"#3987e5,#d95926\" --mode dark --surface \"#221d22\"; node $S/validate_palette.js \"#3987e5,#d95926\" --mode dark --surface \"#121112\"",
+        "success": true
+      },
+      {
+        "command": "grep -oE '\\b(Table|SegmentedRadioGroup|Card|Text|Flex)\\b' build/esm/index.d.ts build/esm/components/index.d.ts | sort -u; sed -n 1,80p build/esm/components/Table/Table.d.ts | grep -n \"interface\\|data\\|columns\\|name\\|align\\|id:\" | head -30; grep -oE -- '--g-(shadow|text-body-font-family|border-radius-[a-z]+)[a-z-]*' styles/styles.css | sort -u | head",
+        "success": true
+      },
+      {
+        "command": "S=/tmp/claude-1000/bundled-skills/2.1.312/00bafcfd17c86a083078e55677845021/dataviz/scripts; node $S/validate_palette.js \"#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#6250d6,#e34948\" --mode light --surface \"#ffffff\" | head -8; node $S/validate_palette.js \"#3987e5,#d95926,#199e70,#c98500,#d55181,#008300,#9085e9,#e66767\" --mode dark --surface \"#221d22\" | head -8",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -15; ls node_modules/.bin | grep -iE 'playwright|puppeteer'; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace && ls node_modules | grep -iE 'jsdom|happy-dom|testing-library'; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && sed -i \"s/const MARGIN = { top: 12, right: 96,/const MARGIN = { top: 12, right: 112,/; s/style={{ display: 'block', overflow: 'visible', outline: 'none' }}/style={{ display: 'block', overflow: 'visible' }}/\" src/ThemedLineChart.tsx && grep -n \"MARGIN = \\|display: 'block'\" src/ThemedLineChart.tsx && npx tsc --noEmit && echo TSC_OK",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 13885,
+      "cacheReadTokens": 411820,
+      "cacheWriteTokens": 34085,
+      "totalTokens": 459816
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

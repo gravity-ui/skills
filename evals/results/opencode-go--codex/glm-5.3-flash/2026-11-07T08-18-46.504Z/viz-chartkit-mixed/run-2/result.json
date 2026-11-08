@@ -1,0 +1,395 @@
+{
+  "status": "failed",
+  "duration": 431.624,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 57700,
+    "outputTokens": 11434,
+    "cacheReadTokens": 2166016,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 140,
+    "totalTokens": 2235150
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 68,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 68,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App.tsx ---\\\\n' && sed -n '1,240p' src/App.tsx && printf '\\\\n--- main.tsx ---\\\\n' && cat src/main.tsx && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!node_modules'\"' .\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/chartkit@latest --save && npm view @gravity-ui/chartkit version && rg \"chartkit\" package-lock.json | head'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @gravity-ui/chartkit@8 version peerDependencies --json | tail -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/chartkit@8.12.0 --save && npm view @gravity-ui/chartkit@8.12.0 dependencies --json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node - <<'NODE'\nconst pkg = require('./node_modules/@gravity-ui/chartkit/package.json');\nconsole.log(JSON.stringify(pkg.exports, null, 2));\nNODE\nrg \\\"declare module '@gravity-ui/chartkit|export .*Yagr|type ChartKit\\\" node_modules/@gravity-ui/chartkit -g '*.d.ts' -n | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/types/index.d.ts && printf '\\\\n--- chartkit component ---\\\\n' && cat node_modules/@gravity-ui/chartkit/build/components/ChartKit.d.ts && printf '\\\\n--- yagr types ---\\\\n' && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts && printf '\\\\n--- yagr widget ---\\\\n' && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/YagrWidget.d.ts && printf '\\\\n--- package dts ---\\\\n' && find node_modules/@gravity-ui/chartkit/build -maxdepth 2 -name 'index.d.ts' -print -exec cat {} \\\\;\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/types/widget.d.ts 2>/dev/null || rg -n \\\"interface ChartKitWidget|type ChartKitWidget\\\" node_modules/@gravity-ui/chartkit/build/types -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"interface MinimalValidConfig|type MinimalValidConfig|interface RawSerieData\\\" node_modules/@gravity-ui/yagr -g '*.d.ts' -n && sed -n '1,220p' node_modules/@gravity-ui/yagr/dist/types/types.d.ts 2>/dev/null | sed -n '1,220p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,190p' node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts && rg -n \\\"interface RawSerieData|type RawSerieData\\\" node_modules/@gravity-ui/yagr/dist -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '280,340p' node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts && rg -n \\\"type:.*'line'|LineSeriesOptions\\\" node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts | head -20 && sed -n '150,235p' node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/visualization/types.ts\n+export type VisualizationMode = 'sales' | 'monitoring';\n+\n+export type SalesPoint = {\n+  date: string;\n+  revenue: number;\n+  orders: number;\n+};\n+\n+export type MonitoringPoint = {\n+  timestamp: number;\n+  responseTimeMs: number;\n+  cpuLoad: number;\n+};\n+\n+export type VisualizationData = {\n+  sales: SalesPoint[];\n+  monitoring: MonitoringPoint[];\n+};\n+\n+export type VisualizationWidgetProps = {\n+  mode: VisualizationMode;\n+  data: VisualizationData;\n+  className?: string;\n+};\n*** Add File: src/visualization/data.ts\n+import type { VisualizationData } from './types';\n+\n+export const visualizationData: VisualizationData = {\n+  sales: Array.from({length: 14}, (_, index) => {\n+    const date = new Date(Date.UTC(2026, 9, index + 1));\n+    const weeklyGrowth = Math.sin(index / 3) * 18000;\n+    const trend = index * 12000;\n+\n+    return {\n+      date: date.toISOString().slice(0, 10),\n+      revenue: Math.round(120000 + trend + weeklyGrowth),\n+      orders: Math.round(220 + index * 18 + Math.sin(index / 2) * 45),\n+    };\n+  }),\n+  monitoring: Array.from({length: 720}, (_, index) => {\n+    const timestamp = Date.UTC(2026, 10, 7, 10, 0) + index * 1000;\n+    const loadWave = Math.sin(index / 24) * 18;\n+    const spike = index % 180 > 170 ? 340 : 0;\n+\n+    return {\n+      timestamp,\n+      responseTimeMs: Math.round(92 + loadWave * 1.4 + spike + Math.sin(index / 7) * 11),\n+      cpuLoad: Number((48 + loadWave + spike / 12).toFixed(1)),\n+    };\n+  }),\n+};\n*** Add File: src/visualization/sales-chart.tsx\n+import {ChartKit} from '@gravity-ui/chartkit';\n+import type {SalesPoint} from './types';\n+\n+type SalesChartProps = {\n+  data: SalesPoint[];\n+  className?: string;\n+};\n+\n+export function SalesChart({data, className}: SalesChartProps) {\n+  const timeline = data.map((point) => Date.parse(point.date));\n+\n+  return (\n+    <div className={className}>\n+      <ChartKit\n+        type=\\\"yagr\\\"\n+        id=\\\"sales-line-chart\\\"\n+        data={{\n+          timeline,\n+          graphs: [\n+            {\n+              id: 'revenue',\n+              name: 'Выручка, ₽',\n+              type: 'line',\n+              color: '#3f80ed',\n+              data: data.map((point) => point.revenue),\n+            },\n+            {\n+              id: 'orders',\n+              name: 'Заказы',\n+              type: 'line',\n+              color: '#25b387',\n+              data: data.map((point) => point.orders),\n+            },\n+          ],\n+        }}\n+        libraryConfig={{\n+          title: {text: 'Продажи за две недели'},\n+          chart: {\n+            series: {type: 'line', width: 2},\n+            appearance: {theme: 'light', locale: 'ru'},\n+          },\n+          axes: {\n+            x: {type: 'category', time: true},\n+          },\n+        }}\n+      />\n+    </div>\n+  );\n+}\n*** Add File: src/visualization/monitoring-chart.tsx\n+import {ChartKit} from '@gravity-ui/chartkit';\n+import type {MonitoringPoint} from './types';\n+\n+type MonitoringChartProps = {\n+  data: MonitoringPoint[];\n+  className?: string;\n+};\n+\n+export function MonitoringChart({data, className}: MonitoringChartProps) {\n+  const timeline = data.map((point) => point.timestamp);\n+\n+  return (\n+    <div className={className}>\n+      <ChartKit\n+        type=\\\"yagr\\\"\n+        id=\\\"monitoring-time-series\\\"\n+        data={{\n+          timeline,\n+          timeZone: 'UTC',\n+          graphs: [\n+            {\n+              id: 'response-time',\n+              name: 'Время ответа, мс',\n+              type: 'line',\n+              color: '#ed573f',\n+              data: data.map((point) => point.responseTimeMs),\n+            },\n+            {\n+              id: 'cpu-load',\n+              name: 'Нагрузка CPU, %',\n+              type: 'line',\n+              color: '#a855f7',\n+              data: data.map((point) => point.cpuLoad),\n+            },\n+          ],\n+        }}\n+        libraryConfig={{\n+          title: {text: 'Мониторинг: высокая плотность точек'},\n+          chart: {\n+            series: {type: 'line', width: 1},\n+            appearance: {theme: 'light', locale: 'ru'},\n+          },\n+          axes: {\n+            x: {type: 'time'},\n+          },\n+        }}\n+      />\n+    </div>\n+  );\n+}\n*** Add File: src/visualization/VisualizationWidget.tsx\n+import {Suspense, lazy, useState} from 'react';\n+import {SegmentedRadioGroup, Spinner} from '@gravity-ui/uikit';\n+import type {VisualizationMode, VisualizationWidgetProps} from './types';\n+\n+const SalesChart = lazy(() => import('./sales-chart').then((module) => ({default: module.SalesChart})));\n+const MonitoringChart = lazy(() =>\n+  import('./monitoring-chart').then((module) => ({default: module.MonitoringChart})),\n+);\n+\n+const modes: Array<{value: VisualizationMode; label: string}> = [\n+  {value: 'sales', label: 'Продажи'},\n+  {value: 'monitoring', label: 'Мониторинг'},\n+];\n+\n+export function VisualizationWidget({mode, data, className}: VisualizationWidgetProps) {\n+  const [selectedMode, setSelectedMode] = useState<VisualizationMode>(mode);\n+  const activeMode = selectedMode ?? mode;\n+\n+  return (\n+    <section className={className}>\n+      <SegmentedRadioGroup\n+        name=\\\"visualization-mode\\\"\n+        value={activeMode}\n+        onUpdate={(value) => setSelectedMode(value as VisualizationMode)}\n+      >\n+        {modes.map(({value, label}) => (\n+          <SegmentedRadioGroup.Option key={value} value={value} content={label} />\n+        ))}\n+      </SegmentedRadioGroup>\n+\n+      <div className=\\\"visualization-chart-container\\\">\n+        <Suspense fallback={<Spinner size=\\\"m\\\" />}>\n+          {activeMode === 'sales' ? (\n+            <SalesChart data={data.sales} />\n+          ) : (\n+            <MonitoringChart data={data.monitoring} />\n+          )}\n+        </Suspense>\n+      </div>\n+    </section>\n+  );\n+}\n*** Update File: src/App.tsx\n@@\n-export function App() {\n-  return <div style={{padding: 24}}>{/* TODO: implement the requested component */}</div>;\n+import {VisualizationWidget} from './visualization/VisualizationWidget';\n+import {visualizationData} from './visualization/data';\n+\n+export function App() {\n+  return (\n+    <div style={{padding: 24}}>\n+      <VisualizationWidget data={visualizationData} mode=\\\"sales\\\" />\n+    </div>\n+  );\n }\n*** End Patch\nPATCH\ncat > src/visualization/visualization.css <<'CSS'\n.visualization-chart-container {\n  margin-top: 16px;\n  min-height: 360px;\n  display: grid;\n  align-items: center;\n}\n\n.visualization-chart-container > div {\n  width: 100%;\n  height: 360px;\n}\nCSS\n\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'which -a apply_patch || find / -name apply_patch -type f -perm -111 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mkdir -p src/visualization\ncat > src/visualization/types.ts <<'EOF'\nexport type VisualizationMode = 'sales' | 'monitoring';\n\nexport type SalesPoint = {\n  date: string;\n  revenue: number;\n  orders: number;\n};\n\nexport type MonitoringPoint = {\n  timestamp: number;\n  responseTimeMs: number;\n  cpuLoad: number;\n};\n\nexport type VisualizationData = {\n  sales: SalesPoint[];\n  monitoring: MonitoringPoint[];\n};\n\nexport type VisualizationWidgetProps = {\n  mode: VisualizationMode;\n  data: VisualizationData;\n  className?: string;\n};\nEOF\ncat > src/visualization/data.ts <<'EOF'\nimport type {VisualizationData} from './types';\n\nexport const visualizationData: VisualizationData = {\n  sales: Array.from({length: 14}, (_, index) => {\n    const date = new Date(Date.UTC(2026, 9, index + 1));\n    const weeklyGrowth = Math.sin(index / 3) * 18000;\n    const trend = index * 12000;\n\n    return {\n      date: date.toISOString().slice(0, 10),\n      revenue: Math.round(120000 + trend + weeklyGrowth),\n      orders: Math.round(220 + index * 18 + Math.sin(index / 2) * 45),\n    };\n  }),\n  monitoring: Array.from({length: 720}, (_, index) => {\n    const timestamp = Date.UTC(2026, 10, 7, 10, 0) + index * 1000;\n    const loadWave = Math.sin(index / 24) * 18;\n    const spike = index % 180 > 170 ? 340 : 0;\n\n    return {\n      timestamp,\n      responseTimeMs: Math.round(92 + loadWave * 1.4 + spike + Math.sin(index / 7) * 11),\n      cpuLoad: Number((48 + loadWave + spike / 12).toFixed(1)),\n    };\n  }),\n};\nEOF\ncat > src/visualization/sales-chart.tsx <<'EOF'\nimport {ChartKit} from '@gravity-ui/chartkit';\nimport type {SalesPoint} from './types';\n\ntype SalesChartProps = {\n  data: SalesPoint[];\n  className?: string;\n};\n\nexport function SalesChart({data, className}: SalesChartProps) {\n  const timeline = data.map((point) => Date.parse(point.date));\n\n  return (\n    <div className={className}>\n      <ChartKit\n        type=\\\"yagr\\\"\n        id=\\\"sales-line-chart\\\"\n        data={{\n          timeline,\n          graphs: [\n            {\n              id: 'revenue',\n              name: 'Выручка, ₽',\n              type: 'line',\n              color: '#3f80ed',\n              data: data.map((point) => point.revenue),\n            },\n            {\n              id: 'orders',\n              name: 'Заказы',\n              type: 'line',\n              color: '#25b387',\n              data: data.map((point) => point.orders),\n            },\n          ],\n        }}\n        libraryConfig={{\n          title: {text: 'Продажи за две недели'},\n          chart: {\n            series: {type: 'line', width: 2},\n            appearance: {theme: 'light', locale: 'ru'},\n          },\n          axes: {\n            x: {type: 'category', time: true},\n          },\n        }}\n      />\n    </div>\n  );\n}\nEOF\ncat > src/visualization/monitoring-chart.tsx <<'EOF'\nimport {ChartKit} from '@gravity-ui/chartkit';\nimport type {MonitoringPoint} from './types';\n\ntype MonitoringChartProps = {\n  data: MonitoringPoint[];\n  className?: string;\n};\n\nexport function MonitoringChart({data, className}: MonitoringChartProps) {\n  const timeline = data.map((point) => point.timestamp);\n\n  return (\n    <div className={className}>\n      <ChartKit\n        type=\\\"yagr\\\"\n        id=\\\"monitoring-time-series\\\"\n        data={{\n          timeline,\n          timeZone: 'UTC',\n          graphs: [\n            {\n              id: 'response-time',\n              name: 'Время ответа, мс',\n              type: 'line',\n              color: '#ed573f',\n              data: data.map((point) => point.responseTimeMs),\n            },\n            {\n              id: 'cpu-load',\n              name: 'Нагрузка CPU, %',\n              type: 'line',\n              color: '#a855f7',\n              data: data.map((point) => point.cpuLoad),\n            },\n          ],\n        }}\n        libraryConfig={{\n          title: {text: 'Мониторинг: высокая плотность точек'},\n          chart: {\n            series: {type: 'line', width: 1},\n            appearance: {theme: 'light', locale: 'ru'},\n          },\n          axes: {\n            x: {type: 'time'},\n          },\n        }}\n      />\n    </div>\n  );\n}\nEOF\ncat > src/visualization/VisualizationWidget.tsx <<'EOF'\nimport {Suspense, lazy, useState} from 'react';\nimport {SegmentedRadioGroup, Spinner} from '@gravity-ui/uikit';\nimport type {VisualizationMode, VisualizationWidgetProps} from './types';\n\nconst SalesChart = lazy(() => import('./sales-chart').then((module) => ({default: module.SalesChart})));\nconst MonitoringChart = lazy(() =>\n  import('./monitoring-chart').then((module) => ({default: module.MonitoringChart})),\n);\n\nconst modes: Array<{value: VisualizationMode; label: string}> = [\n  {value: 'sales', label: 'Продажи'},\n  {value: 'monitoring', label: 'Мониторинг'},\n];\n\nexport function VisualizationWidget({mode, data, className}: VisualizationWidgetProps) {\n  const [selectedMode, setSelectedMode] = useState<VisualizationMode>(mode);\n  const activeMode = selectedMode ?? mode;\n\n  return (\n    <section className={className}>\n      <SegmentedRadioGroup\n        name=\\\"visualization-mode\\\"\n        value={activeMode}\n        onUpdate={(value) => setSelectedMode(value as VisualizationMode)}\n      >\n        {modes.map(({value, label}) => (\n          <SegmentedRadioGroup.Option key={value} value={value} content={label} />\n        ))}\n      </SegmentedRadioGroup>\n\n      <div className=\\\"visualization-chart-container\\\">\n        <Suspense fallback={<Spinner size=\\\"m\\\" />}>\n          {activeMode === 'sales' ? (\n            <SalesChart data={data.sales} />\n          ) : (\n            <MonitoringChart data={data.monitoring} />\n          )}\n        </Suspense>\n      </div>\n    </section>\n  );\n}\nEOF\ncat > src/visualization/visualization.css <<'EOF'\n.visualization-chart-container {\n  margin-top: 16px;\n  min-height: 360px;\n  display: grid;\n  align-items: center;\n}\n\n.visualization-chart-container > div {\n  width: 100%;\n  height: 360px;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {VisualizationWidget} from './visualization/VisualizationWidget';\nimport {visualizationData} from './visualization/data';\nimport './visualization/visualization.css';\n\nexport function App() {\n  return (\n    <div style={{padding: 24}}>\n      <VisualizationWidget data={visualizationData} mode=\\\"sales\\\" />\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"export .*Loader|function Loader|const Loader\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -10 && sed -n '1,50p' node_modules/@gravity-ui/uikit/esm/components/Loader/Loader.d.ts 2>/dev/null\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/import {ChartKit} from '@gravity-ui\\\\/chartkit';/import ChartKit from '@gravity-ui\\\\/chartkit';/\\\" src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nsed -i \\\"s/import {SegmentedRadioGroup, Spinner}/import {Loader, SegmentedRadioGroup}/; s/<Spinner size=\\\\\\\"m\\\\\\\" \\\\/>/<Loader size=\\\\\\\"m\\\\\\\" \\\\/>/\\\" src/visualization/VisualizationWidget.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/        data=>\\\\{\\\\n          timeline,\\\\n          graphs: \\\\[/        data=>\\\\{\\\\n          graphs: \\\\[/g\\\" src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nperl -0pi -e \\\"s/        libraryConfig=>\\\\{\\\\n          title:/        libraryConfig=>\\\\{\\\\n          timeline,\\\\n          title:/g\\\" src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/          timeline,\\\\n          graphs:/          graphs:/g\\\" src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nperl -0pi -e \\\"s/        libraryConfig=\\\\{\\\\{/        libraryConfig=\\\\{\\\\{\\\\n          timeline,/g\\\" src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '10,52p' src/visualization/sales-chart.tsx && printf '\\\\n---\\\\n' && sed -n '10,54p' src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'grep -n \"''^<script'\"\\\\|\"'^</script'\"\\\\|\"'^ *graphs:\" src/visualization/sales-chart.tsx | head -5; grep -n \"''^<script'\"\\\\|\"'^</script'\"\\\\|\"'^ *graphs:\" src/visualization/monitoring-chart.tsx | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '14,24p' src/visualization/sales-chart.tsx; sed -n '14,24p' src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'grep -n \"graphs\" src/visualization/sales-chart.tsx | head -10; grep -n \"graphs\" src/visualization/monitoring-chart.tsx | head -10'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' src/visualization/sales-chart.tsx; sed -n '1,84p' src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/useWidgetData.d.ts && rg -n \\\"libraryConfig\\\" node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/YagrWidget.js | head -20 && sed -n '30,90p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/YagrWidget.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/useWidgetData.js && sed -n '1,35p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/YagrWidget.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"export type YagrWidgetData\\\" node_modules/@gravity-ui/chartkit -g '*.d.ts' && rg -n \\\"graphs\\\" node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/utils.js | head -20 && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/utils.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,50p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' tsconfig.json && sed -n '1,100p' node_modules/@gravity-ui/yagr/dist/index.d.ts && rg \\\"declare module '@gravity-ui/yagr'|export type \\\\*|export \\\\* from './types\\\" node_modules/@gravity-ui/yagr -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts && head -1 node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts && npx tsc --traceResolution --noEmit 2>&1 | rg \\\"Resolving module '@gravity-ui/yagr'|Module resolution kind|url '.*yagr\\\" | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx tsc --noEmit --pretty false 2>&1 | head -20 && cat node_modules/@gravity-ui/yagr/package.json | head -80 && cat node_modules/uplot/package.json | head -50 2>/dev/null || echo no-uplot'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npx tsc --traceResolution --noEmit 2>&1 | rg -A25 \\\"Resolving module '@gravity-ui/yagr' from '/home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts'\\\" | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npx tsc --noEmit --pretty false 2>&1 | sed -n '1,80p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"YagrWidgetData\\\" node_modules/@gravity-ui/chartkit/build -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"declare module '@gravity-ui/yagr'|uplot\\\" node_modules/@gravity-ui/chartkit/build -g '*.d.ts' | head -30 && ls node_modules/@gravity-ui/chartkit/build/plugins/yagr && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/polyfills.d.ts 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'head -30 node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.d.ts && grep -n \"polyfills\" node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.js | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.js && sed -n '1,120p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer -maxdepth 1 -type f -printf '%f\\\\n' | sort && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.d.ts 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx tsc --noEmit --pretty false --extendedDiagnostics 2>&1 | rg \"YagrWidgetData|Object literal|Modules|Types\" | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"matchMedia\\\" node_modules/@gravity-ui/yagr/dist -g '*.d.ts' | head -10 && sed -n '1,80p' node_modules/@gravity-ui/yagr/dist/react.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"matchMedia|declare global\\\" node_modules/@gravity-ui/yagr/dist -g '*.d.ts' | head -20 && rg -n \\\"matchMedia|declare global\\\" node_modules/uplot/dist/uPlot.d.ts | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"matchMedia\\\" node_modules -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.d.ts && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer && cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/polyfills.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"YagrPlugin|ChartKit\\\" src && sed -n '1,20p' src/visualization/sales-chart.tsx && sed -n '1,20p' src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/data={{/data={{\\\\n          data: {/' src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\npython3 - <<'PY'\nfrom pathlib import Path\nfor path_name in ['src/visualization/sales-chart.tsx', 'src/visualization/monitoring-chart.tsx']:\n    path = Path(path_name)\n    text = path.read_text()\n    text = text.replace(\\\"        libraryConfig={{\\\\n\\\", \\\"          },\\\\n          libraryConfig: {\\\\n\\\", 1)\n    # Indent all lines after libraryConfig until closing of the libraryConfig block\n    lines = text.splitlines(keepends=True)\n    start_idx = next((idx for idx, line in enumerate(lines) if 'libraryConfig: {' in line), None)\n    if start_idx is not None:\n        indent_level = 10\n        closing_idx = next((idx for idx in range(start_idx, len(lines)) if lines[idx].startswith('        }}')), None)\n        if closing_idx is not None:\n            for idx in range(start_idx + 1, closing_idx + 1):\n                if lines[idx].strip():\n                    lines[idx] = '  ' + lines[idx]\n                else:\n                    lines[idx] = lines[idx]\n            lines[closing_idx] = lines[closing_idx].replace('        }}', '          },\\\\n        }}')\n        path.write_text(''.join(lines))\nPY\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '12,48p' src/visualization/sales-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/fix_charts.mjs <<'EOF'\nimport fs from 'fs';\n\nfor (const path of ['src/visualization/sales-chart.tsx', 'src/visualization/monitoring-chart.tsx']) {\n  let text = fs.readFileSync(path, 'utf8');\n  text = text.replace(\\\"          data: {\\\\n\\\", \\\"          data: {\\\\n\\\");\n  text = text.replace(\\\"          ],\\\\n        }}\\\\n\\\", \\\"          ],\\\\n          },\\\\n        }}\\\\n\\\");\n  text = text.replace(\\\"        libraryConfig={{\\\\n\\\", \\\"          libraryConfig: {\\\\n\\\");\n  // Indent all lines after libraryConfig until closing of the libraryConfig block\n  const lines = text.split('\\\\n');\n  const startIdx = lines.findIndex((line) => line.startsWith('          libraryConfig: {'));\n  const closingIdx = lines.findIndex((line, index) => index > startIdx && line.startsWith('        }}'));\n  if (startIdx \"'!== -1 && closingIdx !== -1) {\n    for (let index = startIdx + 1; index < closingIdx; index += 1) {\n      if (lines[index].trim()) {\n        lines[index] = `  ${lines[index]}`;\n      }\n    }\n    lines[closingIdx] = '\"'          },\\\\n        }}';\n    fs.writeFileSync(path, lines.join('\\\\n'));\n  }\n}\nEOF\nnode /tmp/fix_charts.mjs\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '10,52p' src/visualization/sales-chart.tsx && sed -n '12,54p' src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/repair_charts.mjs <<'EOF'\nimport fs from 'fs';\n\nfor (const path of ['src/visualization/sales-chart.tsx', 'src/visualization/monitoring-chart.tsx']) {\n  let text = fs.readFileSync(path, 'utf8');\n  text = text.replace('        data={{\\\\n          data: {', '        data={{\\\\n          data: {');\n  text = text.replace('        }}\\\\n          libraryConfig: {', '          },\\\\n          libraryConfig: {');\n  // Remove the extra \"'`}}` that remains after the libraryConfig object.\n  text = text.replace('\"'          },\\\\n        }}\\\\n      />', '          },\\\\n        }}\\\\n      />');\n  fs.writeFileSync(path, text);\n}\nEOF\nnode /tmp/repair_charts.mjs\nsed -n '30,48p' src/visualization/sales-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/finalize_charts.mjs <<'EOF'\nimport fs from 'fs';\n\nfor (const path of ['src/visualization/sales-chart.tsx', 'src/visualization/monitoring-chart.tsx']) {\n  let text = fs.readFileSync(path, 'utf8');\n  // Remove the duplicated inner \"'`},` immediately before the real `libraryConfig: {`.\n  text = text.replace('\"'          },\\\\n          },\\\\n          libraryConfig: {', '          },\\\\n          libraryConfig: {');\n  fs.writeFileSync(path, text);\n}\nEOF\nnode /tmp/finalize_charts.mjs\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '30,46p' src/visualization/sales-chart.tsx && rg -n \\\"interface AxisOptions|export interface AxisOptions\\\" node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i '/x: {type: '\\\\''category'\\\\'', time: true},/d' src/visualization/sales-chart.tsx\nsed -i '/x: {type: '\\\\''time'\\\\''},/d' src/visualization/monitoring-chart.tsx\n# Remove the now-empty axes blocks for both charts.\nsed -i '/\"'^          axes: {$/,/''^          },$/{/''^          axes: {$/d;/''^          },$/d}'\"' src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx\nsed -i 's/        data={{\\\\n          data: {/        data={{\\\\n          data: {\\\\n            timeline,/' src/visualization/sales-chart.tsx\n# Add timeline to the sales chart manually.\nsed -i '0,/          data: {/s//          data: {\\\\n            timeline,/' src/visualization/sales-chart.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'grep -n \"as VisualizationMode\" src/visualization/VisualizationWidget.tsx && grep -n \"onUpdate\" src/visualization/VisualizationWidget.tsx && cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/ControlGroup/ControlGroup.d.ts | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"ControlGroupProps\\\" node_modules/@gravity-ui/uikit/build/esm/components -g '*.d.ts' | head -10\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/onUpdate={(value) => setSelectedMode(value as VisualizationMode)}/onUpdate={setSelectedMode}/' src/visualization/VisualizationWidget.tsx\nsed -i 's/<SegmentedRadioGroup\"'$/<SegmentedRadioGroup<VisualizationMode>/'\"' src/visualization/VisualizationWidget.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' src/visualization/VisualizationWidget.tsx && printf '\\\\n--- sales ---\\\\n' && cat src/visualization/sales-chart.tsx && printf '\\\\n--- monitoring ---\\\\n' && cat src/visualization/monitoring-chart.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/visualization/sales-chart.tsx <<'EOF'\nimport ChartKit from '@gravity-ui/chartkit';\nimport type {SalesPoint} from './types';\n\ntype SalesChartProps = {\n  data: SalesPoint[];\n  className?: string;\n};\n\nexport function SalesChart({data, className}: SalesChartProps) {\n  const timeline = data.map((point) => Date.parse(point.date));\n\n  return (\n    <div className={className}>\n      <ChartKit\n        type=\\\"yagr\\\"\n        id=\\\"sales-line-chart\\\"\n        data={{\n          data: {\n            timeline,\n            graphs: [\n              {\n                id: 'revenue',\n                name: 'Выручка, ₽',\n                type: 'line',\n                color: '#3f80ed',\n                data: data.map((point) => point.revenue),\n              },\n              {\n                id: 'orders',\n                name: 'Заказы',\n                type: 'line',\n                color: '#25b387',\n                data: data.map((point) => point.orders),\n              },\n            ],\n          },\n          libraryConfig: {\n            timeline,\n            title: {text: 'Продажи за две недели'},\n            chart: {\n              series: {type: 'line', width: 2},\n              appearance: {theme: 'light', locale: 'ru'},\n            },\n          },\n        }}\n      />\n    </div>\n  );\n}\nEOF\ncat > src/visualization/monitoring-chart.tsx <<'EOF'\nimport ChartKit from '@gravity-ui/chartkit';\nimport type {MonitoringPoint} from './types';\n\ntype MonitoringChartProps = {\n  data: MonitoringPoint[];\n  className?: string;\n};\n\nexport function MonitoringChart({data, className}: MonitoringChartProps) {\n  const timeline = data.map((point) => point.timestamp);\n\n  return (\n    <div className={className}>\n      <ChartKit\n        type=\\\"yagr\\\"\n        id=\\\"monitoring-time-series\\\"\n        data={{\n          data: {\n            timeline,\n            timeZone: 'UTC',\n            graphs: [\n              {\n                id: 'response-time',\n                name: 'Время ответа, мс',\n                type: 'line',\n                color: '#ed573f',\n                data: data.map((point) => point.responseTimeMs),\n              },\n              {\n                id: 'cpu-load',\n                name: 'Нагрузка CPU, %',\n                type: 'line',\n                color: '#a855f7',\n                data: data.map((point) => point.cpuLoad),\n              },\n            ],\n          },\n          libraryConfig: {\n            timeline,\n            title: {text: 'Мониторинг: высокая плотность точек'},\n            chart: {\n              series: {type: 'line', width: 1},\n              appearance: {theme: 'light', locale: 'ru'},\n            },\n          },\n        }}\n      />\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx vite --port 5173 --host 127.0.0.1'"
+      },
+      {
+        "command": "/bin/bash -lc \"curl -s -o /dev/null -w '%{http_code}\\\\n' http://127.0.0.1:5173/ && curl -s http://127.0.0.1:5173/src/App.tsx | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --stat && git diff -- src/visualization/VisualizationWidget.tsx src/visualization/sales-chart.tsx src/visualization/monitoring-chart.tsx src/App.tsx | sed -n '1,220p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short && ls src/visualization'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -mindepth 1 -maxdepth 1 -exec rm -r {} + && npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -mindepth 1 -maxdepth 1 -exec rm -r {} +'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/visualization/VisualizationWidget.tsx | sed -n '1,80p'; printf '\\\\n--- sales ---\\\\n'; nl -ba src/visualization/sales-chart.tsx | sed -n '1,80p'; printf '\\\\n--- monitoring ---\\\\n'; nl -ba src/visualization/monitoring-chart.tsx | sed -n '1,80p'; printf '\\\\n--- types ---\\\\n'; nl -ba src/visualization/types.ts\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 57700,
+      "outputTokens": 11434,
+      "cacheReadTokens": 2166016,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 140,
+      "totalTokens": 2235150
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

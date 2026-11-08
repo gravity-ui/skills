@@ -1,0 +1,196 @@
+{
+  "status": "failed",
+  "duration": 916.967,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 36568,
+    "outputTokens": 30879,
+    "cacheReadTokens": 1622272,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 3475,
+    "totalTokens": 1689719
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 29,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 29,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'README*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g 'vite.config.*' -g 'tsconfig.json'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la; cat package.json; cat src/App.tsx; cat src/main.tsx; find .. -name AGENTS.md -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install react-markdown remark-gfm'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat tsconfig.json; cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/TextInput/TextInput.d.ts; cat .gitignore'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) {try {console.log(p,import.meta.resolve(p))} catch {}}\\\"; ls /tmp; cat index.html; git diff --stat\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/stroka-browser-check playwright'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc '/tmp/stroka-browser-check/node_modules/.bin/playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short; rg --files /usr/bin | rg 'chrom|firefox'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/stroka-browser-check/check.mjs <<'EOF'\nimport {chromium} from 'playwright';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless:true,args:['--no-sandbox']});\nconst page = await browser.newPage({viewport:{width:1440,height:1080}});\nconst errors=[];\npage.on('pageerror', error => errors.push(error.message));\nawait page.goto('http://localhost:5174');\nawait page.evaluate(() => document.fonts.ready);\nawait page.screenshot({path:'/tmp/stroka-desktop.png',fullPage:true});\nconsole.log('Initial dimensions:', await page.locator('.editor-frame').boundingBox());\nconst source=page.locator('#markdown-content');\nconst preview=page.getByRole('article',{name:'Предпросмотр Markdown'});\nawait source.fill('# Проверка\\\\n\\\\n**Жирный** и *курсив*\\\\n\\\\n- пункт\\\\n\\\\n> Цитата\\\\n\\\\n[Ссылка](https://example.com)\\\\n\\\\n~~убрать~~\\\\n\\\\n- [x] Сделано\\\\n\\\\n| А | Б |\\\\n| --- | --- |\\\\n| 1 | 2 |\\\\n\\\\n\"'```js'\"\\\\nconst x = 1;\\\\n\"'```'\"');\nassert.equal(await preview.locator('h1').textContent(),'Проверка');\nassert.equal(await preview.locator('strong').textContent(),'Жирный');\nassert.equal(await preview.locator('em').textContent(),'курсив');\nassert.equal(await preview.locator('blockquote').textContent(),'\\\\nЦитата\\\\n');\nassert.equal(await preview.locator('a').getAttribute('href'),'https://example.com');\nassert.equal(await preview.locator('del').textContent(),'убрать');\nassert.equal(await preview.locator('table').count(),1);\nassert.equal(await preview.locator('input[type=\\\"checkbox\\\"]:checked').count(),1);\nassert.equal(await preview.locator('pre code').textContent(),'const x = 1;\\\\n');\nawait source.fill('<script>window.markdownExecuted = true</script>\\\\n\\\\n[unsafe](javascript:alert(1))');\nassert.equal(await preview.locator('script').count(),0);\nassert.equal(await page.evaluate(()=>window.markdownExecuted),undefined);\nassert.notEqual(await preview.locator('a').getAttribute('href'),'javascript:alert(1)');\nawait source.fill('Выделенный текст');\nawait source.evaluate(el=>el.setSelectionRange(0,10));\nawait page.getByRole('button',{name:'Жирный (Ctrl+B)',exact:true}).click();\nassert.equal(await source.inputValue(),'**Выделенный** текст');\nawait source.fill('курсив');\nawait source.selectText();\nawait page.keyboard.press('Control+i');\nassert.equal(await source.inputValue(),'*курсив*');\nawait page.getByRole('button',{name:'Только предпросмотр',exact:true}).click();\nassert.equal(await source.count(),0);\nassert.equal(await preview.locator('em').textContent(),'курсив');\nawait page.getByRole('button',{name:'Редактор и предпросмотр',exact:true}).click();\nawait source.fill('');\nassert.equal(await preview.getByText('Здесь появится ваш текст').count(),1);\nawait page.getByRole('button',{name:'Готово',exact:true}).click();\nassert.equal(await page.getByRole('alert').textContent(),'Напишите текст публикации');\nawait source.fill('# Сохранённый текст\\\\n\\\\n**Содержимое черновика**');\nawait page.locator('#publication-title').fill('Тестовый черновик');\nawait page.getByRole('button',{name:'Сохранить черновик',exact:true}).click();\nawait page.reload();\nassert.equal(await page.locator('#publication-title').inputValue(),'Тестовый черновик');\nassert.equal(await source.inputValue(),'# Сохранённый текст\\\\n\\\\n**Содержимое черновика**');\nawait page.getByRole('button',{name:/Мои черновики/}).click();\nassert.equal(await page.locator('.draft-item strong').textContent(),'Тестовый черновик');\nawait page.getByRole('button',{name:'Закрыть',exact:true}).click();\nawait page.getByRole('button',{name:'Шпаргалка по Markdown',exact:true}).click();\nassert.equal(await page.locator('.cheatsheet>div').count(),12);\nawait page.keyboard.press('Escape');\nawait page.getByRole('button',{name:'Готово',exact:true}).click();\nassert.equal(await page.locator('.document-dialog h2').textContent(),'Тестовый черновик');\nconst downloaded = page.waitForEvent('download');\nawait page.getByRole('button',{name:'Скачать .md',exact:true}).click();\nassert.equal((await downloaded).suggestedFilename(),'Тестовый черновик.md');\nawait page.getByRole('button',{name:'Закрыть',exact:true}).click();\nfor(const width of [390,768,1024]) {\n  await page.setViewportSize({width,height:844});\n  const dimensions=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth}));\n  assert.ok(dimensions.scroll<=dimensions.width,\"'`Overflow at ${width}: ${dimensions.scroll}`);\n}\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'\"'/tmp/stroka-mobile.png',fullPage:true});\nassert.deepEqual(errors,[]);\nconsole.log('PASS: live Markdown, GFM, safe rendering, selection formatting, keyboard shortcuts, view switching, validation, draft persistence, help, download and responsive layout.');\nawait browser.close();\nEOF\nnpx --yes prettier --write src/App.tsx src/styles.css index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'g-button|--g-font|source-panel|article|textarea' src/styles.css; cat .gitignore; git diff --check\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg 'g-text-body-font-family|g-font-family-sans' node_modules/@gravity-ui/uikit/styles/styles.css | head -10; ls /root/.cache/ms-playwright /home/node/.cache/ms-playwright 2>/dev/null\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files /home/node/.cache/ms-playwright/chromium-1254 | rg '/chrome\"'$'\"'; sed -n '1,80p' node_modules/@gravity-ui/uikit/styles/styles.css; cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/headless:true,args/headless:true,executablePath:'\\\\/home\\\\/node\\\\/.cache\\\\/ms-playwright\\\\/chromium-1254\\\\/chrome-linux-arm64\\\\/chrome',args/\\\" /tmp/stroka-browser-check/check.mjs\nnode /tmp/stroka-browser-check/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc '/tmp/stroka-browser-check/node_modules/.bin/playwright install-deps chromium'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat /etc/os-release; ldd /home/node/.cache/ms-playwright/chromium-1254/chrome-linux-arm64/chrome | rg 'not found'; command -v apt-get; ls -d /usr/lib/*-linux-gnu\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/stroka-browser-libs/debs\ncd /tmp/stroka-browser-libs/debs\napt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libcups2 libxkbcommon0 libasound2 libgbm1 libcairo2 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for deb in /tmp/stroka-browser-libs/debs/*.deb; do dpkg-deb -x \"$deb\" /tmp/stroka-browser-libs/root; done\nLD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium-1254/chrome-linux-arm64/chrome | rg '\"'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/stroka-browser-libs/debs\napt-get download libavahi-common3 libavahi-client3 libdrm2 libwayland-server0 libpixman-1-0 libfontconfig1 libfreetype6 libpng16-16 libxcb-shm0 libxcb-render0 libxrender1 libfribidi0 libthai0 libharfbuzz0b libxi6 libgraphite2-3 libdatrie1 libbrotli1\nfor deb in /tmp/stroka-browser-libs/debs/*.deb; do dpkg-deb -x \"$deb\" /tmp/stroka-browser-libs/root; done\nLD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/stroka-browser-libs/root/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium-1254/chrome-linux-arm64/chrome | rg '\"'not found'\""
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/await source.selectText();/await source.evaluate(el=>el.select());/' /tmp/stroka-browser-check/check.mjs\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/stroka-browser-libs/root/lib/aarch64-linux-gnu node /tmp/stroka-browser-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/stroka-browser-libs/root/lib/aarch64-linux-gnu node /tmp/stroka-browser-check/check.mjs 2>&1 | tail -35'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/stroka-browser-libs/root/lib/aarch64-linux-gnu node /tmp/stroka-browser-check/check.mjs > /tmp/stroka-browser-check/browser.log 2>&1\nrg -n 'FATAL|ERROR|Check failed|Fontconfig|font' /tmp/stroka-browser-check/browser.log | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -an 'FATAL|ERROR|Check failed|Fontconfig|font' /tmp/stroka-browser-check/browser.log | head -25; rg --files /home/node/.cache/ms-playwright/chromium_headless_shell-1254 | rg 'headless_shell\"'$'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -an 'FATAL|Check failed|Received signal' /tmp/stroka-browser-check/browser.log; ls /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls /tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu/lib* | rg 'nss|softokn|freebl'; ldd /tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu/libsoftokn3.so | rg 'not found'; ls -ld /home/node /home/node/.pki; ls /usr/share/fonts; env | rg '\"'^HOME'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/stroka-browser-libs/debs\napt-get download libsqlite3-0 fontconfig-config fonts-dejavu-core\nfor deb in /tmp/stroka-browser-libs/debs/*.deb; do dpkg-deb -x \"$deb\" /tmp/stroka-browser-libs/root; done\nmkdir -p /tmp/stroka-browser-libs/fonts\ncat > /tmp/stroka-browser-libs/fonts/fonts.conf <<'\"'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/tmp/stroka-browser-libs/root/usr/share/fonts</dir><cachedir>/tmp/stroka-browser-libs/fontcache</cachedir></fontconfig>\nEOF\nFONTCONFIG_PATH=/tmp/stroka-browser-libs/fonts LD_LIBRARY_PATH=/tmp/stroka-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/stroka-browser-libs/root/lib/aarch64-linux-gnu node /tmp/stroka-browser-check/check.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'event.key|const key' src/App.tsx; git diff --check; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36568,
+      "outputTokens": 30879,
+      "cacheReadTokens": 1622272,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 3475,
+      "totalTokens": 1689719
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

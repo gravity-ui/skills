@@ -1,0 +1,168 @@
+{
+  "status": "passed",
+  "duration": 443.953,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 58,
+    "outputTokens": 18518,
+    "cacheReadTokens": 1779452,
+    "cacheWriteTokens": 66137,
+    "totalTokens": 1864165
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 17,
+    "toolCalls": {
+      "file_read": 5,
+      "file_write": 1,
+      "file_edit": 1,
+      "shell": 26,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 33,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/references/package-routing.md",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/rules/hallucination-traps.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/package.json"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && cat package.json 2>/dev/null; ls -la; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat AGENTS.md && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/ && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -30",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/markdown-editor version peerDependencies dependencies 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/markdown-editor 2>&1 | tail -40; echo \"---\"; git status --short; echo \"---\"; node -e 'for (const p of [\"@gravity-ui/markdown-editor\",\"@gravity-ui/components\",\"@gravity-ui/uikit\",\"@gravity-ui/icons\"]) { try { console.log(p, require(\"./node_modules/\"+p+\"/package.json\").version) } catch(e) { console.log(p, \"MISSING\") } }'",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/components@4 peerDependencies --json 2>/dev/null | grep -B1 -A0 'uikit' | tail -60",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/components@4 version peerDependencies --json 2>/dev/null | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{const a=JSON.parse(s);for(const e of a){const u=e.peerDependencies?.[\"@gravity-ui/uikit\"];if(u)console.log(e.version,u)}})' | tail -25",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/components@4.23.1 @gravity-ui/markdown-editor 2>&1 | grep -v 'npm warn Unknown env' | tail -40; echo \"---\"; node -e 'for (const p of [\"@gravity-ui/markdown-editor\",\"@gravity-ui/components\",\"@gravity-ui/uikit\",\"@gravity-ui/icons\",\"@diplodoc/transform\",\"markdown-it\",\"katex\",\"lowlight\",\"highlight.js\",\"react\",\"react-dom\"]) { try { console.log(p, require(\"./node_modules/\"+p+\"/package.json\").version) } catch(e) { console.log(p, \"MISSING\") } }'; git diff --stat",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor && node -e 'const p=require(\"./package.json\");console.log(JSON.stringify(p.peerDependenciesMeta||{},null,1))'; ls; ls dist 2>/dev/null | head; ls dist/docs build/docs 2>/dev/null; echo ---; cat dist/docs/INDEX.md 2>/dev/null | head -150 || true",
+        "success": true
+      },
+      {
+        "command": "cat build/docs/INDEX.md; echo ---; ls build/docs/guides",
+        "success": true
+      },
+      {
+        "command": "cat build/docs/guides/how-to-add-editor-with-create-react-app.md; echo ----; grep -n -i 'css\\|style' README.md | head -20; echo ----; ls build | head -40; grep -rn \"export\" build/index.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "node -e 'const p=require(\"./package.json\");console.log(JSON.stringify({main:p.main,module:p.module,types:p.types,exports:p.exports,sideEffects:p.sideEffects},null,1))'; echo ----; grep -rn \"styles.css\" README.md build/docs 2>/dev/null | head; echo ----; T=$(node -e 'console.log(require(\"./package.json\").types||\"\")'); echo \"types=$T\"; grep -rln \"useMarkdownEditor\" build/esm --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cat build/esm/bundle/useMarkdownEditor.d.ts; echo ----; ls build/esm/view | head -30; echo ----; grep -rn \"MarkdownEditorView\\b\" build/esm/view/*.d.ts build/esm/bundle/*.d.ts 2>/dev/null | head -5; echo ----; ls build/esm/styles; grep -rln \"styles.css\\|import '.*\\.css'\" build/esm --include=*.js | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm && grep -n \"initial\\|stickyToolbar\\|autofocus\\|mode\\|placeholder\\|height\\|export type MarkdownEditorOptions\\|export interface MarkdownEditorOptions\" bundle/types.d.ts bundle/MarkdownEditorView.d.ts bundle/editor-public-types.d.ts 2>/dev/null | head -60; ls bundle | head -50",
+        "success": true
+      },
+      {
+        "command": "cat bundle/MarkdownEditorView.d.ts; echo ----; sed -n 1,60p bundle/types.d.ts; echo ----; sed -n 160,200p bundle/types.d.ts; echo ----; grep -n \"MarkdownEditorInitialOptions\" -A12 bundle/types.d.ts | head -30; echo ---; cat bundle/editor-public-types.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Flex Text Button 2>&1 | head -40; echo ----; grep -n \"direction\\|gap\" node_modules/@gravity-ui/uikit/build/esm/components/Flex/Flex.d.ts 2>/dev/null | head; grep -rn \"variant\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts 2>/dev/null | head -5; grep -rn \"view?\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Flex Text Button 2>&1 | head -30; echo ----; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/Flex/Flex.d.ts 2>/dev/null | grep -n \"direction\\|gap\\|Props\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -rln \"export declare const Flex\\|FlexProps\" build --include=*.d.ts | head -3; f=$(grep -rln \"export declare const Flex\" build --include=*.d.ts | head -1); [ -n \"$f\" ] && cat \"$f\" | head -40; grep -n \"Text\\b\" build/esm/components/index.d.ts 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | grep -v 'npm warn' | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; echo ----; grep -n \"process\" node_modules/@diplodoc/transform/lib/plugins/utils.js | head -10; echo ----; grep -n \"require(\\|import \" node_modules/css/lib/stringify/source-map-support.js | head; echo ----; grep -rn \"punycode\" node_modules/markdown-it/lib/index.js | head -3",
+        "success": true
+      },
+      {
+        "command": "grep -o \"has been externalized[^\\\"']*\" dist/assets/*.js | sort | uniq -c | head; grep -o \".\\{0,200\\}Cannot access.\\{0,120\\}\" dist/assets/index-*.js | head -3; echo ----; cat vite.config.ts; ls node_modules/process 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "node -e '\nconst s=require(\"fs\").readFileSync(require(\"fs\").readdirSync(\"dist/assets\").filter(f=>/^index-.*\\.js$/.test(f)).map(f=>\"dist/assets/\"+f)[0],\"utf8\");\nfor (const needle of [\"externalized\",\"__vite-browser-external\",\"platform\"]) { const i=s.indexOf(needle); console.log(needle, i, i>=0 ? s.slice(Math.max(0,i-200), i+250).replace(/\\n/g,\" \") : \"\"); console.log(\"---\") }\n'",
+        "success": true
+      },
+      {
+        "command": "node -e '\nconst fs=require(\"fs\");const f=fs.readdirSync(\"dist/assets\").filter(f=>/^index-.*\\.js$/.test(f)).map(f=>\"dist/assets/\"+f)[0];\nconst s=fs.readFileSync(f,\"utf8\");\nfor (const needle of [\"win32\",\"\\\\r\\\\n\"]) { let i=-1; let n=0; while((i=s.indexOf(needle,i+1))>=0 && n<4){ n++; console.log(needle, \"::\", s.slice(Math.max(0,i-160), i+60).replace(/\\n/g,\" \")); console.log(\"---\") } }\n'",
+        "success": true
+      },
+      {
+        "command": "grep -rl \"has been externalized for browser compatibility\" node_modules/vite/dist/node/chunks/ | head -2; f=$(grep -rl \"has been externalized for browser compatibility\" node_modules/vite/dist/node/chunks/ | head -1); grep -n \"has been externalized for browser compatibility\" -B12 -A6 \"$f\" | head -60",
+        "success": true
+      },
+      {
+        "command": "sed -n 50,85p node_modules/markdown-it/lib/index.js",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git diff package.json && git status --short",
+        "success": true
+      },
+      {
+        "command": "npm install 2>&1 | grep -v 'npm warn' | tail -3; npm run build 2>&1 | grep -E \"error|built in|✓ built\" ; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 58,
+      "outputTokens": 18518,
+      "cacheReadTokens": 1779452,
+      "cacheWriteTokens": 66137,
+      "totalTokens": 1864165
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

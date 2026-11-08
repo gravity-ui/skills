@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "duration": 175.525,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 105978,
+    "outputTokens": 2661,
+    "cacheReadTokens": 159744,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 511,
+    "totalTokens": 268383
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- routing ---\\\\n' && sed -n '1,60p' .agents/skills/gravity-ui/references/package-routing.md && rg -n \\\"chart\\\" .agents/skills/gravity-ui/references/package-routing.md | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/charts && node -p \\\"require('./node_modules/@gravity-ui/charts/package.json').version\\\" && ls node_modules/@gravity-ui/charts/dist/docs 2>/dev/null || cat node_modules/@gravity-ui/charts/README.md\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/charts@''^1 && node -p \"require('\"'./node_modules/@gravity-ui/charts/package.json').version + ' | uikit peer: ' + JSON.stringify(require('./node_modules/@gravity-ui/charts/package.json').peerDependencies)\\\" && ls node_modules/@gravity-ui/charts/dist/docs 2>/dev/null || sed -n '1,120p' node_modules/@gravity-ui/charts/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/charts/dist/docs/get-started.md && printf '\\\\n--- INDEX ---\\\\n' && cat node_modules/@gravity-ui/charts/dist/docs/INDEX.md && printf '\\\\n--- examples head ---\\\\n' && sed -n '1,80p' node_modules/@gravity-ui/charts/dist/docs/examples.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' node_modules/@gravity-ui/charts/dist/docs/guides/theming.md && printf '\\\\n--- line ---\\\\n' && sed -n '1,180p' node_modules/@gravity-ui/charts/dist/docs/guides/series-types/line.md && printf '\\\\n--- colors ---\\\\n' && sed -n '1,140p' node_modules/@gravity-ui/charts/dist/docs/guides/colors.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export declare (const|function) Chart|interface ChartProps|type ChartProps\\\" node_modules/@gravity-ui/charts/dist -g '*.d.ts' | head && rg -n \\\"marker|interpolation|color\\\" node_modules/@gravity-ui/charts/dist/docs/guides/series-types/line.md | head -20 && rg -n \\\"LineSeriesData|name|color\\\" node_modules/@gravity-ui/charts/dist -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '15,45p' node_modules/@gravity-ui/charts/dist/esm/components/index.d.ts && rg -n \\\"interface ChartData|series:\\\" node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-types.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'EOF'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { Chart } from '@gravity-ui/charts';\n+import { Card, Flex, Text } from '@gravity-ui/uikit';\n+\n+const chartData = {\n+  series: {\n+    data: [\n+      {\n+        type: 'line',\n+        name: 'Пользователи',\n+        data: [\n+          { x: 0, y: 120 },\n+          { x: 1, y: 180 },\n+          { x: 2, y: 150 },\n+          { x: 3, y: 210 },\n+          { x: 4, y: 240 },\n+          { x: 5, y: 220 },\n+          { x: 6, y: 280 },\n+        ],\n+      },\n+    ],\n+  },\n+  xAxis: {\n+    type: 'category' as const,\n+    categories: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],\n+  },\n+};\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  return (\n+    <Flex direction=\\\"column\\\" gap={4} style={{ padding: 24 }}>\n+      <Text variant=\\\"header-2\\\">Активность за неделю</Text>\n+      <Card>\n+        <div style={{ height: 320 }}>\n+          <Chart data={chartData} />\n+        </div>\n+      </Card>\n+    </Flex>\n+  );\n }\n*** End Patch\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apply_patch || find / -name apply_patch -type f -not -path '*/node_modules/*' 2>/dev/null | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Chart } from '@gravity-ui/charts';\nimport { Card, Flex, Text } from '@gravity-ui/uikit';\n\nconst chartData = {\n  series: {\n    data: [\n      {\n        type: 'line' as const,\n        name: 'Пользователи',\n        data: [\n          { x: 0, y: 120 },\n          { x: 1, y: 180 },\n          { x: 2, y: 150 },\n          { x: 3, y: 210 },\n          { x: 4, y: 240 },\n          { x: 5, y: 220 },\n          { x: 6, y: 280 },\n        ],\n      },\n    ],\n  },\n  xAxis: {\n    type: 'category' as const,\n    categories: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],\n  },\n};\n\nexport function App() {\n  return (\n    <Flex direction=\\\"column\\\" gap={4} style={{ padding: 24 }}>\n      <Text variant=\\\"header-2\\\">Активность за неделю</Text>\n      <Card>\n        <div style={{ height: 320 }}>\n          <Chart data={chartData} />\n        </div>\n      </Card>\n    </Flex>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short 2>/dev/null || true; git diff --stat 2>/dev/null || true; sed -n '1,50p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 105978,
+      "outputTokens": 2661,
+      "cacheReadTokens": 159744,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 511,
+      "totalTokens": 268383
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

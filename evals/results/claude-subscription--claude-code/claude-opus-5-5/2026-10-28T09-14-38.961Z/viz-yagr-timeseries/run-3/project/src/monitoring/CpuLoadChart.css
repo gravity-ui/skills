@@ -1,0 +1,60 @@
+.cpu-load-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    min-height: 240px;
+}
+
+.cpu-load-chart__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+}
+
+.cpu-load-chart__stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.cpu-load-chart__plot {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+/* Абсолютное позиционирование: размер canvas не влияет на размер контейнера (нет петли ресайза). */
+.cpu-load-chart__canvas {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+/* Перекрашиваем Yagr токенами Gravity: два класса сильнее .yagr_theme_*. */
+.cpu-load-chart .yagr {
+    --yagr-font-family: var(--g-text-body-font-family);
+    --yagr-background: var(--g-color-base-background);
+    --yagr-grid: var(--g-color-line-generic);
+    --yagr-axis-stroke: var(--g-color-text-secondary);
+}
+
+.cpu-load-chart__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Тултип рендерится в document.body, поэтому селектор глобальный. */
+.yagr-tooltip.cpu-load-chart-tooltip {
+    --yagr-tooltip-font-family: var(--g-text-body-font-family);
+    color: var(--g-color-text-primary);
+    background-color: var(--g-color-base-float);
+    border-radius: var(--g-border-radius-m);
+    box-shadow: 0 0 0 1px var(--g-color-line-generic), 0 8px 20px var(--g-color-sfx-shadow);
+}

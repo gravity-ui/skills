@@ -1,0 +1,274 @@
+{
+  "status": "failed",
+  "duration": 968.948,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 150,
+    "outputTokens": 124133,
+    "cacheReadTokens": 9011932,
+    "cacheWriteTokens": 178511,
+    "totalTokens": 9314726
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 38,
+    "toolCalls": {
+      "file_read": 3,
+      "file_write": 11,
+      "file_edit": 8,
+      "shell": 51,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 74,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/e2e/01-initial.png",
+      "/tmp/e2e/05-tooltip.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/dashboard/layout.ts",
+      "/home/sandbox/workspace/src/dashboard/layout.test.ts",
+      "/home/sandbox/workspace/src/dashboard/data.ts",
+      "/home/sandbox/workspace/src/dashboard/theme.ts",
+      "/home/sandbox/workspace/src/dashboard/useElementSize.ts",
+      "/home/sandbox/workspace/src/dashboard/charts.tsx",
+      "/home/sandbox/workspace/src/dashboard/widgets.tsx",
+      "/home/sandbox/workspace/src/dashboard/Dashboard.tsx",
+      "/home/sandbox/workspace/src/dashboard/WidgetCard.tsx",
+      "/home/sandbox/workspace/src/dashboard/dashboard.css",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status && git log --oneline | head -5 && cat package.json 2>/dev/null; ls node_modules 2>/dev/null | head; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; echo \"=== harness\"; head -c 1500 __agent_eval__/run.mjs; echo; ls node_modules/@gravity-ui/ ; ls node_modules | grep -iE 'grid|dnd|recharts|chart|vitest'",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.319/21ede179c3fa888287f355088533fd14/dataviz && ls -R && cat references/palette.md && echo ===== && cat references/anti-patterns.md | head -300",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.319/21ede179c3fa888287f355088533fd14/dataviz && cat references/components.md && echo ===== && cat references/marks-and-anatomy.md && echo ===== && cat references/interaction.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.319/21ede179c3fa888287f355088533fd14/dataviz && node scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a\" --mode light 2>&1 | tail -40; echo ======; node scripts/validate_palette.js \"#3987e5,#d95926,#199e70\" --mode dark --surface \"#1a1a19\" 2>&1 | tail -40; echo ======; cd /home/sandbox/workspace && grep -oE \"export \\{[^}]*\\}|export \\* from[^;]*\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -5; ls node_modules/@gravity-ui/uikit/build/esm/components | head -80; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; node -v",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,80p Text/Text.d.ts 2>/dev/null | head -80; echo ====; ls Text Button | head -30; echo ====; grep -n \"view\\|size\\|selected\" Button/Button.d.ts | head -30; echo ====; grep -rn \"theme\" Label/Label.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npx tsc --noEmit 2>&1 | head -40; echo \"tsc exit: ${PIPESTATUS[0]}\"; npx vitest run 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -15; ls /usr/bin | grep -iE \"chrom|firefox\" ; ls ~/.cache 2>/dev/null; python3 -c \"import playwright\" 2>&1 | tail -1; ls node_modules | grep -i -E \"^playwright|puppeteer\" ",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && (timeout 120 npm init -y >/dev/null 2>&1; timeout 240 npm install playwright@1 --no-audit --no-fund 2>&1 | tail -3; timeout 300 npx playwright install chromium 2>&1 | tail -5; echo \"exit $?\")",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite preview --port 4173 --strictPort > /tmp/e2e/preview.log 2>&1 &) ; sleep 4; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:4173/; tail -3 /tmp/e2e/preview.log",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > e2e.mjs <<'EOF'\nimport { chromium } from 'playwright';\n\nconst URL = 'http://localhost:4173/';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\nconst errors = [];\npage.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`); });\npage.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));\n\nawait page.goto(URL, { waitUntil: 'networkidle' });\nawait page.evaluate(() => localStorage.clear());\nawait page.reload({ waitUntil: 'networkidle' });\n\nconst rects = () => page.$$eval('.dash-widget', (els) =>\n  els.map((el) => {\n    const r = el.getBoundingClientRect();\n    return { id: el.querySelector('h2')?.textContent, x: r.x, y: r.y, w: r.width, h: r.height };\n  }));\nconst overlapPairs = (rs) => {\n  const bad = [];\n  for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) {\n    const a = rs[i], b = rs[j];\n    if (a.x < b.x + b.w - 1 && b.x < a.x + a.w - 1 && a.y < b.y + b.h - 1 && b.y < a.y + a.h - 1) bad.push(`${a.id} x ${b.id}`);\n  }\n  return bad;\n};\n\nconst report = {};\nreport.count = (await rects()).length;\nreport.initialOverlaps = overlapPairs(await rects());\nawait page.screenshot({ path: '/tmp/e2e/01-initial.png', fullPage: true });\n\n// 1) drag \"Каналы\" (bottom-left) to the top-right corner\nconst grip = page.locator('.dash-widget', { hasText: 'Каналы' }).first().locator('.dash-widget__grip');\nconst gb = await grip.boundingBox();\nawait page.mouse.move(gb.x + 20, gb.y + 10);\nawait page.mouse.down();\nfor (let s = 1; s <= 20; s++) await page.mouse.move(gb.x + 20 + (900 - gb.x) * s / 20, gb.y + 10 + (-560) * s / 20, { steps: 1 });\nconst midDrag = await rects();\nreport.duringDragOverlaps = overlapPairs(midDrag);\nawait page.screenshot({ path: '/tmp/e2e/02-dragging.png', fullPage: true });\nawait page.mouse.up();\nawait page.waitForTimeout(300);\nconst afterDrag = await rects();\nreport.afterDragOverlaps = overlapPairs(afterDrag);\nreport.channelsPos = afterDrag.find((r) => r.id === 'Каналы');\nawait page.screenshot({ path: '/tmp/e2e/03-after-drag.png', fullPage: true });\n\n// 2) resize \"Структура выручки\" wider via handle\nconst seg = page.locator('.dash-widget', { hasText: 'Структура выручки' }).first();\nconst before = await seg.boundingBox();\nconst handle = seg.locator('.dash-widget__resize');\nconst hb = await handle.boundingBox();\nawait page.mouse.move(hb.x + 8, hb.y + 8);\nawait page.mouse.down();\nawait page.mouse.move(hb.x + 8 + 120, hb.y + 8 + 40, { steps: 10 });\nawait page.mouse.up();\nawait page.waitForTimeout(300);\nconst after = await seg.boundingBox();\nreport.resize = { beforeW: Math.round(before.width), afterW: Math.round(after.width), beforeH: Math.round(before.height), afterH: Math.round(after.height) };\nreport.afterResizeOverlaps = overlapPairs(await rects());\n\n// 3) keyboard: focus \"Заметка\"? use revenue widget grip, ArrowRight x2\nconst kg = page.locator('.dash-widget', { hasText: 'Выручка' }).first().locator('.dash-widget__grip');\nconst kb0 = await page.locator('.dash-widget', { hasText: 'Выручка' }).first().boundingBox();\nawait kg.focus();\nawait page.keyboard.press('ArrowRight');\nawait page.keyboard.press('ArrowRight');\nawait page.waitForTimeout(300);\nconst kb1 = await page.locator('.dash-widget', { hasText: 'Выручка' }).first().boundingBox();\nreport.keyboardMove = { dx: Math.round(kb1.x - kb0.x) };\nawait page.keyboard.press('Shift+ArrowRight');\nawait page.waitForTimeout(300);\nconst kb2 = await page.locator('.dash-widget', { hasText: 'Выручка' }).first().boundingBox();\nreport.keyboardResize = { dw: Math.round(kb2.width - kb1.width) };\nreport.afterKeyOverlaps = overlapPairs(await rects());\n\n// 4) table toggle on dynamics\nconst dyn = page.locator('.dash-widget', { hasText: 'Динамика выручки' }).first();\nawait dyn.getByRole('button', { name: 'Таблица' }).click();\nreport.tableRows = await dyn.locator('tbody tr').count();\nawait dyn.getByRole('button', { name: 'График' }).click();\n\n// 5) hover tooltip on line chart and on channel bars\nconst dynSvg = dyn.locator('svg[role=\"img\"]');\nconst dsb = await dynSvg.boundingBox();\nawait page.mouse.move(dsb.x + dsb.width * 0.5, dsb.y + dsb.height * 0.5);\nawait page.waitForTimeout(100);\nreport.lineTooltip = await dyn.locator('.viz-tooltip').count();\nreport.lineTooltipText = (await dyn.locator('.viz-tooltip').textContent().catch(() => null));\nawait page.screenshot({ path: '/tmp/e2e/04-tooltip.png', fullPage: true });\n\n// 6) persistence: reload and compare positions\nconst beforeReload = await rects();\nawait page.reload({ waitUntil: 'networkidle' });\nconst afterReload = await rects();\nreport.persisted = JSON.stringify(beforeReload.map(({ id, x, y, w, h }) => [id, Math.round(x), Math.round(y), Math.round(w), Math.round(h)])) ===\n  JSON.stringify(afterReload.map(({ id, x, y, w, h }) => [id, Math.round(x), Math.round(y), Math.round(w), Math.round(h)]));\nreport.afterReloadOverlaps = overlapPairs(afterReload);\n\n// 7) reset\nawait page.getByRole('button', { name: 'Сбросить раскладку' }).click();\nawait page.waitForTimeout(300);\nreport.afterResetOverlaps = overlapPairs(await rects());\nreport.afterResetFirstWidget = (await rects())[0];\n\nreport.errors = errors;\nconsole.log(JSON.stringify(report, null, 2));\nawait browser.close();\nEOF\nnode e2e.mjs 2>&1 | tail -150",
+        "success": true
+      },
+      {
+        "command": "id -u; (sudo -n true 2>/dev/null && echo SUDO_OK) || echo NO_SUDO; find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; (timeout 120 apt-get download libglib2.0-0 2>&1 | tail -2); ls *.deb 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e/libs && cd /tmp/e2e && dpkg-deb -x libglib2.0-0_*.deb libs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell && ldd $CHROME | grep \"not found\"; echo \"---\"; for p in libnss3 libnspr4 libatk-1.0-0 libdbus-1-3 libxkbcommon0 libasound2 libgbm1 libpango-1.0-0 libcairo2 libexpat1 libnss3; do :; done; echo ok",
+        "success": true
+      },
+      {
+        "command": "mv libglib2.0-0_*.deb /tmp/e2e/ && cd /tmp/e2e && dpkg-deb -x libglib2.0-0_*.deb libs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell && LD_LIBRARY_PATH=/tmp/e2e/libs/usr/lib/aarch64-linux-gnu ldd $CHROME | grep \"not found\"; echo \"---\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e/debs && cd /tmp/e2e/debs && timeout 300 apt-get download libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 libdbus-1-3 libx11-6 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libxcb1 libxkbcommon0 libasound2 libcups2 libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libdrm2 libexpat1 libxshmfence1 libnssutil3 libsmime3 libxcursor1 libxi6 libxtst6 2>&1 | tail -2; for f in *.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; ldd $CHROME | grep \"not found\"; echo \"remaining-missing-check-done\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 300 apt-get download libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 libdbus-1-3 libx11-6 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libxcb1 libxkbcommon0 libasound2 libcups2 libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libdrm2 libexpat1 libxshmfence1 libxcursor1 libxi6 libxtst6 2>&1 | tail -2; ls | wc -l; for f in *.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; ldd $CHROME | grep \"not found\"; echo \"check-done\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 300 apt-get download libxrender1 libwayland-server0 libxau6 libxdmcp6 2>&1 | tail -1; for f in libxrender1*.deb libwayland-server0*.deb libxau6*.deb libxdmcp6*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; ldd $CHROME | grep \"not found\"; echo \"check-done\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 300 apt-get download libbsd0 2>&1 | tail -1; for f in libbsd0*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; ldd $CHROME | grep \"not found\"; echo \"check-done\"; LD_LIBRARY_PATH=$LD_LIBRARY_PATH $CHROME --version 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && LD_LIBRARY_PATH=$(cat /tmp/e2e/ldpath) node e2e.mjs 2>&1 | tail -150",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat /tmp/e2e/ldpath) timeout 60 $CHROME --headless --no-sandbox --dump-dom http://localhost:4173/ 2>&1 | head -c 600; echo; echo \"exit=$?\"; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:4173/ ; tail -5 /tmp/e2e/preview.log",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > probe.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst CHROME = process.env.CHROME;\nconst browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage();\nawait page.goto('http://localhost:4173/', { waitUntil: 'load', timeout: 30000 });\nconsole.log('title:', await page.title(), 'h1:', await page.locator('h1').textContent());\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) timeout 120 node probe.mjs 2>&1 | grep -v dbus | tail -25",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > probe2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu', '--single-process'] });\nbrowser.on('disconnected', () => console.log('browser disconnected'));\nconst page = await browser.newPage();\npage.on('crash', () => console.log('page crashed'));\nawait page.setContent('<h1>hi</h1>');\nconsole.log('setContent ok:', await page.locator('h1').textContent());\nawait page.goto('http://localhost:4173/', { waitUntil: 'load', timeout: 30000 }).then(() => console.log('goto ok')).catch((e) => console.log('goto err', e.message.split('\\n')[0]));\nconsole.log('h1 on app:', await page.locator('h1').textContent().catch((e) => 'none ' + e.message.split('\\n')[0]));\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) timeout 120 node probe2.mjs 2>&1 | grep -v dbus | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && env | grep -i proxy | sed 's/=.*/=<set>/'; CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; for u in http://127.0.0.1:4173/ http://localhost:4173/; do echo \"== $u\"; LD_LIBRARY_PATH=$(cat ldpath) timeout 90 $CHROME --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=5000 --dump-dom $u 2>/dev/null | grep -o 'Дашборд продаж\\|dash-root\\|<title>[^<]*' | head -3; echo \"rc=${PIPESTATUS[0]}\"; done",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; echo \"== data\"; LD_LIBRARY_PATH=$(cat ldpath) timeout 60 $CHROME --headless --no-sandbox --disable-gpu --dump-dom 'data:text/html,<h1>ok</h1>' 2>/dev/null | head -c 200; echo \" rc=${PIPESTATUS[0]}\"; echo \"== local\"; cat > /tmp/e2e/static.html <<'EOF'\n<!doctype html><html><body><h1>static ok</h1><script>document.body.dataset.js='yes'</script></body></html>\nEOF\nLD_LIBRARY_PATH=$(cat ldpath) timeout 60 $CHROME --headless --no-sandbox --disable-gpu --dump-dom file:///tmp/e2e/static.html 2>/dev/null | head -c 200; echo \" rc=${PIPESTATUS[0]}\"; echo \"== curl\"; curl -s http://127.0.0.1:4173/ | head -c 200; echo; curl -s -o /dev/null -w \"%{http_code} %{size_download}\\n\" http://127.0.0.1:4173/assets/$(ls /home/sandbox/workspace/dist/assets | grep '\\.js$')",
+        "success": false
+      },
+      {
+        "command": "setsid nohup npx vite preview --port 4173 --strictPort --host 127.0.0.1 > /tmp/e2e/preview.log 2>&1 < /dev/null & sleep 6; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:4173/; cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat ldpath) timeout 90 $CHROME --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=5000 --dump-dom http://127.0.0.1:4173/ 2>/dev/null | grep -o 'Дашборд продаж\\|dash-widget\"' | sort | uniq -c",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat ldpath) timeout 90 $CHROME --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --enable-logging=stderr --v=0 --virtual-time-budget=5000 --dump-dom http://127.0.0.1:4173/ 2>err.log > dom.html; echo \"rc=$? bytes=$(wc -c < dom.html)\"; head -c 400 dom.html; echo; grep -v dbus err.log | grep -iE \"console|error|uncaught|Failed\" | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 200 apt-get download libsqlite3-0 2>&1 | tail -1; for f in libsqlite3-0*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat ldpath) timeout 90 $CHROME --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=5000 --dump-dom http://127.0.0.1:4173/ 2>/dev/null > dom.html; echo \"rc=$? bytes=$(wc -c < dom.html)\"; grep -o 'Дашборд продаж\\|class=\"dash-widget\"' dom.html | sort | uniq -c",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && sed -i \"s|const URL = 'http://localhost:4173/';|const URL = 'http://127.0.0.1:4173/';|; s|const browser = await chromium.launch();|const browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });|\" e2e.mjs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) timeout 200 node e2e.mjs 2>&1 | grep -v dbus | tail -150",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > probe3.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nbrowser.on('disconnected', () => console.log('[browser disconnected]'));\nconst page = await browser.newPage();\npage.on('crash', () => console.log('[page crash]'));\npage.on('pageerror', (e) => console.log('[pageerror]', e.message));\npage.on('console', (m) => console.log('[console]', m.type(), m.text().slice(0, 200)));\nawait page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' }).then(() => console.log('goto ok')).catch((e) => console.log('goto err', e.message.split('\\n')[0]));\nawait page.waitForTimeout(1500);\nconsole.log('h1:', await page.locator('h1').first().textContent().catch((e) => 'ERR ' + e.message.split('\\n')[0]));\nconsole.log('widgets:', await page.locator('.dash-widget').count().catch((e) => 'ERR'));\nawait page.reload({ waitUntil: 'load' }).then(() => console.log('reload ok')).catch((e) => console.log('reload err', e.message.split('\\n')[0]));\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) timeout 120 node probe3.mjs 2>&1 | grep -v dbus | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && sed -i \"s/waitUntil: 'networkidle'/waitUntil: 'load'/g\" e2e.mjs && sed -i \"s|await page.goto(URL, { waitUntil: 'load' });|await page.goto(URL, { waitUntil: 'load' }); await page.waitForSelector('.dash-widget');|\" e2e.mjs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) timeout 220 node e2e.mjs 2>&1 | grep -v dbus | tail -150",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && sed -n 90,98p e2e.mjs; ls /usr/share/fonts 2>/dev/null | head; ls /etc/fonts 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 250 apt-get download fonts-dejavu-core fontconfig-config libfontconfig1 libfreetype6 2>&1 | tail -1; for f in fonts-dejavu-core*.deb fontconfig-config*.deb libfontconfig1*.deb libfreetype6*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; mkdir -p /tmp/e2e/fontcache && cat > /tmp/e2e/fonts.conf <<'EOF'\n<?xml version=\"1.0\"?>\n<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig>\n  <dir>/tmp/e2e/libs/usr/share/fonts</dir>\n  <cachedir>/tmp/e2e/fontcache</cachedir>\n</fontconfig>\nEOF\nfind /tmp/e2e/libs/usr/share/fonts -name \"*.ttf\" | head -3; export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD_LIBRARY_PATH\" > /tmp/e2e/ldpath; echo \"FONTCONFIG_FILE=/tmp/e2e/fonts.conf\" > /tmp/e2e/envfonts; ls /tmp/e2e/libs/usr/lib/aarch64-linux-gnu/ | grep -c \"\\.so\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; export CHROME; LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf timeout 220 node e2e.mjs > run.log 2>&1; echo \"exit=$?\"; grep -v -E \"dbus|NOTREACHED|\\[err\\]\" run.log | tail -120",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > debug.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\npage.on('pageerror', (e) => console.log('[pageerror]', e.message));\nawait page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });\nawait page.evaluate(() => localStorage.clear());\nawait page.reload({ waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.waitForTimeout(400);\n\nconst seg = page.locator('.dash-widget', { hasText: 'Структура выручки' }).first();\nconst handle = seg.locator('.dash-widget__resize');\nconst hb = await handle.boundingBox();\nconst sb = await seg.boundingBox();\nconsole.log('handle box', hb, 'section box', sb);\nconsole.log('element at handle center:', await page.evaluate(([x, y]) => {\n  const el = document.elementFromPoint(x, y); return el ? el.className + ' <' + el.tagName + '>' : null; }, [hb.x + 8, hb.y + 8]));\nawait page.mouse.move(hb.x + 8, hb.y + 8);\nawait page.mouse.down();\nawait page.mouse.move(hb.x + 8 + 60, hb.y + 8 + 40, { steps: 6 });\nconsole.log('mid-drag classes:', await seg.getAttribute('class'));\nawait page.mouse.up();\nawait page.waitForTimeout(400);\nconsole.log('after classes:', await seg.getAttribute('class'), 'size', (await seg.boundingBox()));\nconsole.log('stored:', await page.evaluate(() => localStorage.getItem('dashboard-layout:v1')));\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node debug.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > debug2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\npage.on('console', (m) => console.log('[console]', m.text()));\nawait page.goto('http://127.0.0.1:4173/', { waitUntil: 'load' });\nawait page.evaluate(() => localStorage.clear());\nawait page.reload({ waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.evaluate(() => {\n  for (const t of ['pointerdown', 'pointerup', 'pointercancel', 'lostpointercapture']) {\n    document.addEventListener(t, (e) => console.log('evt', t, e.target.className, e.clientY), true);\n  }\n});\nconst seg = page.locator('.dash-widget', { hasText: 'Структура выручки' }).first();\nconst hb = await seg.locator('.dash-widget__resize').boundingBox();\nawait page.mouse.move(hb.x + 8, hb.y + 8);\nawait page.mouse.down();\nawait page.mouse.move(hb.x + 8 + 60, hb.y + 8 + 40, { steps: 6 });\nawait page.mouse.up();\nawait page.waitForTimeout(300);\nconsole.log('final h px', (await seg.boundingBox()).height);\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell; LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node debug2.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\" | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && python3 --version 2>/dev/null; node -e '\nconst fs = require(\"fs\");\nlet s = fs.readFileSync(\"e2e.mjs\", \"utf8\");\ns = s.replace(/\\/\\/ 2\\) resize[\\s\\S]*?report\\.afterResizeOverlaps = overlapPairs\\(await rects\\(\\)\\);/, `// 2) resize \"Динамика выручки\" by mouse (8 cols, x=0): +120px wide, +70px tall\nconst dynW = page.locator(\".dash-widget\", { hasText: \"Динамика выручки\" }).first();\nconst beforeR = await dynW.boundingBox();\nconst hbR = await dynW.locator(\".dash-widget__resize\").boundingBox();\nawait page.mouse.move(hbR.x + 8, hbR.y + 8);\nawait page.mouse.down();\nawait page.mouse.move(hbR.x + 8 + 120, hbR.y + 8 + 70, { steps: 10 });\nawait page.mouse.up();\nawait page.waitForTimeout(400);\nconst afterR = await dynW.boundingBox();\nreport.resize = { beforeW: Math.round(beforeR.width), afterW: Math.round(afterR.width), beforeH: Math.round(beforeR.height), afterH: Math.round(afterR.height) };\nreport.afterResizeOverlaps = overlapPairs(await rects());`);\ns = s.replace(/\\/\\/ 6\\) persistence[\\s\\S]*?report\\.afterReloadOverlaps = overlapPairs\\(afterReload\\);/, `// 6) persistence: stored layout and rendered geometry must survive a reload\nconst storedBefore = await page.evaluate(() => localStorage.getItem(\"dashboard-layout:v1\"));\nconst geomBefore = JSON.stringify((await rects()).map(({ id, x, y, w, h }) => [id, Math.round(x), Math.round(y), Math.round(w), Math.round(h)]));\nawait page.reload({ waitUntil: \"load\" });\nawait page.waitForSelector(\".dash-widget\");\nawait page.waitForTimeout(400);\nconst storedAfter = await page.evaluate(() => localStorage.getItem(\"dashboard-layout:v1\"));\nconst afterReload = await rects();\nconst geomAfter = JSON.stringify(afterReload.map(({ id, x, y, w, h }) => [id, Math.round(x), Math.round(y), Math.round(w), Math.round(h)]));\nreport.persisted = { storageEqual: storedBefore === storedAfter, geometryEqual: geomBefore === geomAfter };\nreport.afterReloadOverlaps = overlapPairs(afterReload);`);\ns = s.replace(\"report.duringDragOverlaps = overlapPairs(midDrag);\", \"report.duringDragOverlapsInfo = 'expected: free-follow drag overlaps others mid-flight'; report.duringDragOverlaps = overlapPairs(midDrag);\");\nfs.writeFileSync(\"e2e.mjs\", s);\n' && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e.mjs > run.log 2>&1; echo \"exit=$?\"; grep -v -E \"dbus|NOTREACHED|\\[err\\]\" run.log | tail -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > e2e.mjs <<'EOF'\nimport { chromium } from 'playwright';\n\nconst URL = 'http://127.0.0.1:4173/';\nconst KEY = 'dashboard-layout:v1';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\nconst errors = [];\npage.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(`${m.type()}: ${m.text()}`); });\npage.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));\n\nconst rects = () => page.$$eval('.dash-widget', (els) => els.map((el) => {\n  const r = el.getBoundingClientRect();\n  return { id: el.querySelector('h2')?.textContent, x: r.x, y: r.y, w: r.width, h: r.height };\n}));\nconst round = (rs) => rs.map(({ id, x, y, w, h }) => [id, Math.round(x), Math.round(y), Math.round(w), Math.round(h)]);\nconst overlapPairs = (rs) => {\n  const bad = [];\n  for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) {\n    const a = rs[i], b = rs[j];\n    if (a.x < b.x + b.w - 1 && b.x < a.x + a.w - 1 && a.y < b.y + b.h - 1 && b.y < a.y + a.h - 1) bad.push(`${a.id} x ${b.id}`);\n  }\n  return bad;\n};\nconst box = (title) => page.locator('.dash-widget', { hasText: title }).first();\nconst report = {};\n\nawait page.goto(URL, { waitUntil: 'load' });\nawait page.evaluate((k) => localStorage.removeItem(k), KEY);\nawait page.reload({ waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.waitForTimeout(300);\nreport.count = (await rects()).length;\nreport.initialOverlaps = overlapPairs(await rects());\nawait page.screenshot({ path: '/tmp/e2e/01-initial.png', fullPage: true });\n\n// 1) mouse drag: \"Каналы\" (bottom-left) to the top-right area\n{\n  const grip = box('Каналы').locator('.dash-widget__grip');\n  const gb = await grip.boundingBox();\n  await page.mouse.move(gb.x + 20, gb.y + 10);\n  await page.mouse.down();\n  for (let s = 1; s <= 20; s++) await page.mouse.move(gb.x + 20 + (900 - gb.x) * s / 20, gb.y + 10 - 560 * s / 20);\n  await page.screenshot({ path: '/tmp/e2e/02-dragging.png', fullPage: true });\n  await page.mouse.up();\n  await page.waitForTimeout(400);\n  report.afterDragOverlaps = overlapPairs(await rects());\n  report.channelsAfterDrag = round(await rects()).find((r) => r[0] === 'Каналы');\n  await page.screenshot({ path: '/tmp/e2e/03-after-drag.png', fullPage: true });\n}\n\n// 2) mouse resize: \"Динамика выручки\" +120px wide, +70px tall\n{\n  const w = box('Динамика выручки');\n  const b0 = await w.boundingBox();\n  const h = await w.locator('.dash-widget__resize').boundingBox();\n  await page.mouse.move(h.x + 8, h.y + 8);\n  await page.mouse.down();\n  await page.mouse.move(h.x + 128, h.y + 78, { steps: 10 });\n  await page.mouse.up();\n  await page.waitForTimeout(400);\n  const b1 = await w.boundingBox();\n  report.resize = { w: [Math.round(b0.width), Math.round(b1.width)], h: [Math.round(b0.height), Math.round(b1.height)] };\n  report.afterResizeOverlaps = overlapPairs(await rects());\n  await page.screenshot({ path: '/tmp/e2e/04-after-resize.png', fullPage: true });\n}\n\n// 3) keyboard: \"Выручка\" ArrowRight x2, then Shift+ArrowRight\n{\n  const w = box('Выручка');\n  const k0 = await w.boundingBox();\n  await w.locator('.dash-widget__grip').focus();\n  await page.keyboard.press('ArrowRight');\n  await page.keyboard.press('ArrowRight');\n  await page.waitForTimeout(300);\n  const k1 = await w.boundingBox();\n  await page.keyboard.press('Shift+ArrowRight');\n  await page.waitForTimeout(300);\n  const k2 = await w.boundingBox();\n  report.keyboard = { moveDx: Math.round(k1.x - k0.x), resizeDw: Math.round(k2.width - k1.width) };\n  report.afterKeyOverlaps = overlapPairs(await rects());\n}\n\n// 4) table twin toggle on \"Динамика выручки\"\n{\n  const w = box('Динамика выручки');\n  await w.getByRole('button', { name: 'Таблица' }).click();\n  report.tableRows = await w.locator('tbody tr').count();\n  await w.getByRole('button', { name: 'График' }).click();\n}\n\n// 5) hover tooltip on line chart\n{\n  const w = box('Динамика выручки');\n  const svg = await w.locator('svg[role=\"img\"]').boundingBox();\n  await page.mouse.move(svg.x + svg.width * 0.5, svg.y + svg.height * 0.5);\n  await page.waitForTimeout(100);\n  report.lineTooltipText = await w.locator('.viz-tooltip').textContent().catch(() => null);\n  await page.screenshot({ path: '/tmp/e2e/05-tooltip.png', fullPage: true });\n}\n\n// 6) persistence across reload\n{\n  await page.mouse.move(0, 0);\n  await page.waitForTimeout(300);\n  const storedBefore = await page.evaluate((k) => localStorage.getItem(k), KEY);\n  const geomBefore = JSON.stringify(round(await rects()));\n  await page.reload({ waitUntil: 'load' });\n  await page.waitForSelector('.dash-widget');\n  await page.waitForTimeout(400);\n  const storedAfter = await page.evaluate((k) => localStorage.getItem(k), KEY);\n  const geomAfter = JSON.stringify(round(await rects()));\n  report.persisted = { storageEqual: storedBefore === storedAfter, geometryEqual: geomBefore === geomAfter };\n  report.afterReloadOverlaps = overlapPairs(await rects());\n}\n\n// 7) reset\n{\n  await page.getByRole('button', { name: 'Сбросить раскладку' }).click();\n  await page.waitForTimeout(400);\n  report.afterResetOverlaps = overlapPairs(await rects());\n  report.afterResetDefault = round(await rects()).find((r) => r[0] === 'Выручка');\n}\n\nreport.errors = errors;\nconsole.log(JSON.stringify(report, null, 2));\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e.mjs > run.log 2>&1; echo \"exit=$?\"; grep -v -E \"dbus|NOTREACHED|\\[err\\]\" run.log | tail -80",
+        "success": true
+      },
+      {
+        "command": "cp src/dashboard/Dashboard.tsx /tmp/e2e/Dashboard.backup.tsx && node -e '\nconst fs=require(\"fs\");const p=\"src/dashboard/Dashboard.tsx\";let s=fs.readFileSync(p,\"utf8\");\ns=s.replace(\"const endDrag = (e: PointerEvent<HTMLDivElement>) => {\\n    if (!drag) return;\",\"const endDrag = (e: PointerEvent<HTMLDivElement>) => {\\n    console.log(\\\"DBG endDrag\\\", !!drag, e.clientX, e.clientY, drag && drag.startX, drag && drag.startY);\\n    if (!drag) return;\");\ns=s.replace(\"setDrag({ id, mode, startX: e.clientX, startY: e.clientY, base });\",\"console.log(\\\"DBG beginDrag\\\", id, mode); setDrag({ id, mode, startX: e.clientX, startY: e.clientY, base });\");\nfs.writeFileSync(p,s);' && grep -n \"DBG\" src/dashboard/Dashboard.tsx && (setsid nohup npx vite --port 5173 --strictPort --host 127.0.0.1 > /tmp/e2e/dev.log 2>&1 < /dev/null &) ; sleep 5; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > dbg3.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\npage.on('console', (m) => { if (m.text().startsWith('DBG')) console.log(m.text()); });\npage.on('pageerror', (e) => console.log('[pageerror]', e.message));\nawait page.goto('http://127.0.0.1:5173/', { waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.evaluate(() => localStorage.removeItem('dashboard-layout:v1'));\nawait page.reload({ waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.waitForTimeout(500);\nconst w = page.locator('.dash-widget', { hasText: 'Динамика выручки' }).first();\nconst b0 = await w.boundingBox();\nconst h = await w.locator('.dash-widget__resize').boundingBox();\nconsole.log('b0', b0, 'handle', h);\nawait page.mouse.move(h.x + 8, h.y + 8);\nawait page.mouse.down();\nawait page.mouse.move(h.x + 128, h.y + 78, { steps: 10 });\nawait page.waitForTimeout(100);\nconsole.log('mid', (await w.boundingBox()));\nawait page.mouse.up();\nawait page.waitForTimeout(400);\nconsole.log('after', await w.boundingBox());\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node dbg3.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && tail -5 dev.log; cat > dbg4.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\npage.on('console', (m) => console.log('[console]', m.type(), m.text().slice(0, 300)));\npage.on('pageerror', (e) => console.log('[pageerror]', e.message.slice(0, 300)));\nawait page.goto('http://127.0.0.1:5173/', { waitUntil: 'load' });\nawait page.waitForTimeout(4000);\nconsole.log('widgets', await page.locator('.dash-widget').count(), 'root html len', (await page.content()).length);\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node dbg4.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\" | head -30",
+        "success": true
+      },
+      {
+        "command": "(setsid nohup npx vite --port 5299 --strictPort --host 127.0.0.1 > /tmp/e2e/dev2.log 2>&1 < /dev/null &); sleep 5; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5299/; cd /tmp/e2e && sed -i \"s|127.0.0.1:5173|127.0.0.1:5299|\" dbg3.mjs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node dbg3.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && sed \"s|127.0.0.1:4173|127.0.0.1:5299|\" e2e.mjs > e2e-dev.mjs && sed -i \"s|page.on('pageerror'|page.on('console', (m) => { if (m.text().startsWith('DBG')) console.log(m.text()); });\\npage.on('pageerror'|\" e2e-dev.mjs && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e-dev.mjs > run-dev.log 2>&1; echo \"exit=$?\"; grep -E \"DBG|\\\"resize\\\"|\\\"w\\\"|\\\"h\\\"|persisted|storageEqual|geometryEqual|keyboard|moveDx|resizeDw|afterDragOverlaps|errors|pageerror\" run-dev.log | head -40; grep -v -E \"dbus|NOTREACHED|\\[err\\]\" run-dev.log | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > dbg5.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ executablePath: process.env.CHROME, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });\nawait page.goto('http://127.0.0.1:5299/', { waitUntil: 'load' });\nawait page.evaluate(() => localStorage.removeItem('dashboard-layout:v1'));\nawait page.reload({ waitUntil: 'load' });\nawait page.waitForSelector('.dash-widget');\nawait page.waitForTimeout(300);\nconst grip = page.locator('.dash-widget', { hasText: 'Каналы' }).first().locator('.dash-widget__grip');\nconst gb = await grip.boundingBox();\nawait page.mouse.move(gb.x + 20, gb.y + 10); await page.mouse.down();\nfor (let s = 1; s <= 20; s++) await page.mouse.move(gb.x + 20 + (900 - gb.x) * s / 20, gb.y + 10 - 560 * s / 20);\nawait page.mouse.up(); await page.waitForTimeout(400);\nconst all = await page.$$eval('.dash-widget', (els) => els.map((el) => { const r = el.getBoundingClientRect(); return [el.querySelector('h2')?.textContent, Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)]; }));\nconsole.log(JSON.stringify(all));\nconst dyn = page.locator('.dash-widget', { hasText: 'Динамика выручки' }).first();\nconst h = await dyn.locator('.dash-widget__resize').boundingBox();\nconst top = await page.evaluate(([x, y]) => { const el = document.elementFromPoint(x, y); return el ? `${el.className} | in dash-widget: ${el.closest('.dash-widget')?.querySelector('h2')?.textContent}` : null; }, [h.x + 8, h.y + 8]);\nconsole.log('handle', h, 'topmost:', top);\nawait browser.close();\nEOF\nCHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 120 node dbg5.mjs 2>&1 | grep -v -E \"dbus|NOTREACHED|\\[err\\]\" | head -20",
+        "success": true
+      },
+      {
+        "command": "node -e '\nconst fs=require(\"fs\");const p=\"src/dashboard/Dashboard.tsx\";let s=fs.readFileSync(p,\"utf8\");\nconst before=s.length;\ns=s.replace(\"    console.log(\\\"DBG endDrag\\\", !!drag, e.clientX, e.clientY, drag && drag.startX, drag && drag.startY);\\n\",\"\");\ns=s.replace(\"console.log(\\\"DBG beginDrag\\\", id, mode); setDrag(\",\"setDrag(\");\nfs.writeFileSync(p,s); console.log(\"removed\", before-s.length, \"chars\");' && grep -c \"DBG\" src/dashboard/Dashboard.tsx; grep -n \"measured\" src/dashboard/Dashboard.tsx | head -3; cd /tmp/e2e && sed -i \"s|  const gb = await grip.boundingBox();|  await grip.scrollIntoViewIfNeeded(); const gb = await grip.boundingBox();|; s|  const h = await w.locator('.dash-widget__resize').boundingBox();|  await w.locator('.dash-widget__resize').scrollIntoViewIfNeeded(); const h = await w.locator('.dash-widget__resize').boundingBox();|\" e2e.mjs && grep -n \"scrollIntoView\" e2e.mjs",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -E \"built|error|Error\" ; npx tsc --noEmit && echo TSC_OK; npx vitest run 2>&1 | grep -E \"Tests|passed|failed\" ; cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e.mjs > run.log 2>&1; echo \"e2e exit=$?\"; grep -v -E \"dbus|NOTREACHED|\\[err\\]\" run.log | tail -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && node -e '\nconst fs=require(\"fs\");let s=fs.readFileSync(\"e2e.mjs\",\"utf8\");\ns=s.replace(\"const r = el.getBoundingClientRect();\\n  return { id: el.querySelector(\\x27h2\\x27)?.textContent, x: r.x, y: r.y, w: r.width, h: r.height };\",\"const r = el.getBoundingClientRect();\\n  return { id: el.querySelector(\\x27h2\\x27)?.textContent, x: el.offsetLeft, y: el.offsetTop, w: r.width, h: r.height };\");\nfs.writeFileSync(\"e2e.mjs\",s);console.log(s.includes(\"el.offsetTop\"));' && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e.mjs > run.log 2>&1; echo \"e2e exit=$?\"; grep -A3 '\"persisted\"' run.log; grep -A2 '\"errors\"' run.log; grep -E \"afterReloadOverlaps|afterResizeOverlaps|afterKeyOverlaps|afterDragOverlaps|initialOverlaps\" -A1 run.log | head -12",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -E \"built|rror\" ; npx tsc --noEmit && echo TSC_OK; npx vitest run 2>&1 | grep -E \"Tests  |Test Files\"; cd /tmp/e2e && CHROME=$(ls -d /home/node/.cache/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-linux-arm64)/chrome-headless-shell LD_LIBRARY_PATH=$(cat ldpath) FONTCONFIG_FILE=/tmp/e2e/fonts.conf CHROME=$CHROME timeout 220 node e2e.mjs > run.log 2>&1; echo \"e2e exit=$?\"; node -e 'const t=require(\"fs\").readFileSync(\"/tmp/e2e/run.log\",\"utf8\"); const j=JSON.parse(t.slice(t.indexOf(\"{\"), t.lastIndexOf(\"}\")+1)); console.log(JSON.stringify({count:j.count, overlapsAfter:[j.initialOverlaps,j.afterDragOverlaps,j.afterResizeOverlaps,j.afterKeyOverlaps,j.afterReloadOverlaps,j.afterResetOverlaps].map(a=>a.length), resize:j.resize, keyboard:j.keyboard, tableRows:j.tableRows, tooltip:j.lineTooltipText, persisted:j.persisted, errors:j.errors}, null, 1))'",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite preview --port 4173\" ; pkill -f \"vite --port 5299\"; sleep 1; cd /home/sandbox/workspace && rm -rf dist && git status --short && echo \"---\" && find src -type f | sort && echo \"---\" && ls -la | grep -v node_modules && wc -l src/dashboard/*.ts* src/App.tsx | tail -1",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *\"vite preview --port 4173\"*|*\"vite --port 5299\"*) echo \"killing ${p#/proc/}: $c\" | cut -c1-120; kill ${p#/proc/} 2>/dev/null;; esac; done; sleep 2; curl -s -o /dev/null -w \"4173:%{http_code}\\n\" http://127.0.0.1:4173/ ; curl -s -o /dev/null -w \"5299:%{http_code}\\n\" http://127.0.0.1:5299/",
+        "success": false
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in node*vite*) case \"$c\" in *preview*4173*|*--port\\ 5299*) echo \"stop ${p#/proc/}: $c\" | cut -c1-100; kill ${p#/proc/} 2>/dev/null;; esac;; esac; done; sleep 2; curl -s -o /dev/null -w \"4173:%{http_code}\\n\" http://127.0.0.1:4173/ ; curl -s -o /dev/null -w \"5299:%{http_code}\\n\" http://127.0.0.1:5299/; true",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"console\\.\\|DBG\\|debugger\\|TODO\" src/ ; echo \"grep-done\"; git diff --stat; wc -l src/dashboard/* | tail -1",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 150,
+      "outputTokens": 124133,
+      "cacheReadTokens": 9011932,
+      "cacheWriteTokens": 178511,
+      "totalTokens": 9314726
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

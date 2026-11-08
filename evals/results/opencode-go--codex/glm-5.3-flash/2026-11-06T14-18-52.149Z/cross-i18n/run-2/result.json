@@ -1,0 +1,102 @@
+{
+  "status": "failed",
+  "duration": 365.762,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 6372,
+    "outputTokens": 6621,
+    "cacheReadTokens": 136576,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 4305,
+    "totalTokens": 149569
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*.ts' -g '*.tsx' -g '*.js' -g '*.jsx' -g '*.vue' -g '*.svelte' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App ---\\\\n' && sed -n '1,240p' src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- files ---\\\\n' && rg --files\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat index.html && cat vite.config.ts && cat tsconfig.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit/components | head -40 && rg -n \\\"function Select|const Select|Segmented\\\" node_modules/@gravity-ui/uikit -g 'Select.d.ts' -g 'Segmented*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/i18n.tsx\n@@\n-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';\n+import {\n+  createContext,\n+  useContext,\n+  useEffect,\n+  useMemo,\n+  useState,\n+  type ReactNode,\n+} from 'react';\n@@\n export function I18nProvider({ children }: { children: ReactNode }) {\n   const [language, setLanguage] = useState<Language>('en');\n+\n+  useEffect(() => {\n+    document.documentElement.lang = language;\n+  }, [language]);\n*** Update File: index.html\n@@\n-<html lang=\\\"en\\\" data-app-language=\\\"en\\\">\n+<html lang=\\\"en\\\">\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"/usr/bin/apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/i18n.tsx\n@@\n-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';\n+import {\n+  createContext,\n+  useContext,\n+  useEffect,\n+  useMemo,\n+  useState,\n+  type ReactNode,\n+} from 'react';\n@@\n export function I18nProvider({ children }: { children: ReactNode }) {\n   const [language, setLanguage] = useState<Language>('en');\n+\n+  useEffect(() => {\n+    document.documentElement.lang = language;\n+  }, [language]);\n*** Update File: index.html\n@@\n-<html lang=\\\"en\\\" data-app-language=\\\"en\\\">\n+<html lang=\\\"en\\\">\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || true; find / -name apply_patch -type f 2>/dev/null | head; git diff -- src/i18n.tsx index.html | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"I18nProvider|SegmentedRadioGroup|translate\\\\('greeting'\\\\)\\\" src/i18n.tsx src/App.tsx src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 6372,
+      "outputTokens": 6621,
+      "cacheReadTokens": 136576,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 4305,
+      "totalTokens": 149569
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

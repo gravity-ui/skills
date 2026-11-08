@@ -1,0 +1,237 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 8869ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 1ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 1ms
+     → expected 'import { MarkdownEditor } from \'./Ma…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 8862ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The markdown editor uses a raw Gravity UI TextArea with state and a custom marked.parse preview via dangerouslySetInnerHTML (src/MarkdownEditor.tsx). The project does not depend on or import @gravity-ui/markdown-editor, and neither useMarkdownEditor nor MarkdownEditorView appears in the source.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  14:13:01
+   Duration  9.07s (transform 33ms, setup 16ms, collect 20ms, tests 8.87s, environment 0ms, prepare 55ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected 'import { MarkdownEditor } from \'./Ma…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+"import { MarkdownEditor } from './MarkdownEditor';
+
+export function App() {
+  return (
+    <div style={{ padding: 24 }}>
+      <MarkdownEditor />
+    </div>
+  );
+}
+
+
+import React, { useState } from 'react';
+import { TextArea, Card, Text, Flex } from '@gravity-ui/uikit';
+import { marked } from 'marked';
+import './markdown.css';
+
+const renderMarkdown = (raw: string): string => {
+  if (!raw.trim()) return '';
+  return marked.parse(raw, { breaks: true }) as string;
+};
+
+export function MarkdownEditor() {
+  const [text, setText] = useState(
+    '# Hello, Markdown!\\n\\nType **markdown** here and see the *live preview*.\\n\\n- item 1\\n- item 2\\n\\n> A blockquote\\n\\n```js\\nconsole.log(\"code block\");\\n```',
+  );
+
+  return (
+    <Flex gap={4} style={{ height: 'calc(100vh - 48px)' }}>
+      <Card style={{ flex: 1, padding: 16 }} view=\"outlined\" type=\"container\">
+        <Text variant=\"subheader-2\" style={{ marginBottom: 8 }}>
+          Markdown
+        </Text>
+        <TextArea
+          value={text}
+          onUpdate={setText}
+          minRows={20}
+          controlProps={{
+            style: {
+              fontFamily: 'monospace',
+              height: '100%',
+              resize: 'none',
+            },
+          }}
+        />
+      </Card>
+
+      <Card style={{ flex: 1, padding: 16, overflow: 'auto' }} view=\"outlined\" type=\"container\">
+        <Text variant=\"subheader-2\" style={{ marginBottom: 8 }}>
+          Preview
+        </Text>
+        <div
+          className=\"markdown-preview\"
+          dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}
+        />
+      </Card>
+    </Flex>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+.markdown-preview {
+  line-height: 1.65;
+}
+
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-preview p {
+  margin: 0.5em 0;
+}
+
+.markdown-preview code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.markdown-preview pre {
+  background: rgba(0, 0, 0, 0.04);
+  padding: 12px 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 0.5em 0;
+}
+
+.markdown-preview pre code {
+  background: none;
+  padding: 0;
+}
+
+.markdown-preview blockquote {
+  margin: 0.5em 0;
+  padding: 0 1em;
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.markdown-preview li {
+  margin: 0.25em 0;
+}
+
+.markdown-preview a {
+  color: #0a6cff;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The markdown editor uses a raw Gravity UI TextArea with state and a custom marked.parse preview via dangerouslySetInnerHTML (src/MarkdownEditor.tsx). The project does not depend on or import @gravity-ui/markdown-editor, and neither useMarkdownEditor nor MarkdownEditorView appears in the source.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

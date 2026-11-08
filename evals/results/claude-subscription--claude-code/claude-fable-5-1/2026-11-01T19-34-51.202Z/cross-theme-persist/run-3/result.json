@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "duration": 566.108,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 194,
+    "outputTokens": 7481,
+    "cacheReadTokens": 171229,
+    "cacheWriteTokens": 20220,
+    "totalTokens": 199124
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -type f -not -path './node_modules/*' -not -path './.git/*' | head -50",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore __agent_eval__/run.mjs; do echo \"=== $f ===\"; cat \"$f\"; echo; done; ls node_modules/@gravity-ui/uikit/build/esm/components/theme/ 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.js ThemeContext.d.ts useTheme.js useThemeType.js constants.js types.d.ts; grep -n \"Segmented\\|RadioButton\\|Switch\" ../index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/index.d.ts; ls node_modules | grep -i \"jsdom\\|happy-dom\"; ls node_modules/@gravity-ui/icons/esm 2>/dev/null | grep -i \"sun\\|moon\\|monitor\" | head",
+        "success": true
+      },
+      {
+        "command": "cat > src/themeStorage.ts <<'EOF'\nimport type { Theme } from '@gravity-ui/uikit';\n\nexport const THEME_STORAGE_KEY = 'app-theme';\n\nexport const THEME_OPTIONS = ['light', 'dark', 'system'] as const satisfies readonly Theme[];\nexport type AppTheme = (typeof THEME_OPTIONS)[number];\n\nexport const DEFAULT_APP_THEME: AppTheme = 'system';\n\nexport function isAppTheme(value: unknown): value is AppTheme {\n  return typeof value === 'string' && (THEME_OPTIONS as readonly string[]).includes(value);\n}\n\ntype StorageLike = Pick<Storage, 'getItem' | 'setItem'>;\n\nfunction getStorage(): StorageLike | null {\n  try {\n    return typeof window !== 'undefined' ? window.localStorage : null;\n  } catch {\n    // Доступ к localStorage может бросить исключение (например, при запрете cookies).\n    return null;\n  }\n}\n\n/** Читает сохранённую тему; при отсутствии или мусоре в хранилище возвращает тему по умолчанию. */\nexport function readStoredTheme(storage: StorageLike | null = getStorage()): AppTheme {\n  if (!storage) return DEFAULT_APP_THEME;\n  try {\n    const raw = storage.getItem(THEME_STORAGE_KEY);\n    return isAppTheme(raw) ? raw : DEFAULT_APP_THEME;\n  } catch {\n    return DEFAULT_APP_THEME;\n  }\n}\n\n/** Сохраняет тему. Ошибки записи (переполнение, приватный режим) глотаются: тема всё равно применится в текущей сессии. */\nexport function writeStoredTheme(theme: AppTheme, storage: StorageLike | null = getStorage()): void {\n  if (!storage) return;\n  try {\n    storage.setItem(THEME_STORAGE_KEY, theme);\n  } catch {\n    // ignore\n  }\n}\nEOF\n\ncat > src/useStoredTheme.ts <<'EOF'\nimport React from 'react';\n\nimport {\n  THEME_STORAGE_KEY,\n  isAppTheme,\n  readStoredTheme,\n  writeStoredTheme,\n  type AppTheme,\n} from './themeStorage';\n\n/**\n * Тема приложения, синхронизированная с localStorage.\n * Начальное значение читается синхронно в инициализаторе useState,\n * поэтому первый рендер уже идёт в правильной теме и после перезагрузки нет мигания.\n */\nexport function useStoredTheme(): [AppTheme, (theme: AppTheme) => void] {\n  const [theme, setThemeState] = React.useState<AppTheme>(() => readStoredTheme());\n\n  const setTheme = React.useCallback((next: AppTheme) => {\n    setThemeState(next);\n    writeStoredTheme(next);\n  }, []);\n\n  // Если тему поменяли в другой вкладке, подхватываем изменение.\n  React.useEffect(() => {\n    const onStorage = (event: StorageEvent) => {\n      if (event.key !== THEME_STORAGE_KEY) return;\n      setThemeState(isAppTheme(event.newValue) ? event.newValue : readStoredTheme());\n    };\n    window.addEventListener('storage', onStorage);\n    return () => window.removeEventListener('storage', onStorage);\n  }, []);\n\n  return [theme, setTheme];\n}\nEOF\n\ncat > src/ThemeRoot.tsx <<'EOF'\nimport React from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nimport type { AppTheme } from './themeStorage';\nimport { useStoredTheme } from './useStoredTheme';\n\ninterface ThemeSwitchContextValue {\n  theme: AppTheme;\n  setTheme: (theme: AppTheme) => void;\n}\n\nconst ThemeSwitchContext = React.createContext<ThemeSwitchContextValue | null>(null);\n\n/** Корневой провайдер: хранит выбранную тему, персистит её и отдаёт в Gravity UI ThemeProvider. */\nexport function ThemeRoot({ children }: { children: React.ReactNode }) {\n  const [theme, setTheme] = useStoredTheme();\n  const value = React.useMemo(() => ({ theme, setTheme }), [theme, setTheme]);\n\n  return (\n    <ThemeSwitchContext.Provider value={value}>\n      <ThemeProvider theme={theme}>{children}</ThemeProvider>\n    </ThemeSwitchContext.Provider>\n  );\n}\n\nexport function useThemeSwitch(): ThemeSwitchContextValue {\n  const ctx = React.useContext(ThemeSwitchContext);\n  if (!ctx) {\n    throw new Error('useThemeSwitch must be used inside <ThemeRoot>');\n  }\n  return ctx;\n}\nEOF\n\ncat > src/ThemeSwitcher.tsx <<'EOF'\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\n\nimport { useThemeSwitch } from './ThemeRoot';\nimport type { AppTheme } from './themeStorage';\n\nconst LABELS: Record<AppTheme, string> = {\n  light: 'Светлая',\n  dark: 'Тёмная',\n  system: 'Системная',\n};\n\nexport function ThemeSwitcher() {\n  const { theme, setTheme } = useThemeSwitch();\n\n  return (\n    <SegmentedRadioGroup<AppTheme>\n      value={theme}\n      onUpdate={setTheme}\n      size=\"m\"\n      aria-label=\"Тема оформления\"\n      qa=\"theme-switcher\"\n    >\n      <SegmentedRadioGroup.Option value=\"light\">{LABELS.light}</SegmentedRadioGroup.Option>\n      <SegmentedRadioGroup.Option value=\"dark\">{LABELS.dark}</SegmentedRadioGroup.Option>\n      <SegmentedRadioGroup.Option value=\"system\">{LABELS.system}</SegmentedRadioGroup.Option>\n    </SegmentedRadioGroup>\n  );\n}\nEOF\n\ncat > src/App.tsx <<'EOF'\nimport { Button, Card, Text, useThemeValue } from '@gravity-ui/uikit';\n\nimport { ThemeSwitcher } from './ThemeSwitcher';\n\nexport function App() {\n  const themeValue = useThemeValue();\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 480 }}>\n      <Text variant=\"header-1\">Тема оформления</Text>\n      <ThemeSwitcher />\n      <Card view=\"filled\" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>\n        <Text>\n          Активная тема: <Text variant=\"code-1\">{themeValue}</Text>\n        </Text>\n        <Text color=\"secondary\">\n          Выбор сохраняется в localStorage и восстанавливается после перезагрузки страницы.\n        </Text>\n        <div>\n          <Button view=\"action\">Пример кнопки</Button>\n        </div>\n      </Card>\n    </div>\n  );\n}\nEOF\n\ncat > src/main.tsx <<'EOF'\n// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\nimport { ThemeRoot } from './ThemeRoot';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <ThemeRoot>\n      <App />\n    </ThemeRoot>\n  </React.StrictMode>,\n);\nEOF\n\ncat > src/themeStorage.test.ts <<'EOF'\nimport { describe, expect, it } from 'vitest';\n\nimport { THEME_STORAGE_KEY, readStoredTheme, writeStoredTheme } from './themeStorage';\n\nfunction fakeStorage(initial: Record<string, string> = {}) {\n  const map = new Map(Object.entries(initial));\n  return {\n    getItem: (key: string) => map.get(key) ?? null,\n    setItem: (key: string, value: string) => void map.set(key, value),\n    dump: () => Object.fromEntries(map),\n  };\n}\n\ndescribe('themeStorage', () => {\n  it('falls back to system when nothing is stored', () => {\n    expect(readStoredTheme(fakeStorage())).toBe('system');\n  });\n\n  it('falls back to system when storage is unavailable', () => {\n    expect(readStoredTheme(null)).toBe('system');\n  });\n\n  it('ignores garbage values', () => {\n    expect(readStoredTheme(fakeStorage({ [THEME_STORAGE_KEY]: 'neon' }))).toBe('system');\n  });\n\n  it('round-trips the chosen theme', () => {\n    const storage = fakeStorage();\n    writeStoredTheme('dark', storage);\n    expect(storage.dump()).toEqual({ [THEME_STORAGE_KEY]: 'dark' });\n    expect(readStoredTheme(storage)).toBe('dark');\n  });\n\n  it('swallows write errors', () => {\n    const broken = {\n      getItem: () => null,\n      setItem: () => {\n        throw new Error('QuotaExceededError');\n      },\n    };\n    expect(() => writeStoredTheme('light', broken)).not.toThrow();\n  });\n});\nEOF\n\nnode -e '\nconst fs=require(\"fs\");const p=JSON.parse(fs.readFileSync(\"package.json\",\"utf8\"));\np.scripts.test=\"vitest run\";fs.writeFileSync(\"package.json\",JSON.stringify(p,null,2)+\"\\n\");'\nnpm run build 2>&1 | tail -15 && npx vitest run 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && (which chromium chromium-browser google-chrome 2>/dev/null; ls node_modules | grep -i \"playwright\\|puppeteer\"; ls ~/.cache/ms-playwright 2>/dev/null) ; echo \"---\"; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 194,
+      "outputTokens": 7481,
+      "cacheReadTokens": 171229,
+      "cacheWriteTokens": 20220,
+      "totalTokens": 199124
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

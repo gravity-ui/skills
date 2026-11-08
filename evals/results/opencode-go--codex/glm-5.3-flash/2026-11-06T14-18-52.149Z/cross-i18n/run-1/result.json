@@ -1,0 +1,87 @@
+{
+  "status": "failed",
+  "duration": 259.85,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 105613,
+    "outputTokens": 3667,
+    "cacheReadTokens": 8960,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 99,
+    "totalTokens": 118240
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' | head -50 && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!node_modules'\"' | head -120\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App.tsx ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main.tsx ---\\\\n' && cat src/main.tsx && printf '\\\\n--- index.html ---\\\\n' && cat index.html && printf '\\\\n--- vite config ---\\\\n' && cat vite.config.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' src/main.tsx && printf '\\\\n--- i18n exists? ---\\\\n' && ls src && printf '\\\\n--- App ---\\\\n' && sed -n '1,120p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/i18n.tsx\n@@\n const I18nContext = createContext<I18nContextValue | null>(null);\n \n+const languageStorageKey = 'app-language';\n+\n+function getInitialLanguage(): Language {\n+  const storedLanguage = localStorage.getItem(languageStorageKey);\n+\n+  return storedLanguage === 'en' || storedLanguage === 'ru' ? storedLanguage : 'en';\n+}\n+\n export function I18nProvider({ children }: { children: ReactNode }) {\n-  const [language, setLanguage] = useState<Language>('en');\n+  const [language, setLanguage] = useState<Language>(getInitialLanguage);\n+\n+  const changeLanguage = useCallback((nextLanguage: Language) => {\n+    setLanguage(nextLanguage);\n+    localStorage.setItem(languageStorageKey, nextLanguage);\n+  }, []);\n \n   const t = useCallback((key: TranslationKey) => translations[language][key], [language]);\n \n   const value = useMemo(\n-    () => ({ language, setLanguage, t }),\n-    [language, t],\n+    () => ({ language, setLanguage: changeLanguage, t }),\n+    [changeLanguage, language, t],\n   );\n*** Update File: src/App.tsx\n@@\n import { Button, Card, Select } from '@gravity-ui/uikit';\n+import { useEffect } from 'react';\n@@\n   const { language, setLanguage, t } = useI18n();\n+\n+  useEffect(() => {\n+    document.documentElement.lang = language;\n+  }, [language]);\n*** End Patch\nPATCH\n\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/i18n.tsx\n@@\n const I18nContext = createContext<I18nContextValue | null>(null);\n \n+const languageStorageKey = 'app-language';\n+\n+function getInitialLanguage(): Language {\n+  const storedLanguage = localStorage.getItem(languageStorageKey);\n+\n+  return storedLanguage === 'en' || storedLanguage === 'ru' ? storedLanguage : 'en';\n+}\n+\n export function I18nProvider({ children }: { children: ReactNode }) {\n-  const [language, setLanguage] = useState<Language>('en');\n+  const [language, setLanguage] = useState<Language>(getInitialLanguage);\n+\n+  const changeLanguage = useCallback((nextLanguage: Language) => {\n+    setLanguage(nextLanguage);\n+    localStorage.setItem(languageStorageKey, nextLanguage);\n+  }, []);\n \n   const t = useCallback((key: TranslationKey) => translations[language][key], [language]);\n \n   const value = useMemo(\n-    () => ({ language, setLanguage, t }),\n-    [language, t],\n+    () => ({ language, setLanguage: changeLanguage, t }),\n+    [changeLanguage, language, t],\n   );\n*** Update File: src/App.tsx\n@@\n import { Button, Card, Select } from '@gravity-ui/uikit';\n+import { useEffect } from 'react';\n@@\n   const { language, setLanguage, t } = useI18n();\n+\n+  useEffect(() => {\n+    document.documentElement.lang = language;\n+  }, [language]);\n*** End Patch\nPATCH\n\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 105613,
+      "outputTokens": 3667,
+      "cacheReadTokens": 8960,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 99,
+      "totalTokens": 118240
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

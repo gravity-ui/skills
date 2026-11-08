@@ -1,0 +1,152 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-primary);
+}
+
+.page {
+  box-sizing: border-box;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page__title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.chart-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+}
+
+.chart-card__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+}
+
+.chart-card__stats {
+  display: flex;
+  gap: 32px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat__value {
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * График растягивается по карточке: фрейм занимает всю свободную высоту,
+ * сам инстанс абсолютно спозиционирован внутри него (иначе canvas участвовал
+ * бы в раскладке и ResizeObserver мог попасть в цикл «resize → layout»).
+ */
+.chart-card__frame {
+  position: relative;
+  flex: 1;
+  min-height: 340px;
+  width: 100%;
+}
+
+.cpu-chart {
+  position: absolute;
+  inset: 0;
+}
+
+/* Тема yagr: прозрачная подложка поверх карточки, приглушённая сетка. */
+.cpu-chart.yagr_theme_light {
+  --yagr-background: transparent;
+  --yagr-grid: rgba(0, 0, 0, 0.07);
+  --yagr-axis-stroke: rgba(0, 0, 0, 0.45);
+}
+
+.cpu-chart.yagr_theme_dark {
+  --yagr-background: transparent;
+  --yagr-grid: rgba(255, 255, 255, 0.09);
+  --yagr-axis-stroke: rgba(255, 255, 255, 0.5);
+}
+
+/*
+ * Тултип рендерится в document.body, поэтому тему берём от класса,
+ * который выставляет Gravity UI ThemeProvider.
+ */
+.yagr-tooltip {
+  font-family: var(--g-font-family-sans, 'Inter', 'Helvetica Neue', Arial, sans-serif);
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  padding: 8px 12px;
+}
+
+.g-root_theme_dark .yagr-tooltip {
+  background: #2d2c33;
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.cpu-tooltip__time {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.cpu-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cpu-tooltip__mark {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2a78d6;
+}
+
+.g-root_theme_dark .cpu-tooltip__mark {
+  background: #3987e5;
+}
+
+.cpu-tooltip__value {
+  margin-left: auto;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

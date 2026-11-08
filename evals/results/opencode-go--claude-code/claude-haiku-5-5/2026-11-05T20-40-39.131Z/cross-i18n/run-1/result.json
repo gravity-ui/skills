@@ -1,0 +1,249 @@
+{
+  "status": "passed",
+  "duration": 1487.489,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 110,
+    "outputTokens": 34744,
+    "cacheReadTokens": 2805100,
+    "cacheWriteTokens": 65303,
+    "totalTokens": 2905257
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 28,
+    "toolCalls": {
+      "file_read": 3,
+      "file_write": 5,
+      "file_edit": 0,
+      "shell": 46,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 54,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/verify/check.mjs",
+      "/tmp/verify/initial.png",
+      "/tmp/verify/ru.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/i18n/translations.ts",
+      "/home/sandbox/workspace/src/i18n/LanguageProvider.tsx",
+      "/home/sandbox/workspace/src/components/LanguageSwitcher.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/tmp/verify/check.mjs"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html tsconfig.json vite.config.ts .gitignore src/App.tsx src/main.tsx src/vite-env.d.ts && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "node -v && npm -v && (npm ci 2>&1 || npm install 2>&1) | tail -15",
+        "success": true
+      },
+      {
+        "command": "git status --short && npm run build 2>&1 | tail -15; echo \"exit=$?\"; ls node_modules/@gravity-ui/uikit/build/esm/ | head -80; grep -rl \"configure\\b\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null; grep -n \"configure\\|lang\\|i18n\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts; ls node_modules/@gravity-ui/uikit/build/esm/i18n; cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.js; grep -n \"SegmentedRadioGroup\\|export.*Select\\b\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head; cat dist/index.html >/dev/null; rm -rf dist",
+        "success": true
+      },
+      {
+        "command": "grep -rl \"subscribeConfigure\" node_modules/@gravity-ui/uikit/build/esm --include=*.js | head; cat node_modules/@gravity-ui/uikit/build/esm/i18n/i18n.js | head -60; ls node_modules/@gravity-ui/uikit/build/esm/components | head -80",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.js; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts 2>/dev/null | head -40; ls node_modules/@gravity-ui/uikit/build/esm/components/theme/; grep -n \"lang\\|Lang\" node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js | head; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "cd node_modules/@gravity-ui/uikit/build/esm && grep -n \"ControlGroupProps\\|ControlGroupOption\" -A12 components/types.d.ts | head -60; grep -n \"interface DOMProps\" -A8 components/types.d.ts; grep -n \"export\" components/Button/Button.d.ts | head -5; grep -n \"view\\|size\" components/Button/Button.d.ts | head -10; grep -n \"export\" components/index.d.ts | grep -i \"card\\|text\\|Button\\|Segmented\" ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,40p Text/Text.d.ts; sed -n 1,30p Card/Card.d.ts; cat SegmentedRadioGroup/SegmentedRadioGroup.js | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -20; echo \"exit=${PIPESTATUS[0]}\"; rm -rf dist",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; python3 -c \"import playwright\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/verify && cd /tmp/verify && npm init -y >/dev/null && npm i playwright@1 2>&1 | tail -2 && timeout 280000 npx playwright install --with-deps chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && timeout 280000 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5173 --strictPort > /tmp/verify/vite.log 2>&1 &) ; sleep 6; cat /tmp/verify/vite.log | tail -5; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5173/",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/verify && node -e \"fetch('http://localhost:5173/').then(async r=>{console.log(r.status); console.log((await r.text()).slice(0,600))}).catch(e=>console.log('ERR',e.message))\"; ps aux | grep -i \"vite\\|node\" | grep -v grep | head",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5180 --strictPort > /tmp/verify/vite.log 2>&1 &) ; sleep 6; cat /tmp/verify/vite.log | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && timeout 120000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "B=/home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell; ldd $B | grep \"not found\"; which apt-get dpkg-deb dpkg 2>/dev/null; id -u",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/verify/debs /tmp/verify/libs && cd /tmp/verify/debs && timeout 200 apt-get download libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0 libgobject-2.0-0 2>&1 | tail -3; ls",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify/debs && timeout 200 apt-get download libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0 2>&1 | tail -3; for f in *.deb; do dpkg -x \"$f\" /tmp/verify/libs; done; find /tmp/verify/libs -name \"*.so*\" | wc -l; B=/home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell; LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d -name \"*-linux-gnu*\" -printf \"%p:\" ) ldd $B | grep \"not found\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify/debs && timeout 200 apt-get download libxrender1 libdrm2 libwayland-server0 libxi6 2>&1 | tail -1; for f in libxrender1*.deb libdrm2*.deb libwayland-server0*.deb libxi6*.deb; do dpkg -x \"$f\" /tmp/verify/libs; done; B=/home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell; export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); ldd $B | grep \"not found\"; echo \"missing-check-done\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && tail -5 vite.log; export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > probe.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--single-process'] });\nconst p = await b.newPage();\nawait p.goto('data:text/html,<h1>hi</h1>');\nconsole.log('title ok', await p.textContent('h1'));\nawait b.close();\nEOF\ntimeout 60000 node probe.mjs 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') && sed -i \"s/chromium.launch()/chromium.launch({ args: ['--no-sandbox','--disable-gpu','--single-process'] })/; s/waitUntil: 'networkidle'/waitUntil: 'load'/g\" check.mjs && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > probe2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--single-process'] });\nconst p = await b.newPage();\np.on('crash', () => console.log('CRASH'));\np.on('close', () => console.log('PAGE CLOSED'));\ntry { await p.goto('http://127.0.0.1:5180/', { timeout: 30000 }); console.log('loaded', await p.title()); } catch (e) { console.log('ERR', e.message.split('\\n')[0]); }\nawait b.close();\nEOF\ntimeout 90000 node probe2.mjs 2>&1 | tail -8; node -e \"fetch('http://127.0.0.1:5180/src/main.tsx').then(r=>console.log('vite src', r.status))\"",
+        "success": false
+      },
+      {
+        "command": "setsid nohup npx vite --port 5180 --strictPort > /tmp/verify/vite.log 2>&1 < /dev/null & sleep 8; cat /tmp/verify/vite.log | tail -3; node -e \"fetch('http://127.0.0.1:5180/src/App.tsx').then(r=>r.text()).then(t=>console.log('vite src ok', t.length)).catch(e=>console.log('ERR', e.message))\"",
+        "success": true
+      },
+      {
+        "command": "cat /tmp/verify/vite.log | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && node -e \"\nfor (const u of ['http://localhost:5180/src/App.tsx','http://localhost:5173/src/App.tsx','http://[::1]:5180/src/App.tsx']) fetch(u).then(async r=>{const t=await r.text(); console.log(u, r.status, t.includes('Переключение')?'HAS-RU':'no-ru', t.slice(0,80).replace(/\\n/g,' '))}).catch(e=>console.log(u,'ERR',e.cause?.code||e.message))\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > probe3.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst sets = [\n  ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'],\n  ['--no-sandbox','--disable-gpu','--single-process','--no-zygote'],\n  ['--no-sandbox','--disable-gpu','--disable-features=NetworkService','--no-zygote','--single-process'],\n];\nfor (const args of sets) {\n  try {\n    const b = await chromium.launch({ args, timeout: 30000 });\n    const p = await b.newPage();\n    await p.goto('http://localhost:5180/', { timeout: 30000, waitUntil: 'domcontentloaded' });\n    console.log('OK', args.join(' '), await p.title());\n    await b.close();\n  } catch (e) { console.log('FAIL', args.join(' '), '::', e.message.split('\\n')[0]); }\n}\nEOF\ntimeout 200000 node probe3.mjs 2>&1 | tail -10",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); sed -i \"s/args: \\['--no-sandbox','--disable-gpu','--single-process'\\]/args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage']/\" check.mjs && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > probe4.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst ctx = await b.newContext({ viewport: { width: 900, height: 620 } });\nconst p = await ctx.newPage();\np.on('crash', () => console.log('CRASH'));\np.on('console', (m) => console.log('console', m.type(), m.text().slice(0,120)));\np.on('pageerror', (e) => console.log('pageerror', e.message.slice(0,200)));\ntry { await p.goto('http://localhost:5180/', { timeout: 30000, waitUntil: 'domcontentloaded' }); console.log('dom ok'); } catch (e) { console.log('ERR1', e.message.split('\\n')[0]); }\ntry { await p.waitForSelector('text=Language switcher', { timeout: 20000 }); console.log('selector ok'); } catch (e) { console.log('ERR2', e.message.split('\\n')[0]); }\nawait b.close();\nEOF\ntimeout 120000 node probe4.mjs 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > probe5.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst p = await b.newPage();\np.on('crash', () => console.log('CRASH'));\np.on('close', () => console.log('PAGE CLOSE EVENT'));\np.on('pageerror', (e) => console.log('pageerror', e.message.slice(0,300)));\nawait p.goto('http://localhost:5180/', { waitUntil: 'domcontentloaded' });\nfor (let i = 0; i < 4; i++) {\n  await new Promise(r => setTimeout(r, 1500));\n  try { const len = await p.evaluate(() => document.getElementById('root')?.innerHTML.length); console.log('t', i, 'root len', len, 'connected', b.isConnected()); }\n  catch (e) { console.log('t', i, 'ERR', e.message.split('\\n')[0], 'connected', b.isConnected()); break; }\n}\nawait b.close();\nEOF\ntimeout 120000 node probe5.mjs 2>&1 | tail -15; echo; echo \"--- trivial page check:\"; cat > probe6.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst p = await b.newPage();\nawait p.goto('http://localhost:5180/', { waitUntil: 'domcontentloaded' });\nawait new Promise(r => setTimeout(r, 3000));\nconsole.log('isConnected', b.isConnected(), await p.evaluate(() => 'alive ' + document.title).catch(e => 'ERR ' + e.message.split('\\n')[0]));\nawait b.close();\nEOF\ntimeout 60000 node probe6.mjs 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); DEBUG=pw:browser timeout 60000 node probe6.mjs 2>&1 | grep -v \"^\\s*$\" | tail -25",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify/debs && timeout 120 apt-get download libsqlite3-0 2>&1 | tail -1 && dpkg -x libsqlite3-0*.deb /tmp/verify/libs && cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > shot.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst p = await b.newPage({ viewport: { width: 900, height: 620 } });\nconst errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type()==='error') errs.push(m.text()); });\nawait p.goto('http://localhost:5180/', { waitUntil: 'load' });\nawait new Promise(r => setTimeout(r, 2500));\nconsole.log(await p.evaluate(() => document.getElementById('root').innerHTML.slice(0, 700)));\nconsole.log('errors:', errs.slice(0,5));\nawait p.screenshot({ path: '/tmp/verify/initial.png', fullPage: true });\nawait b.close();\nEOF\ntimeout 90000 node shot.mjs 2>&1 | tail -12",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > css.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst p = await b.newPage({ viewport: { width: 900, height: 620 } });\nawait p.goto(process.env.APP_URL ?? 'http://localhost:5180/', { waitUntil: 'load' });\nawait new Promise(r => setTimeout(r, 2000));\nconsole.log(await p.evaluate(() => {\n  const span = document.querySelector('.g-text');\n  const cs = getComputedStyle(span);\n  const bodyCls = document.body.className, htmlCls = document.documentElement.className;\n  return { bodyCls, htmlCls, color: cs.color, font: cs.fontFamily, opacity: cs.opacity, vis: cs.visibility, textVar: getComputedStyle(document.body).getPropertyValue('--g-color-text-primary'), sheets: [...document.styleSheets].map(s => { try { return s.cssRules.length } catch { return 'x' } }) };\n}));\nawait b.close();\nEOF\ntimeout 90000 node css.mjs 2>&1 | tail -5; grep -n \"rootClassName\\|document.body\\|classList\\|scoped\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); sed -i 's/sheets: \\[.*\\] }));/}));/' css.mjs && timeout 90000 node css.mjs 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':'); cat > css.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst b = await chromium.launch({ args: ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] });\nconst p = await b.newPage({ viewport: { width: 900, height: 620 } });\nawait p.goto('http://localhost:5180/', { waitUntil: 'load' });\nawait new Promise(r => setTimeout(r, 2000));\nconst out = await p.evaluate(() => {\n  const span = document.querySelector('.g-text');\n  const cs = getComputedStyle(span);\n  return JSON.stringify({ bodyCls: document.body.className, htmlCls: document.documentElement.className, color: cs.color, font: cs.fontFamily, vis: cs.visibility, bodyTextVar: getComputedStyle(document.body).getPropertyValue('--g-color-text-primary') });\n});\nconsole.log(out);\nawait b.close();\nEOF\ntimeout 90000 node css.mjs 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "ls /usr/share/fonts 2>/dev/null | head; fc-list 2>/dev/null | wc -l; ls /tmp/verify/libs/usr/share/fonts 2>/dev/null | head -3; find /home/node/.cache /usr/share -iname \"*.ttf\" 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify/debs && timeout 200 apt-get download fonts-dejavu-core fontconfig-config 2>&1 | tail -1; for f in fonts-dejavu-core*.deb; do dpkg -x \"$f\" /tmp/verify/libs; done; mkdir -p /tmp/verify/fccache && cat > /tmp/verify/fonts.conf <<'EOF'\n<?xml version=\"1.0\"?>\n<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig>\n  <dir>/tmp/verify/libs/usr/share/fonts</dir>\n  <cachedir>/tmp/verify/fccache</cachedir>\n</fontconfig>\nEOF\nfind /tmp/verify/libs/usr/share/fonts -name \"*.ttf\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') FONTCONFIG_FILE=/tmp/verify/fonts.conf && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') FONTCONFIG_FILE=/tmp/verify/fonts.conf && sed -i \"s/await page.getByText('Русский', { exact: true }).click();/await page.locator('input[type=radio][value=\\\"ru\\\"]').check();/; s/await page.getByText('English', { exact: true }).click();/await page.locator('input[type=radio][value=\\\"en\\\"]').check();/\" check.mjs && grep -n \"check();\" check.mjs && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/verify && export LD_LIBRARY_PATH=$(find /tmp/verify/libs -type d \\( -name \"*-linux-gnu*\" -o -name lib \\) | tr '\\n' ':') FONTCONFIG_FILE=/tmp/verify/fonts.conf && sed -i \"s/'\\.segmented-radio-group /'.g-segmented-radio-group /g; s/querySelectorAll('\\.segmented-radio-group input')/querySelectorAll('.g-segmented-radio-group input')/; s/body.includes('Current value: 2') \\&\\& s.body.includes('Counter')/body.includes('Current value: 0') \\&\\& s.body.includes('Counter')/\" check.mjs && grep -n \"segmented\\|Current value: 0\" check.mjs && APP_URL=http://localhost:5180/ timeout 150000 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "for d in /proc/[0-9]*; do if grep -qa \"vite\" $d/cmdline 2>/dev/null && grep -qa \"5180\" $d/cmdline 2>/dev/null; then kill $(basename $d) 2>/dev/null && echo \"killed $(basename $d)\"; fi; done; cd /home/sandbox/workspace && git status --short && npm run build 2>&1 | tail -4; rm -rf dist; git status --short",
+        "success": false
+      },
+      {
+        "command": "git status --short && npm run build 2>&1 | tail -4; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 110,
+      "outputTokens": 34744,
+      "cacheReadTokens": 2805100,
+      "cacheWriteTokens": 65303,
+      "totalTokens": 2905257
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

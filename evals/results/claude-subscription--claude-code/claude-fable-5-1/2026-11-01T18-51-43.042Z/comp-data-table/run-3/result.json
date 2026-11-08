@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 596.056,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 546,
+    "outputTokens": 14915,
+    "cacheReadTokens": 712332,
+    "cacheWriteTokens": 39434,
+    "totalTokens": 767227
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 2,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/DataTable.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; cat package-lock.json 2>/dev/null | head -40; git log --oneline | head; find . -path ./node_modules -prune -o -type f -print | head -50",
+        "success": true
+      },
+      {
+        "command": "cat index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; echo ---; cat __agent_eval__/run.mjs; echo ---; ls node_modules/@gravity-ui/uikit/build/esm/components | head -100",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Table/index.d.ts && cat Table/Table.d.ts && ls Table/hoc && cat Table/hoc/withTableSorting/withTableSorting.d.ts Table/hoc/withTableSelection/withTableSelection.d.ts Table/hoc/withTableSettings/withTableSettings.d.ts 2>/dev/null | head -120",
+        "success": true
+      },
+      {
+        "command": "cat Pagination/Pagination.d.ts Pagination/types.d.ts 2>/dev/null; echo ---SORT-IMPL; sed -n 1,200p Table/hoc/withTableSorting/withTableSorting.js; echo ---SEL-IMPL; sed -n 1,160p Table/hoc/withTableSelection/withTableSelection.js; echo ---TEXT; grep -n \"variant\" Text/Text.d.ts | head; echo ---LABEL; grep -n \"theme\" Label/Label.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && grep -n \"export\" node_modules/@gravity-ui/uikit/build/esm/components/layout/index.d.ts | head -20 && grep -n \"size\\|view\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -10 && grep -n \"variant\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts 2>/dev/null | head -3 || grep -rn \"TextVariant\\|TEXT_VARIANTS\" node_modules/@gravity-ui/uikit/build/esm/components/Text/*.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "cat > src/data.ts <<'EOF'\nexport type EmployeeStatus = 'active' | 'vacation' | 'dismissed';\n\nexport interface Employee {\n  id: string;\n  name: string;\n  email: string;\n  department: string;\n  position: string;\n  salary: number;\n  hiredAt: string; // ISO date\n  status: EmployeeStatus;\n}\n\nconst FIRST_NAMES = [\n  'Анна', 'Иван', 'Мария', 'Дмитрий', 'Елена', 'Сергей', 'Ольга', 'Алексей',\n  'Наталья', 'Павел', 'Екатерина', 'Михаил', 'Татьяна', 'Андрей', 'Юлия', 'Николай',\n];\nconst LAST_NAMES = [\n  'Иванова', 'Петров', 'Смирнова', 'Кузнецов', 'Попова', 'Васильев', 'Соколова', 'Михайлов',\n  'Новикова', 'Фёдоров', 'Морозова', 'Волков', 'Алексеева', 'Лебедев', 'Семёнова', 'Егоров',\n];\nconst DEPARTMENTS = ['Разработка', 'Дизайн', 'Маркетинг', 'Продажи', 'Поддержка', 'Финансы'];\nconst POSITIONS = ['Junior', 'Middle', 'Senior', 'Lead', 'Head'];\nconst STATUSES: EmployeeStatus[] = ['active', 'active', 'active', 'vacation', 'dismissed'];\n\n/** Простой детерминированный генератор, чтобы данные не менялись между перезагрузками. */\nfunction createRng(seed: number) {\n  let state = seed >>> 0;\n  return () => {\n    state = (state * 1664525 + 1013904223) >>> 0;\n    return state / 0x100000000;\n  };\n}\n\nfunction translit(value: string): string {\n  const map: Record<string, string> = {\n    а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y',\n    к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f',\n    х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya',\n  };\n  return value\n    .toLowerCase()\n    .split('')\n    .map((ch) => map[ch] ?? ch)\n    .join('');\n}\n\nexport function generateEmployees(count = 57, seed = 42): Employee[] {\n  const rnd = createRng(seed);\n  const pick = <T,>(arr: T[]) => arr[Math.floor(rnd() * arr.length)];\n\n  return Array.from({ length: count }, (_, i) => {\n    const firstName = pick(FIRST_NAMES);\n    const lastName = pick(LAST_NAMES);\n    const position = pick(POSITIONS);\n    const base = 60_000 + POSITIONS.indexOf(position) * 45_000;\n    const year = 2015 + Math.floor(rnd() * 10);\n    const month = 1 + Math.floor(rnd() * 12);\n    const day = 1 + Math.floor(rnd() * 28);\n\n    return {\n      id: String(1001 + i),\n      name: `${firstName} ${lastName}`,\n      email: `${translit(firstName)}.${translit(lastName)}@example.com`,\n      department: pick(DEPARTMENTS),\n      position,\n      salary: base + Math.round(rnd() * 40) * 1000,\n      hiredAt: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,\n      status: pick(STATUSES),\n    };\n  });\n}\nEOF\ncat > src/DataTable.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\nimport {\n  Button,\n  Flex,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n  type TableColumnConfig,\n  type TableDataItem,\n  type TableSortState,\n} from '@gravity-ui/uikit';\n\nexport type SortableColumnConfig<I> = TableColumnConfig<I> & {\n  /** Функция сравнения для сортировки. Если не задана, колонка не сортируется. */\n  sortFn?: (a: I, b: I) => number;\n  /** Порядок первого клика по заголовку. По умолчанию `asc`. */\n  defaultSortOrder?: 'asc' | 'desc';\n};\n\nexport interface DataTableProps<I extends TableDataItem> {\n  data: I[];\n  columns: SortableColumnConfig<I>[];\n  /** Уникальный идентификатор строки. Используется для выделения. */\n  getRowId: (item: I) => string;\n  pageSizeOptions?: number[];\n  defaultPageSize?: number;\n  defaultSortState?: TableSortState;\n  /** Контролируемое выделение. Если не передано, компонент хранит выделение сам. */\n  selectedIds?: string[];\n  onSelectionChange?: (ids: string[]) => void;\n  isRowSelectionDisabled?: (item: I) => boolean;\n  emptyMessage?: string;\n  className?: string;\n}\n\n// HOC-и из Gravity UI оборачивают один раз на уровне модуля, чтобы не пересоздавать компонент на каждый рендер.\nconst EnhancedTable = withTableSorting(withTableSelection(Table)) as typeof Table &\n  ((props: any) => JSX.Element);\n\nfunction compareDefault(a: unknown, b: unknown): number {\n  if (a === b) return 0;\n  if (a == null) return 1;\n  if (b == null) return -1;\n  if (typeof a === 'number' && typeof b === 'number') return a - b;\n  return String(a).localeCompare(String(b), 'ru', { numeric: true, sensitivity: 'base' });\n}\n\nexport function DataTable<I extends TableDataItem>({\n  data,\n  columns,\n  getRowId,\n  pageSizeOptions = [10, 20, 50],\n  defaultPageSize = pageSizeOptions[0] ?? 10,\n  defaultSortState = [],\n  selectedIds: controlledSelectedIds,\n  onSelectionChange,\n  isRowSelectionDisabled,\n  emptyMessage = 'Нет данных',\n  className,\n}: DataTableProps<I>) {\n  const [sortState, setSortState] = useState<TableSortState>(defaultSortState);\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(defaultPageSize);\n  const [innerSelectedIds, setInnerSelectedIds] = useState<string[]>([]);\n\n  const isControlled = controlledSelectedIds !== undefined;\n  const selectedIds = isControlled ? controlledSelectedIds : innerSelectedIds;\n  const handleSelectionChange = (ids: string[]) => {\n    if (!isControlled) setInnerSelectedIds(ids);\n    onSelectionChange?.(ids);\n  };\n\n  // Колонки для Table: `meta.sort` включает индикатор сортировки в заголовке,\n  // а саму сортировку мы делаем сами (controlled sortState + disableDataSorting).\n  const tableColumns = useMemo<TableColumnConfig<I>[]>(\n    () =>\n      columns.map(({ sortFn, defaultSortOrder, ...column }) => ({\n        ...column,\n        meta: {\n          ...column.meta,\n          sort: Boolean(sortFn),\n          defaultSortOrder,\n        },\n      })),\n    [columns],\n  );\n\n  // Сортируем ВСЕ данные, а не только текущую страницу.\n  const sortedData = useMemo(() => {\n    if (sortState.length === 0) return data;\n    const comparators = sortState\n      .map(({ column, order }) => {\n        const col = columns.find((c) => c.id === column);\n        if (!col?.sortFn) return null;\n        const fn = col.sortFn;\n        return (a: I, b: I) => (order === 'asc' ? fn(a, b) : -fn(a, b));\n      })\n      .filter((fn): fn is (a: I, b: I) => number => fn !== null);\n    if (comparators.length === 0) return data;\n\n    return [...data].sort((a, b) => {\n      for (const cmp of comparators) {\n        const result = cmp(a, b);\n        if (result !== 0) return result;\n      }\n      return 0;\n    });\n  }, [data, columns, sortState]);\n\n  const total = sortedData.length;\n  const pageCount = Math.max(1, Math.ceil(total / pageSize));\n  const currentPage = Math.min(page, pageCount);\n  const pageData = useMemo(\n    () => sortedData.slice((currentPage - 1) * pageSize, currentPage * pageSize),\n    [sortedData, currentPage, pageSize],\n  );\n\n  const handleSortChange = (next: TableSortState) => {\n    setSortState(next);\n    setPage(1);\n  };\n\n  const handlePaginationUpdate = (nextPage: number, nextPageSize: number) => {\n    if (nextPageSize !== pageSize) {\n      setPageSize(nextPageSize);\n      setPage(1);\n      return;\n    }\n    setPage(nextPage);\n  };\n\n  const from = total === 0 ? 0 : (currentPage - 1) * pageSize + 1;\n  const to = Math.min(currentPage * pageSize, total);\n\n  return (\n    <Flex direction=\"column\" gap={3} className={className}>\n      <Flex alignItems=\"center\" gap={3} style={{ minHeight: 28 }}>\n        <Text variant=\"body-1\" color=\"secondary\">\n          Показано {from}–{to} из {total}\n        </Text>\n        {selectedIds.length > 0 && (\n          <>\n            <Text variant=\"body-1\">Выбрано: {selectedIds.length}</Text>\n            <Button size=\"s\" view=\"flat-secondary\" onClick={() => handleSelectionChange([])}>\n              Снять выделение\n            </Button>\n          </>\n        )}\n      </Flex>\n\n      <EnhancedTable\n        data={pageData}\n        columns={tableColumns}\n        getRowDescriptor={(item: I) => ({ id: getRowId(item) })}\n        sortState={sortState}\n        onSortStateChange={handleSortChange}\n        disableDataSorting\n        selectedIds={selectedIds}\n        onSelectionChange={handleSelectionChange}\n        isRowSelectionDisabled={isRowSelectionDisabled}\n        emptyMessage={emptyMessage}\n        width=\"max\"\n      />\n\n      <Flex justifyContent=\"flex-end\">\n        <Pagination\n          page={currentPage}\n          pageSize={pageSize}\n          total={total}\n          pageSizeOptions={pageSizeOptions}\n          onUpdate={handlePaginationUpdate}\n          compact={false}\n          showInput\n        />\n      </Flex>\n    </Flex>\n  );\n}\n\nexport { compareDefault };\nEOF\ncat > src/App.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\nimport { Label, Text, type LabelProps } from '@gravity-ui/uikit';\n\nimport { DataTable, compareDefault, type SortableColumnConfig } from './DataTable';\nimport { generateEmployees, type Employee, type EmployeeStatus } from './data';\n\nconst STATUS_LABEL: Record<EmployeeStatus, { text: string; theme: LabelProps['theme'] }> = {\n  active: { text: 'Работает', theme: 'success' },\n  vacation: { text: 'В отпуске', theme: 'info' },\n  dismissed: { text: 'Уволен', theme: 'danger' },\n};\n\nconst salaryFormat = new Intl.NumberFormat('ru-RU', {\n  style: 'currency',\n  currency: 'RUB',\n  maximumFractionDigits: 0,\n});\nconst dateFormat = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'medium' });\n\nconst columns: SortableColumnConfig<Employee>[] = [\n  {\n    id: 'id',\n    name: 'ID',\n    width: 72,\n    sortFn: (a, b) => Number(a.id) - Number(b.id),\n  },\n  {\n    id: 'name',\n    name: 'Сотрудник',\n    primary: true,\n    sortFn: (a, b) => compareDefault(a.name, b.name),\n  },\n  {\n    id: 'email',\n    name: 'Email',\n    sortFn: (a, b) => compareDefault(a.email, b.email),\n  },\n  {\n    id: 'department',\n    name: 'Отдел',\n    sortFn: (a, b) => compareDefault(a.department, b.department),\n  },\n  {\n    id: 'position',\n    name: 'Должность',\n    sortFn: (a, b) => compareDefault(a.position, b.position),\n  },\n  {\n    id: 'salary',\n    name: 'Зарплата',\n    align: 'end',\n    template: (item) => salaryFormat.format(item.salary),\n    sortFn: (a, b) => a.salary - b.salary,\n    defaultSortOrder: 'desc',\n  },\n  {\n    id: 'hiredAt',\n    name: 'Дата найма',\n    template: (item) => dateFormat.format(new Date(item.hiredAt)),\n    sortFn: (a, b) => a.hiredAt.localeCompare(b.hiredAt),\n  },\n  {\n    id: 'status',\n    name: 'Статус',\n    template: (item) => {\n      const { text, theme } = STATUS_LABEL[item.status];\n      return <Label theme={theme}>{text}</Label>;\n    },\n    sortFn: (a, b) => compareDefault(a.status, b.status),\n  },\n];\n\nexport function App() {\n  const employees = useMemo(() => generateEmployees(57), []);\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>\n      <Text variant=\"header-1\">Сотрудники</Text>\n      <DataTable\n        data={employees}\n        columns={columns}\n        getRowId={(item) => item.id}\n        defaultSortState={[{ column: 'name', order: 'asc' }]}\n        pageSizeOptions={[10, 20, 50]}\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        isRowSelectionDisabled={(item) => item.status === 'dismissed'}\n      />\n    </div>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/index.d.ts && python3 - <<'EOF'\nimport re\np='src/DataTable.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"  type TableColumnConfig,\n  type TableDataItem,\n  type TableSortState,\n} from '@gravity-ui/uikit';\"\"\",\"\"\"  type TableColumnConfig,\n  type TableDataItem,\n  type TableProps,\n  type TableSortState,\n  type WithTableSelectionProps,\n  type WithTableSortingProps,\n} from '@gravity-ui/uikit';\"\"\")\ns=s.replace(\"\"\"const EnhancedTable = withTableSorting(withTableSelection(Table)) as typeof Table &\n  ((props: any) => JSX.Element);\"\"\",\"\"\"type EnhancedTableProps<I extends TableDataItem> = TableProps<I> &\n  WithTableSortingProps &\n  WithTableSelectionProps<I>;\nconst EnhancedTable = withTableSorting(withTableSelection(Table)) as unknown as <\n  I extends TableDataItem,\n>(\n  props: EnhancedTableProps<I>,\n) => JSX.Element;\"\"\")\nopen(p,'w').write(s)\nEOF\nnpx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | head -30 && echo TSC_OK && npx vite build 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "(ls node_modules/.bin | grep -i -E \"playwright|puppeteer\"; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i -E \"playwright|puppeteer\") ; echo \"---done\"",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -i -E \"^(jsdom|happy-dom|@testing-library)$\"; ls node_modules/@testing-library 2>/dev/null; echo \"---ssr\"; cat > /tmp/ssr.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\nimport { test, expect } from 'vitest';\n\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const rows = (html.match(/<tr class=\"g-table__row/g) || []).length;\n  console.log('rows:', rows);\n  console.log('has pagination:', html.includes('g-pagination'));\n  console.log('has checkbox:', html.includes('g-table__selection-checkbox'));\n  console.log('has sort:', html.includes('g-table__sort'));\n  console.log(html.includes('Показано 1–10 из 57'));\n  expect(rows).toBe(10);\n});\nEOF\ncp /tmp/ssr.test.tsx src/__ssr.test.tsx && npx vitest run src/__ssr.test.tsx --environment node 2>&1 | tail -25; rm -f src/__ssr.test.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.tmp.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { environment: 'node', server: { deps: { inline: ['@gravity-ui/uikit'] } }, css: false },\n});\nEOF\ncp /tmp/ssr.test.tsx src/__ssr.test.tsx && npx vitest run src/__ssr.test.tsx --config vitest.tmp.config.ts 2>&1 | tail -25; rm -f src/__ssr.test.tsx vitest.tmp.config.ts",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.tmp.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { environment: 'node', server: { deps: { inline: ['@gravity-ui/uikit'] } }, css: false },\n});\nEOF\ncat > src/__ssr.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nimport { test, expect } from 'vitest';\n\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const tbody = html.slice(html.indexOf('<tbody'), html.indexOf('</tbody>'));\n  const rows = (tbody.match(/<tr /g) || []).length;\n  const names = [...tbody.matchAll(/g-table__cell_id_name[^>]*>(?:<[^>]*>)*([^<]+)/g)].map(m => m[1]);\n  console.log('body rows:', rows);\n  console.log('names:', names.join(' | '));\n  console.log('pagination:', html.includes('g-pagination'), 'checkbox:', (tbody.match(/g-table__selection-checkbox/g)||[]).length, 'sort headers:', (html.match(/g-table__sort /g)||[]).length);\n  console.log('disabled checkboxes:', (tbody.match(/g-checkbox_disabled/g)||[]).length);\n  console.log('counter:', html.includes('Показано 1–10 из 57'));\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run src/__ssr.test.tsx --config vitest.tmp.config.ts 2>&1 | grep -E \"body rows|names|pagination|disabled|counter|passed|failed\"; rm -f src/__ssr.test.tsx vitest.tmp.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cat > vitest.tmp.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { environment: 'node', server: { deps: { inline: ['@gravity-ui/uikit'] } }, css: false },\n});\nEOF\ncat > src/__ssr.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nimport { test } from 'vitest';\n\ntest('inspect', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>).replace(/<!-- -->/g, '');\n  const text = html.replace(/<[^>]+>/g, '§').replace(/§+/g, ' | ');\n  console.log(text.slice(0, 1800));\n});\nEOF\nnpx vitest run src/__ssr.test.tsx --config vitest.tmp.config.ts 2>&1 | sed -n '/stdout/,/passed\\|failed/p' | head -20; rm -f src/__ssr.test.tsx vitest.tmp.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/patch.ts <<'EOF'\nEOF\nsed -i '/^const FIRST_NAMES = \\[/,/^const STATUSES/c\\\nconst PEOPLE = {\\\n  male: {\\\n    first: [\"Иван\", \"Дмитрий\", \"Сергей\", \"Алексей\", \"Павел\", \"Михаил\", \"Андрей\", \"Николай\"],\\\n    last: [\"Петров\", \"Кузнецов\", \"Васильев\", \"Михайлов\", \"Фёдоров\", \"Волков\", \"Лебедев\", \"Егоров\"],\\\n  },\\\n  female: {\\\n    first: [\"Анна\", \"Мария\", \"Елена\", \"Ольга\", \"Наталья\", \"Екатерина\", \"Татьяна\", \"Юлия\"],\\\n    last: [\"Иванова\", \"Смирнова\", \"Попова\", \"Соколова\", \"Новикова\", \"Морозова\", \"Алексеева\", \"Семёнова\"],\\\n  },\\\n};\\\nconst DEPARTMENTS = [\"Разработка\", \"Дизайн\", \"Маркетинг\", \"Продажи\", \"Поддержка\", \"Финансы\"];\\\nconst POSITIONS = [\"Junior\", \"Middle\", \"Senior\", \"Lead\", \"Head\"];\\\nconst STATUSES: EmployeeStatus[] = [\"active\", \"active\", \"active\", \"vacation\", \"dismissed\"];' src/data.ts\nsed -i 's/    const firstName = pick(FIRST_NAMES);\\n//' src/data.ts\nperl -0pi -e 's/    const firstName = pick\\(FIRST_NAMES\\);\\n    const lastName = pick\\(LAST_NAMES\\);/    const person = rnd() < 0.5 ? PEOPLE.male : PEOPLE.female;\\n    const firstName = pick(person.first);\\n    const lastName = pick(person.last);/' src/data.ts\nsed -i \"s/\\\"/'/g\" src/data.ts\nsed -n '14,32p;60,66p' src/data.ts && npx tsc --noEmit && echo TSC_OK && git status --short",
+        "success": true
+      },
+      {
+        "command": "grep -n \"person\\|firstName\\|lastName\" src/data.ts | head && npx vite build 2>&1 | tail -3 && rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 546,
+      "outputTokens": 14915,
+      "cacheReadTokens": 712332,
+      "cacheWriteTokens": 39434,
+      "totalTokens": 767227
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

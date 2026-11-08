@@ -1,0 +1,457 @@
+/* Reference palette (dataviz skill, palette.md). Roles, not raw hex, in the components below. */
+.viz-root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --grid: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --success-text: #006300;
+  --critical: #d03b3b;
+}
+
+/* Dark is opt-in via data-theme, so it never flips the page under a light Gravity theme. */
+:root[data-theme='dark'] .viz-root {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface-1: #1a1a19;
+  --text-primary: #f0efec;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --grid: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --success-text: #0ca30c;
+  --critical: #d03b3b;
+}
+
+.dashboard-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px 32px 48px;
+  background: var(--page);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* ---- Grid ---- */
+
+.dashboard-grid {
+  position: relative;
+  width: 100%;
+}
+
+.widget {
+  position: absolute;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  overflow: hidden;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition:
+    left 180ms ease,
+    top 180ms ease,
+    width 180ms ease,
+    height 180ms ease,
+    box-shadow 120ms ease;
+}
+
+.widget.is-live {
+  z-index: 2;
+  transition: none;
+  box-shadow: 0 8px 24px rgba(11, 11, 11, 0.14);
+}
+
+.widget__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  min-height: 24px;
+}
+
+.widget__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.widget__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.widget__handle,
+.widget__resize {
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.widget__handle {
+  display: inline-flex;
+  padding: 4px 2px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.widget__handle:active {
+  cursor: grabbing;
+}
+
+.widget__resize {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  cursor: nwse-resize;
+  touch-action: none;
+}
+
+.widget__handle:hover,
+.widget__resize:hover {
+  color: var(--text-primary);
+}
+
+.widget__handle:focus-visible,
+.widget__resize:focus-visible,
+.legend-item:focus-visible,
+.plot:focus-visible,
+.region-row:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 2px;
+}
+
+/* ---- Stat tile ---- */
+
+.stat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  gap: 2px;
+}
+
+.stat__value {
+  flex: none;
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.stat__delta {
+  flex: none;
+  font-size: 13px;
+}
+
+.stat__delta.is-good {
+  color: var(--success-text);
+}
+
+.stat__delta.is-bad {
+  color: var(--critical);
+}
+
+.stat__muted {
+  color: var(--text-secondary);
+}
+
+.stat__spark {
+  position: relative;
+  flex: 1;
+  min-height: 24px;
+  margin-top: 6px;
+}
+
+.stat__spark svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ---- Charts ---- */
+
+.chart {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chart__toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.chart__toolbar > :last-child {
+  margin-left: auto;
+}
+
+.chart__unit {
+  color: var(--text-secondary);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.legend-item[aria-pressed='false'] {
+  color: var(--text-muted);
+}
+
+.legend-item[aria-pressed='false'] .legend-key {
+  opacity: 0.35;
+}
+
+.legend-key {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.plot {
+  position: relative;
+  flex: 1;
+  min-height: 160px;
+  outline: none;
+}
+
+.plot svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: visible;
+}
+
+.axis-text {
+  font-size: 11px;
+  fill: var(--text-muted);
+}
+
+.value-label {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--text-primary);
+}
+
+/* Tooltip: values lead, labels follow. Pointer-transparent so it never steals hover. */
+.viz-tooltip {
+  position: absolute;
+  z-index: 3;
+  min-width: 160px;
+  padding: 8px 10px;
+  pointer-events: none;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(11, 11, 11, 0.12);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.viz-tooltip__title {
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.viz-tooltip__row {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-tooltip__key {
+  width: 10px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.viz-tooltip__name {
+  color: var(--text-secondary);
+}
+
+.viz-tooltip__value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-tooltip__total {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--grid);
+}
+
+/* ---- Ranked bars ---- */
+
+.region-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.region-row {
+  display: grid;
+  grid-template-columns: minmax(96px, 150px) 1fr 84px;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.region-name {
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.region-track {
+  position: relative;
+  height: 16px;
+}
+
+.region-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  min-width: 2px;
+  border-radius: 0 4px 4px 0;
+  background: var(--series-1);
+  transition: filter 120ms ease;
+}
+
+.region-row:hover .region-bar,
+.region-row:focus-visible .region-bar {
+  filter: brightness(1.12);
+}
+
+.region-tip {
+  display: none;
+  top: 50%;
+  transform: translate(8px, -50%);
+  white-space: nowrap;
+}
+
+.region-tip.is-flipped {
+  transform: translate(calc(-100% - 8px), -50%);
+}
+
+.region-row:hover .region-tip,
+.region-row:focus-visible .region-tip {
+  display: block;
+}
+
+.region-tip .viz-tooltip__line {
+  display: flex;
+  gap: 8px;
+}
+
+.region-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+/* ---- Table view ---- */
+
+.table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--grid);
+  text-align: left;
+  color: var(--text-primary);
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-1);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table__total td {
+  font-weight: 600;
+}

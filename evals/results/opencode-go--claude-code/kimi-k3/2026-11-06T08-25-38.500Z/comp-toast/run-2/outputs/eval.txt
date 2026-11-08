@@ -1,0 +1,31 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (6 tests | 1 failed) 36021ms
+   ✓ imports @gravity-ui/uikit 1ms
+   ✓ no react-toastify 0ms
+   ✓ no react-hot-toast 0ms
+   ✓ no sonner 0ms
+   ✓ no notistack 0ms
+   × judge: implements the task with the intended Gravity UI API 36019ms
+     → [judge:environment] FAIL — Clicking a Gravity Button shows a notification through @gravity-ui/uikit's Toaster system: a Toaster instance or the toaster singleton provided via ToasterProvider, a mounted ToasterComponent, and the toast added with add() from useToaster() or called directly on the Toaster instance / singleton that was passed to ToasterProvider (the hook only returns that same instance), so it hides by itself (autoHiding). A hand-rolled fixed div with setTimeout, or a third-party toast library, fails.
+  reason: src/App.tsx imports Toaster/ToasterProvider/useToaster and calls add({name, title, theme, autoHiding}) from a Gravity Button, but never mounts ToasterComponent (no occurrence of 'ToasterComponent' or 'ToastList' anywhere in src/, and main.tsx is unmodified), and ToasterProvider only supplies contexts while ToasterComponent is the sole consumer of ToastsContext that renders the toasts; the built bundle dist/assets/index-*.js contains ToasterProvider/useToaster but zero occurrences of ToastList/aria-live, confirming the rendering component was tree-shaken out, so clicking the button shows no notification at all.
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  08:34:56
+   Duration  36.48s (transform 35ms, setup 18ms, collect 21ms, tests 36.02s, environment 0ms, prepare 50ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — Clicking a Gravity Button shows a notification through @gravity-ui/uikit's Toaster system: a Toaster instance or the toaster singleton provided via ToasterProvider, a mounted ToasterComponent, and the toast added with add() from useToaster() or called directly on the Toaster instance / singleton that was passed to ToasterProvider (the hook only returns that same instance), so it hides by itself (autoHiding). A hand-rolled fixed div with setTimeout, or a third-party toast library, fails.
+  reason: src/App.tsx imports Toaster/ToasterProvider/useToaster and calls add({name, title, theme, autoHiding}) from a Gravity Button, but never mounts ToasterComponent (no occurrence of 'ToasterComponent' or 'ToastList' anywhere in src/, and main.tsx is unmodified), and ToasterProvider only supplies contexts while ToasterComponent is the sole consumer of ToastsContext that renders the toasts; the built bundle dist/assets/index-*.js contains ToasterProvider/useToaster but zero occurrences of ToastList/aria-live, confirming the rendering component was tree-shaken out, so clicking the button shows no notification at all.
+ ❯ EVAL.ts:85:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

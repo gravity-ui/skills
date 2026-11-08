@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "duration": 213.168,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 3036,
+    "cacheReadTokens": 155705,
+    "cacheWriteTokens": 19488,
+    "totalTokens": 178391
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo \"-----\"; ls -la /home/sandbox/workspace; echo \"-----\"; find /home/sandbox/workspace/.agents -type f | head -100",
+        "success": true
+      },
+      {
+        "command": "cat package.json tsconfig.json vite.config.ts index.html; echo \"----- src\"; find src -type f -exec sh -c 'echo \"== $1\"; cat \"$1\"' _ {} \\;; echo \"----- routing top\"; sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md; echo \"----- routing dialog/modal\"; rg -n -i -C 2 'dialog|modal' .agents/skills/gravity-ui/references/package-routing.md | head -60; echo \"----- traps\"; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo \"----- inspect\"; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Dialog Modal ThemeProvider Text",
+        "success": false
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Dialog Text 2>&1 | head -60; echo \"----- docs dirs\"; ls node_modules/@gravity-ui/uikit/ ; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; echo \"----- Dialog d.ts\"; find node_modules/@gravity-ui/uikit/build/esm/components/Dialog -name '*.d.ts' | head -20; echo \"-----\"; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogBody/DialogBody.d.ts 2>&1; echo \"----- Dialog README\"; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/README.md 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "rg -n 'variant' node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head -5; cat > src/App.tsx <<'EOF'\nimport * as React from 'react';\nimport { Button, Dialog, Flex, Text } from '@gravity-ui/uikit';\n\ntype Result = 'confirmed' | 'cancelled' | null;\n\nexport function App() {\n  const [open, setOpen] = React.useState(false);\n  const [result, setResult] = React.useState<Result>(null);\n\n  const handleConfirm = () => {\n    setResult('confirmed');\n    setOpen(false);\n  };\n\n  const handleCancel = () => {\n    setResult('cancelled');\n    setOpen(false);\n  };\n\n  return (\n    <Flex direction=\"column\" gap={3} alignItems=\"flex-start\" style={{ padding: 24 }}>\n      <Button view=\"action\" size=\"l\" onClick={() => setOpen(true)}>\n        Открыть окно\n      </Button>\n\n      {result !== null && (\n        <Text variant=\"body-1\" color=\"secondary\">\n          {result === 'confirmed' ? 'Действие подтверждено' : 'Действие отменено'}\n        </Text>\n      )}\n\n      <Dialog\n        open={open}\n        onClose={handleCancel}\n        size=\"s\"\n        initialFocus=\"apply\"\n        aria-labelledby=\"confirm-dialog-title\"\n      >\n        <Dialog.Header id=\"confirm-dialog-title\" caption=\"Подтверждение действия\" />\n        <Dialog.Body>\n          <Text variant=\"body-1\">\n            Вы уверены, что хотите выполнить это действие? Его нельзя будет отменить.\n          </Text>\n        </Dialog.Body>\n        <Dialog.Footer\n          textButtonApply=\"Подтвердить\"\n          textButtonCancel=\"Отменить\"\n          onClickButtonApply={handleConfirm}\n          onClickButtonCancel={handleCancel}\n        />\n      </Dialog>\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit && echo TYPECHECK_OK",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -8",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 3036,
+      "cacheReadTokens": 155705,
+      "cacheWriteTokens": 19488,
+      "totalTokens": 178391
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

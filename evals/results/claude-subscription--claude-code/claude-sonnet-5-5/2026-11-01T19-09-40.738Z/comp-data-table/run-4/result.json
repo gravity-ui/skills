@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "duration": 513.836,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 7562,
+    "cacheReadTokens": 337008,
+    "cacheWriteTokens": 20635,
+    "totalTokens": 365231
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 2,
+      "file_edit": 1,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -30 && git ls-files",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html src/App.tsx src/main.tsx tsconfig.json vite.config.ts .gitignore; ls __agent_eval__ node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep '\"version\"'; ls build/esm/components/Table build/esm/components/Table/hoc build/esm/components/Pagination; cat build/esm/components/Table/hoc/withTableSorting/withTableSorting.d.ts build/esm/components/Table/hoc/withTableSelection/withTableSelection.d.ts build/esm/components/Pagination/Pagination.d.ts; sed -n 1,200p build/esm/components/Table/Table.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Pagination/types.d.ts; grep -n \"meta\\|sort\" Table/hoc/withTableSorting/withTableSorting.js | head -50; grep -n \"Checkbox\\|selectedIds\\|onSelectionChange\\|indeterminate\" Table/hoc/withTableSelection/withTableSelection.js | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -n 34,60p Table/hoc/withTableSorting/withTableSorting.js; sed -n 95,118p Table/hoc/withTableSorting/withTableSorting.js; sed -n 84,110p Table/hoc/withTableSelection/withTableSelection.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"WithTableSortingProps\\|WithTableSelectionProps\\|TableProps\" node_modules/@gravity-ui/uikit/build/esm/components/Table/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='src/DataTable.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"import type {TableColumnConfig, TableDataItem, TableSortState} from '@gravity-ui/uikit';\n\nconst SelectableSortableTable = withTableSelection(withTableSorting(Table));\n\"\"\",\"\"\"import type {\n  TableColumnConfig,\n  TableDataItem,\n  TableProps,\n  TableSortState,\n  WithTableSelectionProps,\n  WithTableSortingProps,\n} from '@gravity-ui/uikit';\n\n// HOC выводят I = TableDataItem, поэтому возвращаем дженерик-тип вручную.\nconst SelectableSortableTable = withTableSelection(withTableSorting(Table)) as unknown as <\n  I extends TableDataItem,\n>(\n  props: TableProps<I> & WithTableSortingProps & WithTableSelectionProps<I>,\n) => React.ReactElement;\n\"\"\")\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 7562,
+      "cacheReadTokens": 337008,
+      "cacheWriteTokens": 20635,
+      "totalTokens": 365231
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "status": "passed",
+  "duration": 472.5,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 49978,
+    "outputTokens": 8751,
+    "cacheReadTokens": 1236992,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1284,
+    "totalTokens": 1295721
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 11,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 32,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 32,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- routing ---\\\\n' && sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- app ---\\\\n' && cat src/App.tsx src/main.tsx && printf '\\\\n--- deps ---\\\\n' && for p in node_modules/@gravity-ui/*/package.json; do node -p \\\"require('./'+process.argv[1]).version + ' ' + process.argv[1]\\\" \\\"\"'$p\"; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/chartkit && ls node_modules/@gravity-ui/chartkit && find node_modules/@gravity-ui/chartkit -maxdepth 3 \\\\( -iname 'INDEX.md' -o -iname 'README.md' \\\\) -print\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @gravity-ui/chartkit versions --json | tail -n 80 && npm view @gravity-ui/chartkit@8 version peerDependencies --json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/chartkit@''^8.12.0 && find node_modules/@gravity-ui/chartkit -maxdepth 4 '\"\\\\( -iname 'INDEX.md' -o -iname 'README.md' \\\\) -print && find node_modules/@gravity-ui/chartkit/dist -maxdepth 2 -type d | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,260p' node_modules/@gravity-ui/chartkit/build/docs/INDEX.md && printf '\\\\n--- README setup ---\\\\n' && sed -n '1,220p' node_modules/@gravity-ui/chartkit/README.md && printf '\\\\n--- exports ---\\\\n' && rg -n \\\"ChartKit|lazy|YagrChart|GravityCharts\\\" node_modules/@gravity-ui/chartkit/build -g '*.d.ts' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 6 \\\"YagrPlugin|type=\\\\\\\"yagr\\\\\\\"|YagrWidgetData|import .*chartkit/yagr\\\" node_modules/@gravity-ui/chartkit/build/docs/INDEX.md node_modules/@gravity-ui/chartkit/build -g '*.d.ts' | head -180 && printf '\\\\n--- package deps ---\\\\n' && node -e \\\"const p=require('./node_modules/@gravity-ui/chartkit/package.json'); console.log(p.version,p.dependencies,p.peerDependencies)\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/chartkit/build/types/index.d.ts; printf '\\\\n--- gc data ---\\\\n'; rg -n \\\"export type ChartData|interface ChartData|type ChartData\\\" node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts -g '*.d.ts' | head -20; printf '\\\\n--- yagr cfg ---\\\\n'; sed -n '1,120p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts; printf '\\\\n--- ui controls dts ---\\\\n'; rg -n \\\"export declare const SegmentedRadioGroup|export declare const RadioGroup|export declare const Switch\\\" node_modules/@gravity-ui/uikit/build -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; sed -n '3300,3375p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts; rg -n \\\"interface LineSeries|type LineSeries|interface Series|type Series\\\" node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '3370,3415p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts; sed -n '1695,1825p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts; rg -n \\\"interface ControlGroupProps|interface ControlProps\\\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/types* -g '*'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"interface RawSerieData|type RawSerieData\\\" node_modules/@gravity-ui/yagr -g '*.d.ts' | head -10; rg -n -A 35 \\\"interface RawSerieData|type RawSerieData\\\" node_modules/@gravity-ui/yagr/dist -g '*.d.ts' | head -70; rg -n -A 30 \\\"interface ChartXAxis|type ChartXAxis\\\" node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts | head -65; cat tsconfig.json vite.config.ts 2>/dev/null\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n -B 8 -A 30 \"export interface ExtendedSeriesOptions\" node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts | head -65; rg -n -B 3 -A 20 \"interface ChartAxis\" node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts | head -50'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n -B 4 -A 35 \"export type DataSeriesExtended|type DataSeriesExtended|export interface LineSeriesOptions\" node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts | head -120'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/types.d.ts | sed -n '1,80p'; apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/VisualizationWidget.tsx\n@@\n-import type {ChartData} from '@gravity-ui/charts';\n-import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\n+import type {GravityChartsWidgetData} from '@gravity-ui/chartkit/gravity-charts';\n+import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\n@@\n-    sales: ChartData;\n+    sales: GravityChartsWidgetData;\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/VisualizationWidget.tsx\n@@\n-import type {ChartData} from '@gravity-ui/charts';\n-import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\n+import type {GravityChartsWidgetData} from '@gravity-ui/chartkit/gravity-charts';\n+import type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\n@@\n-    sales: ChartData;\n+    sales: GravityChartsWidgetData;\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apply_patch || type -a apply_patch || ls /usr/local/bin | rg 'patch|apply'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'find / -name apply_patch -type f -perm -111 2>/dev/null | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python - <<'PY'\nfrom pathlib import Path\npath = Path('src/VisualizationWidget.tsx')\ntext = path.read_text()\ntext = text.replace(\\\"import type {ChartData} from '@gravity-ui/charts';\\\\nimport type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\\\", \\\"import type {GravityChartsWidgetData} from '@gravity-ui/chartkit/gravity-charts';\\\\nimport type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\\\")\ntext = text.replace('    sales: ChartData;', '    sales: GravityChartsWidgetData;')\npath.write_text(text)\nPY\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('fs');\nconst path = 'src/VisualizationWidget.tsx';\nlet text = fs.readFileSync(path, 'utf8');\ntext = text.replace(\\\"import type {ChartData} from '@gravity-ui/charts';\\\\nimport type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\\\", \\\"import type {GravityChartsWidgetData} from '@gravity-ui/chartkit/gravity-charts';\\\\nimport type {YagrWidgetData} from '@gravity-ui/chartkit/yagr';\\\");\ntext = text.replace('    sales: ChartData;', '    sales: GravityChartsWidgetData;');\nfs.writeFileSync(path, text);\nNODE\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/VisualizationWidget.tsx\n@@\n-    sales: GravityChartsWidgetData;\n+    sales: GravityChartsWidgetData['data'];\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import {VisualizationWidget, type VisualizationMode} from './VisualizationWidget';\n+import {\n+    VisualizationWidget,\n+    type VisualizationMode,\n+    type VisualizationWidgetData,\n+} from './VisualizationWidget';\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --check && git diff -- package.json package-lock.json src/App.tsx src/VisualizationWidget.tsx | sed -n '1,260p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' src/VisualizationWidget.tsx; npm exec prettier -- --check src/VisualizationWidget.tsx src/App.tsx 2>/dev/null || true; ls -l package-lock.json | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"type TextVariant|TextVariant =\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text -g '*.d.ts' | head -20 && rg -n -A 12 \\\"type TextVariant\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text/*.d.ts | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"variant\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/VisualizationWidget.tsx\n@@\n settings.set({plugins: [GravityChartsPlugin, YagrPlugin]});\n \n const modes = [\n-    {value: 'sales', content: 'Продажи'},\n-    {value: 'monitoring', content: 'Мониторинг'},\n+    {content: 'Продажи', value: 'sales'},\n+    {content: 'Мониторинг', value: 'monitoring'},\n ] as const;\n*** End Patch\nPATCH\ngit diff --check && npm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/VisualizationWidget.tsx | sed -n '1,70p'; printf '\\\\n---\\\\n'; nl -ba src/App.tsx | sed -n '1,100p'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 49978,
+      "outputTokens": 8751,
+      "cacheReadTokens": 1236992,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1284,
+      "totalTokens": 1295721
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

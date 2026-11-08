@@ -1,0 +1,101 @@
+{
+  "status": "passed",
+  "duration": 971.136,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 258,
+    "outputTokens": 7286,
+    "cacheReadTokens": 306608,
+    "cacheWriteTokens": 32373,
+    "totalTokens": 346525
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 11,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo ---- && ls -la && cat AGENTS.md && cat package.json && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts && echo ---- && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head && ls node_modules/@gravity-ui/uikit/dist/docs 2>&1 | head && echo ---- && sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md && echo ---- && grep -n -i -B2 -A12 'theme' .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme useThemeValue useThemeType Switch SegmentedRadioGroup Icon 2>&1 | head -60; echo ----; ls node_modules/@gravity-ui/; echo ----; grep -n -C3 -E 'useTheme|useThemeValue|useThemeType|setTheme|ThemeProvider' .agents/skills/gravity-ui/references/theming.md | head -120",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,150p .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm; ls $U/components/theme/; echo ----; cat $U/components/theme/index.d.ts $U/components/theme/ThemeProvider.d.ts $U/components/theme/useTheme.d.ts $U/components/theme/useThemeValue.d.ts $U/components/theme/useThemeType.d.ts $U/components/theme/types.d.ts 2>&1; echo ----; cat $U/components/Switch/Switch.d.ts $U/components/Switch/index.d.ts 2>&1; cat $U/components/Switch/*.d.ts 2>/dev/null | head -40; cat $U/components/Icon/Icon.d.ts; echo ----; grep '\"version\"' node_modules/@gravity-ui/icons/package.json; ls node_modules/@gravity-ui/icons/ | head; grep -E '^export \\{ default as (Sun|Moon)' node_modules/@gravity-ui/icons/index.d.ts 2>/dev/null || grep -rlE 'Sun|Moon' node_modules/@gravity-ui/icons/*.d.ts 2>/dev/null | head; grep -oE 'as (Sun|Moon)[A-Za-z]*' node_modules/@gravity-ui/icons/index.d.ts | sort -u",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm; grep -n -A12 'interface ControlProps' $U/components/types.d.ts; echo ----; grep -n -A6 '\"dependencies\"' node_modules/@gravity-ui/uikit/package.json; echo ----; grep -n -B2 -A3 '\"node_modules/@gravity-ui/icons\"' package-lock.json; echo ----; grep -n -A4 'Segmented' $U/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cat > src/ThemeSwitcher.tsx <<'EOF'\nimport {Moon, Sun} from '@gravity-ui/icons';\nimport {Flex, Icon, Switch, Text, useThemeType} from '@gravity-ui/uikit';\nimport type {RealTheme} from '@gravity-ui/uikit';\n\nexport interface ThemeSwitcherProps {\n  /** Called with the theme the user picked (\"light\" or \"dark\"). */\n  onThemeChange: (theme: RealTheme) => void;\n}\n\n/**\n * Light/dark toggle. Reads the resolved theme type from the nearest\n * ThemeProvider (so \"system\" / \"*-hc\" themes are handled), and asks the\n * owner of ThemeProvider to switch the `theme` prop.\n */\nexport function ThemeSwitcher({onThemeChange}: ThemeSwitcherProps) {\n  const themeType = useThemeType();\n  const isDark = themeType === 'dark';\n\n  return (\n    <Flex alignItems=\"center\" gap={2}>\n      <Icon data={Sun} size={16} color={isDark ? 'secondary' : 'primary'} />\n      <Switch\n        size=\"m\"\n        checked={isDark}\n        onUpdate={(checked) => onThemeChange(checked ? 'dark' : 'light')}\n        controlProps={{'aria-label': 'Toggle dark theme'}}\n      />\n      <Icon data={Moon} size={16} color={isDark ? 'primary' : 'secondary'} />\n      <Text variant=\"body-1\" color=\"secondary\">\n        {isDark ? 'Dark' : 'Light'}\n      </Text>\n    </Flex>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {useCallback, useEffect, useState} from 'react';\nimport {Button, Card, Flex, Text, ThemeProvider} from '@gravity-ui/uikit';\nimport type {Theme} from '@gravity-ui/uikit';\n\nimport {ThemeSwitcher} from './ThemeSwitcher';\n\nconst THEME_STORAGE_KEY = 'app-theme';\n\nfunction readStoredTheme(): Theme {\n  if (typeof window === 'undefined') return 'system';\n  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);\n  return stored === 'light' || stored === 'dark' ? stored : 'system';\n}\n\nexport function App() {\n  // The outermost ThemeProvider owns the theme: it writes `g-root g-root_theme_*`\n  // to <body>, so the state that drives its `theme` prop must live above it.\n  const [theme, setTheme] = useState<Theme>(readStoredTheme);\n\n  useEffect(() => {\n    if (theme === 'system') {\n      window.localStorage.removeItem(THEME_STORAGE_KEY);\n    } else {\n      window.localStorage.setItem(THEME_STORAGE_KEY, theme);\n    }\n  }, [theme]);\n\n  const handleThemeChange = useCallback((next: Theme) => setTheme(next), []);\n\n  return (\n    <ThemeProvider theme={theme}>\n      <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)'}}>\n        <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={4}>\n          <Text variant=\"header-1\">Gravity UI</Text>\n          <ThemeSwitcher onThemeChange={handleThemeChange} />\n        </Flex>\n\n        <Card view=\"filled\" style={{padding: 'var(--g-spacing-4)', maxWidth: 480}}>\n          <Flex direction=\"column\" gap={3}>\n            <Text variant=\"subheader-2\">Theme preview</Text>\n            <Text variant=\"body-1\" color=\"secondary\">\n              The toggle above switches the whole page between the light and dark themes.\n              The choice is saved in localStorage; until you pick one, the OS preference is used.\n            </Text>\n            <Flex gap={2}>\n              <Button view=\"action\">Action</Button>\n              <Button view=\"normal\">Normal</Button>\n              <Button view=\"outlined\">Outlined</Button>\n            </Flex>\n          </Flex>\n        </Card>\n      </Flex>\n    </ThemeProvider>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\n// Base Gravity UI styles are imported once here. The ThemeProvider lives in\n// App.tsx so the theme switcher can control its `theme` prop.\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\nnpm install @gravity-ui/icons@^2.23.1 --no-audit --no-fund --prefer-offline 2>&1 | tail -5; grep -n icons package.json",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | tail -20; echo \"tsc exit: ${PIPESTATUS[0]}\"; npx vite build 2>&1 | tail -8; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 258,
+      "outputTokens": 7286,
+      "cacheReadTokens": 306608,
+      "cacheWriteTokens": 32373,
+      "totalTokens": 346525
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T17:01:26.309Z",
+    "by": "claude-subscription--claude-code--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "status": "passed",
+  "duration": 210.75,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 30643,
+    "outputTokens": 3481,
+    "cacheReadTokens": 165504,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 975,
+    "totalTokens": 199628
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/SKILL.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"pwd && ls -la && find . -maxdepth 3 -type f | sed 's#\"'^./##'\"' | sort | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' .agents/skills/gravity-ui/references/package-routing.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- src files ---\\\\n' && find src -maxdepth 2 -type f -print -exec sed -n '1,200p' {} \\\\;\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' .agents/skills/gravity-ui/rules/hallucination-traps.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/package.json | sed -n '1,120p'; printf '\\\\n--- docs dirs ---\\\\n'; find node_modules/@gravity-ui/uikit -maxdepth 3 -type d -name docs -o -type f -name INDEX.md | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n -C 3 \"DropdownMenu|Menu|MenuGroup|MenuItem|useMenu\" node_modules/@gravity-ui/uikit/build node_modules/@gravity-ui/uikit/dist 2>/dev/null | head -200'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit/build/esm/components -maxdepth 2 -type d -iname '*Dropdown*' -o -type d -iname '*Menu*' | sort; printf '\\\\n--- index exports dropdown ---\\\\n'; rg -n \\\"DropdownMenu\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.js | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"DropdownMenu|DropdownMenuItem|DropdownMenuList|DropdownMenuTrigger\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenuItem.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts 2>/dev/null | sed -n '1,220p'; printf '\\\\n--- MenuItemProps ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/Menu/MenuItem.d.ts 2>/dev/null | sed -n '1,220p'; cat node_modules/@gravity-ui/uikit/build/esm/components/Menu/types.d.ts 2>/dev/null | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit -type f \\\\( -name '*.md' -o -name '*.tsx' -o -name '*.ts' \\\\) | rg -i 'dropdownmenu|menu' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Button/constants.d.ts 2>/dev/null; printf '\\\\n--- default props ---\\\\n'; rg -n \\\"DropdownMenu\\\" node_modules/@gravity-ui/uikit/build/esm/components/theme/PrivateDefaultPropsProvider.js | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {Button, DropdownMenu, type DropdownMenuItem} from '@gravity-ui/uikit';\n\nconst actions: DropdownMenuItem[] = [\n  {\n    text: 'Редактировать',\n    action: () => console.log('edit'),\n  },\n  {\n    text: 'Дублировать',\n    action: () => console.log('duplicate'),\n  },\n  {\n    text: 'Удалить',\n    theme: 'danger',\n    action: () => console.log('delete'),\n  },\n];\n\nexport function App() {\n  return (\n    <div style={{padding: 24}}>\n      <DropdownMenu\n        items={actions}\n        renderSwitcher={(props) => (\n          <Button view=\\\"action\\\" {...props}>\n            Действия\n          </Button>\n        )}\n      />\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 30643,
+      "outputTokens": 3481,
+      "cacheReadTokens": 165504,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 975,
+      "totalTokens": 199628
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

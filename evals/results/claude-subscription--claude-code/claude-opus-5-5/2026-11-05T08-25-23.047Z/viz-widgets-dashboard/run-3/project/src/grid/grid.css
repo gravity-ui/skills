@@ -1,0 +1,98 @@
+.grid-layout {
+  position: relative;
+  transition: height 0.2s ease;
+}
+
+.grid-layout_stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-layout:not(.grid-layout_stacked) > .grid-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition:
+    transform 0.2s ease,
+    width 0.2s ease,
+    height 0.2s ease;
+}
+
+.grid-layout > .grid-item.grid-item_active {
+  z-index: 3;
+  transition: none;
+}
+
+.grid-placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 12px;
+  background: var(--g-color-base-info-light);
+  outline: 2px dashed var(--g-color-line-info);
+  outline-offset: -2px;
+  transition:
+    transform 0.15s ease,
+    width 0.15s ease,
+    height 0.15s ease;
+}
+
+.grid-resize-handle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  cursor: nwse-resize;
+  touch-action: none;
+  z-index: 2;
+}
+
+.grid-resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--g-color-line-generic-accent);
+  border-bottom: 2px solid var(--g-color-line-generic-accent);
+  border-bottom-right-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.grid-item:hover > .grid-resize-handle::after,
+.grid-item_resize > .grid-resize-handle::after {
+  opacity: 1;
+}
+
+body.grid-dragging,
+body.grid-dragging * {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+body.grid-resizing,
+body.grid-resizing * {
+  cursor: nwse-resize !important;
+  user-select: none;
+}
+
+.grid-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-layout,
+  .grid-layout > .grid-item,
+  .grid-placeholder {
+    transition: none;
+  }
+}

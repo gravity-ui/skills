@@ -1,0 +1,129 @@
+{
+  "status": "passed",
+  "duration": 1514.175,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 38,
+    "outputTokens": 15544,
+    "cacheReadTokens": 599727,
+    "cacheWriteTokens": 33730,
+    "totalTokens": 649039
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 9,
+      "file_edit": 1,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 26,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/router.ts",
+      "/home/sandbox/workspace/src/pages/HomePage.tsx",
+      "/home/sandbox/workspace/src/pages/NotesPage.tsx",
+      "/home/sandbox/workspace/src/pages/AboutPage.tsx",
+      "/home/sandbox/workspace/src/pages/NotFoundPage.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/App.css",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git log --stat | head -30; head -c 600 package-lock.json; node -v",
+        "success": true
+      },
+      {
+        "command": "cat src/*.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; ls __agent_eval__; ls node_modules | head -80; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm/components/theme/; cat build/esm/components/theme/ThemeProvider.js; ls build/esm/components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && sed -n 1,200p uikit/build/esm/components/Button/Button.d.ts | grep -nE \"selected|href|view|extraProps|component\" ; ls icons | grep -iE \"^(Sun|Moon|House|Gear|Circle|ListUl|Info|TrashBin|Plus)[A-Za-z]*\\.js$\"; grep -n \"items\\|name\\|children\" uikit/build/esm/components/DefinitionList/types.d.ts | head; ls uikit/build/esm/components/controls; cat uikit/build/esm/components/theme/types.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -A3 '\"dependencies\"\\|peerDep' uikit/package.json | head; grep version icons/package.json; cat uikit/build/esm/components/DefinitionList/types.d.ts uikit/build/esm/components/DefinitionList/DefinitionList.d.ts; grep -n \"Props\\b\\|export\" uikit/build/esm/components/Card/Card.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && grep -n '\"@gravity-ui/icons\"' package-lock.json; grep -n -B2 -A6 '\"node_modules/@gravity-ui/icons\"' package-lock.json | head -20",
+        "success": true
+      },
+      {
+        "command": "npm pkg set 'dependencies.@gravity-ui/icons=^2.16.0' && npm install --offline --no-audit --no-fund 2>&1 | tail -3 && git diff --stat",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\np='src/main.tsx'; s=open(p).read()\ns=s.replace(\"\"\"// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\n\"\"\",\"\"\"// Gravity UI styles are loaded here; the ThemeProvider lives in App so the theme can be switched at runtime.\n\"\"\").replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\",\"\").replace(\"\"\"    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>\"\"\",\"\"\"    <App />\"\"\")\nopen(p,'w').write(s)\np='src/App.tsx'; s=open(p).read()\ns=s.replace(\"extraProps={{'aria-current': active ? 'page' : undefined}}\",\"\"\"extraProps={{\n                                        'aria-current': active ? 'page' : undefined,\n                                        'aria-label': item.title,\n                                    }}\"\"\")\nopen(p,'w').write(s)\np='index.html'; s=open(p).read()\ns=s.replace('lang=\"en\"','lang=\"ru\"').replace('Gravity UI eval','Мини-приложение')\nopen(p,'w').write(s)\nEOF\ncat src/main.tsx; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "sed -i 's/lang=\"en\"/lang=\"ru\"/; s/Gravity UI eval/Мини-приложение/' index.html && npm run build 2>&1 | tail -6",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules | grep -iE \"jsdom|happy|playwright|puppeteer\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/entry.tsx <<'EOF'\nexport {App} from '/home/sandbox/workspace/src/App';\nexport {HomePage} from '/home/sandbox/workspace/src/pages/HomePage';\nexport {NotesPage} from '/home/sandbox/workspace/src/pages/NotesPage';\nexport {AboutPage} from '/home/sandbox/workspace/src/pages/AboutPage';\nexport {NotFoundPage} from '/home/sandbox/workspace/src/pages/NotFoundPage';\nexport {ThemeProvider} from '@gravity-ui/uikit';\nEOF\nnpx vite build --ssr /tmp/smoke/entry.tsx --outDir /tmp/smoke/out --logLevel error && cat > /tmp/smoke/run.mjs <<'EOF'\nconst store = {};\nglobalThis.window = {\n  location: {hash: '#/notes'},\n  localStorage: {getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v)},\n  matchMedia: () => ({matches: true}),\n  addEventListener() {}, removeEventListener() {},\n};\nconst React = (await import('react')).default;\nconst {renderToString} = await import('react-dom/server');\nconst m = await import('/tmp/smoke/out/entry.mjs');\nconst wrap = (el) => renderToString(React.createElement(m.ThemeProvider, {theme: 'dark'}, el));\nconst check = (name, html, ...needles) => {\n  const miss = needles.filter((n) => !html.includes(n));\n  console.log(miss.length ? `FAIL ${name}: missing ${miss}` : `ok   ${name}`);\n};\nconst app = renderToString(React.createElement(m.App));\ncheck('App (server snapshot → home)', app, 'Добро пожаловать', 'Активна тёмная тема', 'aria-current=\"page\"', 'href=\"#/notes\"', 'Включить светлую тему', 'Сейчас заметок: 2');\ncheck('Notes', wrap(React.createElement(m.NotesPage, {notes: [{id: 1, text: 'abc'}], onAdd() {}, onRemove() {}})), 'abc', 'Удалить «abc»', 'Новая заметка');\ncheck('Notes empty', wrap(React.createElement(m.NotesPage, {notes: [], onAdd() {}, onRemove() {}})), 'Пока пусто');\ncheck('About', wrap(React.createElement(m.AboutPage)), 'Hash-роутинг');\ncheck('404', wrap(React.createElement(m.NotFoundPage)), 'Страница не найдена', 'href=\"#/\"');\nEOF\nnode /tmp/smoke/run.mjs",
+        "success": false
+      },
+      {
+        "command": "mkdir -p .smoke && sed 's#/home/sandbox/workspace/src#../src#' /tmp/smoke/entry.tsx > .smoke/entry.tsx && npx vite build --ssr .smoke/entry.tsx --outDir .smoke/out --logLevel error && cat > .smoke/run.mjs <<'EOF'\nconst store = {};\nglobalThis.window = {\n  location: {hash: '#/notes'},\n  localStorage: {getItem: (k) => store[k] ?? null, setItem: (k, v) => (store[k] = v)},\n  matchMedia: () => ({matches: true}),\n  addEventListener() {}, removeEventListener() {},\n};\nconst React = (await import('react')).default;\nconst {renderToString} = await import('react-dom/server');\nconst m = await import('./out/entry.js');\nconst wrap = (el) => renderToString(React.createElement(m.ThemeProvider, {theme: 'dark'}, el));\nconst check = (name, html, ...needles) => {\n  const miss = needles.filter((n) => !html.includes(n));\n  console.log(miss.length ? `FAIL ${name}: missing ${miss}` : `ok   ${name}`);\n};\nconst app = renderToString(React.createElement(m.App));\ncheck('App (server snapshot → home)', app, 'Добро пожаловать', 'Активна тёмная тема', 'aria-current=\"page\"', 'href=\"#/notes\"', 'Включить светлую тему', 'Сейчас заметок: 2');\ncheck('Notes', wrap(React.createElement(m.NotesPage, {notes: [{id: 1, text: 'abc'}], onAdd() {}, onRemove() {}})), 'abc', 'Удалить «abc»', 'Новая заметка');\ncheck('Notes empty', wrap(React.createElement(m.NotesPage, {notes: [], onAdd() {}, onRemove() {}})), 'Пока пусто');\ncheck('About', wrap(React.createElement(m.AboutPage)), 'Hash-роутинг');\ncheck('404', wrap(React.createElement(m.NotFoundPage)), 'Страница не найдена', 'href=\"#/\"');\nEOF\nls .smoke/out; node .smoke/run.mjs",
+        "success": false
+      },
+      {
+        "command": "cat > .smoke/vite.config.mjs <<'EOF'\nimport react from '@vitejs/plugin-react';\nexport default {root: '..', plugins: [react()], ssr: {noExternal: [/@gravity-ui/]}};\nEOF\nnpx vite build -c .smoke/vite.config.mjs --ssr .smoke/entry.tsx --outDir .smoke/out --emptyOutDir --logLevel error && node .smoke/run.mjs",
+        "success": false
+      },
+      {
+        "command": "sed -i \"s/root: '..', //\" .smoke/vite.config.mjs && npx vite build -c .smoke/vite.config.mjs --ssr .smoke/entry.tsx --outDir .smoke/out --emptyOutDir --logLevel error && node .smoke/run.mjs",
+        "success": true
+      },
+      {
+        "command": "sed -i 's/const miss = needles/html = html.replace(\\/<!-- -->\\/g, \"\"); const miss = needles/' .smoke/run.mjs && node .smoke/run.mjs 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "rm -rf .smoke dist /tmp/smoke && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 38,
+      "outputTokens": 15544,
+      "cacheReadTokens": 599727,
+      "cacheWriteTokens": 33730,
+      "totalTokens": 649039
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

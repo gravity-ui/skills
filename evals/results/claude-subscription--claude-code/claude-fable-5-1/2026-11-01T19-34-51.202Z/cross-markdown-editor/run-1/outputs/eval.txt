@@ -1,0 +1,1389 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 7926ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   × no raw textarea input 1ms
+     → expected 'import { renderToStaticMarkup } from …' not to match /<textarea[\s/>]/>]
+   ✓ no dangerouslySetInnerHTML preview 0ms
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 7920ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: MarkdownField uses a uikit TextArea with a custom MarkdownPreview; no useMarkdownEditor/MarkdownEditorView usage and @gravity-ui/markdown-editor is not in package.json.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  19:45:25
+   Duration  8.11s (transform 40ms, setup 18ms, collect 21ms, tests 7.93s, environment 0ms, prepare 47ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no raw textarea input
+AssertionError: expected 'import { renderToStaticMarkup } from …' not to match /<textarea[\s/>]/>]
+
+[32m- Expected:[39m 
+/<textarea[\s/>]/
+
+[31m+ Received:[39m 
+"import { renderToStaticMarkup } from 'react-dom/server';
+import { ThemeProvider } from '@gravity-ui/uikit';
+import { describe, expect, it } from 'vitest';
+
+import { App } from './App';
+
+describe('App form', () => {
+  it('renders title input, markdown textarea and live preview', () => {
+    const html = renderToStaticMarkup(
+      <ThemeProvider theme=\"light\">
+        <App />
+      </ThemeProvider>,
+    );
+    expect(html).toContain('<form');
+    expect(html).toMatch(/<input [^>]*name=\"title\"/);
+    expect(html).toMatch(/<textarea [^>]*name=\"description\"/);
+    // предпросмотр начального текста уже отформатирован
+    expect(html).toContain('<h1');
+    expect(html).toContain('<strong>жирным</strong>');
+    expect(html).toContain('<ol');
+    expect(html).toContain('<blockquote');
+    expect(html).toContain('<pre');
+  });
+});
+
+
+import { useState } from 'react';
+import { Button, Flex, Text, TextInput } from '@gravity-ui/uikit';
+
+import { MarkdownField } from './MarkdownField';
+
+const INITIAL_DESCRIPTION = `# Заголовок
+
+Обычный абзац с **жирным**, _курсивом_, ~~зачёркнутым~~ и \\`inline-кодом\\`.
+
+- Пункт списка
+- Ещё один пункт
+  - Вложенный пункт
+
+1. Первый шаг
+2. Второй шаг
+
+> Цитата с [ссылкой](https://gravity-ui.com)
+
+\\`\\`\\`ts
+const answer = 42;
+\\`\\`\\`
+`;
+
+const DESCRIPTION_MAX_LENGTH = 5000;
+
+export function App() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState(INITIAL_DESCRIPTION);
+  const [submitted, setSubmitted] = useState<{ title: string; description: string } | null>(null);
+
+  const descriptionTooLong = description.length > DESCRIPTION_MAX_LENGTH;
+  const canSubmit = title.trim().length > 0 && description.trim().length > 0 && !descriptionTooLong;
+
+  return (
+    <form
+      style={{ padding: 24, maxWidth: 1200, margin: '0 auto' }}
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (!canSubmit) return;
+        setSubmitted({ title: title.trim(), description });
+      }}
+    >
+      <Flex direction=\"column\" gap={5}>
+        <Text as=\"h1\" variant=\"header-2\">
+          Новая запись
+        </Text>
+
+        <Flex direction=\"column\" gap={2}>
+          <Text as=\"label\" htmlFor=\"title\" variant=\"subheader-1\">
+            Название
+          </Text>
+          <TextInput
+            id=\"title\"
+            name=\"title\"
+            size=\"l\"
+            value={title}
+            onUpdate={setTitle}
+            placeholder=\"Коротко о чём запись\"
+            hasClear
+          />
+        </Flex>
+
+        <MarkdownField
+          label=\"Описание\"
+          name=\"description\"
+          value={description}
+          onUpdate={setDescription}
+          maxLength={DESCRIPTION_MAX_LENGTH}
+          note=\"Форматирование применяется сразу при вводе.\"
+        />
+
+        <Flex gap={2} alignItems=\"center\">
+          <Button type=\"submit\" view=\"action\" size=\"l\" disabled={!canSubmit}>
+            Сохранить
+          </Button>
+          {submitted ? (
+            <Text variant=\"body-1\" color=\"positive\">
+              Сохранено: «{submitted.title}», {submitted.description.length} символов описания
+            </Text>
+          ) : null}
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+
+
+.md-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.md-field__label {
+  display: block;
+}
+
+.md-field__panes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+@media (max-width: 800px) {
+  .md-field__panes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.md-field__pane {
+  min-width: 0;
+}
+
+.md-field__textarea {
+  font-family: var(--g-font-family-monospace);
+  tab-size: 2;
+}
+
+.md-field__preview {
+  flex: 1;
+  min-height: 160px;
+  padding: 12px 16px;
+  overflow: auto;
+}
+
+
+import { useId } from 'react';
+import type { ReactNode } from 'react';
+import { Card, Flex, Text, TextArea } from '@gravity-ui/uikit';
+
+import { MarkdownPreview } from './markdown';
+
+import './MarkdownField.css';
+
+export interface MarkdownFieldProps {
+  /** Подпись поля */
+  label: ReactNode;
+  /** Текущее значение (markdown) */
+  value: string;
+  /** Вызывается при каждом изменении текста */
+  onUpdate: (value: string) => void;
+  /** Атрибут name для отправки формы */
+  name?: string;
+  placeholder?: string;
+  /** Подсказка под полем */
+  note?: ReactNode;
+  /** Текст ошибки валидации */
+  errorMessage?: ReactNode;
+  /** Ограничение длины: при превышении показывается ошибка */
+  maxLength?: number;
+  disabled?: boolean;
+  minRows?: number;
+  maxRows?: number;
+}
+
+/**
+ * Поле формы для текста с markdown-разметкой: слева редактор,
+ * справа (на узких экранах — снизу) живой предпросмотр форматирования.
+ */
+export function MarkdownField({
+  label,
+  value,
+  onUpdate,
+  name,
+  placeholder = 'Поддерживается markdown: **жирный**, _курсив_, `код`, списки, ссылки…',
+  note,
+  errorMessage,
+  maxLength,
+  disabled,
+  minRows = 10,
+  maxRows = 24,
+}: MarkdownFieldProps) {
+  const id = useId();
+  const labelId = `${id}-label`;
+  const previewId = `${id}-preview`;
+
+  const tooLong = maxLength !== undefined && value.length > maxLength;
+  const error = errorMessage ?? (tooLong ? `Максимум ${maxLength} символов` : undefined);
+
+  const counter =
+    maxLength !== undefined ? (
+      <Text variant=\"caption-2\" color={tooLong ? 'danger' : 'secondary'}>
+        {value.length} / {maxLength}
+      </Text>
+    ) : null;
+
+  return (
+    <div className=\"md-field\" role=\"group\" aria-labelledby={labelId}>
+      <Text as=\"label\" id={labelId} htmlFor={id} variant=\"subheader-1\" className=\"md-field__label\">
+        {label}
+      </Text>
+
+      <div className=\"md-field__panes\">
+        <Flex direction=\"column\" gap={1} className=\"md-field__pane\">
+          <Text variant=\"caption-2\" color=\"secondary\">
+            Markdown
+          </Text>
+          <TextArea
+            id={id}
+            name={name}
+            value={value}
+            onUpdate={onUpdate}
+            placeholder={placeholder}
+            disabled={disabled}
+            minRows={minRows}
+            maxRows={maxRows}
+            size=\"l\"
+            hasClear
+            validationState={error ? 'invalid' : undefined}
+            errorMessage={error}
+            errorPlacement=\"outside\"
+            note={counter ?? undefined}
+            controlProps={{
+              spellCheck: true,
+              'aria-describedby': previewId,
+              className: 'md-field__textarea',
+            }}
+          />
+          {note ? (
+            <Text variant=\"caption-2\" color=\"secondary\">
+              {note}
+            </Text>
+          ) : null}
+        </Flex>
+
+        <Flex direction=\"column\" gap={1} className=\"md-field__pane\">
+          <Text variant=\"caption-2\" color=\"secondary\">
+            Предпросмотр
+          </Text>
+          <Card view=\"filled\" type=\"container\" className=\"md-field__preview\" id={previewId} aria-live=\"polite\">
+            <MarkdownPreview source={value} />
+          </Card>
+        </Flex>
+      </div>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+.md-preview {
+  color: var(--g-color-text-primary);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.md-preview > :first-child {
+  margin-top: 0;
+}
+
+.md-preview > :last-child {
+  margin-bottom: 0;
+}
+
+.md-preview__heading {
+  display: block;
+  margin: 20px 0 8px;
+}
+
+.md-preview__paragraph {
+  display: block;
+  margin: 0 0 12px;
+}
+
+.md-preview__code-inline {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--g-color-base-misc-light);
+}
+
+.md-preview__code-block {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--g-color-base-misc-light);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.md-preview__blockquote {
+  margin: 0 0 12px;
+  padding: 4px 0 4px 12px;
+  border-inline-start: 3px solid var(--g-color-line-generic);
+  color: var(--g-color-text-complementary);
+}
+
+.md-preview__blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.md-preview__list {
+  margin: 0 0 12px;
+  padding-inline-start: 24px;
+}
+
+.md-preview__list .md-preview__list {
+  margin-bottom: 0;
+}
+
+.md-preview__list-item {
+  display: list-item;
+  margin: 2px 0;
+}
+
+.md-preview__hr {
+  margin: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--g-color-line-generic);
+}
+
+.md-preview__image {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
+
+import { MarkdownPreview } from './MarkdownPreview';
+
+describe('MarkdownPreview', () => {
+  it('renders placeholder for empty source', () => {
+    const html = renderToStaticMarkup(<MarkdownPreview source=\"   \" emptyText=\"Пусто\" />);
+    expect(html).toContain('md-preview_empty');
+    expect(html).toContain('Пусто');
+  });
+
+  it('renders blocks and inline formatting as elements', () => {
+    const html = renderToStaticMarkup(
+      <MarkdownPreview source={'# Hi\\n\\nSome **bold** and `code`\\n\\n- one\\n- two\\n\\n> q\\n\\n```js\\nx()\\n```\\n\\n---'} />,
+    );
+    expect(html).toContain('<h1');
+    expect(html).toContain('<strong>bold</strong>');
+    expect(html).toContain('<code');
+    expect(html).toContain('<ul');
+    expect(html).toContain('<li');
+    expect(html).toContain('<blockquote');
+    expect(html).toContain('<pre');
+    expect(html).toContain('<hr');
+  });
+
+  it('escapes raw html and strips unsafe links', () => {
+    const html = renderToStaticMarkup(
+      <MarkdownPreview source={'<script>alert(1)</script> [x](javascript:alert(1))'} />,
+    );
+    expect(html).not.toContain('<script>');
+    expect(html).toContain('&lt;script&gt;');
+    expect(html).not.toContain('javascript:');
+    expect(html).not.toContain('<a ');
+  });
+
+  it('renders safe links with rel=noopener', () => {
+    const html = renderToStaticMarkup(<MarkdownPreview source=\"[site](https://example.com)\" />);
+    expect(html).toMatch(/<a [^>]*href=\"https:\\/\\/example.com\"/);
+    expect(html).toContain('rel=\"noopener noreferrer\"');
+  });
+
+  it('renders ordered list start attribute', () => {
+    const html = renderToStaticMarkup(<MarkdownPreview source={'3. a\\n4. b'} />);
+    expect(html).toMatch(/<ol [^>]*start=\"3\"/);
+  });
+});
+
+
+import { Fragment } from 'react';
+import type { ReactNode } from 'react';
+import { Link, Text } from '@gravity-ui/uikit';
+import type { TextProps } from '@gravity-ui/uikit';
+
+import type { BlockNode, HeadingLevel, InlineNode } from './parse';
+import { parseMarkdown } from './parse';
+
+import './MarkdownPreview.css';
+
+const HEADING_VARIANTS: Record<HeadingLevel, TextProps['variant']> = {
+  1: 'header-2',
+  2: 'header-1',
+  3: 'subheader-3',
+  4: 'subheader-2',
+  5: 'subheader-1',
+  6: 'body-2',
+};
+
+function renderInline(nodes: InlineNode[]): ReactNode {
+  return nodes.map((node, index) => {
+    switch (node.type) {
+      case 'text':
+        return <Fragment key={index}>{node.value}</Fragment>;
+      case 'br':
+        return <br key={index} />;
+      case 'strong':
+        return <strong key={index}>{renderInline(node.children)}</strong>;
+      case 'em':
+        return <em key={index}>{renderInline(node.children)}</em>;
+      case 'del':
+        return <del key={index}>{renderInline(node.children)}</del>;
+      case 'code':
+        return (
+          <Text key={index} as=\"code\" variant=\"code-inline-2\" className=\"md-preview__code-inline\">
+            {node.value}
+          </Text>
+        );
+      case 'link':
+        if (!node.href) {
+          // Небезопасный URL — показываем просто текст
+          return <Fragment key={index}>{renderInline(node.children)}</Fragment>;
+        }
+        return (
+          <Link key={index} href={node.href} title={node.title} target=\"_blank\" rel=\"noopener noreferrer\">
+            {renderInline(node.children)}
+          </Link>
+        );
+      case 'image':
+        if (!node.src) {
+          return <Fragment key={index}>{node.alt}</Fragment>;
+        }
+        return <img key={index} className=\"md-preview__image\" src={node.src} alt={node.alt} title={node.title} />;
+      default:
+        return null;
+    }
+  });
+}
+
+function renderBlocks(blocks: BlockNode[]): ReactNode {
+  return blocks.map((block, index) => {
+    switch (block.type) {
+      case 'heading': {
+        const Tag = `h${block.level}` as const;
+        return (
+          <Text key={index} as={Tag} variant={HEADING_VARIANTS[block.level]} className=\"md-preview__heading\">
+            {renderInline(block.children)}
+          </Text>
+        );
+      }
+      case 'paragraph':
+        if (block.tight) {
+          return <Fragment key={index}>{renderInline(block.children)}</Fragment>;
+        }
+        return (
+          <Text key={index} as=\"p\" variant=\"body-2\" className=\"md-preview__paragraph\">
+            {renderInline(block.children)}
+          </Text>
+        );
+      case 'code':
+        return (
+          <pre key={index} className=\"md-preview__code-block\" data-lang={block.lang}>
+            <Text as=\"code\" variant=\"code-2\">
+              {block.value}
+            </Text>
+          </pre>
+        );
+      case 'blockquote':
+        return (
+          <blockquote key={index} className=\"md-preview__blockquote\">
+            {renderBlocks(block.children)}
+          </blockquote>
+        );
+      case 'list': {
+        const ListTag = block.ordered ? 'ol' : 'ul';
+        return (
+          <ListTag
+            key={index}
+            className=\"md-preview__list\"
+            start={block.ordered && block.start !== 1 ? block.start : undefined}
+          >
+            {block.items.map((item, itemIndex) => (
+              <Text key={itemIndex} as=\"li\" variant=\"body-2\" className=\"md-preview__list-item\">
+                {renderBlocks(item)}
+              </Text>
+            ))}
+          </ListTag>
+        );
+      }
+      case 'hr':
+        return <hr key={index} className=\"md-preview__hr\" />;
+      default:
+        return null;
+    }
+  });
+}
+
+export interface MarkdownPreviewProps {
+  /** Исходный markdown-текст */
+  source: string;
+  /** Что показать, когда текст пустой */
+  emptyText?: ReactNode;
+  className?: string;
+}
+
+/** Рендерит markdown-текст в React-элементы без использования innerHTML. */
+export function MarkdownPreview({ source, emptyText, className }: MarkdownPreviewProps) {
+  const blocks = parseMarkdown(source);
+
+  if (blocks.length === 0) {
+    return (
+      <div className={['md-preview', 'md-preview_empty', className].filter(Boolean).join(' ')}>
+        <Text variant=\"body-2\" color=\"hint\">
+          {emptyText ?? 'Здесь появится отформатированный текст'}
+        </Text>
+      </div>
+    );
+  }
+
+  return <div className={['md-preview', className].filter(Boolean).join(' ')}>{renderBlocks(blocks)}</div>;
+}
+
+
+export { MarkdownPreview } from './MarkdownPreview';
+export type { MarkdownPreviewProps } from './MarkdownPreview';
+export { parseMarkdown, parseInline, sanitizeUrl } from './parse';
+export type { BlockNode, InlineNode, HeadingLevel } from './parse';
+
+
+import { describe, expect, it } from 'vitest';
+
+import { parseInline, parseMarkdown, sanitizeUrl } from './parse';
+
+describe('parseInline', () => {
+  it('parses strong, em and del', () => {
+    expect(parseInline('a **b** _c_ ~~d~~')).toEqual([
+      { type: 'text', value: 'a ' },
+      { type: 'strong', children: [{ type: 'text', value: 'b' }] },
+      { type: 'text', value: ' ' },
+      { type: 'em', children: [{ type: 'text', value: 'c' }] },
+      { type: 'text', value: ' ' },
+      { type: 'del', children: [{ type: 'text', value: 'd' }] },
+    ]);
+  });
+
+  it('nests emphasis', () => {
+    expect(parseInline('**bold *and em***')).toEqual([
+      {
+        type: 'strong',
+        children: [
+          { type: 'text', value: 'bold ' },
+          { type: 'em', children: [{ type: 'text', value: 'and em' }] },
+        ],
+      },
+    ]);
+  });
+
+  it('does not treat snake_case as emphasis', () => {
+    expect(parseInline('foo_bar_baz')).toEqual([{ type: 'text', value: 'foo_bar_baz' }]);
+  });
+
+  it('leaves unmatched markers as text', () => {
+    expect(parseInline('2 * 3 = 6 and **open')).toEqual([{ type: 'text', value: '2 * 3 = 6 and **open' }]);
+  });
+
+  it('parses inline code and ignores markup inside', () => {
+    expect(parseInline('use `a **b** c` here')).toEqual([
+      { type: 'text', value: 'use ' },
+      { type: 'code', value: 'a **b** c' },
+      { type: 'text', value: ' here' },
+    ]);
+    expect(parseInline('`` a ` b ``')).toEqual([{ type: 'code', value: 'a ` b' }]);
+  });
+
+  it('parses links with titles and images', () => {
+    expect(parseInline('[site](https://example.com \"Title\")')).toEqual([
+      { type: 'link', href: 'https://example.com', title: 'Title', children: [{ type: 'text', value: 'site' }] },
+    ]);
+    expect(parseInline('![alt](https://example.com/a.png)')).toEqual([
+      { type: 'image', src: 'https://example.com/a.png', alt: 'alt', title: undefined },
+    ]);
+    expect(parseInline('<https://example.com>')).toEqual([
+      { type: 'link', href: 'https://example.com', children: [{ type: 'text', value: 'https://example.com' }] },
+    ]);
+  });
+
+  it('drops unsafe urls', () => {
+    // eslint-disable-next-line no-script-url
+    expect(parseInline('[x](javascript:alert(1))')).toEqual([
+      { type: 'link', href: '', title: undefined, children: [{ type: 'text', value: 'x' }] },
+    ]);
+  });
+
+  it('handles escapes and hard breaks', () => {
+    expect(parseInline('\\\\*not em\\\\*')).toEqual([{ type: 'text', value: '*not em*' }]);
+    expect(parseInline('line one  \\nline two')).toEqual([
+      { type: 'text', value: 'line one' },
+      { type: 'br' },
+      { type: 'text', value: 'line two' },
+    ]);
+    expect(parseInline('soft\\nbreak')).toEqual([{ type: 'text', value: 'soft break' }]);
+  });
+});
+
+describe('sanitizeUrl', () => {
+  it('allows http(s), mailto, relative and anchors', () => {
+    expect(sanitizeUrl('https://a.b/c')).toBe('https://a.b/c');
+    expect(sanitizeUrl('mailto:me@a.b')).toBe('mailto:me@a.b');
+    expect(sanitizeUrl('/docs')).toBe('/docs');
+    expect(sanitizeUrl('#top')).toBe('#top');
+    expect(sanitizeUrl('example.com')).toBe('example.com');
+  });
+
+  it('rejects javascript:, data: and vbscript:', () => {
+    expect(sanitizeUrl('javascript:alert(1)')).toBe('');
+    expect(sanitizeUrl('JavaScript:alert(1)')).toBe('');
+    expect(sanitizeUrl('data:text/html,<b>')).toBe('');
+    expect(sanitizeUrl('vbscript:x')).toBe('');
+  });
+});
+
+describe('parseMarkdown', () => {
+  it('returns no blocks for blank input', () => {
+    expect(parseMarkdown('')).toEqual([]);
+    expect(parseMarkdown('  \\n\\n \\t')).toEqual([]);
+  });
+
+  it('parses headings (ATX and setext)', () => {
+    expect(parseMarkdown('# One\\n## Two ##\\nThree\\n===\\nFour\\n---')).toEqual([
+      { type: 'heading', level: 1, children: [{ type: 'text', value: 'One' }] },
+      { type: 'heading', level: 2, children: [{ type: 'text', value: 'Two' }] },
+      { type: 'heading', level: 1, children: [{ type: 'text', value: 'Three' }] },
+      { type: 'heading', level: 2, children: [{ type: 'text', value: 'Four' }] },
+    ]);
+    expect(parseMarkdown('#notaheading')).toEqual([
+      { type: 'paragraph', children: [{ type: 'text', value: '#notaheading' }] },
+    ]);
+  });
+
+  it('joins paragraph lines and splits on blank lines', () => {
+    expect(parseMarkdown('a\\nb\\n\\nc')).toEqual([
+      { type: 'paragraph', children: [{ type: 'text', value: 'a b' }] },
+      { type: 'paragraph', children: [{ type: 'text', value: 'c' }] },
+    ]);
+  });
+
+  it('parses fenced code blocks verbatim', () => {
+    expect(parseMarkdown('```ts\\nconst a = **1**;\\n\\n# not heading\\n```\\nafter')).toEqual([
+      { type: 'code', lang: 'ts', value: 'const a = **1**;\\n\\n# not heading' },
+      { type: 'paragraph', children: [{ type: 'text', value: 'after' }] },
+    ]);
+    // Незакрытый блок тянется до конца
+    expect(parseMarkdown('~~~\\nx')).toEqual([{ type: 'code', lang: undefined, value: 'x' }]);
+  });
+
+  it('parses horizontal rules but not confuse them with lists', () => {
+    expect(parseMarkdown('---\\n* * *\\n___')).toEqual([{ type: 'hr' }, { type: 'hr' }, { type: 'hr' }]);
+  });
+
+  it('parses blockquotes with nested content', () => {
+    expect(parseMarkdown('> # Title\\n> text\\ncontinued\\n\\nout')).toEqual([
+      {
+        type: 'blockquote',
+        children: [
+          { type: 'heading', level: 1, children: [{ type: 'text', value: 'Title' }] },
+          { type: 'paragraph', children: [{ type: 'text', value: 'text continued' }] },
+        ],
+      },
+      { type: 'paragraph', children: [{ type: 'text', value: 'out' }] },
+    ]);
+  });
+
+  it('parses tight bullet lists with nesting', () => {
+    expect(parseMarkdown('- a\\n- b\\n  - b1\\n  - b2\\n- c')).toEqual([
+      {
+        type: 'list',
+        ordered: false,
+        start: 1,
+        items: [
+          [{ type: 'paragraph', tight: true, children: [{ type: 'text', value: 'a' }] }],
+          [
+            { type: 'paragraph', tight: true, children: [{ type: 'text', value: 'b' }] },
+            {
+              type: 'list',
+              ordered: false,
+              start: 1,
+              items: [
+                [{ type: 'paragraph', tight: true, children: [{ type: 'text', value: 'b1' }] }],
+                [{ type: 'paragraph', tight: true, children: [{ type: 'text', value: 'b2' }] }],
+              ],
+            },
+          ],
+          [{ type: 'paragraph', tight: true, children: [{ type: 'text', value: 'c' }] }],
+        ],
+      },
+    ]);
+  });
+
+  it('parses ordered lists with a custom start and loose items', () => {
+    const [list] = parseMarkdown('3. three\\n\\n4. four\\n   more');
+    expect(list).toMatchObject({ type: 'list', ordered: true, start: 3 });
+    if (list.type !== 'list') throw new Error('expected list');
+    expect(list.items).toHaveLength(2);
+    expect(list.items[0][0]).toEqual({ type: 'paragraph', children: [{ type: 'text', value: 'three' }] });
+    expect(list.items[1][0]).toEqual({ type: 'paragraph', children: [{ type: 'text', value: 'four more' }] });
+  });
+
+  it('separates bullet and ordered lists and ends list on unindented paragraph', () => {
+    const blocks = parseMarkdown('- a\\n1. b\\n\\npara');
+    expect(blocks.map((b) => b.type)).toEqual(['list', 'list', 'paragraph']);
+  });
+
+  it('normalises CRLF', () => {
+    expect(parseMarkdown('a\\r\\n\\r\\nb')).toEqual([
+      { type: 'paragraph', children: [{ type: 'text', value: 'a' }] },
+      { type: 'paragraph', children: [{ type: 'text', value: 'b' }] },
+    ]);
+  });
+});
+
+
+/**
+ * Небольшой markdown-парсер, покрывающий привычное подмножество CommonMark:
+ * заголовки, абзацы, списки (вложенные), цитаты, блоки кода, разделители,
+ * жирный / курсив / зачёркнутый, inline-код, ссылки, изображения, экранирование.
+ *
+ * Результат — дерево узлов, которое рендерится в React-элементы без innerHTML,
+ * поэтому пользовательский ввод не может внедрить разметку или скрипты.
+ */
+
+export type InlineNode =
+  | { type: 'text'; value: string }
+  | { type: 'strong'; children: InlineNode[] }
+  | { type: 'em'; children: InlineNode[] }
+  | { type: 'del'; children: InlineNode[] }
+  | { type: 'code'; value: string }
+  | { type: 'link'; href: string; title?: string; children: InlineNode[] }
+  | { type: 'image'; src: string; alt: string; title?: string }
+  | { type: 'br' };
+
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+export type BlockNode =
+  | { type: 'heading'; level: HeadingLevel; children: InlineNode[] }
+  | { type: 'paragraph'; children: InlineNode[]; tight?: boolean }
+  | { type: 'code'; lang?: string; value: string }
+  | { type: 'blockquote'; children: BlockNode[] }
+  | { type: 'list'; ordered: boolean; start: number; items: BlockNode[][] }
+  | { type: 'hr' };
+
+/* ───────────────────────────── helpers ───────────────────────────── */
+
+const SAFE_PROTOCOL = /^(https?|mailto|tel):/i;
+const RELATIVE_URL = /^(\\/|\\.\\.?\\/|#)/;
+
+/** Возвращает URL, если он безопасен для href/src, иначе пустую строку. */
+export function sanitizeUrl(raw: string): string {
+  const url = raw.trim();
+  if (!url) return '';
+  const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(url);
+  if (!hasScheme) {
+    // Без схемы: относительные пути, якоря и голые домены вроде example.com
+    return RELATIVE_URL.test(url) || !/[\\s<>\"']/.test(url) ? url : '';
+  }
+  return SAFE_PROTOCOL.test(url) ? url : '';
+}
+
+const FENCE_RE = /^ {0,3}(`{3,}|~{3,})([^`]*)$/;
+const HEADING_RE = /^ {0,3}(#{1,6})(?:[ \\t]+(.*?))?[ \\t]*#*[ \\t]*$/;
+const HR_RE = /^ {0,3}([-*_])(?:[ \\t]*\\1){2,}[ \\t]*$/;
+const QUOTE_RE = /^ {0,3}> ?(.*)$/;
+const BULLET_RE = /^( {0,3})([-+*])[ \\t]+(.*)$/;
+const ORDERED_RE = /^( {0,3})(\\d{1,9})[.)][ \\t]+(.*)$/;
+const BLANK_RE = /^[ \\t]*$/;
+
+function listItemMatch(line: string) {
+  const bullet = BULLET_RE.exec(line);
+  if (bullet) {
+    return { indent: bullet[1].length, ordered: false, start: 1, content: bullet[3], marker: bullet[2] };
+  }
+  const ordered = ORDERED_RE.exec(line);
+  if (ordered) {
+    return {
+      indent: ordered[1].length,
+      ordered: true,
+      start: Number(ordered[2]),
+      content: ordered[3],
+      marker: ordered[2],
+    };
+  }
+  return null;
+}
+
+function stripIndent(line: string, width: number): string {
+  let i = 0;
+  let removed = 0;
+  while (i < line.length && removed < width) {
+    if (line[i] === ' ') removed += 1;
+    else if (line[i] === '\\t') removed += 4;
+    else break;
+    i += 1;
+  }
+  return line.slice(i);
+}
+
+function leadingSpaces(line: string): number {
+  let n = 0;
+  for (const ch of line) {
+    if (ch === ' ') n += 1;
+    else if (ch === '\\t') n += 4;
+    else break;
+  }
+  return n;
+}
+
+/* ───────────────────────────── blocks ───────────────────────────── */
+
+export function parseMarkdown(source: string): BlockNode[] {
+  const lines = source.replace(/\\r\\n?/g, '\\n').split('\\n');
+  return parseBlocks(lines);
+}
+
+function parseBlocks(lines: string[]): BlockNode[] {
+  const blocks: BlockNode[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (BLANK_RE.test(line)) {
+      i += 1;
+      continue;
+    }
+
+    // ``` fenced code
+    const fence = FENCE_RE.exec(line);
+    if (fence) {
+      const marker = fence[1];
+      const lang = fence[2].trim() || undefined;
+      const body: string[] = [];
+      i += 1;
+      while (i < lines.length) {
+        const closing = /^ {0,3}(`{3,}|~{3,})[ \\t]*$/.exec(lines[i]);
+        if (closing && closing[1][0] === marker[0] && closing[1].length >= marker.length) {
+          i += 1;
+          break;
+        }
+        body.push(lines[i]);
+        i += 1;
+      }
+      blocks.push({ type: 'code', lang, value: body.join('\\n') });
+      continue;
+    }
+
+    // --- horizontal rule (проверяем до списков: \"* * *\" не список)
+    if (HR_RE.test(line)) {
+      blocks.push({ type: 'hr' });
+      i += 1;
+      continue;
+    }
+
+    // # heading
+    const heading = HEADING_RE.exec(line);
+    if (heading) {
+      blocks.push({
+        type: 'heading',
+        level: heading[1].length as HeadingLevel,
+        children: parseInline(heading[2] ?? ''),
+      });
+      i += 1;
+      continue;
+    }
+
+    // > blockquote
+    if (QUOTE_RE.test(line)) {
+      const inner: string[] = [];
+      while (i < lines.length) {
+        const q = QUOTE_RE.exec(lines[i]);
+        if (q) {
+          inner.push(q[1]);
+        } else if (!BLANK_RE.test(lines[i]) && inner.length && !BLANK_RE.test(inner[inner.length - 1])) {
+          // lazy continuation
+          inner.push(lines[i]);
+        } else {
+          break;
+        }
+        i += 1;
+      }
+      blocks.push({ type: 'blockquote', children: parseBlocks(inner) });
+      continue;
+    }
+
+    // - list / 1. list
+    const item = listItemMatch(line);
+    if (item) {
+      const { block, next } = parseList(lines, i, item.ordered);
+      blocks.push(block);
+      i = next;
+      continue;
+    }
+
+    // Setext heading: текст + подчёркивание === или ---
+    if (i + 1 < lines.length && /^ {0,3}(=+|-+)[ \\t]*$/.test(lines[i + 1])) {
+      const level = lines[i + 1].trim()[0] === '=' ? 1 : 2;
+      blocks.push({ type: 'heading', level, children: parseInline(line.trim()) });
+      i += 2;
+      continue;
+    }
+
+    // paragraph: до пустой строки или начала другого блока
+    const para: string[] = [line];
+    i += 1;
+    while (i < lines.length) {
+      const next = lines[i];
+      if (
+        BLANK_RE.test(next) ||
+        FENCE_RE.test(next) ||
+        HEADING_RE.test(next) ||
+        HR_RE.test(next) ||
+        QUOTE_RE.test(next) ||
+        listItemMatch(next)
+      ) {
+        break;
+      }
+      para.push(next);
+      i += 1;
+    }
+    blocks.push({ type: 'paragraph', children: parseInline(para.join('\\n')) });
+  }
+
+  return blocks;
+}
+
+function parseList(lines: string[], from: number, ordered: boolean): { block: BlockNode; next: number } {
+  const first = listItemMatch(lines[from])!;
+  const items: BlockNode[][] = [];
+  let i = from;
+  let hasBlankBetween = false;
+
+  while (i < lines.length) {
+    const m = listItemMatch(lines[i]);
+    if (!m || m.ordered !== ordered || m.indent > first.indent + 3) break;
+    if (m.indent < first.indent) break;
+
+    // Содержимое пункта: первая строка + все строки с отступом >= contentIndent
+    const markerWidth = m.indent + m.marker.length + 1;
+    const contentIndent = markerWidth;
+    const itemLines: string[] = [m.content];
+    i += 1;
+
+    while (i < lines.length) {
+      const l = lines[i];
+      if (BLANK_RE.test(l)) {
+        // пустая строка: продолжаем, только если следующая непустая строка всё ещё с отступом
+        let j = i + 1;
+        while (j < lines.length && BLANK_RE.test(lines[j])) j += 1;
+        if (j < lines.length && leadingSpaces(lines[j]) >= contentIndent) {
+          itemLines.push('');
+          hasBlankBetween = true;
+          i += 1;
+          continue;
+        }
+        break;
+      }
+      if (leadingSpaces(l) >= contentIndent) {
+        itemLines.push(stripIndent(l, contentIndent));
+        i += 1;
+        continue;
+      }
+      // lazy continuation для абзаца внутри пункта
+      if (!listItemMatch(l) && !HEADING_RE.test(l) && !FENCE_RE.test(l) && !QUOTE_RE.test(l) && !HR_RE.test(l)) {
+        if (itemLines.length && !BLANK_RE.test(itemLines[itemLines.length - 1])) {
+          itemLines.push(l.trim());
+          i += 1;
+          continue;
+        }
+      }
+      break;
+    }
+
+    items.push(parseBlocks(itemLines));
+
+    // Пропускаем пустые строки между пунктами одного списка
+    let j = i;
+    while (j < lines.length && BLANK_RE.test(lines[j])) j += 1;
+    const nextItem = j < lines.length ? listItemMatch(lines[j]) : null;
+    if (nextItem && nextItem.ordered === ordered && nextItem.indent >= first.indent && nextItem.indent <= first.indent + 3) {
+      if (j > i) hasBlankBetween = true;
+      i = j;
+    } else {
+      break;
+    }
+  }
+
+  // «Плотный» список (без пустых строк): первый абзац пункта рендерится без отступов <p>
+  if (!hasBlankBetween) {
+    for (const item of items) {
+      const firstBlock = item[0];
+      if (firstBlock && firstBlock.type === 'paragraph') {
+        firstBlock.tight = true;
+      }
+    }
+  }
+
+  return { block: { type: 'list', ordered, start: first.start, items }, next: i };
+}
+
+/* ───────────────────────────── inline ───────────────────────────── */
+
+const ESCAPABLE = /[\\\\`*_{}[\\]()#+\\-.!~<>|\"']/;
+
+export function parseInline(text: string): InlineNode[] {
+  const nodes: InlineNode[] = [];
+  let buf = '';
+  let i = 0;
+
+  const flush = () => {
+    if (buf) {
+      nodes.push({ type: 'text', value: buf });
+      buf = '';
+    }
+  };
+
+  while (i < text.length) {
+    const ch = text[i];
+
+    // \\* экранирование
+    if (ch === '\\\\' && i + 1 < text.length && ESCAPABLE.test(text[i + 1])) {
+      buf += text[i + 1];
+      i += 2;
+      continue;
+    }
+
+    // жёсткий перенос: два пробела или обратный слэш перед \\n
+    if (ch === '\\n') {
+      if (buf.endsWith('  ')) {
+        buf = buf.replace(/ +$/, '');
+        flush();
+        nodes.push({ type: 'br' });
+      } else if (buf.endsWith('\\\\')) {
+        buf = buf.slice(0, -1);
+        flush();
+        nodes.push({ type: 'br' });
+      } else {
+        buf = buf.replace(/ +$/, '') + ' ';
+      }
+      i += 1;
+      // пропускаем ведущие пробелы следующей строки
+      while (i < text.length && (text[i] === ' ' || text[i] === '\\t')) i += 1;
+      continue;
+    }
+
+    // `code`
+    if (ch === '`') {
+      let run = 0;
+      while (text[i + run] === '`') run += 1;
+      const open = '`'.repeat(run);
+      const close = text.indexOf(open, i + run);
+      if (close !== -1 && text[close + run] !== '`') {
+        flush();
+        let code = text.slice(i + run, close).replace(/\\n/g, ' ');
+        if (code.length > 2 && code.startsWith(' ') && code.endsWith(' ') && code.trim()) {
+          code = code.slice(1, -1);
+        }
+        nodes.push({ type: 'code', value: code });
+        i = close + run;
+        continue;
+      }
+      buf += open;
+      i += run;
+      continue;
+    }
+
+    // ![alt](src \"title\")
+    if (ch === '!' && text[i + 1] === '[') {
+      const link = readLink(text, i + 1);
+      if (link) {
+        flush();
+        nodes.push({ type: 'image', src: sanitizeUrl(link.url), alt: link.label, title: link.title });
+        i = link.end;
+        continue;
+      }
+    }
+
+    // [text](url \"title\")
+    if (ch === '[') {
+      const link = readLink(text, i);
+      if (link) {
+        flush();
+        nodes.push({
+          type: 'link',
+          href: sanitizeUrl(link.url),
+          title: link.title,
+          children: parseInline(link.label),
+        });
+        i = link.end;
+        continue;
+      }
+    }
+
+    // <https://autolink>
+    if (ch === '<') {
+      const m = /^<((?:https?|mailto):[^\\s<>]+)>/i.exec(text.slice(i));
+      if (m) {
+        flush();
+        nodes.push({ type: 'link', href: sanitizeUrl(m[1]), children: [{ type: 'text', value: m[1] }] });
+        i += m[0].length;
+        continue;
+      }
+    }
+
+    // **strong** / __strong__ / *em* / _em_ / ~~del~~
+    if (ch === '*' || ch === '_' || ch === '~') {
+      const emph = readEmphasis(text, i);
+      if (emph) {
+        flush();
+        nodes.push(emph.node);
+        i = emph.end;
+        continue;
+      }
+    }
+
+    buf += ch;
+    i += 1;
+  }
+
+  flush();
+  return mergeText(nodes);
+}
+
+function mergeText(nodes: InlineNode[]): InlineNode[] {
+  const out: InlineNode[] = [];
+  for (const n of nodes) {
+    const last = out[out.length - 1];
+    if (n.type === 'text' && last && last.type === 'text') {
+      last.value += n.value;
+    } else {
+      out.push(n);
+    }
+  }
+  return out;
+}
+
+function readLink(text: string, start: number): { label: string; url: string; title?: string; end: number } | null {
+  // start указывает на '['
+  let depth = 0;
+  let i = start;
+  for (; i < text.length; i += 1) {
+    const c = text[i];
+    if (c === '\\\\') {
+      i += 1;
+      continue;
+    }
+    if (c === '[') depth += 1;
+    else if (c === ']') {
+      depth -= 1;
+      if (depth === 0) break;
+    }
+  }
+  if (i >= text.length || text[i + 1] !== '(') return null;
+  const label = text.slice(start + 1, i);
+
+  let j = i + 2;
+  let parens = 0;
+  for (; j < text.length; j += 1) {
+    const c = text[j];
+    if (c === '\\\\') {
+      j += 1;
+      continue;
+    }
+    if (c === '(') parens += 1;
+    else if (c === ')') {
+      if (parens === 0) break;
+      parens -= 1;
+    } else if (c === '\\n') {
+      return null;
+    }
+  }
+  if (j >= text.length) return null;
+
+  const inner = text.slice(i + 2, j).trim();
+  const titled = /^(\\S+)\\s+\"([^\"]*)\"$/.exec(inner) ?? /^(\\S+)\\s+'([^']*)'$/.exec(inner);
+  const url = (titled ? titled[1] : inner).replace(/^<(.*)>$/, '$1');
+  const title = titled ? titled[2] : undefined;
+  return { label, url, title, end: j + 1 };
+}
+
+function readEmphasis(text: string, start: number): { node: InlineNode; end: number } | null {
+  const ch = text[start];
+  let run = 0;
+  while (text[start + run] === ch) run += 1;
+
+  // Левофланговый разделитель: после него не должно быть пробела
+  const after = text[start + run];
+  if (after === undefined || /\\s/.test(after)) return null;
+  // Для _ и ~ требуем границу слова слева (чтобы snake_case не ломался)
+  const before = start > 0 ? text[start - 1] : '';
+  if ((ch === '_' || ch === '~') && before && /[\\p{L}\\p{N}]/u.test(before)) return null;
+
+  const candidates: number[] = [];
+  if (ch === '~') {
+    if (run >= 2) candidates.push(2);
+  } else {
+    if (run >= 2) candidates.push(2);
+    if (run >= 1) candidates.push(1);
+  }
+
+  for (const len of candidates) {
+    const marker = ch.repeat(len);
+    const contentStart = start + len;
+    const close = findClosing(text, contentStart, marker, ch);
+    if (close === -1) continue;
+    const content = text.slice(contentStart, close);
+    if (!content.trim()) continue;
+    const children = parseInline(content);
+    const node: InlineNode =
+      ch === '~' ? { type: 'del', children } : len === 2 ? { type: 'strong', children } : { type: 'em', children };
+    return { node, end: close + len };
+  }
+  return null;
+}
+
+function findClosing(text: string, from: number, marker: string, ch: string): number {
+  let i = from;
+  while (i < text.length) {
+    const c = text[i];
+    if (c === '\\\\') {
+      i += 2;
+      continue;
+    }
+    if (c === '`') {
+      // пропускаем inline-код
+      let run = 0;
+      while (text[i + run] === '`') run += 1;
+      const close = text.indexOf('`'.repeat(run), i + run);
+      if (close !== -1) {
+        i = close + run;
+        continue;
+      }
+      i += run;
+      continue;
+    }
+    if (c === ch && text.startsWith(marker, i)) {
+      let run = 0;
+      while (text[i + run] === ch) run += 1;
+      const prev = text[i - 1];
+      const next = text[i + run];
+      const rightFlanking = prev !== undefined && !/\\s/.test(prev);
+      const wordAfter = next !== undefined && /[\\p{L}\\p{N}]/u.test(next);
+      if (run === marker.length && rightFlanking && !((ch === '_' || ch === '~') && wordAfter)) {
+        return i;
+      }
+      if (run > marker.length && rightFlanking) {
+        // например **bold *and em*** — закрываемся на последних символах
+        return i + run - marker.length;
+      }
+      i += run;
+      continue;
+    }
+    i += 1;
+  }
+  return -1;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:77:19
+     75| // A hand-rolled <textarea> as the markdown input is the forbidden raw…
+     76| test("no raw textarea input", () => {
+     77|   expect(src).not.toMatch(new RegExp("<textarea[\\s/>]"));
+       |                   ^
+     78| });
+     79| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: MarkdownField uses a uikit TextArea with a custom MarkdownPreview; no useMarkdownEditor/MarkdownEditorView usage and @gravity-ui/markdown-editor is not in package.json.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

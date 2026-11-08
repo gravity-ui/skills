@@ -1,0 +1,130 @@
+.cpu-load-chart {
+    /* Шаги синего подобраны отдельно для каждой темы: контраст с фоном не ниже 3:1. */
+    --cpu-load-chart-line: var(--g-color-private-blue-600-solid);
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    height: 100%;
+    min-width: 0;
+    padding: 16px 20px;
+}
+
+.cpu-load-chart_theme_dark {
+    --cpu-load-chart-line: var(--g-color-private-blue-550-solid);
+}
+
+.cpu-load-chart__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.cpu-load-chart__title {
+    display: block;
+    margin: 0 0 2px;
+}
+
+.cpu-load-chart__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 32px;
+    margin: 0;
+}
+
+.cpu-load-chart__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cpu-load-chart__stat-value {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Растягивается на всё свободное место карточки и может сжиматься в flex/grid-раскладке. */
+.cpu-load-chart__plot {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 200px;
+}
+
+/* Абсолютное позиционирование: canvas с пиксельным размером не распирает контейнер при сжатии. */
+.cpu-load-chart__canvas {
+    position: absolute;
+    inset: 0;
+}
+
+.cpu-load-chart__canvas.yagr {
+    --yagr-font-family: var(--g-text-body-font-family);
+    --yagr-background: var(--g-color-base-background);
+    --yagr-grid: var(--g-color-line-generic);
+    --yagr-axis-stroke: var(--g-color-text-secondary);
+}
+
+.cpu-load-chart__canvas.yagr .u-select {
+    background: var(--g-color-base-info-light);
+}
+
+.cpu-load-chart__canvas .yagr-point span {
+    border-color: var(--g-color-base-background);
+    box-shadow: none;
+}
+
+.cpu-load-chart__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--g-color-base-background);
+}
+
+.cpu-load-chart__hint {
+    display: block;
+}
+
+/* Подсказка монтируется в document.body и берёт цвета из темы Gravity UI. */
+.yagr-tooltip.cpu-load-tooltip {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: var(--g-color-base-float);
+    box-shadow: 0 2px 8px var(--g-color-sfx-shadow);
+    color: var(--g-color-text-primary);
+    font-family: var(--g-text-body-font-family);
+    font-size: 13px;
+}
+
+.cpu-load-tooltip__time {
+    margin-bottom: 4px;
+    color: var(--g-color-text-secondary);
+    font-size: 12px;
+}
+
+.cpu-load-tooltip__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.cpu-load-tooltip__key {
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+}
+
+.cpu-load-tooltip__value {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.cpu-load-tooltip__name {
+    color: var(--g-color-text-secondary);
+}

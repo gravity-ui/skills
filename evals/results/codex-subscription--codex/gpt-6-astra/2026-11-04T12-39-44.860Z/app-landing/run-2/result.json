@@ -1,0 +1,108 @@
+{
+  "status": "failed",
+  "duration": 1989.749,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 26314,
+    "outputTokens": 6337,
+    "cacheReadTokens": 409088,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 798,
+    "totalTokens": 441739
+  },
+  "model": "gpt-6-astra",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 11,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' -g 'AGENTS.md' -g 'package.json' -g 'index.html' -g 'src/**' -g 'app/**' -g 'pages/**' -g '*config*' -g 'README*' -g 'public/**' -g '*lock*'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && cat index.html && cat vite.config.ts && find .. -name AGENTS.md -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) { try { console.log(p, import.meta.resolve(p)) } catch {} }\\\" && git diff --stat && cat node_modules/@gravity-ui/uikit/styles/fonts.css\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/tempo-browser-check playwright --no-audit --no-fund'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /root/.cache/ms-playwright /home/node/.cache/ms-playwright /opt/google/chrome 2>/dev/null'",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc '/tmp/tempo-browser-check/node_modules/.bin/playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/tempo-browser-check/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });\nconst page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });\nconst errors = [];\npage.on('pageerror', error => errors.push(error.message));\nawait page.goto('http://localhost:5174', { waitUntil: 'networkidle' });\nawait page.screenshot({ path: '/tmp/tempo-desktop.png', fullPage: true });\nif (await page.locator('main section').count() \"'!== 3) throw new Error('\"'Expected three sections');\nif (await page.locator('button').count() \"'!== 1) throw new Error('\"'Expected one CTA');\nawait page.getByRole('button', { name: 'Попробовать в деле' }).click();\nawait page.waitForTimeout(1200);\nif (await page.getByRole('timer').textContent() === '00:00:00') throw new Error('Timer did not advance');\nawait page.getByRole('button', { name: 'Остановить таймер' }).click();\nawait page.getByRole('button', { name: 'Попробовать ещё раз' }).waitFor();\nfor (const width of [320, 390, 768, 1440]) {\n  await page.setViewportSize({ width, height: 900 });\n  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);\n  if (overflow) throw new Error(\"'`Overflow at ${width}px`);\n}\nawait page.setViewportSize({ width: 390, height: 844 });\nawait page.screenshot({ path: '\"'/tmp/tempo-mobile.png', fullPage: true });\nif (errors.length) throw new Error(errors.join('\\\\n'));\nconsole.log('PASS: three sections, one CTA, timer start/advance/stop, responsive widths 320/390/768/1440, no browser errors.');\nawait browser.close();\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/headless: true,/headless: true, channel: 'chromium',/\\\" /tmp/tempo-browser-check/check.mjs\nnode /tmp/tempo-browser-check/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26314,
+      "outputTokens": 6337,
+      "cacheReadTokens": 409088,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 798,
+      "totalTokens": 441739
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

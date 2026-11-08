@@ -1,0 +1,250 @@
+{
+  "status": "failed",
+  "duration": 665.983,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 46662,
+    "outputTokens": 20805,
+    "cacheReadTokens": 1955840,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2739,
+    "totalTokens": 2023307
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 41,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 41,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'README*' -g 'src/**' -g 'app/**' -g 'components/**' -g 'pages/**' -g '*lock*' -g 'index.html' -g 'vite.config.*' -g 'tsconfig.json' -g '\"'!node_modules'\"' -g '\"'!dist'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!'\"\\\\.git/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/TextArea/TextArea.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/TextInput/TextInput.d.ts && cat tsconfig.json && git status --short && find .. -name AGENTS.md -not -path '*/node_modules/*' -print\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install react-markdown remark-gfm'"
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '(TextArea|TextInput|Button).*d.ts\"'$'\"' | head -25; cat tsconfig.json; git status --short; find .. -name AGENTS.md -not -path '*/node_modules/*' -print\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextArea.d.ts node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextAreaControl.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/react-markdown/readme.md | head -100; rg -n 'skipHtml|urlTransform|Security' node_modules/react-markdown/readme.md; cat index.html; ls node_modules | rg 'playwright|puppeteer'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {useRef, useState, type FormEvent, type KeyboardEvent} from 'react';\nimport {Button, TextArea, TextInput} from '@gravity-ui/uikit';\nimport ReactMarkdown from 'react-markdown';\nimport remarkGfm from 'remark-gfm';\nimport './styles.css';\n\nconst example = \"'`## Идеи, которыми хочется поделиться\n\nХороший текст начинается с **одной простой мысли**.\nДобавьте немного *вдохновения* — и продолжайте писать.\n\n### План на сегодня\n- Собрать интересные идеи\n- Записать самое важное\n- Поделиться результатом\n\n> Не бойтесь чистого листа. Просто начните.\n\nПодробнее о [Markdown](https://www.markdownguide.org/).\n\nНебольшой фрагмент кода: '\"\\\\\"'`hello, world'\"\\\\\"'`.\n`;\n\nfunction DocumentIcon({small = false}: {small?: boolean}) {\n  return <svg width={small ? 18 : 24} height={small ? 18 : 24} viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z\" stroke=\"currentColor\" strokeWidth=\"1.6\" strokeLinejoin=\"round\"/><path d=\"M14 3v6h6M8 13h8M8 17h5\" stroke=\"currentColor\" strokeWidth=\"1.6\" strokeLinecap=\"round\"/></svg>;\n}\n\nexport function App() {\n  const [title, setTitle] = useState('\"'');\n  const [markdown, setMarkdown] = useState('');\n  const [showHelp, setShowHelp] = useState(false);\n  const [status, setStatus] = useState('');\n  const editor = useRef<HTMLTextAreaElement>(null);\n  const words = markdown.trim() ? markdown.trim().split(/\\\\s+/u).length : 0;\n\n  function updateMarkdown(value: string) {\n    setMarkdown(value);\n    setStatus('');\n  }\n\n  function insert(before: string, after = '', fallback = 'текст', line = false) {\n    const control = editor.current;\n    if (\"'!control) return;\n    const start = control.selectionStart;\n    const end = control.selectionEnd;\n    const selected = markdown.slice(start, end) || fallback;\n    const prefix = line && start > 0 && markdown[start - 1] !== '\"'\\\\n' ? '\\\\n' : '';\n    const text = prefix + before + (line ? selected.split('\\\\n').join('\\\\n' + before) : selected) + after;\n    updateMarkdown(markdown.slice(0, start) + text + markdown.slice(end));\n    requestAnimationFrame(() => {\n      control.focus();\n      control.setSelectionRange(start + prefix.length + before.length, start + text.length - after.length);\n    });\n  }\n\n  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {\n    if ((event.ctrlKey || event.metaKey) && ['b', 'i', 'k'].includes(event.key.toLowerCase())) {\n      event.preventDefault();\n      const key = event.key.toLowerCase();\n      if (key === 'b') insert('**', '**');\n      if (key === 'i') insert('*', '*');\n      if (key === 'k') insert('[', '](https://example.com)', 'название ссылки');\n    }\n  }\n\n  function saveNote(event: FormEvent) {\n    event.preventDefault();\n    if (\"'!title.trim() || !markdown.trim()) {\n      setStatus('\"'Добавьте название и текст заметки.');\n      return;\n    }\n    try {\n      localStorage.setItem('markdown-note', JSON.stringify({title: title.trim(), markdown}));\n      setStatus('Заметка сохранена в этом браузере.');\n    } catch {\n      setStatus('Не удалось сохранить заметку. Проверьте настройки хранилища браузера.');\n    }\n  }\n\n  return (\n    <div className=\\\"app\\\">\n      <header className=\\\"site-header\\\">\n        <div className=\\\"brand\\\"><span className=\\\"brand-icon\\\"><DocumentIcon /></span>Заметки<span className=\\\"brand-divider\\\" /><span className=\\\"workspace\\\">Личное пространство</span></div>\n        <span className=\\\"avatar\\\" aria-label=\\\"Личный профиль\\\">Я</span>\n      </header>\n      <main className=\\\"main\\\">\n        <div className=\\\"breadcrumb\\\">Мои заметки<span>/</span><span>Новая заметка</span></div>\n        <div className=\\\"page-heading\\\"><div><div className=\\\"eyebrow\\\">ПРОСТРАНСТВО ДЛЯ ВАШИХ МЫСЛЕЙ</div><h1>Начните с одной мысли</h1><p>Пишите, оформляйте и сразу смотрите, что получается.</p></div><span className=\\\"heading-decoration\\\" aria-hidden=\\\"true\\\">✳</span></div>\n        <form className=\\\"note-form\\\" onSubmit={saveNote}>\n          <div className=\\\"form-heading\\\"><div className=\\\"form-title\\\"><DocumentIcon small /><h2>Новая заметка</h2></div><span className=\\\"draft-badge\\\"><span />Черновик</span></div>\n          <div className=\\\"title-field\\\"><label htmlFor=\\\"note-title\\\">Название</label><TextInput id=\\\"note-title\\\" name=\\\"title\\\" size=\\\"xl\\\" value={title} onUpdate={(value) => {setTitle(value); setStatus('');}} placeholder=\\\"О чём будет ваша заметка?\\\" controlProps={{required: true, maxLength: 200}} /></div>\n          <div className=\\\"content-label\\\"><label htmlFor=\\\"note-content\\\">Текст заметки</label><span className=\\\"markdown-badge\\\">M↓<span>Markdown</span></span></div>\n          <div className=\\\"editor-shell\\\">\n            <div className=\\\"editor-pane\\\">\n              <div className=\\\"pane-heading\\\"><span className=\\\"pane-title\\\"><span aria-hidden=\\\"true\\\">↗</span>Редактор</span><Button view=\\\"flat-secondary\\\" size=\\\"s\\\" type=\\\"button\\\" onClick={() => setShowHelp(\"'!showHelp)} aria-expanded={showHelp} aria-controls=\"markdown-help\">{showHelp ? '\"'Скрыть подсказки' : 'Подсказки'}<span className=\\\"help-icon\\\" aria-hidden=\\\"true\\\">?</span></Button></div>\n              <div className=\\\"toolbar\\\" role=\\\"group\\\" aria-label=\\\"Форматирование Markdown\\\">\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('**', '**')} title=\\\"Жирный (Ctrl/⌘ + B)\\\" aria-label=\\\"Жирный\\\"><b>B</b></Button>\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('*', '*')} title=\\\"Курсив (Ctrl/⌘ + I)\\\" aria-label=\\\"Курсив\\\"><i>I</i></Button>\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('## ', '', 'Заголовок', true)} title=\\\"Заголовок\\\" aria-label=\\\"Заголовок\\\"><b>H₂</b></Button>\n                <span className=\\\"toolbar-divider\\\" />\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('[', '](https://example.com)', 'название ссылки')} title=\\\"Ссылка (Ctrl/⌘ + K)\\\" aria-label=\\\"Ссылка\\\"><svg width=\\\"17\\\" height=\\\"17\\\" viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" aria-hidden=\\\"true\\\"><path d=\\\"m10 13 4-4m-6 6-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2 2 2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0\\\" transform=\\\"translate(2 0)\\\" stroke=\\\"currentColor\\\" strokeWidth=\\\"1.7\\\" strokeLinecap=\\\"round\\\"/></svg></Button>\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('- ', '', 'Пункт списка', true)} title=\\\"Маркированный список\\\" aria-label=\\\"Маркированный список\\\">☷</Button>\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('> ', '', 'Цитата', true)} title=\\\"Цитата\\\" aria-label=\\\"Цитата\\\"><span className=\\\"quote-icon\\\">“</span></Button>\n                <Button type=\\\"button\\\" view=\\\"flat\\\" onClick={() => insert('\"'`'\"', '\"'`'\"', 'код')} title=\\\"Код\\\" aria-label=\\\"Код\\\"><span className=\\\"code-icon\\\">&lt;/&gt;</span></Button>\n              </div>\n              {showHelp && <div className=\\\"markdown-help\\\" id=\\\"markdown-help\\\"><strong>Быстрая подсказка</strong><span><code>**жирный**</code> · <code>*курсив*</code> · <code>## Заголовок</code></span><span><code>- пункт списка</code> · <code>[ссылка](https://...)</code></span><span><code>&gt; цитата</code> · <code>\"'`код`</code> · <code>```</code> для блока кода</span></div>}\n              <TextArea id=\"note-content\" name=\"markdown\" className=\"markdown-input\" view=\"clear\" controlRef={editor} value={markdown} onUpdate={updateMarkdown} onKeyDown={handleKeyDown} rows={17} placeholder={'\"'Начните писать здесь…\\\\n\\\\n## Добавьте заголовок\\\\nВыделите **главное** или составьте список.\\\\n\\\\nВаш текст оживёт справа →'} controlProps={{required: true, 'aria-describedby': 'editor-hint', spellCheck: true}} />\n              <div className=\\\"editor-footer\\\"><span>{markdown.length.toLocaleString('ru-RU')} симв. <span className=\\\"count-dot\\\">·</span> {words.toLocaleString('ru-RU')} слов</span><Button type=\\\"button\\\" size=\\\"s\\\" view=\\\"flat-secondary\\\" disabled={\"'!!markdown} onClick={() => updateMarkdown(example)}>Вставить пример<span aria-hidden=\"true\">↗</span></Button></div>\n            </div>\n            <section className=\"preview-pane\" aria-label=\"Предпросмотр Markdown\">\n              <div className=\"pane-heading\"><span className=\"pane-title\"><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z\" stroke=\"currentColor\" strokeWidth=\"1.6\"/><circle cx=\"12\" cy=\"12\" r=\"3\" stroke=\"currentColor\" strokeWidth=\"1.6\"/></svg>Предпросмотр</span><span className=\"live-badge\"><span />В реальном времени</span></div>\n              {markdown.trim() ? <div className=\"markdown-preview\"><ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml components={{a: ({node, children, ...props}) => <a {...props} target=\"_blank\" rel=\"noopener noreferrer\">{children}</a>}}>{markdown}</ReactMarkdown></div> : <div className=\"empty-preview\"><div className=\"empty-document\" aria-hidden=\"true\"><span>Aa</span><i /><i /><i /></div><h3>Ваши мысли обретают форму</h3><p>Начните писать в редакторе —<br />и здесь появится оформленный текст.</p><span className=\"empty-caption\">Каждое изменение видно сразу</span></div>}\n            </section>\n          </div>\n          <p className=\"editor-hint\" id=\"editor-hint\"><span className=\"hint-spark\" aria-hidden=\"true\">✧</span>Используйте Markdown или кнопки на панели, чтобы оформить текст.</p>\n          <div className=\"form-footer\"><span className=\"save-note\">Сохранение в этом браузере</span><Button view=\"action\" size=\"xl\" type=\"submit\">Сохранить заметку<span aria-hidden=\"true\">↗</span></Button></div>\n          {status && <p className=\"save-status\" role=\"status\">{status}</p>}\n        </form>\n        <footer className=\"page-footer\"><span className=\"footer-dot\" />Меньше отвлечений. Больше хороших мыслей.</footer>\n      </main>\n    </div>\n  );\n}\nEOF\ncat > src/styles.css <<'\"'EOF'\n:root{font-family:Arial,sans-serif;color:#292735;background:#f8f9fb;font-synthesis:none;--g-color-base-brand:#7560d1;--g-color-base-brand-hover:#6550c1;--g-color-text-brand:#7560d1;--g-color-text-dark-primary:#fff;--g-color-line-brand:#7560d1}\n*{box-sizing:border-box}body{margin:0}.app{min-height:100vh;background:radial-gradient(ellipse at 85% 15%,#efedf8 0,transparent 40%),#f8f9fb}.site-header{height:78px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid #eae9ef}.brand{display:flex;align-items:center;gap:11px;font-size:20px;font-weight:650;letter-spacing:-.6px}.brand-icon{display:grid;place-items:center;width:36px;height:38px;border-radius:10px;background:#f0ebff;color:#7961d5}.brand-divider{width:1px;height:23px;background:#e7e5ed;margin:0 9px}.workspace{font-size:13px;font-weight:400;color:#8a8796;letter-spacing:0}.avatar{display:grid;place-items:center;width:34px;height:34px;border:4px solid #f5f0ff;border-radius:50%;background:#e9e0fc;color:#8467b7;font-size:12px;font-weight:bold}.main{max-width:1120px;margin:0 auto;padding:33px 30px 26px}.breadcrumb{display:flex;gap:13px;font-size:12px;color:#96929f}.breadcrumb>span:last-child{color:#55505f}.page-heading{display:flex;align-items:center;justify-content:space-between;margin:37px 0 28px}.eyebrow{font-size:10px;font-weight:600;letter-spacing:1.6px;color:#90849f}h1{font-size:32px;line-height:1.3;font-weight:600;letter-spacing:-1px;margin:12px 0 10px}.page-heading p{color:#8b8794;font-size:14px;margin:0;line-height:1.6}.heading-decoration{font-size:67px;color:#b7a8de;line-height:1;margin-right:21px;transform:rotate(12deg)}.note-form{background:white;border:1px solid #e6e4ec;border-radius:14px;padding:25px 28px 0;box-shadow:0 6px 24px #32265d04}.form-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}.form-title{display:flex;gap:9px;align-items:center;color:#716a7f}.form-title h2{font-size:15px;color:#393441;font-weight:600;margin:0}.draft-badge{display:flex;align-items:center;gap:6px;border:1px solid #eae7ee;background:#faf9fb;border-radius:5px;padding:4px 8px;font-size:11px;color:#99909f}.draft-badge>span{height:5px;width:5px;border-radius:50%;background:#b1a4bf}label{display:block;font-size:13px;font-weight:500;color:#4f485b}.title-field label{margin-bottom:9px}.title-field .g-text-input{--g-text-input-border-radius:7px;--g-text-input-border-color:#e3dfea;--g-text-input-placeholder-color:#a49eae}.title-field .g-text-input__control{font-size:13px}.content-label{display:flex;justify-content:space-between;align-items:center;margin:25px 0 10px}.markdown-badge{font-size:14px;display:flex;gap:6px;align-items:center;color:#9b91ad}.markdown-badge>span{font-size:11px}.editor-shell{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2deeb;border-radius:8px;overflow:hidden}.editor-pane{min-width:0;display:flex;flex-direction:column;background:#fff}.preview-pane{min-width:0;display:flex;flex-direction:column;background:#fdfcfe;border-left:1px solid #e6e2ed}.pane-heading{height:45px;flex-shrink:0;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #eeebf3}.pane-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;color:#6c627e}.pane-title>span{font-size:18px}.pane-heading .g-button{font-size:11px;color:#9b92a9}.help-icon{display:inline-grid;place-items:center;width:12px;height:12px;border:1px solid currentColor;border-radius:50%;margin-left:6px;font-size:9px}.live-badge{display:flex;gap:5px;align-items:center;font-size:9px;color:#aaa1b7;white-space:nowrap}.live-badge>span{height:5px;width:5px;background:#a394c2;border-radius:50%}.toolbar{display:flex;align-items:center;gap:2px;padding:8px 10px;border-bottom:1px solid #f1eef5;min-height:46px}.toolbar .g-button{color:#746a84;min-width:30px}.toolbar .g-button__text{display:flex;align-items:center;justify-content:center}.toolbar-divider{height:18px;width:1px;background:#e8e3ef;margin:0 7px}.toolbar i{font-family:Georgia,serif;font-size:17px}.quote-icon{font:26px Georgia,serif;line-height:22px}.code-icon{font:12px monospace}.markdown-input{flex:1;display:flex;min-height:330px}.markdown-input .g-text-area__control{padding:20px 18px;font-family:'SFMono-Regular',Consolas,monospace;font-size:12px;line-height:1.9;resize:vertical;min-height:330px;color:#655b74}.markdown-input .g-text-area__control::placeholder{color:#b5adbf;opacity:1}.markdown-input:focus-within{box-shadow:inset 0 0 0 2px #b4a3e3;border-radius:3px}.editor-footer{display:flex;align-items:center;justify-content:space-between;min-height:36px;padding:0 12px;border-top:1px solid #f1edf6;font-size:10px;color:#aaa1b5}.count-dot{margin:0 4px}.editor-footer .g-button{font-size:10px}.editor-footer .g-button__text>span{margin-left:6px}.empty-preview{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:36px 18px}.empty-document{width:68px;height:80px;border:1px solid #e2daee;border-radius:7px;background:#f7f3fc;box-shadow:5px 5px 0 #f1edf7;transform:rotate(-5deg);padding:11px 12px;margin-bottom:26px}.empty-document>span{font:22px Georgia,serif;color:#a999c0;display:block;text-align:left;margin-bottom:9px}.empty-document i{display:block;height:3px;border-radius:4px;margin:5px 0;background:#e0d6ed}.empty-document i:last-child{width:65%}.empty-preview h3{font-size:14px;font-weight:500;margin:0 0 11px;color:#7e718f}.empty-preview p{font-size:12px;color:#aaa1b6;line-height:1.8;margin:0}.empty-caption{font-size:10px;color:#beb5c8;margin-top:27px}.markdown-preview{padding:18px 24px;overflow-wrap:anywhere;font-size:13px;line-height:1.8;color:#51495d;overflow:auto;max-height:530px;min-height:412px}.markdown-preview>:first-child{margin-top:0}.markdown-preview h1,.markdown-preview h2,.markdown-preview h3,.markdown-preview h4{color:#42384f;line-height:1.4;letter-spacing:-.3px;margin-top:22px;margin-bottom:12px}.markdown-preview h1{font-size:25px}.markdown-preview h2{font-size:20px}.markdown-preview h3{font-size:16px}.markdown-preview a{color:#8060c6;text-underline-offset:3px}.markdown-preview blockquote{margin:18px 0;padding:3px 16px;border-left:3px solid #c0afe2;background:#f4f0fa;color:#9484a6}.markdown-preview ul,.markdown-preview ol{padding-left:22px}.markdown-preview li{padding-left:3px}.markdown-preview code{padding:3px 5px;border-radius:4px;background:#f0eaf8;color:#8c62b1;font-size:11px}.markdown-preview pre{padding:13px;border-radius:6px;overflow:auto;background:#f0eaf8}.markdown-preview pre code{padding:0}.markdown-preview img{max-width:100%;height:auto;border-radius:5px}.markdown-preview table{border-collapse:collapse;display:block;overflow-x:auto}.markdown-preview th,.markdown-preview td{padding:7px 10px;border:1px solid #ded6e8}.markdown-preview hr{border:0;border-top:1px solid #e3dce9;margin:20px 0}.markdown-help{display:flex;flex-direction:column;gap:7px;padding:13px 16px;background:#f6f2fc;color:#7e6d94;font-size:11px;line-height:1.6;border-bottom:1px solid #ece5f5}.markdown-help code{font-size:10px}.editor-hint{display:flex;align-items:center;gap:7px;font-size:11px;line-height:1.7;color:#a69baf;margin:11px 0 25px}.hint-spark{font-size:18px;color:#a490bf}.form-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #eeebf2;margin:0 -28px;padding:19px 28px;background:#fdfcfe;border-radius:0 0 14px 14px}.save-note{font-size:11px;color:#a398af}.form-footer .g-button{--g-button-border-radius:7px;font-size:12px}.form-footer .g-button__text>span{margin-left:13px}.save-status{font-size:12px;color:#796194;padding-bottom:17px;line-height:1.6}.page-footer{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:24px;font-size:10px;color:#aea5b7}.footer-dot{width:4px;height:4px;border-radius:50%;background:#bcafcb}\n@media(min-width:1400px){.main{padding-top:45px}.page-heading{margin-top:45px;margin-bottom:35px}.markdown-input,.markdown-input .g-text-area__control{min-height:370px}.empty-preview{min-height:450px}}\n@media(max-width:760px){.main{padding:24px 18px}.site-header{height:65px;padding:0 20px}.workspace,.brand-divider{display:none}.page-heading{margin:27px 0 24px}.eyebrow{font-size:8px;letter-spacing:1.1px}h1{font-size:26px}.page-heading p{font-size:12px}.heading-decoration{font-size:44px;margin-right:0}.note-form{padding:22px 16px 0}.editor-shell{grid-template-columns:1fr}.preview-pane{border-left:0;border-top:1px solid #e6e2ed}.markdown-input,.markdown-input .g-text-area__control{min-height:260px}.markdown-input .g-text-area__control{height:280px}.empty-preview{min-height:270px}.markdown-preview{min-height:270px;max-height:none}.form-footer{margin:0 -16px;padding:17px 16px}.save-note{max-width:125px;line-height:1.6}.editor-hint{align-items:flex-start;font-size:10px}.pane-heading{padding:0 12px}.page-footer{font-size:9px;margin-bottom:8px}}\nEOF\npython3 - <<'PY'\np='index.html'\ns=open(p).read().replace('lang=\\\"en\\\"','lang=\\\"ru\\\"').replace('<title>Gravity UI eval</title>','<title>Новая заметка — Markdown-редактор</title>')\nopen(p,'w').write(s)\nPY\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('fs');const p='index.html';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('lang=\\\\\\\"en\\\\\\\"','lang=\\\\\\\"ru\\\\\\\"').replace('<title>Gravity UI eval</title>','<title>Новая заметка — Markdown-редактор</title>'));\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes --package=@playwright/test playwright --version'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc \"ls -d /root/.cache/ms-playwright/* /home/node/.cache/ms-playwright/* /home/sandbox/.cache/ms-playwright/* 2>/dev/null; rg -n 'g-color-base-brand|g-color-text-brand' node_modules/@gravity-ui/uikit/styles/styles.css | head -4; git diff --stat; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes --package=@playwright/test playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'ls -d /root/.npm/_npx/*/node_modules/@playwright/test /home/node/.npm/_npx/*/node_modules/@playwright/test /home/sandbox/.npm/_npx/*/node_modules/@playwright/test 2>/dev/null; cat .gitignore; cat node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextArea.css | head -90'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier --write src/App.tsx src/styles.css index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' src/App.tsx; sed -n '1,65p' src/styles.css; npm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/check-markdown.cjs <<'EOF'\nconst {chromium} = require('/home/node/.npm/_npx/420ff84f11983ee5/node_modules/playwright');\nconst assert = require('node:assert/strict');\n(async () => {\n  const browser = await chromium.launch({headless:true, args:['--no-sandbox']});\n  const page = await browser.newPage({viewport:{width:1440,height:1100}});\n  const errors = [];\n  page.on('pageerror', error => errors.push(error.message));\n  await page.goto('http://localhost:5173');\n  const input = page.getByLabel('Текст заметки', {exact:true});\n  const preview = page.getByRole('region', {name:'Предпросмотр Markdown'});\n  await input.fill('## Заголовок\\\\n\\\\n**Жирный** и *курсив* и ~~удалено~~\\\\n\\\\n- пункт один\\\\n- пункт два\\\\n\\\\n> Цитата\\\\n\\\\n[Ссылка](https://example.com)\\\\n\\\\n\"'```js'\"\\\\nconst x = 1;\\\\n\"'```'\"\\\\n\\\\n| A | B |\\\\n|---|---|\\\\n| 1 | 2 |\\\\n\\\\n- [x] готово');\n  assert.equal(await preview.locator('h2').textContent(), 'Заголовок');\n  assert.equal(await preview.locator('strong').textContent(), 'Жирный');\n  assert.equal(await preview.locator('em').textContent(), 'курсив');\n  assert.equal(await preview.locator('del').textContent(), 'удалено');\n  assert.equal(await preview.locator('blockquote').textContent(), '\\\\nЦитата\\\\n');\n  assert.equal(await preview.locator('pre code').textContent(), 'const x = 1;\\\\n');\n  assert.equal(await preview.locator('table').count(), 1);\n  assert.equal(await preview.locator('input[type=checkbox]:checked').count(), 1);\n  assert.equal(await preview.getByRole('link', {name:'Ссылка'}).getAttribute('href'), 'https://example.com');\n  await input.fill('выделение');\n  await input.evaluate(el => el.setSelectionRange(0, el.value.length));\n  await page.getByRole('button', {name:'Жирный', exact:true}).click();\n  await page.waitForFunction(() => document.querySelector('#note-content').value === '**выделение**');\n  assert.equal(await preview.locator('strong').textContent(), 'выделение');\n  await input.fill('курсив');\n  await input.selectText();\n  await input.press('Control+i');\n  assert.equal(await input.inputValue(), '*курсив*');\n  assert.equal(await preview.locator('em').textContent(), 'курсив');\n  await input.fill('<script>window.pwned=true</script>\\\\n\\\\n[опасная](javascript:alert(1))\\\\n\\\\n<img src=x onerror=\\\"window.pwned=true\\\">');\n  assert.equal(await preview.locator('script').count(), 0);\n  assert.equal(await preview.locator('[onerror]').count(), 0);\n  assert.ok(\"'!(await preview.locator('\"'a').getAttribute('href')).startsWith('javascript:'));\n  assert.equal(await page.evaluate(() => window.pwned), undefined);\n  await input.fill('');\n  assert.equal(await page.locator('.empty-preview').count(), 1);\n  await page.getByRole('button', {name:'Подсказки'}).click();\n  assert.equal(await page.locator('#markdown-help').isVisible(), true);\n  await page.getByRole('button', {name:'Скрыть подсказки'}).click();\n  await page.getByRole('button', {name:'Вставить пример'}).click();\n  assert.ok((await input.inputValue()).includes('**одной простой мысли**'));\n  assert.equal(await preview.locator('strong').textContent(), 'одной простой мысли');\n  await page.getByLabel('Название', {exact:true}).fill('Моя заметка');\n  await page.getByRole('button', {name:'Сохранить заметку'}).click();\n  assert.match(await page.getByRole('status').textContent(), /сохранена/);\n  const value = await input.inputValue();\n  await page.reload();\n  assert.equal(await input.inputValue(), value);\n  assert.equal(await page.getByLabel('Название', {exact:true}).inputValue(), 'Моя заметка');\n  await page.screenshot({path:'/tmp/markdown-desktop.png',fullPage:true});\n  await page.setViewportSize({width:375,height:812});\n  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);\n  const editorBox = await page.locator('.editor-pane').boundingBox();\n  const previewBox = await preview.boundingBox();\n  assert.ok(previewBox.y >= editorBox.y + editorBox.height - 1);\n  await page.screenshot({path:'/tmp/markdown-mobile.png',fullPage:true});\n  assert.deepEqual(errors, []);\n  console.log('PASS: live Markdown, GFM, selection formatting, keyboard shortcut, safe HTML/URLs, empty state, help, example, save/reload, mobile layout, no browser errors.');\n  await browser.close();\n})().catch(error => { console.error(error); process.exit(1); });\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'node /tmp/check-markdown.cjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes --package=@playwright/test playwright install-deps chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && cat package.json && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'id; command -v sudo; command -v apt-get; cat /etc/os-release; ls /usr/lib/aarch64-linux-gnu | head; ldconfig -p 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg 'not found'; apt-cache policy libglib2.0-0 libnss3 libatk1.0-0 libnspr4 libasound2\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/markdown-browser-libs && cd /tmp/markdown-browser-libs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0 libdrm2 libdrm-common && for deb in *.deb; do dpkg-deb -x \"$deb\" root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node - <<'JS'\nconst fs=require('fs');const p='/tmp/check-markdown.cjs';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('await input.selectText();','await input.evaluate(el => el.select());'));\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg 'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/markdown-browser-libs && apt-get download libxrender1 libwayland-server0 libxi6 && for deb in libxrender1*.deb libwayland-server0*.deb libxi6*.deb; do dpkg-deb -x \"$deb\" root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/markdown-browser-libs && apt-get download libsqlite3-0 fontconfig-config fonts-dejavu-core && for deb in libsqlite3-0*.deb fontconfig-config*.deb fonts-dejavu-core*.deb; do dpkg-deb -x \"$deb\" root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_PATH=/tmp/markdown-browser-libs/root/etc/fonts LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'"
+      },
+      {
+        "command": "/bin/bash -lc 'head -30 node_modules/@gravity-ui/uikit/styles/fonts.css; git diff --check; git diff --numstat'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node - <<'JS'\nconst fs=require('fs');const p='/tmp/check-markdown.cjs';let s=fs.readFileSync(p,'utf8');s=s.replace(\\\"await page.goto('http://localhost:5173');\\\", \\\"page.setDefaultTimeout(10000);\\\\n  await page.route('https://**/*', route => route.abort());\\\\n  await page.goto('http://localhost:5173', {waitUntil:'domcontentloaded'});\\\\n  console.log('Page loaded');\\\");fs.writeFileSync(p,s);\nJS\nFONTCONFIG_PATH=/tmp/markdown-browser-libs/root/etc/fonts LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba /tmp/check-markdown.cjs | head -30; cat node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextAreaControl.js | head -100'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/markdown-fonts.conf <<'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/tmp/markdown-browser-libs/root/usr/share/fonts</dir><cachedir>/tmp/markdown-font-cache</cachedir></fontconfig>\nEOF\nnode - <<'\"'JS'\nconst fs=require('fs');let s=fs.readFileSync('/tmp/check-markdown.cjs','utf8');s=s.replace(\\\"assert.equal(await preview.locator('h2').textContent(), 'Заголовок');\\\", \\\"console.log(await input.inputValue()); console.log(await preview.innerHTML()); await page.screenshot({path:'/tmp/markdown-debug.png',fullPage:true}); assert.equal(await preview.locator('h2').textContent(), 'Заголовок');\\\");fs.writeFileSync('/tmp/check-markdown-debug.cjs',s);\nJS\nFONTCONFIG_FILE=/tmp/markdown-fonts.conf LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown-debug.cjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'action.*color|brand-contrast|text-dark-primary' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css | head -20; git diff --check\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --check'"
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/markdown-fonts.conf LD_LIBRARY_PATH=/tmp/markdown-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/markdown-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-markdown.cjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 46662,
+      "outputTokens": 20805,
+      "cacheReadTokens": 1955840,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2739,
+      "totalTokens": 2023307
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

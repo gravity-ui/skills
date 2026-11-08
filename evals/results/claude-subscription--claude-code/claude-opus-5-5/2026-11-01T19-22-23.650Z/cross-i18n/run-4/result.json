@@ -1,0 +1,103 @@
+{
+  "status": "failed",
+  "duration": 330.267,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 9501,
+    "cacheReadTokens": 315923,
+    "cacheWriteTokens": 22561,
+    "totalTokens": 348011
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "git ls-files | head -100 && cat package.json && ls",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; ls __agent_eval__",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && ls; cat uikit/package.json | grep '\"version\"'; ls uikit/build/esm; grep -rn \"lang\" uikit/build/esm/components/theme/ThemeProvider.d.ts uikit/build/esm/components/theme/types.d.ts 2>/dev/null; grep -rln \"configure\\|Lang\" uikit/build/esm/index.d.ts uikit/build/esm/components/index.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat index.d.ts; cat components/theme/types.d.ts; grep -rn \"lang\\|Lang\" components/theme/*.d.ts | head -40; ls components/theme components/utils/configure* 2>/dev/null; cat utils/configure.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat components/theme/useLang.js components/theme/ThemeProvider.js; cat i18n/*.js | head -60; ls i18n",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls; cat SegmentedRadioGroup/SegmentedRadioGroup.d.ts; ls Pagination/i18n 2>/dev/null; cat Pagination/i18n/ru.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "grep -n \"interface ControlGroupProps\" -A 20 types.d.ts; cat Pagination/types.d.ts | head -40; grep -n \"export\" Text/Text.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src/i18n && cd /home/sandbox/workspace/src && cat > i18n/translations.ts <<'EOF'\nexport const LANGUAGES = ['en', 'ru'] as const;\nexport type Language = (typeof LANGUAGES)[number];\n\nexport const DEFAULT_LANGUAGE: Language = 'en';\n\n/** Plural forms keyed by `Intl.PluralRules` categories; `other` is mandatory. */\nexport type PluralMessage = Partial<Record<Intl.LDMLPluralRule, string>> & {other: string};\nexport type Message = string | PluralMessage;\n\nconst en = {\n    'app.title': 'Language switcher demo',\n    'app.description':\n        'Switch the interface language — your choice is saved and restored on the next visit.',\n    'language.label': 'Interface language',\n    'language.en': 'English',\n    'language.ru': 'Русский',\n    'counter.title': 'Counter',\n    'counter.value': {one: 'You clicked {count} time', other: 'You clicked {count} times'},\n    'counter.increment': 'Click me',\n    'counter.reset': 'Reset',\n    'pagination.title': 'Built-in component texts',\n    'pagination.hint': 'Gravity UI components are translated too:',\n} satisfies Record<string, Message>;\n\nexport type MessageKey = keyof typeof en;\nexport type Messages = Record<MessageKey, Message>;\n\nconst ru: Messages = {\n    'app.title': 'Демо переключения языка',\n    'app.description':\n        'Переключите язык интерфейса — выбор сохранится и восстановится при следующем визите.',\n    'language.label': 'Язык интерфейса',\n    'language.en': 'English',\n    'language.ru': 'Русский',\n    'counter.title': 'Счётчик',\n    'counter.value': {\n        one: 'Вы нажали {count} раз',\n        few: 'Вы нажали {count} раза',\n        many: 'Вы нажали {count} раз',\n        other: 'Вы нажали {count} раза',\n    },\n    'counter.increment': 'Нажми меня',\n    'counter.reset': 'Сбросить',\n    'pagination.title': 'Тексты встроенных компонентов',\n    'pagination.hint': 'Компоненты Gravity UI тоже переводятся:',\n};\n\nexport const translations: Record<Language, Messages> = {en, ru};\n\nexport function isLanguage(value: unknown): value is Language {\n    return typeof value === 'string' && (LANGUAGES as readonly string[]).includes(value);\n}\nEOF\ncat > i18n/I18nProvider.tsx <<'EOF'\nimport * as React from 'react';\nimport {ThemeProvider} from '@gravity-ui/uikit';\n\nimport {\n    DEFAULT_LANGUAGE,\n    type Language,\n    type MessageKey,\n    isLanguage,\n    translations,\n} from './translations';\n\nconst STORAGE_KEY = 'app.language';\n\ntype Params = Record<string, string | number>;\n\nexport interface I18nContextValue {\n    lang: Language;\n    setLang: (lang: Language) => void;\n    /** Translate a key. Pass `count` in params to select a plural form. */\n    t: (key: MessageKey, params?: Params) => string;\n}\n\nconst I18nContext = React.createContext<I18nContextValue | undefined>(undefined);\n\nfunction readStoredLanguage(): Language | undefined {\n    try {\n        const stored = window.localStorage.getItem(STORAGE_KEY);\n        return isLanguage(stored) ? stored : undefined;\n    } catch {\n        return undefined;\n    }\n}\n\nfunction detectLanguage(): Language {\n    if (typeof window === 'undefined') {\n        return DEFAULT_LANGUAGE;\n    }\n    const stored = readStoredLanguage();\n    if (stored) {\n        return stored;\n    }\n    const browserLang = window.navigator.language?.slice(0, 2).toLowerCase();\n    return isLanguage(browserLang) ? browserLang : DEFAULT_LANGUAGE;\n}\n\nfunction interpolate(template: string, params?: Params) {\n    if (!params) {\n        return template;\n    }\n    return template.replace(/\\{(\\w+)\\}/g, (match, name: string) =>\n        name in params ? String(params[name]) : match,\n    );\n}\n\nexport function I18nProvider({children}: React.PropsWithChildren) {\n    const [lang, setLangState] = React.useState<Language>(detectLanguage);\n\n    const setLang = React.useCallback((next: Language) => {\n        setLangState(next);\n        try {\n            window.localStorage.setItem(STORAGE_KEY, next);\n        } catch {\n            // storage unavailable (private mode, etc.) — keep the in-memory choice\n        }\n    }, []);\n\n    React.useEffect(() => {\n        document.documentElement.lang = lang;\n    }, [lang]);\n\n    const value = React.useMemo<I18nContextValue>(() => {\n        const messages = translations[lang];\n        const pluralRules = new Intl.PluralRules(lang);\n\n        const t: I18nContextValue['t'] = (key, params) => {\n            const message = messages[key] ?? translations[DEFAULT_LANGUAGE][key] ?? key;\n            if (typeof message === 'string') {\n                return interpolate(message, params);\n            }\n            const count = Number(params?.count ?? 0);\n            const form = message[pluralRules.select(count)] ?? message.other;\n            return interpolate(form, params);\n        };\n\n        return {lang, setLang, t};\n    }, [lang, setLang]);\n\n    return (\n        <I18nContext.Provider value={value}>\n            {/* Propagates the language to Gravity UI's built-in component texts */}\n            <ThemeProvider lang={lang}>{children}</ThemeProvider>\n        </I18nContext.Provider>\n    );\n}\n\nexport function useI18n(): I18nContextValue {\n    const context = React.useContext(I18nContext);\n    if (!context) {\n        throw new Error('useI18n must be used within I18nProvider');\n    }\n    return context;\n}\nEOF\ncat > i18n/LanguageSwitcher.tsx <<'EOF'\nimport {SegmentedRadioGroup} from '@gravity-ui/uikit';\n\nimport {useI18n} from './I18nProvider';\nimport {LANGUAGES, type Language} from './translations';\n\nexport function LanguageSwitcher() {\n    const {lang, setLang, t} = useI18n();\n\n    return (\n        <SegmentedRadioGroup<Language>\n            aria-label={t('language.label')}\n            value={lang}\n            onUpdate={setLang}\n            options={LANGUAGES.map((code) => ({value: code, content: t(`language.${code}`)}))}\n        />\n    );\n}\nEOF\ncat > App.tsx <<'EOF'\nimport * as React from 'react';\nimport {Button, Card, Flex, Pagination, Text} from '@gravity-ui/uikit';\n\nimport {I18nProvider, useI18n} from './i18n/I18nProvider';\nimport {LanguageSwitcher} from './i18n/LanguageSwitcher';\n\nfunction Content() {\n    const {t} = useI18n();\n    const [count, setCount] = React.useState(0);\n    const [page, setPage] = React.useState(1);\n    const [pageSize, setPageSize] = React.useState(10);\n\n    return (\n        <Flex direction=\"column\" gap={4} style={{padding: 24, maxWidth: 720}}>\n            <Flex justifyContent=\"space-between\" alignItems=\"center\" gap={4} wrap>\n                <Text variant=\"header-2\">{t('app.title')}</Text>\n                <LanguageSwitcher />\n            </Flex>\n            <Text color=\"secondary\">{t('app.description')}</Text>\n\n            <Card view=\"outlined\" style={{padding: 16}}>\n                <Flex direction=\"column\" gap={3}>\n                    <Text variant=\"subheader-2\">{t('counter.title')}</Text>\n                    <Text>{t('counter.value', {count})}</Text>\n                    <Flex gap={2}>\n                        <Button view=\"action\" onClick={() => setCount((c) => c + 1)}>\n                            {t('counter.increment')}\n                        </Button>\n                        <Button onClick={() => setCount(0)} disabled={count === 0}>\n                            {t('counter.reset')}\n                        </Button>\n                    </Flex>\n                </Flex>\n            </Card>\n\n            <Card view=\"outlined\" style={{padding: 16}}>\n                <Flex direction=\"column\" gap={3}>\n                    <Text variant=\"subheader-2\">{t('pagination.title')}</Text>\n                    <Text color=\"secondary\">{t('pagination.hint')}</Text>\n                    <Pagination\n                        page={page}\n                        pageSize={pageSize}\n                        total={250}\n                        compact={false}\n                        showInput\n                        pageSizeOptions={[10, 25, 50]}\n                        onUpdate={(nextPage, nextPageSize) => {\n                            setPage(nextPage);\n                            setPageSize(nextPageSize);\n                        }}\n                    />\n                </Flex>\n            </Card>\n        </Flex>\n    );\n}\n\nexport function App() {\n    return (\n        <I18nProvider>\n            <Content />\n        </I18nProvider>\n    );\n}\nEOF\ncd .. && npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -iE \"jsdom|happy-dom|playwright|testing-library|puppeteer\"; which chromium chromium-browser google-chrome 2>/dev/null; rm -rf dist",
+        "success": true
+      },
+      {
+        "command": "cat > src/tmp_i18n.test.tsx <<'EOF'\nimport {renderToString} from 'react-dom/server';\nimport {test, expect, vi} from 'vitest';\n\nfunction setup(stored: string | null) {\n    vi.stubGlobal('window', {localStorage: {getItem: () => stored, setItem: () => {}}, navigator: {language: 'de-DE'}});\n    vi.stubGlobal('document', {documentElement: {}});\n}\n\ntest('render en/ru', async () => {\n    const {App} = await import('./App');\n    setup('ru');\n    const ru = renderToString(<App />);\n    setup('en');\n    const en = renderToString(<App />);\n    setup(null);\n    const def = renderToString(<App />);\n    const strip = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ');\n    console.log('RU:', strip(ru));\n    console.log('EN:', strip(en));\n    expect(ru).toContain('Вы нажали 0 раз');\n    expect(ru).toContain('Следующая');\n    expect(en).toContain('You clicked 0 times');\n    expect(en).toContain('Next');\n    expect(def).toContain('Language switcher demo');\n});\nEOF\nnpx vitest run src/tmp_i18n.test.tsx 2>&1 | tail -25; rm src/tmp_i18n.test.tsx",
+        "success": true
+      },
+      {
+        "command": "git stash list >/dev/null; cat > vitest.tmp.config.ts <<'EOF'\nimport {defineConfig} from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({plugins: [react()], test: {server: {deps: {inline: [/@gravity-ui/]}}}});\nEOF\ngit show HEAD:src/App.tsx >/dev/null; cat > src/tmp_i18n.test.tsx <<'EOF'\nimport {renderToString} from 'react-dom/server';\nimport {test, expect, vi} from 'vitest';\n\nfunction setup(stored: string | null) {\n    vi.stubGlobal('window', {localStorage: {getItem: () => stored, setItem: () => {}}, navigator: {language: 'de-DE'}});\n    vi.stubGlobal('document', {documentElement: {}});\n}\n\ntest('render en/ru', async () => {\n    const {App} = await import('./App');\n    setup('ru');\n    const ru = renderToString(<App />);\n    setup('en');\n    const en = renderToString(<App />);\n    setup(null);\n    const def = renderToString(<App />);\n    const strip = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ');\n    console.log('RU:', strip(ru));\n    console.log('EN:', strip(en));\n    expect(ru).toContain('Вы нажали 0 раз');\n    expect(ru).toContain('Следующая');\n    expect(en).toContain('You clicked 0 times');\n    expect(en).toContain('Next');\n    expect(def).toContain('Language switcher demo');\n});\nEOF\nnpx vitest run -c vitest.tmp.config.ts src/tmp_i18n.test.tsx 2>&1 | grep -v \"^$\" | tail -20; rm src/tmp_i18n.test.tsx vitest.tmp.config.ts",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.tmp.config.ts <<'EOF'\nimport {defineConfig} from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({plugins: [react()], test: {testTimeout: 120000, server: {deps: {inline: [/@gravity-ui/]}}}});\nEOF\ncat > src/tmp_i18n.test.tsx <<'EOF'\nimport {renderToString} from 'react-dom/server';\nimport {test, expect, vi} from 'vitest';\n\nfunction setup(stored: string | null) {\n    vi.stubGlobal('window', {localStorage: {getItem: () => stored, setItem: () => {}}, navigator: {language: 'de-DE'}});\n    vi.stubGlobal('document', {documentElement: {}});\n}\n\ntest('render en/ru', async () => {\n    const {App} = await import('./App');\n    setup('ru');\n    const ru = renderToString(<App />);\n    setup('en');\n    const en = renderToString(<App />);\n    setup(null);\n    const def = renderToString(<App />);\n    const strip = (s: string) => s.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ');\n    console.log('RU:', strip(ru));\n    console.log('EN:', strip(en));\n    expect(ru).toContain('Вы нажали 0 раз');\n    expect(ru).toContain('Следующая');\n    expect(en).toContain('You clicked 0 times');\n    expect(en).toContain('Next');\n    expect(def).toContain('Language switcher demo');\n});\nEOF\ntimeout 300 npx vitest run -c vitest.tmp.config.ts src/tmp_i18n.test.tsx 2>&1 | grep -v \"^$\" | tail -20; rm src/tmp_i18n.test.tsx vitest.tmp.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 9501,
+      "cacheReadTokens": 315923,
+      "cacheWriteTokens": 22561,
+      "totalTokens": 348011
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

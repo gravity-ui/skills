@@ -1,0 +1,286 @@
+/* Layout and table styles. Colours and typography come from Gravity UI theme tokens (--g-*),
+   so light and dark themes both work without extra rules. */
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-primary);
+  font-family: var(--g-font-family-sans);
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 232px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
+  background: var(--g-color-base-float);
+  border-right: 1px solid var(--g-color-line-generic);
+  transition: width 200ms ease;
+}
+
+.sidebar.is-collapsed {
+  width: 64px;
+  padding: 12px 8px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 36px;
+  padding-left: 4px;
+}
+
+.sidebar.is-collapsed .sidebar-header {
+  justify-content: center;
+  padding-left: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-item {
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.sidebar.is-collapsed .sidebar-item {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar-item-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
+
+/* ---------- Main ---------- */
+
+.app-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--g-font-family-sans);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+/* ---------- Stat tiles ---------- */
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 20px;
+  background: var(--g-color-base-float);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+}
+
+/* ---------- Orders table ---------- */
+
+.table-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--g-color-base-float);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.table-heading,
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-scroll {
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+  min-height: 320px;
+}
+
+.table-footer {
+  padding: 8px 16px;
+  border-top: 1px solid var(--g-color-line-generic);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.orders-table th.num,
+.orders-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Column headers: sticky, draggable. */
+.orders-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--g-color-base-float);
+  color: var(--g-color-text-secondary);
+  font-weight: 600;
+  cursor: grab;
+  user-select: none;
+}
+
+.orders-table thead th:focus-visible {
+  outline: 2px solid var(--g-color-line-generic-accent);
+  outline-offset: -2px;
+}
+
+.orders-table thead th.is-dragging {
+  opacity: 0.5;
+}
+
+.orders-table thead th.is-drop-target {
+  box-shadow: inset 2px 0 0 var(--g-color-line-generic-accent);
+}
+
+.th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.th-content .g-icon {
+  color: var(--g-color-text-hint);
+}
+
+.orders-table th.cell-check,
+.orders-table td.cell-check {
+  width: 40px;
+  padding-right: 0;
+}
+
+/* Rows */
+.orders-table tbody tr {
+  user-select: none;
+  cursor: pointer;
+}
+
+.orders-table tbody tr:hover td {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders-table tbody tr.is-selected td {
+  background: var(--g-color-base-selection);
+}
+
+.orders-table tbody tr.is-selected:hover td {
+  background: var(--g-color-base-selection-hover);
+}
+
+/* Status group headers */
+.orders-table tr.group-row td {
+  background: var(--g-color-base-generic-ultralight);
+  cursor: default;
+}
+
+.orders-table tr.group-row:hover td {
+  background: var(--g-color-base-generic-ultralight);
+}
+
+.group-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+}
+
+.group-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--g-color-text-secondary);
+  cursor: pointer;
+}
+
+.group-toggle:hover {
+  background: var(--g-color-base-generic-hover);
+}
+
+.group-toggle:focus-visible {
+  outline: 2px solid var(--g-color-line-generic-accent);
+  outline-offset: 1px;
+}
+
+.group-meta {
+  color: var(--g-color-text-secondary);
+  font-weight: 400;
+}
+
+.empty-cell {
+  padding: 32px 12px;
+  text-align: center;
+  color: var(--g-color-text-secondary);
+}

@@ -1,0 +1,127 @@
+{
+  "status": "passed",
+  "duration": 428.706,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 578,
+    "outputTokens": 7743,
+    "cacheReadTokens": 555218,
+    "cacheWriteTokens": 25372,
+    "totalTokens": 588911
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts .gitignore && echo ---- && cat __agent_eval__/run.mjs && echo ---- && ls node_modules/@gravity-ui/ && ls node_modules/@gravity-ui/uikit/build/esm/components/ | head -100",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/lab node_modules/@gravity-ui/uikit/build/esm/components/controls; ls node_modules/@gravity-ui/icons/ | grep -iE '^Chevron(Left|Right)\\.' ; cat node_modules/@gravity-ui/icons/package.json | grep '\"version\"'; timeout 20 npm view @gravity-ui/date-components version 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "timeout 30 npm view @gravity-ui/date-components@4.1.0 peerDependencies dependencies 2>&1",
+        "success": true
+      },
+      {
+        "command": "timeout 180 npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "grep -E '\"@gravity-ui/(date|uikit)' package.json; ls node_modules/@gravity-ui/date-components/build/esm/components/; sed -n 1,200p node_modules/@gravity-ui/date-components/build/esm/components/Calendar/Calendar.d.ts; sed -n 1,80p node_modules/@gravity-ui/date-components/build/esm/components/Calendar/index.d.ts; ls node_modules/@gravity-ui/date-components/build/esm/components/Calendar/",
+        "success": false
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components && ls $D && cat $D/package.json | sed -n 1,60p && find $D -maxdepth 4 -iname 'Calendar*.d.ts' | head && find $D -maxdepth 3 -name '*.css' | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm && ls $D $D/components && cat $D/components/Calendar/Calendar.d.ts && sed -n 1,80p $D/components/Calendar/index.d.ts; grep -n 'css' $D/components/Calendar/Calendar.js | head; grep -n -iE 'import.*css|styles' $D/index.js | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm && cat $D/components/CalendarView/hooks/useCalendarState.d.ts | sed -n 1,80p; echo ----; grep -n -E 'export (declare )?(const|function) (dateTime|dateTimeParse|settings)' -r node_modules/@gravity-ui/date-utils/build/*.d.ts node_modules/@gravity-ui/date-utils/build/**/*.d.ts 2>/dev/null | head; ls node_modules/@gravity-ui/date-utils/build | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm && cat $D/components/types/index.d.ts | grep -n -A12 'ValueBase'; grep -n -B2 -A20 'CalendarStateOptionsBase' $D/components/CalendarView/hooks/types.d.ts | head -60; echo ----; sed -n 1,40p node_modules/@gravity-ui/date-utils/build/dateTime/dateTime.d.ts; grep -n -A6 'interface PublicSettings' -r node_modules/@gravity-ui/date-utils/build/settings/*.d.ts node_modules/@gravity-ui/date-utils/build/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "grep -n -A10 'interface ValueBase' node_modules/@gravity-ui/date-components/dist/esm/types/index.d.ts",
+        "success": false
+      },
+      {
+        "command": "grep -rn -A10 'interface ValueBase' node_modules/@gravity-ui/date-components/dist/esm/components/types/",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Calendar } from '@gravity-ui/date-components';\nimport type { DateTime } from '@gravity-ui/date-utils';\nimport { Button, Flex, Text } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [date, setDate] = useState<DateTime | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 24, maxWidth: 360 }}>\n      <Text variant=\"header-1\">Выбор даты</Text>\n\n      <Calendar value={date} onUpdate={setDate} aria-label=\"Календарь для выбора даты\" />\n\n      <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={2}>\n        <Text variant=\"body-1\" color={date ? 'primary' : 'secondary'}>\n          {date ? `Выбрано: ${date.format('DD.MM.YYYY')}` : 'Дата не выбрана'}\n        </Text>\n        {date && (\n          <Button view=\"flat\" size=\"s\" onClick={() => setDate(null)}>\n            Сбросить\n          </Button>\n        )}\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short && (which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; node -e \"require.resolve('playwright')\" 2>&1 | head -1)",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { expect, test } from 'vitest';\nimport { App } from './App';\n\ntest('renders a calendar grid', () => {\n  const html = renderToStaticMarkup(\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>,\n  );\n  expect(html).toContain('role=\"grid\"');\n  expect(html).toContain('Дата не выбрана');\n  expect((html.match(/role=\"gridcell\"/g) ?? []).length).toBeGreaterThanOrEqual(28);\n});\nEOF\ntimeout 120 npx vitest run src/__smoke.test.tsx 2>&1 | tail -15; rm -f src/__smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { expect, test } from 'vitest';\nimport { App } from './App';\n\ntest('renders a calendar grid', () => {\n  const html = renderToStaticMarkup(\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>,\n  );\n  expect(html).toContain('role=\"grid\"');\n  expect(html).toContain('Дата не выбрана');\n  expect((html.match(/role=\"gridcell\"/g) ?? []).length).toBeGreaterThanOrEqual(28);\n});\nEOF\ncat > /tmp/vitest.smoke.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  root: '/home/sandbox/workspace',\n  plugins: [react()],\n  test: { include: ['src/__smoke.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } },\n});\nEOF\ntimeout 180 npx vitest run --config /tmp/vitest.smoke.config.ts 2>&1 | tail -15; rm -f src/__smoke.test.tsx /tmp/vitest.smoke.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { expect, test } from 'vitest';\nimport { App } from './App';\n\ntest('renders a calendar grid', () => {\n  const html = renderToStaticMarkup(\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>,\n  );\n  expect(html).toContain('role=\"grid\"');\n  expect(html).toContain('Дата не выбрана');\n  expect((html.match(/role=\"gridcell\"/g) ?? []).length).toBeGreaterThanOrEqual(28);\n});\nEOF\ncat > __smoke.vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { include: ['src/__smoke.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } },\n});\nEOF\ntimeout 180 npx vitest run --config __smoke.vitest.config.ts 2>&1 | tail -15; rm -f src/__smoke.test.tsx __smoke.vitest.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { expect, test } from 'vitest';\nimport { App } from './App';\ntest('renders', () => {\n  expect(renderToStaticMarkup(<ThemeProvider theme=\"light\"><App /></ThemeProvider>)).toContain('role=\"grid\"');\n});\nEOF\ncat > __smoke.vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()], test: { include: ['src/__smoke.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ntimeout 180 npx vitest run --config __smoke.vitest.config.ts 2>&1 | grep -iE 'warning|error' | sort | uniq -c | head; rm -f src/__smoke.test.tsx __smoke.vitest.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 578,
+      "outputTokens": 7743,
+      "cacheReadTokens": 555218,
+      "cacheWriteTokens": 25372,
+      "totalTokens": 588911
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

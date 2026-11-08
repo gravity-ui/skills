@@ -1,0 +1,223 @@
+{
+  "status": "passed",
+  "duration": 570.978,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 96,
+    "outputTokens": 29410,
+    "cacheReadTokens": 2339175,
+    "cacheWriteTokens": 61181,
+    "totalTokens": 2429862
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 24,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 1,
+      "file_edit": 3,
+      "shell": 41,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 47,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/e2e/shown.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -200",
+        "success": true
+      },
+      {
+        "command": "cat package.json tsconfig.json vite.config.ts index.html .gitignore src/App.tsx src/main.tsx src/vite-env.d.ts && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "(test -d node_modules && echo \"node_modules exists\" || echo \"no node_modules\") && node -v && npm -v && timeout 300 npm install --no-audit --no-fund 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/dist | head -50 && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/dist/components/Toaster 2>/dev/null; find node_modules/@gravity-ui/uikit/dist -iname \"*toast*\" | head -30",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/ && cat node_modules/@gravity-ui/uikit/package.json | head -60 && find node_modules/@gravity-ui/uikit -ipath \"*toast*\" -name \"*.d.ts\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && cat index.d.ts types.d.ts hooks/useToaster.d.ts Provider/ToasterProvider.d.ts && cat Toaster.d.ts && cat ../../toaster-singleton.d.ts && cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.js 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cat ToasterComponent/ToasterComponent.d.ts hooks/useToaster.js 2>/dev/null; cat ToasterComponent/ToasterComponent.js | head -60; grep -rn \"autoHiding\" --include=*.js . | head; cat constants.js | head -30",
+        "success": true
+      },
+      {
+        "command": "grep -n \"DEFAULT_TIMEOUT =\" -r . | head -3; sed -n 1,60p Toaster.js | grep -n \"add(\\|has(\\|name\" ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; ls node_modules | grep -i -E \"^playwright|puppeteer\" ) ; echo done",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && timeout 240 npm init -y >/dev/null && timeout 240 npm install --no-audit --no-fund playwright@1.49.1 2>&1 | tail -3 && timeout 280 npx playwright install --with-deps chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 280 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5173 --strictPort > /tmp/e2e/vite.log 2>&1 &) ; sleep 4; cat /tmp/e2e/vite.log; cat > /tmp/e2e/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\n\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nconst errors = [];\npage.on('pageerror', (e) => errors.push(String(e)));\npage.on('console', (m) => m.type() === 'error' && errors.push(m.text()));\nawait page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });\n\nconst toastSel = '[data-toast]';\nconst count = () => page.locator(toastSel).count();\nconsole.log('toasts before click:', await count());\n\nawait page.getByRole('button', { name: 'Показать уведомление' }).click();\nawait page.waitForSelector(toastSel, { timeout: 2000 });\nconsole.log('toasts after 1 click:', await count());\nconsole.log('toast text:', (await page.locator(toastSel).first().innerText()).replace(/\\n/g, ' | '));\nawait page.screenshot({ path: '/tmp/e2e/shown.png' });\n\nawait page.waitForTimeout(2000);\nconsole.log('toasts at +2s (should still be 1):', await count());\n\nawait page.waitForTimeout(3000);\nconsole.log('toasts at +5s (should be 0):', await count());\n\nawait page.getByRole('button', { name: 'Показать уведомление' }).click();\nawait page.getByRole('button', { name: 'Показать уведомление' }).click();\nconsole.log('toasts after 2 more clicks:', await count());\nawait page.waitForTimeout(5000);\nconsole.log('toasts after auto-hide:', await count());\n\nconst box = await page.getByRole('button', { name: 'Показать уведомление' }).boundingBox();\nconsole.log('button box (viewport 1000x700):', JSON.stringify(box));\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\ncd /tmp/e2e && timeout 120 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "curl -s -m 5 http://localhost:5173/ | head -12; echo; echo ---; (ss -ltnp 2>/dev/null || netstat -ltnp 2>/dev/null) | head -20",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite --port 5190 --strictPort > /tmp/e2e/vite2.log 2>&1 &); sleep 5; cat /tmp/e2e/vite2.log | tail -5; cd /tmp/e2e && sed -i \"s#localhost:5173#localhost:5190#\" check.mjs && PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 timeout 150 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd ~/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux && ldd headless_shell | grep \"not found\" ; echo ---; which apt-get && timeout 60 apt-get download libglib2.0-0 2>&1 | tail -2; ls *.deb 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e/debs /tmp/e2e/libs && cd /tmp/e2e/debs && timeout 280 apt-get download libglib2.0-0 libnss3 libnspr4 libdbus-1-3 libatk1.0-0 libatspi2.0-0 libx11-6 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libdrm2 libxcb1 libxkbcommon0 libasound2 2>&1 | tail -3; for f in *.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; find /tmp/e2e/libs -name \"*.so*\" | wc -l; cd ~/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux && LD_LIBRARY_PATH=$(find /tmp/e2e/libs -type d -name \"*-linux-gnu\" -printf \"%p:\" ) ldd headless_shell | grep \"not found\"; echo \"ldd check done\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 200 apt-get download libxi6 libxrender1 libwayland-server0 libxau6 libxdmcp6 2>&1 | tail -1; for f in libxi6*.deb libxrender1*.deb libwayland-server0*.deb libxau6*.deb libxdmcp6*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/libs; done; cd ~/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux && export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -type d \\( -name \"*-linux-gnu\" -o -name lib \\) | paste -sd:) && ldd headless_shell | grep \"not found\"; echo \"remaining missing: $(ldd headless_shell | grep -c 'not found')\"; cd /tmp/e2e && echo \"export LD_LIBRARY_PATH=$LD_LIBRARY_PATH\" > env.sh",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 200 apt-get download libbsd0 2>&1 | tail -1; dpkg-deb -x libbsd0*.deb /tmp/e2e/libs; cd ~/.cache/ms-playwright/chromium_headless_shell-1148/chrome-linux && export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -type d \\( -name \"*-linux-gnu\" -o -name lib \\) | paste -sd:) && echo \"remaining missing: $(ldd headless_shell | grep -c 'not found')\"; cd /tmp/e2e && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 150 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && tail -3 vite2.log; curl -s -m 5 -o /dev/null -w \"%{http_code}\\n\" http://localhost:5190/; cat > probe.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });\nconst page = await browser.newPage();\nawait page.setContent('<h1>hi</h1>');\nconsole.log('setContent ok', await page.textContent('h1'));\nawait page.goto('http://localhost:5190/', { waitUntil: 'load', timeout: 30000 });\nconsole.log('goto ok', await page.title());\nawait browser.close();\nEOF\nsource env.sh; export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1; timeout 120 node probe.mjs 2>&1 | grep -v \"^\\s*at \" | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && sed -i \"s#http://localhost:5190/#http://127.0.0.1:5190/#\" probe.mjs && timeout 120 node probe.mjs 2>&1 | grep -v \"^\\s*at \" | tail -6; echo ---; sed -i \"s#http://127.0.0.1:5190/#https://example.com/#\" probe.mjs && timeout 60 node probe.mjs 2>&1 | grep -v \"^\\s*at \" | tail -4",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && DEBUG=pw:browser* timeout 90 node probe.mjs 2>&1 | grep -iv \"^\\s*at \" | grep -i -E \"err|crash|fail|exit|signal|dump\" | head -20; ls ~/.cache/ms-playwright/chromium-1148 2>/dev/null | head -2",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 200 apt-get download libsqlite3-0 2>&1 | tail -1; dpkg-deb -x libsqlite3-0*.deb /tmp/e2e/libs; cd /tmp/e2e && export LD_LIBRARY_PATH=$(find /tmp/e2e/libs -type d \\( -name \"*-linux-gnu\" -o -name lib \\) | paste -sd:) && echo \"export LD_LIBRARY_PATH=$LD_LIBRARY_PATH\" > env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 90 node probe.mjs 2>&1 | grep -v \"^\\s*at \" | tail -4",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 150 node check.mjs 2>&1 | grep -v \"^\\s*at \" | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && cat > debug.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nawait page.goto('http://localhost:5190/', { waitUntil: 'load' });\nawait page.waitForTimeout(1000);\nconst info = await page.evaluate(() => {\n  const btn = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать'));\n  const r = btn.getBoundingClientRect();\n  const x = r.left + r.width / 2, y = r.top + r.height / 2;\n  const hit = document.elementFromPoint(x, y);\n  const portal = document.querySelector('[data-floating-ui-portal]');\n  return {\n    btnRect: r.toJSON(), hit: hit && hit.outerHTML.slice(0, 200), hitChain: (() => { const out = []; let e = hit; while (e && out.length < 6) { out.push(e.tagName + '.' + (e.className && e.className.baseVal === undefined ? e.className : '')); e = e.parentElement; } return out; })(),\n    portalHTML: portal ? portal.outerHTML.slice(0, 1500) : null,\n  };\n});\nconsole.log(JSON.stringify(info, null, 2));\nawait browser.close();\nEOF\ntimeout 90 node debug.mjs 2>&1 | grep -v \"^\\s*at \" | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && cat > debug2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nawait page.goto('http://localhost:5190/', { waitUntil: 'load' });\nawait page.waitForTimeout(800);\nconst r = await page.evaluate(() => {\n  const btn = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать'));\n  const cs = getComputedStyle(btn);\n  const wrap = btn.parentElement;\n  return { btnWidth: cs.width, btnDisplay: cs.display, btnMinWidth: cs.minWidth, btnPadding: cs.padding, wrapCss: wrap.getAttribute('style'), wrapWidth: getComputedStyle(wrap).width, scrollW: btn.scrollWidth };\n});\nconsole.log(JSON.stringify(r));\n// Show a toast and measure where it lands\nawait page.evaluate(() => [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать')).click());\nawait page.waitForTimeout(500);\nconst t = await page.evaluate(() => {\n  const toast = document.querySelector('[data-toast]');\n  const tr = toast && toast.getBoundingClientRect();\n  const tc = document.querySelector('.g-toaster');\n  const cr = tc && getComputedStyle(tc);\n  return { toastRect: tr && tr.toJSON(), toasterPos: cr && { position: cr.position, left: cr.left, right: cr.right, bottom: cr.bottom, top: cr.top } };\n});\nconsole.log(JSON.stringify(t));\nawait page.screenshot({ path: '/tmp/e2e/shown.png' });\nawait browser.close();\nEOF\ntimeout 90 node debug2.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -10",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Button && grep -n \"width\" Button.js | head -20; grep -rn \"pin_round-round\\|round-round\" -r . --include=*.css 2>/dev/null | head -3; grep -o \"\\.g-button_pin_round-round[^}]*}\" -r ../../../styles 2>/dev/null | head -3; grep -rho \"\\.g-button_pin_round-round[^{]*{[^}]*}\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -n 35,50p node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.js; grep -n \"width\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.js | head; grep -n \"Button.*width\\|width.*Button\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -5; grep -n \"width\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 150 node check.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && cat > debug3.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nawait page.goto('http://localhost:5190/', { waitUntil: 'load' });\nawait page.waitForTimeout(800);\nconsole.log(JSON.stringify(await page.evaluate(() => {\n  const btn = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать'));\n  const span = btn.querySelector('span');\n  const cs = (e) => { const s = getComputedStyle(e); return { w: s.width, h: s.height, disp: s.display, ov: s.overflow, vis: s.visibility, op: s.opacity, font: s.fontSize, ws: s.whiteSpace }; };\n  return { btn: cs(btn), span: cs(span), spanRect: span.getBoundingClientRect().toJSON(), btnHTML: btn.outerHTML.slice(0, 400) };\n})));\nawait page.evaluate(() => [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать')).click());\nawait page.waitForTimeout(800);\nconsole.log(JSON.stringify(await page.evaluate(() => {\n  const t = document.querySelector('[data-toast]');\n  if (!t) return 'no toast';\n  const s = getComputedStyle(t);\n  return { html: t.outerHTML.slice(0, 700), rect: t.getBoundingClientRect().toJSON(), disp: s.display, op: s.opacity, vis: s.visibility, z: s.zIndex, clip: s.clipPath };\n}), null, 1));\nawait page.screenshot({ path: '/tmp/e2e/shown2.png' });\nawait browser.close();\nEOF\ntimeout 90 node debug3.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build && grep -n -A8 \"^\\.g-button__text\\|\\.g-button__text {\" esm/components/Button/Button.css | head -30; grep -n -B2 -A10 \"g-button_width_auto\" esm/components/Button/Button.css | head -30",
+        "success": true
+      },
+      {
+        "command": "awk 'NR>=1 && NR<=520 && /^\\.g-button \\{/{p=1} p{print NR\": \"$0} /^}/{if(p){p=0}}' esm/components/Button/Button.css | head -60; grep -n \"g-button_size_l\\b\" esm/components/Button/Button.css | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && cat > experiment.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nawait page.goto('http://localhost:5190/', { waitUntil: 'load' });\nawait page.waitForTimeout(800);\nconst measure = () => page.evaluate(() => {\n  const btn = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать'));\n  const wrap = btn.parentElement;\n  return { wrapW: wrap.getBoundingClientRect().width, btnW: btn.getBoundingClientRect().width, spanW: btn.querySelector('span').getBoundingClientRect().width, wrapCss: wrap.getAttribute('style') };\n});\nconsole.log('as-is', JSON.stringify(await measure()));\nawait page.evaluate(() => { const w = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать')).parentElement; w.style.width = 'max-content'; });\nconsole.log('wrapper width:max-content', JSON.stringify(await measure()));\nawait page.evaluate(() => { const w = [...document.querySelectorAll('button')].find(b => b.textContent.includes('Показать')).parentElement; w.style.width = ''; w.style.left = 'auto'; });\nconst btn = await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find(x => x.textContent.includes('Показать')); b.classList.remove('g-button_width_auto'); return { ok: true }; });\nconsole.log('no width_auto class', JSON.stringify(await measure()));\nawait page.evaluate(() => { const b = [...document.querySelectorAll('button')].find(x => x.textContent.includes('Показать')); b.querySelector('span').style.display='inline'; });\nconsole.log('span inline', JSON.stringify(await measure()));\nawait browser.close();\nEOF\ntimeout 90 node experiment.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -10",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && cat > fonts.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage();\nawait page.setContent('<span id=\"a\" style=\"font-size:13px\">Показать уведомление</span><span id=\"b\" style=\"font-size:13px;font-family:sans-serif\">Hello world</span>');\nconsole.log(await page.evaluate(() => ({ a: document.getElementById('a').getBoundingClientRect().width, b: document.getElementById('b').getBoundingClientRect().width })));\nawait browser.close();\nEOF\ntimeout 60 node fonts.mjs 2>&1 | tail -2; ls /usr/share/fonts 2>/dev/null | head; fc-list 2>/dev/null | wc -l",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e/debs && timeout 200 apt-get download fonts-dejavu-core fontconfig-config fonts-dejavu-core 2>&1 | tail -1; timeout 200 apt-get download fontconfig 2>&1 | tail -1; for f in fonts-dejavu-core*.deb fontconfig-config*.deb; do dpkg-deb -x \"$f\" /tmp/e2e/fontroot; done; ls /tmp/e2e/fontroot/etc/fonts 2>/dev/null | head; find /tmp/e2e/fontroot -name \"*.ttf\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > fonts.conf <<'EOF'\n<?xml version=\"1.0\"?>\n<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig>\n  <dir>/tmp/e2e/fontroot/usr/share/fonts</dir>\n  <cachedir>/tmp/e2e/fontcache</cachedir>\n</fontconfig>\nEOF\necho 'export FONTCONFIG_FILE=/tmp/e2e/fonts.conf' >> env.sh && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 60 node fonts.mjs 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && sed -i \"s#await page.screenshot({ path: '/tmp/e2e/shown.png' });#await page.waitForTimeout(400); await page.screenshot({ path: '/tmp/e2e/shown.png' });#\" check.mjs && timeout 150 node check.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && sleep 2 && timeout 150 node check.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -12 && cd /home/sandbox/workspace && npm run build 2>&1 | grep -E \"error|built in\" ; cat src/App.tsx",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && source env.sh && export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1 && timeout 150 node check.mjs 2>&1 | grep -v \"^\\s*at \\|Skipping\" | tail -10; pkill -f \"vite --port 5190\" ; cd /home/sandbox/workspace && npm run build 2>&1 | grep -E \"error|built in\"; rm -rf dist && git status --short && git diff --stat",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do cmd=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$cmd\" in *\"--port 5190\"*) echo \"killing ${p#/proc/}: $cmd\"; kill ${p#/proc/} 2>/dev/null;; esac; done; sleep 1; curl -s -m 3 -o /dev/null -w \"5190: %{http_code}\\n\" http://localhost:5190/ ; curl -s -m 3 -o /dev/null -w \"5173: %{http_code}\\n\" http://localhost:5173/",
+        "success": false
+      },
+      {
+        "command": "curl -s -m 3 -o /dev/null -w \"5190: %{http_code}\\n\" http://localhost:5190/; curl -s -m 3 -o /dev/null -w \"5173: %{http_code}\\n\" http://localhost:5173/; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 96,
+      "outputTokens": 29410,
+      "cacheReadTokens": 2339175,
+      "cacheWriteTokens": 61181,
+      "totalTokens": 2429862
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

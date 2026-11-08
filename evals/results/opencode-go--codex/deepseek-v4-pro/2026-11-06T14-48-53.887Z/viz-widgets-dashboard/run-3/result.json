@@ -1,0 +1,215 @@
+{
+  "status": "failed",
+  "duration": 353.43,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 15896,
+    "outputTokens": 11928,
+    "cacheReadTokens": 399104,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 3514,
+    "totalTokens": 426928
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 13,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 32,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 32,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la /home/sandbox/workspace/src/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/vite.config.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/src/main.tsx'"
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/tsconfig.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/node_modules/@gravity-ui/uikit -name \"*.d.ts\" | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components/ | sort'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components/Card/Card.d.ts 2>/dev/null | head -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components/Button/Button.d.ts 2>/dev/null | head -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components/Icon/Icon.d.ts 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /home/sandbox/workspace/src/widgets'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/types.ts << 'TYPESEOF'\nexport interface WidgetDef {\n  id: string;\n  title: string;\n  col: number;\n  row: number;\n  colSpan: number;\n  rowSpan: number;\n  kind: WidgetKind;\n}\n\nexport type WidgetKind =\n  | 'metric'\n  | 'chart'\n  | 'list'\n  | 'progress'\n  | 'text';\n\nexport interface MetricProps {\n  value: string;\n  label: string;\n  trend?: 'up' | 'down' | 'flat';\n  trendValue?: string;\n}\n\nexport interface ChartProps {\n  bars: { label: string; value: number; color?: string }[];\n}\n\nexport interface ListItem {\n  label: string;\n  value: string;\n}\n\nexport interface ListProps {\n  items: ListItem[];\n}\n\nexport interface ProgressItem {\n  label: string;\n  current: number;\n  total: number;\n}\n\nexport interface ProgressProps {\n  items: ProgressItem[];\n}\n\nexport interface TextProps {\n  body: string;\n}\nTYPESEOF\necho \\\"types.ts created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/MetricWidget.tsx << 'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\nimport type { MetricProps } from './types';\n\nconst trendColors: Record<string, string> = {\n  up: 'var(--g-color-text-positive)',\n  down: 'var(--g-color-text-danger)',\n  flat: 'var(--g-color-text-secondary)',\n};\n\nconst trendArrows: Record<string, string> = {\n  up: '↑',\n  down: '↓',\n  flat: '→',\n};\n\nexport function MetricWidget({ value, label, trend, trendValue }: MetricProps) {\n  return (\n    <Card view=\\\"raised\\\" style={{ padding: 16, height: '100%' }}>\n      <Text variant=\\\"subheader-1\\\" color=\\\"secondary\\\">\n        {label}\n      </Text>\n      <Text variant=\\\"display-2\\\" style={{ marginTop: 8 }}>\n        {value}\n      </Text>\n      {trend && (\n        <Text\n          variant=\\\"body-1\\\"\n          style={{ marginTop: 4, color: trendColors[trend] ?? trendColors.flat }}\n        >\n          {trendArrows[trend] ?? ''} {trendValue ?? ''}\n        </Text>\n      )}\n    </Card>\n  );\n}\nEOF\necho \\\"MetricWidget.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget.tsx << 'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\nimport type { ChartProps } from './types';\n\nconst defaultColors = [\n  'var(--g-color-base-info)',\n  'var(--g-color-base-positive)',\n  'var(--g-color-base-warning)',\n  'var(--g-color-base-danger)',\n  'var(--g-color-base-utility)',\n];\n\nexport function ChartWidget({ bars }: ChartProps) {\n  const max = Math.max(...bars.map((b) => b.value), 1);\n  return (\n    <Card view=\\\"raised\\\" style={{ padding: 16, height: '100%', display: 'flex', flexDirection: 'column', gap: 8 }}>\n      {bars.map((bar, i) => (\n        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>\n          <Text variant=\\\"caption-1\\\" style={{ width: 64, flexShrink: 0, textAlign: 'right' }}>\n            {bar.label}\n          </Text>\n          <div style={{ flex: 1, background: 'var(--g-color-base-generic)', borderRadius: 4, height: 20, overflow: 'hidden' }}>\n            <div\n              style={{\n                width: \"'`${Math.round((bar.value / max) * 100)}%`,\n                height: '\"'100%',\n                borderRadius: 4,\n                backgroundColor: bar.color ?? defaultColors[i % defaultColors.length],\n                transition: 'width 0.3s ease',\n              }}\n            />\n          </div>\n          <Text variant=\\\"caption-1\\\" style={{ width: 40, flexShrink: 0 }}>\n            {bar.value}\n          </Text>\n        </div>\n      ))}\n    </Card>\n  );\n}\nEOF\necho \\\"ChartWidget.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ListWidget.tsx << 'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\nimport type { ListProps } from './types';\n\nexport function ListWidget({ items }: ListProps) {\n  return (\n    <Card view=\\\"raised\\\" style={{ padding: 16, height: '100%' }}>\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>\n        {items.map((item, i) => (\n          <div\n            key={i}\n            style={{\n              display: 'flex',\n              justifyContent: 'space-between',\n              padding: '6px 0',\n              borderBottom:\n                i < items.length - 1 ? '1px solid var(--g-color-line-generic)' : undefined,\n            }}\n          >\n            <Text variant=\\\"body-1\\\">{item.label}</Text>\n            <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n              {item.value}\n            </Text>\n          </div>\n        ))}\n      </div>\n    </Card>\n  );\n}\nEOF\necho \\\"ListWidget.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ProgressWidget.tsx << 'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\nimport type { ProgressProps } from './types';\n\nexport function ProgressWidget({ items }: ProgressProps) {\n  return (\n    <Card view=\\\"raised\\\" style={{ padding: 16, height: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>\n      {items.map((item, i) => {\n        const pct = Math.min(Math.round((item.current / Math.max(item.total, 1)) * 100), 100);\n        return (\n          <div key={i}>\n            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>\n              <Text variant=\\\"caption-1\\\">{item.label}</Text>\n              <Text variant=\\\"caption-1\\\" color=\\\"secondary\\\">\n                {item.current} / {item.total}\n              </Text>\n            </div>\n            <div style={{ background: 'var(--g-color-base-generic)', borderRadius: 4, height: 8, overflow: 'hidden' }}>\n              <div\n                style={{\n                  width: \"'`${pct}%`,\n                  height: '\"'100%',\n                  borderRadius: 4,\n                  backgroundColor: pct >= 100 ? 'var(--g-color-base-positive)' : 'var(--g-color-base-info)',\n                  transition: 'width 0.3s ease',\n                }}\n              />\n            </div>\n          </div>\n        );\n      })}\n    </Card>\n  );\n}\nEOF\necho \\\"ProgressWidget.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/TextWidget.tsx << 'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\nimport type { TextProps } from './types';\n\nexport function TextWidget({ body }: TextProps) {\n  return (\n    <Card view=\\\"raised\\\" style={{ padding: 16, height: '100%' }}>\n      <Text variant=\\\"body-1\\\" style={{ whiteSpace: 'pre-wrap' }}>\n        {body}\n      </Text>\n    </Card>\n  );\n}\nEOF\necho \\\"TextWidget.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/Dashboard.tsx << 'DASHBOARDEOF'\nimport { useCallback, useRef, useState } from 'react';\nimport { Button, Icon, Text } from '@gravity-ui/uikit';\nimport { CircleXmark } from '@gravity-ui/icons';\nimport type { WidgetDef } from './widgets/types';\nimport { MetricWidget } from './widgets/MetricWidget';\nimport { ChartWidget } from './widgets/ChartWidget';\nimport { ListWidget } from './widgets/ListWidget';\nimport { ProgressWidget } from './widgets/ProgressWidget';\nimport { TextWidget } from './widgets/TextWidget';\n\nconst COLS = 6;\nconst GAP = 12;\nconst HEADER_H = 48;\n\nfunction renderWidget(w: WidgetDef) {\n  switch (w.kind) {\n    case 'metric':\n      return <MetricWidget {...(w.data as any)} />;\n    case 'chart':\n      return <ChartWidget {...(w.data as any)} />;\n    case 'list':\n      return <ListWidget {...(w.data as any)} />;\n    case 'progress':\n      return <ProgressWidget {...(w.data as any)} />;\n    case 'text':\n      return <TextWidget {...(w.data as any)} />;\n    default:\n      return null;\n  }\n}\n\ninterface DashboardProps {\n  widgets: WidgetDef[];\n  onChange: (widgets: WidgetDef[]) => void;\n}\n\nexport function Dashboard({ widgets, onChange }: DashboardProps) {\n  const [dragId, setDragId] = useState<string | null>(null);\n  const [dragOverId, setDragOverId] = useState<string | null>(null);\n  const [editMode, setEditMode] = useState(true);\n  const containerRef = useRef<HTMLDivElement>(null);\n\n  const handleDragStart = useCallback((id: string) => {\n    setDragId(id);\n  }, []);\n\n  const handleDragOver = useCallback(\n    (e: React.DragEvent, id: string) => {\n      e.preventDefault();\n      e.dataTransfer.dropEffect = 'move';\n      if (dragId && dragId \"'!== id) {\n        setDragOverId(id);\n      }\n    },\n    [dragId],\n  );\n\n  const handleDragLeave = useCallback(() => {\n    setDragOverId(null);\n  }, []);\n\n  const handleDrop = useCallback(\n    (e: React.DragEvent, targetId: string) => {\n      e.preventDefault();\n      setDragOverId(null);\n      setDragId(null);\n      if (!dragId || dragId === targetId) return;\n\n      const srcIdx = widgets.findIndex((w) => w.id === dragId);\n      const tgtIdx = widgets.findIndex((w) => w.id === targetId);\n      if (srcIdx === -1 || tgtIdx === -1) return;\n\n      const next = [...widgets];\n      const src = next[srcIdx];\n      const tgt = next[tgtIdx];\n\n      // Swap positions\n      const tmpCol = src.col;\n      const tmpRow = src.row;\n      const tmpColSpan = src.colSpan;\n      const tmpRowSpan = src.rowSpan;\n\n      src.col = tgt.col;\n      src.row = tgt.row;\n      src.colSpan = tgt.colSpan;\n      src.rowSpan = tgt.rowSpan;\n\n      tgt.col = tmpCol;\n      tgt.row = tmpRow;\n      tgt.colSpan = tmpColSpan;\n      tgt.rowSpan = tmpRowSpan;\n\n      onChange(next);\n    },\n    [dragId, widgets, onChange],\n  );\n\n  const handleDragEnd = useCallback(() => {\n    setDragId(null);\n    setDragOverId(null);\n  }, []);\n\n  const removeWidget = useCallback(\n    (id: string) => {\n      onChange(widgets.filter((w) => w.id !== id));\n    },\n    [widgets, onChange],\n  );\n\n  // Compute grid rows\n  const maxRow = widgets.reduce((m, w) => Math.max(m, w.row + w.rowSpan), 2);\n\n  return (\n    <div style={{ height: '\"'100vh', display: 'flex', flexDirection: 'column', background: 'var(--g-color-base-background)' }}>\n      {/* header */}\n      <div\n        style={{\n          height: HEADER_H,\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          padding: '0 24px',\n          borderBottom: '1px solid var(--g-color-line-generic)',\n          flexShrink: 0,\n        }}\n      >\n        <Text variant=\\\"header-1\\\">Дашборд</Text>\n        <Button view={editMode ? 'action' : 'normal'} onClick={() => setEditMode((v) => \"'!v)}>\n          {editMode ? '\"'Режим редактирования' : 'Режим просмотра'}\n        </Button>\n      </div>\n\n      {/* grid */}\n      <div\n        ref={containerRef}\n        style={{\n          flex: 1,\n          overflow: 'auto',\n          padding: 16,\n        }}\n      >\n        <div\n          style={{\n            display: 'grid',\n            gridTemplateColumns: \"'`repeat(${COLS}, 1fr)`,\n            gridAutoRows: '\"'120px',\n            gap: GAP,\n          }}\n        >\n          {widgets.map((w) => {\n            const isDrag = dragId === w.id;\n            const isOver = dragOverId === w.id;\n            return (\n              <div\n                key={w.id}\n                draggable={editMode}\n                onDragStart={() => handleDragStart(w.id)}\n                onDragOver={(e) => handleDragOver(e, w.id)}\n                onDragLeave={handleDragLeave}\n                onDrop={(e) => handleDrop(e, w.id)}\n                onDragEnd={handleDragEnd}\n                style={{\n                  gridColumn: \"'`${w.col} / span ${w.colSpan}`,\n                  gridRow: `${w.row} / span ${w.rowSpan}`,\n                  opacity: isDrag ? 0.4 : 1,\n                  outline: isOver ? '\"'2px dashed var(--g-color-line-brand)' : undefined,\n                  outlineOffset: 2,\n                  borderRadius: 8,\n                  position: 'relative',\n                  transition: 'opacity 0.15s ease',\n                  cursor: editMode ? 'grab' : 'default',\n                  minHeight: 0,\n                }}\n              >\n                {editMode && (\n                  <button\n                    onClick={(e) => {\n                      e.stopPropagation();\n                      removeWidget(w.id);\n                    }}\n                    title=\\\"Удалить виджет\\\"\n                    style={{\n                      position: 'absolute',\n                      top: -10,\n                      right: -10,\n                      zIndex: 2,\n                      background: 'var(--g-color-base-background)',\n                      border: 'none',\n                      borderRadius: '50%',\n                      cursor: 'pointer',\n                      padding: 2,\n                      lineHeight: 0,\n                      boxShadow: '0 1px 4px rgba(0,0,0,0.15)',\n                    }}\n                  >\n                    <Icon data={CircleXmark} size={18} fill=\\\"var(--g-color-text-secondary)\\\" />\n                  </button>\n                )}\n                {/* title bar */}\n                <div\n                  style={{\n                    background: 'var(--g-color-base-generic)',\n                    borderRadius: '8px 8px 0 0',\n                    padding: '6px 12px',\n                    display: 'flex',\n                    alignItems: 'center',\n                  }}\n                >\n                  <Text variant=\\\"caption-2\\\" color=\\\"secondary\\\">\n                    {w.title}\n                  </Text>\n                </div>\n                <div style={{ height: 'calc(100% - 28px)' }}>{renderWidget(w)}</div>\n              </div>\n            );\n          })}\n        </div>\n      </div>\n    </div>\n  );\n}\nDASHBOARDEOF\necho \\\"Dashboard.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/types.ts << 'TYPESEOF'\nexport interface WidgetDef {\n  id: string;\n  title: string;\n  col: number;\n  row: number;\n  colSpan: number;\n  rowSpan: number;\n  kind: WidgetKind;\n  data: MetricProps | ChartProps | ListProps | ProgressProps | TextProps;\n}\n\nexport type WidgetKind =\n  | 'metric'\n  | 'chart'\n  | 'list'\n  | 'progress'\n  | 'text';\n\nexport interface MetricProps {\n  value: string;\n  label: string;\n  trend?: 'up' | 'down' | 'flat';\n  trendValue?: string;\n}\n\nexport interface ChartProps {\n  bars: { label: string; value: number; color?: string }[];\n}\n\nexport interface ListItem {\n  label: string;\n  value: string;\n}\n\nexport interface ListProps {\n  items: ListItem[];\n}\n\nexport interface ProgressItem {\n  label: string;\n  current: number;\n  total: number;\n}\n\nexport interface ProgressProps {\n  items: ProgressItem[];\n}\n\nexport interface TextProps {\n  body: string;\n}\nTYPESEOF\necho \\\"types.ts updated\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/icons/ 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/icons/package.json 2>/dev/null && cat /home/sandbox/workspace/node_modules/@gravity-ui/icons/package.json | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/icons/CircleXmark.* 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'APPEOF'\nimport { useState } from 'react';\nimport { Dashboard } from './Dashboard';\nimport type { WidgetDef } from './widgets/types';\n\nconst defaultWidgets: WidgetDef[] = [\n  {\n    id: 'w1',\n    title: 'Выручка',\n    col: 1,\n    row: 1,\n    colSpan: 2,\n    rowSpan: 1,\n    kind: 'metric',\n    data: { value: '₽ 1,284,500', label: 'За текущий месяц', trend: 'up', trendValue: '+12.3%' },\n  },\n  {\n    id: 'w2',\n    title: 'Активные пользователи',\n    col: 3,\n    row: 1,\n    colSpan: 2,\n    rowSpan: 1,\n    kind: 'metric',\n    data: { value: '4,821', label: 'DAU (сегодня)', trend: 'up', trendValue: '+5.1%' },\n  },\n  {\n    id: 'w3',\n    title: 'Конверсия',\n    col: 5,\n    row: 1,\n    colSpan: 2,\n    rowSpan: 1,\n    kind: 'metric',\n    data: { value: '3.2%', label: 'В корзину → заказ', trend: 'down', trendValue: '−0.4%' },\n  },\n  {\n    id: 'w4',\n    title: 'Продажи по категориям',\n    col: 1,\n    row: 2,\n    colSpan: 3,\n    rowSpan: 2,\n    kind: 'chart',\n    data: {\n      bars: [\n        { label: 'Электроника', value: 420 },\n        { label: 'Одежда', value: 310 },\n        { label: 'Книги', value: 180 },\n        { label: 'Спорт', value: 250 },\n        { label: 'Дом', value: 140 },\n      ],\n    },\n  },\n  {\n    id: 'w5',\n    title: 'Топ товаров',\n    col: 4,\n    row: 2,\n    colSpan: 3,\n    rowSpan: 2,\n    kind: 'list',\n    data: {\n      items: [\n        { label: 'iPhone 16 Pro', value: '₽ 4,200,000' },\n        { label: 'MacBook Air M4', value: '₽ 3,150,000' },\n        { label: 'AirPods Pro 2', value: '₽ 1,870,000' },\n        { label: 'Apple Watch Ultra', value: '₽ 1,560,000' },\n        { label: 'iPad Pro M4', value: '₽ 1,240,000' },\n        { label: 'Apple Pencil Pro', value: '₽ 720,000' },\n      ],\n    },\n  },\n  {\n    id: 'w6',\n    title: 'Выполнение плана',\n    col: 1,\n    row: 4,\n    colSpan: 3,\n    rowSpan: 2,\n    kind: 'progress',\n    data: {\n      items: [\n        { label: 'Квартальная цель по выручке', current: 78, total: 100 },\n        { label: 'NPS целевой показатель', current: 45, total: 50 },\n        { label: 'План по найму (Q4)', current: 12, total: 15 },\n        { label: 'Миграция на новую платформу', current: 62, total: 100 },\n        { label: 'Обучение сотрудников', current: 88, total: 100 },\n      ],\n    },\n  },\n  {\n    id: 'w7',\n    title: 'Заметки',\n    col: 4,\n    row: 4,\n    colSpan: 3,\n    rowSpan: 2,\n    kind: 'text',\n    data: {\n      body: 'Ключевые приоритеты на неделю:\\\\n\\\\n• Запуск A/B-теста нового онбординга\\\\n• Оптимизация времени загрузки чекаута (цель: < 2с)\\\\n• Интеграция с новым платёжным провайдером\\\\n• Анализ оттока за октябрь\\\\n\\\\nСледующий обзор: пятница, 10:00.',\n    },\n  },\n];\n\nexport function App() {\n  const [widgets, setWidgets] = useState<WidgetDef[]>(defaultWidgets);\n  return <Dashboard widgets={widgets} onChange={setWidgets} />;\n}\nAPPEOF\necho \\\"App.tsx created\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1 | grep -v \"npm warn\"'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1; echo \"EXIT: $?\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/Dashboard.tsx << 'DASHBOARDEOF'\nimport { useCallback, useState } from 'react';\nimport { Button, Icon, Text } from '@gravity-ui/uikit';\nimport { CircleXmark } from '@gravity-ui/icons';\nimport type { WidgetDef } from './widgets/types';\nimport { MetricWidget } from './widgets/MetricWidget';\nimport { ChartWidget } from './widgets/ChartWidget';\nimport { ListWidget } from './widgets/ListWidget';\nimport { ProgressWidget } from './widgets/ProgressWidget';\nimport { TextWidget } from './widgets/TextWidget';\n\nconst COLS = 6;\nconst GAP = 12;\nconst HEADER_H = 48;\n\nfunction renderWidget(w: WidgetDef) {\n  switch (w.kind) {\n    case 'metric':\n      return <MetricWidget {...(w.data as any)} />;\n    case 'chart':\n      return <ChartWidget {...(w.data as any)} />;\n    case 'list':\n      return <ListWidget {...(w.data as any)} />;\n    case 'progress':\n      return <ProgressWidget {...(w.data as any)} />;\n    case 'text':\n      return <TextWidget {...(w.data as any)} />;\n    default:\n      return null;\n  }\n}\n\ninterface DashboardProps {\n  widgets: WidgetDef[];\n  onChange: (widgets: WidgetDef[]) => void;\n}\n\nexport function Dashboard({ widgets, onChange }: DashboardProps) {\n  const [dragId, setDragId] = useState<string | null>(null);\n  const [dragOverId, setDragOverId] = useState<string | null>(null);\n  const [editMode, setEditMode] = useState(true);\n\n  const handleDragStart = useCallback((id: string) => {\n    setDragId(id);\n  }, []);\n\n  const handleDragOver = useCallback(\n    (e: React.DragEvent, id: string) => {\n      e.preventDefault();\n      e.dataTransfer.dropEffect = 'move';\n      if (dragId && dragId \"'!== id) {\n        setDragOverId(id);\n      }\n    },\n    [dragId],\n  );\n\n  const handleDragLeave = useCallback(() => {\n    setDragOverId(null);\n  }, []);\n\n  const handleDrop = useCallback(\n    (e: React.DragEvent, targetId: string) => {\n      e.preventDefault();\n      setDragOverId(null);\n      setDragId(null);\n      if (!dragId || dragId === targetId) return;\n\n      const srcIdx = widgets.findIndex((w) => w.id === dragId);\n      const tgtIdx = widgets.findIndex((w) => w.id === targetId);\n      if (srcIdx === -1 || tgtIdx === -1) return;\n\n      const next = [...widgets];\n      const src = next[srcIdx];\n      const tgt = next[tgtIdx];\n\n      // Swap positions\n      const tmpCol = src.col;\n      const tmpRow = src.row;\n      const tmpColSpan = src.colSpan;\n      const tmpRowSpan = src.rowSpan;\n\n      src.col = tgt.col;\n      src.row = tgt.row;\n      src.colSpan = tgt.colSpan;\n      src.rowSpan = tgt.rowSpan;\n\n      tgt.col = tmpCol;\n      tgt.row = tmpRow;\n      tgt.colSpan = tmpColSpan;\n      tgt.rowSpan = tmpRowSpan;\n\n      onChange(next);\n    },\n    [dragId, widgets, onChange],\n  );\n\n  const handleDragEnd = useCallback(() => {\n    setDragId(null);\n    setDragOverId(null);\n  }, []);\n\n  const removeWidget = useCallback(\n    (id: string) => {\n      onChange(widgets.filter((w) => w.id !== id));\n    },\n    [widgets, onChange],\n  );\n\n  return (\n    <div style={{ height: '\"'100vh', display: 'flex', flexDirection: 'column', background: 'var(--g-color-base-background)' }}>\n      {/* header */}\n      <div\n        style={{\n          height: HEADER_H,\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          padding: '0 24px',\n          borderBottom: '1px solid var(--g-color-line-generic)',\n          flexShrink: 0,\n        }}\n      >\n        <Text variant=\\\"header-1\\\">Дашборд</Text>\n        <Button view={editMode ? 'action' : 'normal'} onClick={() => setEditMode((v) => \"'!v)}>\n          {editMode ? '\"'Режим редактирования' : 'Режим просмотра'}\n        </Button>\n      </div>\n\n      {/* grid */}\n      <div style={{ flex: 1, overflow: 'auto', padding: 16 }}>\n        <div\n          style={{\n            display: 'grid',\n            gridTemplateColumns: \"'`repeat(${COLS}, 1fr)`,\n            gridAutoRows: '\"'120px',\n            gap: GAP,\n          }}\n        >\n          {widgets.map((w) => {\n            const isDrag = dragId === w.id;\n            const isOver = dragOverId === w.id;\n            return (\n              <div\n                key={w.id}\n                draggable={editMode}\n                onDragStart={() => handleDragStart(w.id)}\n                onDragOver={(e) => handleDragOver(e, w.id)}\n                onDragLeave={handleDragLeave}\n                onDrop={(e) => handleDrop(e, w.id)}\n                onDragEnd={handleDragEnd}\n                style={{\n                  gridColumn: \"'`${w.col} / span ${w.colSpan}`,\n                  gridRow: `${w.row} / span ${w.rowSpan}`,\n                  opacity: isDrag ? 0.4 : 1,\n                  outline: isOver ? '\"'2px dashed var(--g-color-line-brand)' : undefined,\n                  outlineOffset: 2,\n                  borderRadius: 8,\n                  position: 'relative',\n                  transition: 'opacity 0.15s ease',\n                  cursor: editMode ? 'grab' : 'default',\n                  minHeight: 0,\n                }}\n              >\n                {editMode && (\n                  <button\n                    onClick={(e) => {\n                      e.stopPropagation();\n                      removeWidget(w.id);\n                    }}\n                    title=\\\"Удалить виджет\\\"\n                    style={{\n                      position: 'absolute',\n                      top: -10,\n                      right: -10,\n                      zIndex: 2,\n                      background: 'var(--g-color-base-background)',\n                      border: 'none',\n                      borderRadius: '50%',\n                      cursor: 'pointer',\n                      padding: 2,\n                      lineHeight: 0,\n                      boxShadow: '0 1px 4px rgba(0,0,0,0.15)',\n                    }}\n                  >\n                    <Icon data={CircleXmark} size={18} fill=\\\"var(--g-color-text-secondary)\\\" />\n                  </button>\n                )}\n                {/* title bar */}\n                <div\n                  style={{\n                    background: 'var(--g-color-base-generic)',\n                    borderRadius: '8px 8px 0 0',\n                    padding: '6px 12px',\n                    display: 'flex',\n                    alignItems: 'center',\n                  }}\n                >\n                  <Text variant=\\\"caption-2\\\" color=\\\"secondary\\\">\n                    {w.title}\n                  </Text>\n                </div>\n                <div style={{ height: 'calc(100% - 28px)' }}>{renderWidget(w)}</div>\n              </div>\n            );\n          })}\n        </div>\n      </div>\n    </div>\n  );\n}\nDASHBOARDEOF\necho \\\"Dashboard.tsx cleaned\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1 && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 15896,
+      "outputTokens": 11928,
+      "cacheReadTokens": 399104,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 3514,
+      "totalTokens": 426928
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "status": "passed",
+  "duration": 391.379,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 32,
+    "outputTokens": 8390,
+    "cacheReadTokens": 665216,
+    "cacheWriteTokens": 45435,
+    "totalTokens": 719073
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 17,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json AGENTS.md && find .agents -type f | head -100",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/.agents/skills/gravity-ui && sed -n 1,80p references/package-routing.md; echo ------; rg -n -i \"navigation|aside|table|sidebar|app shell\" references/package-routing.md | head -60; echo -----; cat rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat index.html tsconfig.json vite.config.ts .gitignore; find src __agent_eval__ -type f | head; ls node_modules/@gravity-ui; ls node_modules | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx; ls node_modules/@tanstack node_modules/@hello-pangea; ls node_modules/@gravity-ui/*/package.json; grep '\"version\"' node_modules/@gravity-ui/*/package.json; cat __agent_eval__/run.mjs | head -30; npm ls --depth=0 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/navigation version peerDependencies 2>&1 | head -30; npm view @gravity-ui/table version peerDependencies dependencies 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/navigation @gravity-ui/table @gravity-ui/icons @gravity-ui/i18n @dnd-kit/core @dnd-kit/sortable @bem-react/classname lodash 2>&1 | tail -15; grep '\"version\"' node_modules/@gravity-ui/{navigation,table,icons,uikit}/package.json; ls node_modules/@gravity-ui/table/ node_modules/@gravity-ui/navigation/; ls node_modules/@gravity-ui/table/dist/docs node_modules/@gravity-ui/navigation/build/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && cat navigation/build/docs/INDEX.md | head -60; ls navigation/build/docs/components; ls table/build/docs 2>&1 | head; rg -n -i \"reorder|grouping|getGroupedRowModel|expanded|enableRowSelection|Required setup|styles\" table/README.md | head -50",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,130p table/README.md; sed -n 255,347p table/README.md; sed -n 453,480p table/README.md",
+        "success": true
+      },
+      {
+        "command": "sed -n 60,140p navigation/build/docs/INDEX.md; sed -n 1,120p navigation/build/docs/components/AsideHeader.md",
+        "success": true
+      },
+      {
+        "command": "rg -n -i \"css|styles\" navigation/README.md | head; rg -n \"useRowSelectionFixedHandler\" -r . table/build --glob '*.d.ts' | head -5; rg -n \"getGroupTitle|ColumnReorderingProviderProps\" table/build --glob '*.d.ts' | head; grep -n '\"exports\"' -A25 navigation/package.json | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/table/build/esm && cat components/ColumnReorderingProvider/types.d.ts hooks/useRowSelectionFixedHandler.d.ts; rg -n \"enableColumnOrdering|columnOrder|enableColumnReorder|disableReorder|isReorderable\" -r . --glob '*.d.ts' | head; rg -n \"selectionColumn\" . --glob '*.d.ts' | head -3; sed -n 1,60p components/BaseGroupHeader/BaseGroupHeader.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/icons && ls esm | grep -E \"^(House|Persons|ShoppingCart|Gear|Cubes3|Receipt|Bag)\\.js$\"; cd ../navigation/build/esm && rg -n \"logo\\??:|menuItems|renderContent|multipleTooltip|enableTooltip\" components/AsideHeader/types.d.ts | head; rg -n \"interface MenuItem\" -A40 components/types.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,40p components/Logo/Logo.d.ts 2>/dev/null || rg -l \"interface LogoProps\" .; rg -n \"ColumnDef|columnOrder|getRowId\" ../../../table/build/esm/hooks/useTable.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "rg -n \"interface LogoProps\" -A25 components/types.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/src && cat > data.ts <<'EOF'\nexport type OrderStatus = 'new' | 'processing' | 'shipped' | 'delivered' | 'cancelled';\n\nexport interface Order {\n  id: string;\n  customer: string;\n  city: string;\n  status: OrderStatus;\n  amount: number;\n  createdAt: string;\n}\n\nexport interface OrderGroup {\n  id: string;\n  status: OrderStatus;\n  items: Order[];\n}\n\nexport type OrderRow = Order | OrderGroup;\n\nexport const STATUS_ORDER: OrderStatus[] = ['new', 'processing', 'shipped', 'delivered', 'cancelled'];\n\nexport const STATUS_TITLE: Record<OrderStatus, string> = {\n  new: 'Новые',\n  processing: 'В обработке',\n  shipped: 'Отправлены',\n  delivered: 'Доставлены',\n  cancelled: 'Отменены',\n};\n\nexport const STATUS_LABEL: Record<OrderStatus, string> = {\n  new: 'Новый',\n  processing: 'В обработке',\n  shipped: 'Отправлен',\n  delivered: 'Доставлен',\n  cancelled: 'Отменён',\n};\n\nconst CUSTOMERS = [\n  'Анна Смирнова',\n  'Иван Петров',\n  'Мария Кузнецова',\n  'Дмитрий Орлов',\n  'Елена Волкова',\n  'Сергей Попов',\n  'Ольга Лебедева',\n  'Алексей Соколов',\n  'Наталья Морозова',\n  'Павел Новиков',\n];\nconst CITIES = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск', 'Екатеринбург', 'Самара'];\n\n// Детерминированная генерация, чтобы данные не менялись между перезагрузками.\nexport const ORDERS: Order[] = Array.from({length: 60}, (_, i) => {\n  const n = i + 1;\n  const day = ((n * 7) % 28) + 1;\n  return {\n    id: `ORD-${1000 + n}`,\n    customer: CUSTOMERS[(n * 3) % CUSTOMERS.length],\n    city: CITIES[(n * 5) % CITIES.length],\n    status: STATUS_ORDER[(n * 2 + Math.floor(n / 4)) % STATUS_ORDER.length],\n    amount: 1200 + ((n * 7919) % 48000),\n    createdAt: `2026-10-${String(day).padStart(2, '0')}`,\n  };\n});\n\nexport function groupByStatus(orders: Order[]): OrderGroup[] {\n  return STATUS_ORDER.map((status) => ({\n    id: `group:${status}`,\n    status,\n    items: orders.filter((o) => o.status === status),\n  })).filter((g) => g.items.length > 0);\n}\n\nexport function isGroup(row: OrderRow): row is OrderGroup {\n  return 'items' in row;\n}\nEOF\ncat > OrdersTable.tsx <<'EOF'\nimport React from 'react';\nimport {\n  ColumnReorderingProvider,\n  Table,\n  selectionColumn,\n  useRowSelectionFixedHandler,\n  useTable,\n} from '@gravity-ui/table';\nimport type {\n  ColumnDef,\n  ColumnOrderState,\n  ExpandedState,\n  Row,\n  RowSelectionState,\n} from '@gravity-ui/table/tanstack';\nimport {Flex, Label, Text} from '@gravity-ui/uikit';\nimport type {LabelProps} from '@gravity-ui/uikit';\n\nimport {\n  ORDERS,\n  STATUS_LABEL,\n  STATUS_TITLE,\n  groupByStatus,\n  isGroup,\n  type OrderRow,\n  type OrderStatus,\n} from './data';\n\nconst STATUS_THEME: Record<OrderStatus, LabelProps['theme']> = {\n  new: 'info',\n  processing: 'warning',\n  shipped: 'utility',\n  delivered: 'success',\n  cancelled: 'danger',\n};\n\nconst currency = new Intl.NumberFormat('ru-RU', {\n  style: 'currency',\n  currency: 'RUB',\n  maximumFractionDigits: 0,\n});\nconst dateFormat = new Intl.DateTimeFormat('ru-RU');\n\nconst columns: ColumnDef<OrderRow>[] = [\n  selectionColumn as ColumnDef<OrderRow>,\n  {id: 'id', header: 'Заказ', size: 130, accessorFn: (r) => (isGroup(r) ? '' : r.id)},\n  {id: 'customer', header: 'Клиент', size: 220, accessorFn: (r) => (isGroup(r) ? '' : r.customer)},\n  {id: 'city', header: 'Город', size: 180, accessorFn: (r) => (isGroup(r) ? '' : r.city)},\n  {\n    id: 'status',\n    header: 'Статус',\n    size: 160,\n    accessorFn: (r) => (isGroup(r) ? '' : r.status),\n    cell: ({row}) =>\n      isGroup(row.original) ? null : (\n        <Label theme={STATUS_THEME[row.original.status]} size=\"s\">\n          {STATUS_LABEL[row.original.status]}\n        </Label>\n      ),\n  },\n  {\n    id: 'amount',\n    header: 'Сумма',\n    size: 140,\n    accessorFn: (r) => (isGroup(r) ? 0 : r.amount),\n    cell: ({row}) => (isGroup(row.original) ? null : currency.format(row.original.amount)),\n  },\n  {\n    id: 'createdAt',\n    header: 'Создан',\n    size: 130,\n    accessorFn: (r) => (isGroup(r) ? '' : r.createdAt),\n    cell: ({row}) => (isGroup(row.original) ? null : dateFormat.format(new Date(row.original.createdAt))),\n  },\n];\n\nconst getRowId = (row: OrderRow) => row.id;\nconst getSubRows = (row: OrderRow) => (isGroup(row) ? row.items : undefined);\n\nconst getGroupTitle = (row: Row<OrderRow>) => {\n  const original = row.original;\n  if (!isGroup(original)) return null;\n  return (\n    <Flex alignItems=\"center\" gap={2}>\n      <Text variant=\"subheader-2\">{STATUS_TITLE[original.status]}</Text>\n      <Text variant=\"body-1\" color=\"secondary\">\n        {original.items.length}\n      </Text>\n    </Flex>\n  );\n};\n\nexport function OrdersTable() {\n  const data = React.useMemo(() => groupByStatus(ORDERS), []);\n\n  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});\n  const [expanded, setExpanded] = React.useState<ExpandedState>(true);\n  const [columnOrder, setColumnOrder] = React.useState<ColumnOrderState>(() =>\n    columns.map((c, i) => (i === 0 ? '_select' : (c.id as string))),\n  );\n\n  const handleRowSelectionChange = useRowSelectionFixedHandler<OrderRow>({\n    rowSelection,\n    setRowSelection,\n    tableData: data,\n    getSubRows,\n    getRowId,\n  });\n\n  const table = useTable({\n    columns,\n    data,\n    getRowId,\n    getSubRows,\n    enableExpanding: true,\n    enableRowSelection: true,\n    enableMultiRowSelection: true,\n    onRowSelectionChange: handleRowSelectionChange,\n    onExpandedChange: setExpanded,\n    onColumnOrderChange: setColumnOrder,\n    state: {rowSelection, expanded, columnOrder},\n  });\n\n  const selectedCount = Object.keys(rowSelection).filter((id) => !id.startsWith('group:')).length;\n\n  return (\n    <Flex direction=\"column\" gap={3} style={{flex: 1, minHeight: 0}}>\n      <Flex alignItems=\"center\" justifyContent=\"space-between\" style={{flexShrink: 0}}>\n        <Text variant=\"body-1\" color=\"secondary\">\n          {selectedCount > 0 ? `Выбрано заказов: ${selectedCount}` : 'Перетаскивайте заголовки, чтобы менять порядок колонок'}\n        </Text>\n      </Flex>\n      <div style={{flex: 1, minHeight: 0, overflow: 'auto'}}>\n        <ColumnReorderingProvider table={table}>\n          <Table table={table} getGroupTitle={getGroupTitle} stickyHeader />\n        </ColumnReorderingProvider>\n      </div>\n    </Flex>\n  );\n}\nEOF\ncat > App.tsx <<'EOF'\nimport React from 'react';\nimport {AsideHeader} from '@gravity-ui/navigation';\nimport {Gear, House, Persons, ShoppingCart} from '@gravity-ui/icons';\nimport {Flex, Text} from '@gravity-ui/uikit';\n\nimport {OrdersTable} from './OrdersTable';\n\ntype SectionId = 'home' | 'users' | 'orders' | 'settings';\n\nconst SECTIONS: {id: SectionId; title: string; icon: typeof House}[] = [\n  {id: 'home', title: 'Главная', icon: House},\n  {id: 'users', title: 'Пользователи', icon: Persons},\n  {id: 'orders', title: 'Заказы', icon: ShoppingCart},\n  {id: 'settings', title: 'Настройки', icon: Gear},\n];\n\nexport function App() {\n  const [compact, setCompact] = React.useState(false);\n  const [section, setSection] = React.useState<SectionId>('orders');\n\n  const menuItems = SECTIONS.map(({id, title, icon}) => ({\n    id,\n    title,\n    icon,\n    current: id === section,\n    onItemClick: () => setSection(id),\n  }));\n\n  const current = SECTIONS.find((s) => s.id === section)!;\n\n  return (\n    <div style={{height: '100vh'}}>\n      <AsideHeader\n        logo={{text: 'Админка', icon: ShoppingCart}}\n        compact={compact}\n        onChangeCompact={setCompact}\n        menuItems={menuItems}\n        renderContent={() => (\n          <Flex\n            direction=\"column\"\n            gap={4}\n            style={{height: '100vh', padding: 'var(--g-spacing-6)', boxSizing: 'border-box'}}\n          >\n            <Text variant=\"header-1\" style={{flexShrink: 0}}>\n              {current.title}\n            </Text>\n            {section === 'orders' ? (\n              <OrdersTable />\n            ) : (\n              <Text variant=\"body-2\" color=\"secondary\">\n                Раздел «{current.title}» пока пуст.\n              </Text>\n            )}\n          </Flex>\n        )}\n      />\n    </div>\n  );\n}\nEOF\ncd .. && npx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "grep -o \"id: *['\\\"][^'\\\"]*['\\\"]\" node_modules/@gravity-ui/table/build/esm/constants/selectionColumn.js; npm run build 2>&1 | tail -12",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 32,
+      "outputTokens": 8390,
+      "cacheReadTokens": 665216,
+      "cacheWriteTokens": 45435,
+      "totalTokens": 719073
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

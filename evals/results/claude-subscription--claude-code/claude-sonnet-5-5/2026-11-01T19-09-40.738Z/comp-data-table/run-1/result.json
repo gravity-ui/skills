@@ -1,0 +1,79 @@
+{
+  "status": "passed",
+  "duration": 511.818,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 14,
+    "outputTokens": 5276,
+    "cacheReadTokens": 147764,
+    "cacheWriteTokens": 17443,
+    "totalTokens": 170497
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git ls-files | head -50",
+        "success": true
+      },
+      {
+        "command": "cat index.html src/*.ts* tsconfig.json vite.config.ts .gitignore; ls __agent_eval__; ls node_modules/@gravity-ui; ls node_modules/@gravity-ui/uikit/build/esm/components | head -100",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls Table Table/hoc Table/hoc/withTableSorting Table/hoc/withTableSelection Pagination; cat Table/hoc/withTableSorting/withTableSorting.d.ts Table/hoc/withTableSelection/withTableSelection.d.ts Table/Table.d.ts Pagination/Pagination.d.ts; cat Table/hoc/withTableSelection/withTableSelection.js | head -80",
+        "success": true
+      },
+      {
+        "command": "sed -n 80,140p Table/hoc/withTableSelection/withTableSelection.js; cat Pagination/types.d.ts; grep -n \"meta\\|sortable\\|defaultSortOrder\\|disableDataSorting\" Table/hoc/withTableSorting/withTableSorting.js | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/data.ts <<'EOF'\nexport type Status = 'active' | 'pending' | 'blocked';\n\nexport interface Employee {\n  id: string;\n  name: string;\n  email: string;\n  department: string;\n  status: Status;\n  salary: number;\n  hiredAt: string; // ISO date\n}\n\nconst FIRST = ['Анна', 'Борис', 'Виктор', 'Галина', 'Дмитрий', 'Елена', 'Жанна', 'Игорь', 'Ксения', 'Леонид', 'Мария', 'Николай'];\nconst LAST = ['Иванов', 'Петров', 'Сидоров', 'Кузнецов', 'Смирнов', 'Попов', 'Лебедев', 'Козлов', 'Новиков', 'Морозов'];\nconst DEPARTMENTS = ['Разработка', 'Дизайн', 'Аналитика', 'Маркетинг', 'Поддержка'];\nconst STATUSES: Status[] = ['active', 'pending', 'blocked', 'active', 'active'];\n\n// Deterministic pseudo-random generator, so the data is stable between reloads.\nfunction createRandom(seed: number) {\n  let s = seed;\n  return () => {\n    s = (s * 1664525 + 1013904223) % 4294967296;\n    return s / 4294967296;\n  };\n}\n\nexport function generateEmployees(count: number): Employee[] {\n  const rnd = createRandom(42);\n  return Array.from({length: count}, (_, i) => {\n    const first = FIRST[Math.floor(rnd() * FIRST.length)];\n    const last = LAST[i % LAST.length];\n    const date = new Date(Date.UTC(2015, 0, 1) + Math.floor(rnd() * 3650) * 86400000);\n    return {\n      id: String(i + 1),\n      name: `${first} ${last}`,\n      email: `user${i + 1}@example.com`,\n      department: DEPARTMENTS[Math.floor(rnd() * DEPARTMENTS.length)],\n      status: STATUSES[Math.floor(rnd() * STATUSES.length)],\n      salary: 60000 + Math.floor(rnd() * 140) * 1000,\n      hiredAt: date.toISOString().slice(0, 10),\n    };\n  });\n}\nEOF\ncat > src/DataTable.tsx <<'EOF'\nimport React from 'react';\nimport {\n  Button,\n  Flex,\n  Label,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n} from '@gravity-ui/uikit';\nimport type {LabelProps, TableColumnConfig, TableSortState} from '@gravity-ui/uikit';\n\nimport type {Employee, Status} from './data';\n\nconst SortableSelectableTable = withTableSelection(withTableSorting(Table<Employee>));\n\nconst STATUS_LABELS: Record<Status, {text: string; theme: LabelProps['theme']}> = {\n  active: {text: 'Активен', theme: 'success'},\n  pending: {text: 'Ожидает', theme: 'warning'},\n  blocked: {text: 'Заблокирован', theme: 'danger'},\n};\n\nconst salaryFormat = new Intl.NumberFormat('ru-RU');\nconst dateFormat = new Intl.DateTimeFormat('ru-RU');\n\nconst collator = new Intl.Collator('ru');\nconst compare: Record<string, (a: Employee, b: Employee) => number> = {\n  id: (a, b) => Number(a.id) - Number(b.id),\n  name: (a, b) => collator.compare(a.name, b.name),\n  email: (a, b) => collator.compare(a.email, b.email),\n  department: (a, b) => collator.compare(a.department, b.department),\n  status: (a, b) => collator.compare(STATUS_LABELS[a.status].text, STATUS_LABELS[b.status].text),\n  salary: (a, b) => a.salary - b.salary,\n  hiredAt: (a, b) => a.hiredAt.localeCompare(b.hiredAt),\n};\n\n// `meta.sort` marks a column as sortable (the HOC renders the header indicator).\n// Actual sorting is done below on the whole dataset, so it works across pages.\nconst sortable = {sort: true};\n\nconst columns: TableColumnConfig<Employee>[] = [\n  {id: 'id', name: 'ID', width: 70, meta: sortable},\n  {id: 'name', name: 'Имя', primary: true, meta: sortable},\n  {id: 'email', name: 'Email', meta: sortable},\n  {id: 'department', name: 'Отдел', meta: sortable},\n  {\n    id: 'status',\n    name: 'Статус',\n    meta: sortable,\n    template: (item) => (\n      <Label theme={STATUS_LABELS[item.status].theme}>{STATUS_LABELS[item.status].text}</Label>\n    ),\n  },\n  {\n    id: 'salary',\n    name: 'Зарплата, ₽',\n    align: 'end',\n    meta: sortable,\n    template: (item) => salaryFormat.format(item.salary),\n  },\n  {\n    id: 'hiredAt',\n    name: 'Принят',\n    meta: sortable,\n    template: (item) => dateFormat.format(new Date(item.hiredAt)),\n  },\n];\n\nconst PAGE_SIZE_OPTIONS = [5, 10, 20];\n\nexport interface DataTableProps {\n  data: Employee[];\n}\n\nexport function DataTable({data}: DataTableProps) {\n  const [sortState, setSortState] = React.useState<TableSortState>([]);\n  const [page, setPage] = React.useState(1);\n  const [pageSize, setPageSize] = React.useState(10);\n  // Selection is stored by row id, so it survives sorting and page changes.\n  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);\n\n  const sorted = React.useMemo(() => {\n    const [current] = sortState;\n    if (!current) return data;\n    const cmp = compare[current.column];\n    if (!cmp) return data;\n    const direction = current.order === 'desc' ? -1 : 1;\n    return [...data].sort((a, b) => direction * cmp(a, b));\n  }, [data, sortState]);\n\n  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));\n  const currentPage = Math.min(page, pageCount);\n  const pageData = React.useMemo(\n    () => sorted.slice((currentPage - 1) * pageSize, currentPage * pageSize),\n    [sorted, currentPage, pageSize],\n  );\n\n  const handleSortChange = (next: TableSortState) => {\n    // Single-column sorting: keep only the most recently clicked column.\n    setSortState(next.slice(-1));\n    setPage(1);\n  };\n\n  const handlePaginationUpdate = (nextPage: number, nextPageSize: number) => {\n    if (nextPageSize !== pageSize) {\n      setPageSize(nextPageSize);\n      setPage(1);\n    } else {\n      setPage(nextPage);\n    }\n  };\n\n  const allSelected = data.length > 0 && selectedIds.length === data.length;\n\n  return (\n    <Flex direction=\"column\" gap={4}>\n      <Flex alignItems=\"center\" gap={3} style={{minHeight: 36}}>\n        <Text variant=\"body-2\" color=\"secondary\">\n          Выбрано: {selectedIds.length} из {data.length}\n        </Text>\n        <Button\n          view=\"outlined\"\n          size=\"m\"\n          disabled={allSelected}\n          onClick={() => setSelectedIds(data.map((item) => item.id))}\n        >\n          Выбрать все ({data.length})\n        </Button>\n        <Button\n          view=\"flat\"\n          size=\"m\"\n          disabled={selectedIds.length === 0}\n          onClick={() => setSelectedIds([])}\n        >\n          Снять выделение\n        </Button>\n      </Flex>\n\n      <SortableSelectableTable\n        data={pageData}\n        columns={columns}\n        getRowId=\"id\"\n        sortState={sortState}\n        onSortStateChange={handleSortChange}\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        emptyMessage=\"Нет данных\"\n      />\n\n      <Pagination\n        page={currentPage}\n        pageSize={pageSize}\n        total={sorted.length}\n        pageSizeOptions={PAGE_SIZE_OPTIONS}\n        onUpdate={handlePaginationUpdate}\n      />\n    </Flex>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {Text} from '@gravity-ui/uikit';\n\nimport {DataTable} from './DataTable';\nimport {generateEmployees} from './data';\n\nconst employees = generateEmployees(57);\n\nexport function App() {\n  return (\n    <div style={{padding: 24, maxWidth: 1100, margin: '0 auto'}}>\n      <Text variant=\"header-1\" as=\"h1\" style={{margin: '0 0 16px'}}>\n        Сотрудники\n      </Text>\n      <DataTable data={employees} />\n    </div>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && ls node_modules | grep -E \"^(jsdom|happy-dom|playwright|puppeteer)\" ; ls node_modules/@testing-library 2>/dev/null; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 14,
+      "outputTokens": 5276,
+      "cacheReadTokens": 147764,
+      "cacheWriteTokens": 17443,
+      "totalTokens": 170497
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

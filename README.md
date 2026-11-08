@@ -56,6 +56,30 @@ it on any UI task here.
 For Claude Code, also add `@AGENTS.md` to `CLAUDE.md` (it reads `CLAUDE.md`
 natively, not `AGENTS.md`).
 
+## Evaluation
+
+Does the skill help? Ten models solved 17 Gravity UI tasks four times each without the skill and four times
+with it. A run passes when the project builds, deterministic checks pass (the right `@gravity-ui/*` package,
+no hand-rolled replacement) and an LLM judge confirms the intended Gravity UI solution.
+
+| Model | Agent CLI | Without skill | With skill |
+|---|---|---|---|
+| Claude Sonnet 5.5 | Claude Code | 65% | 99% |
+| Claude Fable 5.1 | Claude Code | 68% | 96% |
+| Claude Opus 5.5 | Claude Code | 72% | 94% |
+| GPT-6 Astra | Codex | 28% | 91% |
+| Claude Haiku 5.5 | Claude Code | 66% | 88% |
+| DeepSeek v4 Pro | Codex | 56% | 88% |
+| GLM 5.3 Flash | Codex | 48% | 85% |
+| GPT-6.1 Sol | Codex | 25% | 85% |
+| GPT-6 Luna | Codex | 15% | 85% |
+| Kimi K3 | Claude Code | 50% | 79% |
+
+All models together: **49% → 89%**. Without the skill agents know `@gravity-ui/uikit` and hand-write the rest
+(navigation, tables, charts, dashboards, landing pages, the markdown editor, the date picker); with it they
+route to the right package. Method, per-task numbers, screenshots of every generated UI and the harness to
+re-run it are in [`evals/`](evals/README.md).
+
 ## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for details.

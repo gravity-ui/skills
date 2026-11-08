@@ -1,0 +1,216 @@
+/* Widget chrome + chart ink. Series colors live in colors.ts (validated
+   palette instance); text wears text tokens, never a series color. */
+
+.ck-widget {
+  --ck-surface: #fcfcfb;
+  --ck-text-primary: #0b0b0b;
+  --ck-text-secondary: #52514e;
+  --ck-muted: #898781;
+  --ck-grid: #e1e0d9;
+  --ck-baseline: #c3c2b7;
+  --ck-border: rgba(11, 11, 11, 0.1);
+
+  color-scheme: light;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 12px;
+  padding: 16px 20px 12px;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--ck-text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .ck-widget {
+    color-scheme: dark;
+    --ck-surface: #1a1a19;
+    --ck-text-primary: #f0efec;
+    --ck-text-secondary: #c3c2b7;
+    --ck-grid: #2c2c2a;
+    --ck-baseline: #383835;
+    --ck-border: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.ck-widget__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.ck-widget__controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ck-widget__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* chart area */
+
+.ck-chart {
+  position: relative;
+  width: 100%;
+}
+
+.ck-grid {
+  stroke: var(--ck-grid);
+  stroke-width: 1;
+}
+
+.ck-baseline {
+  stroke: var(--ck-baseline);
+  stroke-width: 1;
+}
+
+.ck-crosshair {
+  stroke: var(--ck-baseline);
+  stroke-width: 1;
+}
+
+.ck-ring {
+  stroke: var(--ck-surface);
+  stroke-width: 2;
+}
+
+.ck-axis-label {
+  fill: var(--ck-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-axis-label--abs {
+  position: absolute;
+  color: var(--ck-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.ck-value-label {
+  fill: var(--ck-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* tooltip */
+
+.ck-tooltip {
+  position: absolute;
+  z-index: 2;
+  min-width: 140px;
+  max-width: 240px;
+  padding: 8px 10px;
+  background: var(--ck-surface);
+  border: 1px solid var(--ck-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.ck-tooltip__title {
+  color: var(--ck-text-secondary);
+  margin-bottom: 4px;
+}
+
+.ck-tooltip__row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 1px 0;
+}
+
+.ck-tooltip__key {
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+  align-self: center;
+  flex: none;
+}
+
+.ck-tooltip__name {
+  color: var(--ck-text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ck-tooltip__value {
+  color: var(--ck-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* legend */
+
+.ck-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 2px 0 6px;
+}
+
+.ck-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  color: var(--ck-text-primary);
+}
+
+.ck-legend__item[data-off] {
+  opacity: 0.4;
+}
+
+.ck-legend__key {
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* table view */
+
+.ck-table-wrap {
+  max-height: 360px;
+  overflow: auto;
+}
+
+.ck-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ck-table th {
+  position: sticky;
+  top: 0;
+  background: var(--ck-surface);
+  color: var(--ck-text-secondary);
+  text-align: left;
+  font-weight: 500;
+  padding: 6px 12px 6px 0;
+  border-bottom: 1px solid var(--ck-baseline);
+}
+
+.ck-table td {
+  padding: 4px 12px 4px 0;
+  border-bottom: 1px solid var(--ck-grid);
+  color: var(--ck-text-primary);
+}

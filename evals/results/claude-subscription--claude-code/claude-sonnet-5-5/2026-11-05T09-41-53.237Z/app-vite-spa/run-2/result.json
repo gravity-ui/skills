@@ -1,0 +1,85 @@
+{
+  "status": "passed",
+  "duration": 759.295,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 18,
+    "outputTokens": 7279,
+    "cacheReadTokens": 197968,
+    "cacheWriteTokens": 17286,
+    "totalTokens": 222551
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 8,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -30 && node -v && npm -v",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html vite.config.ts tsconfig.json .gitignore && find src __agent_eval__ -type f | head -50 && for f in $(find src -type f); do echo \"--- $f\"; cat $f; done; ls node_modules | grep -i router",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/ && ls node_modules/@gravity-ui/uikit/build/esm/components/theme/ && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider/ThemeProvider.js && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider/ThemeProvider.d.ts; cat __agent_eval__/run.mjs | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.js ThemeProvider.d.ts; ls ../../../../../icons | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && ls node_modules/@gravity-ui/icons/ | head; ls node_modules/@gravity-ui/icons/build/esm/icons 2>/dev/null | grep -E \"^(Sun|Moon|House|Gear|Circle(Info|Question))\\.js$\"; ls node_modules/@gravity-ui/icons/build/esm 2>/dev/null | head -3; grep -n \"icons\" package.json node_modules/@gravity-ui/uikit/package.json | head",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/pages && cat > src/theme.tsx <<'EOF'\nimport React from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nexport type AppTheme = 'light' | 'dark';\n\nconst STORAGE_KEY = 'app-theme';\n\ninterface ThemeApi {\n  theme: AppTheme;\n  toggleTheme: () => void;\n}\n\nconst ThemeApiContext = React.createContext<ThemeApi | null>(null);\n\nfunction getInitialTheme(): AppTheme {\n  try {\n    const saved = localStorage.getItem(STORAGE_KEY);\n    if (saved === 'light' || saved === 'dark') return saved;\n  } catch {\n    // localStorage может быть недоступен — просто идём дальше\n  }\n  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n}\n\nexport function AppThemeProvider({ children }: { children: React.ReactNode }) {\n  const [theme, setTheme] = React.useState<AppTheme>(getInitialTheme);\n\n  React.useEffect(() => {\n    try {\n      localStorage.setItem(STORAGE_KEY, theme);\n    } catch {\n      // ignore\n    }\n  }, [theme]);\n\n  const api = React.useMemo<ThemeApi>(\n    () => ({\n      theme,\n      toggleTheme: () => setTheme((t) => (t === 'light' ? 'dark' : 'light')),\n    }),\n    [theme],\n  );\n\n  return (\n    <ThemeApiContext.Provider value={api}>\n      <ThemeProvider theme={theme}>{children}</ThemeProvider>\n    </ThemeApiContext.Provider>\n  );\n}\n\nexport function useAppTheme(): ThemeApi {\n  const ctx = React.useContext(ThemeApiContext);\n  if (!ctx) throw new Error('useAppTheme must be used inside <AppThemeProvider>');\n  return ctx;\n}\nEOF\ncat > src/router.ts <<'EOF'\nimport React from 'react';\n\n// Минимальный hash-роутер: не требует серверных настроек и доп. зависимостей.\nexport type RoutePath = '/' | '/features' | '/about';\n\nexport const ROUTES: { path: RoutePath; title: string }[] = [\n  { path: '/', title: 'Главная' },\n  { path: '/features', title: 'Возможности' },\n  { path: '/about', title: 'О проекте' },\n];\n\nfunction readPath(): RoutePath {\n  const raw = window.location.hash.replace(/^#/, '') || '/';\n  return ROUTES.some((r) => r.path === raw) ? (raw as RoutePath) : '/';\n}\n\nexport function useRoute(): RoutePath {\n  const [path, setPath] = React.useState<RoutePath>(readPath);\n\n  React.useEffect(() => {\n    const onChange = () => setPath(readPath());\n    window.addEventListener('hashchange', onChange);\n    return () => window.removeEventListener('hashchange', onChange);\n  }, []);\n\n  return path;\n}\n\nexport const hrefTo = (path: RoutePath) => `#${path}`;\nEOF\ncat > src/pages/Home.tsx <<'EOF'\nimport { Button, Card, Text } from '@gravity-ui/uikit';\nimport { hrefTo } from '../router';\nimport { useAppTheme } from '../theme';\n\nexport function Home() {\n  const { theme } = useAppTheme();\n  return (\n    <div className=\"stack\">\n      <Text variant=\"display-1\" as=\"h1\">\n        Добро пожаловать\n      </Text>\n      <Text variant=\"body-2\" color=\"secondary\">\n        Небольшое приложение на React и Gravity UI: три страницы, навигация и переключатель темы.\n      </Text>\n      <Card type=\"container\" view=\"outlined\" className=\"card\">\n        <Text variant=\"subheader-2\">Текущая тема</Text>\n        <Text as=\"p\">\n          Сейчас включена {theme === 'dark' ? 'тёмная' : 'светлая'} тема. Переключатель находится в\n          шапке — выбор сохраняется между визитами.\n        </Text>\n        <div>\n          <Button view=\"action\" size=\"l\" href={hrefTo('/features')}>\n            Смотреть возможности\n          </Button>\n        </div>\n      </Card>\n    </div>\n  );\n}\nEOF\ncat > src/pages/Features.tsx <<'EOF'\nimport React from 'react';\nimport { Button, Card, Text } from '@gravity-ui/uikit';\n\nconst FEATURES = [\n  { title: 'Навигация', text: 'Переход между страницами через hash-роутер, работает кнопка «Назад».' },\n  { title: 'Две темы', text: 'Светлая и тёмная темы Gravity UI, по умолчанию — как в системе.' },\n  { title: 'Запоминание', text: 'Выбранная тема сохраняется в localStorage.' },\n];\n\nexport function Features() {\n  const [count, setCount] = React.useState(0);\n\n  return (\n    <div className=\"stack\">\n      <Text variant=\"display-1\" as=\"h1\">\n        Возможности\n      </Text>\n      <div className=\"grid\">\n        {FEATURES.map((f) => (\n          <Card key={f.title} type=\"container\" view=\"outlined\" className=\"card\">\n            <Text variant=\"subheader-2\">{f.title}</Text>\n            <Text as=\"p\" color=\"secondary\">\n              {f.text}\n            </Text>\n          </Card>\n        ))}\n      </div>\n      <Card type=\"container\" view=\"filled\" className=\"card\">\n        <Text variant=\"subheader-2\">Счётчик</Text>\n        <Text as=\"p\">Нажатий: {count}</Text>\n        <div className=\"row\">\n          <Button view=\"action\" onClick={() => setCount((c) => c + 1)}>\n            Увеличить\n          </Button>\n          <Button view=\"outlined\" onClick={() => setCount(0)} disabled={count === 0}>\n            Сбросить\n          </Button>\n        </div>\n      </Card>\n    </div>\n  );\n}\nEOF\ncat > src/pages/About.tsx <<'EOF'\nimport { Text } from '@gravity-ui/uikit';\n\nexport function About() {\n  return (\n    <div className=\"stack\">\n      <Text variant=\"display-1\" as=\"h1\">\n        О проекте\n      </Text>\n      <Text as=\"p\" variant=\"body-2\">\n        Демонстрационное приложение: Vite, React 18, TypeScript и библиотека компонентов Gravity UI.\n      </Text>\n      <Text as=\"p\" color=\"secondary\">\n        Страницы лежат в <code>src/pages</code>, роутер — в <code>src/router.ts</code>, управление темой —\n        в <code>src/theme.tsx</code>.\n      </Text>\n    </div>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { Button, Switch, Text } from '@gravity-ui/uikit';\nimport { ROUTES, hrefTo, useRoute } from './router';\nimport type { RoutePath } from './router';\nimport { useAppTheme } from './theme';\nimport { Home } from './pages/Home';\nimport { Features } from './pages/Features';\nimport { About } from './pages/About';\nimport './app.css';\n\nconst PAGES: Record<RoutePath, () => React.JSX.Element> = {\n  '/': Home,\n  '/features': Features,\n  '/about': About,\n};\n\nexport function App() {\n  const route = useRoute();\n  const { theme, toggleTheme } = useAppTheme();\n  const Page = PAGES[route];\n\n  React.useEffect(() => {\n    const title = ROUTES.find((r) => r.path === route)?.title ?? '';\n    document.title = `${title} · Gravity UI app`;\n  }, [route]);\n\n  return (\n    <div className=\"layout\">\n      <header className=\"header\">\n        <Text variant=\"header-1\" className=\"logo\">\n          Gravity App\n        </Text>\n        <nav className=\"nav\" aria-label=\"Основная навигация\">\n          {ROUTES.map((r) => (\n            <Button\n              key={r.path}\n              href={hrefTo(r.path)}\n              view={r.path === route ? 'normal' : 'flat'}\n              selected={r.path === route}\n              extraProps={r.path === route ? { 'aria-current': 'page' } : undefined}\n            >\n              {r.title}\n            </Button>\n          ))}\n        </nav>\n        <Switch checked={theme === 'dark'} onUpdate={toggleTheme} content=\"Тёмная тема\" />\n      </header>\n      <main className=\"content\">\n        <Page />\n      </main>\n    </div>\n  );\n}\nEOF\ncat > src/app.css <<'EOF'\n.layout {\n  min-height: 100vh;\n  background: var(--g-color-base-background);\n  color: var(--g-color-text-primary);\n}\n\n.header {\n  position: sticky;\n  top: 0;\n  z-index: 10;\n  display: flex;\n  align-items: center;\n  gap: 24px;\n  padding: 12px 24px;\n  background: var(--g-color-base-background);\n  border-bottom: 1px solid var(--g-color-line-generic);\n}\n\n.logo {\n  white-space: nowrap;\n}\n\n.nav {\n  display: flex;\n  flex: 1;\n  flex-wrap: wrap;\n  gap: 4px;\n}\n\n.content {\n  max-width: 880px;\n  margin: 0 auto;\n  padding: 32px 24px 64px;\n}\n\n.stack {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n\n.row {\n  display: flex;\n  gap: 8px;\n}\n\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 16px;\n}\n\n.card {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 20px;\n}\n\n@media (max-width: 600px) {\n  .header {\n    flex-wrap: wrap;\n    gap: 8px 16px;\n  }\n  .nav {\n    order: 3;\n    flex-basis: 100%;\n  }\n}\nEOF\npython3 - <<'EOF'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\",\"\")\ns=s.replace(\"import { App } from './App';\",\"import { App } from './App';\\nimport { AppThemeProvider } from './theme';\")\ns=s.replace('<ThemeProvider theme=\"light\">','<AppThemeProvider>').replace('</ThemeProvider>','</AppThemeProvider>')\nopen(p,'w').write(s)\nEOF\ncat src/main.tsx; npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -8 && rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 18,
+      "outputTokens": 7279,
+      "cacheReadTokens": 197968,
+      "cacheWriteTokens": 17286,
+      "totalTokens": 222551
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+.cpu-load-chart {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+/*
+ * The plot is taken out of the flow: the canvas gets explicit pixel sizes,
+ * and it must not feed them back into the size of the container it observes.
+ */
+.cpu-load-chart__plot {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.2s;
+}
+
+.cpu-load-chart__plot_loading {
+    opacity: 0.5;
+}
+
+.cpu-load-chart__status {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+/* Yagr reads these variables on every draw, so Gravity tokens follow the theme. */
+.cpu-load-chart .yagr {
+    --yagr-font-family: var(--g-font-family-sans);
+    --yagr-background: transparent;
+    --yagr-grid: var(--g-color-line-generic);
+    --yagr-axis-stroke: var(--g-color-text-secondary);
+}
+
+.cpu-load-chart .yagr .u-select {
+    background: var(--g-color-base-info-light);
+}
+
+/* Yagr renders the tooltip into <body>, outside of the chart container. */
+.yagr-tooltip.cpu-load-chart__tooltip {
+    padding: 6px 10px;
+    border-radius: var(--g-border-radius-m, 6px);
+    color: var(--g-color-text-primary);
+    background-color: var(--g-color-base-float);
+    box-shadow:
+        0 0 0 1px var(--g-color-line-generic),
+        0 4px 12px var(--g-color-sfx-shadow);
+    font-family: var(--g-font-family-sans);
+    font-variant-numeric: tabular-nums;
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .__title {
+    margin-bottom: 2px;
+    color: var(--g-color-text-secondary);
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .yagr-tooltip__item {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Line key instead of a dot: the series is drawn as a line. */
+.yagr-tooltip.cpu-load-chart__tooltip .yagr-tooltip__mark {
+    width: 12px;
+    height: 2px;
+    border-radius: 1px;
+}

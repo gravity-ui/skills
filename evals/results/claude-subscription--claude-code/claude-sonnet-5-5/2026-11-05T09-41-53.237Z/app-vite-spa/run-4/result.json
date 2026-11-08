@@ -1,0 +1,71 @@
+{
+  "status": "failed",
+  "duration": 174.076,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 10,
+    "outputTokens": 5062,
+    "cacheReadTokens": 90179,
+    "cacheWriteTokens": 10473,
+    "totalTokens": 105724
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 4,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 4,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -20; node -v; npm -v",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html tsconfig.json vite.config.ts .gitignore; find src __agent_eval__ -type f | head -50; for f in $(find src -type f); do echo \"== $f\"; cat $f; done; ls node_modules | grep -i router",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/pages && \ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\nimport './app.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\n// ThemeProvider lives in App, because the theme is switchable at runtime.\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\ncat > src/useHashRoute.ts <<'EOF'\nimport { useEffect, useState } from 'react';\n\nexport type RoutePath = '/' | '/features' | '/about';\n\nexport const ROUTES: { path: RoutePath; title: string }[] = [\n  { path: '/', title: 'Главная' },\n  { path: '/features', title: 'Возможности' },\n  { path: '/about', title: 'О проекте' },\n];\n\nfunction readPath(): RoutePath {\n  const raw = window.location.hash.replace(/^#/, '') || '/';\n  return (ROUTES.find((r) => r.path === raw)?.path ?? '/') as RoutePath;\n}\n\n/** Minimal hash router: works on any static host, no extra dependencies. */\nexport function useHashRoute(): RoutePath {\n  const [path, setPath] = useState<RoutePath>(readPath);\n\n  useEffect(() => {\n    const onChange = () => setPath(readPath());\n    window.addEventListener('hashchange', onChange);\n    return () => window.removeEventListener('hashchange', onChange);\n  }, []);\n\n  return path;\n}\nEOF\ncat > src/useTheme.ts <<'EOF'\nimport { useCallback, useEffect, useState } from 'react';\n\nexport type AppTheme = 'light' | 'dark';\n\nconst STORAGE_KEY = 'app-theme';\n\nfunction initialTheme(): AppTheme {\n  try {\n    const saved = localStorage.getItem(STORAGE_KEY);\n    if (saved === 'light' || saved === 'dark') return saved;\n  } catch {\n    /* storage unavailable */\n  }\n  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n}\n\nexport function useTheme() {\n  const [theme, setTheme] = useState<AppTheme>(initialTheme);\n\n  useEffect(() => {\n    try {\n      localStorage.setItem(STORAGE_KEY, theme);\n    } catch {\n      /* ignore */\n    }\n  }, [theme]);\n\n  const toggle = useCallback(() => setTheme((t) => (t === 'dark' ? 'light' : 'dark')), []);\n\n  return { theme, toggle };\n}\nEOF\ncat > src/pages/Home.tsx <<'EOF'\nimport { Button, Card, Text } from '@gravity-ui/uikit';\n\nexport function Home() {\n  return (\n    <div className=\"page\">\n      <Text variant=\"display-2\" as=\"h1\">\n        Добро пожаловать\n      </Text>\n      <Text variant=\"body-2\" color=\"secondary\" as=\"p\">\n        Небольшое приложение из трёх страниц: навигация в шапке и переключатель светлой и тёмной\n        темы. Выбор темы сохраняется между визитами.\n      </Text>\n      <div className=\"row\">\n        <Button view=\"action\" size=\"l\" href=\"#/features\">\n          Смотреть возможности\n        </Button>\n        <Button view=\"outlined\" size=\"l\" href=\"#/about\">\n          О проекте\n        </Button>\n      </div>\n      <Card type=\"container\" view=\"outlined\" className=\"card\">\n        <Text variant=\"subheader-2\" as=\"h2\">\n          Совет\n        </Text>\n        <Text as=\"p\">\n          Если тема ещё не выбрана, используется системная настройка (prefers-color-scheme).\n        </Text>\n      </Card>\n    </div>\n  );\n}\nEOF\ncat > src/pages/Features.tsx <<'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\n\nconst FEATURES = [\n  { title: 'Три страницы', text: 'Главная, «Возможности» и «О проекте» с общей шапкой.' },\n  { title: 'Hash-навигация', text: 'Ссылки вида #/about работают без сервера, кнопка «Назад» тоже.' },\n  { title: 'Две темы', text: 'Светлая и тёмная темы Gravity UI переключаются мгновенно.' },\n  { title: 'Запоминание выбора', text: 'Тема хранится в localStorage.' },\n];\n\nexport function Features() {\n  return (\n    <div className=\"page\">\n      <Text variant=\"display-1\" as=\"h1\">\n        Возможности\n      </Text>\n      <div className=\"grid\">\n        {FEATURES.map((f) => (\n          <Card key={f.title} type=\"container\" view=\"outlined\" className=\"card\">\n            <Text variant=\"subheader-2\" as=\"h2\">\n              {f.title}\n            </Text>\n            <Text color=\"secondary\" as=\"p\">\n              {f.text}\n            </Text>\n          </Card>\n        ))}\n      </div>\n    </div>\n  );\n}\nEOF\ncat > src/pages/About.tsx <<'EOF'\nimport { Label, Text } from '@gravity-ui/uikit';\n\nexport function About() {\n  return (\n    <div className=\"page\">\n      <Text variant=\"display-1\" as=\"h1\">\n        О проекте\n      </Text>\n      <Text variant=\"body-2\" color=\"secondary\" as=\"p\">\n        Демонстрационное SPA на React, Vite и Gravity UI.\n      </Text>\n      <div className=\"row\">\n        <Label theme=\"info\">React 18</Label>\n        <Label theme=\"success\">Vite</Label>\n        <Label theme=\"normal\">Gravity UI</Label>\n        <Label theme=\"unknown\">TypeScript</Label>\n      </div>\n    </div>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Switch, Text, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { About } from './pages/About';\nimport { Features } from './pages/Features';\nimport { Home } from './pages/Home';\nimport { ROUTES, RoutePath, useHashRoute } from './useHashRoute';\nimport { useTheme } from './useTheme';\n\nconst PAGES: Record<RoutePath, () => JSX.Element> = {\n  '/': Home,\n  '/features': Features,\n  '/about': About,\n};\n\nexport function App() {\n  const { theme, toggle } = useTheme();\n  const path = useHashRoute();\n  const Page = PAGES[path];\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div className=\"layout\">\n        <header className=\"header\">\n          <nav className=\"nav\" aria-label=\"Основная навигация\">\n            {ROUTES.map((r) => (\n              <a\n                key={r.path}\n                href={`#${r.path}`}\n                className={'nav__link' + (r.path === path ? ' nav__link_active' : '')}\n                aria-current={r.path === path ? 'page' : undefined}\n              >\n                {r.title}\n              </a>\n            ))}\n          </nav>\n          <Switch checked={theme === 'dark'} onUpdate={toggle} size=\"l\" content=\"Тёмная тема\" />\n        </header>\n        <main className=\"main\">\n          <Page />\n        </main>\n        <footer className=\"footer\">\n          <Text color=\"secondary\" variant=\"caption-2\">\n            Текущая тема: {theme === 'dark' ? 'тёмная' : 'светлая'}\n          </Text>\n        </footer>\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\ncat > src/app.css <<'EOF'\nbody {\n  margin: 0;\n}\n\n.layout {\n  min-height: 100vh;\n  display: flex;\n  flex-direction: column;\n  background: var(--g-color-base-background);\n  color: var(--g-color-text-primary);\n}\n\n.header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 16px;\n  padding: 12px 24px;\n  border-bottom: 1px solid var(--g-color-line-generic);\n}\n\n.nav {\n  display: flex;\n  gap: 4px;\n}\n\n.nav__link {\n  padding: 8px 14px;\n  border-radius: 8px;\n  color: var(--g-color-text-secondary);\n  text-decoration: none;\n  font-weight: 500;\n}\n\n.nav__link:hover {\n  background: var(--g-color-base-simple-hover);\n  color: var(--g-color-text-primary);\n}\n\n.nav__link_active {\n  background: var(--g-color-base-selection);\n  color: var(--g-color-text-brand);\n}\n\n.main {\n  flex: 1;\n  padding: 32px 24px;\n}\n\n.page {\n  max-width: 800px;\n  margin: 0 auto;\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n}\n\n.row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\n  gap: 16px;\n}\n\n.card {\n  padding: 16px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n.footer {\n  padding: 12px 24px;\n  border-top: 1px solid var(--g-color-line-generic);\n}\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10,
+      "outputTokens": 5062,
+      "cacheReadTokens": 90179,
+      "cacheWriteTokens": 10473,
+      "totalTokens": 105724
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

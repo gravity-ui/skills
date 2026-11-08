@@ -1,0 +1,83 @@
+{
+  "status": "failed",
+  "duration": 339.516,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 16,
+    "outputTokens": 2466,
+    "cacheReadTokens": 151744,
+    "cacheWriteTokens": 10315,
+    "totalTokens": 164541
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -20",
+        "success": true
+      },
+      {
+        "command": "cat index.html package.json vite.config.ts tsconfig.json .gitignore; ls -R src __agent_eval__; for f in $(find src -type f); do echo \"--- $f\"; cat $f; done",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm/components | grep -E \"^(Flex|Text|Button|Card|Container|Row|Col|Link|Theme)\" ; grep -n \"variant\" build/esm/components/Text/types.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "ls build/esm/components | tr '\\n' ' '; echo; grep -rn \"TextVariant\\b\" build/esm/components/Text/*.d.ts | head -3; grep -n \"variant\" -r build/esm/components/Text/Text.d.ts | head; ls build/esm/components/layout 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,80p layout/Flex/Flex.d.ts; grep -n \"view\\|type\\|theme\" Card/Card.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/App.tsx <<'EOF'\nimport { Button, Card, Flex, Text } from '@gravity-ui/uikit';\n\nconst BENEFITS = [\n  {\n    title: 'Учёт в один клик',\n    text: 'Запускайте таймер на задаче и забудьте о таблицах — время записывается само.',\n  },\n  {\n    title: 'Прозрачность для команды',\n    text: 'Видно, сколько часов уходит на проекты и кто чем занят, без лишних созвонов.',\n  },\n  {\n    title: 'Готовые отчёты',\n    text: 'Сводки по людям, проектам и неделям — для планирования и счетов клиентам.',\n  },\n];\n\nexport function App() {\n  return (\n    <Flex\n      as=\"main\"\n      direction=\"column\"\n      alignItems=\"center\"\n      gap=\"10\"\n      style={{ maxWidth: 960, margin: '0 auto', padding: '80px 24px' }}\n    >\n      <Flex as=\"section\" direction=\"column\" alignItems=\"center\" gap=\"4\" style={{ textAlign: 'center' }}>\n        <Text as=\"h1\" variant=\"display-3\">\n          Учёт времени для команд без лишней рутины\n        </Text>\n        <Text as=\"p\" variant=\"body-3\" color=\"secondary\" style={{ maxWidth: 560 }}>\n          Простой инструмент, который показывает, куда уходит время команды, — и помогает\n          планировать реалистичнее.\n        </Text>\n      </Flex>\n\n      <Flex as=\"section\" gap=\"4\" wrap style={{ width: '100%' }}>\n        {BENEFITS.map(({ title, text }) => (\n          <Card\n            key={title}\n            type=\"container\"\n            view=\"outlined\"\n            style={{ flex: '1 1 240px', padding: 20 }}\n          >\n            <Flex direction=\"column\" gap=\"2\">\n              <Text as=\"h2\" variant=\"subheader-3\">\n                {title}\n              </Text>\n              <Text as=\"p\" variant=\"body-2\" color=\"secondary\">\n                {text}\n              </Text>\n            </Flex>\n          </Card>\n        ))}\n      </Flex>\n\n      <Flex as=\"section\" justifyContent=\"center\">\n        <Button view=\"action\" size=\"xl\" href=\"#\">\n          Попробовать бесплатно\n        </Button>\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nsed -i 's/lang=\"en\"/lang=\"ru\"/; s/<title>.*<\\/title>/<title>Учёт времени для команд<\\/title>/' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 16,
+      "outputTokens": 2466,
+      "cacheReadTokens": 151744,
+      "cacheWriteTokens": 10315,
+      "totalTokens": 164541
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

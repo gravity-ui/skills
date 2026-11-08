@@ -1,0 +1,319 @@
+{
+  "status": "passed",
+  "duration": 896.942,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 174,
+    "outputTokens": 72850,
+    "cacheReadTokens": 8442767,
+    "cacheWriteTokens": 138242,
+    "totalTokens": 8654033
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 54,
+    "toolCalls": {
+      "file_read": 4,
+      "file_write": 10,
+      "file_edit": 9,
+      "shell": 62,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 86,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz/references/palette.md",
+      "/tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz/references/marks-and-anatomy.md",
+      "/tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz/references/anti-patterns.md",
+      "/tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz/references/interaction.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/viz/types.ts",
+      "/home/sandbox/workspace/src/viz/palette.ts",
+      "/home/sandbox/workspace/src/viz/series.ts",
+      "/home/sandbox/workspace/src/viz/engines.ts",
+      "/home/sandbox/workspace/src/viz/adapters/sales.ts",
+      "/home/sandbox/workspace/src/viz/adapters/monitoring.ts",
+      "/home/sandbox/workspace/src/viz/VizWidget.tsx",
+      "/home/sandbox/workspace/src/viz/VizWidget.css",
+      "/home/sandbox/workspace/src/viz/demo-data.ts",
+      "/home/sandbox/workspace/src/viz/__tests__/adapters.test.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && git status --short && git log --oneline | head -5 && ls -la && cat package.json 2>/dev/null; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in index.html package.json tsconfig.json vite.config.ts .gitignore src/App.tsx src/main.tsx src/vite-env.d.ts __agent_eval__/run.mjs; do echo \"=== $f\"; cat \"$f\"; echo; done; echo \"=== node_modules top-level\"; ls node_modules | grep -v '^\\.' | tr '\\n' ' '; echo; ls node_modules/@gravity-ui 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz && ls -R . | head -40; echo ---; timeout 25 npm view uplot version 2>&1 | tail -2; echo \"exit=$?\"; cd /home/sandbox/workspace && node --version && npm --version",
+        "success": true
+      },
+      {
+        "command": "for p in @gravity-ui/chartkit @gravity-ui/charts @gravity-ui/yagr; do echo \"== $p\"; timeout 30 npm view $p version peerDependencies dependencies 2>/dev/null | head -40; done; echo; timeout 30 npm view @gravity-ui/chartkit@latest exports 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "timeout 280 npm install @gravity-ui/chartkit@8.12.0 2>&1 | tail -15; echo \"exit=$?\"; cat package.json | sed -n '1,25p'; ls node_modules/@gravity-ui/",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit && cat package.json | python3 -c \"import json,sys;d=json.load(sys.stdin);print(d.get('version'),d.get('types'),d.get('exports',{}).keys() if isinstance(d.get('exports'),dict) else '');print(d.get('peerDependencies'))\"; find . -name \"*.d.ts\" | grep -v node_modules | head -80; echo; cat build/index.d.ts 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat components/ChartKit.d.ts; echo ----; cat types/index.d.ts; echo ----; cat types/widget.d.ts | head -150; echo ----; cat plugins/gravity-charts/index.d.ts plugins/yagr/index.d.ts plugins/gravity-charts/types.d.ts | head -150",
+        "success": true
+      },
+      {
+        "command": "cat libs/settings/settings.d.ts; echo ----; cat libs/index.d.ts; echo ----; cat plugins/yagr/types.d.ts | head -150; echo ----; ls ../; ls ../build | head; ls ../build/plugins/yagr; grep -o \"plugins[^;]\\{0,200\\}\" index.js 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit && grep -n -i \"plugin\" README.md | head -40; echo ----; cat build/plugins/gravity-charts/index.js | head -c 1500; echo; echo ----; grep -rl \"settings.get(\\\"plugins\\\")\\|get('plugins')\\|get(\\\"plugins\\\")\" build --include=*.js | head; ",
+        "success": true
+      },
+      {
+        "command": "sed -n 40,140p README.md; echo ----; ls build/plugins/yagr/renderer; sed -n 1,80p build/plugins/yagr/renderer/YagrWidget.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && ls yagr 2>/dev/null; ls chartkit/node_modules 2>/dev/null; find / -path /proc -prune -o -type d \\( -name yagr -o -name charts \\) -path \"*@gravity-ui*\" -print 2>/dev/null | head; ",
+        "success": true
+      },
+      {
+        "command": "grep -n '\"version\"' yagr/package.json chartkit/node_modules/@gravity-ui/charts/package.json; ls yagr/typings; echo ----; grep -n -i \"timeline\\|RawSerieData\\|interface MinimalValidConfig\\|export interface YagrConfig\\|scales\\|timeZone\" yagr/typings/*.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/yagr && ls dist | head; grep -rn \"timeline\" typings/ dist/*.d.ts dist/**/*.d.ts 2>/dev/null | head -30; find . -name \"*.d.ts\" | grep -v resize | head -20; grep -n '\"types\"\\|\"typings\"' package.json",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/yagr/dist && sed -n 1,140p YagrCore/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "grep -n \"RawSerieData\\|interface.*SeriesOptions\\|type: \\|color\\|name\\|data:\" YagrCore/types.d.ts | sed -n 1,60p; echo ----; grep -n \"\" YagrCore/types.d.ts | grep -A12 \"export interface RawSerieData\\|export type RawSerieData\" | head -30; echo ----; grep -n \"\" YagrCore/types.d.ts | grep -A14 \"export interface Scale\\b\\|export type Scale\\b\\|interface Scale \" | head -30; echo ----; grep -rn \"timeline\" YagrCore/*.d.ts | head -5; grep -rn \"Scale\\|YagrChartOptions\" YagrCore/types.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && grep -n -i \"timeline\\|seconds\\|milli\\|scale:\" yagr/README.md | head -30; echo ----; cd chartkit/node_modules/@gravity-ui/charts && ls; grep -n -i \"datetime\\|xAxis\" README.md | head -20; ls build 2>/dev/null | head; find . -name \"types*.d.ts\" -path \"*build*\" | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist && ls | head -30; find . -name \"*.d.ts\" | grep -i \"types\\|index\" | head -20; grep -rn \"type ChartData\\b\\|interface ChartData\\b\" --include=*.d.ts . | head -5",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p cjs/core/types/index.d.ts | head -120; echo ----; grep -n \"type: 'datetime'\\|'datetime'\" config/chart-config.d.ts | head -5; grep -n \"interface LineSeries\\b\\|interface LineSeries \" config/chart-config.d.ts | head; grep -n \"xAxis?:\\|yAxis?:\\|legend?:\\|  axisX\\|xAxis\" config/chart-config.d.ts | head -10",
+        "success": true
+      },
+      {
+        "command": "grep -n \"export interface ChartXAxis\\|export interface ChartYAxis\" -A30 cjs/core/types/chart/axis.d.ts | grep -n \"type\\|dateFormat\\|labels\\|min\\|max\\|grid\\|title\" | head -30; grep -n \"'datetime'\\|\\\"datetime\\\"\" cjs/core/types/chart/axis.d.ts | head -3; grep -n \"export interface ChartSeriesLine\\|export interface ChartLineSeries\\|interface LineSeries\" -A6 cjs/core/types/chart/line.d.ts | head -30; grep -n \"lineWidth\\|marker\\|dash\\|connectNulls\\|tooltip\" cjs/core/types/chart/line.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz && sed -n 1,40p scripts/validate_palette.js | grep -n \"usage\\|Usage\\|--\" | head -30; echo ----; echo \"## 2 series light\"; node scripts/validate_palette.js \"#2a78d6,#eb6834\" --mode light 2>&1 | tail -30; echo \"## 2 series dark\"; node scripts/validate_palette.js \"#3987e5,#d95926\" --mode dark 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && grep -n \"plugins\" components/ChartKit.js | head -10; echo ----; grep -n \"plugins\" -A6 libs/settings/settings.js | head -30; echo ----; cat plugins/yagr/renderer/useWidgetData.js | head -80",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p plugins/yagr/renderer/utils.js; echo ----; sed -n 28,60p libs/settings/settings.js; echo ----; sed -n 1,40p components/ChartKit.js",
+        "success": true
+      },
+      {
+        "command": "grep -n \"msm\\|timeline\\|timeZone\" plugins/yagr/renderer/utils.js | head -40; echo ----; grep -n \"export const shapeYagrConfig\" -A40 plugins/yagr/renderer/utils.js | head -70",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/yagr/dist && grep -rn \"timeMultiplier\" --include=*.d.ts . | head -5; grep -rn \"timeMultiplier\" YagrCore/defaults.d.ts; grep -o \"timeMultiplier:[^,}]*\" index.js | head -3; cd ../../chartkit/build && sed -n 1,20p plugins/yagr/renderer/YagrWidget.js | head -5; grep -n \"chart\\b\\|timeMultiplier\\|legend\\|cursor\" plugins/yagr/types.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/yagr/dist && sed -n 175,215p YagrCore/types.d.ts; grep -rn \"timeMultiplier\" YagrCore/*.d.ts YagrCore/utils/*.d.ts | head; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && G=chartkit/node_modules/@gravity-ui/charts/dist/cjs; grep -rn \"formatter?:\\|valueFormat\\|format?:\" $G/core/types/chart/axis.d.ts $G/core/types/chart/tooltip.d.ts $G/core/types/chart/series.d.ts 2>/dev/null | head -12; echo ----; grep -n \"formatter\\|format\" $G/core/types/chart/line.d.ts | head -5; echo ----; grep -o \"SegmentedRadioGroup\\|Loader\\|Card\\b\\|Text\\b\\|Alert\\|Label\\b\" uikit/build/cjs/components/index.d.ts 2>/dev/null | sort -u | head; ls uikit/build | head -5",
+        "success": true
+      },
+      {
+        "command": "G=chartkit/node_modules/@gravity-ui/charts/dist/cjs; grep -rn \"export type ValueFormat\\|export interface ValueFormat\" -A8 $G/core/types | head -20; grep -n \"labels?:\\|formatter\" $G/core/types/chart/axis.d.ts | head -8; echo ----; grep -n \"valueFormat\\|format\" yagr/dist/YagrCore/plugins/tooltip/types.d.ts | head; grep -rn \"formatter\\|format\" yagr/dist/YagrCore/plugins/tooltip/types.d.ts | head -3; echo ----; grep -n \"export interface TooltipOptions\\|export interface LegendOptions\" -A12 yagr/dist/YagrCore/plugins/tooltip/types.d.ts yagr/dist/YagrCore/plugins/legend/legend.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "G=chartkit/node_modules/@gravity-ui/charts/dist/cjs; sed -n 30,52p $G/core/types/chart/base.d.ts | grep -v \"^\\s*\\*\\|/\\*\\*\" ; grep -n \"ChartAxisLabels\" -A12 $G/core/types/chart/axis.d.ts | grep -v \"\\*\" | head -14; echo ----; sed -n 120,132p yagr/dist/YagrCore/plugins/tooltip/types.d.ts; grep -n \"ChartXAxis\\b\" -A3 $G/core/types/chart/axis.d.ts | head -8",
+        "success": true
+      },
+      {
+        "command": "G=chartkit/node_modules/@gravity-ui/charts/dist/cjs; grep -rn \"interface CustomFormat\\b\\|type CustomFormat\\b\\|CustomFormat<\" -A4 $G/core/types/chart/base.d.ts | head -14; grep -n \"interface ChartAxisLabels\" -A30 $G/core/types/chart/axis.d.ts | grep \"format\\|Format\" ; grep -n \"ChartAxisLabels\\|format\" $G/core/types/chart/axis.d.ts | head; grep -rn \"ValueFormatter =\" -A2 yagr/dist/YagrCore | head -4",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat libs/settings/mergeSettingStrategy.js; echo ----; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; echo \"browsers-check-done\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.318/59592d6718a84fd0d52d463e1c2ec635/dataviz && node scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a\" --mode light --pairs all 2>&1 | sed -n 1,12p; echo \"=== dark\"; node scripts/validate_palette.js \"#3987e5,#d95926,#199e70\" --mode dark --pairs all 2>&1 | sed -n 1,12p; echo \"=== light contrast note\"; node scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a\" --mode light --pairs all 2>&1 | grep -i \"contrast\\|relief\\|WARN\" | head",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx tsc --noEmit 2>&1 | head -40; echo \"exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/cjs && grep -n \"CustomFormatContext\" -A8 core/types/chart/base.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/yagr/dist && grep -rn \"type PerScale\" -A3 YagrCore | head -8; grep -rn \"tooltip.value\\|\\.value\\[\" YagrCore/plugins/tooltip/*.js | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && find . -path \"*SegmentedRadioGroup*\" -name \"*.d.ts\" | head -3; f=$(find . -path \"*SegmentedRadioGroup/SegmentedRadioGroup.d.ts\" | head -1); cat \"$f\" | head -60; echo ----; f2=$(find . -path \"*Loader/Loader.d.ts\" | head -1); sed -n 1,30p \"$f2\" | grep -n \"size\\|Props\\|export\" | head; f3=$(find . -path \"*Alert/Alert.d.ts\" | head -1); grep -n \"theme\\|title\\|message\\|view\" \"$f3\" | head -8",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components && cat SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts | head -20; grep -n \"ControlGroupProps\" -A12 types.d.ts | head -30; grep -n \"export\" Alert/Alert.d.ts | head -5; grep -n \"theme\\|title\\|message\\|view\\|children\" Alert/types.d.ts 2>/dev/null | head; ls Alert | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/viz/index.ts <<'EOF'\nexport {VizWidget} from './VizWidget';\nexport type {VizMode, VizPoint, VizSeries, VizWidgetProps} from './types';\nexport {SERIES_LIMIT} from './palette';\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\n\nimport {VizWidget} from './viz';\nimport {generateDemoSeries} from './viz/demo-data';\n\nexport function App(): React.JSX.Element {\n  const series = React.useMemo(() => generateDemoSeries(), []);\n\n  return (\n    <main style={{padding: 24, maxWidth: 960, margin: '0 auto'}}>\n      <VizWidget title=\"Выручка по каналам, 15 мин\" series={series} unit=\"₽\" defaultMode=\"sales\" height={360} />\n    </main>\n  );\n}\nEOF\ntimeout 200 npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/cjs/core/types/chart && grep -n \"grid\" axis.d.ts | head -12; grep -n \"interface BaseTextStyle\" -A8 base.d.ts | head -12; grep -n \"BaseTextStyle\\|Partial<BaseTextStyle>\" -B2 axis.d.ts | grep -n \"style\" | head -5",
+        "success": true
+      },
+      {
+        "command": "sed -n 246,262p axis.d.ts; sed -n 40,46p axis.d.ts; grep -n \"lineColor\\|lineVisible\" axis.d.ts | head -4",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 200 npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "timeout 280 npx vite build 2>&1 | grep -v \"npm warn\" | tail -25; echo \"exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/dist && grep -o 'assets/[^\"]*\\.js' index.html; ENTRY=$(grep -o 'assets/index-[^\"]*\\.js' index.html | head -1); echo \"entry=$ENTRY size=$(wc -c < $ENTRY)\"; echo \"--- markers in entry (expect none of the engine-only ones):\"; for m in \"uPlot\" \"uplot\" \"yagr\" \"Yagr\" \"gravity-charts\" \"GravityCharts\" \"ChartTooltipContent\" \"d3-scale\" \"CustomShapeRenderer\"; do printf \"%-22s entry=%s  \" \"$m\" \"$(grep -c \"$m\" $ENTRY)\"; echo \"yagr-chunk=$(grep -l \"$m\" assets/*.js | xargs -n1 basename 2>/dev/null | tr '\\n' ' ')\"; done; echo \"--- dynamic import targets in entry:\"; grep -o 'import(\"[^\"]*\")\\|__vitePreload' $ENTRY | head -5; grep -o '\"[^\"]*YagrWidget[^\"]*\"\\|\"[^\"]*GravityChartsWidget[^\"]*\"' $ENTRY | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/dist/assets && E=index-mXCQSLML.js; echo \"static import statements in entry:\"; grep -o '^import[^;]*from *\"[^\"]*\";\\?' $E | head; grep -o 'import *\"[^\"]*\"' $E | head; echo \"--- chunk contents (first bytes)\"; for c in index-BXzp_KAn.js index-DQTtTww0.js; do echo \"$c: $(wc -c < $c) bytes; contains uplot code: $(grep -c 'uPlot' $c); contains gravity charts: $(grep -c 'ChartTooltipContent' $c)\"; done; echo \"--- what the yagr widget chunk imports:\"; grep -o 'from *\"[^\"]*\"' YagrWidget-*.js | sort -u | head -8",
+        "success": true
+      },
+      {
+        "command": "E=index-mXCQSLML.js; echo \"static-import specifiers in entry:\"; grep -o 'from *\"\\./[^\"]*\"' $E | sort -u; echo \"dynamic specifiers in entry:\"; grep -o 'import(\"\\./[^\"]*\")' $E | sort -u; echo \"--- yagr widget chunk weight: $(wc -c < YagrWidget-*.js) bytes; gravity: $(wc -c < GravityChartsWidget-*.js) bytes\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src/viz/__tests__ && cd /home/sandbox/workspace/src/viz/__tests__ && cat > adapters.test.ts <<'EOF'\nimport {describe, expect, it} from 'vitest';\n\nimport {toMonitoringChart} from '../adapters/monitoring';\nimport {toSalesChart} from '../adapters/sales';\nimport {SERIES_COLORS_LIGHT} from '../palette';\nimport {buildTimeline, summarize, validateSeries} from '../series';\nimport type {VizSeries} from '../types';\n\nconst series: VizSeries[] = [\n  {\n    id: 'site',\n    name: 'Сайт',\n    points: [\n      {t: 1000, v: 10},\n      {t: 2000, v: 20},\n      {t: 3000, v: null},\n    ],\n  },\n  {\n    id: 'app',\n    name: 'Приложение',\n    points: [\n      {t: 2000, v: 5},\n      {t: 4000, v: 7},\n    ],\n  },\n];\n\ndescribe('buildTimeline', () => {\n  it('returns the sorted union of all timestamps', () => {\n    expect(buildTimeline(series)).toEqual([1000, 2000, 3000, 4000]);\n  });\n});\n\ndescribe('toMonitoringChart (yagr)', () => {\n  const config = toMonitoringChart(series, {unit: '₽'});\n\n  it('aligns every series to the shared timeline with nulls for missing samples', () => {\n    expect(config.data.timeline).toEqual([1000, 2000, 3000, 4000]);\n    expect(config.data.graphs[0].data).toEqual([10, 20, null, null]);\n    expect(config.data.graphs[1].data).toEqual([null, 5, null, 7]);\n  });\n\n  it('declares epoch milliseconds, the same unit as the sales mode', () => {\n    expect(config.libraryConfig.chart?.timeMultiplier).toBe(1);\n  });\n\n  it('assigns colors by position in the fixed categorical order', () => {\n    expect(config.data.graphs.map((g) => g.color)).toEqual(SERIES_COLORS_LIGHT.slice(0, 2));\n  });\n\n  it('shows the legend only for two or more series', () => {\n    expect(config.libraryConfig.legend?.show).toBe(true);\n    expect(toMonitoringChart([series[0]]).libraryConfig.legend?.show).toBe(false);\n  });\n\n  it('formats tooltip values with the unit and shows an em dash for gaps', () => {\n    const format = config.libraryConfig.tooltip?.value as (v: number | null) => string;\n    expect(format(1234.4)).toBe('1 234 ₽');\n    expect(format(null)).toBe('—');\n  });\n});\n\ndescribe('toSalesChart (gravity-charts)', () => {\n  const config = toSalesChart(series, {unit: '₽'});\n\n  it('keeps gaps as points with null y, not zeros', () => {\n    const [site] = config.series.data;\n    expect(site.data).toEqual([\n      {x: 1000, y: 10},\n      {x: 2000, y: 20},\n      {x: 3000, y: null},\n    ]);\n  });\n\n  it('uses one datetime x-axis and the fixed series colors', () => {\n    expect(config.xAxis).toMatchObject({type: 'datetime'});\n    expect(config.series.data.map((s) => s.color)).toEqual(SERIES_COLORS_LIGHT.slice(0, 2));\n  });\n\n  it('enables the legend only for two or more series', () => {\n    expect(config.legend).toEqual({enabled: true});\n    expect(toSalesChart([series[0]]).legend).toEqual({enabled: false});\n  });\n});\n\ndescribe('validateSeries', () => {\n  it('accepts up to the three-series limit', () => {\n    expect(validateSeries([series[0], series[1]])).toBeNull();\n  });\n\n  it('refuses a fourth series instead of cycling hues', () => {\n    const four = [...series, {id: 'x', name: 'X', points: []}, {id: 'y', name: 'Y', points: []}];\n    expect(validateSeries(four)).toMatch(/Серий больше 3/);\n  });\n\n  it('rejects duplicate ids', () => {\n    expect(validateSeries([series[0], {...series[1], id: 'site'}])).toMatch(/Повторяющийся id/);\n  });\n\n  it('rejects points that are not in ascending time order', () => {\n    const unsorted: VizSeries = {id: 'u', name: 'U', points: [{t: 2, v: 1}, {t: 1, v: 1}]};\n    expect(validateSeries([unsorted])).toMatch(/возрастанию времени/);\n  });\n});\n\ndescribe('summarize', () => {\n  it('ignores gaps for min/max/avg/last and counts them separately', () => {\n    const [site] = summarize(series);\n    expect(site).toMatchObject({count: 2, gaps: 1, last: 20, min: 10, max: 20, avg: 15});\n  });\n\n  it('returns nulls for a series with no real values', () => {\n    const [empty] = summarize([{id: 'e', name: 'E', points: [{t: 1, v: null}]}]);\n    expect(empty).toMatchObject({count: 0, gaps: 1, last: null, min: null, max: null, avg: null});\n  });\n});\nEOF\ncat > engines.test.ts <<'EOF'\nimport {beforeEach, describe, expect, it, vi} from 'vitest';\n\n// Each engine module records when its code is evaluated. The laziness test checks\n// that importing the registry evaluates neither engine.\nconst loaded = vi.hoisted(() => ({gravity: 0, yagr: 0}));\nconst settingsSet = vi.hoisted(() => vi.fn());\n\nvi.mock('@gravity-ui/chartkit', () => ({settings: {set: settingsSet}}));\nvi.mock('@gravity-ui/chartkit/gravity-charts', () => {\n  loaded.gravity += 1;\n  return {GravityChartsPlugin: {type: 'gravity-charts', renderer: () => null}};\n});\nvi.mock('@gravity-ui/chartkit/yagr', () => {\n  loaded.yagr += 1;\n  return {YagrPlugin: {type: 'yagr', renderer: () => null}};\n});\n\nimport {ensureEngine} from '../engines';\n\ndescribe('engine registry', () => {\n  beforeEach(() => {\n    settingsSet.mockClear();\n  });\n\n  it('does not evaluate any engine module just by importing the registry', () => {\n    expect(loaded).toEqual({gravity: 0, yagr: 0});\n  });\n\n  it('loads only the requested engine and registers its plugin', async () => {\n    await ensureEngine('sales');\n    expect(loaded).toEqual({gravity: 1, yagr: 0});\n    expect(settingsSet).toHaveBeenCalledWith({plugins: [expect.objectContaining({type: 'gravity-charts'})]});\n  });\n\n  it('loads each engine once and shares the in-flight promise', async () => {\n    await Promise.all([ensureEngine('monitoring'), ensureEngine('monitoring')]);\n    await ensureEngine('monitoring');\n    expect(loaded.yagr).toBe(1);\n    expect(settingsSet).toHaveBeenCalledTimes(1);\n  });\n});\nEOF\ncd /home/sandbox/workspace && timeout 280 npx vitest run 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "timeout 280 npx vitest run 2>&1 | tail -8; echo; timeout 200 npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit=${PIPESTATUS[0]}\"; timeout 200 npx vitest run 2>&1 | grep -E \"Tests|Test Files|FAIL\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/browser-check && cd /tmp/browser-check && (timeout 200 npm init -y >/dev/null 2>&1; timeout 240 npm install playwright@1.52.0 2>&1 | tail -2) && (timeout 280 npx playwright install chromium 2>&1 | tail -4); echo \"install-exit=$?\"; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "sleep 60; tail -c 1500 /tmp/claude-1000/-home-sandbox-workspace/8ad7f5be-bd76-4b20-bb80-3d50f980864a/tasks/bouwgtzcc.output 2>/dev/null; echo; ls ~/.cache/ms-playwright 2>/dev/null || echo \"no-browser-yet\"",
+        "success": false
+      },
+      {
+        "command": "tail -c 1500 /tmp/claude-1000/-home-sandbox-workspace/8ad7f5be-bd76-4b20-bb80-3d50f980864a/tasks/bouwgtzcc.output 2>/dev/null; echo; ls ~/.cache/ms-playwright 2>/dev/null || echo \"no-browser-yet\"",
+        "success": true
+      },
+      {
+        "command": "pgrep -af \"playwright install\" | head -3 || true; ls ~/.cache/ms-playwright/chromium-1169 2>/dev/null | head; du -sh ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5173 --strictPort --host 127.0.0.1 > /tmp/vite-dev.log 2>&1 &) ; cat > /tmp/browser-check/check.mjs <<'EOF'\nimport {chromium} from 'playwright';\n\nconst browser = await chromium.launch({args: ['--no-sandbox']});\nconst page = await browser.newPage({viewport: {width: 1100, height: 900}});\nconst errors = [];\npage.on('pageerror', (e) => errors.push('pageerror: ' + e.message));\npage.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text()); });\nconst chunks = [];\npage.on('request', (r) => { if (r.url().includes('/assets/')) chunks.push(r.url().split('/assets/')[1]); });\n\nawait page.goto('http://127.0.0.1:5173/', {waitUntil: 'networkidle'});\nawait page.waitForSelector('.viz-widget .chartkit-theme_common', {timeout: 30000});\nconst chunksAfterFirstLoad = [...chunks];\nawait page.screenshot({path: '/tmp/browser-check/sales.png', fullPage: true});\nconst salesSvg = await page.locator('.viz-widget svg').count();\nconsole.log('sales: svg count =', salesSvg);\n\n// Switch to monitoring mode.\nchunks.length = 0;\nawait page.getByRole('radio', {name: 'Мониторинг'}).click();\nawait page.waitForSelector('.viz-widget canvas', {timeout: 30000});\nawait page.waitForTimeout(800);\nawait page.screenshot({path: '/tmp/browser-check/monitoring.png', fullPage: true});\nconsole.log('monitoring: canvas count =', await page.locator('.viz-widget canvas').count());\nconsole.log('chunks requested before first load:', chunksAfterFirstLoad);\nconsole.log('chunks requested on switch to monitoring:', chunks);\nconsole.log('errors:', JSON.stringify(errors, null, 2));\nawait browser.close();\nEOF\nsleep 4; cat /tmp/vite-dev.log | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/browser-check && timeout 150 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "ls ~/.cache/ms-playwright/chromium-1169/chrome-linux | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/browser-check && sed -i \"s#chromium.launch({args: \\['--no-sandbox'\\]})#chromium.launch({executablePath: '/home/node/.cache/ms-playwright/chromium-1169/chrome-linux/chrome', args: ['--no-sandbox']})#\" check.mjs && timeout 150 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "id -u; (sudo -n true 2>/dev/null && echo \"sudo-ok\") || echo \"no-sudo\"; ldconfig -p | grep -c \"libglib-2.0\" ",
+        "success": true
+      },
+      {
+        "command": "for p in $(ps -eo pid,args | grep \"[v]ite --port 5173\" | awk '{print $1}'); do kill $p; done; sleep 1; ps -eo args | grep -c \"[v]ite --port 5173\"; cd /home/sandbox/workspace && timeout 250 npm install -D jsdom@26 @testing-library/react@16 @testing-library/dom@10 2>&1 | grep -v \"npm warn\" | tail -3",
+        "success": true
+      },
+      {
+        "command": "node -e \"console.log(require('jsdom/package.json').version, require('@testing-library/react/package.json').version)\" && cat > src/viz/__tests__/VizWidget.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport React from 'react';\nimport {afterEach, describe, expect, it, vi} from 'vitest';\nimport {cleanup, fireEvent, render, screen, waitFor} from '@testing-library/react';\n\n// ChartKit itself is replaced by a stub that reports which engine type it was asked for.\n// This test covers the widget's state machine (requested vs shown, controlled vs\n// uncontrolled), not the engines' drawing, which needs a real browser.\nvi.mock('@gravity-ui/chartkit', async () => {\n  const ReactModule = await import('react');\n  const ChartKitStub = (props: {type: string}) =>\n    ReactModule.createElement('div', {'data-testid': 'chartkit', 'data-type': props.type});\n  return {default: ChartKitStub, settings: {set: vi.fn()}};\n});\nvi.mock('@gravity-ui/chartkit/gravity-charts', () => ({\n  GravityChartsPlugin: {type: 'gravity-charts', renderer: () => null},\n}));\nvi.mock('@gravity-ui/chartkit/yagr', () => ({\n  YagrPlugin: {type: 'yagr', renderer: () => null},\n}));\n\nimport {VizWidget} from '../VizWidget';\nimport type {VizSeries, VizWidgetProps} from '../types';\n\nconst series: VizSeries[] = [\n  {id: 'site', name: 'Сайт', points: [{t: 1, v: 1500}, {t: 2, v: null}]},\n  {id: 'app', name: 'Приложение', points: [{t: 1, v: 900}, {t: 2, v: 1200}]},\n];\n\nfunction renderWidget(overrides: Partial<VizWidgetProps> = {}) {\n  return render(<VizWidget title=\"Выручка\" series={series} unit=\"₽\" {...overrides} />);\n}\n\ndescribe('VizWidget', () => {\n  afterEach(() => {\n    cleanup();\n  });\n\n  it('starts in sales mode and shows the gravity-charts engine once it is loaded', async () => {\n    renderWidget();\n    const chart = await screen.findByTestId('chartkit');\n    expect(chart.getAttribute('data-type')).toBe('gravity-charts');\n  });\n\n  it('switches to the monitoring engine and reports the change', async () => {\n    const onModeChange = vi.fn();\n    renderWidget({onModeChange});\n    await screen.findByTestId('chartkit');\n\n    fireEvent.click(screen.getByRole('radio', {name: 'Мониторинг'}));\n\n    await waitFor(() => {\n      expect(screen.getByTestId('chartkit').getAttribute('data-type')).toBe('yagr');\n    });\n    expect(onModeChange).toHaveBeenCalledWith('monitoring');\n  });\n\n  it('in controlled mode keeps the shown engine until the parent changes `mode`', async () => {\n    const onModeChange = vi.fn();\n    const {rerender} = renderWidget({mode: 'sales', onModeChange});\n    await screen.findByTestId('chartkit');\n\n    fireEvent.click(screen.getByRole('radio', {name: 'Мониторинг'}));\n    expect(onModeChange).toHaveBeenCalledWith('monitoring');\n    // The parent has not updated `mode`, so the sales chart stays on screen.\n    expect(screen.getByTestId('chartkit').getAttribute('data-type')).toBe('gravity-charts');\n\n    rerender(<VizWidget title=\"Выручка\" series={series} unit=\"₽\" mode=\"monitoring\" onModeChange={onModeChange} />);\n    await waitFor(() => {\n      expect(screen.getByTestId('chartkit').getAttribute('data-type')).toBe('yagr');\n    });\n  });\n\n  it('renders the table twin with formatted last, min, max and gap counts', async () => {\n    renderWidget();\n    await screen.findByTestId('chartkit');\n\n    const siteRow = screen.getByRole('rowheader', {name: 'Сайт'}).closest('tr') as HTMLElement;\n    const cells = Array.from(siteRow.querySelectorAll('td')).map((td) => td.textContent);\n    // Last real value is 1500 (the null at t=2 is a gap, not a value).\n    expect(cells[0]).toBe('1 500 ₽');\n    expect(cells[cells.length - 1]).toBe('1');\n  });\n\n  it('refuses more than three series and renders no chart', async () => {\n    const four: VizSeries[] = ['a', 'b', 'c', 'd'].map((id) => ({id, name: id, points: []}));\n    renderWidget({series: four});\n    expect(await screen.findByText('Не удалось построить график')).toBeTruthy();\n    expect(screen.queryByTestId('chartkit')).toBeNull();\n  });\n});\nEOF\ntimeout 250 npx vitest run 2>&1 | grep -E \"✓|×|FAIL|Tests|Test Files|Error|expected\" | head -40",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\nimport {defineConfig} from 'vite';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    // uikit ships ESM that imports CSS; let vitest transform it instead of externalizing.\n    server: {deps: {inline: [/@gravity-ui\\//]}},\n  },\n});\nEOF\ntimeout 250 npx vitest run 2>&1 | grep -E \"✓|×|FAIL|Tests |Test Files|Error|expected|Unable\" | head -40",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit=${PIPESTATUS[0]}\"; timeout 200 npx vite build 2>&1 | grep -E \"index|Yagr|Gravity|built|error\" | grep -v \"^dist/assets/[a-z][a-z]-\" ; echo \"build exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "for d in /proc/[0-9]*; do if tr '\\0' ' ' < $d/cmdline 2>/dev/null | grep -q \"vite --port 5173\"; then kill ${d#/proc/} 2>/dev/null && echo \"killed ${d#/proc/}\"; fi; done; cd /home/sandbox/workspace && rm -rf dist && git status --short && echo --- && git diff --stat -- package.json && cat .gitignore",
+        "success": false
+      },
+      {
+        "command": "rm -rf dist && git status --short && echo --- && cat .gitignore && echo --- && git diff -- package.json | head -30",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 174,
+      "outputTokens": 72850,
+      "cacheReadTokens": 8442767,
+      "cacheWriteTokens": 138242,
+      "totalTokens": 8654033
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

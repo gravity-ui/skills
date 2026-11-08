@@ -1,0 +1,127 @@
+.dash-grid {
+  position: relative;
+  width: 100%;
+}
+
+.dash-grid_stacked {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-grid:not(.dash-grid_stacked) > .dash-grid__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dash-grid__item {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.dash-grid_editable > .dash-grid__item {
+  transition:
+    transform 180ms ease,
+    width 180ms ease,
+    height 180ms ease;
+}
+
+.dash-grid > .dash-grid__item_active {
+  z-index: 3;
+  transition: none;
+  opacity: 0.94;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash-grid_editable > .dash-grid__item {
+    transition: none;
+  }
+}
+
+/* Колонки-направляющие в режиме редактирования */
+.dash-grid__guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dash-grid__guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 8px;
+  background: var(--g-color-base-generic);
+}
+
+/* Куда встанет виджет после отпускания */
+.dash-grid__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 2px solid var(--g-color-line-brand);
+  background: var(--g-color-base-selection);
+  transition:
+    transform 120ms ease,
+    width 120ms ease,
+    height 120ms ease;
+}
+
+/* Уголок для изменения размера */
+.dash-grid__resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+  touch-action: none;
+}
+
+.dash-grid__resize::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--g-color-line-generic-accent);
+  border-bottom: 2px solid var(--g-color-line-generic-accent);
+  border-bottom-right-radius: 3px;
+}
+
+.dash-grid__resize:hover::after {
+  border-color: var(--g-color-line-brand);
+}
+
+body.dash-grid-dragging {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: nwse-resize;
+}
+
+body.dash-grid-dragging_move {
+  cursor: grabbing;
+}
+
+body.dash-grid-dragging * {
+  cursor: inherit !important;
+}
+
+.dash-grid__live,
+.dash-grid__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

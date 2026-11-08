@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "duration": 1166.135,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 322,
+    "outputTokens": 9446,
+    "cacheReadTokens": 411461,
+    "cacheWriteTokens": 36345,
+    "totalTokens": 457574
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----\" && ls -R .agents/skills/gravity-ui | head -50 && echo \"-----\" && cat AGENTS.md && echo \"-----\" && cat package.json && ls",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md && echo \"----- TABLE entries\" && rg -n -i -C 3 \"table\" .agents/skills/gravity-ui/references/package-routing.md | head -80 && echo \"----- SRC\" && find src -type f | head -50 && echo && cat src/*.tsx 2>/dev/null | head -120 && echo \"----- index.html / tsconfig / vite\" && cat index.html tsconfig.json vite.config.ts && echo \"----- eval\" && ls -R __agent_eval__ | head -30 && echo \"----- installed gravity\" && ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | rg -n '\"version\"' && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination 2>&1 | head -60; echo \"----- TRAPS\"; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination 2>&1 | head -60; echo \"----- DTS\"; U=node_modules/@gravity-ui/uikit/build/esm/components; cat $U/Table/Table.d.ts; echo; cat $U/Table/hoc/withTableSorting/withTableSorting.d.ts; echo; cat $U/Table/hoc/withTableSelection/withTableSelection.d.ts; echo; cat $U/Pagination/Pagination.d.ts; echo; cat $U/Pagination/types.d.ts; echo \"----- README Table\"; ls $U/Table/ ; find node_modules/@gravity-ui/uikit -name \"README.md\" -path \"*Table*\" | head; find node_modules/@gravity-ui/uikit -name \"README.md\" -path \"*Pagination*\" | head",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; echo \"----- sorting js meta keys\"; rg -n \"meta|getRowId|disableDataSorting|sortState\" $U/Table/hoc/withTableSorting/withTableSorting.js | head -40; echo \"----- selection js\"; rg -n \"getRowId|getRowDescriptor|disabled|Checkbox\" $U/Table/hoc/withTableSelection/withTableSelection.js | head -30; echo \"----- index exports\"; cat $U/Table/index.d.ts; echo \"----- ONLINE\"; curl -sS -m 20 https://gravity-ui.com/llms/uikit/7/llms.txt -o /tmp/uikit7.txt; echo \"exit=$? size=$(wc -c < /tmp/uikit7.txt 2>/dev/null)\"; head -c 300 /tmp/uikit7.txt; echo; rg -n -i \"withTableSorting|defaultSortOrder|meta.*sort\" /tmp/uikit7.txt | head -30",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; rg -n -A8 \"static getRowId\" $U/Table/Table.js | head -20; echo \"----- Label themes\"; rg -n \"theme\\?|LabelTheme|size\\?\" $U/Label/Label.d.ts | head; echo \"----- Text variants\"; rg -n \"caption|body-|subheader\" $U/Text/text/types.d.ts 2>/dev/null | head -5 || rg -n \"TEXT_VARIANTS|caption-2\" $U/Text -l | head",
+        "success": true
+      },
+      {
+        "command": "cat > src/data.ts <<'EOF'\nexport type UserStatus = 'active' | 'pending' | 'blocked';\n\nexport interface UserRow {\n  id: string;\n  name: string;\n  email: string;\n  role: string;\n  status: UserStatus;\n  createdAt: string; // ISO date\n  balance: number;\n}\n\nconst FIRST_NAMES = [\n  'Анна', 'Иван', 'Мария', 'Пётр', 'Елена', 'Дмитрий', 'Ольга', 'Сергей',\n  'Наталья', 'Алексей', 'Татьяна', 'Михаил', 'Екатерина', 'Андрей', 'Юлия',\n];\nconst LAST_NAMES = [\n  'Иванова', 'Петров', 'Смирнова', 'Кузнецов', 'Попова', 'Васильев', 'Соколова',\n  'Михайлов', 'Новикова', 'Фёдоров', 'Морозова', 'Волков', 'Алексеева', 'Лебедев',\n];\nconst ROLES = ['Администратор', 'Редактор', 'Аналитик', 'Разработчик', 'Менеджер', 'Наблюдатель'];\nconst STATUSES: UserStatus[] = ['active', 'active', 'active', 'pending', 'blocked'];\n\n// Deterministic pseudo-random generator so the dataset is stable between renders.\nfunction makeRng(seed: number) {\n  let state = seed;\n  return () => {\n    state = (state * 1664525 + 1013904223) % 4294967296;\n    return state / 4294967296;\n  };\n}\n\nexport function generateUsers(count: number): UserRow[] {\n  const rng = makeRng(42);\n  const rows: UserRow[] = [];\n  for (let i = 0; i < count; i++) {\n    const first = FIRST_NAMES[Math.floor(rng() * FIRST_NAMES.length)];\n    const last = LAST_NAMES[Math.floor(rng() * LAST_NAMES.length)];\n    const day = new Date(2024, 0, 1).getTime() + Math.floor(rng() * 600) * 86_400_000;\n    rows.push({\n      id: String(1000 + i),\n      name: `${first} ${last}`,\n      email: `user${1000 + i}@example.com`,\n      role: ROLES[Math.floor(rng() * ROLES.length)],\n      status: STATUSES[Math.floor(rng() * STATUSES.length)],\n      createdAt: new Date(day).toISOString().slice(0, 10),\n      balance: Math.round(rng() * 250_000) / 100,\n    });\n  }\n  return rows;\n}\nEOF\ncat > src/DataTable.tsx <<'EOF'\nimport React from 'react';\nimport {\n  Button,\n  Flex,\n  Label,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n} from '@gravity-ui/uikit';\nimport type { TableColumnConfig, TableSortState } from '@gravity-ui/uikit';\n\nimport type { UserRow, UserStatus } from './data';\n\nconst PAGE_SIZE_OPTIONS = [5, 10, 20, 50];\n\nconst STATUS_META: Record<UserStatus, { text: string; theme: 'success' | 'warning' | 'danger' }> = {\n  active: { text: 'Активен', theme: 'success' },\n  pending: { text: 'Ожидает', theme: 'warning' },\n  blocked: { text: 'Заблокирован', theme: 'danger' },\n};\n\nconst numberFormat = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' });\nconst dateFormat = new Intl.DateTimeFormat('ru-RU', { dateStyle: 'medium' });\n\ntype Comparator = (a: UserRow, b: UserRow) => number;\n\nconst byString = (key: 'name' | 'email' | 'role'): Comparator => (a, b) =>\n  a[key].localeCompare(b[key], 'ru');\n\nconst comparators: Record<string, Comparator> = {\n  id: (a, b) => Number(a.id) - Number(b.id),\n  name: byString('name'),\n  email: byString('email'),\n  role: byString('role'),\n  status: (a, b) => STATUS_META[a.status].text.localeCompare(STATUS_META[b.status].text, 'ru'),\n  createdAt: (a, b) => a.createdAt.localeCompare(b.createdAt),\n  balance: (a, b) => a.balance - b.balance,\n};\n\nconst columns: TableColumnConfig<UserRow>[] = [\n  { id: 'id', name: 'ID', width: 80, meta: { sort: comparators.id } },\n  { id: 'name', name: 'Имя', primary: true, meta: { sort: comparators.name } },\n  { id: 'email', name: 'Email', meta: { sort: comparators.email } },\n  { id: 'role', name: 'Роль', meta: { sort: comparators.role } },\n  {\n    id: 'status',\n    name: 'Статус',\n    meta: { sort: comparators.status },\n    template: (item) => {\n      const { text, theme } = STATUS_META[item.status];\n      return <Label theme={theme} size=\"xs\">{text}</Label>;\n    },\n  },\n  {\n    id: 'createdAt',\n    name: 'Создан',\n    meta: { sort: comparators.createdAt, defaultSortOrder: 'desc' },\n    template: (item) => dateFormat.format(new Date(item.createdAt)),\n  },\n  {\n    id: 'balance',\n    name: 'Баланс',\n    align: 'end',\n    meta: { sort: comparators.balance, defaultSortOrder: 'desc' },\n    template: (item) => numberFormat.format(item.balance),\n  },\n];\n\n// Sorting is controlled so that it applies to the whole dataset before pagination,\n// not only to the rows of the current page.\nconst SelectableSortableTable = withTableSorting(withTableSelection<UserRow>(Table));\n\nfunction sortRows(rows: UserRow[], sortState: TableSortState): UserRow[] {\n  if (sortState.length === 0) return rows;\n  const sorted = [...rows];\n  sorted.sort((a, b) => {\n    for (const { column, order } of sortState) {\n      const compare = comparators[column];\n      if (!compare) continue;\n      const result = compare(a, b);\n      if (result !== 0) return order === 'asc' ? result : -result;\n    }\n    return 0;\n  });\n  return sorted;\n}\n\nexport interface DataTableProps {\n  rows: UserRow[];\n}\n\nexport function DataTable({ rows }: DataTableProps) {\n  const [sortState, setSortState] = React.useState<TableSortState>([\n    { column: 'createdAt', order: 'desc' },\n  ]);\n  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);\n  const [page, setPage] = React.useState(1);\n  const [pageSize, setPageSize] = React.useState(PAGE_SIZE_OPTIONS[1]);\n\n  const sortedRows = React.useMemo(() => sortRows(rows, sortState), [rows, sortState]);\n\n  const pageCount = Math.max(1, Math.ceil(sortedRows.length / pageSize));\n  const currentPage = Math.min(page, pageCount);\n  const pageRows = React.useMemo(\n    () => sortedRows.slice((currentPage - 1) * pageSize, currentPage * pageSize),\n    [sortedRows, currentPage, pageSize],\n  );\n\n  const handlePaginationUpdate = (nextPage: number, nextPageSize: number) => {\n    if (nextPageSize !== pageSize) {\n      setPageSize(nextPageSize);\n      setPage(1);\n    } else {\n      setPage(nextPage);\n    }\n  };\n\n  const firstIndex = sortedRows.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;\n  const lastIndex = Math.min(currentPage * pageSize, sortedRows.length);\n\n  return (\n    <Flex direction=\"column\" gap={3}>\n      <Flex alignItems=\"center\" gap={3} wrap>\n        <Text variant=\"body-1\" color=\"secondary\" style={{ flex: 1, minWidth: 0 }}>\n          Показано {firstIndex}–{lastIndex} из {sortedRows.length}\n        </Text>\n        <Text variant=\"body-1\" style={{ flexShrink: 0 }}>\n          Выбрано: {selectedIds.length}\n        </Text>\n        <Button\n          view=\"flat\"\n          size=\"m\"\n          disabled={selectedIds.length === 0}\n          onClick={() => setSelectedIds([])}\n          style={{ flexShrink: 0 }}\n        >\n          Снять выделение\n        </Button>\n      </Flex>\n\n      <div style={{ overflowX: 'auto', maxWidth: '100%' }}>\n        <SelectableSortableTable\n          data={pageRows}\n          columns={columns}\n          width=\"max\"\n          getRowDescriptor={(item) => ({ id: item.id })}\n          sortState={sortState}\n          onSortStateChange={setSortState}\n          selectedIds={selectedIds}\n          onSelectionChange={setSelectedIds}\n          emptyMessage=\"Нет данных\"\n          aria-label=\"Пользователи\"\n        />\n      </div>\n\n      <Flex justifyContent=\"flex-end\">\n        <Pagination\n          page={currentPage}\n          pageSize={pageSize}\n          total={sortedRows.length}\n          pageSizeOptions={PAGE_SIZE_OPTIONS}\n          onUpdate={handlePaginationUpdate}\n          compact={false}\n        />\n      </Flex>\n    </Flex>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { Box, Flex, Text } from '@gravity-ui/uikit';\n\nimport { DataTable } from './DataTable';\nimport { generateUsers } from './data';\n\nexport function App() {\n  const rows = React.useMemo(() => generateUsers(47), []);\n\n  return (\n    <Box spacing={{ p: 6 }}>\n      <Flex direction=\"column\" gap={4}>\n        <Flex direction=\"column\" gap={1}>\n          <Text variant=\"header-1\">Пользователи</Text>\n          <Text variant=\"body-1\" color=\"secondary\">\n            Сортировка по колонкам, выделение строк чекбоксами и постраничная навигация.\n          </Text>\n        </Flex>\n        <DataTable rows={rows} />\n      </Flex>\n    </Box>\n  );\n}\nEOF\nrg -n \"justifyContent\\?|wrap\\?\" node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts | head -5; rg -n \"color\\?\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/*.d.ts 2>/dev/null | head -5; npx tsc --noEmit -p tsconfig.json && echo TSC_OK",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore 2>/dev/null; git status --short | head",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 322,
+      "outputTokens": 9446,
+      "cacheReadTokens": 411461,
+      "cacheWriteTokens": 36345,
+      "totalTokens": 457574
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

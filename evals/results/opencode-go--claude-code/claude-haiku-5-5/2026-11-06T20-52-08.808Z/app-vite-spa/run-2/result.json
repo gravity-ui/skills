@@ -1,0 +1,235 @@
+{
+  "status": "passed",
+  "duration": 708.497,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 114,
+    "outputTokens": 47378,
+    "cacheReadTokens": 3249208,
+    "cacheWriteTokens": 76251,
+    "totalTokens": 3372951
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 44,
+    "toolCalls": {
+      "file_read": 5,
+      "file_write": 8,
+      "file_edit": 3,
+      "shell": 41,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 57,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/pw-check/debug.png",
+      "/tmp/pw-check/check.mjs",
+      "/tmp/pw-check/shots/3-tasks-dark.png",
+      "/tmp/pw-check/shots/2-tasks-light.png",
+      "/tmp/pw-check/shots/5-tasks-dark-settled.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/router.ts",
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/App.css",
+      "/home/sandbox/workspace/src/pages/HomePage.tsx",
+      "/home/sandbox/workspace/src/pages/TasksPage.tsx",
+      "/home/sandbox/workspace/src/pages/AboutPage.tsx",
+      "/tmp/pw-check/check.mjs"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && (which node && node --version || echo \"node not found\")",
+        "success": true
+      },
+      {
+        "command": "cat package.json && echo \"--- index.html\" && cat index.html && echo \"--- vite.config.ts\" && cat vite.config.ts && echo \"--- tsconfig.json\" && cat tsconfig.json && echo \"--- .gitignore\" && cat .gitignore && echo \"--- src\" && find src __agent_eval__ -type f | head -50 && echo \"--- git ls-files\" && git ls-files && echo \"--- node_modules\" && ls node_modules | head -80 && ls node_modules | wc -l",
+        "success": true
+      },
+      {
+        "command": "echo \"--- main.tsx\" && cat src/main.tsx && echo \"--- App.tsx\" && cat src/App.tsx && echo \"--- vite-env.d.ts\" && cat src/vite-env.d.ts && echo \"--- git log\" && git log --oneline && ls node_modules/@gravity-ui && ls node_modules | grep -i router; ls node_modules/.bin | grep -E \"^(tsc|vite|vitest)$\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && cat uikit/package.json | grep '\"version\"' && cat icons/package.json | grep '\"version\"' && ls uikit/build 2>/dev/null | head -30; find uikit -name \"ThemeProvider*.d.ts\" | head; find uikit -path \"*ThemeProvider*\" -name \"*.d.ts\" | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.d.ts && echo \"--- ThemeProvider.js\" && cat ThemeProvider.js | head -80; echo \"--- index exports\"; ls ../../ | head -60; grep -E \"^export \\{.*(Tabs|Button|Card|Text|Switch|Header|Label|ThemeProvider|Icon|Container|Flex|Divider|Title)\" ../../index.d.ts 2>/dev/null | head; cat ../../index.d.ts 2>/dev/null | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && for c in Tabs/Tabs Switch/Switch Card/Card Text/Text TextInput/TextInput Button/Button Checkbox/Checkbox Label/Label Link/Link Header/Header; do f=$c.d.ts; if [ -f \"$f\" ]; then echo \"=== $c\"; grep -vE \"^import|^\\s*$\" \"$f\" | head -40; else echo \"MISSING $f\"; fi; done; echo; grep -n \"Tabs\\|Switch\\|Card\\|Text\\|TextInput\\|Button\\|Checkbox\\|Link\\|Header\\|Label\" index.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "ls | tr '\\n' ' '; echo; echo \"--- Tabs\"; find . -path \"*Tabs*\" -name \"*.d.ts\" | head -3; f=$(find . -path \"*Tabs/Tabs.d.ts\" | head -1); [ -n \"$f\" ] && grep -vE \"^import|^\\s*$\" \"$f\" | head -40; echo \"--- TextInput\"; f=$(find . -path \"*TextInput/TextInput.d.ts\" | head -1); [ -n \"$f\" ] && grep -vE \"^import|^\\s*$\" \"$f\" | head -30; echo \"--- Layout/Flex/Container\"; ls | grep -iE \"layout|flex|container|header|spacer\" ; echo \"--- Text variants\"; grep -n \"variant\" Text/*.d.ts | head -5; ls Text",
+        "success": true
+      },
+      {
+        "command": "f=$(grep -rl \"interface ControlProps\" . | grep \"\\.d\\.ts\" | head -1); echo \"$f\"; grep -n -A12 \"interface ControlProps\" \"$f\"; echo \"--- layout\"; ls layout; grep -n \"export\" layout/index.d.ts 2>/dev/null | head; echo \"--- BaseInputControlProps onUpdate\"; grep -rn \"onUpdate\" $(grep -rl \"BaseInputControlProps\" . --include=*.d.ts | head -3) | head -5; echo \"--- icons pkg name\"; grep '\"name\"' ../../../../../icons/package.json; ls /home/sandbox/workspace/node_modules/@gravity-ui/icons 2>/dev/null | head -2 && echo \"icons dir exists\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build && for v in --g-color-base-background --g-color-base-float --g-color-line-generic --g-color-text-hint --g-color-text-secondary --g-color-text-primary; do printf \"%s: \" $v; grep -rl -- \"$v:\" esm/styles 2>/dev/null | head -1 || true; grep -rho -- \"$v:\" . 2>/dev/null | head -1; echo; done; grep -rn \"BUTTON_VIEWS = \" esm/components/Button/*.js | head -2; grep -rn -A3 \"BUTTON_VIEWS = \" esm/components/Button/*.js | head -6",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,30p esm/components/Button/constants.js; echo ---; grep -rhoE -- \"--g-color-(base-background|base-float|line-generic|text-hint|text-secondary|text-primary)\\b\" esm/ 2>/dev/null | sort | uniq -c | head; echo ---; grep -rlE \"g-color-base-float\" ../styles 2>/dev/null | head -3; ls ../styles 2>/dev/null | head; find .. -name \"styles.css\" -path \"*uikit*\" -not -path \"*/node_modules/*/node_modules/*\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npx tsc --noEmit; echo \"tsc exit: $?\"; npx vite build --outDir /tmp/app-dist --emptyOutDir 2>&1 | tail -20; echo \"vite exit: ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules | grep -iE \"playwright|puppeteer|jsdom|happy-dom\" ; npm ls -g 2>/dev/null | grep -iE \"playwright|puppeteer\" ; echo done",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pw-check && cd /tmp/pw-check && (npm init -y >/dev/null 2>&1; timeout 300 npm i --no-audit --no-fund playwright@1 2>&1 | tail -3; timeout 400 npx playwright install chromium 2>&1 | tail -5); echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite preview --outDir /tmp/app-dist --port 4173 --strictPort > /tmp/preview.log 2>&1 &) ; sleep 4; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" http://localhost:4173/; tail -3 /tmp/preview.log",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && timeout 180 node check.mjs; echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "whoami; id -u; (sudo -n true 2>/dev/null && echo \"sudo ok\") || echo \"no passwordless sudo\"; ls /usr/lib/aarch64-linux-gnu 2>/dev/null | grep -i glib | head -3; ls /usr/lib/x86_64-linux-gnu 2>/dev/null | grep -i glib | head -3; (timeout 120 sudo -n apt-get install -y libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 2>&1 | tail -3) || echo \"apt not possible\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/debs /tmp/libroot && cd /tmp/debs && timeout 200 apt-get download libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libdrm2 libpango-1.0-0 libcairo2 libasound2t64 libcups2t64 libpcre2-8-0 libffi8 libxfixes3 libxext6 libx11-6 libxcb1 libexpat1 libpng16-16t64 libfontconfig1 libfreetype6 libharfbuzz0b libpangocairo-1.0-0 libpangoft2-1.0-0 libthai0 libdatrie1 libgraphite2-3 libbsd0 libmd0 libnsl2 2>&1 | tail -3; ls /tmp/debs | wc -l; for f in /tmp/debs/*.deb; do dpkg -x \"$f\" /tmp/libroot; done; find /tmp/libroot -name \"libglib-2.0.so.0*\" | head -2; echo \"LD path check:\"; LD_LIBRARY_PATH=$(find /tmp/libroot -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:) ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell 2>&1 | grep \"not found\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && pk=\"libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libdrm2 libpango-1.0-0 libcairo2 libasound2 libcups2 libpcre2-8-0 libffi8 libxfixes3 libxext6 libx11-6 libxcb1 libexpat1 libfontconfig1 libfreetype6 libharfbuzz0b libpangocairo-1.0-0 libpangoft2-1.0-0 libthai0 libdatrie1 libgraphite2-3 libbsd0 libmd0 libnsl2 libdbus-1-3 libatspi2.0-0 libxtst6 libxi6 libsystemd0 liblzma5 libzstd1 libselinux1 libmount1 libblkid1 libuuid1 libxrender1 libcairo-gobject2 libgdk-pixbuf-2.0-0 libwayland-client0 libepoxy0 libvulkan1 libxcursor1 libxinerama1 libxshmfence1\"; for p in $pk; do timeout 60 apt-get download $p >/dev/null 2>&1 || echo \"skip $p\"; done; ls *.deb 2>/dev/null | wc -l; for f in *.deb; do dpkg -x \"$f\" /tmp/libroot; done; LD=$(find /tmp/libroot -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD\" > /tmp/ldpath.txt; LD_LIBRARY_PATH=$LD ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell 2>&1 | grep \"not found\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && for p in libwayland-server0 libxau6 libxdmcp6; do timeout 60 apt-get download $p >/dev/null 2>&1 && dpkg -x $(ls ${p}*.deb | head -1) /tmp/libroot; done; LD=$(find /tmp/libroot -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD\" > /tmp/ldpath.txt; LD_LIBRARY_PATH=$LD ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell 2>&1 | grep -c \"not found\"; cd /tmp/pw-check && LD_LIBRARY_PATH=$LD timeout 240 node check.mjs; echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" http://localhost:4173/ ; tail -5 /tmp/preview.log; pgrep -fa \"vite preview\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > probe.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', '--no-zygote', '--single-process'] });\nconst page = await browser.newPage();\nawait page.goto('http://localhost:4173/', { timeout: 30000 });\nconsole.log('TITLE', await page.title(), await page.locator('main h1').innerText());\nawait browser.close();\nEOF\nLD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node probe.mjs 2>&1 | grep -v \"^\\s*-\\|launching\" | head -20; echo \"exit ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "B=/home/node/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64/chrome-headless-shell; LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 60 $B --no-sandbox --disable-gpu --disable-dev-shm-usage --headless --dump-dom http://localhost:4173/ 2>&1 | grep -v \"^\\[.*VERBOSE\" | head -30; echo \"exit ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && timeout 60 apt-get download libsqlite3-0 >/dev/null 2>&1; for f in libsqlite3-0*.deb; do dpkg -x \"$f\" /tmp/libroot; done; LD=$(find /tmp/libroot -name \"*.so*\" -printf \"%h\\n\" | sort -u | paste -sd:); echo \"$LD\" > /tmp/ldpath.txt; cd /tmp/pw-check && LD_LIBRARY_PATH=$LD timeout 120 node probe.mjs 2>&1 | grep -E \"TITLE|Error|error\" | head -5; echo \"exit ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && sed -i \"s/const browser = await chromium.launch();/const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });/\" check.mjs && LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 240 node check.mjs; echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > debug.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 800 } });\nawait page.goto('http://localhost:4173/');\nawait page.waitForTimeout(1500);\nconst info = await page.evaluate(() => {\n  const h = document.querySelector('main h1');\n  const cs = getComputedStyle(h);\n  const r = h.getBoundingClientRect();\n  const app = getComputedStyle(document.querySelector('.app'));\n  return { rect: [r.x, r.y, r.width, r.height], display: cs.display, visibility: cs.visibility, color: cs.color, opacity: cs.opacity,\n    appBg: app.backgroundColor, appDisplay: app.display, bodyClass: document.body.className,\n    gravityLoaded: [...document.styleSheets].map(s => s.href).filter(Boolean), rootHTML: document.getElementById('root').innerHTML.slice(0, 200) };\n});\nconsole.log(JSON.stringify(info, null, 2));\nawait page.screenshot({ path: '/tmp/pw-check/debug.png' });\nawait browser.close();\nEOF\nLD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node debug.mjs 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > debug2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 800 } });\nawait page.goto('http://localhost:4173/');\nawait page.waitForTimeout(1000);\nconst info = await page.evaluate(() => {\n  const h = document.querySelector('main h1');\n  const cs = getComputedStyle(h);\n  const body = getComputedStyle(document.body);\n  const rootVars = getComputedStyle(document.body);\n  const names = ['--g-text-header-1-font-size','--g-font-family-sans','--g-text-body-font-size-2','--g-color-text-primary','--g-spacing-base'];\n  const vars = Object.fromEntries(names.map(n => [n, rootVars.getPropertyValue(n)]));\n  const rules = [];\n  for (const sheet of document.styleSheets) { try { for (const r of sheet.cssRules) { if (r.cssText.includes('g-text_variant_header-1')) rules.push(r.cssText.slice(0, 300)); } } catch {} }\n  return { fontSize: cs.fontSize, lineHeight: cs.lineHeight, fontFamily: cs.fontFamily, bodyFont: body.fontFamily, vars, rules: rules.slice(0,3), sheetCount: document.styleSheets.length, cssRuleCount: [...document.styleSheets].map(s=>{try{return s.cssRules.length}catch{return 'x'}}) };\n});\nconsole.log(JSON.stringify(info, null, 2));\nawait browser.close();\nEOF\nLD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node debug2.mjs 2>&1 | head -60; echo \"--- built css head:\"; grep -o \"g-text_variant_header-1[^}]*}\" /tmp/app-dist/assets/*.css | head -3; echo \"--- fonts.css check:\"; grep -c \"@font-face\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/styles/styles.css 2>/dev/null; ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/styles/ 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > debug3.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 600, height: 300 } });\nawait page.setContent('<html><body style=\"font-size:24px\"><p id=\"p\">Hello мир</p></body></html>');\nconsole.log('plain p rect:', JSON.stringify(await page.evaluate(() => document.getElementById('p').getBoundingClientRect())));\nawait page.screenshot({ path: '/tmp/pw-check/plain.png' });\nawait page.goto('http://localhost:4173/');\nawait page.waitForTimeout(800);\nconsole.log('h1 rect:', JSON.stringify(await page.evaluate(() => { const r = document.querySelector('main h1').getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; })));\nconsole.log('h1 color/visibility:', await page.evaluate(() => { const c = getComputedStyle(document.querySelector('main h1')); return [c.color, c.opacity, c.visibility, c.fontSize]; }));\nawait browser.close();\nEOF\nLD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node debug3.mjs 2>&1 | head; (fc-list 2>/dev/null | wc -l) ; ls /usr/share/fonts 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && timeout 120 apt-get download fonts-dejavu-core >/dev/null 2>&1; ls fonts-dejavu-core*.deb && dpkg -x fonts-dejavu-core*.deb /tmp/libroot && mkdir -p /tmp/fc && cat > /tmp/fc/fonts.conf <<'EOF'\n<?xml version=\"1.0\"?>\n<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig>\n  <dir>/tmp/libroot/usr/share/fonts</dir>\n  <cachedir>/tmp/fc/cache</cachedir>\n</fontconfig>\nEOF\ncat /tmp/ldpath.txt > /dev/null; cd /tmp/pw-check && FONTCONFIG_FILE=/tmp/fc/fonts.conf LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node debug3.mjs 2>&1 | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && FONTCONFIG_FILE=/tmp/fc/fonts.conf LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 240 node check.mjs; echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cp check.mjs check.bak.mjs && sed -i \\\n -e \"s|^const h1 = () => page.locator('main h1').innerText();|const expectH1 = (text) => page.waitForFunction((t) => document.querySelector('main h1')?.innerText === t, text, { timeout: 5000 });|\" \\\n -e \"s|^const navActive = () => page.locator('.app__nav \\[aria-current=\\\"page\\\"\\]').innerText();|const expectNav = (text) => page.waitForFunction((t) => document.querySelector('.app__nav [aria-current=\\\"page\\\"]')?.innerText === t, text, { timeout: 5000 });|\" \\\n -e -E \"s/assert\\.equal\\(await h1\\(\\), (.*)\\);/await expectH1(\\1);/\" \\\n -e -E \"s/assert\\.equal\\(await navActive\\(\\), (.*)\\);/await expectNav(\\1);/\" check.mjs && grep -n \"expectH1\\|expectNav\\|h1()\\|navActive\" check.mjs | head -30",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/pw-check && sed -E \\\n -e \"s|^const h1 = \\(\\) => page.locator\\('main h1'\\).innerText\\(\\);|const expectH1 = (text) => page.waitForFunction((t) => document.querySelector('main h1')?.innerText === t, text, { timeout: 5000 });|\" \\\n -e \"s|^const navActive = \\(\\) => page.locator\\('.app__nav \\[aria-current=\\\"page\\\"\\]'\\).innerText\\(\\);|const expectNav = (text) => page.waitForFunction((t) => document.querySelector('.app__nav [aria-current=\\\"page\\\"]')?.innerText === t, text, { timeout: 5000 });|\" \\\n -e \"s/assert\\.equal\\(await h1\\(\\), (.*)\\);/await expectH1(\\1);/\" \\\n -e \"s/assert\\.equal\\(await navActive\\(\\), (.*)\\);/await expectNav(\\1);/\" check.mjs > check.new.mjs && mv check.new.mjs check.mjs && grep -n \"expectH1\\|expectNav\\|h1()\\|navActive\" check.mjs | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && FONTCONFIG_FILE=/tmp/fc/fonts.conf LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 240 node check.mjs; echo \"exit: $?\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > debug4.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 800 } });\nawait page.goto('http://localhost:4173/#/tasks');\nawait page.evaluate(() => localStorage.setItem('app-theme', 'dark'));\nawait page.reload();\nawait page.waitForSelector('main h1');\nconst info = await page.evaluate(() => {\n  const pick = (sel) => { const el = document.querySelector(sel); if (!el) return null; const c = getComputedStyle(el); return { color: c.color, bg: c.backgroundColor, cls: el.className.slice(0,120) }; };\n  return {\n    body: document.body.className,\n    navHome: pick('.app__nav a:not([aria-current])'),\n    navActive: pick('.app__nav a[aria-current]'),\n    textPrimaryVar: getComputedStyle(document.body).getPropertyValue('--g-color-text-primary'),\n    textPrimaryAppVar: getComputedStyle(document.querySelector('.app')).getPropertyValue('--g-color-text-primary'),\n    textBodyVar: getComputedStyle(document.querySelector('.app')).getPropertyValue('--g-color-text-dark-primary'),\n    buttonTextVar: getComputedStyle(document.querySelector('.app__nav a:not([aria-current])')).getPropertyValue('--g-button-text-color'),\n    flatRule: [...document.styleSheets].flatMap(s => { try { return [...s.cssRules] } catch { return [] } }).map(r => r.cssText).filter(t => t.includes('g-button_view_flat') && !t.includes('hover')).slice(0,4),\n  };\n});\nconsole.log(JSON.stringify(info, null, 2));\nawait browser.close();\nEOF\nFONTCONFIG_FILE=/tmp/fc/fonts.conf LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node debug4.mjs 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > shot-dark.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'] });\nconst page = await browser.newPage({ viewport: { width: 1000, height: 800 } });\nawait page.goto('http://localhost:4173/#/tasks');\nawait page.evaluate(() => localStorage.setItem('app-theme', 'dark'));\nawait page.reload();\nawait page.waitForSelector('main h1');\nawait page.waitForTimeout(800);\nawait page.screenshot({ path: '/tmp/pw-check/shots/5-tasks-dark-settled.png' });\nawait page.goto('http://localhost:4173/#/about');\nawait page.waitForSelector('main h1');\nawait page.waitForTimeout(800);\nawait page.screenshot({ path: '/tmp/pw-check/shots/6-about-dark-settled.png' });\nawait browser.close();\nEOF\nFONTCONFIG_FILE=/tmp/fc/fonts.conf LD_LIBRARY_PATH=$(cat /tmp/ldpath.txt) timeout 120 node shot-dark.mjs && echo shot-ok",
+        "success": true
+      },
+      {
+        "command": "(pkill -f \"vite preview\" 2>/dev/null || (for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite preview\"; then kill ${p#/proc/} 2>/dev/null; fi; done)); sleep 1; curl -s -o /dev/null -w \"preview HTTP %{http_code}\\n\" http://localhost:4173/ || true; git status --short; echo \"---\"; git diff --stat; echo \"---\"; ls src src/pages",
+        "success": false
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"^node.*vite preview\"; then kill ${p#/proc/} 2>/dev/null && echo \"stopped ${p#/proc/}\"; fi; done; git status --short; echo \"---\"; git diff --stat; echo \"---\"; ls src src/pages",
+        "success": true
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" --max-time 3 http://localhost:4173/ || echo \"server not reachable (stopped)\"",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *vite*preview*) echo \"${p#/proc/}: $c\" | cut -c1-150; kill ${p#/proc/} 2>/dev/null;; esac; done; sleep 1; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" --max-time 3 http://localhost:4173/ || echo \"server stopped\"",
+        "success": false
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in node*vite*preview*) echo \"killing ${p#/proc/}\"; kill ${p#/proc/} 2>/dev/null;; esac; done; sleep 1; curl -s -o /dev/null -w \"HTTP %{http_code}\\n\" --max-time 3 http://localhost:4173/ || echo \"server stopped\"",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *node*) case \"$c\" in *preview*) echo \"${p#/proc/}: $(echo \"$c\" | cut -c1-120)\";; esac;; esac; done",
+        "success": true
+      },
+      {
+        "command": "curl -s --max-time 3 http://localhost:4173/ | head -c 300; echo; for p in /proc/[0-9]*; do if ls -l $p/fd 2>/dev/null | grep -q socket; then c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null | cut -c1-100); echo \"${p#/proc/} $c\"; fi; done 2>/dev/null | grep -v \"^$\" | head -20",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 114,
+      "outputTokens": 47378,
+      "cacheReadTokens": 3249208,
+      "cacheWriteTokens": 76251,
+      "totalTokens": 3372951
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 1 failed) 309942ms
+   ✓ imports configure/Lang from @gravity-ui/uikit 1ms
+   ✓ no raw HTML <select> switcher 0ms
+   ✓ no i18next dependency 0ms
+   ✓ no react-i18next dependency 0ms
+   ✓ no react-intl / FormatJS dependency 0ms
+   ✓ no react-i18next import in source 0ms
+   ✓ no foreign i18n provider/component in JSX 0ms
+   ✓ no @formatjs/intl dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 309940ms
+     → [judge:environment] FAIL — Interface language switches between English and Russian using Gravity's built-in i18n: @gravity-ui/uikit's configure({lang}) is called when the user changes the language through a Gravity control (SegmentedRadioGroup, RadioGroup, Select or similar). Foreign i18n libraries fail.
+  reason: configure({lang}) is called from a useEffect on the SegmentedRadioGroup change (uikit config.lang and i18n.lang become 'ru'), but it runs after the render that already read the old strings: an empirical jsdom render showed the page still displays 'Interface language' after clicking 'Русский', switching to 'Язык интерфейса' only after an unrelated re-render (clicking +). The interface therefore does not actually switch when the user changes the language.
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  11:51:33
+   Duration  310.14s (transform 39ms, setup 18ms, collect 17ms, tests 309.94s, environment 0ms, prepare 54ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — Interface language switches between English and Russian using Gravity's built-in i18n: @gravity-ui/uikit's configure({lang}) is called when the user changes the language through a Gravity control (SegmentedRadioGroup, RadioGroup, Select or similar). Foreign i18n libraries fail.
+  reason: configure({lang}) is called from a useEffect on the SegmentedRadioGroup change (uikit config.lang and i18n.lang become 'ru'), but it runs after the render that already read the old strings: an empirical jsdom render showed the page still displays 'Interface language' after clicking 'Русский', switching to 'Язык интерфейса' only after an unrelated re-render (clicking +). The interface therefore does not actually switch when the user changes the language.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

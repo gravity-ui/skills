@@ -1,0 +1,82 @@
+{
+  "status": "failed",
+  "duration": 240.92,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 6982,
+    "outputTokens": 5766,
+    "cacheReadTokens": 60160,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 707,
+    "totalTokens": 72908
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'mkdir -p /home/sandbox/workspace/viz-widget/engines'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/viz-widget/engines/lineChartEngine.js << 'ENGINEEOF'\n// lineChartEngine.js — движок линейного графика продаж\nconst LineChartEngine = (() => {\n  const GRID_COLOR = '#2d3748';\n  const AXIS_COLOR = '#a0aec0';\n  const LINE_COLOR = '#48bb78';\n  const AREA_TOP = 'rgba(72, 187, 120, 0.25)';\n  const AREA_BOTTOM = 'rgba(72, 187, 120, 0.02)';\n  const POINT_COLOR = '#48bb78';\n  const PAD = { top: 24, right: 24, bottom: 48, left: 60 };\n\n  function draw(ctx, width, height, data, title) {\n    ctx.clearRect(0, 0, width, height);\n    const w = width - PAD.left - PAD.right;\n    const h = height - PAD.top - PAD.bottom;\n    if (w <= 0 || h <= 0 || data.length < 2) return;\n\n    const maxVal = Math.max(...data.map(d => d.value)) * 1.1 || 1;\n    const xStep = w / (data.length - 1);\n\n    // сетка\n    const gridLines = 5;\n    ctx.strokeStyle = GRID_COLOR;\n    ctx.lineWidth = 1;\n    for (let i = 0; i <= gridLines; i++) {\n      const y = PAD.top + (h / gridLines) * i;\n      ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + w, y); ctx.stroke();\n      const lbl = Math.round(maxVal - (maxVal / gridLines) * i);\n      ctx.fillStyle = AXIS_COLOR; ctx.font = '11px monospace'; ctx.textAlign = 'right';\n      ctx.fillText(lbl, PAD.left - 8, y + 4);\n    }\n\n    // ось X\n    data.forEach((d, i) => {\n      const x = PAD.left + xStep * i;\n      ctx.fillStyle = AXIS_COLOR; ctx.font = '10px monospace'; ctx.textAlign = 'center';\n      ctx.fillText(d.label, x, PAD.top + h + 18);\n    });\n\n    // заливка\n    ctx.beginPath();\n    ctx.moveTo(PAD.left, PAD.top + h);\n    data.forEach((d, i) => {\n      const x = PAD.left + xStep * i;\n      const y = PAD.top + h - (d.value / maxVal) * h;\n      ctx.lineTo(x, y);\n    });\n    ctx.lineTo(PAD.left + xStep * (data.length - 1), PAD.top + h);\n    ctx.closePath();\n    const grad = ctx.createLinearGradient(0, PAD.top, 0, PAD.top + h);\n    grad.addColorStop(0, AREA_TOP); grad.addColorStop(1, AREA_BOTTOM);\n    ctx.fillStyle = grad; ctx.fill();\n\n    // линия\n    ctx.strokeStyle = LINE_COLOR; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';\n    ctx.beginPath();\n    data.forEach((d, i) => {\n      const x = PAD.left + xStep * i;\n      const y = PAD.top + h - (d.value / maxVal) * h;\n      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);\n    });\n    ctx.stroke();\n\n    // точки\n    data.forEach(d => {\n      const x = PAD.left + xStep * data.indexOf(d);\n      const y = PAD.top + h - (d.value / maxVal) * h;\n      ctx.fillStyle = POINT_COLOR; ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();\n      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill();\n    });\n\n    // заголовок\n    ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'left';\n    ctx.fillText(title, PAD.left, 18);\n  }\n\n  return { render: draw };\n})();\nENGINEEOF\necho \\\"lineChartEngine.js written\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/viz-widget/engines/timeseriesEngine.js << 'ENGINEEOF'\n// timeseriesEngine.js — плотный временной ряд мониторинга\nconst TimeseriesEngine = (() => {\n  const GRID_COLOR = '#2d3748';\n  const AXIS_COLOR = '#a0aec0';\n  const SERIES_COLORS = ['#68d391', '#f6e05e', '#fc8181', '#63b3ed', '#b794f4'];\n  const BG = '#1a202c';\n  const PAD = { top: 28, right: 20, bottom: 48, left: 60 };\n\n  function draw(ctx, width, height, data, title) {\n    ctx.clearRect(0, 0, width, height);\n    const w = width - PAD.left - PAD.right;\n    const h = height - PAD.top - PAD.bottom;\n    if (w <= 0 || h <= 0 || \"'!data.length) return;\n\n    // фон\n    ctx.fillStyle = BG; ctx.fillRect(0, 0, width, height);\n\n    const series = data[0]?.series ? data : [{ name: title, points: data }];\n    const allValues = series.flatMap(s => s.points.map(p => p.value));\n    const maxVal = Math.max(...allValues) * 1.15 || 1;\n    const minVal = Math.min(...allValues, 0) * 0.95;\n    const range = maxVal - minVal || 1;\n    const pointCount = series[0]?.points.length || 0;\n    const xStep = pointCount > 1 ? w / (pointCount - 1) : w;\n\n    // вертикальная сетка (каждый 5-й)\n    ctx.strokeStyle = GRID_COLOR; ctx.lineWidth = 0.5;\n    for (let i = 0; i < pointCount; i += Math.max(1, Math.floor(pointCount / 12))) {\n      const x = PAD.left + xStep * i;\n      ctx.beginPath(); ctx.moveTo(x, PAD.top); ctx.lineTo(x, PAD.top + h); ctx.stroke();\n    }\n\n    // горизонтальная сетка\n    ctx.lineWidth = 0.5;\n    for (let i = 0; i <= 8; i++) {\n      const y = PAD.top + (h / 8) * i;\n      ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + w, y); ctx.stroke();\n      const lbl = (maxVal - (range / 8) * i).toFixed(0);\n      ctx.fillStyle = AXIS_COLOR; ctx.font = '\"'10px monospace'; ctx.textAlign = 'right';\n      ctx.fillText(lbl, PAD.left - 8, y + 4);\n    }\n\n    // ряды\n    series.forEach((s, si) => {\n      const color = SERIES_COLORS[si % SERIES_COLORS.length];\n      ctx.strokeStyle = color; ctx.lineWidth = 1.8; ctx.lineJoin = 'round';\n      ctx.beginPath();\n      s.points.forEach((p, i) => {\n        const x = PAD.left + xStep * i;\n        const y = PAD.top + h - ((p.value - minVal) / range) * h;\n        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);\n      });\n      ctx.stroke();\n\n      // подпись ряда\n      const last = s.points[s.points.length - 1];\n      const lx = PAD.left + xStep * (s.points.length - 1) + 6;\n      const ly = PAD.top + h - ((last.value - minVal) / range) * h + 4;\n      ctx.fillStyle = color; ctx.font = 'bold 11px monospace';\n      ctx.fillText(s.name || \"'`Series-${si + 1}`, lx, ly);\n    });\n\n    // метки времени (каждые ~12 точек)\n    const pts0 = series[0]?.points || [];\n    const step = Math.max(1, Math.floor(pts0.length / 12));\n    pts0.forEach((p, i) => {\n      if (i % step !== 0) return;\n      const x = PAD.left + xStep * i;\n      ctx.fillStyle = AXIS_COLOR; ctx.font = '\"'9px monospace'; ctx.textAlign = 'center';\n      ctx.fillText(p.ts || i, x, PAD.top + h + 14);\n    });\n\n    // заголовок\n    ctx.fillStyle = '#e2e8f0'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'left';\n    ctx.fillText(title, PAD.left, 16);\n  }\n\n  return { render: draw };\n})();\nENGINEEOF\necho \\\"timeseriesEngine.js written\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/viz-widget/vizWidget.js << 'APIEOF'\n// vizWidget.js — единый API виджета с ленивой загрузкой движков\nconst VizWidget = (() => {\n  const _registry = {};    // id -> { canvas, mode, data, title, loaded }\n\n  function _ensureEngine(entry, engineName, engineUrl) {\n    if (entry.loaded === engineName) return Promise.resolve();\n    return new Promise((resolve, reject) => {\n      const script = document.createElement('script');\n      script.src = engineUrl;\n      script.onload = () => { entry.loaded = engineName; resolve(); };\n      script.onerror = () => reject(new Error(\"'`Failed to load ${engineUrl}`));\n      document.head.appendChild(script);\n    });\n  }\n\n  function _redraw(entry) {\n    const ctx = entry.canvas.getContext('\"'2d');\n    const dpr = window.devicePixelRatio || 1;\n    const w = entry.canvas.clientWidth;\n    const h = entry.canvas.clientHeight;\n    entry.canvas.width = w * dpr;\n    entry.canvas.height = h * dpr;\n    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);\n\n    const engine = entry.mode === 'timeseries'\n      ? (typeof TimeseriesEngine \"'!== '\"'undefined' ? TimeseriesEngine : null)\n      : (typeof LineChartEngine \"'!== '\"'undefined' ? LineChartEngine : null);\n\n    if (engine) engine.render(ctx, w, h, entry.data, entry.title);\n  }\n\n  // ---- публичный API ----\n\n  function create(id, { mode = 'line', data = [], title = 'Chart', width = '100%', height = 400 } = {}) {\n    const existing = document.getElementById(id);\n    if (\"'!existing) throw new Error(`Element #${id} not found`);\n    const canvas = existing.tagName === '\"'CANVAS' ? existing : document.createElement('canvas');\n    if (existing.tagName \"'!== '\"'CANVAS') { existing.innerHTML = ''; existing.appendChild(canvas); }\n    canvas.style.width = typeof width === 'number' ? width + 'px' : width;\n    canvas.style.height = typeof height === 'number' ? height + 'px' : height;\n    canvas.style.display = 'block';\n\n    const entry = { canvas, mode, data, title, loaded: null };\n    _registry[id] = entry;\n    setMode(id, mode);\n    return { id };\n  }\n\n  function setMode(id, mode) {\n    const entry = _registry[id];\n    if (\"'!entry) throw new Error(`Widget ${id} not found`);\n    entry.mode = mode;\n\n    const url = mode === '\"'timeseries'\n      ? './engines/timeseriesEngine.js'\n      : './engines/lineChartEngine.js';\n\n    return _ensureEngine(entry, mode, url).then(() => _redraw(entry));\n  }\n\n  function setData(id, data) {\n    const entry = _registry[id];\n    if (\"'!entry) throw new Error(`Widget ${id} not found`);\n    entry.data = data;\n    if (entry.loaded) _redraw(entry);\n  }\n\n  function setTitle(id, title) {\n    const entry = _registry[id];\n    if (!entry) throw new Error(`Widget ${id} not found`);\n    entry.title = title;\n    if (entry.loaded) _redraw(entry);\n  }\n\n  function resize(id) {\n    const entry = _registry[id];\n    if (!entry) return;\n    if (entry.loaded) _redraw(entry);\n  }\n\n  return { create, setMode, setData, setTitle, resize };\n})();\nAPIEOF\necho \"vizWidget.js written\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/viz-widget/index.html << 'HTMLEOF'\n<\"'!DOCTYPE html>\n<html lang=\"ru\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>VizWidget — Sales Chart + Timeseries Monitor</title>\n<style>\n  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n  body {\n    font-family: -apple-system, BlinkMacSystemFont, '\"'Segoe UI', Roboto, sans-serif;\n    background: #0d1117;\n    color: #c9d1d9;\n    display: flex; flex-direction: column; align-items: center;\n    min-height: 100vh; padding: 32px 16px;\n    gap: 24px;\n  }\n  h1 { font-size: 22px; font-weight: 600; color: #e6edf3; letter-spacing: -0.3px; }\n\n  .controls {\n    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;\n  }\n  .controls button {\n    background: #21262d; color: #c9d1d9; border: 1px solid #30363d;\n    border-radius: 8px; padding: 10px 22px; font-size: 14px;\n    font-weight: 500; cursor: pointer; transition: all 0.15s;\n  }\n  .controls button:hover   { background: #30363d; }\n  .controls button.active  {\n    background: #238636; border-color: #238636; color: #fff; font-weight: 600;\n  }\n\n  .chart-wrapper {\n    width: min(960px, 100%); background: #161b22; border: 1px solid #30363d;\n    border-radius: 12px; padding: 8px;\n  }\n  #viz-canvas { width: 100%; height: 420px; display: block; border-radius: 8px; }\n\n  .info {\n    font-size: 12px; color: #6e7681; max-width: min(960px, 100%);\n    text-align: center; line-height: 1.6;\n  }\n</style>\n</head>\n<body>\n<h1>VizWidget — унифицированный виджет визуализации</h1>\n\n<div class=\\\"controls\\\">\n  <button id=\\\"btn-line\\\"      class=\\\"active\\\"  onclick=\\\"switchTo('line')\\\">📈 Продажи (линейный)</button>\n  <button id=\\\"btn-ts\\\"                        onclick=\\\"switchTo('timeseries')\\\">📊 Мониторинг (временной ряд)</button>\n  <button id=\\\"btn-resize\\\"                    onclick=\\\"VizWidget.resize('main')\\\">↺ Resize</button>\n</div>\n\n<div class=\\\"chart-wrapper\\\">\n  <canvas id=\\\"viz-canvas\\\"></canvas>\n</div>\n\n<div class=\\\"info\\\">\n  Оба движка (<code>lineChartEngine.js</code> / <code>timeseriesEngine.js</code>) загружаются лениво при первом переключении.<br>\n  Единый API: <code>VizWidget.create</code>, <code>.setMode</code>, <code>.setData</code>, <code>.setTitle</code>, <code>.resize</code>.\n</div>\n\n<\"'!-- API-ядро загружается сразу, движки — лениво через setMode -->\n<script src=\"vizWidget.js\"></script>\n<script>\n  // ── демо-данные ──────────────────────────────────\n  const salesData = [\n    { label: '\"'Янв', value: 120 }, { label: 'Фев', value: 190 },\n    { label: 'Мар', value: 145 }, { label: 'Апр', value: 210 },\n    { label: 'Май', value: 260 }, { label: 'Июн', value: 195 },\n    { label: 'Июл', value: 310 }, { label: 'Авг', value: 285 },\n    { label: 'Сен', value: 340 }, { label: 'Окт', value: 300 },\n    { label: 'Ноя', value: 370 }, { label: 'Дек', value: 420 },\n  ];\n\n  const tsData = [\n    { name: 'CPU %', points: Array.from({ length: 60 }, (_, i) =>\n      ({ ts: \"'`${String(i).padStart(2, '\"'0')}:00\"'`, value: 20 + Math.sin(i * 0.3) * 15 + Math.random() * 8 })) },\n    { name: '\"'Mem GB', points: Array.from({ length: 60 }, (_, i) =>\n      ({ ts: \"'`${String(i).padStart(2, '\"'0')}:00\"'`, value: 6 + Math.cos(i * 0.4) * 2 + Math.random() * 1.5 })) },\n    { name: '\"'Req/s', points: Array.from({ length: 60 }, (_, i) =>\n      ({ ts: \"'`${String(i).padStart(2, '\"'0')}:00\"'`, value: 150 + Math.sin(i * 0.5 + 1) * 60 + Math.random() * 30 })) },\n  ];\n\n  // ── инициализация ────────────────────────────────\n  window.addEventListener('\"'DOMContentLoaded', () => {\n    VizWidget.create('viz-canvas', {\n      mode: 'line',\n      data: salesData,\n      title: 'Продажи 2025 (млн руб.)',\n    });\n  });\n\n  window.addEventListener('resize', () => VizWidget.resize('main'));\n\n  function switchTo(mode) {\n    const isLine = mode === 'line';\n    document.getElementById('btn-line').classList.toggle('active', isLine);\n    document.getElementById('btn-ts').classList.toggle('active', \"'!isLine);\n\n    VizWidget.setMode('\"'main', mode).then(() => {\n      VizWidget.setData('main', isLine ? salesData : tsData);\n      VizWidget.setTitle('main', isLine ? 'Продажи 2025 (млн руб.)' : 'Мониторинг сервера (CPU / Mem / Req/s)');\n    });\n  }\n</script>\n</body>\n</html>\nHTMLEOF\necho \\\"index.html written\\\"\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 6982,
+      "outputTokens": 5766,
+      "cacheReadTokens": 60160,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 707,
+      "totalTokens": 72908
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

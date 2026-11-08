@@ -1,0 +1,150 @@
+{
+  "status": "passed",
+  "duration": 306.953,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 28610,
+    "outputTokens": 9313,
+    "cacheReadTokens": 358144,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 5160,
+    "totalTokens": 396067
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 11,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 19,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/SKILL.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/references/package-routing.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@gravity-ui/uikit/build/docs/ 2>/dev/null || echo \"NO_LOCAL_DOCS\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'curl -sL https://gravity-ui.com/llms/uikit/7/llms.txt | head -3000'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'curl -sL https://unpkg.com/@gravity-ui/uikit@7.51.1/build/docs/components/Table.md'"
+      },
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/rules/hallucination-traps.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find . -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'curl -sL https://unpkg.com/@gravity-ui/uikit@7.51.1/build/docs/components/Pagination.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx && echo \"---\" && cat src/App.tsx && echo \"---\" && cat index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'curl -sL https://unpkg.com/@gravity-ui/uikit@7.51.1/build/docs/components/Table.md | grep -A 150 \"withTableSelection\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"curl -sL https://unpkg.com/@gravity-ui/uikit@7.51.1/build/docs/components/Table.md | sed -n '/## Using.*withTableSelection/,/## Using.*withTableSettings/p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx << 'ENDOFFILE'\nimport React, { useMemo, useState } from 'react';\nimport {\n  Table,\n  withTableSorting,\n  withTableSelection,\n  Pagination,\n  Flex,\n  Text,\n} from '@gravity-ui/uikit';\nimport type { TableColumnConfig, TableSortState } from '@gravity-ui/uikit';\n\nconst DataTable = withTableSelection(withTableSorting(Table));\n\ninterface Item {\n  id: string;\n  name: string;\n  email: string;\n  role: string;\n  status: string;\n}\n\nconst ALL_DATA: Item[] = [\n  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin', status: 'Active' },\n  { id: '2', name: 'Bob Smith', email: 'bob@example.com', role: 'Editor', status: 'Active' },\n  { id: '3', name: 'Carol White', email: 'carol@example.com', role: 'Viewer', status: 'Inactive' },\n  { id: '4', name: 'Dave Brown', email: 'dave@example.com', role: 'Editor', status: 'Active' },\n  { id: '5', name: 'Eve Davis', email: 'eve@example.com', role: 'Admin', status: 'Inactive' },\n  { id: '6', name: 'Frank Miller', email: 'frank@example.com', role: 'Viewer', status: 'Active' },\n  { id: '7', name: 'Grace Wilson', email: 'grace@example.com', role: 'Editor', status: 'Inactive' },\n  { id: '8', name: 'Hank Moore', email: 'hank@example.com', role: 'Viewer', status: 'Active' },\n  { id: '9', name: 'Ivy Taylor', email: 'ivy@example.com', role: 'Admin', status: 'Active' },\n  { id: '10', name: 'Jack Anderson', email: 'jack@example.com', role: 'Editor', status: 'Inactive' },\n  { id: '11', name: 'Karen Thomas', email: 'karen@example.com', role: 'Viewer', status: 'Active' },\n  { id: '12', name: 'Leo Jackson', email: 'leo@example.com', role: 'Editor', status: 'Active' },\n];\n\nconst COLUMNS: TableColumnConfig<Item>[] = [\n  { id: 'name', name: 'Name', meta: { sort: true } },\n  { id: 'email', name: 'Email', meta: { sort: true } },\n  { id: 'role', name: 'Role', meta: { sort: true } },\n  { id: 'status', name: 'Status', meta: { sort: true } },\n];\n\nconst PAGE_SIZE = 5;\n\nexport function App() {\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n  const [sortState, setSortState] = useState<TableSortState>([]);\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(PAGE_SIZE);\n\n  const sortedData = useMemo(() => {\n    if (sortState.length === 0) return ALL_DATA;\n    const [{ column, order }] = sortState;\n    return [...ALL_DATA].sort((a, b) => {\n      const aVal = a[column as keyof Item];\n      const bVal = b[column as keyof Item];\n      const cmp = String(aVal).localeCompare(String(bVal));\n      return order === 'asc' ? cmp : -cmp;\n    });\n  }, [sortState]);\n\n  const paginatedData = useMemo(() => {\n    const start = (page - 1) * pageSize;\n    return sortedData.slice(start, start + pageSize);\n  }, [sortedData, page, pageSize]);\n\n  return (\n    <Flex direction=\\\"column\\\" gap={4} style={{ padding: 24 }}>\n      <Text variant=\\\"header-1\\\">Data Table</Text>\n      <Flex gap={2}>\n        <Text variant=\\\"body-1\\\">Selected: {selectedIds.length}</Text>\n      </Flex>\n      <DataTable\n        data={paginatedData}\n        columns={COLUMNS}\n        getRowId=\\\"id\\\"\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        sortState={sortState}\n        onSortStateChange={setSortState}\n        disableDataSorting\n      />\n      <Pagination\n        page={page}\n        pageSize={pageSize}\n        total={sortedData.length}\n        onUpdate={(newPage, newPageSize) => {\n          setPage(newPage);\n          setPageSize(newPageSize);\n        }}\n        pageSizeOptions={[5, 10, 20]}\n        showInput\n      />\n    </Flex>\n  );\n}\nENDOFFILE\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npm run build 2>&1'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1 | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg -n \"TableDataItem\" node_modules/@gravity-ui/uikit/build/esm/components/Table/ | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx << 'ENDOFFILE'\nimport React, { useMemo, useState } from 'react';\nimport {\n  Table,\n  withTableSorting,\n  withTableSelection,\n  Pagination,\n  Flex,\n  Text,\n} from '@gravity-ui/uikit';\nimport type { TableColumnConfig, TableSortState } from '@gravity-ui/uikit';\n\nconst DataTable = withTableSelection(withTableSorting(Table));\n\ninterface Item {\n  id: string;\n  name: string;\n  email: string;\n  role: string;\n  status: string;\n}\n\nconst ALL_DATA: Item[] = [\n  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin', status: 'Active' },\n  { id: '2', name: 'Bob Smith', email: 'bob@example.com', role: 'Editor', status: 'Active' },\n  { id: '3', name: 'Carol White', email: 'carol@example.com', role: 'Viewer', status: 'Inactive' },\n  { id: '4', name: 'Dave Brown', email: 'dave@example.com', role: 'Editor', status: 'Active' },\n  { id: '5', name: 'Eve Davis', email: 'eve@example.com', role: 'Admin', status: 'Inactive' },\n  { id: '6', name: 'Frank Miller', email: 'frank@example.com', role: 'Viewer', status: 'Active' },\n  { id: '7', name: 'Grace Wilson', email: 'grace@example.com', role: 'Editor', status: 'Inactive' },\n  { id: '8', name: 'Hank Moore', email: 'hank@example.com', role: 'Viewer', status: 'Active' },\n  { id: '9', name: 'Ivy Taylor', email: 'ivy@example.com', role: 'Admin', status: 'Active' },\n  { id: '10', name: 'Jack Anderson', email: 'jack@example.com', role: 'Editor', status: 'Inactive' },\n  { id: '11', name: 'Karen Thomas', email: 'karen@example.com', role: 'Viewer', status: 'Active' },\n  { id: '12', name: 'Leo Jackson', email: 'leo@example.com', role: 'Editor', status: 'Active' },\n];\n\nconst COLUMNS = [\n  { id: 'name', name: 'Name', meta: { sort: true } },\n  { id: 'email', name: 'Email', meta: { sort: true } },\n  { id: 'role', name: 'Role', meta: { sort: true } },\n  { id: 'status', name: 'Status', meta: { sort: true } },\n] as TableColumnConfig<Item>[];\n\nconst PAGE_SIZE = 5;\n\nexport function App() {\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n  const [sortState, setSortState] = useState<TableSortState>([]);\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(PAGE_SIZE);\n\n  const sortedData = useMemo(() => {\n    if (sortState.length === 0) return ALL_DATA;\n    const [{ column, order }] = sortState;\n    return [...ALL_DATA].sort((a, b) => {\n      const aVal = a[column as keyof Item];\n      const bVal = b[column as keyof Item];\n      const cmp = String(aVal).localeCompare(String(bVal));\n      return order === 'asc' ? cmp : -cmp;\n    });\n  }, [sortState]);\n\n  const paginatedData = useMemo(() => {\n    const start = (page - 1) * pageSize;\n    return sortedData.slice(start, start + pageSize);\n  }, [sortedData, page, pageSize]);\n\n  return (\n    <Flex direction=\\\"column\\\" gap={4} style={{ padding: 24 }}>\n      <Text variant=\\\"header-1\\\">Data Table</Text>\n      <Text variant=\\\"body-1\\\">Selected: {selectedIds.length}</Text>\n      <DataTable\n        data={paginatedData}\n        columns={COLUMNS as TableColumnConfig<any>[]}\n        getRowId=\\\"id\\\"\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        sortState={sortState}\n        onSortStateChange={setSortState}\n        disableDataSorting\n      />\n      <Pagination\n        page={page}\n        pageSize={pageSize}\n        total={sortedData.length}\n        onUpdate={(newPage, newPageSize) => {\n          setPage(newPage);\n          setPageSize(newPageSize);\n        }}\n        pageSizeOptions={[5, 10, 20]}\n        showInput\n      />\n    </Flex>\n  );\n}\nENDOFFILE\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npm run build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 28610,
+      "outputTokens": 9313,
+      "cacheReadTokens": 358144,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 5160,
+      "totalTokens": 396067
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

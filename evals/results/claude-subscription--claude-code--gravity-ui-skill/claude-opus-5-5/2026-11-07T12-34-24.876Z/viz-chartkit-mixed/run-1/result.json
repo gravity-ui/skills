@@ -1,0 +1,175 @@
+{
+  "status": "passed",
+  "duration": 1352.754,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 60,
+    "outputTokens": 20258,
+    "cacheReadTokens": 1591060,
+    "cacheWriteTokens": 68512,
+    "totalTokens": 1679890
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 30,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 30,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && ls -R .agents | head -100 && cat AGENTS.md && git ls-files && cat package.json 2>/dev/null; ls",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ----; grep -n -i -C 4 'chartkit\\|charts\\|yagr\\|timeseries\\|time series' .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,200p",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts index.html .gitignore; ls __agent_eval__ node_modules/@gravity-ui; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/chartkit version peerDependencies dependencies --json 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "for v in $(npm view @gravity-ui/chartkit versions --json | node -e 'const a=JSON.parse(require(\"fs\").readFileSync(0));console.log(a.filter(v=>!v.includes(\"-\")).slice(-15).join(\" \"))'); do echo \"$v $(npm view @gravity-ui/chartkit@$v peerDependencies --json | tr -d '\\n ')\"; done",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/chartkit@^8.12.0 2>&1 | tail -15 && node -e 'for (const p of [\"chartkit\",\"charts\",\"yagr\",\"uikit\"]) console.log(p, require(\"./node_modules/@gravity-ui/\"+p+\"/package.json\").version)' && .agents/skills/gravity-ui/scripts/inspect-package.sh chartkit ChartKit settings GravityChartsPlugin YagrPlugin ChartKitRef 2>&1 | head -60",
+        "success": false
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/chartkit/package.json | node -e 'const p=JSON.parse(require(\"fs\").readFileSync(0));console.log(JSON.stringify({deps:p.dependencies,peer:p.peerDependencies,exports:p.exports,main:p.main},null,1))'; find node_modules -path '*@gravity-ui/charts/package.json' -o -path '*@gravity-ui/yagr/package.json' | head; ls node_modules/@gravity-ui/chartkit node_modules/@gravity-ui/chartkit/build 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit && ls -R build/docs | head -40; cat build/docs/INDEX.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat index.d.ts types/index.d.ts; ls plugins/yagr plugins/yagr/types plugins/gravity-charts; cat plugins/yagr/index.d.ts plugins/gravity-charts/index.d.ts; cat plugins/yagr/types/index.d.ts plugins/gravity-charts/types.d.ts 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat types/widget.d.ts plugins/yagr/types.d.ts; cat plugins/yagr/index.js plugins/gravity-charts/index.js; ls plugins/yagr/renderer",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && C=chartkit/node_modules/@gravity-ui/charts; grep version $C/package.json yagr/package.json; ls $C/dist/docs 2>/dev/null $C/build/docs 2>/dev/null | head; find $C/dist -name '*.d.ts' -path '*types/chart*' | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist && T=esm/core/types/chart; cat esm/core/types/chart/chart.d.ts 2>/dev/null; grep -n -A30 'export interface ChartData' -r esm/core/types/*.d.ts | head -60; grep -n -B2 -A12 \"type: 'datetime'\\|AxisType\\|title?:\\|timestamp\\|labels?:\" $T/axis.d.ts | head -70",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/esm/core/types && sed -n 70,120p index.d.ts; grep -n -B1 -A6 'export interface ChartAxisTitle\\b\\|export interface ChartAxisTitle {' chart/axis.d.ts | head -20; grep -n 'export interface LineSeries\\b\\|export interface LineSeries<\\|export interface LineSeriesData' -A25 chart/line.d.ts | grep -v '^\\S*-\\s*\\*' | head -50; grep -n 'export interface ChartLegend' -A6 chart/legend.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && grep -n 'enabled?' -B3 chartkit/node_modules/@gravity-ui/charts/dist/esm/core/types/chart/legend.d.ts | head -8; grep -n 'export interface ChartTitle' -A4 chartkit/node_modules/@gravity-ui/charts/dist/esm/core/types/chart/title.d.ts; Y=yagr/dist; ls $Y; grep -rn 'export interface RawSerieData\\|export type RawSerieData' -A30 $Y --include=*.d.ts | grep -v '^\\S*-\\s*\\*' | head -40",
+        "success": true
+      },
+      {
+        "command": "T=yagr/dist/YagrCore/types.d.ts; grep -n 'export interface ExtendedSeriesOptions' -A40 $T | grep -v '^\\S*-\\s*\\*' | head -45; grep -n 'export interface YagrConfig' -A40 $T | grep -v '^\\S*-\\s*\\*' | head -45; grep -n 'export interface YagrChartOptions\\|export interface ChartOptions' -A30 $T | grep -v '^\\S*-\\s*\\*' | head -40; grep -n 'timeMultiplier\\|ms\\b' $T | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer && grep -n 'theme\\|timeMultiplier\\|timeZone\\|locale\\|legend' utils.js useWidgetData.js YagrWidget.js | head -40; grep -n 'type ChartType\\|export interface LegendOptions' -A8 /home/sandbox/workspace/node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts | head -24",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Card Loader Text Flex Label 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Card Loader Text Flex Label 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls SegmentedRadioGroup Card Loader; cat SegmentedRadioGroup/SegmentedRadioGroup.d.ts SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts 2>/dev/null | head -60; grep -n 'view\\|type\\|theme' Card/Card.d.ts | head; grep -n 'size' Loader/Loader.d.ts; grep -n \"TEXT_VARIANTS\\|color\" text/text/Text.d.ts 2>/dev/null| head; ls | grep -i -E 'text|alert|skeleton'",
+        "success": true
+      },
+      {
+        "command": "grep -n 'onUpdate\\|value\\|options\\|name' types.d.ts | sed -n 1,30p; grep -n 'export interface AlertProps' -A25 Alert/types.d.ts | grep -E 'theme|title|message|view|actions|layout' ; grep -n 'LoaderSize =' Loader/Loader.d.ts; grep -rn \"color?\" Text/Text.d.ts text/colorText/*.d.ts 2>/dev/null | head -3; grep -rn \"TEXT_COLORS\\|'secondary'\" Text/colorText/*.d.ts 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && grep -n sideEffects -A4 chartkit/package.json chartkit/node_modules/@gravity-ui/charts/package.json yagr/package.json; grep -n \"^import\\|^export\" chartkit/build/components/ChartKit.js chartkit/build/libs/settings/settings.js 2>/dev/null | head -20; grep -n 'export type AlertTheme' -r uikit/build/esm/components/Alert/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat libs/settings/settings.d.ts | head -30; sed -n 1,40p components/ChartKit.js | sed -n 10,40p",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && T=yagr/dist/YagrCore/types.d.ts; grep -n 'export interface LegendOptions' -A14 $T | grep -v '^\\S*-\\s*\\*'; grep -n 'export interface LineSeriesOptions\\|export interface CommonSeriesOptions' -A24 $T | grep -v '^\\S*-\\s*\\*' | head -40; grep -n 'label?\\|size?' uikit/../yagr/node_modules/uplot/dist/uPlot.d.ts 2>/dev/null | head -3; find . -path '*uplot/dist/uPlot.d.ts' | head -2; cat chartkit/build/components/ChartKit.d.ts",
+        "success": true
+      },
+      {
+        "command": "T=yagr/dist/YagrCore; grep -rn 'interface LegendOptions\\|LegendOptions =' -A12 $T --include=*.d.ts | grep -v '^\\S*-\\s*\\*' | head -16; grep -rln 'interface Axis\\b' ../uplot/dist/ 2>/dev/null; grep -n 'label?:' ../../node_modules/uplot/dist/uPlot.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,80p Alert/types.d.ts | grep -v '^\\s*\\*\\|/\\*\\*'; grep -n 'wrap\\|justifyContent\\|alignItems' layout/Flex/Flex.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src/visualization && cd /home/sandbox/workspace/src/visualization && cat > types.ts <<'EOF'\n/** Режимы визуализации, доступные в виджете. */\nexport type VisualizationMode = 'sales' | 'monitoring';\n\n/** Один временной ряд. `values[i]` соответствует `timestamps[i]` датасета; `null` — пропуск. */\nexport interface TimeSeries {\n    id: string;\n    name: string;\n    values: Array<number | null>;\n}\n\n/**\n * Единый формат данных виджета — одинаковый для обоих режимов.\n * Виджет сам преобразует его в формат нужного движка (gravity-charts или yagr).\n */\nexport interface TimeSeriesDataset {\n    /** Метки времени в миллисекундах (Unix epoch), по возрастанию. */\n    timestamps: number[];\n    series: TimeSeries[];\n    /** Единица измерения значений — подпись оси Y. */\n    unit?: string;\n}\n\nexport interface VisualizationWidgetProps {\n    title: string;\n    /** Данные для каждого режима в едином формате. */\n    datasets: Record<VisualizationMode, TimeSeriesDataset>;\n    /** Контролируемый режим. Если не задан — виджет хранит режим сам. */\n    mode?: VisualizationMode;\n    /** Стартовый режим для неконтролируемого варианта. */\n    defaultMode?: VisualizationMode;\n    onModeChange?: (mode: VisualizationMode) => void;\n    /** Высота области графика в px. */\n    height?: number;\n    /** Внешняя загрузка данных — показывает лоадер вместо графика. */\n    loading?: boolean;\n    /** Вызывается, когда движок текущего режима отрисовал график. */\n    onLoad?: (mode: VisualizationMode) => void;\n    /** Вызывается при ошибке движка графика. */\n    onError?: (mode: VisualizationMode, error: unknown) => void;\n}\n\n/** Императивный API виджета. */\nexport interface VisualizationWidgetRef {\n    /** Пересчитать размеры графика (например, после изменения размеров контейнера). */\n    reflow: () => void;\n}\nEOF\ncat > chartkit-setup.ts <<'EOF'\nimport {settings} from '@gravity-ui/chartkit';\nimport {GravityChartsPlugin} from '@gravity-ui/chartkit/gravity-charts';\nimport {YagrPlugin} from '@gravity-ui/chartkit/yagr';\n\n// Регистрируем плагины один раз. Рендерер каждого плагина — React.lazy:\n// код движка (gravity-charts / yagr) загружается только при первом показе\n// графика этого типа.\nsettings.set({plugins: [GravityChartsPlugin, YagrPlugin], lang: 'ru'});\nEOF\ncat > adapters.ts <<'EOF'\nimport type {ChartKitWidget} from '@gravity-ui/chartkit';\n\nimport type {TimeSeriesDataset, VisualizationMode} from './types';\n\ntype GravityChartsData = ChartKitWidget['gravity-charts']['data'];\ntype YagrData = ChartKitWidget['yagr']['data'];\n\n/** Обычный линейный график продаж — @gravity-ui/charts (SVG, богатые подписи и легенда). */\nexport function toGravityChartsData(dataset: TimeSeriesDataset): GravityChartsData {\n    return {\n        series: {\n            data: dataset.series.map((series) => ({\n                type: 'line',\n                id: series.id,\n                name: series.name,\n                data: dataset.timestamps.map((x, i) => ({x, y: series.values[i] ?? null})),\n            })),\n        },\n        xAxis: {type: 'datetime'},\n        yAxis: [{title: dataset.unit ? {text: dataset.unit} : undefined}],\n        legend: {enabled: true},\n    };\n}\n\n/** Плотный временной ряд мониторинга — @gravity-ui/yagr (canvas, uPlot). */\nexport function toYagrData(dataset: TimeSeriesDataset): YagrData {\n    return {\n        data: {\n            timeline: dataset.timestamps,\n            graphs: dataset.series.map((series) => ({\n                id: series.id,\n                name: series.name,\n                data: series.values,\n            })),\n        },\n        libraryConfig: {\n            chart: {\n                series: {type: 'line', spanGaps: false},\n                select: {zoom: true},\n                timeMultiplier: 1,\n            },\n            axes: dataset.unit ? {y: {label: dataset.unit}} : undefined,\n            legend: {show: true, position: 'bottom'},\n        },\n    };\n}\n\n/** Возвращает текст ошибки, если датасет некорректен, иначе `null`. */\nexport function validateDataset(dataset: TimeSeriesDataset): string | null {\n    const length = dataset.timestamps.length;\n    const broken = dataset.series.find((series) => series.values.length !== length);\n    if (broken) {\n        return `Ряд «${broken.name}»: ${broken.values.length} значений при ${length} метках времени`;\n    }\n    return null;\n}\n\nexport function isDatasetEmpty(dataset: TimeSeriesDataset): boolean {\n    return dataset.timestamps.length === 0 || dataset.series.length === 0;\n}\n\nexport const MODE_LABELS: Record<VisualizationMode, string> = {\n    sales: 'Продажи',\n    monitoring: 'Мониторинг',\n};\n\nexport const MODE_HINTS: Record<VisualizationMode, string> = {\n    sales: 'Линейный график по месяцам',\n    monitoring: 'Плотный временной ряд, выделите область для зума',\n};\nEOF",
+        "success": true
+      },
+      {
+        "command": "cat > VisualizationWidget.tsx <<'EOF'\nimport * as React from 'react';\nimport ChartKit from '@gravity-ui/chartkit';\nimport type {ChartKitRef, ChartKitProps} from '@gravity-ui/chartkit';\nimport {Alert, Card, Flex, Loader, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';\n\nimport './chartkit-setup';\nimport {\n    MODE_HINTS,\n    MODE_LABELS,\n    isDatasetEmpty,\n    toGravityChartsData,\n    toYagrData,\n    validateDataset,\n} from './adapters';\nimport type {VisualizationMode, VisualizationWidgetProps, VisualizationWidgetRef} from './types';\n\nimport './VisualizationWidget.css';\n\nconst MODES: VisualizationMode[] = ['sales', 'monitoring'];\n\nconst renderPluginLoader = () => (\n    <div className=\"viz-widget__state\">\n        <Loader size=\"m\" />\n    </div>\n);\n\nconst renderError: ChartKitProps<'yagr'>['renderError'] = ({message, resetError}) => (\n    <div className=\"viz-widget__state\">\n        <Alert\n            theme=\"danger\"\n            title=\"Не удалось построить график\"\n            message={message}\n            actions={[{text: 'Повторить', handler: resetError}]}\n        />\n    </div>\n);\n\nexport const VisualizationWidget = React.forwardRef<VisualizationWidgetRef, VisualizationWidgetProps>(\n    function VisualizationWidget(\n        {\n            title,\n            datasets,\n            mode: controlledMode,\n            defaultMode = 'sales',\n            onModeChange,\n            height = 360,\n            loading = false,\n            onLoad,\n            onError,\n        },\n        ref,\n    ) {\n        const [uncontrolledMode, setUncontrolledMode] = React.useState<VisualizationMode>(defaultMode);\n        const mode = controlledMode ?? uncontrolledMode;\n        const dataset = datasets[mode];\n\n        const chartRef = React.useRef<ChartKitRef | null | undefined>(null);\n\n        React.useImperativeHandle(\n            ref,\n            () => ({\n                reflow() {\n                    // gravity-charts может вернуть промис, который отклоняется при размонтировании.\n                    Promise.resolve(chartRef.current?.reflow()).catch(() => {});\n                },\n            }),\n            [],\n        );\n\n        const handleModeChange = (next: VisualizationMode) => {\n            if (controlledMode === undefined) {\n                setUncontrolledMode(next);\n            }\n            onModeChange?.(next);\n        };\n\n        const validationError = React.useMemo(() => validateDataset(dataset), [dataset]);\n\n        // Адаптеры мемоизируем: ChartKit перерисовывает график при смене ссылки на data.\n        const chart = React.useMemo(() => {\n            if (validationError || isDatasetEmpty(dataset)) {\n                return null;\n            }\n            return mode === 'sales'\n                ? ({type: 'gravity-charts', data: toGravityChartsData(dataset)} as const)\n                : ({type: 'yagr', data: toYagrData(dataset)} as const);\n        }, [mode, dataset, validationError]);\n\n        const handleLoad = () => onLoad?.(mode);\n        const handleError = ({error}: {error: unknown}) => onError?.(mode, error);\n\n        let body: React.ReactNode;\n        if (loading) {\n            body = renderPluginLoader();\n        } else if (validationError) {\n            body = (\n                <div className=\"viz-widget__state\">\n                    <Alert theme=\"danger\" title=\"Некорректные данные\" message={validationError} />\n                </div>\n            );\n        } else if (!chart) {\n            body = (\n                <div className=\"viz-widget__state\">\n                    <Text color=\"secondary\">Нет данных за выбранный период</Text>\n                </div>\n            );\n        } else if (chart.type === 'gravity-charts') {\n            body = (\n                <ChartKit\n                    key=\"gravity-charts\"\n                    ref={chartRef}\n                    type=\"gravity-charts\"\n                    data={chart.data}\n                    onLoad={handleLoad}\n                    onError={handleError}\n                    renderError={renderError}\n                    renderPluginLoader={renderPluginLoader}\n                />\n            );\n        } else {\n            body = (\n                <ChartKit\n                    key=\"yagr\"\n                    ref={chartRef}\n                    type=\"yagr\"\n                    data={chart.data}\n                    onLoad={handleLoad}\n                    onError={handleError}\n                    renderError={renderError}\n                    renderPluginLoader={renderPluginLoader}\n                />\n            );\n        }\n\n        return (\n            <Card view=\"outlined\" className=\"viz-widget\">\n                <Flex\n                    className=\"viz-widget__header\"\n                    justifyContent=\"space-between\"\n                    alignItems=\"center\"\n                    gap={3}\n                    wrap\n                >\n                    <Flex direction=\"column\" gap={0.5} className=\"viz-widget__heading\">\n                        <Text variant=\"subheader-3\" ellipsis>\n                            {title}\n                        </Text>\n                        <Text variant=\"caption-2\" color=\"secondary\" ellipsis>\n                            {MODE_HINTS[mode]}\n                        </Text>\n                    </Flex>\n                    <SegmentedRadioGroup<VisualizationMode>\n                        className=\"viz-widget__switch\"\n                        value={mode}\n                        onUpdate={handleModeChange}\n                        aria-label=\"Режим графика\"\n                    >\n                        {MODES.map((m) => (\n                            <SegmentedRadioGroup.Option key={m} value={m}>\n                                {MODE_LABELS[m]}\n                            </SegmentedRadioGroup.Option>\n                        ))}\n                    </SegmentedRadioGroup>\n                </Flex>\n                <div className=\"viz-widget__body\" style={{height}}>\n                    {body}\n                </div>\n            </Card>\n        );\n    },\n);\nEOF\ncat > VisualizationWidget.css <<'EOF'\n.viz-widget {\n    display: flex;\n    flex-direction: column;\n    gap: var(--g-spacing-4);\n    padding: var(--g-spacing-4);\n    min-width: 0;\n}\n\n.viz-widget__header {\n    flex-shrink: 0;\n}\n\n.viz-widget__heading {\n    flex: 1;\n    min-width: 0;\n}\n\n.viz-widget__switch {\n    flex-shrink: 0;\n}\n\n.viz-widget__body {\n    position: relative;\n    min-width: 0;\n}\n\n.viz-widget__state {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    height: 100%;\n    padding: var(--g-spacing-4);\n    text-align: center;\n}\nEOF\ncat > mock-data.ts <<'EOF'\nimport type {TimeSeriesDataset} from './types';\n\n/** Детерминированный PRNG, чтобы демо-данные не менялись между перезагрузками. */\nfunction createRandom(seed: number) {\n    let state = seed;\n    return () => {\n        state = (state * 1664525 + 1013904223) % 4294967296;\n        return state / 4294967296;\n    };\n}\n\n/** 12 месяцев продаж по двум каналам. */\nexport function createSalesDataset(): TimeSeriesDataset {\n    const random = createRandom(42);\n    const year = new Date().getFullYear() - 1;\n    const timestamps = Array.from({length: 12}, (_, month) => Date.UTC(year, month, 1));\n    const seasonal = (month: number) => 1 + 0.25 * Math.sin(((month - 2) / 12) * 2 * Math.PI);\n\n    return {\n        unit: 'тыс. ₽',\n        timestamps,\n        series: [\n            {\n                id: 'online',\n                name: 'Онлайн',\n                values: timestamps.map((_, m) => Math.round(820 * seasonal(m) * (1 + m * 0.03) + random() * 90)),\n            },\n            {\n                id: 'retail',\n                name: 'Розница',\n                values: timestamps.map((_, m) => Math.round(640 * seasonal(m) + random() * 70)),\n            },\n        ],\n    };\n}\n\n/** Сутки метрик с шагом 10 секунд: 8 640 точек × 3 ряда. */\nexport function createMonitoringDataset(): TimeSeriesDataset {\n    const random = createRandom(7);\n    const stepMs = 10_000;\n    const points = 8640;\n    const end = Math.floor(Date.now() / stepMs) * stepMs;\n    const start = end - (points - 1) * stepMs;\n    const timestamps = Array.from({length: points}, (_, i) => start + i * stepMs);\n\n    const base = timestamps.map((ts) => {\n        const hour = new Date(ts).getHours() + new Date(ts).getMinutes() / 60;\n        return 120 + 80 * Math.sin(((hour - 8) / 24) * 2 * Math.PI);\n    });\n\n    const spike = (i: number) => (i > 5200 && i < 5260 ? 140 : 0);\n\n    return {\n        unit: 'мс',\n        timestamps,\n        series: [\n            {id: 'p50', name: 'p50', values: base.map((v, i) => +(v * 0.5 + random() * 12 + spike(i) * 0.3).toFixed(1))},\n            {id: 'p95', name: 'p95', values: base.map((v, i) => +(v + random() * 30 + spike(i)).toFixed(1))},\n            {\n                id: 'p99',\n                name: 'p99',\n                // Небольшой разрыв в данных — сбор метрик прерывался.\n                values: base.map((v, i) => (i > 3000 && i < 3030 ? null : +(v * 1.6 + random() * 60 + spike(i) * 1.8).toFixed(1))),\n            },\n        ],\n    };\n}\nEOF\ncat > index.ts <<'EOF'\nexport {VisualizationWidget} from './VisualizationWidget';\nexport type {\n    TimeSeries,\n    TimeSeriesDataset,\n    VisualizationMode,\n    VisualizationWidgetProps,\n    VisualizationWidgetRef,\n} from './types';\nEOF\ncat > ../App.tsx <<'EOF'\nimport * as React from 'react';\nimport {Flex, Text} from '@gravity-ui/uikit';\n\nimport {VisualizationWidget} from './visualization';\nimport type {TimeSeriesDataset, VisualizationMode} from './visualization';\nimport {createMonitoringDataset, createSalesDataset} from './visualization/mock-data';\n\nexport function App() {\n    const datasets = React.useMemo<Record<VisualizationMode, TimeSeriesDataset>>(\n        () => ({sales: createSalesDataset(), monitoring: createMonitoringDataset()}),\n        [],\n    );\n\n    return (\n        <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)', maxWidth: 1200, margin: '0 auto'}}>\n            <Text variant=\"header-1\">Аналитика</Text>\n            <VisualizationWidget title=\"Продажи и мониторинг сервиса\" datasets={datasets} height={380} />\n        </Flex>\n    );\n}\nEOF\ncd /home/sandbox/workspace && npx tsc --noEmit -p . 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/dist && cat index.html | grep -o '<script[^>]*>\\|<link[^>]*>'; I=$(ls assets/index-*.js); grep -o 'import(\"[^\"]*\")' $I | sort -u | grep -v -E '/[a-z]{2}(-[a-z]+)?-' ; echo ---static; head -c 400 $I | grep -o 'from\"[^\"]*\"' ; grep -c 'uPlot\\|d3-' $I; grep -o 'import[^;]\\{0,80\\}isEmpty[^;]\\{0,20\\}' assets/*Widget*.js | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/visualization/adapters.test.ts <<'EOF'\nimport {describe, expect, it} from 'vitest';\n\nimport {isDatasetEmpty, toGravityChartsData, toYagrData, validateDataset} from './adapters';\nimport type {TimeSeriesDataset} from './types';\n\nconst dataset: TimeSeriesDataset = {\n    unit: 'шт.',\n    timestamps: [1000, 2000, 3000],\n    series: [{id: 'a', name: 'A', values: [1, null, 3]}],\n};\n\ndescribe('visualization adapters', () => {\n    it('maps the shared dataset to gravity-charts line series on a datetime axis', () => {\n        const data = toGravityChartsData(dataset);\n        expect(data.xAxis?.type).toBe('datetime');\n        expect(data.yAxis?.[0]?.title?.text).toBe('шт.');\n        expect(data.series.data[0]).toMatchObject({\n            type: 'line',\n            name: 'A',\n            data: [\n                {x: 1000, y: 1},\n                {x: 2000, y: null},\n                {x: 3000, y: 3},\n            ],\n        });\n    });\n\n    it('maps the same dataset to yagr timeline + graphs', () => {\n        const {data, libraryConfig} = toYagrData(dataset);\n        expect(data.timeline).toEqual([1000, 2000, 3000]);\n        expect(data.graphs).toEqual([{id: 'a', name: 'A', data: [1, null, 3]}]);\n        expect(libraryConfig.chart?.timeMultiplier).toBe(1);\n    });\n\n    it('detects length mismatch and empty datasets', () => {\n        expect(validateDataset(dataset)).toBeNull();\n        expect(validateDataset({...dataset, series: [{id: 'b', name: 'B', values: [1]}]})).toMatch('B');\n        expect(isDatasetEmpty({timestamps: [], series: []})).toBe(true);\n        expect(isDatasetEmpty(dataset)).toBe(false);\n    });\n});\nEOF\nnpx vitest run 2>&1 | tail -8; npx tsc --noEmit -p . && echo TSC_OK; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 60,
+      "outputTokens": 20258,
+      "cacheReadTokens": 1591060,
+      "cacheWriteTokens": 68512,
+      "totalTokens": 1679890
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,826 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 11487ms
+   × imports @gravity-ui/navigation 5ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 1ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 1ms
+     → expected ':root {\n  --admin-surface: var(--g-c…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 11480ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The app imports only @gravity-ui/uikit and @gravity-ui/icons, renders a raw <aside> at src/App.tsx:346, and uses UIKit's generic Table with hand-rolled selection, column drag events, and group rows. It does not use @gravity-ui/navigation AsideHeader or @gravity-ui/table useTable/ColumnReorderingProvider.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  06:25:56
+   Duration  11.70s (transform 37ms, setup 17ms, collect 17ms, tests 11.49s, environment 0ms, prepare 67ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected ':root {\n  --admin-surface: var(--g-c…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+":root {
+  --admin-surface: var(--g-color-base-float, #fff);
+  --admin-surface-hover: var(--g-color-base-float-hover, #f4f5f7);
+  --admin-line: var(--g-color-line-generic, #e5e7eb);
+  --admin-text: var(--g-color-text-primary, #212224);
+  --admin-text-secondary: var(--g-color-text-secondary, #6f7579);
+  --admin-accent: var(--g-color-base-brand, #3b82f6);
+  --admin-selection: var(--g-color-base-selection, #e8f2ff);
+  --admin-radius: 12px;
+}
+
+.dashboard {
+  display: flex;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--g-color-base-background, #f7f8fa);
+  color: var(--admin-text);
+}
+
+.dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 250px;
+  height: 100dvh;
+  padding: 18px 14px;
+  box-sizing: border-box;
+  border-right: 1px solid var(--admin-line);
+  background: var(--admin-surface);
+  transition: flex-basis .2s ease;
+}
+
+.dashboard_nav-collapsed .dashboard-sidebar {
+  flex-basis: 74px;
+  padding: 18px 10px;
+}
+
+.dashboard-brand,
+.dashboard-nav__item,
+.dashboard-collapse {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--admin-radius);
+  background: transparent;
+  color: var(--admin-text-secondary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dashboard-brand {
+  margin-bottom: 18px;
+  color: var(--admin-text);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.dashboard-brand:hover,
+.dashboard-collapse:hover {
+  background: var(--admin-surface-hover);
+  color: var(--admin-text);
+}
+
+.dashboard-brand__icon,
+.dashboard-nav__icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  color: var(--admin-text-secondary);
+}
+
+.dashboard-nav__item_active {
+  background: var(--admin-selection);
+  color: var(--admin-accent);
+}
+
+.dashboard-nav__item_active .dashboard-nav__icon {
+  color: var(--admin-accent);
+}
+
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.dashboard-collapse {
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+
+.dashboard-collapse__arrow {
+  width: 20px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.dashboard-nav__text,
+.dashboard-brand__text,
+.dashboard-collapse__text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dashboard_nav-collapsed .dashboard-nav__text,
+.dashboard_nav-collapsed .dashboard-brand__text,
+.dashboard_nav-collapsed .dashboard-collapse__text,
+.dashboard_nav-collapsed .dashboard-nav__item,
+.dashboard_nav-collapsed .dashboard-brand,
+.dashboard_nav-collapsed .dashboard-collapse {
+  width: auto;
+}
+
+.dashboard_nav-collapsed .dashboard-nav__item,
+.dashboard_nav-collapsed .dashboard-brand,
+.dashboard_nav-collapsed .dashboard-collapse {
+  justify-content: center;
+  padding: 0;
+}
+
+.dashboard_nav-collapsed .dashboard-brand {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard-content {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  padding: 24px 28px;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.orders-panel,
+.placeholder-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 20px;
+  border: 1px solid var(--admin-line);
+  border-radius: 16px;
+  background: var(--admin-surface);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, .05);
+}
+
+.placeholder-panel {
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.orders-panel__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.orders-panel__toolbar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dashboard-button {
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--admin-line);
+  border-radius: 8px;
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dashboard-button:hover {
+  background: var(--admin-surface-hover);
+}
+
+.dashboard-button_ghost {
+  color: var(--admin-text-secondary);
+}
+
+.orders-panel__hint {
+  margin: 12px 0 16px;
+  color: var(--admin-text-secondary);
+  font-size: 13px;
+}
+
+.orders-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--admin-line);
+  border-radius: 10px;
+}
+
+.orders-table table {
+  width: 100%;
+  min-width: 760px;
+}
+
+.orders-table__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 28px;
+  cursor: grab;
+  user-select: none;
+}
+
+.orders-table__header:active {
+  cursor: grabbing;
+}
+
+.orders-table__drag-handle {
+  margin-left: auto;
+  color: var(--admin-text-secondary);
+  font-size: 11px;
+  letter-spacing: -2px;
+  opacity: .45;
+}
+
+.orders-table__header:hover .orders-table__drag-handle,
+.orders-table__header_dragging .orders-table__drag-handle {
+  opacity: 1;
+}
+
+.orders-table__header_dragging {
+  opacity: .55;
+}
+
+.orders-table__header_drop-target {
+  box-shadow: inset -3px 0 0 var(--admin-accent);
+}
+
+.orders-table__row_selected {
+  background: var(--admin-selection) !important;
+}
+
+.orders-table__row_group-header {
+  background: var(--g-color-base-simple-hover, #f5f6f8) !important;
+  font-weight: 600;
+}
+
+.orders-table__row_group-first {
+  box-shadow: inset 2px 0 0 var(--admin-accent);
+}
+
+.orders-table .g-table__cell {
+  vertical-align: middle;
+}
+
+@media (max-width: 720px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    position: static;
+    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--admin-line);
+  }
+
+  .dashboard-brand {
+    margin: 0;
+  }
+
+  .dashboard-nav {
+    flex-direction: row;
+    gap: 4px;
+    overflow-x: auto;
+  }
+
+  .dashboard-collapse {
+    margin: 0;
+    width: auto;
+  }
+
+  .dashboard-content {
+    padding: 16px;
+  }
+
+  .orders-panel {
+    padding: 12px;
+  }
+}
+
+
+import { useCallback, useMemo, useState } from 'react';
+import type { CSSProperties, DragEvent, MouseEvent, ReactNode } from 'react';
+import {
+  Flex,
+  Label,
+  SegmentedRadioGroup,
+  Table,
+  Text,
+} from '@gravity-ui/uikit';
+import type { TableColumnConfig } from '@gravity-ui/uikit';
+import {
+  Files,
+  Gear,
+  House,
+  ListCheck,
+  Person,
+  ShoppingCart,
+} from '@gravity-ui/icons';
+import './App.css';
+
+type SectionId = 'home' | 'users' | 'orders' | 'settings';
+
+type OrderStatus = 'new' | 'processing' | 'done' | 'canceled';
+
+interface Order {
+  id: string;
+  number: string;
+  customer: string;
+  createdAt: string;
+  total: number;
+  status: OrderStatus;
+}
+
+interface GroupHeader extends Order {
+  __group: OrderStatus;
+}
+
+type OrderRow = Order | GroupHeader;
+
+type ColumnId = Exclude<keyof Order, 'status'>;
+
+interface DashboardColumn {
+  id: ColumnId;
+  name: string;
+  width: number | string;
+  align?: 'start' | 'end';
+  render: (order: Order) => ReactNode;
+}
+
+const navItems: { id: SectionId; title: string; icon: typeof House }[] = [
+  { id: 'home', title: 'Главная', icon: House },
+  { id: 'users', title: 'Пользователи', icon: Person },
+  { id: 'orders', title: 'Заказы', icon: ShoppingCart },
+  { id: 'settings', title: 'Настройки', icon: Gear },
+];
+
+const orderStatuses: Record<OrderStatus, string> = {
+  new: 'Новые',
+  processing: 'В работе',
+  done: 'Завершённые',
+  canceled: 'Отменённые',
+};
+
+const statusOrder: OrderStatus[] = ['new', 'processing', 'done', 'canceled'];
+
+const statusLabels: Record<OrderStatus, { tone: 'info' | 'warning' | 'success' | 'danger' }> = {
+  new: { tone: 'info' },
+  processing: { tone: 'warning' },
+  done: { tone: 'success' },
+  canceled: { tone: 'danger' },
+};
+
+const orders: Order[] = [
+  { id: '1', number: 'ORD-10241', customer: 'Анна Соколова', createdAt: '2026-11-03', total: 18400, status: 'new' },
+  { id: '2', number: 'ORD-10242', customer: 'ООО «Северный путь»', createdAt: '2026-11-03', total: 56200, status: 'processing' },
+  { id: '3', number: 'ORD-10243', customer: 'Игорь Мельник', createdAt: '2026-11-02', total: 8900, status: 'done' },
+  { id: '4', number: 'ORD-10244', customer: 'Мария Клименко', createdAt: '2026-11-02', total: 24150, status: 'canceled' },
+  { id: '5', number: 'ORD-10245', customer: 'Сергей Романов', createdAt: '2026-11-01', total: 31800, status: 'processing' },
+  { id: '6', number: 'ORD-10246', customer: 'ТехноСервис', createdAt: '2026-11-01', total: 12990, status: 'new' },
+  { id: '7', number: 'ORD-10247', customer: 'Дмитрий Волков', createdAt: '2026-10-31', total: 46000, status: 'done' },
+  { id: '8', number: 'ORD-10248', customer: 'Ольга Кравец', createdAt: '2026-10-31', total: 7250, status: 'canceled' },
+];
+
+const columns: DashboardColumn[] = [
+  { id: 'number', name: 'Номер', width: 140, render: (order) => order.number },
+  { id: 'customer', name: 'Покупатель', width: 240, render: (order) => order.customer },
+  { id: 'createdAt', name: 'Дата', width: 120, render: (order) => order.createdAt },
+  { id: 'total', name: 'Сумма', width: 130, align: 'end', render: (order) => `${order.total.toLocaleString('ru-RU')} ₽` },
+];
+
+const defaultColumnOrder: ColumnId[] = columns.map((column) => column.id);
+
+const moneyFormatter = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+  maximumFractionDigits: 0,
+});
+
+function formatMoney(value: number) {
+  return moneyFormatter.format(value);
+}
+
+function getSectionHeader(id: SectionId) {
+  if (id === 'home') {
+    return 'Обзор';
+  }
+  if (id === 'users') {
+    return 'Пользователи';
+  }
+  if (id === 'orders') {
+    return 'Заказы';
+  }
+  return 'Настройки';
+}
+
+function isGroupRow(row: OrderRow): row is GroupHeader {
+  return '__group' in row;
+}
+
+export function App() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeSection, setActiveSection] = useState<SectionId>('orders');
+  const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(null);
+  const [grouping, setGrouping] = useState<'none' | 'status'>('status');
+  const [columnOrder, setColumnOrder] = useState<ColumnId[]>(defaultColumnOrder);
+  const [dragOverColumn, setDragOverColumn] = useState<ColumnId | null>(null);
+  const [draggingColumn, setDraggingColumn] = useState<ColumnId | null>(null);
+
+  const orderedColumns = useMemo(
+    () => columnOrder.map((id) => columns.find((column) => column.id === id)!),
+    [columnOrder],
+  );
+
+  const rowsByStatus = useMemo(() => {
+    if (grouping === 'none') {
+      return orders.map((order) => [order]);
+    }
+    return statusOrder.map((status) =>
+      orders.filter((order) => order.status === status),
+    );
+  }, [grouping]);
+
+  const tableData = useMemo<OrderRow[]>(() => {
+    if (grouping === 'none') {
+      return orders.map((order) => ({ ...order }));
+    }
+    return rowsByStatus.flatMap((statusRows) => {
+      const status = statusRows[0]?.status as OrderStatus;
+      return [
+        {
+          id: `group-${status}`,
+          number: '',
+          customer: '',
+          createdAt: '',
+          total: 0,
+          status,
+          __group: status,
+        },
+        ...statusRows,
+      ];
+    });
+  }, [grouping, rowsByStatus]);
+
+  const clearSelection = useCallback(() => {
+    setSelectedRowIds([]);
+    setLastSelectedIndex(null);
+  }, []);
+
+  const handleRowClick = useCallback(
+    (row: OrderRow, index: number, event: MouseEvent<HTMLTableRowElement>) => {
+      if (isGroupRow(row)) {
+        return;
+      }
+
+      const isRangeSelect = event.shiftKey;
+      const isMultiSelect = event.metaKey || event.ctrlKey;
+      const isAlreadySelected = selectedRowIds.includes(row.id);
+      let nextSelectedIds: string[];
+
+      if (isRangeSelect && lastSelectedIndex !== null) {
+        const start = Math.min(lastSelectedIndex, index);
+        const end = Math.max(lastSelectedIndex, index);
+        const rangeIds = tableData
+          .slice(start, end + 1)
+          .filter((item) => !isGroupRow(item))
+          .map((item) => item.id);
+        nextSelectedIds = isAlreadySelected
+          ? selectedRowIds.filter((id) => !rangeIds.includes(id))
+          : Array.from(new Set([...selectedRowIds, ...rangeIds]));
+      } else if (isMultiSelect) {
+        nextSelectedIds = isAlreadySelected
+          ? selectedRowIds.filter((id) => id !== row.id)
+          : [...selectedRowIds, row.id];
+      } else {
+        nextSelectedIds = [row.id];
+      }
+
+      setSelectedRowIds(nextSelectedIds);
+      setLastSelectedIndex(index);
+    },
+    [tableData, lastSelectedIndex, selectedRowIds],
+  );
+
+  const handleHeaderDragStart = useCallback((columnId: ColumnId, event: DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData('text/plain', columnId);
+    event.dataTransfer.effectAllowed = 'move';
+    setDraggingColumn(columnId);
+  }, []);
+
+  const handleHeaderDragOver = useCallback((columnId: ColumnId, event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    setDragOverColumn(columnId);
+  }, []);
+
+  const handleHeaderDrop = useCallback(
+    (targetColumnId: ColumnId) => {
+      if (!draggingColumn || draggingColumn === targetColumnId) {
+        setDraggingColumn(null);
+        setDragOverColumn(null);
+        return;
+      }
+
+      setColumnOrder((currentOrder) => {
+        const sourceIndex = currentOrder.indexOf(draggingColumn);
+        const targetIndex = currentOrder.indexOf(targetColumnId);
+        const nextOrder = [...currentOrder];
+        nextOrder.splice(sourceIndex, 1);
+        nextOrder.splice(targetIndex, 0, draggingColumn);
+        return nextOrder;
+      });
+
+      setDraggingColumn(null);
+      setDragOverColumn(null);
+    },
+    [draggingColumn],
+  );
+
+  const handleHeaderDragEnd = useCallback(() => {
+    setDraggingColumn(null);
+    setDragOverColumn(null);
+  }, []);
+
+  const resetColumnOrder = useCallback(() => setColumnOrder(defaultColumnOrder), []);
+  const selectAllVisible = useCallback(
+    () => setSelectedRowIds(orders.map((order) => order.id)),
+    [],
+  );
+
+  const isRowSelected = (order: Order) => selectedRowIds.includes(order.id);
+
+  const tableColumns: TableColumnConfig<OrderRow>[] = orderedColumns.map((column) => ({
+    id: column.id,
+    name: () => (
+      <div
+        className={`orders-table__header${draggingColumn === column.id ? ' orders-table__header_dragging' : ''}${dragOverColumn === column.id ? ' orders-table__header_drop-target' : ''}`}
+        draggable
+        onDragStart={(event) => handleHeaderDragStart(column.id, event)}
+        onDragOver={(event) => handleHeaderDragOver(column.id, event)}
+        onDrop={() => handleHeaderDrop(column.id)}
+        onDragEnd={handleHeaderDragEnd}
+        title=\"Перетащите, чтобы изменить порядок колонок\"
+      >
+        <span className=\"orders-table__header-name\">{column.name}</span>
+        <span aria-hidden className=\"orders-table__drag-handle\">⋮⋮</span>
+      </div>
+    ),
+    align: column.align,
+    width: column.width,
+    template: (row) =>
+      isGroupRow(row)
+        ? column.id === 'number'
+          ? `${orderStatuses[row.__group]} · ${rowsByStatus.find((statusRows) => statusRows[0]?.status === row.__group)?.length || 0} заказов`
+          : ''
+        : column.render(row),
+  }));
+
+  tableColumns.unshift({
+    id: 'status',
+    name: 'Статус',
+    width: 170,
+    template: (row) =>
+      isGroupRow(row) ? (
+        <Label theme={statusLabels[row.__group].tone}>
+          {orderStatuses[row.__group]}
+        </Label>
+      ) : (
+        <Label theme={statusLabels[row.status].tone}>{orderStatuses[row.status]}</Label>
+      ),
+  });
+
+  const selectedSummary = selectedRowIds.length
+    ? `Выбрано заказов: ${selectedRowIds.length}`
+    : 'Кликните строку, Shift — диапазон, Ctrl/Cmd — добавить';
+
+  const sectionContent = activeSection === 'orders' ? (
+    <div className=\"orders-panel\">
+      <div className=\"orders-panel__toolbar\">
+        <SegmentedRadioGroup
+          value={grouping}
+          onUpdate={(value) => setGrouping(value as typeof grouping)}
+        >
+          <SegmentedRadioGroup.Option value=\"status\">По статусу</SegmentedRadioGroup.Option>
+          <SegmentedRadioGroup.Option value=\"none\">Без групп</SegmentedRadioGroup.Option>
+        </SegmentedRadioGroup>
+        <div className=\"orders-panel__toolbar-actions\">
+          <button type=\"button\" className=\"dashboard-button\" onClick={selectAllVisible}>
+            Выбрать все
+          </button>
+          <button type=\"button\" className=\"dashboard-button\" onClick={clearSelection}>
+            Снять выбор
+          </button>
+          <button type=\"button\" className=\"dashboard-button dashboard-button_ghost\" onClick={resetColumnOrder}>
+            Сбросить колонки
+          </button>
+        </div>
+      </div>
+      <div className=\"orders-panel__hint\">{selectedSummary}</div>
+      <div className=\"orders-table-wrap\">
+        <Table
+          className=\"orders-table\"
+          data={tableData}
+          columns={tableColumns}
+          getRowId={(row) => row.id}
+          getRowDescriptor={(row) => ({
+            classNames: [isRowSelected(row) ? 'orders-table__row_selected' : ''],
+            interactive: true,
+          })}
+          onRowClick={handleRowClick}
+          emptyMessage=\"Заказов нет\"
+          width=\"max\"
+        />
+      </div>
+    </div>
+  ) : (
+    <div className=\"placeholder-panel\">
+      <Text variant=\"body-1\">
+        Раздел «{getSectionHeader(activeSection)}» доступен как часть навигации.
+      </Text>
+    </div>
+  );
+
+  return (
+    <div className={`dashboard${collapsed ? ' dashboard_nav-collapsed' : ''}`}>
+      <aside className=\"dashboard-sidebar\" aria-label=\"Основная навигация\">
+        <button
+          type=\"button\"
+          className=\"dashboard-brand\"
+          onClick={() => setCollapsed((value) => !value)}
+          aria-expanded={!collapsed}
+        >
+          <Files className=\"dashboard-brand__icon\" />
+          <span className=\"dashboard-brand__text\">Админка</span>
+        </button>
+        <nav className=\"dashboard-nav\">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                type=\"button\"
+                className={`dashboard-nav__item${activeSection === item.id ? ' dashboard-nav__item_active' : ''}`}
+                onClick={() => setActiveSection(item.id)}
+                title={collapsed ? item.title : undefined}
+                aria-current={activeSection === item.id ? 'page' : undefined}
+              >
+                <Icon className=\"dashboard-nav__icon\" />
+                <span className=\"dashboard-nav__text\">{item.title}</span>
+              </button>
+            );
+          })}
+        </nav>
+        <button
+          type=\"button\"
+          className=\"dashboard-collapse\"
+          onClick={() => setCollapsed((value) => !value)}
+          aria-expanded={!collapsed}
+        >
+          <span className=\"dashboard-collapse__arrow\" aria-hidden>{collapsed ? '›' : '‹'}</span>
+          <span className=\"dashboard-collapse__text\">Свернуть</span>
+        </button>
+      </aside>
+      <main className=\"dashboard-content\">
+        <header className=\"dashboard-header\">
+          <Text variant=\"header-2\">{getSectionHeader(activeSection)}</Text>
+          <Text color=\"secondary\">{grouping === 'status' ? 'Группировка: статус заказа' : 'Группировка выключена'}</Text>
+        </header>
+        {sectionContent}
+      </main>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The app imports only @gravity-ui/uikit and @gravity-ui/icons, renders a raw <aside> at src/App.tsx:346, and uses UIKit's generic Table with hand-rolled selection, column drag events, and group rows. It does not use @gravity-ui/navigation AsideHeader or @gravity-ui/table useTable/ColumnReorderingProvider.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

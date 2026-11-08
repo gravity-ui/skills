@@ -1,0 +1,197 @@
+{
+  "status": "failed",
+  "duration": 383.017,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 12613,
+    "outputTokens": 8389,
+    "cacheReadTokens": 378624,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2236,
+    "totalTokens": 399626
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 28,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 28,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la /home/sandbox/workspace'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/src -type f | sort'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/package.json && echo \"---\" && cat /home/sandbox/workspace/index.html && echo \"---\" && cat /home/sandbox/workspace/tsconfig.json && echo \"---\" && cat /home/sandbox/workspace/vite.config.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/src/main.tsx && echo \"===\" && cat /home/sandbox/workspace/src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /home/sandbox/workspace/src/widget/engines /home/sandbox/workspace/src/data'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/data/types.ts << 'EOF'\n/** Единая точка для линейного графика продаж */\nexport interface DataPoint {\n  label: string;\n  value: number;\n}\n\n/** Точка плотного временного ряда мониторинга */\nexport interface TimeSeriesPoint {\n  ts: number; // unix-мс\n  value: number;\n  alert?: boolean; // подсветка тревожных значений\n}\n\n/** Общий контракт данных для виджета */\nexport interface WidgetData {\n  line: DataPoint[];\n  monitor: TimeSeriesPoint[];\n}\n\n/** Контракт движка рендеринга — общий для обоих режимов */\nexport interface ChartEngine {\n  render(container: SVGSVGElement, data: WidgetData): void;\n  destroy(container: SVGSVGElement): void;\n}\nEOF\necho \\\"types.ts done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widget/engines/line-engine.ts << 'EOF'\nimport type {ChartEngine} from '../../data/types';\n\nconst PAD = {top: 24, right: 24, bottom: 36, left: 56};\nconst GRID_COLOR = '#e8e8e8';\nconst LINE_COLOR = '#5282ff';\nconst AREA_COLOR = 'rgba(82,130,255,0.12)';\nconst TEXT_COLOR = '#555';\n\nconst engine: ChartEngine = {\n  render(svg, data) {\n    const {line} = data;\n    if (\"'!line.length) return;\n\n    const w = svg.clientWidth || 600;\n    const h = svg.clientHeight || 340;\n    const px = PAD.left;\n    const py = PAD.top;\n    const cw = w - PAD.left - PAD.right;\n    const ch = h - PAD.top - PAD.bottom;\n\n    const max = Math.max(...line.map(d => d.value));\n    const yRange = max || 1;\n\n    const xs = (i: number) => px + (i / (line.length - 1 || 1)) * cw;\n    const ys = (v: number) => py + ch - (v / yRange) * ch;\n\n    // area path\n    const area = line.map((d, i) => `${i === 0 ? '\"'M' : 'L'}\"'${xs(i)},${ys(d.value)}`).join('\"' ');\n    const areaFull = \"'`${area} L${xs(line.length - 1)},${py + ch} L${xs(0)},${py + ch} Z`;\n\n    // line path\n    const path = line.map((d, i) => `${i === 0 ? '\"'M' : 'L'}\"'${xs(i)},${ys(d.value)}`).join('\"' ');\n\n    svg.innerHTML = \"'`\n      <style>\n        .grid line, .grid path { stroke: ${GRID_COLOR}; shape-rendering: crispEdges; }\n        .tick text { font-size: 11px; fill: ${TEXT_COLOR}; }\n      </style>\n      <g class=\"grid\"></g>\n      <path d=\"${areaFull}\" fill=\"${AREA_COLOR}\" stroke=\"none\"/>\n      <path d=\"${path}\" fill=\"none\" stroke=\"${LINE_COLOR}\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n    `;\n\n    // grid\n    const grid = svg.querySelector('\"'.grid')\"'!;\n    const steps = 5;\n    for (let i = 0; i <= steps; i++) {\n      const y = py + (ch / steps) * i;\n      grid.innerHTML += `<line x1=\"${px}\" y1=\"${y}\" x2=\"${px + cw}\" y2=\"${y}\"/>`;\n      const val = Math.round(yRange - (yRange / steps) * i);\n      grid.innerHTML += `<text class=\"tick\" x=\"${px - 8}\" y=\"${y + 4}\" text-anchor=\"end\">${val}</text>`;\n    }\n\n    // x‑labels\n    for (let i = 0; i < line.length; i++) {\n      grid.innerHTML += `<text class=\"tick\" x=\"${xs(i)}\" y=\"${py + ch + 18}\" text-anchor=\"middle\">${line[i].label}</text>`;\n    }\n\n    // dots\n    let dots = '\"'';\n    for (let i = 0; i < line.length; i++) {\n      dots += \"'`<circle cx=\"${xs(i)}\" cy=\"${ys(line[i].value)}\" r=\"3\" fill=\"white\" stroke=\"${LINE_COLOR}\" stroke-width=\"2\"/>`;\n    }\n    svg.insertAdjacentHTML('\"'beforeend', dots);\n  },\n\n  destroy(svg) {\n    svg.innerHTML = '';\n  },\n};\n\nexport default engine;\nEOF\necho \\\"line-engine done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widget/engines/monitor-engine.ts << 'EOF'\nimport type {ChartEngine} from '../../data/types';\n\nconst PAD = {top: 16, right: 16, bottom: 28, left: 48};\nconst GRID_COLOR = '#e0e0e0';\nconst SERIES_COLOR = '#ff7043';\nconst ALERT_COLOR = '#d32f2f';\nconst TEXT_COLOR = '#888';\n\nconst engine: ChartEngine = {\n  render(svg, data) {\n    const {monitor} = data;\n    if (\"'!monitor.length) return;\n\n    const w = svg.clientWidth || 600;\n    const h = svg.clientHeight || 340;\n    const px = PAD.left;\n    const py = PAD.top;\n    const cw = w - PAD.left - PAD.right;\n    const ch = h - PAD.top - PAD.bottom;\n\n    const values = monitor.map(d => d.value);\n    const max = Math.max(...values);\n    const min = Math.min(...values);\n    const yr = (max - min) || 1;\n\n    const xs = (i: number) => px + (i / (monitor.length - 1 || 1)) * cw;\n    const ys = (v: number) => py + ch - ((v - min) / yr) * ch;\n\n    const pts = monitor.map((d, i) => `${xs(i)},${ys(d.value)}`).join('\"' ');\n\n    svg.innerHTML = \"'`\n      <style>\n        .mgrid line, .mgrid path { stroke: ${GRID_COLOR}; shape-rendering: crispEdges; }\n        .mtick text { font-size: 10px; fill: ${TEXT_COLOR}; }\n        .monitor-line { fill: none; stroke: ${SERIES_COLOR}; stroke-width: 1.2; stroke-linejoin: round; }\n      </style>\n      <g class=\"mgrid\"></g>\n      <polyline class=\"monitor-line\" points=\"${pts}\"/>\n      <g class=\"alerts\"></g>\n    `;\n\n    // grid\n    const grid = svg.querySelector('\"'.mgrid')\"'!;\n    const steps = 4;\n    for (let i = 0; i <= steps; i++) {\n      const y = py + (ch / steps) * i;\n      grid.innerHTML += `<line x1=\"${px}\" y1=\"${y}\" x2=\"${px + cw}\" y2=\"${y}\"/>`;\n      const val = (min + (yr / steps) * (steps - i)).toFixed(1);\n      grid.innerHTML += `<text class=\"mtick\" x=\"${px - 6}\" y=\"${y + 4}\" text-anchor=\"end\">${val}</text>`;\n    }\n\n    // time labels — every N points\n    const step = Math.max(1, Math.floor(monitor.length / 6));\n    for (let i = 0; i < monitor.length; i += step) {\n      const d = new Date(monitor[i].ts);\n      const label = `${String(d.getHours()).padStart(2, '\"'0')}:\"'${String(d.getMinutes()).padStart(2, '\"'0')}\"'`;\n      grid.innerHTML += `<text class=\"mtick\" x=\"${xs(i)}\" y=\"${py + ch + 16}\" text-anchor=\"middle\">${label}</text>`;\n    }\n\n    // alert dots\n    const alerts = svg.querySelector('\"'.alerts')\"'!;\n    for (let i = 0; i < monitor.length; i++) {\n      if (monitor[i].alert) {\n        alerts.innerHTML += `<circle cx=\"${xs(i)}\" cy=\"${ys(monitor[i].value)}\" r=\"4\" fill=\"${ALERT_COLOR}\" opacity=\"0.85\"/>`;\n      }\n    }\n  },\n\n  destroy(svg) {\n    svg.innerHTML = '\"'';\n  },\n};\n\nexport default engine;\nEOF\necho \\\"monitor-engine done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widget/use-engine.ts << 'EOF'\nimport {useCallback, useEffect, useRef, useState} from 'react';\nimport type {ChartEngine, WidgetData} from '../data/types';\n\nexport type EngineName = 'line' | 'monitor';\n\nconst cache = new Map<EngineName, ChartEngine>();\n\n/** Возвращает текущий движок и колбэк для смены без повторной загрузки. */\nexport function useEngine(name: EngineName) {\n  const [engine, setEngine] = useState<ChartEngine | null>(() => cache.get(name) ?? null);\n  const cur = useRef<EngineName>(name);\n\n  const load = useCallback(async (n: EngineName) => {\n    cur.current = n;\n    if (cache.has(n)) {\n      setEngine(cache.get(n)\"'!);\n      return;\n    }\n    // ленивый динамический импорт — только при первом использовании\n    const mod = n === '\"'line'\n      ? await import('./engines/line-engine')\n      : await import('./engines/monitor-engine');\n    cache.set(n, mod.default);\n    if (cur.current === n) setEngine(mod.default);\n  }, []);\n\n  useEffect(() => {\n    if (name \"'!== cur.current || !engine) load(name);\n  }, [name, load, engine]);\n\n  return engine;\n}\n\n/** Удобная обёртка: биндит движок к SVG‑контейнеру. */\nexport function useEngineRender(\n  engine: ChartEngine | null,\n  data: WidgetData,\n) {\n  const svgRef = useRef<SVGSVGElement | null>(null);\n\n  useEffect(() => {\n    const svg = svgRef.current;\n    if (!svg || !engine) return;\n    engine.destroy(svg);\n    engine.render(svg, data);\n    return () => engine.destroy(svg);\n  }, [engine, data]);\n\n  return svgRef;\n}\nEOF\necho \"use-engine done\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/data/sample.ts << 'EOF'\nimport type {WidgetData} from './types';\n\nexport const SAMPLE_DATA: WidgetData = {\n  line: [\n    {label: 'Янв', value: 120},\n    {label: 'Фев', value: 190},\n    {label: 'Мар', value: 140},\n    {label: 'Апр', value: 220},\n    {label: 'Май', value: 270},\n    {label: 'Июн', value: 200},\n    {label: 'Июл', value: 310},\n    {label: 'Авг', value: 350},\n    {label: 'Сен', value: 290},\n    {label: 'Окт', value: 330},\n    {label: 'Ноя', value: 370},\n    {label: 'Дек', value: 410},\n  ],\n  // плотный временной ряд: по точке каждые 5 минут за 2 часа\n  monitor: Array.from({length: 24}, (_, i) => {\n    const t = new Date('2026-01-01T08:00:00Z').getTime() + i * 5 * 60_000;\n    const base = 50 + Math.sin(i * 0.9) * 18 + Math.random() * 10;\n    return {\n      ts: t,\n      value: Math.round(base * 10) / 10,\n      alert: base > 72,\n    };\n  }),\n};\nEOF\necho \\\"sample done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widget/SalesWidget.tsx << 'EOF'\nimport React, {useState} from 'react';\nimport {RadioButton} from '@gravity-ui/uikit';\nimport {SAMPLE_DATA} from '../data/sample';\nimport type {WidgetData} from '../data/types';\nimport {useEngine, useEngineRender, type EngineName} from './use-engine';\n\nconst MODES: {value: EngineName; content: string}[] = [\n  {value: 'line', content: 'Линейный график продаж'},\n  {value: 'monitor', content: 'Мониторинг (временной ряд)'},\n];\n\ninterface SalesWidgetProps {\n  /** Данные; если не переданы, используется SAMPLE_DATA */\n  data?: WidgetData;\n  /** Ширина контейнера (по умолчанию 100 %) */\n  width?: string | number;\n  /** Высота SVG-области */\n  height?: number;\n}\n\nexport const SalesWidget: React.FC<SalesWidgetProps> = ({\n  data = SAMPLE_DATA,\n  width = '100%',\n  height = 340,\n}) => {\n  const [mode, setMode] = useState<EngineName>('line');\n  const engine = useEngine(mode);\n  const svgRef = useEngineRender(engine, data);\n\n  return (\n    <div style={{width, fontFamily: 'Inter, system-ui, sans-serif'}}>\n      <RadioButton\n        value={mode}\n        onChange={e => setMode(e.target.value as EngineName)}\n        options={MODES}\n      />\n      <div style={{marginTop: 16, border: '1px solid #e5e5e5', borderRadius: 8, overflow: 'hidden'}}>\n        <svg ref={svgRef} width=\\\"100%\\\" height={height} viewBox={\"'`0 0 ${600} ${height}`} />\n      </div>\n    </div>\n  );\n};\nEOF\necho \"SalesWidget done\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'EOF'\nimport {SalesWidget} from './widget/SalesWidget';\n\nexport function App() {\n  return (\n    <div style={{padding: 24, maxWidth: 860, margin: '0 auto'}}>\n      <h2 style={{margin: '0 0 16px', fontWeight: 600, fontSize: 20}}>Виджет продаж / мониторинга</h2>\n      <SalesWidget />\n    </div>\n  );\n}\nEOF\necho \\\"App done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg -l \"RadioButton\" node_modules/@gravity-ui/uikit/build/esm/index.js 2>/dev/null && rg \"exports.RadioButton\" node_modules/@gravity-ui/uikit/build/esm/index.js 2>/dev/null | head -5'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cd /home/sandbox/workspace && rg -r '\"'$1'\"' --no-filename \\\"export \\\\{([\"'^}]*RadioButton[''^}]*)'\"\\\\}\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null; rg \\\"RadioButton\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -5\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/node_modules/@gravity-ui/uikit -name \"*.d.ts\" -path \"*RadioButton*\" | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/node_modules/@gravity-ui/uikit -name \"index.d.ts\" | head -5 && ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/ 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"RadioButton\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/index.d.ts'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"RadioButton\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/index.js | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"Radio\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -10'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"''^export\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"Radio\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head -10'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"export interface ControlGroupProps\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts -A 15'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"ControlGroupOption\" /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts -A 5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widget/SalesWidget.tsx << 'EOF'\nimport React, {useState} from 'react';\nimport {SegmentedRadioGroup} from '@gravity-ui/uikit';\nimport {SAMPLE_DATA} from '../data/sample';\nimport type {WidgetData} from '../data/types';\nimport {useEngine, useEngineRender, type EngineName} from './use-engine';\n\nconst MODES: {value: EngineName; content: string}[] = [\n  {value: 'line', content: 'Линейный график продаж'},\n  {value: 'monitor', content: 'Мониторинг (временной ряд)'},\n];\n\ninterface SalesWidgetProps {\n  /** Данные; если не переданы — SAMPLE_DATA */\n  data?: WidgetData;\n  width?: string | number;\n  height?: number;\n}\n\nexport const SalesWidget: React.FC<SalesWidgetProps> = ({\n  data = SAMPLE_DATA,\n  width = '100%',\n  height = 340,\n}) => {\n  const [mode, setMode] = useState<EngineName>('line');\n  const engine = useEngine(mode);\n  const svgRef = useEngineRender(engine, data);\n\n  return (\n    <div style={{width, fontFamily: 'Inter, system-ui, sans-serif'}}>\n      <SegmentedRadioGroup\n        value={mode}\n        onChange={e => setMode(e.target.value as EngineName)}\n        options={MODES}\n      />\n      <div style={{marginTop: 16, border: '1px solid #e5e5e5', borderRadius: 8, overflow: 'hidden'}}>\n        <svg ref={svgRef} width=\\\"100%\\\" height={height} viewBox={\"'`0 0 ${600} ${height}`} />\n      </div>\n    </div>\n  );\n};\nEOF\necho \"SalesWidget fixed\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 12613,
+      "outputTokens": 8389,
+      "cacheReadTokens": 378624,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2236,
+      "totalTokens": 399626
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

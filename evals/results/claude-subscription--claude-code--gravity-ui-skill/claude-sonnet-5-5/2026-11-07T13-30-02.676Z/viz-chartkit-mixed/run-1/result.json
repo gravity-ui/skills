@@ -1,0 +1,125 @@
+{
+  "status": "passed",
+  "duration": 422.671,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 36,
+    "outputTokens": 12357,
+    "cacheReadTokens": 726251,
+    "cacheWriteTokens": 47331,
+    "totalTokens": 785975
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 17,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json AGENTS.md; find .agents -type f | head -100",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; rg -n -C 4 -i \"chartkit|charts\" .agents/skills/gravity-ui/references/package-routing.md | head -150; cat .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150; find src __agent_eval__ -type f; cat src/* vite.config.ts tsconfig.json index.html 2>/dev/null; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "sed -n 150,400p .agents/skills/gravity-ui/rules/hallucination-traps.md | head -120; npm view @gravity-ui/chartkit version peerDependencies --json 2>&1 | head -40; npm view @gravity-ui/charts version peerDependencies --json | head -20; npm view @gravity-ui/yagr version peerDependencies --json | head",
+        "success": true
+      },
+      {
+        "command": "for p in chartkit charts; do echo \"== $p\"; for v in $(npm view @gravity-ui/$p versions --json | tr -d '[],\" ' | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+$' | awk -F. '{print $1}' | sort -un); do l=$(npm view \"@gravity-ui/$p@$v\" version peerDependencies.@gravity-ui/uikit 2>/dev/null | tail -2 | tr '\\n' ' '); echo \"major $v latest: $l\"; done; done",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/chartkit@8.12.0 peerDependencies peerDependenciesMeta --json; npm view @gravity-ui/charts@1.73.0 peerDependencies --json",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/chartkit@^8.12.0 @gravity-ui/charts@^1.73.0 @gravity-ui/yagr@^5.3.1 2>&1 | tail -15; for p in chartkit charts yagr; do node -p \"require('./node_modules/@gravity-ui/$p/package.json').version\"; ls node_modules/@gravity-ui/$p/build/docs node_modules/@gravity-ui/$p/dist/docs 2>&1 | head -5; done",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && cat chartkit/build/docs/INDEX.md | head -150; find chartkit/build/docs -type f; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit && cat package.json | sed -n 1,80p | grep -nE '\"(exports|\\./|import|types)' | head -30; ls build build/plugins build/plugins/yagr build/plugins/gravity-charts 2>/dev/null | head -60; cat build/plugins/yagr/index.d.ts build/plugins/yagr/types.d.ts build/plugins/gravity-charts/index.d.ts build/plugins/gravity-charts/types.d.ts 2>/dev/null; cat build/types/index.d.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/chartkit/build && cat plugins/yagr/index.js plugins/gravity-charts/index.js; sed -n 1,60p plugins/gravity-charts/renderer/index.d.ts; cat types/widget.d.ts; grep -rn \"settings\\b\" index.d.ts; cat libs/settings/settings.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Loader Card Flex Text Alert 2>&1 | head -40; cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/YagrWidget.js | head -90",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Loader Card Flex Text Alert 2>&1 | head -30; cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/useWidgetData.js | head -60; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && ls uikit/build/esm/components/SegmentedRadioGroup/; cat uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts uikit/build/esm/components/SegmentedRadioGroup/types.d.ts 2>/dev/null | head -60; grep -n \"interface RawSerieData\" -A25 yagr/dist/types.d.ts | head -50; grep -rn \"axes\\|scales\\|chart?\" yagr/dist/YagrCore/types.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -n \"ControlGroupProps\" -B2 -A22 uikit/build/esm/components/types.d.ts | head -60; grep -rn \"RawSerieData\\b\" yagr/dist --include=*.d.ts | head -3; grep -n \"ControlGroupOption\" -A8 uikit/build/esm/components/types.d.ts | head -20; sed -n 1,60p charts/dist/docs/INDEX.md",
+        "success": true
+      },
+      {
+        "command": "sed -n 295,312p yagr/dist/YagrCore/types.d.ts; grep -n \"xAxis\\|yAxis\\|type: 'datetime'\\|'datetime'\" charts/dist/docs/guides/axes/axis-types.md | head -12; grep -n \"datetime\" -B3 -A12 charts/dist/docs/guides/axes/axis-types.md | head -50; grep -n \"legend\" charts/dist/docs/guides/legend.md | head -8",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src/widgets/ChartWidget && cd /home/sandbox/workspace/src/widgets/ChartWidget && cat > types.ts <<'EOF'\nexport type ChartWidgetMode = 'sales' | 'monitoring';\n\nexport interface SalesSeries {\n    id: string;\n    name: string;\n    /** x — Unix timestamp (ms), y — revenue */\n    points: Array<{x: number; y: number}>;\n}\n\nexport interface MonitoringSeries {\n    id: string;\n    name: string;\n    /** One value per `timeline` entry; `null` is a gap in the data. */\n    values: Array<number | null>;\n}\n\nexport interface MonitoringData {\n    /** Unix timestamps (ms), ascending */\n    timeline: number[];\n    series: MonitoringSeries[];\n}\n\n/** Single public API of the widget: both modes are driven by these props. */\nexport interface ChartWidgetProps {\n    /** Controlled mode. */\n    mode?: ChartWidgetMode;\n    /** Initial mode when uncontrolled. Default: `'sales'`. */\n    defaultMode?: ChartWidgetMode;\n    onModeChange?: (mode: ChartWidgetMode) => void;\n    title?: string;\n    /** Data for the `sales` mode (regular line chart). */\n    sales: SalesSeries[];\n    /** Data for the `monitoring` mode (dense time series). */\n    monitoring: MonitoringData;\n    /** Chart area height in px. Default: 360. */\n    height?: number;\n}\nEOF\ncat > engines.ts <<'EOF'\nimport {settings} from '@gravity-ui/chartkit';\nimport type {ChartKitPlugin, ChartKitType} from '@gravity-ui/chartkit';\n\nimport type {ChartWidgetMode} from './types';\n\n/**\n * Each mode has its own chart engine. The plugin modules are imported dynamically,\n * so the engine code (`@gravity-ui/charts` / `@gravity-ui/yagr`) lands in a separate\n * chunk and is fetched only when the mode is first shown.\n * (Importing a plugin statically would pull the engine into the main bundle:\n * the `gravity-charts` plugin entry re-exports from `@gravity-ui/charts`.)\n */\nconst ENGINES: Record<\n    ChartWidgetMode,\n    {type: ChartKitType; load: () => Promise<ChartKitPlugin>}\n> = {\n    sales: {\n        type: 'gravity-charts',\n        load: () => import('@gravity-ui/chartkit/gravity-charts').then((m) => m.GravityChartsPlugin),\n    },\n    monitoring: {\n        type: 'yagr',\n        load: () => import('@gravity-ui/chartkit/yagr').then((m) => m.YagrPlugin),\n    },\n};\n\nconst pending = new Map<ChartWidgetMode, Promise<void>>();\n\nexport function getEngineType(mode: ChartWidgetMode) {\n    return ENGINES[mode].type;\n}\n\n/** Loads the engine for the mode once and registers it in the ChartKit registry. */\nexport function ensureEngine(mode: ChartWidgetMode): Promise<void> {\n    let promise = pending.get(mode);\n    if (!promise) {\n        promise = ENGINES[mode]\n            .load()\n            .then((plugin) => settings.set({plugins: [plugin]}))\n            .catch((error) => {\n                // allow a retry after a failed chunk load\n                pending.delete(mode);\n                throw error;\n            });\n        pending.set(mode, promise);\n    }\n    return promise;\n}\nEOF\ncat > useEngine.ts <<'EOF'\nimport React from 'react';\n\nimport {ensureEngine} from './engines';\nimport type {ChartWidgetMode} from './types';\n\nexport type EngineState = {status: 'loading'} | {status: 'ready'} | {status: 'error'; error: unknown};\n\nexport function useEngine(mode: ChartWidgetMode) {\n    const [attempt, setAttempt] = React.useState(0);\n    const [state, setState] = React.useState<{mode: ChartWidgetMode; attempt: number; value: EngineState}>();\n\n    React.useEffect(() => {\n        let cancelled = false;\n        ensureEngine(mode).then(\n            () => !cancelled && setState({mode, attempt, value: {status: 'ready'}}),\n            (error) => !cancelled && setState({mode, attempt, value: {status: 'error', error}}),\n        );\n        return () => {\n            cancelled = true;\n        };\n    }, [mode, attempt]);\n\n    // a result that belongs to another mode / attempt is stale → still loading\n    const engine: EngineState =\n        state && state.mode === mode && state.attempt === attempt ? state.value : {status: 'loading'};\n    const retry = React.useCallback(() => setAttempt((n) => n + 1), []);\n\n    return {engine, retry};\n}\nEOF\ncat > adapters.ts <<'EOF'\nimport type {ChartKitProps} from '@gravity-ui/chartkit';\n\nimport type {MonitoringData, SalesSeries} from './types';\n\n/** Regular line chart → `gravity-charts` engine. */\nexport function toSalesChartData(sales: SalesSeries[]): ChartKitProps<'gravity-charts'>['data'] {\n    return {\n        series: {\n            data: sales.map((s) => ({\n                type: 'line' as const,\n                name: s.name,\n                data: s.points,\n            })),\n        },\n        xAxis: {type: 'datetime'},\n        yAxis: [{type: 'linear', title: {text: 'Revenue'}}],\n    };\n}\n\n/** Dense time series → `yagr` engine. */\nexport function toMonitoringChartData({timeline, series}: MonitoringData): ChartKitProps<'yagr'>['data'] {\n    return {\n        data: {\n            timeline,\n            graphs: series.map((s) => ({id: s.id, name: s.name, data: s.values})),\n        },\n        libraryConfig: {\n            chart: {series: {spanGaps: false}},\n        },\n    };\n}\nEOF\ncat > ChartWidget.tsx <<'EOF'\nimport React from 'react';\nimport ChartKit from '@gravity-ui/chartkit';\nimport {Alert, Button, Flex, Loader, SegmentedRadioGroup, Text} from '@gravity-ui/uikit';\n\nimport {toMonitoringChartData, toSalesChartData} from './adapters';\nimport {getEngineType} from './engines';\nimport type {ChartWidgetMode, ChartWidgetProps} from './types';\nimport {useEngine} from './useEngine';\n\nconst MODE_OPTIONS = [\n    {value: 'sales', content: 'Sales'},\n    {value: 'monitoring', content: 'Monitoring'},\n] satisfies Array<{value: ChartWidgetMode; content: string}>;\n\nfunction Centered({children, height}: {children: React.ReactNode; height: number}) {\n    return (\n        <Flex alignItems=\"center\" justifyContent=\"center\" style={{height}}>\n            {children}\n        </Flex>\n    );\n}\n\nexport function ChartWidget({\n    mode: controlledMode,\n    defaultMode = 'sales',\n    onModeChange,\n    title = 'Analytics',\n    sales,\n    monitoring,\n    height = 360,\n}: ChartWidgetProps) {\n    const [innerMode, setInnerMode] = React.useState<ChartWidgetMode>(defaultMode);\n    const mode = controlledMode ?? innerMode;\n\n    const handleModeChange = React.useCallback(\n        (next: ChartWidgetMode) => {\n            if (controlledMode === undefined) {\n                setInnerMode(next);\n            }\n            onModeChange?.(next);\n        },\n        [controlledMode, onModeChange],\n    );\n\n    const {engine, retry} = useEngine(mode);\n\n    const salesData = React.useMemo(() => toSalesChartData(sales), [sales]);\n    const monitoringData = React.useMemo(() => toMonitoringChartData(monitoring), [monitoring]);\n\n    const loader = <Loader size=\"m\" />;\n\n    const renderChart = () => {\n        if (engine.status === 'loading') {\n            return <Centered height={height}>{loader}</Centered>;\n        }\n        if (engine.status === 'error') {\n            return (\n                <Centered height={height}>\n                    <Alert\n                        theme=\"danger\"\n                        title=\"Failed to load the chart engine\"\n                        actions={<Button onClick={retry}>Retry</Button>}\n                    />\n                </Centered>\n            );\n        }\n\n        const renderError = ({message}: {message: string}) => (\n            <Centered height={height}>\n                <Text color=\"secondary\">{message}</Text>\n            </Centered>\n        );\n\n        // `key` remounts the chart when switching engines\n        return mode === 'sales' ? (\n            <ChartKit\n                key={mode}\n                type={getEngineType(mode) as 'gravity-charts'}\n                data={salesData}\n                renderPluginLoader={() => <Centered height={height}>{loader}</Centered>}\n                renderError={renderError}\n            />\n        ) : (\n            <ChartKit\n                key={mode}\n                id=\"chart-widget-monitoring\"\n                type={getEngineType(mode) as 'yagr'}\n                data={monitoringData}\n                renderPluginLoader={() => <Centered height={height}>{loader}</Centered>}\n                renderError={renderError}\n            />\n        );\n    };\n\n    return (\n        <Flex direction=\"column\" gap={4} style={{minWidth: 0}}>\n            <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={3} wrap>\n                <Text variant=\"header-2\" style={{flex: 1, minWidth: 0}}>\n                    {title}\n                </Text>\n                <SegmentedRadioGroup\n                    style={{flexShrink: 0}}\n                    aria-label=\"Chart mode\"\n                    value={mode}\n                    options={MODE_OPTIONS}\n                    onUpdate={handleModeChange}\n                />\n            </Flex>\n            <div style={{height, minWidth: 0}}>{renderChart()}</div>\n        </Flex>\n    );\n}\nEOF\ncat > index.ts <<'EOF'\nexport {ChartWidget} from './ChartWidget';\nexport type {\n    ChartWidgetMode,\n    ChartWidgetProps,\n    MonitoringData,\n    MonitoringSeries,\n    SalesSeries,\n} from './types';\nEOF\ncat > ../../data.ts <<'EOF'\nimport type {MonitoringData, SalesSeries} from './widgets/ChartWidget';\n\nconst DAY = 24 * 3600 * 1000;\nconst MINUTE = 60 * 1000;\n\n// deterministic pseudo-random so the demo is stable between renders\nfunction rng(seed: number) {\n    let s = seed;\n    return () => {\n        s = (s * 1664525 + 1013904223) % 4294967296;\n        return s / 4294967296;\n    };\n}\n\nexport function makeSales(): SalesSeries[] {\n    const end = Date.UTC(2026, 10, 1);\n    return ['Online', 'Retail'].map((name, idx) => {\n        const rand = rng(10 + idx);\n        return {\n            id: name.toLowerCase(),\n            name,\n            points: Array.from({length: 30}, (_, i) => ({\n                x: end - (29 - i) * DAY,\n                y: Math.round(40_000 * (idx + 1) + i * 600 + rand() * 8_000),\n            })),\n        };\n    });\n}\n\nexport function makeMonitoring(points = 2000): MonitoringData {\n    const end = Date.UTC(2026, 10, 1);\n    const timeline = Array.from({length: points}, (_, i) => end - (points - 1 - i) * MINUTE);\n    const series = ['CPU', 'Memory', 'Latency'].map((name, idx) => {\n        const rand = rng(100 + idx);\n        return {\n            id: name.toLowerCase(),\n            name,\n            values: timeline.map((_, i) =>\n                i > 700 && i < 730 && idx === 2\n                    ? null\n                    : Math.round((50 + 30 * Math.sin(i / (40 + idx * 25)) + rand() * 15) * 10) / 10,\n            ),\n        };\n    });\n    return {timeline, series};\n}\nEOF\ncat > ../../App.tsx <<'EOF'\nimport React from 'react';\nimport {Card, Flex} from '@gravity-ui/uikit';\n\nimport {makeMonitoring, makeSales} from './data';\nimport {ChartWidget} from './widgets/ChartWidget';\n\nexport function App() {\n    const sales = React.useMemo(makeSales, []);\n    const monitoring = React.useMemo(() => makeMonitoring(), []);\n\n    return (\n        <Flex style={{padding: 24, minWidth: 0}}>\n            <Card view=\"outlined\" style={{flex: 1, minWidth: 0, padding: 16}}>\n                <ChartWidget sales={sales} monitoring={monitoring} />\n            </Card>\n        </Flex>\n    );\n}\nEOF\ncd /home/sandbox/workspace && npx tsc --noEmit 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s/chart: {series: {spanGaps: false}}/chart: {series: {type: 'line', spanGaps: false}}/\" src/widgets/ChartWidget/adapters.ts && npx tsc --noEmit 2>&1 | head -20 && npx vite build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "grep -o 'assets/[^\"]*' dist/index.html; cat .gitignore; for f in $(grep -o 'assets/[^\"]*\\.js' dist/index.html); do echo \"$f:\"; grep -o 'import[^;]*from\"[^\"]*\"' dist/$f | head; grep -c \"GravityChartsWidget\\|YagrWidget\" dist/$f; done; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36,
+      "outputTokens": 12357,
+      "cacheReadTokens": 726251,
+      "cacheWriteTokens": 47331,
+      "totalTokens": 785975
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

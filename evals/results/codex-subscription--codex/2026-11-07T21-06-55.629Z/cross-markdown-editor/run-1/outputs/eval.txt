@@ -1,0 +1,2138 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 5 failed) 16836ms
+   × depends on @gravity-ui/markdown-editor 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 1ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   × no react-markdown DIY preview 0ms
+     → expected true to be false // Object.is equality
+   × no raw textarea input 1ms
+     → expected 'import { useEffect, useRef, useState …' not to match /<textarea[\s/>]/>]
+   ✓ no dangerouslySetInnerHTML preview 0ms
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 16829ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx uses a raw <textarea> bound to body and renders a custom ReactMarkdown preview; package.json declares react-markdown and does not declare @gravity-ui/markdown-editor. The source has no useMarkdownEditor or MarkdownEditorView usage, so the required Gravity editor is not implemented.
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  21:21:33
+   Duration  17.00s (transform 27ms, setup 15ms, collect 15ms, tests 16.84s, environment 0ms, prepare 30ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  EVAL.ts > no react-markdown DIY preview
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:72:44
+     70| // Pulling react-markdown signals a DIY textarea+preview build instead…
+     71| test("no react-markdown DIY preview", () => {
+     72|   expect(dependsOn(src, "react-markdown")).toBe(false);
+       |                                            ^
+     73| });
+     74| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  EVAL.ts > no raw textarea input
+AssertionError: expected 'import { useEffect, useRef, useState …' not to match /<textarea[\s/>]/>]
+
+[32m- Expected:[39m 
+/<textarea[\s/>]/
+
+[31m+ Received:[39m 
+"import { useEffect, useRef, useState } from \"react\";
+import { Button } from \"@gravity-ui/uikit\";
+import ReactMarkdown from \"react-markdown\";
+import remarkGfm from \"remark-gfm\";
+import \"./styles.css\";
+
+const initialText = `# Хорошие идеи начинаются с заметки
+
+Иногда достаточно просто начать писать. А **Markdown**
+поможет придать вашим мыслям красивую форму.
+
+## Что можно добавить?
+
+- **Важные мысли**, которые хочется сохранить
+- *Вдохновение* для следующего проекта
+- Список маленьких шагов к большой цели
+
+> Не ждите идеального момента. Создайте его сами.
+
+Больше о разметке — в [руководстве по Markdown](https://www.markdownguide.org/basic-syntax/).
+`;
+type Draft = { title: string; body: string; savedAt: string };
+type IconName =
+  | \"pen\"
+  | \"chevron\"
+  | \"help\"
+  | \"split\"
+  | \"eye\"
+  | \"expand\"
+  | \"link\"
+  | \"quote\"
+  | \"list\"
+  | \"ordered\"
+  | \"code\"
+  | \"check\"
+  | \"close\"
+  | \"arrow\"
+  | \"file\"
+  | \"spark\"
+  | \"bulb\"
+  | \"lock\";
+function Icon({ name, size = 18 }: { name: IconName; size?: number }) {
+  const paths: Record<IconName, React.ReactNode> = {
+    pen: (
+      <>
+        <path d=\"m15 4 5 5M4 20l5-1L20 8a2.8 2.8 0 0 0-4-4L5 15l-1 5Z\" />
+        <path d=\"M13 20h7\" />
+      </>
+    ),
+    chevron: <path d=\"m9 6 6 6-6 6\" />,
+    help: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <path d=\"M9.5 9a2.5 2.5 0 1 1 4 2c-1.5 1-1.5 1-1.5 2M12 16.5v.1\" />
+      </>
+    ),
+    split: (
+      <>
+        <rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\" />
+        <path d=\"M12 4v16\" />
+      </>
+    ),
+    eye: (
+      <>
+        <path d=\"M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z\" />
+        <circle cx=\"12\" cy=\"12\" r=\"3\" />
+      </>
+    ),
+    expand: <path d=\"M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5\" />,
+    link: (
+      <>
+        <path
+          d=\"m10 13 4-4m-6 6-1 1a3.5 3.5 0 0 1-5-5l4-4a3.5 3.5 0 0 1 5 0m2 2 1-1a3.5 3.5 0 0 1 5 5l-4 4a3.5 3.5 0 0 1-5 0\"
+          transform=\"translate(1 1)\"
+        />
+      </>
+    ),
+    quote: (
+      <path d=\"M5 7h5v6H5V7Zm9 0h5v6h-5V7ZM10 13c0 3-2 4-4 4m13-4c0 3-2 4-4 4\" />
+    ),
+    list: (
+      <>
+        <path d=\"M9 6h12M9 12h12M9 18h12\" />
+        <circle cx=\"3\" cy=\"6\" r=\".7\" />
+        <circle cx=\"3\" cy=\"12\" r=\".7\" />
+        <circle cx=\"3\" cy=\"18\" r=\".7\" />
+      </>
+    ),
+    ordered: (
+      <path d=\"M10 6h11M10 12h11M10 18h11M3 4h1v5M2 13c3-3 5 0 2 2l-2 2h4\" />
+    ),
+    code: <path d=\"m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16\" />,
+    check: <path d=\"m5 12 4 4L19 6\" />,
+    close: <path d=\"m6 6 12 12M6 18 18 6\" />,
+    arrow: <path d=\"M4 12h15m-5-5 5 5-5 5\" />,
+    file: (
+      <>
+        <path d=\"M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z\" />
+        <path d=\"M14 3v6h6M8 13h8M8 17h5\" />
+      </>
+    ),
+    spark: (
+      <path d=\"m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z\" />
+    ),
+    bulb: (
+      <path d=\"M9 18h6m-5 3h4M8 14a6 6 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z\" />
+    ),
+    lock: (
+      <>
+        <rect x=\"5\" y=\"10\" width=\"14\" height=\"11\" rx=\"2\" />
+        <path d=\"M8 10V7a4 4 0 0 1 8 0v3\" />
+      </>
+    ),
+  };
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox=\"0 0 24 24\"
+      fill=\"none\"
+      stroke=\"currentColor\"
+      strokeWidth=\"1.65\"
+      strokeLinecap=\"round\"
+      strokeLinejoin=\"round\"
+      aria-hidden=\"true\"
+    >
+      {paths[name]}
+    </svg>
+  );
+}
+function readDraft(): Draft | null {
+  try {
+    const draft = JSON.parse(localStorage.getItem(\"slovo-draft\") || \"null\");
+    return draft &&
+      typeof draft.title === \"string\" &&
+      typeof draft.body === \"string\" &&
+      typeof draft.savedAt === \"string\"
+      ? draft
+      : null;
+  } catch {
+    return null;
+  }
+}
+const syntaxExamples = [
+  [\"# Заголовок\", \"Большой заголовок\"],
+  [\"## Подзаголовок\", \"Заголовок второго уровня\"],
+  [\"**жирный**\", \"Жирное начертание\"],
+  [\"*курсив*\", \"Курсивное начертание\"],
+  [\"~~текст~~\", \"Зачёркнутый текст\"],
+  [\"- Пункт списка\", \"Маркированный список\"],
+  [\"1. Пункт списка\", \"Нумерованный список\"],
+  [\"> Цитата\", \"Блок цитаты\"],
+  [\"[текст](https://…)\", \"Ссылка\"],
+  [\"`код`\", \"Фрагмент кода\"],
+  [\"- [ ] Задача\", \"Список задач\"],
+];
+
+export function App() {
+  const [loadedDraft] = useState(readDraft);
+  const [title, setTitle] = useState(
+    loadedDraft?.title ?? \"Моя первая заметка\",
+  );
+  const [body, setBody] = useState(loadedDraft?.body ?? initialText);
+  const [savedDraft, setSavedDraft] = useState<Draft | null>(loadedDraft);
+  const [view, setView] = useState<\"split\" | \"preview\">(\"split\");
+  const [expanded, setExpanded] = useState(false);
+  const [dialog, setDialog] = useState<\"help\" | \"notes\" | null>(null);
+  const [toast, setToast] = useState(\"\");
+  const textarea = useRef<HTMLTextAreaElement>(null);
+  const dirty =
+    !savedDraft || savedDraft.body !== body || savedDraft.title !== title;
+  const words = body.trim() ? body.trim().split(/\\s+/u).length : 0;
+  useEffect(() => {
+    if (!toast) return;
+    const id = window.setTimeout(() => setToast(\"\"), 4000);
+    return () => window.clearTimeout(id);
+  }, [toast]);
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === \"Escape\") {
+        setDialog(null);
+        setExpanded(false);
+      }
+    }
+    window.addEventListener(\"keydown\", onKey);
+    return () => window.removeEventListener(\"keydown\", onKey);
+  }, []);
+  useEffect(() => {
+    if (!dialog && !expanded) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = \"hidden\";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [dialog, expanded]);
+  function save() {
+    const draft = { title, body, savedAt: new Date().toISOString() };
+    try {
+      localStorage.setItem(\"slovo-draft\", JSON.stringify(draft));
+      setSavedDraft(draft);
+      setToast(\"Заметка сохранена в этом браузере\");
+    } catch {
+      setToast(
+        \"Не удалось сохранить заметку. Проверьте доступ к хранилищу браузера.\",
+      );
+    }
+  }
+  function format(
+    before: string,
+    after = \"\",
+    placeholder = \"текст\",
+    block = false,
+  ) {
+    setView(\"split\");
+    const start = textarea.current?.selectionStart ?? body.length;
+    const end = textarea.current?.selectionEnd ?? body.length;
+    const selected = body.slice(start, end) || placeholder;
+    const prefix =
+      block && start > 0 && body[start - 1] !== \"\\n\" ? \"\\n\" + before : before;
+    setBody(body.slice(0, start) + prefix + selected + after + body.slice(end));
+    requestAnimationFrame(() => {
+      textarea.current?.focus();
+      textarea.current?.setSelectionRange(
+        start + prefix.length,
+        start + prefix.length + selected.length,
+      );
+    });
+  }
+  return (
+    <div className=\"app\">
+      <header className=\"site-header\">
+        <div className=\"header-inner\">
+          <a className=\"brand\" href=\"#\" aria-label=\"Слово — главная\">
+            <span className=\"brand-symbol\">
+              <Icon name=\"pen\" size={21} />
+            </span>
+            слово<span className=\"brand-dot\">.</span>
+          </a>
+          <nav className=\"main-nav\" aria-label=\"Основная навигация\">
+            <button
+              className=\"nav-item active\"
+              onClick={() => {
+                setDialog(null);
+                textarea.current?.focus();
+              }}
+            >
+              Редактор
+            </button>
+            <button className=\"nav-item\" onClick={() => setDialog(\"notes\")}>
+              Мои заметки
+            </button>
+          </nav>
+          <div className=\"header-right\">
+            <span className=\"personal-space\">Личное пространство</span>
+            <span className=\"avatar\" title=\"Личное пространство\">
+              А
+            </span>
+          </div>
+        </div>
+      </header>
+      <main className=\"main\">
+        <div className=\"breadcrumb\">
+          <span>Личное пространство</span>
+          <Icon name=\"chevron\" size={13} />
+          <span>Редактор заметки</span>
+        </div>
+        <section className=\"intro\">
+          <div>
+            <div className=\"eyebrow\">
+              <span /> ПРОСТРАНСТВО ДЛЯ ИДЕЙ
+            </div>
+            <h1>
+              Мысли — ваши. Форма — наша<span>.</span>
+            </h1>
+            <p>
+              Пишите свободно. Добавляйте Markdown. Смотрите, как оживает текст.
+            </p>
+          </div>
+          <div className=\"intro-art\" aria-hidden=\"true\">
+            <div className=\"art-back\">
+              <span>#</span>
+              <i />
+              <i />
+            </div>
+            <div className=\"art-front\">
+              <span>Aa</span>
+              <i />
+              <i />
+            </div>
+            <span className=\"art-spark\">
+              <Icon name=\"spark\" size={24} />
+            </span>
+          </div>
+        </section>
+        <form
+          className=\"note-card\"
+          onSubmit={(e) => {
+            e.preventDefault();
+            save();
+          }}
+        >
+          <div className=\"card-heading\">
+            <div className=\"card-heading-left\">
+              <span className=\"note-icon\">
+                <Icon name=\"file\" size={20} />
+              </span>
+              <h2>Новая заметка</h2>
+              <span className=\"draft-badge\">Черновик</span>
+            </div>
+            <span className=\"private-note\">
+              <Icon name=\"lock\" size={12} /> Только для вас
+            </span>
+          </div>
+          <div className=\"form-content\">
+            <label className=\"field-label\" htmlFor=\"note-title\">
+              Название заметки
+            </label>
+            <input
+              className=\"title-input\"
+              id=\"note-title\"
+              name=\"title\"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder=\"Дайте своей идее название\"
+              maxLength={200}
+            />
+            <div className=\"content-label\">
+              <label className=\"field-label\" htmlFor=\"markdown-input\">
+                Содержание
+              </label>
+              <span>
+                <span className=\"markdown-logo\">M↓</span> Поддерживает Markdown
+              </span>
+            </div>
+            <div className={`editor ${expanded ? \"editor-expanded\" : \"\"}`}>
+              <div className=\"editor-toolbar\">
+                <div
+                  className=\"format-tools\"
+                  role=\"toolbar\"
+                  aria-label=\"Форматирование текста\"
+                >
+                  <button
+                    type=\"button\"
+                    className=\"tool heading-tool\"
+                    title=\"Заголовок\"
+                    aria-label=\"Добавить заголовок\"
+                    onClick={() => format(\"## \", \"\", \"Заголовок\", true)}
+                  >
+                    H<span>2</span>
+                  </button>
+                  <span className=\"toolbar-divider\" />
+                  <button
+                    type=\"button\"
+                    className=\"tool bold-tool\"
+                    title=\"Жирный (Ctrl/⌘ + B)\"
+                    aria-label=\"Жирный\"
+                    onClick={() => format(\"**\", \"**\")}
+                  >
+                    B
+                  </button>
+                  <button
+                    type=\"button\"
+                    className=\"tool italic-tool\"
+                    title=\"Курсив (Ctrl/⌘ + I)\"
+                    aria-label=\"Курсив\"
+                    onClick={() => format(\"*\", \"*\")}
+                  >
+                    I
+                  </button>
+                  <button
+                    type=\"button\"
+                    className=\"tool strike-tool\"
+                    title=\"Зачёркнутый\"
+                    aria-label=\"Зачёркнутый\"
+                    onClick={() => format(\"~~\", \"~~\")}
+                  >
+                    S
+                  </button>
+                  <span className=\"toolbar-divider\" />
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title=\"Ссылка\"
+                    aria-label=\"Добавить ссылку\"
+                    onClick={() =>
+                      format(\"[\", \"](https://example.com)\", \"текст ссылки\")
+                    }
+                  >
+                    <Icon name=\"link\" />
+                  </button>
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title=\"Цитата\"
+                    aria-label=\"Добавить цитату\"
+                    onClick={() => format(\"> \", \"\", \"Цитата\", true)}
+                  >
+                    <Icon name=\"quote\" />
+                  </button>
+                  <span className=\"toolbar-divider\" />
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title=\"Маркированный список\"
+                    aria-label=\"Добавить список\"
+                    onClick={() => format(\"- \", \"\", \"Пункт списка\", true)}
+                  >
+                    <Icon name=\"list\" />
+                  </button>
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title=\"Нумерованный список\"
+                    aria-label=\"Добавить нумерованный список\"
+                    onClick={() => format(\"1. \", \"\", \"Пункт списка\", true)}
+                  >
+                    <Icon name=\"ordered\" />
+                  </button>
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title=\"Код\"
+                    aria-label=\"Добавить код\"
+                    onClick={() => format(\"`\", \"`\", \"код\")}
+                  >
+                    <Icon name=\"code\" />
+                  </button>
+                </div>
+                <div className=\"view-tools\">
+                  <div className=\"view-switch\" aria-label=\"Режим редактора\">
+                    <button
+                      type=\"button\"
+                      className={view === \"split\" ? \"selected\" : \"\"}
+                      aria-label=\"Редактор и предпросмотр\"
+                      aria-pressed={view === \"split\"}
+                      title=\"Редактор и предпросмотр\"
+                      onClick={() => setView(\"split\")}
+                    >
+                      <Icon name=\"split\" size={16} />
+                    </button>
+                    <button
+                      type=\"button\"
+                      className={view === \"preview\" ? \"selected\" : \"\"}
+                      aria-label=\"Только предпросмотр\"
+                      aria-pressed={view === \"preview\"}
+                      title=\"Только предпросмотр\"
+                      onClick={() => setView(\"preview\")}
+                    >
+                      <Icon name=\"eye\" size={17} />
+                    </button>
+                  </div>
+                  <span className=\"toolbar-divider\" />
+                  <button
+                    type=\"button\"
+                    className=\"tool\"
+                    title={expanded ? \"Свернуть редактор\" : \"На весь экран\"}
+                    aria-label={
+                      expanded ? \"Свернуть редактор\" : \"На весь экран\"
+                    }
+                    onClick={() => setExpanded(!expanded)}
+                  >
+                    <Icon name={expanded ? \"close\" : \"expand\"} size={17} />
+                  </button>
+                </div>
+              </div>
+              <div
+                className={`editor-panes ${view === \"preview\" ? \"preview-only\" : \"\"}`}
+              >
+                {view === \"split\" && (
+                  <section
+                    className=\"source-pane\"
+                    aria-label=\"Markdown-редактор\"
+                  >
+                    <div className=\"pane-heading\">
+                      <span>MARKDOWN</span>
+                      <span className=\"source-heading-detail\">
+                        Просто начните писать
+                      </span>
+                    </div>
+                    <textarea
+                      id=\"markdown-input\"
+                      name=\"content\"
+                      ref={textarea}
+                      spellCheck={false}
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      placeholder={
+                        \"# Ваша история начинается здесь…\\n\\nНапишите что-нибудь. Форматирование появится справа.\"
+                      }
+                      onKeyDown={(e) => {
+                        if (
+                          (e.metaKey || e.ctrlKey) &&
+                          [\"b\", \"i\", \"s\"].includes(e.key.toLowerCase())
+                        ) {
+                          e.preventDefault();
+                          const key = e.key.toLowerCase();
+                          if (key === \"s\") save();
+                          else if (key === \"b\") format(\"**\", \"**\");
+                          else format(\"*\", \"*\");
+                        }
+                      }}
+                    />
+                  </section>
+                )}
+                <section
+                  className=\"preview-pane\"
+                  aria-label=\"Предпросмотр текста\"
+                >
+                  <div className=\"pane-heading\">
+                    <span>ПРЕДПРОСМОТР</span>
+                    <span className=\"live-label\">
+                      <i /> В реальном времени
+                    </span>
+                  </div>
+                  <div className=\"markdown-preview\">
+                    {body.trim() ? (
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          a: ({ children, ...props }) => (
+                            <a
+                              {...props}
+                              target=\"_blank\"
+                              rel=\"noopener noreferrer\"
+                            >
+                              {children}
+                            </a>
+                          ),
+                        }}
+                      >
+                        {body}
+                      </ReactMarkdown>
+                    ) : (
+                      <div className=\"preview-empty\">
+                        <Icon name=\"pen\" size={30} />
+                        <h3>Здесь появятся ваши мысли</h3>
+                        <p>
+                          Добавьте текст в редактор —<br />и сразу увидите
+                          результат.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </section>
+              </div>
+              <div className=\"editor-status\">
+                <span>
+                  {words} слов<span className=\"status-dot\">·</span>
+                  {body.length} символов
+                </span>
+                <button type=\"button\" onClick={() => setDialog(\"help\")}>
+                  <Icon name=\"help\" size={14} /> Шпаргалка Markdown
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className=\"card-footer\">
+            <div className={`save-status ${!dirty ? \"is-saved\" : \"\"}`}>
+              <Icon name={dirty ? \"file\" : \"check\"} size={16} />
+              <span>
+                {dirty
+                  ? \"Есть несохранённые изменения\"
+                  : \"Все изменения сохранены\"}
+              </span>
+            </div>
+            <Button
+              type=\"submit\"
+              view=\"action\"
+              size=\"l\"
+              className=\"save-button\"
+            >
+              <Icon name=\"check\" size={17} /> Сохранить заметку
+            </Button>
+          </div>
+        </form>
+        <aside className=\"tip-card\">
+          <span className=\"tip-icon\">
+            <Icon name=\"bulb\" size={21} />
+          </span>
+          <div>
+            <strong>Чуть меньше разметки. Чуть больше смысла.</strong>
+            <p>
+              Выделите текст и нажмите кнопку на панели — или используйте
+              привычный Markdown.
+            </p>
+          </div>
+          <button type=\"button\" onClick={() => setDialog(\"help\")}>
+            Как это работает
+            <Icon name=\"arrow\" size={16} />
+          </button>
+        </aside>
+        <footer className=\"page-footer\">
+          <span>Хорошим мыслям нужно место.</span>
+          <span>
+            Сделано с вниманием к словам{\" \"}
+            <span className=\"footer-flower\">✳</span>
+          </span>
+        </footer>
+      </main>
+      {dialog && (
+        <div className=\"modal-backdrop\" onClick={() => setDialog(null)}>
+          <section
+            className=\"modal\"
+            role=\"dialog\"
+            aria-modal=\"true\"
+            aria-labelledby=\"dialog-title\"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type=\"button\"
+              className=\"modal-close tool\"
+              aria-label=\"Закрыть\"
+              autoFocus
+              onClick={() => setDialog(null)}
+            >
+              <Icon name=\"close\" />
+            </button>
+            {dialog === \"help\" ? (
+              <>
+                <span className=\"modal-symbol\">
+                  <Icon name=\"spark\" size={24} />
+                </span>
+                <h2 id=\"dialog-title\">Немного Markdown — много возможностей</h2>
+                <p className=\"modal-description\">
+                  Введите разметку в редактор. Результат появится рядом сразу.
+                </p>
+                <div className=\"syntax-table\">
+                  {syntaxExamples.map(([syntax, label]) => (
+                    <div key={syntax}>
+                      <code>{syntax}</code>
+                      <span>{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className=\"shortcut-note\">
+                  Быстрые клавиши: <kbd>Ctrl / ⌘</kbd> + <kbd>B</kbd> — жирный,{\" \"}
+                  <kbd>I</kbd> — курсив.
+                </p>
+              </>
+            ) : (
+              <>
+                <span className=\"modal-symbol\">
+                  <Icon name=\"file\" size={24} />
+                </span>
+                <h2 id=\"dialog-title\">Мои заметки</h2>
+                <p className=\"modal-description\">
+                  Ваш черновик хранится только в этом браузере.
+                </p>
+                {savedDraft ? (
+                  <button
+                    type=\"button\"
+                    className=\"saved-note\"
+                    onClick={() => {
+                      setTitle(savedDraft.title);
+                      setBody(savedDraft.body);
+                      setDialog(null);
+                    }}
+                  >
+                    <Icon name=\"file\" size={24} />
+                    <span>
+                      <strong>{savedDraft.title || \"Без названия\"}</strong>
+                      <small>
+                        Сохранено{\" \"}
+                        {new Date(savedDraft.savedAt).toLocaleString(\"ru-RU\", {
+                          day: \"numeric\",
+                          month: \"long\",
+                          hour: \"2-digit\",
+                          minute: \"2-digit\",
+                        })}
+                      </small>
+                    </span>
+                    <Icon name=\"chevron\" />
+                  </button>
+                ) : (
+                  <div className=\"notes-empty\">
+                    <Icon name=\"pen\" size={32} />
+                    <p>Здесь будет ваша первая заметка.</p>
+                    <span>
+                      Напишите пару строк и нажмите «Сохранить заметку».
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        </div>
+      )}
+      {toast && (
+        <div className=\"toast\" role=\"status\">
+          <Icon name=\"check\" size={18} />
+          {toast}
+          <button
+            type=\"button\"
+            aria-label=\"Скрыть уведомление\"
+            onClick={() => setToast(\"\")}
+          >
+            <Icon name=\"close\" size={16} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+@import url(\"https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;450;500;550;600;650;700;750;800&family=IBM+Plex+Mono:wght@400;450;500&display=swap\");
+:root {
+  font-family: \"Golos Text\", sans-serif;
+  color: #252631;
+  background: #f7f8fa;
+  font-synthesis: none;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  --purple: #7353d7;
+  --g-color-base-brand: #7353d7;
+  --g-color-base-brand-hover: #6242c6;
+  --g-color-text-brand: #7353d7;
+  --g-font-family-sans: \"Golos Text\", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #b7a2f3;
+  outline-offset: 3px;
+}
+svg {
+  flex-shrink: 0;
+}
+a {
+  color: inherit;
+}
+.site-header {
+  height: 77px;
+  background: #fff;
+  border-bottom: 1px solid #e9eaf0;
+}
+.header-inner {
+  max-width: 1280px;
+  padding: 0 40px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: 65px;
+}
+.brand {
+  text-decoration: none;
+  font-size: 27px;
+  font-weight: 750;
+  letter-spacing: -1.3px;
+  display: flex;
+  align-items: center;
+}
+.brand-symbol {
+  background: #7856d9;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+.brand-dot {
+  color: var(--purple);
+}
+.main-nav {
+  display: flex;
+  gap: 30px;
+  height: 100%;
+}
+.nav-item {
+  border: 0;
+  background: none;
+  font-size: 13px;
+  position: relative;
+  padding: 0 3px;
+  color: #8b8c97;
+}
+.nav-item.active {
+  color: var(--purple);
+  font-weight: 550;
+}
+.nav-item.active:after {
+  content: \"\";
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--purple);
+}
+.nav-item:hover {
+  color: var(--purple);
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: auto;
+}
+.personal-space {
+  font-size: 12px;
+  color: #8c8d98;
+}
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #ede8f9;
+  color: #7353be;
+  font-size: 13px;
+  font-weight: 600;
+  border: 3px solid #f8f6fc;
+}
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 29px 20px 0;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 11px;
+  color: #9b9da8;
+}
+.breadcrumb span:last-child {
+  color: #656774;
+}
+.intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 34px 0 30px;
+  min-height: 112px;
+}
+.eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  font-weight: 600;
+  color: #8b78b7;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.eyebrow > span {
+  width: 5px;
+  height: 5px;
+  background: #9878d5;
+  border-radius: 50%;
+}
+h1 {
+  font-size: 34px;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: -1.2px;
+  margin: 10px 0 11px;
+}
+h1 > span {
+  color: var(--purple);
+}
+.intro p {
+  color: #92939f;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.7;
+}
+.intro-art {
+  position: relative;
+  width: 150px;
+  height: 112px;
+  margin-right: 25px;
+}
+.art-back,
+.art-front {
+  position: absolute;
+  width: 78px;
+  height: 92px;
+  border-radius: 9px;
+  border: 1px solid #dfd7f0;
+  background: #ede7fa;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 13px;
+}
+.art-back {
+  transform: rotate(-13deg);
+  left: 10px;
+  top: 9px;
+  background: #f1eef8;
+}
+.art-back span {
+  font-family: \"IBM Plex Mono\", monospace;
+  font-size: 30px;
+  color: #b19bcf;
+}
+.art-front {
+  transform: rotate(10deg);
+  left: 58px;
+  top: 12px;
+  background: #fff;
+  box-shadow: 0 5px 12px #53328708;
+}
+.art-front span {
+  font-family: Georgia, serif;
+  font-size: 34px;
+  color: #7c59c8;
+  line-height: 43px;
+}
+.intro-art i {
+  height: 3px;
+  background: #d9cbed;
+  width: 46px;
+  margin-top: 6px;
+  border-radius: 2px;
+}
+.intro-art i:last-child {
+  width: 30px;
+}
+.art-spark {
+  position: absolute;
+  right: -8px;
+  top: 0;
+  color: #ad98cd;
+  transform: rotate(10deg);
+}
+.note-card {
+  background: #fff;
+  border: 1px solid #e5e5ed;
+  border-radius: 13px;
+  box-shadow: 0 3px 8px #2b254004;
+  overflow: hidden;
+}
+.card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 27px;
+  border-bottom: 1px solid #eff0f4;
+}
+.card-heading-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.note-icon {
+  display: flex;
+  color: #7e62bd;
+}
+.card-heading h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 2px 0 0;
+  letter-spacing: -0.3px;
+}
+.draft-badge {
+  background: #f4f3f8;
+  color: #94909e;
+  font-size: 10px;
+  border-radius: 5px;
+  padding: 4px 7px;
+}
+.private-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: #a1a2ae;
+}
+.form-content {
+  padding: 24px 27px 0;
+}
+.field-label {
+  font-size: 11px;
+  display: block;
+  font-weight: 550;
+  color: #51515e;
+  margin-bottom: 10px;
+}
+.title-input {
+  width: 100%;
+  height: 44px;
+  border: 1px solid #e1e2e9;
+  border-radius: 7px;
+  padding: 0 13px;
+  color: #464652;
+  font-size: 12px;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.title-input:focus {
+  border-color: #aa8fe2;
+  box-shadow: 0 0 0 3px #ede6fa;
+}
+.content-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 23px;
+  margin-bottom: 10px;
+}
+.content-label .field-label {
+  margin: 0;
+}
+.content-label > span {
+  font-size: 10px;
+  color: #a0a0ad;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.markdown-logo {
+  font-family: Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  border: 1px solid #b2b2bd;
+  border-radius: 2px;
+  padding: 0 2px;
+  line-height: 10px;
+}
+.editor {
+  border: 1px solid #e0e1e9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.editor-toolbar {
+  min-height: 49px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e7e7ee;
+  background: #fff;
+  gap: 10px;
+}
+.format-tools,
+.view-tools {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.tool {
+  height: 28px;
+  width: 29px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #72727e;
+  flex-shrink: 0;
+}
+.tool:hover {
+  color: var(--purple);
+  background: #f0eafa;
+}
+.heading-tool {
+  font-size: 17px;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+}
+.heading-tool span {
+  font-size: 10px;
+  margin-top: 7px;
+}
+.bold-tool {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+}
+.italic-tool {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+}
+.strike-tool {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  text-decoration: line-through;
+}
+.toolbar-divider {
+  width: 1px;
+  height: 17px;
+  background: #e6e5ee;
+  margin: 0 7px;
+}
+.view-switch {
+  display: flex;
+  background: #f5f5f9;
+  padding: 3px;
+  gap: 2px;
+  border-radius: 5px;
+}
+.view-switch button {
+  height: 25px;
+  width: 31px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #93919e;
+}
+.view-switch button.selected {
+  background: #fff;
+  color: var(--purple);
+  box-shadow: 0 1px 4px #29203213;
+}
+.view-switch button:hover {
+  color: var(--purple);
+}
+.editor-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 371px;
+}
+.source-pane {
+  background: #fafafd;
+  border-right: 1px solid #e7e7ee;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pane-heading {
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 21px;
+  color: #a0a0b0;
+  font-size: 8px;
+  letter-spacing: 1.15px;
+  font-weight: 500;
+}
+.source-heading-detail {
+  font-family: \"Golos Text\", sans-serif;
+  letter-spacing: 0;
+  font-size: 9px;
+  color: #b0aebc;
+  font-weight: 400;
+}
+.source-pane textarea {
+  display: block;
+  width: 100%;
+  height: 329px;
+  flex: 1;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  padding: 7px 21px 23px;
+  font-family: \"IBM Plex Mono\", monospace;
+  font-size: 11px;
+  line-height: 1.95;
+  color: #737085;
+  tab-size: 2;
+  caret-color: var(--purple);
+}
+.source-pane textarea::placeholder {
+  color: #aaa4b8;
+}
+.source-pane:focus-within {
+  box-shadow: inset 0 0 0 2px #a28bda55;
+}
+.preview-pane {
+  min-width: 0;
+  background: #fff;
+}
+.live-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: #9995a5;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.live-label i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #7fbc9b;
+  box-shadow: 0 0 0 3px #f0f8f3;
+}
+.markdown-preview {
+  padding: 5px 25px 20px;
+  height: 329px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 1.85;
+  color: #70717d;
+  overflow-wrap: anywhere;
+}
+.markdown-preview h1 {
+  font-size: 23px;
+  line-height: 1.4;
+  letter-spacing: -0.6px;
+  color: #33323e;
+  font-weight: 650;
+  margin: 0 0 15px;
+  max-width: 370px;
+}
+.markdown-preview h2 {
+  font-size: 15px;
+  color: #383742;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 1.5;
+  margin: 20px 0 9px;
+}
+.markdown-preview h3 {
+  font-size: 14px;
+  color: #383742;
+}
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  color: #383742;
+  margin: 14px 0 7px;
+}
+.markdown-preview p {
+  margin: 0 0 13px;
+}
+.markdown-preview strong {
+  font-weight: 600;
+  color: #494752;
+}
+.markdown-preview em {
+  color: #777180;
+}
+.markdown-preview ul,
+.markdown-preview ol {
+  padding-left: 18px;
+  margin: 0 0 17px;
+}
+.markdown-preview li {
+  padding-left: 2px;
+  margin: 3px 0;
+}
+.markdown-preview li::marker {
+  color: #9c85c9;
+}
+.markdown-preview blockquote {
+  border-left: 3px solid #b7a0dc;
+  background: #f8f5fc;
+  padding: 10px 13px;
+  margin: 17px 0;
+  border-radius: 0 5px 5px 0;
+  color: #8a769f;
+  font-size: 10px;
+}
+.markdown-preview blockquote p {
+  margin: 0;
+}
+.markdown-preview a {
+  color: #8b68c6;
+  text-decoration-color: #cbb9e6;
+  text-underline-offset: 3px;
+}
+.markdown-preview code {
+  font-family: \"IBM Plex Mono\", monospace;
+  font-size: 0.9em;
+  color: #8a5ac0;
+  background: #f3eef9;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.markdown-preview pre {
+  background: #f6f4f9;
+  border-radius: 5px;
+  padding: 12px;
+  overflow: auto;
+}
+.markdown-preview pre code {
+  padding: 0;
+  background: transparent;
+}
+.markdown-preview img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+.markdown-preview th,
+.markdown-preview td {
+  padding: 6px 9px;
+  border: 1px solid #e5dfed;
+  text-align: left;
+}
+.markdown-preview th {
+  background: #f7f4fb;
+}
+.markdown-preview hr {
+  border: 0;
+  border-top: 1px solid #e5dfed;
+  margin: 20px 0;
+}
+.markdown-preview .contains-task-list {
+  padding-left: 0;
+  list-style: none;
+}
+.markdown-preview input[type=\"checkbox\"] {
+  accent-color: var(--purple);
+  margin-right: 7px;
+}
+.preview-only {
+  grid-template-columns: 1fr;
+}
+.preview-only .markdown-preview {
+  max-width: 740px;
+  margin: auto;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+.preview-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #b4a8c9;
+}
+.preview-empty h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #82768f;
+  margin: 15px 0 8px;
+}
+.preview-empty p {
+  font-size: 12px;
+  color: #a39aaa;
+}
+.editor-status {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #e7e7ee;
+  padding: 0 15px;
+  font-size: 9px;
+  color: #a4a1b0;
+  background: #fff;
+}
+.status-dot {
+  padding: 0 7px;
+}
+.editor-status button {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: #9892a7;
+  font-size: 9px;
+  gap: 5px;
+}
+.editor-status button:hover {
+  color: var(--purple);
+}
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 27px 22px;
+  gap: 16px;
+}
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #a3a2af;
+  font-size: 10px;
+}
+.save-status svg {
+  color: #b2acbf;
+}
+.save-status.is-saved,
+.save-status.is-saved svg {
+  color: #74a28c;
+}
+.save-button {
+  --g-button-border-radius: 7px;
+  --g-button-height: 39px;
+  --g-button-text-color: white;
+  font-family: \"Golos Text\", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  box-shadow: 0 3px 4px #7353d71a;
+}
+.save-button .g-button__text {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tip-card {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 17px 21px;
+  border: 1px solid #e8e4f0;
+  border-radius: 9px;
+  background: #f3f0f9;
+}
+.tip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 33px;
+  height: 33px;
+  border-radius: 8px;
+  color: #a18abf;
+  background: #ebe4f5;
+}
+.tip-card strong {
+  font-size: 10px;
+  font-weight: 550;
+  color: #756a88;
+}
+.tip-card p {
+  font-size: 10px;
+  color: #a098ad;
+  margin: 5px 0 0;
+  line-height: 1.5;
+}
+.tip-card > button {
+  border: 0;
+  background: none;
+  gap: 9px;
+  margin-left: auto;
+  font-size: 10px;
+  color: #9479b8;
+  white-space: nowrap;
+}
+.tip-card > button:hover {
+  color: #643a9f;
+}
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 25px 0 24px;
+  color: #b0b0bd;
+  font-size: 9px;
+}
+.page-footer > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-flower {
+  color: #af9bc9;
+  font-size: 17px;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #28233455;
+  backdrop-filter: blur(4px);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal {
+  position: relative;
+  width: 530px;
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #eee7f7;
+  border-radius: 17px;
+  padding: 32px;
+  box-shadow: 0 20px 100px #30204433;
+}
+.modal-close {
+  position: absolute;
+  right: 18px;
+  top: 17px;
+}
+.modal-symbol {
+  width: 46px;
+  height: 46px;
+  background: #f1ebfb;
+  color: var(--purple);
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  margin-bottom: 19px;
+}
+.modal h2 {
+  font-size: 22px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.modal-description {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #9992a4;
+  margin-bottom: 22px;
+}
+.syntax-table {
+  border: 1px solid #ebe7f1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.syntax-table > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 13px;
+  font-size: 11px;
+  border-bottom: 1px solid #f0edf5;
+}
+.syntax-table > div:last-child {
+  border: 0;
+}
+.syntax-table code {
+  font-family: \"IBM Plex Mono\", monospace;
+  width: 50%;
+  color: #8a65b8;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+.syntax-table span {
+  color: #8e8798;
+}
+.shortcut-note {
+  font-size: 10px;
+  color: #a097ad;
+  line-height: 2;
+  margin: 19px 0 0;
+}
+kbd {
+  font: inherit;
+  background: #f5f2f8;
+  padding: 3px 5px;
+  border: 1px solid #e9e2f0;
+  border-radius: 4px;
+}
+.saved-note {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  background: #faf8fd;
+  border: 1px solid #e8e0f1;
+  border-radius: 10px;
+  padding: 18px;
+  gap: 13px;
+  color: #9376b6;
+}
+.saved-note span {
+  flex: 1;
+  min-width: 0;
+}
+.saved-note strong {
+  display: block;
+  color: #554562;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-note small {
+  display: block;
+  font-size: 10px;
+  color: #a296ae;
+  margin-top: 8px;
+}
+.saved-note:hover {
+  background: #f2ebfa;
+}
+.notes-empty {
+  text-align: center;
+  padding: 30px 0;
+  color: #b09dc6;
+}
+.notes-empty p {
+  font-size: 14px;
+  color: #7b6f89;
+}
+.notes-empty span {
+  font-size: 11px;
+  color: #a198aa;
+}
+.toast {
+  position: fixed;
+  z-index: 50;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid #e7dfef;
+  box-shadow: 0 8px 35px #2c203722;
+  border-radius: 10px;
+  padding: 15px 17px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #6f5a83;
+  max-width: calc(100vw - 30px);
+  animation: appear 0.2s ease;
+}
+.toast > svg {
+  color: #79a78d;
+}
+.toast button {
+  border: 0;
+  background: none;
+  color: #aaa0b3;
+  margin-left: 13px;
+}
+.editor-expanded {
+  position: fixed;
+  inset: 22px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0 40px #f7f8fa;
+}
+.editor-expanded .editor-panes {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.editor-expanded .source-pane textarea {
+  height: 100%;
+  min-height: 0;
+}
+.editor-expanded .preview-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.editor-expanded .markdown-preview {
+  height: auto;
+  flex: 1;
+}
+.editor-expanded .editor-status {
+  flex-shrink: 0;
+}
+.editor-expanded .preview-only .markdown-preview {
+  width: 100%;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@media (min-width: 1450px) {
+  .main {
+    padding-top: 35px;
+  }
+  .intro {
+    margin-top: 40px;
+    margin-bottom: 35px;
+  }
+  .editor-panes {
+    min-height: 415px;
+  }
+  .source-pane textarea,
+  .markdown-preview {
+    height: 373px;
+  }
+}
+@media (max-width: 1000px) {
+  .main {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+  .header-inner {
+    padding: 0 28px;
+    gap: 45px;
+  }
+  .intro-art {
+    margin-right: 5px;
+  }
+  h1 {
+    font-size: 29px;
+  }
+  .source-heading-detail {
+    display: none;
+  }
+  .markdown-preview {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .markdown-preview h1 {
+    font-size: 21px;
+  }
+  .source-pane textarea {
+    font-size: 10px;
+  }
+  .live-label {
+    font-size: 8px;
+  }
+  .tip-card p {
+    max-width: 490px;
+  }
+}
+@media (max-width: 720px) {
+  .site-header {
+    height: 65px;
+  }
+  .header-inner {
+    padding: 0 20px;
+    gap: 25px;
+  }
+  .brand {
+    font-size: 24px;
+  }
+  .brand-symbol {
+    width: 30px;
+    height: 30px;
+    margin-right: 7px;
+  }
+  .personal-space {
+    display: none;
+  }
+  .main-nav {
+    gap: 17px;
+  }
+  .nav-item {
+    font-size: 11px;
+  }
+  .header-right {
+    gap: 0;
+  }
+  .avatar {
+    width: 29px;
+    height: 29px;
+  }
+  .main {
+    padding: 23px 18px 0;
+  }
+  .breadcrumb {
+    font-size: 9px;
+  }
+  .intro {
+    margin: 30px 0 24px;
+  }
+  .eyebrow {
+    font-size: 8px;
+    letter-spacing: 1.3px;
+  }
+  h1 {
+    font-size: 27px;
+    max-width: 310px;
+    line-height: 1.3;
+  }
+  .intro p {
+    font-size: 11px;
+    max-width: 300px;
+  }
+  .intro-art {
+    width: 90px;
+    transform: scale(0.75);
+    transform-origin: right center;
+    margin-left: -20px;
+  }
+  .art-back {
+    left: -20px;
+  }
+  .art-front {
+    left: 25px;
+  }
+  .art-spark {
+    right: -22px;
+  }
+  .card-heading {
+    padding: 18px;
+  }
+  .card-heading h2 {
+    font-size: 14px;
+  }
+  .private-note {
+    font-size: 9px;
+  }
+  .form-content {
+    padding: 20px 17px 0;
+  }
+  .editor-toolbar {
+    padding: 6px;
+    gap: 4px;
+  }
+  .format-tools {
+    gap: 0;
+  }
+  .tool {
+    width: 26px;
+  }
+  .toolbar-divider {
+    margin: 0 3px;
+  }
+  .view-tools {
+    gap: 0;
+  }
+  .view-switch button {
+    width: 25px;
+  }
+  .editor-panes {
+    grid-template-columns: 1fr;
+  }
+  .source-pane {
+    border-right: 0;
+    border-bottom: 1px solid #e7e7ee;
+  }
+  .source-pane textarea {
+    height: 240px;
+    min-height: 240px;
+    font-size: 11px;
+  }
+  .markdown-preview {
+    height: auto;
+    min-height: 260px;
+    padding: 8px 20px 22px;
+  }
+  .pane-heading {
+    height: 38px;
+  }
+  .source-heading-detail {
+    display: block;
+  }
+  .card-footer {
+    padding: 18px;
+    gap: 10px;
+  }
+  .save-status {
+    font-size: 9px;
+    gap: 5px;
+  }
+  .save-status span {
+    max-width: 125px;
+    line-height: 1.6;
+  }
+  .save-button {
+    font-size: 10px;
+  }
+  .tip-card {
+    padding: 15px;
+    gap: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .tip-card > div {
+    flex: 1 1 calc(100% - 45px);
+  }
+  .tip-card p {
+    font-size: 10px;
+  }
+  .tip-card > button {
+    margin-left: 43px;
+    font-size: 10px;
+  }
+  .tip-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .page-footer {
+    font-size: 8px;
+    gap: 15px;
+    line-height: 1.8;
+  }
+  .page-footer > span:last-child {
+    max-width: 170px;
+    text-align: right;
+  }
+  .editor-expanded {
+    inset: 10px;
+  }
+  .editor-expanded .editor-panes {
+    overflow: auto;
+    display: block;
+  }
+  .editor-expanded .source-pane textarea {
+    min-height: 260px;
+  }
+  .editor-expanded .markdown-preview {
+    min-height: 320px;
+  }
+  .editor-expanded .preview-only {
+    display: flex;
+  }
+  .editor-expanded .preview-only .preview-pane {
+    flex: 1;
+  }
+  .modal {
+    padding: 25px;
+  }
+  .modal h2 {
+    font-size: 21px;
+  }
+  .syntax-table > div {
+    gap: 5px;
+    padding: 9px;
+  }
+  .syntax-table code,
+  .syntax-table span {
+    font-size: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .editor-toolbar {
+    flex-wrap: wrap;
+  }
+  .view-tools {
+    margin-left: auto;
+  }
+  .editor-toolbar .format-tools {
+    flex: 1;
+  }
+  .intro-art {
+    display: none;
+  }
+}
+@media (max-width: 390px) {
+  .main-nav {
+    gap: 10px;
+  }
+  .header-inner {
+    gap: 18px;
+    padding: 0 16px;
+  }
+  .main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .editor-toolbar .toolbar-divider {
+    margin: 0 2px;
+  }
+  .tool {
+    width: 24px;
+  }
+  .view-switch button {
+    width: 23px;
+  }
+  .content-label > span {
+    font-size: 9px;
+  }
+  .private-note {
+    display: none;
+  }
+}
+/* Keep the editor's visual theme consistent inside the UI provider. */
+.app {
+  font-family: \"Golos Text\", sans-serif;
+  background: #f7f8fa;
+  min-height: 100vh;
+  color: #252631;
+  line-height: 1.4;
+  --g-color-base-brand: #7353d7;
+  --g-color-base-brand-hover: #6242c6;
+  --g-text-body-font-family: \"Golos Text\", sans-serif;
+}
+.save-button {
+  --g-button-background-color: #7353d7;
+  --g-button-background-color-hover: #6242c6;
+  --g-button-text-color: #fff;
+  --g-button-text-color-hover: #fff;
+  --g-button-font-size: 11px;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:77:19
+     75| // A hand-rolled <textarea> as the markdown input is the forbidden raw…
+     76| test("no raw textarea input", () => {
+     77|   expect(src).not.toMatch(new RegExp("<textarea[\\s/>]"));
+       |                   ^
+     78| });
+     79| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx uses a raw <textarea> bound to body and renders a custom ReactMarkdown preview; package.json declares react-markdown and does not declare @gravity-ui/markdown-editor. The source has no useMarkdownEditor or MarkdownEditorView usage, so the required Gravity editor is not implemented.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

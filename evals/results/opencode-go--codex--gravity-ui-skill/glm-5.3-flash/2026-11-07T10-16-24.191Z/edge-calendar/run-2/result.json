@@ -1,0 +1,197 @@
+{
+  "status": "passed",
+  "duration": 218.834,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 73806,
+    "outputTokens": 5406,
+    "cacheReadTokens": 801792,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 854,
+    "totalTokens": 881004
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 13,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 28,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 28,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && printf '\\\\n-- files --\\\\n' && rg --files -g '\"'!*node_modules*'\"' | head -200 && printf '\\\\n-- skill --\\\\n' && cat .agents/skills/gravity-ui/SKILL.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n-- package.json --\\\\n' && cat package.json && printf '\\\\n-- app --\\\\n' && sed -n '1,220p' src/App.tsx && printf '\\\\n-- main --\\\\n' && sed -n '1,120p' src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"date-components\\\" .agents/skills/gravity-ui/references/package-routing.md && npm install --save @gravity-ui/date-components @gravity-ui/date-utils && node -e \\\"for (const p of ['@gravity-ui/date-components','@gravity-ui/date-utils']) { const pkg=require(p+'/package.json'); console.log(p, pkg.version, JSON.stringify(pkg.peerDependencies||{})); }\\\" && printf '\\\\n-- exports --\\\\n' && rg -n \\\"export|Calendar\\\" node_modules/@gravity-ui/date-components/build/index.d.ts | head -100\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @gravity-ui/date-components@4 version peerDependencies --json | tail -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --save @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@''^2.6.0 && node -e \"for (const p of ['\"'@gravity-ui/date-components','@gravity-ui/date-utils']) { const pkg=require(p+'/package.json'); console.log(p, pkg.version); }\\\" && printf '\\\\n-- docs/type files --\\\\n' && find node_modules/@gravity-ui/date-components -maxdepth 3 \\\\( -iname 'README*' -o -iname 'INDEX.md' -o -name '*.d.ts' \\\\) | head -50 && printf '\\\\n-- exports --\\\\n' && rg -n \\\"declare const|export \\\\{\\\" node_modules/@gravity-ui/date-components/build/index.d.ts | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/date-components/dist/docs/INDEX.md && printf '\\\\n-- types --\\\\n' && sed -n '1,160p' node_modules/@gravity-ui/date-components/dist/esm/index.d.ts && printf '\\\\n-- calendar type refs --\\\\n' && rg -n \\\"type CalendarProps|declare const Calendar|interface CalendarProps\\\" node_modules/@gravity-ui/date-components/dist/esm -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '-- Calendar doc --' && sed -n '1,220p' node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md && printf '%s\\\\n' '-- Calendar props --' && sed -n '1,220p' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts && printf '%s\\\\n' '-- common types --' && rg -n \\\"type CalendarValueType|type SelectionMode|interface CalendarCommonProps|type CalendarViewType|type CalendarSize|type CalendarDaysOfWeek\\\" node_modules/@gravity-ui/date-components/dist/esm -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,170p' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/types.d.ts && printf '\\\\n-- docs value section --\\\\n' && rg -n -A 12 -B 4 \\\"onUpdate|onChange\\\" node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,70p' node_modules/@gravity-ui/date-components/dist/esm/components/types/index.d.ts && printf '\\\\n-- InputBase --\\\\n' && rg -n -A 30 \\\"interface InputBase|type InputBase\\\" node_modules/@gravity-ui/date-components/dist/esm/components/types -g '*.d.ts' | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,90p' node_modules/@gravity-ui/date-components/dist/esm/components/types/events.d.ts && printf '\\\\n-- RangeValue --\\\\n' && rg -n -A 8 \\\"type RangeValue|interface RangeValue\\\" node_modules/@gravity-ui/date-components/dist/esm/components/types -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,130p' node_modules/@gravity-ui/date-components/dist/esm/components/types/inputs.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { useState } from 'react';\n+\n+import { Calendar } from '@gravity-ui/date-components';\n+import type { DateTime } from '@gravity-ui/date-utils';\n+import { Box, Text } from '@gravity-ui/uikit';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);\n+\n+  return (\n+    <Box display=\\\"flex\\\" direction=\\\"column\\\" gap=\\\"4\\\" style={{ padding: 24 }}>\n+      <Text variant=\\\"header-1\\\">Выбор даты</Text>\n+      <Text variant=\\\"body-1\\\">\n+        {selectedDate ? \"'`Выбранная дата: ${selectedDate.format('\"'DD MMMM YYYY')}\"'` : '\"'Дата не выбрана'}\n+      </Text>\n+      <Calendar\n+        aria-label=\\\"Выбор даты\\\"\n+        size=\\\"l\\\"\n+        value={selectedDate}\n+        onUpdate={setSelectedDate}\n+      />\n+    </Box>\n+  );\n }\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/app.patch <<'EOF'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { useState } from 'react';\n+\n+import { Calendar } from '@gravity-ui/date-components';\n+import type { DateTime } from '@gravity-ui/date-utils';\n+import { Box, Text } from '@gravity-ui/uikit';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);\n+\n+  return (\n+    <Box display=\\\"flex\\\" direction=\\\"column\\\" gap=\\\"4\\\" style={{ padding: 24 }}>\n+      <Text variant=\\\"header-1\\\">Выбор даты</Text>\n+      <Text variant=\\\"body-1\\\">\n+        {selectedDate ? \"'`Выбранная дата: ${selectedDate.format('\"'DD MMMM YYYY')}\"'` : '\"'Дата не выбрана'}\n+      </Text>\n+      <Calendar\n+        aria-label=\\\"Выбор даты\\\"\n+        size=\\\"l\\\"\n+        value={selectedDate}\n+        onUpdate={setSelectedDate}\n+      />\n+    </Box>\n+  );\n }\n*** End Patch\nEOF\npython3 - <<'PY'\nfrom pathlib import Path\n\npath = Path('src/App.tsx')\ncontent = path.read_text()\nold = \\\"\\\"\\\"// Implement the requested feature here (and may add sibling files).\nexport function App() {\n  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n}\n\\\"\\\"\\\"\nnew = \\\"\\\"\\\"import { useState } from 'react';\n\nimport { Calendar } from '@gravity-ui/date-components';\nimport type { DateTime } from '@gravity-ui/date-utils';\nimport { Box, Text } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);\n\n  return (\n    <Box display=\\\"flex\\\" direction=\\\"column\\\" gap=\\\"4\\\" style={{ padding: 24 }}>\n      <Text variant=\\\"header-1\\\">Выбор даты</Text>\n      <Text variant=\\\"body-1\\\">\n        {selectedDate ? \"'`Выбранная дата: ${selectedDate.format('\"'DD MMMM YYYY')}\"'` : '\"'Дата не выбрана'}\n      </Text>\n      <Calendar\n        aria-label=\\\"Выбор даты\\\"\n        size=\\\"l\\\"\n        value={selectedDate}\n        onUpdate={setSelectedDate}\n      />\n    </Box>\n  );\n}\n\\\"\\\"\\\"\nif old not in content:\n    raise SystemExit('Original source did not match')\npath.write_text(content.replace(old, new))\nPY\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v perl node busybox patch git || true && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/new-app.js <<'EOF'\nconst fs = require('fs');\nconst path = 'src/App.tsx';\nconst next = \"'`import { useState } from '\"'react';\\\\n\\\\nimport { Calendar } from '@gravity-ui/date-components';\\\\nimport type { DateTime } from '@gravity-ui/date-utils';\\\\nimport { Box, Text } from '@gravity-ui/uikit';\\\\n\\\\nexport function App() {\\\\n  const [selectedDate, setSelectedDate] = useState<DateTime | null>(null);\\\\n\\\\n  return (\\\\n    <Box display=\\\"flex\\\" direction=\\\"column\\\" gap=\\\"4\\\" style={{ padding: 24 }}>\\\\n      <Text variant=\\\"header-1\\\">Выбор даты</Text>\\\\n      <Text variant=\\\"body-1\\\">\\\\n        {selectedDate ? \\\\\"'`Выбранная дата: '\"\\\\\"'${selectedDate.format('\"'DD MMMM YYYY')}\\\\\"'` : '\"'Дата не выбрана'}\\\\n      </Text>\\\\n      <Calendar\\\\n        aria-label=\\\"Выбор даты\\\"\\\\n        size=\\\"l\\\"\\\\n        value={selectedDate}\\\\n        onUpdate={setSelectedDate}\\\\n      />\\\\n    </Box>\\\\n  );\\\\n}\\\\n\"'`;\nfs.writeFileSync(path, next);\nEOF\nnode /tmp/new-app.js && rm /tmp/new-app.js && npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"type BoxProps|interface BoxProps|display|direction|gap\\\" node_modules/@gravity-ui/uikit/build/types/Box/*.d.ts node_modules/@gravity-ui/uikit/build/types/*.d.ts 2>/dev/null | head -100 || true; rg -n \\\"import \\\\{.*Box|BoxProps\\\" node_modules/@gravity-ui/uikit/build -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts && printf '\\\\n-- export refs --\\\\n' && rg -n \\\"export .*Flex|export .*Box\\\" node_modules/@gravity-ui/uikit/build/esm/components/layout/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export .*Flex|declare const Flex|from './layout|from './components/layout\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null | head -30 && rg -n \\\"export .*Flex\\\" node_modules/@gravity-ui/uikit/build/esm -g 'index.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -40 && rg -n \\\"\\\\{Flex|\\\\bFlex\\\\b\\\" node_modules/@gravity-ui/uikit/build/esm/index.js | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head -30 && rg -n \\\"export \\\\{.*Flex|as Flex\\\" node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.js node_modules/@gravity-ui/uikit/build/esm/components/index.js | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | rg \"layout|Flex|Box\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'EOF'\nconst fs = require('fs');\nconst path = 'src/App.tsx';\nlet content = fs.readFileSync(path, 'utf8');\ncontent = content.replace(\\\"import { Box, Text } from '@gravity-ui/uikit';\\\", \\\"import { Flex, Text } from '@gravity-ui/uikit';\\\");\ncontent = content.replace('<Box display=\\\"flex\\\" direction=\\\"column\\\" gap=\\\"4\\\"', '<Flex direction=\\\"column\\\" gap=\\\"4\\\"');\ncontent = content.replace('</Box>', '</Flex>');\nfs.writeFileSync(path, content);\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"addLanguageKeysets|lang=\\\" node_modules/@gravity-ui/uikit/build/docs/guides/*.md node_modules/@gravity-ui/uikit/build/docs/guides/theming.md 2>/dev/null | head -30 || true && rg -n \\\"ru|lang\\\" node_modules/@gravity-ui/uikit/build/esm/components/ThemeProvider/ThemeProvider.d.ts | head -30 && node -e \\\"console.log(require.resolve('@gravity-ui/uikit/package.json'))\\\"\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/package.json | head -30 && rg -n \\\"interface ThemeProviderProps|type ThemeProviderProps|lang\\\" node_modules/@gravity-ui/uikit/build/esm/components/ThemeProvider -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"ThemeProvider\\\" node_modules/@gravity-ui/uikit/build/esm -g 'index.d.ts' | head -20 && rg -n \\\"interface ThemeProviderProps|lang\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | rg \\\"Theme|lang\\\" | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'EOF'\nconst fs = require('fs');\nconst path = 'src/main.tsx';\nlet content = fs.readFileSync(path, 'utf8');\ncontent = content.replace(\n  \\\"import { ThemeProvider } from '@gravity-ui/uikit';\\\",\n  \\\"import { ThemeProvider } from '@gravity-ui/uikit';\\\\nimport { settings } from '@gravity-ui/date-utils';\\\"\n);\ncontent = content.replace(\\\"import { App } from './App';\\\", \\\"import { App } from './App';\\\\n\\\\nsettings.loadLocale('ru');\\\");\ncontent = content.replace('<ThemeProvider theme=\\\"light\\\">', '<ThemeProvider theme=\\\"light\\\" lang=\\\"ru\\\">');\nfs.writeFileSync(path, content);\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' src/main.tsx && printf '\\\\n-- App --\\\\n' && sed -n '1,100p' src/App.tsx && printf '\\\\n-- deps --\\\\n' && cat package.json | sed -n '1,45p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"Calendar|selectedDate|Выбранная\\\" src/App.tsx && rg -n \\\"loadLocale|lang=\\\\\\\"ru\\\\\\\"\\\" src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 73806,
+      "outputTokens": 5406,
+      "cacheReadTokens": 801792,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 854,
+      "totalTokens": 881004
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

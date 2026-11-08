@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "duration": 512.861,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 39361,
+    "outputTokens": 7981,
+    "cacheReadTokens": 828672,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 755,
+    "totalTokens": 876014
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n---FILES---\\\\n' && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' .agents/skills/gravity-ui/references/package-routing.md && rg -n -C 2 'app shell|navigation|router|uikit' .agents/skills/gravity-ui/references/package-routing.md && cat package.json && printf '\\\\n--- TRAPS ---\\\\n' && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && printf '\\\\n--- APP ---\\\\n' && cat src/App.tsx && printf '\\\\n--- MAIN ---\\\\n' && cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/references/theming.md && node -e \\\"for (const p of ['@gravity-ui/uikit','@gravity-ui/navigation']) {try {console.log(p,require(p+'/package.json').version)} catch(e) {console.log(p,'missing')}}\\\" && npm install @gravity-ui/navigation\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json && .agents/skills/gravity-ui/scripts/inspect-package.sh navigation AsideHeader && .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Card Switch ThemeProvider Text useTheme'",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc 'bash .agents/skills/gravity-ui/scripts/inspect-package.sh navigation AsideHeader && bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Card Switch ThemeProvider Text useTheme'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 3 'AsideHeader|menuItems|renderContent|ThemeProvider|Switch|Card|Button|Required setup' node_modules/@gravity-ui/navigation/build/docs/INDEX.md node_modules/@gravity-ui/navigation/README.md node_modules/@gravity-ui/uikit/README.md && cat node_modules/@gravity-ui/navigation/build/esm/components/AsideHeader/types.d.ts && cat node_modules/@gravity-ui/navigation/build/esm/components/AsideHeader/AsideHeader.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/controls/Switch/Switch.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/icons && rg --files node_modules/@gravity-ui/uikit/build/esm/components/Switch && sed -n '44,76p' node_modules/@gravity-ui/navigation/build/docs/INDEX.md && rg -n 'export interface MenuItem|interface MenuItem|icon\\\\??:' node_modules/@gravity-ui/navigation/build/esm/types.d.ts node_modules/@gravity-ui/navigation/build/esm/types/*.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts && rg -n 'interface MenuItem|type MenuItem|icon\\\\??:' node_modules/@gravity-ui/navigation/build/esm -g '*.d.ts' | head -30 && cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'export.*(House|Chart|Gear|Moon|Sun|CircleCheck|ArrowRight)' node_modules/@gravity-ui/icons/build/esm/index.d.ts node_modules/@gravity-ui/icons/build/esm -g 'index.d.ts' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/icons/package.json | head -35 && rg --files node_modules/@gravity-ui/icons | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/icons | rg '/(House|ChartColumn|Gear|Sun|Moon|Grid|ChartPie|Sliders|ArrowUpRight)\\\\.d\\\\.ts\"'$'\"' | sort\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat tsconfig.json && npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\np='src/App.tsx'\ns=open(p).read().replace(\\\"ChartPie, Gear, House, Moon, Sun\\\", \\\"ChartPie, Gear, House, Sun\\\")\ns=s.replace('size={18}', 'width={18} height={18}').replace('size={20}', 'width={20} height={20}')\nopen(p,'w').write(s)\nPY\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/ChartPie, Gear, House, Moon, Sun/ChartPie, Gear, House, Sun/; s/size={18}/width={18} height={18}/g; s/size={20}/width={20} height={20}/g' src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git status --short && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 39361,
+      "outputTokens": 7981,
+      "cacheReadTokens": 828672,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 755,
+      "totalTokens": 876014
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "status": "failed",
+  "duration": 310.024,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 14,
+    "outputTokens": 2989,
+    "cacheReadTokens": 132627,
+    "cacheWriteTokens": 10459,
+    "totalTokens": 146089
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "git ls-files && cat package.json 2>/dev/null; ls -la",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat $f; done; ls __agent_eval__; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -o \"export {[^}]*}\" build/esm/index.d.ts | head; ls build/esm/components | tr '\\n' ' '; echo; grep -n \"variant\\|TEXT_VARIANTS\" build/esm/components/Text/text/text.d.ts | head; grep -rn \"display-\\|header-\" build/esm/components/Text/text/text.d.ts | head -3; sed -n 1,60p build/esm/components/Button/Button.d.ts | grep -n \"view\\|size\\|href\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls layout; cat layout/Flex/Flex.d.ts | grep -n \"gap\\|direction\\|wrap\\|justify\\|alignItems\" | head; grep -n \"view\\|type\\b\" Card/Card.d.ts | head; grep -n \"color\" Text/Text.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/App.tsx <<'EOF'\nimport { Button, Card, Text } from '@gravity-ui/uikit';\n\nimport './App.css';\n\nconst FEATURES = [\n  {\n    title: 'Старт таймера в один клик',\n    text: 'Сотрудники отмечают время по задачам и проектам без лишних полей и настроек.',\n  },\n  {\n    title: 'Прозрачная загрузка команды',\n    text: 'Руководитель видит, кто чем занят и сколько часов ушло на каждый проект.',\n  },\n  {\n    title: 'Отчёты для клиентов и счетов',\n    text: 'Готовые сводки по часам за неделю или месяц выгружаются в CSV за пару секунд.',\n  },\n];\n\nexport function App() {\n  return (\n    <main className=\"landing\">\n      <section className=\"landing__hero\">\n        <Text as=\"h1\" variant=\"display-2\">\n          Учёт времени команды без лишней рутины\n        </Text>\n        <Text as=\"p\" variant=\"body-3\" color=\"secondary\">\n          Тайминг помогает небольшим командам понимать, куда уходят часы, и честно выставлять\n          счета клиентам.\n        </Text>\n      </section>\n\n      <section className=\"landing__features\" aria-label=\"Преимущества\">\n        {FEATURES.map((feature) => (\n          <Card key={feature.title} view=\"outlined\" className=\"landing__feature\">\n            <Text as=\"h2\" variant=\"subheader-3\">\n              {feature.title}\n            </Text>\n            <Text as=\"p\" variant=\"body-2\" color=\"secondary\">\n              {feature.text}\n            </Text>\n          </Card>\n        ))}\n      </section>\n\n      <section className=\"landing__cta\">\n        <Text as=\"h2\" variant=\"header-2\">\n          Попробуйте 14 дней бесплатно\n        </Text>\n        <Button view=\"action\" size=\"xl\" href=\"/signup\">\n          Начать бесплатно\n        </Button>\n      </section>\n    </main>\n  );\n}\nEOF\ncat > src/App.css <<'EOF'\n.landing {\n  max-width: 960px;\n  margin: 0 auto;\n  padding: 80px 24px;\n  display: flex;\n  flex-direction: column;\n  gap: 64px;\n}\n\n.landing h1,\n.landing h2,\n.landing p {\n  margin: 0;\n}\n\n.landing__hero,\n.landing__cta {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 16px;\n  text-align: center;\n}\n\n.landing__hero p {\n  max-width: 600px;\n}\n\n.landing__features {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\n  gap: 16px;\n}\n\n.landing__feature {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 24px;\n}\nEOF\nsed -i 's/lang=\"en\"/lang=\"ru\"/; s#<title>.*</title>#<title>Тайминг — учёт времени команды</title>#' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -i -E \"playwright|puppeteer\"; which chromium chromium-browser google-chrome 2>/dev/null; echo \"---\"; rm -rf dist",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 14,
+      "outputTokens": 2989,
+      "cacheReadTokens": 132627,
+      "cacheWriteTokens": 10459,
+      "totalTokens": 146089
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

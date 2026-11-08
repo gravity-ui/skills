@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "duration": 375.201,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 20,
+    "outputTokens": 6863,
+    "cacheReadTokens": 227174,
+    "cacheWriteTokens": 17649,
+    "totalTokens": 251706
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files && cat package.json 2>/dev/null; ls -la",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/*.tsx src/*.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat $f; done; ls __agent_eval__",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm/components/theme/ && cat build/esm/components/theme/ThemeProvider.d.ts build/esm/components/theme/ThemeProvider.js build/esm/components/theme/types.d.ts build/esm/components/theme/index.d.ts; ls build/esm/components/SegmentedRadioGroup 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cat build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -40; grep -n \"SegmentedRadioGroup\\|ThemeProvider\\|useThemeValue\" build/esm/index.d.ts build/esm/components/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 - <<'EOF'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\\nimport { App } from './App';\",\"import { App } from './App';\\nimport { PersistentThemeProvider } from './theme';\")\ns=s.replace('<ThemeProvider theme=\"light\">','<PersistentThemeProvider>').replace('</ThemeProvider>','</PersistentThemeProvider>')\nopen(p,'w').write(s)\nEOF\ncat src/main.tsx; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -6; rm -rf dist; ls node_modules | grep -i -E \"jsdom|happy-dom|testing-library|playwright\"",
+        "success": true
+      },
+      {
+        "command": "cat > src/__tmp_theme.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { expect, test } from 'vitest';\nconst store: Record<string, string> = {};\n(globalThis as any).window = Object.assign(globalThis, {\n  localStorage: { getItem: (k: string) => store[k] ?? null, setItem: (k: string, v: string) => { store[k] = v; } },\n  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),\n});\ntest('restores stored theme', async () => {\n  const { PersistentThemeProvider, readStoredTheme } = await import('./theme');\n  const { App } = await import('./App');\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'garbage';\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'dark';\n  const html = renderToString(<PersistentThemeProvider><App /></PersistentThemeProvider>);\n  expect(html).toMatch(/value=\"dark\"[^>]*checked|checked[^>]*value=\"dark\"/);\n});\nEOF\nnpx vitest run src/__tmp_theme.test.tsx 2>&1 | tail -12; rm src/__tmp_theme.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "git stash list >/dev/null; cat > src/__tmp_theme.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { expect, test } from 'vitest';\nconst store: Record<string, string> = {};\n(globalThis as any).window = Object.assign(globalThis, {\n  localStorage: { getItem: (k: string) => store[k] ?? null, setItem: (k: string, v: string) => { store[k] = v; } },\n  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),\n});\ntest('restores stored theme', async () => {\n  const { PersistentThemeProvider, readStoredTheme } = await import('./theme');\n  const { App } = await import('./App');\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'garbage';\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'dark';\n  const html = renderToString(<PersistentThemeProvider><App /></PersistentThemeProvider>);\n  expect(html).toMatch(/value=\"dark\"[^>]*checked|checked[^>]*value=\"dark\"/);\n});\nEOF\nnpx vitest run src/__tmp_theme.test.tsx --server.deps.inline=@gravity-ui/uikit 2>&1 | tail -8; rm src/__tmp_theme.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/vt && cat > /tmp/vt/vitest.config.mjs <<'EOF'\nexport default { root: '/home/sandbox/workspace', test: { include: ['src/__tmp_*.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } } };\nEOF\ncat > src/__tmp_theme.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { expect, test } from 'vitest';\nconst store: Record<string, string> = {};\n(globalThis as any).window = Object.assign(globalThis, {\n  localStorage: { getItem: (k: string) => store[k] ?? null, setItem: (k: string, v: string) => { store[k] = v; } },\n  matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),\n});\ntest('restores stored theme', async () => {\n  const { PersistentThemeProvider, readStoredTheme } = await import('./theme');\n  const { App } = await import('./App');\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'garbage';\n  expect(readStoredTheme()).toBe('light');\n  store['app-theme'] = 'dark';\n  const html = renderToString(<PersistentThemeProvider><App /></PersistentThemeProvider>);\n  expect(html).toMatch(/value=\"dark\"[^>]*checked|checked[^>]*value=\"dark\"/);\n});\nEOF\nnpx vitest run --config /tmp/vt/vitest.config.mjs 2>&1 | tail -8; rm src/__tmp_theme.test.tsx; rm -rf /tmp/vt; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 20,
+      "outputTokens": 6863,
+      "cacheReadTokens": 227174,
+      "cacheWriteTokens": 17649,
+      "totalTokens": 251706
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

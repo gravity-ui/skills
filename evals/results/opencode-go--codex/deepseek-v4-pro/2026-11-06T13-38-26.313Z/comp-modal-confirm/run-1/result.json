@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 176.38,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 9881,
+    "outputTokens": 2356,
+    "cacheReadTokens": 125952,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 801,
+    "totalTokens": 138189
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat index.html && echo \"---\" && cat src/ -r 2>/dev/null || find src -type f'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx && echo \"---\" && cat src/App.tsx && echo \"---\" && cat package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -l \\\"Modal\\\\|Dialog\\\" node_modules/@gravity-ui/uikit/build/esm/ 2>/dev/null | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find node_modules/@gravity-ui/uikit -name \"Modal*\" -o -name \"Dialog*\" 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/cjs/components/Dialog/Dialog.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/cjs/components/Button/Button.d.ts 2>/dev/null | head -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx << 'ENDOFFILE'\nimport { useState, useCallback } from 'react';\nimport { Button, Dialog } from '@gravity-ui/uikit';\n\n// Implement the requested feature here (and may add sibling files).\nexport function App() {\n  const [open, setOpen] = useState(false);\n\n  const handleOpen = useCallback(() => setOpen(true), []);\n  const handleClose = useCallback(() => setOpen(false), []);\n\n  const handleConfirm = useCallback(() => {\n    // Действие при подтверждении\n    setOpen(false);\n  }, []);\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Button view=\\\"action\\\" size=\\\"l\\\" onClick={handleOpen}>\n        Открыть\n      </Button>\n\n      <Dialog open={open} onClose={handleClose}>\n        <Dialog.Header caption=\\\"Подтверждение\\\" />\n        <Dialog.Body>\n          Вы уверены, что хотите выполнить это действие? Пожалуйста, подтвердите\n          или отмените операцию.\n        </Dialog.Body>\n        <Dialog.Footer\n          textButtonApply=\\\"Подтвердить\\\"\n          textButtonCancel=\\\"Отменить\\\"\n          onClickButtonApply={handleConfirm}\n          onClickButtonCancel={handleClose}\n          propsButtonApply={{\n            view: 'action',\n          }}\n          propsButtonCancel={{\n            view: 'normal',\n          }}\n        />\n      </Dialog>\n    </div>\n  );\n}\nENDOFFILE\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace -name \"*.test.*\" -o -name \"*.spec.*\" 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 9881,
+      "outputTokens": 2356,
+      "cacheReadTokens": 125952,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 801,
+      "totalTokens": 138189
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

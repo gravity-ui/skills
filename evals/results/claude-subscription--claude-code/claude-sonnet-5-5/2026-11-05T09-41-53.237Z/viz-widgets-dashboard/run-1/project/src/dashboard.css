@@ -1,0 +1,397 @@
+/* ---------- Tokens ---------- */
+
+.dash {
+  /* Chart palette (validated default: blue slot 1, neutral chrome). */
+  --viz-surface: var(--g-color-base-background);
+  --viz-series-1: #2a78d6;
+  --viz-track: #cde2fb;
+  --viz-muted: #898781;
+  --viz-grid: #e1e0d9;
+  --viz-axis: #c3c2b7;
+  --viz-good: #0b7a0b;
+  --viz-bad: #d03b3b;
+
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+  color: var(--g-color-text-primary);
+}
+
+.g-root_theme_dark .dash {
+  --viz-series-1: #3987e5;
+  --viz-track: #184f95;
+  --viz-grid: #2c2c2a;
+  --viz-axis: #383835;
+  --viz-good: #0ca30c;
+}
+
+body {
+  background: var(--g-color-base-generic-ultralight);
+}
+
+/* ---------- Header ---------- */
+
+.dash__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.dash__title {
+  margin: 0 0 4px;
+}
+.dash__actions {
+  display: flex;
+  gap: 8px;
+}
+.dash__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 64px 0;
+  border: 1px dashed var(--g-color-line-generic);
+  border-radius: 12px;
+}
+
+/* ---------- Grid ---------- */
+
+.grid {
+  position: relative;
+  width: 100%;
+}
+.grid__item,
+.grid__placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.grid__item {
+  transition: transform 200ms ease, width 200ms ease, height 200ms ease;
+}
+.grid__item_active {
+  transition: none;
+  z-index: 2;
+}
+.grid__placeholder {
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--viz-series-1) 12%, transparent);
+  border: 1px dashed var(--viz-series-1);
+  transition: transform 120ms ease, width 120ms ease, height 120ms ease;
+}
+.grid__resize {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 20px;
+  height: 20px;
+  cursor: nwse-resize;
+  border-radius: 4px;
+  opacity: 0.55;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--g-color-text-hint) 50%, var(--g-color-text-hint) 58%, transparent 58%,
+      transparent 70%, var(--g-color-text-hint) 70%, var(--g-color-text-hint) 78%, transparent 78%);
+}
+.grid__item:hover .grid__resize,
+.grid__resize:focus-visible,
+.grid__item_active .grid__resize {
+  opacity: 1;
+}
+.grid__resize:focus-visible,
+.card__handle:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid__item,
+  .grid__placeholder {
+    transition: none;
+  }
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--g-color-base-background);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+.card_dragging {
+  box-shadow: 0 12px 32px rgb(0 0 0 / 18%);
+  border-color: var(--viz-series-1);
+}
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px 0 4px;
+  flex: none;
+}
+.card__handle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px 6px 4px;
+  border-radius: 8px;
+  user-select: none;
+}
+.card__grip {
+  flex: none;
+  color: var(--g-color-text-hint);
+}
+.card__handle:hover .card__grip {
+  color: var(--g-color-text-secondary);
+}
+.card__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding: 0 16px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.muted {
+  color: var(--g-color-text-secondary);
+}
+
+/* ---------- Stat tile ---------- */
+
+.stat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat__value {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 600;
+}
+.stat__delta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  font-size: 13px;
+  line-height: 18px;
+}
+.stat__arrow {
+  display: inline-flex;
+}
+.stat__arrow_good {
+  color: var(--viz-good);
+}
+.stat__arrow_bad {
+  color: var(--viz-bad);
+}
+.spark {
+  flex: 1;
+  min-height: 0;
+  margin-top: 6px;
+}
+.spark svg {
+  display: block;
+}
+
+/* ---------- Meter ---------- */
+
+.meter {
+  height: 12px;
+  margin: 10px 0 8px;
+  border-radius: 4px;
+  background: var(--viz-track);
+  overflow: hidden;
+}
+.meter__fill {
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  background: var(--viz-series-1);
+}
+
+/* ---------- Line chart ---------- */
+
+.chart {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.chart__plot {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.chart__plot svg {
+  display: block;
+  overflow: visible;
+}
+.chart__tick {
+  font-size: 11px;
+  fill: var(--viz-muted);
+}
+.chart__direct {
+  font-size: 12px;
+  fill: var(--g-color-text-secondary);
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--g-color-text-secondary);
+}
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend__swatch {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+.legend__swatch_dashed {
+  background: repeating-linear-gradient(90deg, var(--viz-muted) 0 5px, transparent 5px 8px);
+}
+
+/* ---------- Tooltip ---------- */
+
+.tooltip {
+  position: absolute;
+  z-index: 3;
+  min-width: 150px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--g-color-base-float);
+  border: 1px solid var(--g-color-line-generic);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 14%);
+  font-size: 12px;
+  line-height: 18px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.tooltip__title {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tooltip__name {
+  flex: 1;
+  color: var(--g-color-text-secondary);
+}
+
+/* ---------- Ranked bars ---------- */
+
+.bars {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.bars__row {
+  display: grid;
+  grid-template-columns: minmax(72px, 140px) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 13px;
+  transition: opacity 120ms;
+}
+.bars__row_dim {
+  opacity: 0.45;
+}
+.bars__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--g-color-text-secondary);
+}
+.bars__track {
+  height: 14px;
+}
+.bars__bar {
+  height: 100%;
+  min-width: 2px;
+  background: var(--viz-series-1);
+  border-radius: 0 4px 4px 0;
+}
+.bars__value {
+  min-width: 64px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Table ---------- */
+
+.table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 6px 12px 6px 0;
+  text-align: left;
+  font-weight: 500;
+  color: var(--g-color-text-secondary);
+  background: var(--g-color-base-background);
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+.table td {
+  padding: 8px 12px 8px 0;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  white-space: nowrap;
+}
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  padding-right: 24px;
+}
+
+/* ---------- Utilities ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

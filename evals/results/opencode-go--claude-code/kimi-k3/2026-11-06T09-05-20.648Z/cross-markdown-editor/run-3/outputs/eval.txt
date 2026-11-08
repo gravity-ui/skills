@@ -1,0 +1,393 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 16225ms
+   × depends on @gravity-ui/markdown-editor 5ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 1ms
+     → expected '.app {\n  max-width: 1080px;\n  margi…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 16217ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: @gravity-ui/markdown-editor is not declared in package.json nor imported anywhere in src; the markdown field is instead a Gravity UI TextArea (src/App.tsx:42) with a custom preview rendered via marked + DOMPurify and dangerouslySetInnerHTML (src/markdown.ts, src/App.tsx:54), with no useMarkdownEditor hook or MarkdownEditorView component.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  09:10:12
+   Duration  16.44s (transform 40ms, setup 18ms, collect 20ms, tests 16.22s, environment 0ms, prepare 72ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected '.app {\n  max-width: 1080px;\n  margi…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+".app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.app__header {
+  margin-bottom: 24px;
+}
+
+.app__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.md-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.md-field__panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.md-field__editor textarea {
+  font-family: var(--g-font-family-monospace, monospace);
+  min-height: 320px;
+  resize: vertical;
+}
+
+.md-field__preview {
+  min-height: 320px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 12px 16px;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: var(--g-border-radius-m, 8px);
+  background: var(--g-color-base-float);
+}
+
+.md-field__preview-placeholder {
+  color: var(--g-color-text-secondary);
+}
+
+@media (max-width: 800px) {
+  .md-field__panes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Markdown typography inside the preview */
+.md-body {
+  color: var(--g-color-text-primary);
+  line-height: 1.55;
+  word-wrap: break-word;
+}
+
+.md-body > :first-child {
+  margin-top: 0;
+}
+
+.md-body > :last-child {
+  margin-bottom: 0;
+}
+
+.md-body h1,
+.md-body h2,
+.md-body h3,
+.md-body h4,
+.md-body h5,
+.md-body h6 {
+  margin: 1em 0 0.4em;
+  line-height: 1.3;
+}
+
+.md-body h1 {
+  font-size: 1.6em;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  padding-bottom: 0.2em;
+}
+
+.md-body h2 {
+  font-size: 1.35em;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  padding-bottom: 0.2em;
+}
+
+.md-body h3 {
+  font-size: 1.15em;
+}
+
+.md-body p {
+  margin: 0.6em 0;
+}
+
+.md-body a {
+  color: var(--g-color-text-link);
+}
+
+.md-body code {
+  font-family: var(--g-font-family-monospace, monospace);
+  font-size: 0.9em;
+  background: var(--g-color-base-generic);
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+.md-body pre {
+  background: var(--g-color-base-generic);
+  border-radius: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+}
+
+.md-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.md-body blockquote {
+  margin: 0.6em 0;
+  padding: 2px 16px;
+  border-left: 3px solid var(--g-color-line-accent);
+  color: var(--g-color-text-secondary);
+}
+
+.md-body ul,
+.md-body ol {
+  margin: 0.6em 0;
+  padding-left: 1.6em;
+}
+
+.md-body hr {
+  border: none;
+  border-top: 1px solid var(--g-color-line-generic);
+  margin: 1em 0;
+}
+
+.md-body table {
+  border-collapse: collapse;
+  margin: 0.6em 0;
+}
+
+.md-body th,
+.md-body td {
+  border: 1px solid var(--g-color-line-generic);
+  padding: 6px 12px;
+}
+
+.md-body th {
+  background: var(--g-color-base-generic);
+}
+
+.md-body img {
+  max-width: 100%;
+}
+
+
+import { useMemo, useState } from 'react';
+import { Button, Card, Text, TextArea, TextInput } from '@gravity-ui/uikit';
+
+import { renderMarkdown } from './markdown';
+import './App.css';
+
+const DEFAULT_MARKDOWN = `# Описание задачи
+
+Напишите здесь текст с **markdown**-разметкой — справа сразу появится результат.
+
+## Что поддерживается
+
+- *курсив* и **жирный** текст
+- \\`встроенный код\\` и блоки кода
+- [ссылки](https://gravity-ui.com), списки, таблицы
+
+\\`\\`\\`ts
+const hello: string = 'мир';
+\\`\\`\\`
+
+> Цитата тоже отобразится сразу.
+`;
+
+export function App() {
+  const [title, setTitle] = useState('');
+  const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
+  const [submitted, setSubmitted] = useState(false);
+
+  const previewHtml = useMemo(() => renderMarkdown(markdown), [markdown]);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
+
+  return (
+    <div className=\"app\">
+      <div className=\"app__header\">
+        <Text variant=\"header-1\">Новая задача</Text>
+      </div>
+
+      <Card view=\"raised\" style={{ padding: 24 }}>
+        <form className=\"app__form\" onSubmit={handleSubmit}>
+          <TextInput
+            label=\"Название\"
+            placeholder=\"Краткое название задачи\"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            size=\"l\"
+          />
+
+          <div className=\"md-field\">
+            <Text variant=\"subheader-2\">Описание (Markdown)</Text>
+            <div className=\"md-field__panes\">
+              <TextArea
+                className=\"md-field__editor\"
+                aria-label=\"Описание в формате Markdown\"
+                placeholder=\"Введите текст с markdown-разметкой…\"
+                value={markdown}
+                onChange={(event) => {
+                  setMarkdown(event.target.value);
+                  setSubmitted(false);
+                }}
+              />
+              <div className=\"md-field__preview\" aria-live=\"polite\">
+                {markdown.trim() ? (
+                  <div
+                    className=\"md-body\"
+                    dangerouslySetInnerHTML={{ __html: previewHtml }}
+                  />
+                ) : (
+                  <Text color=\"secondary\" className=\"md-field__preview-placeholder\">
+                    Здесь появится отформатированный текст
+                  </Text>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <Button view=\"action\" size=\"l\" type=\"submit\">
+              Создать задачу
+            </Button>
+          </div>
+
+          {submitted && (
+            <Text color=\"positive\">
+              Задача «{title.trim() || 'Без названия'}» сохранена с описанием в {markdown.length}{' '}
+              символов.
+            </Text>
+          )}
+        </form>
+      </Card>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
+
+/**
+ * Renders markdown source into sanitized HTML, safe to inject into the DOM.
+ */
+export function renderMarkdown(source: string): string {
+  const rawHtml = marked.parse(source, { async: false });
+  return DOMPurify.sanitize(rawHtml);
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: @gravity-ui/markdown-editor is not declared in package.json nor imported anywhere in src; the markdown field is instead a Gravity UI TextArea (src/App.tsx:42) with a custom preview rendered via marked + DOMPurify and dangerouslySetInnerHTML (src/markdown.ts, src/App.tsx:54), with no useMarkdownEditor hook or MarkdownEditorView component.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

@@ -1,0 +1,92 @@
+{
+  "status": "failed",
+  "duration": 463.409,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 24532,
+    "outputTokens": 16631,
+    "cacheReadTokens": 299392,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1851,
+    "totalTokens": 340555
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!*node_modules*'\"' -g '\"'!*.lock'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && sed -n '1,240p' src/App.tsx && sed -n '1,200p' src/main.tsx && cat vite.config.ts && cat tsconfig.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git status --short && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python3 -c 'import shutil; shutil.rmtree(\\\"dist\\\")' && git status --short\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -depth -delete && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx | sed -n '1,24p'; nl -ba src/App.tsx | sed -n '55,75p'; nl -ba src/App.tsx | sed -n '220,250p'; nl -ba src/app.css | sed -n '1,8p'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 24532,
+      "outputTokens": 16631,
+      "cacheReadTokens": 299392,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1851,
+      "totalTokens": 340555
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

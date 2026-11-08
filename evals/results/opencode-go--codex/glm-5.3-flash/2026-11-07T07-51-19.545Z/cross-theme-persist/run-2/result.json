@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "duration": 489.171,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 11478,
+    "outputTokens": 1653,
+    "cacheReadTokens": 80640,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 203,
+    "totalTokens": 93771
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx && cat src/main.tsx && cat index.html && cat package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'EOF'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import { ThemeProvider, ThemeContextType, Toggle, RadioGroup } from '@gravity-ui/uikit';\n+import { ThemeProvider, RadioGroup } from '@gravity-ui/uikit';\n@@\n-type AppThemeProps = {\n-  initialTheme: Theme;\n-};\n-\n export function App() {\n   const [theme, setTheme] = useState<Theme>(readStoredTheme());\n-  const [initialTheme, setInitialTheme] = useState<Theme>(readStoredTheme());\n*** End Patch\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'EOF'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import { ThemeProvider, ThemeContextType, Toggle, RadioGroup } from '@gravity-ui/uikit';\n+import { ThemeProvider, RadioGroup } from '@gravity-ui/uikit';\n@@\n-type AppThemeProps = {\n-  initialTheme: Theme;\n-};\n-\n export function App() {\n   const [theme, setTheme] = useState<Theme>(readStoredTheme());\n-  const [initialTheme, setInitialTheme] = useState<Theme>(readStoredTheme());\n*** Update File: src/main.tsx\n@@\n-import { getInitialTheme } from './theme';\n+import { readStoredTheme } from './theme';\n@@\n-    <ThemeProvider theme={getInitialTheme()}>\n+    <ThemeProvider theme={readStoredTheme()}>\n*** End Patch\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'which apply_patch || echo not-found'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find / -name apply_patch -type f 2>/dev/null | head -3'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/app.tsx <<'EOF'\nimport { useState } from 'react';\nimport { ThemeProvider, RadioGroup } from '@gravity-ui/uikit';\n\nimport { Theme, readStoredTheme, storeTheme } from './theme';\n\nexport function App() {\n  const [theme, setTheme] = useState<Theme>(readStoredTheme());\n\n  const changeTheme = (nextTheme: Theme) => {\n    setTheme(nextTheme);\n    storeTheme(nextTheme);\n  };\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div style={{ padding: 24 }}>\n        <RadioGroup\n          value={theme}\n          onChange={(event) => changeTheme(event.target.value as Theme)}\n        >\n          <RadioGroup.Option value=\\\"light\\\">Light</RadioGroup.Option>\n          <RadioGroup.Option value=\\\"dark\\\">Dark</RadioGroup.Option>\n        </RadioGroup>\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\ncp /tmp/app.tsx src/App.tsx\nsed -i 's/getInitialTheme/readStoredTheme/' src/main.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 11478,
+      "outputTokens": 1653,
+      "cacheReadTokens": 80640,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 203,
+      "totalTokens": 93771
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

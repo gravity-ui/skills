@@ -1,0 +1,47 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (2 tests | 2 failed) 36340ms
+   × declares @gravity-ui/chartkit as a dependency 4ms
+     → expected false to be true // Object.is equality
+   × judge: implements the task with the intended Gravity UI API 36336ms
+     → [judge:environment] FAIL — One @gravity-ui/chartkit ChartKit widget dispatches both modes: the gravity-charts and Yagr plugins are registered through ChartKit's settings plugin registry, and the switch between the sales line chart and the dense monitoring time series selects the engine through ChartKit's `type` prop with matching data. Separate hand-wired charts or a foreign chart library fail.
+  reason: The widget does not use @gravity-ui/chartkit at all: package.json declares no chartkit dependency (only uplot), nothing under src/ imports ChartKit/settings/GravityChartsPlugin/YagrPlugin, and the two modes are hand-wired distinct engines (a custom SVG sales engine and a raw uPlot monitoring engine) selected by a custom `loadEngine` dynamic import rather than ChartKit's settings plugin registry and `type` prop. The agent's own summary confirms it built around uPlot instead of ChartKit.
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  09:56:57
+   Duration  36.51s (transform 24ms, setup 17ms, collect 13ms, tests 36.34s, environment 0ms, prepare 31ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > declares @gravity-ui/chartkit as a dependency
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:101:63
+     99| 
+    100| test('declares @gravity-ui/chartkit as a dependency', () => {
+    101|   expect(Object.hasOwn(dependencies, '@gravity-ui/chartkit')).toBe(tru…
+       |                                                               ^
+    102| });
+    103| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — One @gravity-ui/chartkit ChartKit widget dispatches both modes: the gravity-charts and Yagr plugins are registered through ChartKit's settings plugin registry, and the switch between the sales line chart and the dense monitoring time series selects the engine through ChartKit's `type` prop with matching data. Separate hand-wired charts or a foreign chart library fail.
+  reason: The widget does not use @gravity-ui/chartkit at all: package.json declares no chartkit dependency (only uplot), nothing under src/ imports ChartKit/settings/GravityChartsPlugin/YagrPlugin, and the two modes are hand-wired distinct engines (a custom SVG sales engine and a raw uPlot monitoring engine) selected by a custom `loadEngine` dynamic import rather than ChartKit's settings plugin registry and `type` prop. The agent's own summary confirms it built around uPlot instead of ChartKit.
+ ❯ EVAL.ts:108:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

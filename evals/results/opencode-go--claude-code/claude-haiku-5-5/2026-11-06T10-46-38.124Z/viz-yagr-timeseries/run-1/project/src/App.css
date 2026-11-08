@@ -1,0 +1,52 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.cpu-page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  padding: 24px;
+}
+
+.cpu-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Карточка — поверхность графика; высота делится между заголовком и графиком. */
+.cpu-card {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 320px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--cpu-surface);
+  box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.18);
+}
+
+/* flex-basis 0 + min-height 0: размер хоста задаёт контейнер, а не содержимое графика. */
+.cpu-chart {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+/*
+ * Yagr заливает и корень, и canvas (drawClear) цветом --yagr-background, который задаёт тема.
+ * Переопределяем его на поверхность палитры: график не отличается от карточки.
+ */
+.cpu-card .cpu-chart.yagr {
+  --yagr-background: var(--cpu-surface);
+  background-color: var(--cpu-surface);
+}

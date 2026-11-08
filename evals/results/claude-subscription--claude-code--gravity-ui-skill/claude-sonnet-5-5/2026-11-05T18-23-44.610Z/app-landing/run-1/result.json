@@ -1,0 +1,123 @@
+{
+  "status": "passed",
+  "duration": 328.29,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 34,
+    "outputTokens": 6258,
+    "cacheReadTokens": 718059,
+    "cacheWriteTokens": 44070,
+    "totalTokens": 768421
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 2,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/vite.config.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json AGENTS.md 2>/dev/null; find .agents -type f",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md; echo ----; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----; find src __agent_eval__ -type f | head; cat index.html src/* vite.config.ts tsconfig.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Text ThemeProvider Flex Card 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "grep -n -i -A8 \"page-constructor\" .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,60p; ls node_modules/@gravity-ui; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/page-constructor 2>&1 | tail -15; grep '\"version\"' node_modules/@gravity-ui/page-constructor/package.json; npm ls @gravity-ui/uikit 2>&1 | head; ls node_modules/@gravity-ui/page-constructor; ls node_modules/@gravity-ui/page-constructor/build/docs node_modules/@gravity-ui/page-constructor/dist/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor && grep -n -i -B2 -A12 \"required setup\\|PageConstructorProvider\" README.md | sed -n 1,90p; cat build/docs/INDEX.md | sed -n 1,80p; ls build/docs/blocks",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/build/docs/blocks && sed -n 1,80p Header.md; echo =====; sed -n 1,70p ExtendedFeatures.md; echo ====; sed -n 1,70p Banner.md; grep -n \"peerDependencies\" -A15 ../../../package.json; cd /home/sandbox/workspace; ls node_modules | grep -i \"^sass\\|dynamic-import\\|diplodoc\"; ls node_modules/@diplodoc 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/build/docs && sed -n 1,60p blocks/PromoFeaturesBlock.md; grep -n \"Property\\|required\" blocks/CardLayout.md | head -20; ls sub-blocks guides; grep -n -i \"vite\" -B2 -A15 guides/*.md ../../README.md | head -50",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,75p blocks/CardLayout.md; sed -n 1,60p sub-blocks/BasicCard.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm install @diplodoc/transform 2>&1 | tail -3; npm install -D sass vite-plugin-dynamic-import 2>&1 | tail -3; git status --short; grep -A12 '\"dependencies\"' package.json",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\n/// <reference types=\"vite/client\" />\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\nimport dynamicImport from 'vite-plugin-dynamic-import';\n\nexport default defineConfig({\n  plugins: [\n    react(),\n    dynamicImport({\n      filter: (id) => id.includes('/node_modules/@gravity-ui/page-constructor'),\n    }),\n  ],\n});\nEOF\ncat > src/App.tsx <<'EOF'\nimport { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\nimport type { PageContent } from '@gravity-ui/page-constructor';\nimport '@gravity-ui/page-constructor/styles/styles.scss';\nimport './app.css';\n\nconst content: PageContent = {\n  blocks: [\n    {\n      type: 'header-block',\n      title: 'Учёт времени для команд без лишней рутины',\n      description:\n        'Фиксируйте часы по проектам и задачам в пару кликов и видите, куда уходит время команды.',\n      width: 'm',\n      centered: true,\n      buttons: [{ text: 'Попробовать бесплатно', theme: 'action', url: '#start' }],\n    },\n    {\n      type: 'card-layout-block',\n      colSizes: { all: 12, sm: 6, md: 4 },\n      children: [\n        {\n          type: 'basic-card',\n          title: 'Быстрый старт',\n          text: 'Таймер и ручной ввод часов работают сразу — без долгой настройки и обучения.',\n        },\n        {\n          type: 'basic-card',\n          title: 'Прозрачность для команды',\n          text: 'Все видят загрузку по проектам и людям, поэтому планировать проще.',\n        },\n        {\n          type: 'basic-card',\n          title: 'Понятные отчёты',\n          text: 'Сводки по времени за неделю и месяц собираются автоматически.',\n        },\n      ],\n    },\n    {\n      type: 'banner-block',\n      anchor: { url: 'start', text: 'Начать' },\n      title: 'Начните считать время уже сегодня',\n      subtitle: 'Подключите команду за пару минут.',\n      button: { text: 'Попробовать бесплатно', theme: 'action', url: '#start' },\n    },\n  ],\n};\n\nexport function App() {\n  return (\n    <PageConstructorProvider>\n      <PageConstructor content={content} />\n    </PageConstructorProvider>\n  );\n}\nEOF\ncat > src/app.css <<'EOF'\n*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}\nEOF\nnpm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='vite.config.ts'\ns=open(p).read()\ns=s.replace(\"export default defineConfig({\\n\",\"export default defineConfig({\\n  resolve: {\\n    // page-constructor styles use webpack-style `~pkg` imports\\n    alias: [{ find: /^~(.*)$/, replacement: '$1' }],\\n  },\\n\",1)\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | grep -v -i \"deprecat\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|@import\\|root stylesheet\\|repetitive\" | tail -25",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v -i \"deprecat\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|@import\\|root stylesheet\\|repetitive\\|^\\s*node_modules\" | tail -25",
+        "success": true
+      },
+      {
+        "command": "npm install url 2>&1 | grep -v \"allow-scripts\" | tail -3",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v -i \"deprecat\\|sass-lang\\|^\\s*[│╷╵]\\|^$\\|@import\\|root stylesheet\\|repetitive\\|^\\s*node_modules\" | tail -25",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 34,
+      "outputTokens": 6258,
+      "cacheReadTokens": 718059,
+      "cacheWriteTokens": 44070,
+      "totalTokens": 768421
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

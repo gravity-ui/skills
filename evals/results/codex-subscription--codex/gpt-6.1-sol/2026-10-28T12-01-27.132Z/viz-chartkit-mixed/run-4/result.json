@@ -1,0 +1,244 @@
+{
+  "status": "failed",
+  "duration": 1409.288,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.165.0"
+  },
+  "usage": {
+    "inputTokens": 154598,
+    "outputTokens": 50137,
+    "cacheReadTokens": 2958080,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 5225,
+    "totalTokens": 3162815
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 39,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 39,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' -g '\"'!*lock*'\"' -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g '*config*' -g 'README*' -g 'index.html'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && cat vite.config.ts && cat tsconfig.json && find .. -name AGENTS.md -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install highcharts uplot && npm install -D @playwright/test'"
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/styles/fonts.css && cat index.html && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/highcharts node_modules/uplot node_modules/@playwright 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const {chromium}=require('@playwright/test'); console.log(chromium.executablePath())\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mkdir -p /tmp/pulse-check && node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst browser = await chromium.launch({headless:true});\nconst page = await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});\npage.on('pageerror', error=>console.log('PAGE ERROR:',error.message));\nawait page.goto('http://localhost:5179');\nawait page.locator('.highcharts-root').waitFor();\nawait page.evaluate(()=>document.fonts.ready);\nawait page.screenshot({path:'/tmp/pulse-check/sales.png',fullPage:true});\nconsole.log('size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait page.getByRole('tab',{name:'Мониторинг'}).click();\nawait page.locator('.uplot canvas').waitFor();\nawait page.screenshot({path:'/tmp/pulse-check/monitoring.png',fullPage:true});\nconsole.log('monitoring rendered',await page.locator('.uplot canvas').count());\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});\nconsole.log('mobile size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait browser.close();\nJS\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/node/.cache/ms-playwright && which chromium || which google-chrome || true && npx playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json && ls -la __agent_eval__ && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst browser = await chromium.launch({headless:true});\nconst page = await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});\npage.on('pageerror', error=>console.log('PAGE ERROR:',error.message));\nawait page.goto('http://localhost:5179');\nawait page.locator('.highcharts-root').waitFor();\nawait page.evaluate(()=>document.fonts.ready);\nawait page.screenshot({path:'/tmp/pulse-check/sales.png',fullPage:true});\nconsole.log('size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait page.getByRole('tab',{name:'Мониторинг'}).click();\nawait page.locator('.uplot canvas').waitFor();\nawait page.screenshot({path:'/tmp/pulse-check/monitoring.png',fullPage:true});\nconsole.log('monitoring rendered',await page.locator('.uplot canvas').count());\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});\nconsole.log('mobile size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait browser.close();\nJS\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npx playwright install-deps chromium'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat /etc/os-release && which apt-get && ls /usr/lib/aarch64-linux-gnu | head && ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/pulse-browser-deps && cd /tmp/pulse-browser-deps && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0 libdrm2 libpcre2-8-0 libffi8 libmount1 libselinux1 libsystemd0 libwayland-server0 libcap2 libgcrypt20 liblzma5 libzstd1 liblz4-1 libgpg-error0 && for package in *.deb; do dpkg-deb -x \"$package\" /tmp/pulse-browser-deps/root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst browser = await chromium.launch({headless:true});\nconst page = await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});\npage.on('pageerror', error=>console.log('PAGE ERROR:',error.message));\nawait page.goto('http://localhost:5179');\nawait page.locator('.highcharts-root').waitFor();\nawait page.evaluate(()=>document.fonts.ready);\nawait page.screenshot({path:'/tmp/pulse-check/sales.png',fullPage:true});\nconsole.log('size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait page.getByRole('tab',{name:'Мониторинг'}).click();\nawait page.locator('.uplot canvas').waitFor();\nawait page.screenshot({path:'/tmp/pulse-check/monitoring.png',fullPage:true});\nconsole.log('monitoring rendered',await page.locator('.uplot canvas').count());\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});\nconsole.log('mobile size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait browser.close();\nJS\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/pulse-browser-deps && apt-get download libxrender1 libxi6 && for package in libxrender*.deb libxi*.deb; do dpkg-deb -x \"$package\" /tmp/pulse-browser-deps/root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst browser = await chromium.launch({headless:true});\nconst page = await browser.newPage({viewport:{width:1440,height:1100},deviceScaleFactor:1});\npage.on('pageerror', error=>console.log('PAGE ERROR:',error.message));\nawait page.goto('http://localhost:5179');\nawait page.locator('.highcharts-root').waitFor();\nawait page.evaluate(()=>document.fonts.ready);\nawait page.screenshot({path:'/tmp/pulse-check/sales.png',fullPage:true});\nconsole.log('size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait page.getByRole('tab',{name:'Мониторинг'}).click();\nawait page.locator('.uplot canvas').waitFor();\nawait page.screenshot({path:'/tmp/pulse-check/monitoring.png',fullPage:true});\nconsole.log('monitoring rendered',await page.locator('.uplot canvas').count());\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});\nconsole.log('mobile size',await page.evaluate(()=>({width:document.documentElement.scrollWidth,height:document.documentElement.scrollHeight})));\nawait browser.close();\nJS\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu npm run test:e2e'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'curl -I http://localhost:5179 && df -h /dev/shm && cat /proc/meminfo | head'",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst b=await chromium.launch({headless:true}); const p=await b.newPage(); await p.goto('data:text/html,<h1>Hello</h1>'); console.log(await p.title()); await p.screenshot({path:'/tmp/pulse-check/hello.png'}); await b.close();\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst b=await chromium.launch({headless:true}); const p=await b.newPage(); p.on('console',m=>console.log(m.type(),m.text())); await p.goto('http://127.0.0.1:5179',{waitUntil:'domcontentloaded'}); console.log('loaded'); await p.locator('.highcharts-root').waitFor(); await p.screenshot({path:'/tmp/pulse-check/sales.png'}); await b.close();\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @fontsource-variable/golos-text'"
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/pulse-browser-deps && apt-get download fontconfig-config fonts-dejavu-core libfontconfig1 libfreetype6 libpng16-16 && for package in fontconfig*.deb fonts-dejavu*.deb libfontconfig*.deb libfreetype*.deb libpng*.deb; do dpkg-deb -x \"$package\" /tmp/pulse-browser-deps/root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@fontsource-variable/golos-text && cat node_modules/@fontsource-variable/golos-text/index.css | head -35'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport fs from 'node:fs';\nconst p='src/styles.css';let css=fs.readFileSync(p,'utf8');css=css.replace(/\"'^@import[''^'\"\\\\n]+\\\\n/, '').replace(\\\"'Golos Text',Inter\\\", \\\"'Golos Text Variable',Inter\\\");fs.writeFileSync(p,css);\nfor (const p of ['src/widget/engines/SalesChart.tsx','src/widget/engines/MonitoringChart.tsx']) {fs.writeFileSync(p,fs.readFileSync(p,'utf8').replaceAll('Inter, sans-serif','Golos Text Variable, sans-serif'));}\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mkdir -p /tmp/pulse-fonts && cat > /tmp/pulse-fonts/fonts.conf <<'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/tmp/pulse-browser-deps/root/usr/share/fonts</dir><cachedir>/tmp/pulse-fonts/cache</cachedir><config></config></fontconfig>\nEOF\nFONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu node --input-type=module <<'\"'JS'\nimport {chromium} from '@playwright/test';\nconst browser=await chromium.launch();const page=await browser.newPage({viewport:{width:1440,height:1050}});page.on('pageerror',e=>console.log('ERROR',e.message));await page.goto('http://127.0.0.1:5179');await page.locator('.highcharts-root').waitFor();await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:'/tmp/pulse-check/sales.png',fullPage:true});await page.getByRole('tab',{name:'Мониторинг'}).click();await page.locator('.uplot canvas').waitFor();await page.screenshot({path:'/tmp/pulse-check/monitoring.png',fullPage:true});await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});console.log('mobile width',await page.evaluate(()=>document.documentElement.scrollWidth));await browser.close();\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu npm run test:e2e'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"FONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu node --input-type=module <<'JS'\nimport {chromium} from '@playwright/test';\nconst b=await chromium.launch();const p=await b.newPage({viewport:{width:1440,height:1000}});await p.goto('http://127.0.0.1:5179');await p.locator('.highcharts-root').waitFor();await p.evaluate(()=>document.fonts.ready);await p.screenshot({path:'/tmp/pulse-check/sales-v2.png',fullPage:true});await p.setViewportSize({width:390,height:844});await p.waitForTimeout(300);await p.screenshot({path:'/tmp/pulse-check/mobile-v2.png',fullPage:true});await b.close();\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"DEBUG=pw:browser FONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu npm run test:e2e -- --grep 'loads each'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat test-results/widget-loads-each-engine-o-684aa-s-repeatedly-without-errors/error-context.md && cat .gitignore && ps -eo pid,args | rg 'vite|playwright'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport fs from 'node:fs'; const p='src/App.tsx'; const s=fs.readFileSync(p,'utf8').replace('Хороший темп.<br/>Продолжайте', 'Хороший темп. <br/>Продолжайте').replace('Стабильность —<br/>ваше', 'Стабильность — <br/>ваше'); fs.writeFileSync(p,s);\nJS\nFONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu npm run test:e2e\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short && npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier --write src/App.tsx src/styles.css src/data.ts src/icons.tsx src/main.tsx src/widget playwright.config.ts tests/widget.spec.ts README.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,150p' src/widget/engines/SalesChart.tsx && sed -n '25,120p' src/App.tsx && sed -n '1,85p' src/data.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n '18,4|window.innerHeight|Хороший темп|Стабильность' src/App.tsx && cat src/widget/VisualizationWidget.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier --write src/App.tsx src/styles.css src/widget/VisualizationWidget.tsx src/widget/engines/SalesChart.tsx && npm run build && FONTCONFIG_FILE=/tmp/pulse-fonts/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-browser-deps/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-browser-deps/root/lib/aarch64-linux-gnu npm run test:e2e'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 154598,
+      "outputTokens": 50137,
+      "cacheReadTokens": 2958080,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 5225,
+      "totalTokens": 3162815
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

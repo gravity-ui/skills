@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 258.206,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 31838,
+    "outputTokens": 2420,
+    "cacheReadTokens": 230912,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 233,
+    "totalTokens": 265170
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 12,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; sed -n '1,220p' src/App.tsx; printf '\\\\n--- main ---\\\\n'; cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/date-components @gravity-ui/date-utils && node -e \\\"for (const p of ['@gravity-ui/date-components','@gravity-ui/date-utils']) console.log(p, require(p+'/package.json').version)\\\" && ls node_modules/@gravity-ui/date-components/dist/docs node_modules/@gravity-ui/date-components/build/docs 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm view @gravity-ui/date-components versions --json | tail -80 && printf '\\\\n--- peer versions ---\\\\n' && for v in 4.5.0 4.4.0 4.3.0 4.2.0 4.1.0 4.0.0 3.9.0 3.8.0; do echo -n \\\"\"'$v \"; npm view \"@gravity-ui/date-components@$v\" peerDependencies --json; done'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils && node -e \\\"for (const p of ['@gravity-ui/date-components','@gravity-ui/date-utils']) console.log(p, require(p+'/package.json').version)\\\" && find node_modules/@gravity-ui/date-components -maxdepth 3 -iname 'INDEX.md' -o -maxdepth 3 -iname 'README.md' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/date-components/dist/docs/INDEX.md; printf '\\\\n--- calendar refs ---\\\\n'; rg -l -i 'calendar' node_modules/@gravity-ui/date-components/dist/docs | head -20; printf '\\\\n--- setup ---\\\\n'; rg -n -i -C 3 'required setup|styles|ThemeProvider|locale' node_modules/@gravity-ui/date-components/README.md node_modules/@gravity-ui/date-components/dist/docs/guides -g '*.md' | head -160\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md; printf '\\\\n--- types ---\\\\n'; rg -n 'declare (const|function) Calendar|type CalendarProps|interface CalendarProps|value:|onChange:' node_modules/@gravity-ui/date-components/dist -g 'Calendar*.d.ts' | head -120\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import { App } from './App';\n+import { App } from './App';\n*** End Patch\nPATCH\napply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n+import {useState} from 'react';\n+import {Calendar} from '@gravity-ui/date-components';\n+import {dateTimeParse} from '@gravity-ui/date-utils';\n+\n+const today = dateTimeParse(new Date());\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [selectedDate, setSelectedDate] = useState(today);\n+\n+  return (\n+    <main style={{padding: 24}}>\n+      <h1>Выбор даты</h1>\n+      <p>Выбранная дата: {selectedDate?.format('DD MMMM YYYY')}</p>\n+      <Calendar value={selectedDate} defaultValue={today} onUpdate={setSelectedDate} aria-label=\\\"Выбор даты\\\" />\n+    </main>\n+  );\n }\n*** End Patch\nPATCH\nrm src/main.tsx\napply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/main.tsx\n+import '@gravity-ui/uikit/styles/fonts.css';\n+import '@gravity-ui/uikit/styles/styles.css';\n+\n+import React from 'react';\n+import ReactDOM from 'react-dom/client';\n+import {ThemeProvider} from '@gravity-ui/uikit';\n+import {settings} from '@gravity-ui/date-utils';\n+\n+import {App} from './App';\n+\n+settings.loadLocale('ru').then(() => {\n+  ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n+    <React.StrictMode>\n+      <ThemeProvider theme=\"light\" lang=\"ru\">\n+        <App />\n+      </ThemeProvider>\n+    </React.StrictMode>,\n+  );\n+});\n*** End Patch\nPATCH\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'command -v applypatch || find / -name apply_patch -type f -perm -111 2>/dev/null | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {useState} from 'react';\nimport {Calendar} from '@gravity-ui/date-components';\nimport {dateTimeParse} from '@gravity-ui/date-utils';\n\nconst today = dateTimeParse(new Date());\n\nexport function App() {\n  const [selectedDate, setSelectedDate] = useState(today);\n\n  return (\n    <main style={{padding: 24}}>\n      <h1>Выбор даты</h1>\n      <p>Выбранная дата: {selectedDate?.format('DD MMMM YYYY')}</p>\n      <Calendar value={selectedDate} defaultValue={today} onUpdate={setSelectedDate} aria-label=\\\"Выбор даты\\\" />\n    </main>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport {ThemeProvider} from '@gravity-ui/uikit';\nimport {settings} from '@gravity-ui/date-utils';\n\nimport {App} from './App';\n\nsettings.loadLocale('ru').then(() => {\n  ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n    <React.StrictMode>\n      <ThemeProvider theme=\"light\" lang=\"ru\">\n        <App />\n      </ThemeProvider>\n    </React.StrictMode>,\n  );\n});\nEOF\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && git diff -- package.json src/App.tsx src/main.tsx | sed -n '1,220p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx && nl -ba src/main.tsx | sed -n '1,60p'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 31838,
+      "outputTokens": 2420,
+      "cacheReadTokens": 230912,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 233,
+      "totalTokens": 265170
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

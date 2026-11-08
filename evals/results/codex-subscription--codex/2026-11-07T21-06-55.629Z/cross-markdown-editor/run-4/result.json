@@ -1,0 +1,233 @@
+{
+  "status": "failed",
+  "duration": 998.115,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 48369,
+    "outputTokens": 34506,
+    "cacheReadTokens": 2080896,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2178,
+    "totalTokens": 2163771
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 36,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 36,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'README*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g 'vite.config.*' -g 'tsconfig.json'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!'\"\\\\.git'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat tsconfig.json && cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/TextInput/TextInput.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts && git status --short'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install react-markdown remark-gfm'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit/build/esm/components | rg '/(TextInput|Modal).*d.ts\"'$'\"' && cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts && cat node_modules/react-markdown/readme.md | head -70 && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"try { console.log(require.resolve('playwright')) } catch { console.log('no playwright') }\\\" && cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/controls/types.d.ts && ls /tmp && rg --files node_modules | rg '(playwright|puppeteer)' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('src/App.tsx')\ns=p.read_text().replace('maxLength={150} hasClear required', 'controlProps={{maxLength: 150, required: true}} hasClear')\np.write_text(s)\np=Path('index.html')\np.write_text(p.read_text().replace('lang=\\\"en\\\"', 'lang=\\\"ru\\\"').replace('<title>Gravity UI eval</title>', '<meta name=\\\"theme-color\\\" content=\\\"#34775a\\\" />\\\\n    <meta name=\\\"description\\\" content=\\\"Folio — пространство для ваших идей. Пишите в Markdown и сразу видьте результат.\\\" />\\\\n    <title>Folio — новая публикация</title>'))\nPY\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/folio-browser playwright'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport fs from 'node:fs';\nconst path = 'src/App.tsx';\nfs.writeFileSync(path, fs.readFileSync(path,'utf8').replace('maxLength={150} hasClear required', 'controlProps={{maxLength: 150, required: true}} hasClear'));\nfs.writeFileSync('index.html', fs.readFileSync('index.html','utf8').replace('lang=\\\"en\\\"', 'lang=\\\"ru\\\"').replace('<title>Gravity UI eval</title>', '<meta name=\\\"theme-color\\\" content=\\\"#34775a\\\" />\\\\n    <meta name=\\\"description\\\" content=\\\"Folio — пространство для ваших идей. Пишите в Markdown и сразу видьте результат.\\\" />\\\\n    <title>Folio — новая публикация</title>'));\nJS\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc '/tmp/folio-browser/node_modules/.bin/playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --stat && cat .gitignore && rg 'maxLength|controlProps' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport fs from 'node:fs';\nconst path = 'src/App.tsx';\nlet s = fs.readFileSync(path,'utf8');\ns=s.replace('function saveDraft() {\\\\n    const draft', \\\"function saveDraft() {\\\\n    if (\"'!title.trim() || !text.trim()) {'\"\\\\n      setSaveError(\"'!title.trim() ? '\"'Добавьте название публикации.' : 'Добавьте текст публикации.');\\\\n      if (\"'!text.trim()) {setMode('\"'split'); requestAnimationFrame(() => textarea.current?.focus());}\\\\n      return;\\\\n    }\\\\n    const draft\\\");\ns=s.replace('value={text} required spellCheck', 'value={text} aria-required=\\\"true\\\" spellCheck');\nfs.writeFileSync(path, s);\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/folio-browser/check.mjs <<'JS'\nimport {chromium} from 'playwright';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless:true, args:['--no-sandbox']});\nconst page = await browser.newPage({viewport:{width:1440,height:1080}, deviceScaleFactor:1});\nconst errors=[];\npage.on('pageerror',error=>errors.push(error.message));\nawait page.goto('http://localhost:5175/');\nawait page.evaluate(()=>document.fonts.ready);\nawait page.screenshot({path:'/tmp/folio-desktop.png',fullPage:true});\nconst editor=page.getByRole('textbox',{name:'Текст публикации в Markdown'});\nconst preview=page.getByRole('region',{name:'Предпросмотр Markdown'});\nawait editor.fill('## Проверка\\\\n\\\\n**Жирный** и *курсив*\\\\n\\\\n- первый\\\\n- второй\\\\n\\\\n> цитата\\\\n\\\\n[ссылка](https://example.com)\\\\n\\\\n\"'`const x = 1`'\"\\\\n\\\\n- [x] Готово\\\\n\\\\n| А | Б |\\\\n|---|---|\\\\n| 1 | 2 |');\nawait page.waitForTimeout(100);\nassert.equal(await preview.locator('h2').innerText(),'Проверка');\nassert.equal(await preview.locator('strong').innerText(),'Жирный');\nassert.equal(await preview.locator('em').innerText(),'курсив');\nassert.equal(await preview.locator('blockquote').innerText(),'цитата');\nassert.equal(await preview.locator('table').count(),1);\nassert.equal(await preview.getByRole('checkbox').isChecked(),true);\nawait editor.fill('Привет');\nawait editor.evaluate(el=>el.setSelectionRange(0,6));\nawait page.getByRole('button',{name:'Жирный (Ctrl+B)',exact:true}).click();\nassert.equal(await editor.inputValue(),'**Привет**');\nassert.equal(await preview.locator('strong').innerText(),'Привет');\nawait page.getByRole('button',{name:'Просмотр',exact:true}).click();\nassert.equal(await editor.isVisible(),false);\nawait page.getByRole('button',{name:'Разделить',exact:true}).click();\nawait page.getByRole('button',{name:'Шпаргалка по Markdown'}).click();\nawait page.getByRole('heading',{name:'Знакомьтесь, Markdown.'}).waitFor();\nawait page.getByRole('button',{name:'Всё понятно, пишем\"'!'\"'}).click();\nawait page.getByRole('button',{name:'Развернуть редактор',exact:true}).click();\nassert.equal(await page.locator('.editor-expanded').count(),1);\nawait page.keyboard.press('Escape');\nassert.equal(await page.locator('.editor-expanded').count(),0);\nawait page.getByRole('button',{name:'Сохранить черновик',exact:true}).click();\nawait page.getByRole('status').waitFor();\nawait page.reload();\nassert.equal(await editor.inputValue(),'**Привет**');\nawait page.getByRole('button',{name:'Черновики',exact:true}).click();\nassert.equal(await page.locator('.draft-card').count(),1);\nawait page.locator('.draft-card').click();\nawait editor.fill('<script>window.pwned=true</script>\\\\n\\\\n[опасно](javascript:alert(1))');\nassert.equal(await preview.locator('script').count(),0);\nassert.equal(await page.evaluate(()=>window.pwned),undefined);\nassert.notEqual(await preview.locator('a').getAttribute('href'),'javascript:alert(1)');\nawait editor.fill('');\nawait page.getByRole('button',{name:'Просмотр',exact:true}).click();\nawait page.getByRole('button',{name:'Сохранить черновик',exact:true}).click();\nawait page.getByRole('alert').waitFor();\nassert.equal(await editor.isVisible(),true);\nawait page.evaluate(()=>localStorage.clear());\nawait page.reload();\nfor (const width of [390,768,1024,1440]) {\n  await page.setViewportSize({width,height:900});\n  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,window:innerWidth}));\n  assert.ok(dimensions.scroll<=dimensions.window,\"'`Overflow at ${width}: ${dimensions.scroll}`);\n}\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'\"'/tmp/folio-mobile.png',fullPage:true});\nassert.deepEqual(errors,[]);\nconsole.log('PASS: live Markdown, GFM, formatting, modes, help, fullscreen, persistence, draft navigation, XSS handling, validation, responsive widths.');\nawait browser.close();\nJS\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/headless:true, args/headless:true, executablePath:'\\\\/home\\\\/node\\\\/.cache\\\\/ms-playwright\\\\/chromium-1254\\\\/chrome-linux-arm64\\\\/chrome', args/\\\" /tmp/folio-browser/check.mjs\nnode /tmp/folio-browser/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'which apt-get && id && cat /etc/os-release'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'sudo -n true'",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'ldd /home/node/.cache/ms-playwright/chromium-1254/chrome-linux-arm64/chrome | head -50'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/folio-libs && cd /tmp/folio-libs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libcups2 libxkbcommon0 libasound2 libgbm1 libcairo2 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0 libdrm2 libpcre2-8-0 libffi8 libmount1 libselinux1 libgssapi-krb5-2 libavahi-client3 libavahi-common3 libfontconfig1 libfreetype6 libpixman-1-0 libpng16-16 libxcb-render0 libxcb-shm0 libxrender1 libfribidi0 libthai0 libharfbuzz0 libdatrie1 libgraphite2-3 libbrotli1 libblkid1 libkrb5-3 libk5crypto3 libkrb5support0 libkeyutils1'",
+        "success": false,
+        "exitCode": 100
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/folio-libs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libcups2 libxkbcommon0 libasound2 libgbm1 libcairo2 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0 libdrm2 libpcre2-8-0 libffi8 libmount1 libselinux1 libgssapi-krb5-2 libavahi-client3 libavahi-common3 libfontconfig1 libfreetype6 libpixman-1-0 libpng16-16 libxcb-render0 libxcb-shm0 libxrender1 libfribidi0 libthai0 libharfbuzz0b libdatrie1 libgraphite2-3 libbrotli1 libblkid1 libkrb5-3 libk5crypto3 libkrb5support0 libkeyutils1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short && npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for package in /tmp/folio-libs/*.deb; do dpkg-deb -x \"$package\" /tmp/folio-libs/extracted; done\nLD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/folio-libs && apt-get download libwayland-server0 && dpkg-deb -x libwayland-server0*.deb extracted\nLD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/folio-libs && apt-get download libxi6 && dpkg-deb -x libxi6*.deb extracted\nLD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu DEBUG=pw:browser node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu DEBUG=pw:browser node /tmp/folio-browser/check.mjs > /tmp/folio-browser/browser.log 2>&1\nrg 'FATAL|Check failed|font|Font|ERROR' /tmp/folio-browser/browser.log | tail -15\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -a 'FATAL|Check failed|font|Font|ERROR' /tmp/folio-browser/browser.log | tail -18\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cd /tmp/folio-libs && apt-get download fontconfig-config fonts-dejavu-core && dpkg-deb -x fontconfig-config*.deb extracted && dpkg-deb -x fonts-dejavu-core*.deb extracted\ncat > /tmp/folio-libs/fonts.conf <<'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/tmp/folio-libs/extracted/usr/share/fonts</dir><cachedir>/tmp/folio-libs/font-cache</cachedir><alias><family>sans-serif</family><prefer><family>DejaVu Sans</family></prefer></alias></fontconfig>\nEOF\nFONTCONFIG_FILE=/tmp/folio-libs/fonts.conf LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"FONTCONFIG_FILE=/tmp/folio-libs/fonts.conf LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu DEBUG=pw:browser node /tmp/folio-browser/check.mjs > /tmp/folio-browser/browser.log 2>&1\nrg -a 'FATAL|Fontconfig|Check failed' /tmp/folio-browser/browser.log\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu ldd /tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu/libsoftokn3.so && ls -la /home/node/.pki && rg -a 'nss|NSS' /tmp/folio-browser/browser.log\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/folio-libs && apt-get download libsqlite3-0 && dpkg-deb -x libsqlite3-0*.deb extracted\nFONTCONFIG_FILE=/tmp/folio-libs/fonts.conf LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat >> src/styles.css <<'EOF'\n@media(max-width: 560px) {\n  .formatting-tools>span {display: flex; flex: 1; min-width: 0;}\n  .formatting-tools .g-button {width: 100%; min-width: 0;}\n  .formatting-tools .g-button__text {margin: 0 3px;}\n  .formatting-tools .tool-group {margin-left: 2px; padding-left: 2px;}\n  .source-body textarea {font-size: 10px;}\n}\nEOF\nFONTCONFIG_FILE=/tmp/folio-libs/fonts.conf LD_LIBRARY_PATH=/tmp/folio-libs/extracted/usr/lib/aarch64-linux-gnu:/tmp/folio-libs/extracted/lib/aarch64-linux-gnu node /tmp/folio-browser/check.mjs\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 48369,
+      "outputTokens": 34506,
+      "cacheReadTokens": 2080896,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2178,
+      "totalTokens": 2163771
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

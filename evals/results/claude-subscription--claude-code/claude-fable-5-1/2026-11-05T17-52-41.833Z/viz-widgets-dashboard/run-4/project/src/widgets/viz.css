@@ -1,0 +1,334 @@
+/*
+ * Токены визуализации. Серии — валидированная палитра (3 слота, обе темы),
+ * чернила и линии — переменные Gravity UI, чтобы графики жили в той же теме, что и интерфейс.
+ */
+.g-root_theme_light,
+.g-root_theme_light-hc {
+  --viz-surface: var(--g-color-base-float);
+  --viz-s1: #2a78d6;
+  --viz-s2: #eb6834;
+  --viz-s3: #1baf7a;
+  --viz-other: #898781;
+  --viz-grid: var(--g-color-line-generic);
+  --viz-axis: var(--g-color-line-generic-accent);
+  --viz-ink: var(--g-color-text-primary);
+  --viz-ink-2: var(--g-color-text-secondary);
+  --viz-muted: var(--g-color-text-hint);
+  --viz-good: #006300;
+  --viz-bad: #d03b3b;
+  --viz-warning: #fab219;
+  --viz-critical: #d03b3b;
+  --viz-spark: #898781;
+}
+
+.g-root_theme_dark,
+.g-root_theme_dark-hc {
+  --viz-surface: var(--g-color-base-float);
+  --viz-s1: #3987e5;
+  --viz-s2: #d95926;
+  --viz-s3: #199e70;
+  --viz-other: #898781;
+  --viz-grid: var(--g-color-line-generic);
+  --viz-axis: var(--g-color-line-generic-accent);
+  --viz-ink: var(--g-color-text-primary);
+  --viz-ink-2: var(--g-color-text-secondary);
+  --viz-muted: var(--g-color-text-hint);
+  --viz-good: #0ca30c;
+  --viz-bad: #e66767;
+  --viz-warning: #fab219;
+  --viz-critical: #d03b3b;
+  --viz-spark: #898781;
+}
+
+.viz-chart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.viz-chart svg {
+  display: block;
+  overflow: visible;
+  font-family: inherit;
+}
+
+.viz-chart__overlay {
+  cursor: crosshair;
+  outline: none;
+}
+
+.viz-chart__overlay:focus-visible + .viz-chart__focus-ring {
+  stroke: var(--g-color-line-focus);
+}
+
+.viz-tick {
+  font-size: 11px;
+  fill: var(--viz-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-label {
+  font-size: 12px;
+  fill: var(--viz-ink-2);
+}
+
+.viz-value {
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--viz-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-tooltip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  min-width: 140px;
+  max-width: 220px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--g-color-base-float);
+  box-shadow: 0 1px 2px var(--g-color-sfx-shadow), 0 6px 20px var(--g-color-sfx-shadow);
+  border: 1px solid var(--g-color-line-generic);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--viz-ink);
+}
+
+.viz-tooltip__title {
+  color: var(--viz-ink-2);
+  margin-bottom: 4px;
+}
+
+.viz-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.viz-tooltip__key {
+  flex: 0 0 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.viz-tooltip__key_rect {
+  height: 10px;
+  border-radius: 2px;
+}
+
+.viz-tooltip__value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-tooltip__name {
+  color: var(--viz-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  font-size: 12px;
+  color: var(--viz-ink-2);
+}
+
+.viz-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.viz-legend__key {
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.viz-legend__key_rect {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.viz-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--viz-ink);
+}
+
+.viz-table th,
+.viz-table td {
+  padding: 4px 8px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--viz-grid);
+}
+
+.viz-table th:first-child,
+.viz-table td:first-child {
+  text-align: left;
+}
+
+.viz-table th {
+  font-weight: 500;
+  color: var(--viz-ink-2);
+  position: sticky;
+  top: 0;
+  background: var(--viz-surface);
+}
+
+.viz-table-wrap {
+  height: 100%;
+  overflow: auto;
+}
+
+/* Stat tile */
+.stat-tile {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  gap: 4px;
+}
+
+.stat-tile__label {
+  font-size: 13px;
+  line-height: 16px;
+  color: var(--viz-ink-2);
+}
+
+.stat-tile__value {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--viz-ink);
+  letter-spacing: -0.01em;
+}
+
+.stat-tile__value_hero {
+  font-size: 48px;
+}
+
+.stat-tile__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--viz-ink-2);
+}
+
+.stat-tile__delta-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-tile__delta-value_good {
+  color: var(--viz-good);
+}
+
+.stat-tile__delta-value_bad {
+  color: var(--viz-bad);
+}
+
+.stat-tile__spark {
+  flex: 1 1 auto;
+  min-height: 24px;
+  max-height: 56px;
+  margin-top: auto;
+}
+
+/* Meter */
+.meter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+  height: 100%;
+}
+
+.meter__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--viz-ink-2);
+  margin-bottom: 6px;
+}
+
+.meter__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--viz-ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter__track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.meter__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  transition: width 240ms ease;
+}
+
+/* Segmented bar */
+.segbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  height: 100%;
+  position: relative;
+}
+
+.segbar__bar {
+  display: flex;
+  gap: 2px;
+  height: 28px;
+}
+
+.segbar__part {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  min-width: 0;
+  overflow: hidden;
+  outline: none;
+  transition: filter 120ms ease;
+}
+
+.segbar__part:hover,
+.segbar__part:focus-visible {
+  filter: brightness(1.12);
+}
+
+.segbar__part:focus-visible {
+  box-shadow: 0 0 0 2px var(--g-color-line-focus);
+}

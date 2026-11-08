@@ -1,0 +1,182 @@
+{
+  "status": "passed",
+  "duration": 831.226,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.164.0"
+  },
+  "usage": {
+    "inputTokens": 55965,
+    "outputTokens": 8146,
+    "cacheReadTokens": 793152,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2649,
+    "totalTokens": 857263
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 25,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 25,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | sed -n '1,120p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; cat src/App.tsx src/main.tsx index.html vite.config.ts; printf '\\\\n--- skill rules ---\\\\n'; sed -n '1,220p' .agents/skills/gravity-ui/rules/hallucination-traps.md; printf '\\\\n--- layout ---\\\\n'; sed -n '1,180p' .agents/skills/gravity-ui/references/layout.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json; printf '\\\\n--- installed page-constructor ---\\\\n'; if [ -f node_modules/@gravity-ui/page-constructor/package.json ]; then cat node_modules/@gravity-ui/page-constructor/package.json; else echo absent; fi; printf '\\\\n--- docs candidates ---\\\\n'; find node_modules/@gravity-ui/page-constructor -maxdepth 3 -type f \\\\( -name 'INDEX.md' -o -name 'README.md' \\\\) 2>/dev/null | head -20; printf '\\\\n--- app files ---\\\\n'; for f in src/App.tsx src/main.tsx index.html vite.config.ts; do echo \\\"### \"'$f\"; cat \"$f\"; done; printf '\"'\\\\n--- routing page-constructor ---\\\\n'; rg -n -C 12 '@gravity-ui/page-constructor' .agents/skills/gravity-ui/references/package-routing.md | head -120; printf '\\\\n--- setup traps ---\\\\n'; rg -n -C 3 'ThemeProvider|Button|typography|header' .agents/skills/gravity-ui/rules/hallucination-traps.md | head -180\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/page-constructor@latest'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const p=require('./node_modules/@gravity-ui/page-constructor/package.json');console.log(p.version);console.log(JSON.stringify(p.peerDependencies,null,2))\\\"; find node_modules/@gravity-ui/page-constructor -maxdepth 3 -type f \\\\( -name 'INDEX.md' -o -name 'README.md' \\\\) | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 4 'Required setup|PageConstructorProvider|PageConstructor|provider' node_modules/@gravity-ui/page-constructor/build/docs/INDEX.md node_modules/@gravity-ui/page-constructor/README.md | head -180; printf '\\\\n--- blocks ---\\\\n'; rg -n -i -C 3 'hero|banner|feature|cta|button' node_modules/@gravity-ui/page-constructor/build/docs/INDEX.md | head -220; printf '\\\\n--- dts exports ---\\\\n'; rg -n 'PageConstructor|PageConstructorProvider' node_modules/@gravity-ui/page-constructor/build/esm/index.d.ts node_modules/@gravity-ui/page-constructor/build/esm/*.d.ts 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,75p' node_modules/@gravity-ui/page-constructor/README.md; printf '\\\\n--- doc toc ---\\\\n'; sed -n '130,190p' node_modules/@gravity-ui/page-constructor/build/docs/INDEX.md; printf '\\\\n--- block docs candidates ---\\\\n'; find node_modules/@gravity-ui/page-constructor/build/docs/blocks -maxdepth 1 -type f | sort | sed -n '1,120p'; printf '\\\\n--- provider dts ---\\\\n'; rg -n -C 6 'interface PageConstructorProviderProps|type PageConstructorProviderProps' node_modules/@gravity-ui/page-constructor/build/esm/{containers,} 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for f in blocks/Banner.md blocks/CardLayout.md sub-blocks/BasicCard.md; do echo \"### $f\"; cat \"node_modules/@gravity-ui/page-constructor/build/docs/$f\"; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/page-constructor/build/docs/blocks/CardLayout.md | sed -n '1,140p'; printf '\\\\n--- styles availability ---\\\\n'; find node_modules/@gravity-ui/page-constructor/styles -maxdepth 1 -type f -printf '%f\\\\n'; printf '\\\\n--- css package compiled? ---\\\\n'; find node_modules/@gravity-ui/page-constructor/build -path '*styles*' -type f | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/page-constructor/build/docs/blocks/Header.md 2>/dev/null || true; printf '\\\\n--- peer npm trees ---\\\\n'; node -e \\\"for(const p of ['@diplodoc/transform']) {try{console.log(p,require(p+'/package.json').version)}catch(e){console.log(p,'absent')}}\\\" ; printf '\\\\n--- page constructor block registry ---\\\\n'; rg -n \\\"header-block|banner-block|card-layout-block|basic-card\\\" node_modules/@gravity-ui/page-constructor/build/esm/components/blocks 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'export.*PageContent|interface PageContent|type PageContent' node_modules/@gravity-ui/page-constructor/build/esm | head -60; printf '\\\\n--- package exports ---\\\\n'; node -e \\\"const p=require('./node_modules/@gravity-ui/page-constructor/package.json'); console.log(JSON.stringify(p.exports,null,2))\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n --glob '*.d.ts' 'export.*PageContent|interface PageContent|type PageContent' node_modules/@gravity-ui/page-constructor/build/esm | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import '@gravity-ui/uikit/styles/fonts.css';\n import '@gravity-ui/uikit/styles/styles.css';\n+import '@gravity-ui/page-constructor/styles/styles.css';\n@@\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider } from '@gravity-ui/uikit';\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\n+import type { PageContent } from '@gravity-ui/page-constructor';\n+\n+const landingContent: PageContent = {\n+  blocks: [\n+    {\n+      type: 'header-block',\n+      title: 'Учёт времени без лишних шагов',\n+      description:\n+        'TimeFrame — компактный инструмент для команд: время фиксируется быстро, отчёты понятны, а планирование остаётся реалистичным.',\n+      width: 'm',\n+    },\n+    {\n+      type: 'card-layout-block',\n+      title: 'Три преимуществ',\n+      colSizes: { all: 12, sm: 6, md: 4 },\n+      children: [\n+        {\n+          type: 'basic-card',\n+          title: 'Отметка за десять секунд',\n+          text: 'Старт задачи фиксируется в один клик, не прерывая текущую работу.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Полная картина команды',\n+          text: 'Показатели собраны в наглядных отчётах: время, загрузка и отклонения от изменений плана.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Планирование без перегрузок',\n+          text: 'Реальные затраты времени показывают, где нужно добавить ресурс или вовремя снизить объем работы.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+      ],\n+    },\n+    {\n+      type: 'banner-block',\n+      title: 'Начните вести прозрачный учёт времени уже сегодня',\n+      subtitle: 'Простая настройка, понятные отчёты и работа команды в одном месте.',\n+      button: {\n+        text: 'Начать бесплатно',\n+        url: '#get-started',\n+      },\n+    },\n+  ],\n+};\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  return (\n+    <PageConstructorProvider>\n+      <PageConstructor content={landingContent} />\n+    </PageConstructorProvider>\n+  );\n }\n*** End Patch\nPATCH\n\nsed -i 's/Gravity UI eval/TimeFrame — учёт времени команд/' index.html\n\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || find / -type f -name apply_patch -perm -111 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import '@gravity-ui/uikit/styles/fonts.css';\n import '@gravity-ui/uikit/styles/styles.css';\n+import '@gravity-ui/page-constructor/styles/styles.css';\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\n+import type { PageContent } from '@gravity-ui/page-constructor';\n+\n+const landingContent: PageContent = {\n+  blocks: [\n+    {\n+      type: 'header-block',\n+      title: 'Учёт времени без лишних шагов',\n+      description:\n+        'TimeFrame — компактный инструмент для команд: время фиксируется быстро, отчёты понятны, а планирование остаётся реалистичным.',\n+      width: 'm',\n+    },\n+    {\n+      type: 'card-layout-block',\n+      title: 'Три преимущества',\n+      colSizes: { all: 12, sm: 6, md: 4 },\n+      children: [\n+        {\n+          type: 'basic-card',\n+          title: 'Отметка за десять секунд',\n+          text: 'Старт задачи фиксируется в один клик, не прерывая текущую работу.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Полная картина команды',\n+          text: 'Показатели собраны в наглядных отчётах: время, загрузка и отклонения от плана.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Планирование без перегрузок',\n+          text: 'Реальные затраты времени показывают, где добавить ресурс или снизить объём работы.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+      ],\n+    },\n+    {\n+      type: 'banner-block',\n+      title: 'Начните вести прозрачный учёт времени уже сегодня',\n+      subtitle: 'Простая настройка, понятные отчёты и работа команды в одном месте.',\n+      button: {\n+        text: 'Начать бесплатно',\n+        url: '#get-started',\n+      },\n+    },\n+  ],\n+};\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  return (\n+    <PageConstructorProvider>\n+      <PageConstructor content={landingContent} />\n+    </PageConstructorProvider>\n+  );\n }\n*** Update File: index.html\n@@\n-    <title>Gravity UI eval</title>\n+    <title>TimeFrame — учёт времени команд</title>\n*** End Patch\nPATCH\n\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/App.tsx; sed -n '1,25p' src/main.tsx; cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"patch <<'PATCH'\n--- a/src/main.tsx\n+++ b/src/main.tsx\n@@\n import '@gravity-ui/uikit/styles/fonts.css';\n import '@gravity-ui/uikit/styles/styles.css';\n+import '@gravity-ui/page-constructor/styles/styles.css';\n \n import React from 'react';\n--- a/src/App.tsx\n+++ b/src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\n+import type { PageContent } from '@gravity-ui/page-constructor';\n+\n+const landingContent: PageContent = {\n+  blocks: [\n+    {\n+      type: 'header-block',\n+      title: 'Учёт времени без лишних шагов',\n+      description:\n+        'TimeFrame — компактный инструмент для команд: время фиксируется быстро, отчёты понятны, а планирование остаётся реалистичным.',\n+      width: 'm',\n+    },\n+    {\n+      type: 'card-layout-block',\n+      title: 'Три преимущества',\n+      colSizes: { all: 12, sm: 6, md: 4 },\n+      children: [\n+        {\n+          type: 'basic-card',\n+          title: 'Отметка за десять секунд',\n+          text: 'Старт задачи фиксируется в один клик, не прерывая текущую работу.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Полная картина команды',\n+          text: 'Показатели собраны в наглядных отчётах: время, загрузка и отклонения от плана.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+        {\n+          type: 'basic-card',\n+          title: 'Планирование без перегрузок',\n+          text: 'Реальные затраты времени показывают, где добавить ресурс или снизить объём работы.',\n+          size: 'm',\n+          border: 'line',\n+        },\n+      ],\n+    },\n+    {\n+      type: 'banner-block',\n+      title: 'Начните вести прозрачный учёт времени уже сегодня',\n+      subtitle: 'Простая настройка, понятные отчёты и работа команды в одном месте.',\n+      button: {\n+        text: 'Начать бесплатно',\n+        url: '#get-started',\n+      },\n+    },\n+  ],\n+};\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  return (\n+    <PageConstructorProvider>\n+      <PageConstructor content={landingContent} />\n+    </PageConstructorProvider>\n+  );\n }\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"/import '@gravity-ui\\\\/uikit\\\\/styles\\\\/styles.css';/a import '@gravity-ui/page-constructor/styles/styles.css';\\\" src/main.tsx\ncat > src/App.tsx <<'EOF'\nimport { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\nimport type { PageContent } from '@gravity-ui/page-constructor';\n\nconst landingContent: PageContent = {\n  blocks: [\n    {\n      type: 'header-block',\n      title: 'Учёт времени без лишних шагов',\n      description:\n        'TimeFrame — компактный инструмент для команд: время фиксируется быстро, отчёты понятны, а планирование остаётся реалистичным.',\n      width: 'm',\n    },\n    {\n      type: 'card-layout-block',\n      title: 'Три преимущества',\n      colSizes: { all: 12, sm: 6, md: 4 },\n      children: [\n        {\n          type: 'basic-card',\n          title: 'Отметка за десять секунд',\n          text: 'Старт задачи фиксируется в один клик, не прерывая текущую работу.',\n          size: 'm',\n          border: 'line',\n        },\n        {\n          type: 'basic-card',\n          title: 'Полная картина команды',\n          text: 'Показатели собраны в наглядных отчётах: время, загрузка и отклонения от плана.',\n          size: 'm',\n          border: 'line',\n        },\n        {\n          type: 'basic-card',\n          title: 'Планирование без перегрузок',\n          text: 'Реальные затраты времени показывают, где добавить ресурс или снизить объём работы.',\n          size: 'm',\n          border: 'line',\n        },\n      ],\n    },\n    {\n      type: 'banner-block',\n      title: 'Начните вести прозрачный учёт времени уже сегодня',\n      subtitle: 'Простая настройка, понятные отчёты и работа команды в одном месте.',\n      button: {\n        text: 'Начать бесплатно',\n        url: '#get-started',\n      },\n    },\n  ],\n};\n\nexport function App() {\n  return (\n    <PageConstructorProvider>\n      <PageConstructor content={landingContent} />\n    </PageConstructorProvider>\n  );\n}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/page-constructor/build/esm -maxdepth 4 -path '*styles*' -type f | sort | sed -n '1,120p'; printf '\\\\n-- package css import source --\\\\n'; rg -n \\\"\"'^@import\" node_modules/@gravity-ui/page-constructor/styles/styles.css node_modules/@gravity-ui/page-constructor/styles/styles.scss | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install -D sass\ncat > vite.config.ts <<'EOF'\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\nimport { fileURLToPath } from 'node:url';\n\nexport default defineConfig({\n  plugins: [react()],\n  resolve: {\n    alias: [\n      {\n        find: /\"'^~/,\n        replacement: fileURLToPath(new URL('\"'./node_modules', import.meta.url)),\n      },\n    ],\n  },\n});\nEOF\nsed -i \\\"s|import '@gravity-ui/page-constructor/styles/styles.css';|import '@gravity-ui/page-constructor/styles/styles.scss';|\\\" src/main.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's|replacement: fileURLToPath(new URL('\\\"'\\\"'./node_modules'\\\"'\\\"', import.meta.url)),|replacement: fileURLToPath(new URL('\\\"'\\\"'./node_modules/'\\\"'\\\"', import.meta.url)),|' vite.config.ts\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"try{console.log(require('url/package.json').version)}catch(e){console.log('absent')}\\\"; rg -n \\\"from 'url'|require\\\\('url'\\\\)\\\" node_modules/@gravity-ui/page-constructor/build/esm | head -30; find node_modules/@gravity-ui/page-constructor -maxdepth 2 -iname '*browser*' -o -iname '*vite*' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install url\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short; printf '\\\\n--- diff stat ---\\\\n'; git diff --stat; printf '\\\\n--- source ---\\\\n'; sed -n '1,220p' src/App.tsx; sed -n '1,35p' src/main.tsx; printf '\\\\n--- config ---\\\\n'; cat vite.config.ts package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 25,
+    "usage": {
+      "inputTokens": 55965,
+      "outputTokens": 8146,
+      "cacheReadTokens": 793152,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2649,
+      "totalTokens": 857263
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

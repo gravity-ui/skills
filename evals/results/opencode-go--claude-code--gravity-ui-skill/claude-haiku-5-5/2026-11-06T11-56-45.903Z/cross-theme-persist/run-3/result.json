@@ -1,0 +1,99 @@
+{
+  "status": "passed",
+  "duration": 313.045,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 24,
+    "outputTokens": 10410,
+    "cacheReadTokens": 448257,
+    "cacheWriteTokens": 36364,
+    "totalTokens": 495055
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----\" && find .agents -type f && echo \"-----\" && ls -la && cat AGENTS.md && cat package.json 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo \"-----THEMING\" && cat .agents/skills/gravity-ui/references/theming.md && echo \"-----SRC\" && find src __agent_eval__ -type f | head -50 && for f in $(find src -type f); do echo \"=== $f\"; cat $f; done && echo \"=== index.html\" && cat index.html && echo \"=== vite/tsconfig\" && cat vite.config.ts tsconfig.json && echo \"=== node_modules uikit\" && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "head -40 .agents/skills/gravity-ui/references/package-routing.md; echo \"-----\"; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme SegmentedRadioGroup Switch 2>&1 | head -120; echo \"-----\"; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null; ls node_modules/@gravity-ui/uikit/build/docs/* 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme SegmentedRadioGroup 2>&1 | head -80; echo \"-----\"; grep -rl \"ThemeProvider\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts 2>/dev/null | head; echo \"-----\"; find node_modules/@gravity-ui/uikit/build -name \"ThemeProvider*.d.ts\" | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat theme/ThemeProvider.d.ts; echo \"-----\"; cat theme/index.d.ts; echo \"-----\"; cat theme/types.d.ts 2>/dev/null; echo \"-----\"; ls theme; echo \"-----\"; find . -path \"*SegmentedRadioGroup*\" -name \"*.d.ts\" | head; echo \"-----\"; find . -name \"SegmentedRadioGroup.d.ts\" -exec cat {} \\; | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && grep -n -A12 \"export interface ControlGroupProps\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; grep -n -A6 \"export interface ControlGroupOption\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; echo \"-----\"; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeValue.d.ts",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat > src/theme.tmp.test.ts <<'EOF'\nimport { describe, it, expect, beforeEach, vi } from 'vitest';\nimport { readStoredTheme, writeStoredTheme } from './theme';\n\nfunction makeStorage(initial: Record<string, string> = {}) {\n  const data = new Map(Object.entries(initial));\n  return {\n    getItem: (k: string) => (data.has(k) ? data.get(k)! : null),\n    setItem: (k: string, v: string) => { data.set(k, String(v)); },\n    removeItem: (k: string) => { data.delete(k); },\n    clear: () => data.clear(),\n    key: () => null,\n    get length() { return data.size; },\n  };\n}\n\ndescribe('theme storage', () => {\n  beforeEach(() => { vi.stubGlobal('window', { localStorage: makeStorage() }); });\n\n  it('defaults to light when nothing stored', () => {\n    expect(readStoredTheme()).toBe('light');\n  });\n  it('restores a stored dark theme', () => {\n    vi.stubGlobal('window', { localStorage: makeStorage({ 'app-theme': 'dark' }) });\n    expect(readStoredTheme()).toBe('dark');\n  });\n  it('ignores invalid stored values', () => {\n    vi.stubGlobal('window', { localStorage: makeStorage({ 'app-theme': 'system' }) });\n    expect(readStoredTheme()).toBe('light');\n  });\n  it('round-trips through write then read', () => {\n    writeStoredTheme('dark');\n    expect(window.localStorage.getItem('app-theme')).toBe('dark');\n    expect(readStoredTheme()).toBe('dark');\n  });\n  it('does not throw when storage throws', () => {\n    vi.stubGlobal('window', { localStorage: {\n      getItem: () => { throw new Error('denied'); },\n      setItem: () => { throw new Error('denied'); },\n    } });\n    expect(readStoredTheme()).toBe('light');\n    expect(() => writeStoredTheme('dark')).not.toThrow();\n  });\n});\nEOF\nnpx vitest run src/theme.tmp.test.ts 2>&1 | tail -25; rm -f src/theme.tmp.test.ts; ls src",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 24,
+      "outputTokens": 10410,
+      "cacheReadTokens": 448257,
+      "cacheWriteTokens": 36364,
+      "totalTokens": 495055
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,597 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 6349ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 0ms
+     → expected 'import { useState, type FormEvent } f…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 6343ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: MarkdownField uses a gravity-ui uikit TextArea with a custom MarkdownPreview; @gravity-ui/markdown-editor is not in package.json and useMarkdownEditor/MarkdownEditorView are not used.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  19:51:43
+   Duration  6.51s (transform 29ms, setup 15ms, collect 14ms, tests 6.35s, environment 0ms, prepare 35ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected 'import { useState, type FormEvent } f…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+"import { useState, type FormEvent } from 'react';
+import { Alert, Button, Flex, Text, TextInput } from '@gravity-ui/uikit';
+
+import { MarkdownField } from './MarkdownField';
+
+const DESCRIPTION_MAX_LENGTH = 5000;
+
+const INITIAL_DESCRIPTION = `## О проекте
+
+Этот текст **форматируется на лету** — попробуйте что-нибудь изменить.
+
+- Поддерживаются списки, *курсив* и \\`код\\`
+- [Ссылки](https://gravity-ui.com) открываются в новой вкладке
+
+> Цитаты и таблицы тоже работают.
+`;
+
+export function App() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState(INITIAL_DESCRIPTION);
+  const [errors, setErrors] = useState<{ title?: string; description?: string }>({});
+  const [submitted, setSubmitted] = useState<{ title: string; description: string } | null>(null);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const nextErrors: typeof errors = {};
+    if (!title.trim()) {
+      nextErrors.title = 'Введите заголовок';
+    }
+    if (!description.trim()) {
+      nextErrors.description = 'Введите описание';
+    } else if (description.length > DESCRIPTION_MAX_LENGTH) {
+      nextErrors.description = `Описание не должно превышать ${DESCRIPTION_MAX_LENGTH} символов`;
+    }
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length === 0) {
+      setSubmitted({ title: title.trim(), description });
+    } else {
+      setSubmitted(null);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} noValidate style={{ maxWidth: 960, margin: '0 auto', padding: 24 }}>
+      <Flex direction=\"column\" gap={5}>
+        <Text variant=\"header-1\">Новая публикация</Text>
+
+        <Flex direction=\"column\" gap={2}>
+          <Text as=\"label\" variant=\"subheader-1\" {...{ htmlFor: 'post-title' }}>
+            Заголовок
+          </Text>
+          <TextInput
+            id=\"post-title\"
+            name=\"title\"
+            size=\"l\"
+            value={title}
+            onUpdate={(next) => {
+              setTitle(next);
+              if (errors.title) setErrors((prev) => ({ ...prev, title: undefined }));
+            }}
+            placeholder=\"Коротко о чём публикация\"
+            validationState={errors.title ? 'invalid' : undefined}
+            errorMessage={errors.title}
+          />
+        </Flex>
+
+        <MarkdownField
+          label=\"Описание\"
+          name=\"description\"
+          value={description}
+          onChange={(next) => {
+            setDescription(next);
+            if (errors.description) setErrors((prev) => ({ ...prev, description: undefined }));
+          }}
+          maxLength={DESCRIPTION_MAX_LENGTH}
+          error={errors.description}
+        />
+
+        {submitted && (
+          <Alert
+            theme=\"success\"
+            title=\"Форма отправлена\"
+            message={`Публикация «${submitted.title}» сохранена (${submitted.description.length} символов описания).`}
+            onClose={() => setSubmitted(null)}
+          />
+        )}
+
+        <Flex gap={2}>
+          <Button type=\"submit\" view=\"action\" size=\"l\">
+            Опубликовать
+          </Button>
+          <Button
+            type=\"button\"
+            view=\"flat\"
+            size=\"l\"
+            onClick={() => {
+              setTitle('');
+              setDescription('');
+              setErrors({});
+              setSubmitted(null);
+            }}
+          >
+            Очистить
+          </Button>
+        </Flex>
+      </Flex>
+    </form>
+  );
+}
+
+
+.md-field__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.md-field__body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.md-field__body_mode_split {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 720px) {
+  .md-field__body_mode_split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.md-field__editor {
+  min-width: 0;
+}
+
+.md-field .md-field__editor textarea {
+  font-family: var(--g-font-family-monospace);
+}
+
+.md-field__preview {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 100%;
+  padding: 10px 12px;
+  overflow: auto;
+}
+
+.md-field__footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.md-field__footer_invalid .md-field__counter {
+  color: var(--g-color-text-danger);
+}
+
+
+import { useId, useState } from 'react';
+import { Card, SegmentedRadioGroup, Text, TextArea } from '@gravity-ui/uikit';
+
+import { MarkdownPreview } from './MarkdownPreview';
+import './MarkdownField.css';
+
+export type MarkdownViewMode = 'edit' | 'split' | 'preview';
+
+export interface MarkdownFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  name?: string;
+  placeholder?: string;
+  /** Максимальная длина текста. При превышении счётчик подсвечивается, поле считается невалидным */
+  maxLength?: number;
+  /** Текст ошибки валидации, показывается под полем */
+  error?: string;
+  minRows?: number;
+  maxRows?: number;
+  defaultMode?: MarkdownViewMode;
+  disabled?: boolean;
+}
+
+const MODE_OPTIONS: { value: MarkdownViewMode; content: string }[] = [
+  { value: 'edit', content: 'Редактор' },
+  { value: 'split', content: 'Разделить' },
+  { value: 'preview', content: 'Предпросмотр' },
+];
+
+export function MarkdownField({
+  label,
+  value,
+  onChange,
+  name,
+  placeholder = 'Напишите текст. Поддерживается Markdown: **жирный**, *курсив*, `код`, списки, ссылки…',
+  maxLength,
+  error,
+  minRows = 8,
+  maxRows = 20,
+  defaultMode = 'split',
+  disabled,
+}: MarkdownFieldProps) {
+  const [mode, setMode] = useState<MarkdownViewMode>(defaultMode);
+  const inputId = useId();
+
+  const tooLong = maxLength !== undefined && value.length > maxLength;
+  const invalid = Boolean(error) || tooLong;
+  const showEditor = mode !== 'preview';
+  const showPreview = mode !== 'edit';
+
+  return (
+    <div className=\"md-field\">
+      <div className=\"md-field__header\">
+        <Text as=\"label\" variant=\"subheader-1\" {...{ htmlFor: inputId }}>
+          {label}
+        </Text>
+        <SegmentedRadioGroup<MarkdownViewMode>
+          size=\"s\"
+          value={mode}
+          onUpdate={setMode}
+          options={MODE_OPTIONS}
+          aria-label=\"Режим отображения\"
+        />
+      </div>
+
+      <div className={`md-field__body md-field__body_mode_${mode}`}>
+        {showEditor && (
+          <TextArea
+            id={inputId}
+            name={name}
+            className=\"md-field__editor\"
+            value={value}
+            onUpdate={onChange}
+            placeholder={placeholder}
+            minRows={minRows}
+            maxRows={maxRows}
+            disabled={disabled}
+            validationState={invalid ? 'invalid' : undefined}
+            controlProps={{ spellCheck: true, 'aria-describedby': `${inputId}-hint` }}
+          />
+        )}
+        {showPreview && (
+          <Card view=\"outlined\" className=\"md-field__preview\" aria-live=\"polite\">
+            <MarkdownPreview source={value} />
+          </Card>
+        )}
+      </div>
+
+      <div className={`md-field__footer${invalid ? ' md-field__footer_invalid' : ''}`} id={`${inputId}-hint`}>
+        <Text variant=\"caption-2\" color={error ? 'danger' : 'secondary'}>
+          {error ?? 'Форматирование применяется сразу, по мере ввода'}
+        </Text>
+        {maxLength !== undefined && (
+          <Text variant=\"caption-2\" color=\"secondary\" className=\"md-field__counter\">
+            {value.length} / {maxLength}
+          </Text>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+.md-preview {
+  color: var(--g-color-text-primary);
+  font-size: 13px;
+  line-height: 18px;
+  word-break: break-word;
+}
+
+.md-preview > :first-child {
+  margin-top: 0;
+}
+
+.md-preview > :last-child {
+  margin-bottom: 0;
+}
+
+.md-preview h1,
+.md-preview h2,
+.md-preview h3,
+.md-preview h4,
+.md-preview h5,
+.md-preview h6 {
+  margin: 16px 0 8px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.md-preview h1 { font-size: 20px; }
+.md-preview h2 { font-size: 17px; }
+.md-preview h3 { font-size: 15px; }
+.md-preview h4,
+.md-preview h5,
+.md-preview h6 { font-size: 13px; }
+
+.md-preview p,
+.md-preview ul,
+.md-preview ol,
+.md-preview pre,
+.md-preview table,
+.md-preview blockquote {
+  margin: 0 0 8px;
+}
+
+.md-preview ul,
+.md-preview ol {
+  padding-left: 24px;
+}
+
+.md-preview a {
+  color: var(--g-color-text-link);
+  text-decoration: none;
+}
+
+.md-preview a:hover {
+  color: var(--g-color-text-link-hover);
+  text-decoration: underline;
+}
+
+.md-preview code {
+  padding: 1px 4px;
+  border-radius: var(--g-border-radius-xs);
+  background: var(--g-color-base-misc-light);
+  font-family: var(--g-font-family-monospace);
+  font-size: 12px;
+}
+
+.md-preview pre {
+  padding: 8px 12px;
+  border-radius: var(--g-border-radius-s);
+  background: var(--g-color-base-generic);
+  overflow-x: auto;
+}
+
+.md-preview pre code {
+  padding: 0;
+  background: none;
+}
+
+.md-preview blockquote {
+  padding: 2px 12px;
+  border-left: 3px solid var(--g-color-line-generic);
+  color: var(--g-color-text-secondary);
+}
+
+.md-preview table {
+  border-collapse: collapse;
+}
+
+.md-preview th,
+.md-preview td {
+  padding: 4px 8px;
+  border: 1px solid var(--g-color-line-generic);
+  text-align: left;
+}
+
+.md-preview th {
+  background: var(--g-color-base-generic);
+  font-weight: 600;
+}
+
+.md-preview img {
+  max-width: 100%;
+}
+
+.md-preview hr {
+  margin: 12px 0;
+  border: 0;
+  border-top: 1px solid var(--g-color-line-generic);
+}
+
+
+import { useMemo } from 'react';
+import { Text } from '@gravity-ui/uikit';
+
+import { renderMarkdown } from './markdown';
+import './MarkdownPreview.css';
+
+interface MarkdownPreviewProps {
+  source: string;
+  className?: string;
+}
+
+export function MarkdownPreview({ source, className }: MarkdownPreviewProps) {
+  const html = useMemo(() => renderMarkdown(source), [source]);
+
+  if (!html) {
+    return (
+      <Text as=\"div\" color=\"hint\" className={className}>
+        Здесь появится отформатированный текст
+      </Text>
+    );
+  }
+
+  // HTML уже очищен DOMPurify в renderMarkdown.
+  return (
+    <div
+      className={['md-preview', className].filter(Boolean).join(' ')}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+import { describe, expect, it } from 'vitest';
+
+import { renderMarkdown } from './markdown';
+
+describe('renderMarkdown', () => {
+  it('returns empty string for blank input', () => {
+    expect(renderMarkdown('')).toBe('');
+    expect(renderMarkdown('   \\n ')).toBe('');
+  });
+
+  it('renders inline formatting and headings', () => {
+    const html = renderMarkdown('# Заголовок\\n\\n**жирный** *курсив* `код`');
+    expect(html).toContain('<h1>Заголовок</h1>');
+    expect(html).toContain('<strong>жирный</strong>');
+    expect(html).toContain('<em>курсив</em>');
+    expect(html).toContain('<code>код</code>');
+  });
+
+  it('renders lists, tables and line breaks', () => {
+    const html = renderMarkdown('- один\\n- два\\n\\n| a | b |\\n|---|---|\\n| 1 | 2 |\\n\\nстрока\\nещё');
+    expect(html).toContain('<li>один</li>');
+    expect(html).toContain('<table>');
+    expect(html).toContain('<br>');
+  });
+
+  it('opens links in a new tab with safe rel', () => {
+    const html = renderMarkdown('[сайт](https://example.com)');
+    expect(html).toContain('href=\"https://example.com\"');
+    expect(html).toContain('target=\"_blank\"');
+    expect(html).toContain('rel=\"noopener noreferrer\"');
+  });
+
+  it('strips scripts, event handlers and javascript: urls', () => {
+    const html = renderMarkdown(
+      '<script>alert(1)</script>\\n\\n<img src=\"x\" onerror=\"alert(1)\">\\n\\n[x](javascript:alert(1))',
+    );
+    expect(html).not.toContain('<script');
+    expect(html).not.toContain('onerror');
+    expect(html).not.toContain('javascript:');
+  });
+});
+
+
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
+
+marked.use({ gfm: true, breaks: true });
+
+// Внешние ссылки открываем в новой вкладке и защищаем от доступа к window.opener.
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  if (node.tagName === 'A' && node.hasAttribute('href')) {
+    node.setAttribute('target', '_blank');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+});
+
+/**
+ * Преобразует markdown в безопасный HTML.
+ * Скрипты, обработчики событий и javascript:-ссылки вырезаются.
+ */
+export function renderMarkdown(source: string): string {
+  if (!source.trim()) {
+    return '';
+  }
+  const html = marked.parse(source, { async: false });
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+    ADD_ATTR: ['target'],
+  });
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: MarkdownField uses a gravity-ui uikit TextArea with a custom MarkdownPreview; @gravity-ui/markdown-editor is not in package.json and useMarkdownEditor/MarkdownEditorView are not used.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

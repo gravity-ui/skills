@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gravity UI eval</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Apply the saved theme before first paint so a dark theme doesn't flash white on reload.
+      // Mirrors ThemeModeProvider in src/themeMode.tsx (same storage key and default).
+      (function () {
+        var mode = 'light';
+        try {
+          var saved = localStorage.getItem('theme-mode');
+          if (saved === 'light' || saved === 'dark' || saved === 'system') mode = saved;
+        } catch (e) {}
+        var theme = mode;
+        if (mode === 'system') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.body.classList.add('g-root', 'g-root_theme_' + theme);
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

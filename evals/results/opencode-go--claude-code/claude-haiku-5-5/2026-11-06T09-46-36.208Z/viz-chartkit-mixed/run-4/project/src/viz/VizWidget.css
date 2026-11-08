@@ -1,0 +1,92 @@
+/* Chrome for the visualization widget. Colors are the chart tokens from palette.ts:
+   text uses ink tokens only; series colors appear on marks, never on text. */
+
+.viz-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(11, 11, 11, 0.1);
+  border-radius: 12px;
+  background: #fcfcfb;
+  color: #0b0b0b;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.viz-widget__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.viz-widget__title {
+  margin: 0;
+}
+
+/* The chart area has an explicit height from props; the engine fills it. */
+.viz-widget__chart {
+  position: relative;
+  min-width: 0;
+}
+
+.viz-widget__engine {
+  height: 100%;
+  transition: opacity 150ms ease;
+}
+
+.viz-widget__engine .chartkit-theme_common {
+  height: 100%;
+}
+
+/* Refetch/mode switch keeps the previous frame, dimmed: no skeleton, no layout jump. */
+.viz-widget__engine_refreshing {
+  opacity: 0.5;
+}
+
+.viz-widget__loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viz-widget__table-wrap summary {
+  cursor: pointer;
+  color: #52514e;
+  font-size: 13px;
+}
+
+.viz-widget__table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-widget__table th,
+.viz-widget__table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #e1e0d9;
+  text-align: right;
+}
+
+.viz-widget__table th {
+  color: #52514e;
+  font-weight: 600;
+}
+
+.viz-widget__table thead th,
+.viz-widget__table tbody th {
+  text-align: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz-widget__engine {
+    transition: none;
+  }
+}

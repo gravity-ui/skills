@@ -1,0 +1,83 @@
+{
+  "status": "passed",
+  "duration": 268.712,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 226,
+    "outputTokens": 3043,
+    "cacheReadTokens": 187583,
+    "cacheWriteTokens": 13555,
+    "totalTokens": 204407
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts; echo ---; cat __agent_eval__/run.mjs; echo ---; ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -iE 'dialog|modal|button'",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cat > src/ConfirmDialog.tsx <<'EOF'\nimport { Dialog, Text } from '@gravity-ui/uikit';\n\nexport interface ConfirmDialogProps {\n  open: boolean;\n  title: string;\n  text: string;\n  confirmText?: string;\n  cancelText?: string;\n  onConfirm: () => void;\n  onCancel: () => void;\n}\n\nexport function ConfirmDialog({\n  open,\n  title,\n  text,\n  confirmText = 'Подтвердить',\n  cancelText = 'Отменить',\n  onConfirm,\n  onCancel,\n}: ConfirmDialogProps) {\n  return (\n    <Dialog\n      open={open}\n      onClose={onCancel}\n      onEnterKeyDown={onConfirm}\n      size=\"s\"\n      aria-labelledby=\"confirm-dialog-title\"\n      qa=\"confirm-dialog\"\n    >\n      <Dialog.Header caption={title} id=\"confirm-dialog-title\" />\n      <Dialog.Body>\n        <Text variant=\"body-1\">{text}</Text>\n      </Dialog.Body>\n      <Dialog.Footer\n        textButtonApply={confirmText}\n        textButtonCancel={cancelText}\n        onClickButtonApply={onConfirm}\n        onClickButtonCancel={onCancel}\n        propsButtonApply={{ qa: 'confirm-dialog-apply' }}\n        propsButtonCancel={{ qa: 'confirm-dialog-cancel' }}\n      />\n    </Dialog>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Flex, Text } from '@gravity-ui/uikit';\n\nimport { ConfirmDialog } from './ConfirmDialog';\n\ntype Result = 'confirmed' | 'cancelled' | null;\n\nexport function App() {\n  const [open, setOpen] = useState(false);\n  const [result, setResult] = useState<Result>(null);\n\n  const handleConfirm = () => {\n    setResult('confirmed');\n    setOpen(false);\n  };\n\n  const handleCancel = () => {\n    setResult('cancelled');\n    setOpen(false);\n  };\n\n  return (\n    <Flex direction=\"column\" gap={3} alignItems=\"flex-start\" style={{ padding: 24 }}>\n      <Button view=\"action\" size=\"l\" onClick={() => setOpen(true)} qa=\"open-dialog\">\n        Открыть окно\n      </Button>\n\n      {result && (\n        <Text variant=\"body-1\" color=\"secondary\" qa=\"result\">\n          {result === 'confirmed' ? 'Действие подтверждено' : 'Действие отменено'}\n        </Text>\n      )}\n\n      <ConfirmDialog\n        open={open}\n        title=\"Подтверждение действия\"\n        text=\"Вы уверены, что хотите выполнить это действие? Отменить его будет нельзя.\"\n        onConfirm={handleConfirm}\n        onCancel={handleCancel}\n      />\n    </Flex>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; node -e \"require.resolve('playwright')\" 2>&1 | head -1; npm ls -g playwright 2>/dev/null | grep playwright) ; echo \"exit\"",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -iE '^(jsdom|happy-dom|@testing-library)$'; echo \"---\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 226,
+      "outputTokens": 3043,
+      "cacheReadTokens": 187583,
+      "cacheWriteTokens": 13555,
+      "totalTokens": 204407
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

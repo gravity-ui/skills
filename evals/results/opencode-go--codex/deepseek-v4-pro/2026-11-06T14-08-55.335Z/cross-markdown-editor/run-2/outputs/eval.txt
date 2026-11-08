@@ -1,0 +1,170 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 13993ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 1ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 0ms
+     → expected 'import { useState, useMemo } from \'r…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 13987ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx uses @gravity-ui/uikit TextArea and renders marked.parse(text) via dangerouslySetInnerHTML, while package.json and package-lock.json contain no @gravity-ui/markdown-editor, useMarkdownEditor, or MarkdownEditorView.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  14:12:03
+   Duration  14.20s (transform 35ms, setup 16ms, collect 15ms, tests 13.99s, environment 0ms, prepare 56ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected 'import { useState, useMemo } from \'r…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+"import { useState, useMemo } from 'react';
+import { Card, TextArea } from '@gravity-ui/uikit';
+import { marked } from 'marked';
+
+const mdStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: 16,
+  height: '100vh',
+  padding: 16,
+  boxSizing: 'border-box',
+};
+
+const paneStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden',
+};
+
+const previewStyle: React.CSSProperties = {
+  flex: 1,
+  overflow: 'auto',
+  padding: 16,
+  lineHeight: 1.6,
+};
+
+const placeholder = `# Привет!\\n\\nПиши **Markdown** и сразу смотри результат.\\n\\n- списки\\n- *курсив*\\n- ~~зачёркнутый~~\\n\\n\\`\\`\\`js\\nconsole.log('code block');\\n\\`\\`\\``;
+
+export function App() {
+  const [text, setText] = useState(placeholder);
+
+  const html = useMemo(() => {
+    return marked.parse(text) as string;
+  }, [text]);
+
+  return (
+    <div style={mdStyle}>
+      <div style={paneStyle}>
+        <TextArea
+          value={text}
+          onUpdate={setText}
+          minRows={10}
+          controlProps={{ style: { flex: 1, resize: 'none', fontFamily: 'monospace' } }}
+        />
+      </div>
+      <div style={paneStyle}>
+        <Card style={previewStyle}>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx uses @gravity-ui/uikit TextArea and renders marked.parse(text) via dangerouslySetInnerHTML, while package.json and package-lock.json contain no @gravity-ui/markdown-editor, useMarkdownEditor, or MarkdownEditorView.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

@@ -1,0 +1,112 @@
+/* Токены берутся из палитры data-viz (references/palette.md): поверхность, текст, сетка. */
+
+.cpu-page {
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 24px;
+  display: flex;
+}
+
+.cpu-panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--cpu-border);
+  background: var(--cpu-surface);
+  color: var(--cpu-ink);
+}
+
+.cpu-panel[data-theme='light'] {
+  --cpu-surface: #fcfcfb;
+  --cpu-ink: #0b0b0b;
+  --cpu-ink-2: #52514e;
+  --cpu-ink-3: #898781;
+  --cpu-grid: #e1e0d9;
+  --cpu-border: rgba(11, 11, 11, 0.1);
+}
+
+.cpu-panel[data-theme='dark'] {
+  --cpu-surface: #1a1a19;
+  --cpu-ink: #f0efec;
+  --cpu-ink-2: #c3c2b7;
+  --cpu-ink-3: #898781;
+  --cpu-grid: #2c2c2a;
+  --cpu-border: rgba(255, 255, 255, 0.1);
+}
+
+.cpu-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cpu-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.cpu-stats {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+}
+
+.cpu-stats dt {
+  font-size: 12px;
+  color: var(--cpu-ink-2);
+}
+
+.cpu-stats dd {
+  margin: 2px 0 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Растягивается по доступной высоте панели. Yagr сам отслеживает размер через ResizeObserver. */
+.cpu-chart {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 280px;
+}
+
+/* Переопределяем переменные Yagr на токены панели. Специфичность выше, чем у классов темы Yagr. */
+.cpu-chart.yagr {
+  --yagr-background: var(--cpu-surface);
+  --yagr-grid: var(--cpu-grid);
+  --yagr-axis-stroke: var(--cpu-ink-3);
+  --yagr-title-color: var(--cpu-ink);
+  --yagr-font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.cpu-details summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--cpu-ink-2);
+}
+
+.cpu-table {
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cpu-table th,
+.cpu-table td {
+  padding: 4px 16px 4px 0;
+  text-align: left;
+  border-bottom: 1px solid var(--cpu-grid);
+}
+
+.cpu-table th {
+  color: var(--cpu-ink-2);
+  font-weight: 500;
+}

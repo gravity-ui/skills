@@ -1,0 +1,148 @@
+{
+  "status": "passed",
+  "duration": 895.917,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 16972,
+    "outputTokens": 7468,
+    "cacheReadTokens": 487424,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 852,
+    "totalTokens": 511864
+  },
+  "model": "gpt-6-astra",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 19,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'README*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g '*config*'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g 'AGENTS.md' /home/sandbox /home 2>/dev/null\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"configure|setLanguage|Lang\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/configure* node_modules/@gravity-ui/uikit/build/esm/i18n* && cat tsconfig.json && cat index.html && git status --short'",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.js node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts tsconfig.json index.html && git status --short && rg 'LangProvider|useLang' node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -80; rg 'interface ControlGroupProps' node_modules/@gravity-ui/uikit/build/esm -n -g '*.d.ts'; test -d node_modules/@playwright && ls node_modules/@playwright; test -d node_modules/jsdom && echo jsdom\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer','jsdom']) { try { console.log(p, import.meta.resolve(p)); } catch {} }\\\" && ls /tmp && git diff --check && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/language-ui-check --no-audit --no-fund playwright'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /root/.cache/ms-playwright /home/node/.cache/ms-playwright /home/sandbox/.cache/ms-playwright 2>/dev/null'",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc 'node /tmp/language-ui-check/node_modules/playwright/cli.js install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/language-ui-check/check.mjs <<'EOF'\nimport {chromium} from 'playwright';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless: true, args: ['--no-sandbox']});\ntry {\n  const context = await browser.newContext({locale: 'en-US'});\n  const page = await context.newPage();\n  const errors = [];\n  page.on('pageerror', error => errors.push(error.message));\n  await page.goto('http://localhost:5173');\n  await page.getByRole('heading', {name: 'Settings', exact: true}).waitFor();\n  await page.getByRole('radio', {name: 'Русский', exact: true}).check();\n  await page.getByRole('heading', {name: 'Настройки', exact: true}).waitFor();\n  assert.equal(await page.locator('html').getAttribute('lang'), 'ru');\n  assert.equal(await page.title(), 'Настройки языка · Рабочее пространство');\n  assert.equal(await page.evaluate(() => localStorage.getItem('app.language')), 'ru');\n  await page.reload();\n  await page.getByRole('heading', {name: 'Настройки', exact: true}).waitFor();\n  assert.equal(await page.getByRole('radio', {name: 'Русский', exact: true}).isChecked(), true);\n  await page.getByRole('radio', {name: 'Русский', exact: true}).focus();\n  await page.keyboard.press('ArrowLeft');\n  await page.getByRole('heading', {name: 'Settings', exact: true}).waitFor();\n  await page.reload();\n  await page.getByRole('heading', {name: 'Settings', exact: true}).waitFor();\n  await page.setViewportSize({width: 375, height: 812});\n  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);\n  await page.screenshot({path: '/tmp/language-ui-check/mobile.png'});\n  const russian = await browser.newContext({locale: 'ru-RU'});\n  const ruPage = await russian.newPage();\n  await ruPage.goto('http://localhost:5173');\n  await ruPage.getByRole('heading', {name: 'Настройки', exact: true}).waitFor();\n  const blocked = await browser.newContext({locale: 'en-US'});\n  await blocked.addInitScript(() => {\n    Storage.prototype.getItem = () => { throw new Error('Storage disabled'); };\n    Storage.prototype.setItem = () => { throw new Error('Storage disabled'); };\n  });\n  const blockedPage = await blocked.newPage();\n  await blockedPage.goto('http://localhost:5173');\n  await blockedPage.getByRole('radio', {name: 'Русский', exact: true}).check();\n  await blockedPage.getByText('Язык применён. Браузеру не удалось сохранить ваш выбор.').waitFor();\n  const unsupported = await browser.newContext({locale: 'fr-FR'});\n  await unsupported.addInitScript(() => localStorage.setItem('app.language', 'unsupported'));\n  const fallbackPage = await unsupported.newPage();\n  await fallbackPage.goto('http://localhost:5173');\n  await fallbackPage.getByRole('heading', {name: 'Settings', exact: true}).waitFor();\n  assert.deepEqual(errors, []);\n  console.log('PASS: EN/RU switching, reload persistence, keyboard control, document language/title, mobile overflow, Russian browser default, unavailable storage, invalid language fallback, no browser errors.');\n} finally {\n  await browser.close();\n}\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --stat && git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python -c \\\"import shutil; shutil.rmtree('dist')\\\"\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'rm dist/assets/index-BxMdtHfi.css dist/assets/index-CnXzZEl9.js dist/index.html && rmdir dist/assets dist'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module -e \\\"import fs from 'node:fs'; const p='/tmp/language-ui-check/check.mjs'; fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace('headless: true, args:', 'headless: true, executablePath: chromium.executablePath(), args:'));\\\" && node /tmp/language-ui-check/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/language-ui-check --no-audit --no-fund happy-dom'",
+        "success": false,
+        "exitCode": 130
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/language-check.test.tsx <<'EOF'\nimport {Window} from '/tmp/language-ui-check/node_modules/happy-dom/lib/index.js';\nimport {act} from 'react';\nimport {createRoot} from 'react-dom/client';\nimport {afterEach, expect, test, vi} from 'vitest';\nimport {configure} from '@gravity-ui/uikit';\nimport {getInitialLanguage, LanguageProvider, useLanguage, LANGUAGE_STORAGE_KEY} from './i18n';\n\nvi.mock('@gravity-ui/uikit', () => ({configure: vi.fn()}));\nconst window = new Window({url: 'http://localhost:5173'});\nvi.stubGlobal('window', window);\nvi.stubGlobal('document', window.document);\nvi.stubGlobal('navigator', {language: 'en-US'});\nvi.stubGlobal('localStorage', window.localStorage);\nvi.stubGlobal('IS_REACT_ACT_ENVIRONMENT', true);\nafterEach(() => { localStorage.clear(); vi.restoreAllMocks(); });\n\nfunction Probe() {\n  const {language, setLanguage, t, saved} = useLanguage();\n  return <button onClick={() => setLanguage(language === 'en' ? 'ru' : 'en')} data-saved={saved}>{t.settings}</button>;\n}\n\ntest('switches translations, document metadata and UI kit, and restores preference after remount', async () => {\n  const host = document.createElement('div');\n  document.body.append(host);\n  let root = createRoot(host);\n  await act(async () => root.render(<LanguageProvider><Probe /></LanguageProvider>));\n  expect(host.textContent).toBe('Settings');\n  await act(async () => host.querySelector('button')\"'!.click());\n  expect(host.textContent).toBe('\"'Настройки');\n  expect(document.documentElement.lang).toBe('ru');\n  expect(document.title).toBe('Настройки языка · Рабочее пространство');\n  expect(configure).toHaveBeenLastCalledWith({lang: 'ru'});\n  expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('ru');\n  await act(async () => root.unmount());\n  root = createRoot(host);\n  await act(async () => root.render(<LanguageProvider><Probe /></LanguageProvider>));\n  expect(host.textContent).toBe('Настройки');\n  await act(async () => host.querySelector('button')\"'!.click());\n  expect(host.textContent).toBe('\"'Settings');\n  expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe('en');\n  await act(async () => root.unmount());\n});\n\ntest('uses browser language, validates stored values and prioritizes saved preference', () => {\n  vi.stubGlobal('navigator', {language: 'ru-RU'});\n  expect(getInitialLanguage()).toBe('ru');\n  localStorage.setItem(LANGUAGE_STORAGE_KEY, 'invalid');\n  expect(getInitialLanguage()).toBe('ru');\n  localStorage.setItem(LANGUAGE_STORAGE_KEY, 'en');\n  expect(getInitialLanguage()).toBe('en');\n  localStorage.clear();\n  vi.stubGlobal('navigator', {language: 'fr-FR'});\n  expect(getInitialLanguage()).toBe('en');\n});\n\ntest('keeps switching available when storage is blocked', async () => {\n  vi.stubGlobal('navigator', {language: 'en-US'});\n  vi.spyOn(localStorage, 'getItem').mockImplementation(() => {throw new Error('blocked');});\n  vi.spyOn(localStorage, 'setItem').mockImplementation(() => {throw new Error('blocked');});\n  const host = document.createElement('div');\n  const root = createRoot(host);\n  await act(async () => root.render(<LanguageProvider><Probe /></LanguageProvider>));\n  await act(async () => host.querySelector('button')\"'!.click());\n  expect(host.textContent).toBe('\"'Настройки');\n  expect(host.querySelector('button')\"'!.getAttribute('\"'data-saved')).toBe('false');\n  await act(async () => root.unmount());\n});\nEOF\nnpx vitest run src/language-check.test.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mv src/language-check.test.tsx /tmp/language-ui-check/language-check.test.tsx && git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 16972,
+      "outputTokens": 7468,
+      "cacheReadTokens": 487424,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 852,
+      "totalTokens": 511864
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

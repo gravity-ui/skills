@@ -1,0 +1,50 @@
+.cpu-load-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-3);
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Область графика забирает всё свободное место контейнера; Yagr сам следит за её размером. */
+.cpu-load-chart__body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 200px;
+}
+
+.cpu-load-chart__placeholder,
+.cpu-load-chart__plot-wrapper {
+  position: absolute;
+  inset: 0;
+}
+
+/*
+ * Темизация через собственный CSS API Yagr (--yagr-*), связанный с семантическими
+ * токенами Gravity UI. Двойной класс перебивает .yagr_theme_* из @gravity-ui/yagr/index.css,
+ * поэтому значения следуют за текущей темой ThemeProvider без ручных dark-переопределений.
+ */
+.cpu-load-chart__plot.yagr {
+  --yagr-font-family: var(--g-font-family-sans);
+  --yagr-background: var(--g-color-base-background);
+  --yagr-title-color: var(--g-color-text-primary);
+  --yagr-grid: var(--g-color-line-generic);
+  --yagr-axis-stroke: var(--g-color-text-secondary);
+  --yagr-legend-item: var(--g-color-text-secondary);
+  --yagr-legend-item-hover: var(--g-color-text-primary);
+  --yagr-legend-item-hidden: var(--g-color-text-hint);
+}
+
+/*
+ * Тултип Yagr рендерится в document.body, поэтому темизируется через собственный класс,
+ * переданный опцией tooltip.className (а не через внутреннюю разметку).
+ */
+.yagr-tooltip.cpu-load-chart__tooltip {
+  --yagr-tooltip-font-family: var(--g-font-family-sans);
+  color: var(--g-color-text-primary);
+  background-color: var(--g-color-base-float);
+  border-radius: var(--g-border-radius-m);
+  box-shadow: 0 2px 8px var(--g-color-sfx-shadow);
+}

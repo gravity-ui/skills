@@ -1,0 +1,102 @@
+{
+  "status": "passed",
+  "duration": 135.328,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 19049,
+    "outputTokens": 1637,
+    "cacheReadTokens": 152960,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 67,
+    "totalTokens": 173646
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/SKILL.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -m 80 \\\"modal|dialog|Dialog\\\" .agents/skills/gravity-ui/references/package-routing.md .agents/skills/gravity-ui/rules/hallucination-traps.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- files ---\\\\n'; rg --files -g '\"'!*node_modules*'\"' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/README.md; printf '\\\\n--- exports ---\\\\n'; rg -n \\\"(Dialog|Modal|Button)\\\" node_modules/@gravity-ui/uikit/dist/typings/index.d.ts | head -80; printf '\\\\n--- dialog types ---\\\\n'; rg -n \\\"interface Dialog|type Dialog|DialogProps|onConfirm|onCancel|open\\\" node_modules/@gravity-ui/uikit/dist/typings/components/Dialog/Dialog.d.ts -n -C 3; printf '\\\\n--- button types ---\\\\n'; rg -n \\\"interface Button|type Button|ButtonProps|view|size|width|onClick\\\" node_modules/@gravity-ui/uikit/dist/typings/components/Button/Button.d.ts -n -C 2 | head -140\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '(Dialog|Button).+\\\\.d\\\\.ts\"'$|index'\"\\\\.d\\\\.ts\"'$'\"' | head -60; rg -n \\\"export.*Dialog|export.*Button\\\" node_modules/@gravity-ui/uikit/build/index.d.ts | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export.*Dialog|export.*Button\\\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts; find node_modules/@gravity-ui/uikit/build/esm/components/Dialog -maxdepth 2 -type f -name '*.d.ts' -print; find node_modules/@gravity-ui/uikit/build/esm/components/Button -maxdepth 2 -type f -name '*.d.ts' -print; printf '\\\\n--- app/main ---\\\\n'; cat src/main.tsx src/App.tsx; printf '\\\\n--- config ---\\\\n'; cat vite.config.ts tsconfig.json index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts; printf '\\\\n--- Button ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"BUTTON_VIEWS\" node_modules/@gravity-ui/uikit/build/esm/components/Button/constants.d.ts; rg -n \"interface DialogFooterProps|type DialogFooterProps|children|onClick\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts -C 4; rg -n \"interface DialogHeaderProps|type DialogHeaderProps|title\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts -C 4'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"DialogFooter|onClickButtonApply|onClickButtonCancel\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.js -C 3 | head -120; rg -n \"ModalCloseReason|onOpenChange\" node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts -C 3 | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 19049,
+      "outputTokens": 1637,
+      "cacheReadTokens": 152960,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 67,
+      "totalTokens": 173646
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

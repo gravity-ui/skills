@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "duration": 392.784,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 60,
+    "outputTokens": 15439,
+    "cacheReadTokens": 976797,
+    "cacheWriteTokens": 33061,
+    "totalTokens": 1025357
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 14,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 26,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 29,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/__smoke__.test.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in package.json tsconfig.json vite.config.ts index.html src/App.tsx src/main.tsx src/vite-env.d.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done",
+        "success": true
+      },
+      {
+        "command": "npm ci 2>&1 | tail -5; ls node_modules/@gravity-ui/uikit/ | head; grep -rl \"useToaster\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && cat index.d.ts; cat hooks/useToaster.d.ts; ls; cat types.d.ts 2>/dev/null | head -80; cat ToasterComponent.d.ts 2>/dev/null; cat ToasterProvider.d.ts 2>/dev/null; cat ../../../../../uikit/build/esm/components/Toaster/Toaster.d.ts 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cat hooks/useToaster.js; echo ---; cat Provider/ToasterProvider.d.ts; echo ---; cat ToasterComponent/ToasterComponent.d.ts; echo ---; cat constants.js | head -30; echo ---; cat withToaster.js | head -30; echo; echo ---; cat Provider/*.js | head -60",
+        "success": true
+      },
+      {
+        "command": "cat ToasterComponent/ToasterComponent.js | head -60; echo ---; grep -rn \"autoHiding\" --include=*.js . | grep -v map | head -20; echo ---; cat Toaster.js | head -60; echo; cd /home/sandbox/workspace && grep -n '\"version\"' node_modules/@gravity-ui/uikit/package.json",
+        "success": true
+      },
+      {
+        "command": "grep -n \"DEFAULT_TIMEOUT\" node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toast/Toast.js | head -3; grep -rn \"DEFAULT_TIMEOUT =\" node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ | grep -v map; grep -n \"toaster\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null | head; grep -n \"Toaster\\|Button\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | tail -20; echo \"tsc exit: ${PIPESTATUS[0]}\"; npx vite build 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; node -e \"require.resolve('playwright')\" 2>&1 | head -1; ls /usr/lib/node_modules 2>/dev/null) ; (npx vite --port 5173 --strictPort > /tmp/vite.log 2>&1 &) ; sleep 4; curl -s localhost:5173 | head -5",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && npm init -y >/dev/null && npm i playwright@1 >/dev/null 2>&1 && timeout 300 npx playwright install --with-deps chromium 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 300 npx playwright install chromium 2>&1 | tail -3; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && cat > check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox'] });\nconst page = await browser.newPage({ viewport: { width: 1280, height: 800 } });\nconst errors = [];\npage.on('pageerror', e => errors.push(e.message));\npage.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });\nawait page.goto('http://localhost:5173', { waitUntil: 'networkidle' });\nconst btn = page.getByRole('button', { name: 'Показать уведомление' });\nconst box = await btn.boundingBox();\nconsole.log('button box', box, 'viewport 1280x800');\nawait btn.click();\nawait page.getByText('Кнопка нажата 1 раз(а)').waitFor({ timeout: 2000 });\nconsole.log('toast visible after click: yes');\nawait btn.click();\nawait page.waitForTimeout(300);\nconsole.log('toasts after 2 clicks:', await page.getByText(/Кнопка нажата \\d+ раз/).count());\nawait page.screenshot({ path: '/tmp/e2e/shot-visible.png' });\nconst t0 = Date.now();\nawait page.getByText(/Кнопка нажата \\d+ раз/).first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {});\nawait page.waitForFunction(() => !document.body.innerText.includes('Кнопка нажата'), null, { timeout: 10000 });\nconsole.log('toasts gone after ~', Date.now() - t0, 'ms');\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\nnode check.mjs",
+        "success": false
+      },
+      {
+        "command": "pkill -f \"vite --port 5173\" ; npm i --no-save jsdom@25 >/dev/null 2>&1; echo \"jsdom: $?\"; cat > src/__smoke__.test.tsx <<'EOF'\nimport { describe, it, expect, beforeAll } from 'vitest';\nimport { render, fireEvent, screen, waitFor, act } from '@testing-library/react';\nEOF\nls node_modules | grep -i \"testing-library\" ; ls node_modules/.bin | grep -E \"^vitest$\"",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/vitest.smoke.config.mjs <<'EOF'\nexport default { test: { environment: 'jsdom', include: ['src/__smoke__.test.tsx'], root: '/home/sandbox/workspace' } };\nEOF\ntimeout 200 npx vitest run --config /tmp/vitest.smoke.config.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/vitest.smoke.config.mjs <<'EOF'\nexport default { test: { environment: 'jsdom', include: ['src/__smoke__.test.tsx'], root: '/home/sandbox/workspace', css: true, server: { deps: { inline: [/@gravity-ui/] } } } };\nEOF\ntimeout 200 npx vitest run --config /tmp/vitest.smoke.config.mjs 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && sed -n 1,140p Toast/Toast.js; echo ---; cat ToastList/ToastList.js | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 - <<'EOF'\nimport re\np='src/__smoke__.test.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"    const started = Date.now();\n    // Wait for auto-hide (4000 ms configured) with a generous margin.\n    await new Promise(r => setTimeout(r, 4500));\n    const elapsed = Date.now() - started;\n    await act(async () => {});\n    console.log('elapsed ms before check:', elapsed);\n    expect(document.body.textContent).not.toContain('Кнопка нажата');\n\"\"\",\"\"\"    // Wait past the configured 4000 ms auto-hide.\n    await act(async () => { await new Promise(r => setTimeout(r, 4300)); });\n    const toastEls = [...document.querySelectorAll('[data-toast]')];\n    console.log('toasts still mounted at 4.3s:', toastEls.length,\n      'classes:', toastEls.map(t => t.className));\n    // jsdom runs no CSS animations, so simulate the browser's animationend\n    // that Gravity's ToastList waits for before unmounting exiting toasts.\n    await act(async () => {\n      toastEls.forEach(el => el.dispatchEvent(new Event('animationend')));\n      await new Promise(r => setTimeout(r, 50));\n    });\n    expect(document.querySelectorAll('[data-toast]').length).toBe(0);\n    expect(document.body.textContent).not.toContain('Кнопка нажата');\n\"\"\")\nopen(p,'w').write(s)\nEOF\ntimeout 200 npx vitest run --config /tmp/vitest.smoke.config.mjs 2>&1 | grep -v \"npm warn\" | grep -E \"toasts still|✓|×|FAIL|Tests|passed|failed|Error\" | head -30",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx vitest run --config /tmp/vitest.smoke.config.mjs 2>&1 | grep -v \"npm warn\" | grep -E \"toasts still|✓|×|FAIL|Tests |AssertionError|Expected|Received\" | head -30",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx vitest run --config /tmp/vitest.smoke.config.mjs 2>&1 | grep -A4 \"toasts still\" | sed 's/\\x1b\\[[0-9;]*m//g' | head -8",
+        "success": true
+      },
+      {
+        "command": "rm -f src/__smoke__.test.tsx && rm -rf dist && rm -f /tmp/vitest.smoke.config.mjs && for p in /proc/[0-9]*; do if grep -q \"vite\" $p/cmdline 2>/dev/null; then kill $(basename $p) 2>/dev/null && echo \"killed $(basename $p)\"; fi; done; git status --short; git diff --stat",
+        "success": true
+      },
+      {
+        "command": "(curl -s -m 2 localhost:5173 >/dev/null && echo \"dev server still up\" || echo \"dev server stopped\"); npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit ${PIPESTATUS[0]}\"; cat src/App.tsx | head -5",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *vite*) echo \"$(basename $p): $c\"; kill $(basename $p) 2>/dev/null;; esac; done; sleep 1; curl -s -m 2 localhost:5173 >/dev/null && echo \"still up\" || echo \"stopped\"",
+        "success": false
+      },
+      {
+        "command": "kill 5389 5375 2>/dev/null; sleep 1; curl -s -m 2 localhost:5173 >/dev/null && echo \"still up\" || echo \"dev server stopped\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do n=$(basename $p); c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *\"bin/vite\"*|*\"exec vite\"*) echo \"$n: $c\"; kill -9 $n 2>/dev/null;; esac; done; sleep 1; curl -s -m 2 localhost:5173 >/dev/null && echo \"still up\" || echo \"dev server stopped\"",
+        "success": false
+      },
+      {
+        "command": "curl -s -m 2 -o /dev/null -w \"%{http_code}\\n\" localhost:5173; for p in /proc/[0-9]*; do n=${p#/proc/}; c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in node*vite*) echo \"$n: $c\";; esac; done",
+        "success": true
+      },
+      {
+        "command": "(ss -ltnp 2>/dev/null || netstat -ltnp 2>/dev/null) | grep 5173; for p in /proc/[0-9]*; do n=${p#/proc/}; c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *vite*) echo \"$n: ${c:0:120}\";; esac; done",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 60,
+      "outputTokens": 15439,
+      "cacheReadTokens": 976797,
+      "cacheWriteTokens": 33061,
+      "totalTokens": 1025357
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

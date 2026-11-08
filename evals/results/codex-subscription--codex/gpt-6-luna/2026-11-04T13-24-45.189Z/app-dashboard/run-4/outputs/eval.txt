@@ -1,0 +1,243 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 25059ms
+   × imports @gravity-ui/navigation 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 1ms
+     → expected '@import url(\'https://fonts.googleapi…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 25052ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json includes only @gravity-ui/uikit and no @gravity-ui/navigation or @gravity-ui/table; src/App.tsx implements the sidebar as a native <aside> with custom buttons and the orders grid as a native <table>. Column drag, checkbox selection, and grouping are custom state/DOM logic, with no AsideHeader, useTable, or ColumnReorderingProvider present.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  13:48:02
+   Duration  25.26s (transform 40ms, setup 15ms, collect 26ms, tests 25.06s, environment 0ms, prepare 51ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected '@import url(\'https://fonts.googleapi…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+"@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',sans-serif;color:#202435;background:#f7f8fb;font-synthesis:none;text-rendering:optimizeLegibility}*{box-sizing:border-box}body{margin:0;min-width:360px}.app-shell{--sidebar-width:248px;min-height:100vh}.sidebar{width:var(--sidebar-width);position:fixed;inset:0 auto 0 0;background:#fff;border-right:1px solid #eceef3;padding:24px 15px 14px;display:flex;flex-direction:column;z-index:3;transition:width .22s ease}.sidebar-collapsed{--sidebar-width:76px}.brand-row{height:36px;display:flex;align-items:center;padding:0 7px;gap:10px;position:relative}.brand-mark{width:27px;height:27px;border-radius:9px;background:#6555d9;position:relative;display:grid;place-items:center;box-shadow:0 4px 9px #6555d92e}.brand-mark:before,.brand-mark:after,.brand-mark span{content:\"\";position:absolute;background:white;border-radius:3px;transform:skew(-25deg)}.brand-mark:before{height:13px;width:4px;left:8px}.brand-mark:after{height:18px;width:4px;left:14px}.brand-mark span{height:10px;width:4px;left:20px;top:9px}.brand-name{font:800 19px Manrope,sans-serif;letter-spacing:-1px;color:#222439}.brand-name span{color:#6a5bdd}.collapse-btn{margin-left:auto;width:25px;height:25px;display:grid;place-items:center;border:1px solid #eceef3;background:#fff;color:#84889a;border-radius:7px;cursor:pointer}.collapse-btn svg{transform:rotate(180deg)}.sidebar-collapsed .collapse-btn{position:absolute;right:-27px;top:3px;background:#fff;box-shadow:0 2px 6px #1b24400f}.sidebar-collapsed .collapse-btn svg{transform:none}.workspace-switch{height:58px;border:1px solid #eceef3;border-radius:10px;margin-top:26px;padding:8px;display:flex;align-items:center;gap:9px;color:#8a8da0}.workspace-avatar{width:32px;height:32px;border-radius:8px;background:#f0edff;color:#6656d6;display:grid;place-items:center;font-weight:700;font-size:15px}.workspace-copy,.profile-copy{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}.workspace-copy b,.profile-copy b{font-size:12px;color:#292c3e;font-weight:600;white-space:nowrap}.workspace-copy small,.profile-copy small{font-size:10px;color:#9699a9;white-space:nowrap}.sidebar-collapsed .workspace-switch{justify-content:center;padding:6px}.nav-label{font-size:9px;font-weight:700;color:#a2a5b3;letter-spacing:1px;margin:30px 10px 10px}.sidebar-collapsed .nav-label{text-align:center}.main-nav{display:flex;flex-direction:column;gap:4px}.nav-item{height:42px;width:100%;border:0;background:transparent;border-radius:8px;display:flex;align-items:center;gap:12px;padding:0 11px;color:#787c8f;font:500 12px 'DM Sans',sans-serif;text-align:left;cursor:pointer;transition:.15s}.nav-item:hover{background:#f7f6ff;color:#5547c4}.nav-item.active{background:#f2f0ff;color:#5f51d2;font-weight:600}.nav-item.active:before{content:\"\";position:absolute;left:0;width:3px;height:24px;background:#6959dc;border-radius:0 4px 4px 0}.nav-item span{flex:1}.nav-item em{font-style:normal;font-size:10px;background:#e7e3ff;color:#6153cb;border-radius:10px;padding:3px 7px}.sidebar-collapsed .nav-item{justify-content:center;padding:0}.sidebar-collapsed .nav-item.active:before{left:0}.sidebar-bottom{margin-top:auto}.help-card{background:#f8f7ff;border:1px solid #efedfb;border-radius:10px;padding:12px 10px;display:flex;gap:9px;margin-bottom:14px}.help-glyph{width:25px;height:25px;background:#eae7ff;color:#6555d9;border-radius:7px;display:grid;place-items:center;font-size:16px;flex:none}.help-card b{font-size:11px;display:block;margin:1px 0 3px}.help-card small{font-size:10px;color:#9093a3;display:block}.help-card button{border:0;background:none;padding:8px 0 0;color:#6455d4;font:600 10px 'DM Sans',sans-serif;display:flex;align-items:center;gap:3px;cursor:pointer}.sidebar-collapsed .help-card{justify-content:center;padding:9px 4px}.profile-row{border-top:1px solid #eff0f4;padding:14px 4px 3px;display:flex;align-items:center;gap:9px}.profile-avatar,.top-profile{width:31px;height:31px;border-radius:50%;background:#eadfd7;color:#755445;font-size:10px;font-weight:700;display:grid;place-items:center;flex:none}.profile-more{background:transparent;border:0;color:#989bad;cursor:pointer}.sidebar-collapsed .profile-row{justify-content:center}.main-area{margin-left:var(--sidebar-width);min-height:100vh;transition:margin-left .22s ease}.topbar{height:62px;background:#fff;border-bottom:1px solid #eceef3;display:flex;align-items:center;justify-content:space-between;padding:0 38px}.breadcrumbs{display:flex;align-items:center;gap:10px;font-size:11px;color:#989bad}.breadcrumbs b{color:#373a4c;font-weight:600}.top-actions{display:flex;align-items:center;gap:9px;color:#777b8d}.online-dot{height:7px;width:7px;border-radius:50%;background:#38b784}.store-status{font-size:10px;color:#626678}.icon-button{width:32px;height:32px;border:1px solid #eceef3;border-radius:8px;background:#fff;color:#73778a;display:grid;place-items:center;cursor:pointer}.notification{position:relative;margin-left:15px}.notification i{position:absolute;width:6px;height:6px;border-radius:50%;background:#ef727b;right:7px;top:6px;border:1px solid white}.top-divider{height:24px;width:1px;background:#eceef3;margin:0 8px}.top-profile{width:29px;height:29px}.page-content{max-width:1470px;margin:0 auto;padding:31px 38px 22px}.page-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:23px}.eyebrow{font-size:9px;font-weight:700;letter-spacing:.95px;color:#a1a4b1;margin-bottom:8px}.eyebrow span{padding:0 5px;color:#c3c5ce}.page-heading h1{font:700 27px Manrope,sans-serif;letter-spacing:-.8px;margin:0;color:#202334}.page-heading p,.panel-heading p{margin:5px 0 0;color:#8d91a1;font-size:11px}.primary-button{height:36px;border:0;background:#6657d7;color:white;padding:0 14px;border-radius:7px;display:flex;align-items:center;gap:7px;font:600 11px 'DM Sans',sans-serif;box-shadow:0 3px 7px #6657d72d;cursor:pointer}.primary-button:hover{background:#5546c7}.metrics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:24px}.metric-card{height:121px;background:white;border:1px solid #eceef3;border-radius:10px;padding:13px 15px;position:relative;overflow:hidden}.metric-top{display:flex;align-items:center;justify-content:space-between;color:#85899a;font-size:10px}.metric-icon{width:27px;height:27px;border-radius:8px;display:grid;place-items:center}.metric-icon.purple{background:#f0edff;color:#6858d9}.metric-icon.green{background:#e7f8f0;color:#2ba779}.metric-icon.orange{background:#fff3e7;color:#e89a46}.metric-icon.blue{background:#eaf3ff;color:#5290e3}.metric-icon b{font-size:14px}.ruble{font-size:15px;font-weight:700}.metric-value{font:700 21px Manrope,sans-serif;letter-spacing:-.55px;margin-top:9px;color:#26293b}.metric-foot{display:flex;align-items:center;gap:6px;margin-top:6px;color:#a0a3b0;font-size:9px}.trend{font-size:9px;font-weight:600}.trend.up{color:#35a77d}.trend.down{color:#e17c76}.metric-note{color:#dc9852}.sparkline{height:29px;position:absolute;bottom:10px;right:13px;display:flex;align-items:end;gap:3px;opacity:.52}.sparkline i{display:block;width:3px;border-radius:3px 3px 0 0;background:#806ff0}.purple-line i:nth-child(3n){height:13px}.purple-line i:nth-child(3n+1){height:19px}.purple-line i:nth-child(3n+2){height:24px}.green-line i{background:#47bd8e}.green-line i:nth-child(3n){height:13px}.green-line i:nth-child(3n+1){height:20px}.green-line i:nth-child(3n+2){height:25px}.orange-line i{background:#efa64f}.orange-line i:nth-child(3n){height:12px}.orange-line i:nth-child(3n+1){height:20px}.orange-line i:nth-child(3n+2){height:16px}.blue-line i{background:#65a3ee}.blue-line i:nth-child(3n){height:20px}.blue-line i:nth-child(3n+1){height:13px}.blue-line i:nth-child(3n+2){height:17px}.processing-ring{height:11px;width:11px;border-radius:50%;border:2px solid #e8c18e;border-top-color:#e89a46}.orders-panel{background:#fff;border:1px solid #eceef3;border-radius:11px;overflow:hidden;box-shadow:0 2px 6px #20233a05}.panel-heading{padding:18px 20px 15px;display:flex;justify-content:space-between;align-items:center}.panel-heading h2{font:700 15px Manrope,sans-serif;letter-spacing:-.2px;margin:0;color:#282b3d;display:flex;gap:8px;align-items:center}.count-chip{font:600 9px 'DM Sans',sans-serif;color:#777b8b;background:#f3f4f8;padding:4px 7px;border-radius:12px}.panel-heading p{font-size:10px}.outline-button{height:31px;padding:0 10px;display:flex;align-items:center;gap:7px;border:1px solid #e8eaf0;border-radius:7px;color:#65697b;background:#fff;font:500 10px 'DM Sans',sans-serif;cursor:pointer}.outline-button:hover,.icon-button:hover{background:#f8f8fc}.toolbar{height:53px;border-top:1px solid #f0f1f5;border-bottom:1px solid #f0f1f5;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}.search-box{height:31px;width:255px;border:1px solid #e9ebf1;border-radius:7px;display:flex;align-items:center;padding:0 9px;gap:7px;color:#999dae}.search-box input{border:0;outline:0;flex:1;min-width:0;font:10px 'DM Sans',sans-serif;color:#34374a}.search-box input::placeholder{color:#a6a9b5}.search-box kbd{font:9px 'DM Sans',sans-serif;color:#aaadba;border:1px solid #e9eaf0;background:#fafafd;padding:2px 4px;border-radius:4px}.toolbar-right{display:flex;gap:7px;align-items:center}.filter-select{height:31px;display:flex;align-items:center;gap:6px;color:#777b8b;border:1px solid #e9ebf1;border-radius:7px;padding:0 8px;cursor:pointer}.filter-select select{border:0;outline:0;background:transparent;appearance:none;color:#5b5f70;font:500 10px 'DM Sans',sans-serif;max-width:112px;cursor:pointer}.group-toggle{height:31px;border:1px solid #e9ebf1;border-radius:7px;background:white;color:#777b8b;padding:0 9px;display:flex;align-items:center;gap:6px;font:500 10px 'DM Sans',sans-serif;cursor:pointer}.group-toggle.selected{color:#6254cf;background:#f7f6ff;border-color:#e5e1ff}.group-toggle i{height:6px;width:6px;background:#6b5cdb;border-radius:50%;margin-left:2px}.view-more{height:31px;width:31px}.selection-bar{height:40px;background:#f7f6ff;border-bottom:1px solid #ebe9fc;display:flex;align-items:center;gap:5px;padding:0 20px;color:#777b8b;font-size:10px}.selection-bar b{color:#5146b3}.selection-bar button{margin-left:auto;border:0;background:transparent;color:#6255ce;font:500 10px 'DM Sans',sans-serif;cursor:pointer}.selection-bar .bulk-action{margin-left:8px;background:#fff;border:1px solid #e3e0fa;border-radius:6px;padding:6px 8px;display:flex;align-items:center;gap:3px}.table-scroll{overflow-x:auto}.orders-table{border-collapse:collapse;width:100%;min-width:850px;table-layout:auto}.orders-table thead{background:#fafbfc}.orders-table th{height:36px;color:#9296a5;font-size:8px;letter-spacing:.55px;font-weight:700;text-align:left;white-space:nowrap;padding:0 12px;user-select:none}.orders-table th[draggable=true]{cursor:grab}.orders-table th.dragging{opacity:.35;background:#f0eeff}.orders-table th .drag-handle{color:#c5c7d0;vertical-align:middle;margin-right:5px;opacity:.7}.orders-table th svg{vertical-align:middle}.orders-table th.check-col,.orders-table td.check-col{width:40px;padding-left:20px;padding-right:4px}.orders-table th.more-col,.orders-table td.more-col{width:38px;padding:0 11px 0 2px;text-align:right}.orders-table input[type=checkbox]{appearance:none;width:14px;height:14px;border:1px solid #d9dce5;border-radius:4px;background:white;margin:0;vertical-align:middle;cursor:pointer;position:relative}.orders-table input[type=checkbox]:checked{background:#6657d7;border-color:#6657d7}.orders-table input[type=checkbox]:checked:after{content:'✓';position:absolute;inset:-1px 0 0;color:white;font:bold 10px 'DM Sans',sans-serif;text-align:center}.orders-table td{height:48px;padding:0 12px;border-top:1px solid #f0f1f5;color:#35384a;font-size:10px;white-space:nowrap}.orders-table tr.row-selected{background:#f8f7ff}.orders-table tr.row-selected td{border-color:#efedff}.orders-table .group-row td{height:33px;background:#fcfcfe;color:#4e5262;font-size:9px;padding-left:20px}.group-row td>b{font-weight:600}.group-dot{width:6px;height:6px;display:inline-block;border-radius:50%;margin-right:7px;vertical-align:1px}.group-dot.done{background:#39b783}.group-dot.processing{background:#e6a34e}.group-dot.pending{background:#668fe0}.group-dot.cancelled{background:#e57a80}.group-count{display:inline-block;background:#f0f1f5;color:#85899a;border-radius:8px;padding:2px 6px;margin-left:7px;font-size:8px}.group-row svg{margin-left:7px;vertical-align:middle;color:#a3a6b2}.order-id{color:#6557cf;font-size:10px;font-weight:600}.customer-cell{display:flex;align-items:center;gap:8px}.avatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:8px;font-weight:600;flex:none}.avatar.violet{background:#eeeaff;color:#755fd0}.avatar.blue{background:#e6f0ff;color:#5285cf}.avatar.pink{background:#ffe9f0;color:#c46b8d}.avatar.orange{background:#fff0e3;color:#c98750}.avatar.green{background:#e4f6ee;color:#489878}.avatar.cyan{background:#e3f6f7;color:#4b9a9c}.avatar.yellow{background:#fff6df;color:#b18c3f}.customer-copy{display:flex;flex-direction:column;gap:2px}.customer-copy b{font-size:9px;font-weight:600;color:#373a4a}.customer-copy small{font-size:8px;color:#a0a3b1}.muted-cell{font-size:9px;color:#777b8c}.amount{font-weight:600;font-size:9px;color:#353849}.status-pill{display:inline-flex;align-items:center;gap:5px;border-radius:11px;padding:4px 8px;font-size:8px;font-weight:500}.status-pill i{height:5px;width:5px;border-radius:50%;background:currentColor}.status-pill.done{color:#299c70;background:#eaf8f1}.status-pill.processing{color:#c58637;background:#fff5e9}.status-pill.pending{color:#5a80c5;background:#edf3ff}.status-pill.cancelled{color:#cf666d;background:#fff0f0}.payment-cell{color:#686c7e;font-size:9px;display:flex;gap:6px;align-items:center}.payment-icon{font-size:11px;color:#9094a3;width:14px;text-align:center}.more-col button{border:0;background:transparent;color:#9da0ad;padding:4px;cursor:pointer}.empty-state{height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#969aa8;gap:6px;font-size:10px}.empty-state b{color:#505466;font-size:11px}.empty-icon{height:36px;width:36px;border-radius:50%;background:#f4f3fb;color:#8176d8;display:grid;place-items:center;margin-bottom:2px}.table-footer{height:52px;border-top:1px solid #f0f1f5;display:flex;align-items:center;justify-content:space-between;padding:0 20px;color:#9699a7;font-size:9px}.table-footer b{color:#65697a;font-weight:600}.pagination{display:flex;align-items:center;gap:4px}.pagination button{height:27px;min-width:27px;border:1px solid #e9ebf1;border-radius:6px;background:white;color:#777b8b;font:500 9px 'DM Sans',sans-serif;cursor:pointer;padding:0 7px}.pagination button:disabled{opacity:.45;cursor:default}.pagination button:not(.page-number){border-color:transparent}.pagination .active-page{background:#f1efff;border-color:#e9e5ff;color:#5f51cc}.ellipsis{padding:0 3px;color:#a0a3af}.page-footnote{display:flex;justify-content:space-between;padding:11px 2px;color:#a5a8b4;font-size:9px}.page-footnote button{border:0;background:none;color:#8278c9;font:500 9px 'DM Sans',sans-serif;cursor:pointer}
+
+@media(max-width:1100px){.page-content{padding-left:25px;padding-right:25px}.topbar{padding:0 25px}.metrics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.orders-table{min-width:900px}}
+@media(max-width:720px){.app-shell{--sidebar-width:64px}.sidebar{padding:18px 8px 12px}.brand-row{padding:0;justify-content:center}.brand-name,.collapse-btn{display:none}.workspace-switch{justify-content:center;padding:6px;margin-top:22px}.workspace-copy,.workspace-switch>svg,.nav-label,.nav-item span,.nav-item em,.help-card>div:not(.help-glyph),.profile-copy,.profile-more{display:none}.nav-item{justify-content:center;padding:0}.help-card{justify-content:center;padding:8px 3px}.profile-row{justify-content:center;padding-top:12px}.topbar{padding:0 16px;height:54px}.store-status{font-size:0}.store-status:after{content:'Активен';font-size:10px}.top-actions{gap:6px}.notification{margin-left:5px}.page-content{padding:23px 14px}.page-heading{align-items:flex-start}.page-heading h1{font-size:24px}.page-heading p{max-width:225px;line-height:1.5}.primary-button{padding:0 9px;font-size:0;height:34px}.primary-button svg{width:18px}.metrics-grid{gap:8px;margin-bottom:17px}.metric-card{height:110px;padding:11px}.metric-value{font-size:18px}.metric-top{font-size:9px}.sparkline{opacity:.35;right:9px}.panel-heading{padding:15px 13px 13px}.panel-heading h2{font-size:14px}.toolbar{padding:0 12px;gap:6px}.search-box{width:auto;flex:1;min-width:110px}.search-box kbd{display:none}.filter-select{padding:0 6px}.filter-select select{max-width:76px}.group-toggle{padding:0 7px}.group-toggle span{display:none}.view-more{display:none}.table-footer{padding:0 12px}.table-footer>span{font-size:8px}.pagination{gap:2px}.pagination button{min-width:24px;padding:0 5px}.pagination button:not(.page-number){font-size:0}.pagination button:not(.page-number) span{font-size:0}.page-footnote{font-size:8px}}
+
+
+import { useMemo, useState } from 'react';
+import './App.css';
+
+type OrderStatus = 'Выполнен' | 'В обработке' | 'Отменён' | 'Ожидает оплаты';
+type Order = { id: string; customer: string; initials: string; email: string; date: string; amount: number; status: OrderStatus; color: string; method: string };
+type ColumnKey = 'order' | 'customer' | 'date' | 'amount' | 'status' | 'method';
+
+const orders: Order[] = [
+  { id: '#ORD-2048', customer: 'Анна Смирнова', initials: 'АС', email: 'anna.smirnova@gmail.com', date: 'Сегодня, 10:42', amount: 12_490, status: 'Выполнен', color: 'violet', method: 'Карта ···· 4829' },
+  { id: '#ORD-2047', customer: 'Михаил Петров', initials: 'МП', email: 'm.petrov@mail.ru', date: 'Сегодня, 10:18', amount: 8_750, status: 'В обработке', color: 'blue', method: 'СБП' },
+  { id: '#ORD-2046', customer: 'Екатерина Волкова', initials: 'ЕВ', email: 'katya.volkova@yandex.ru', date: 'Сегодня, 09:56', amount: 24_300, status: 'Выполнен', color: 'pink', method: 'Карта ···· 1034' },
+  { id: '#ORD-2045', customer: 'Дмитрий Козлов', initials: 'ДК', email: 'd.kozlov@gmail.com', date: 'Сегодня, 09:31', amount: 5_990, status: 'Ожидает оплаты', color: 'orange', method: 'СБП' },
+  { id: '#ORD-2044', customer: 'Мария Иванова', initials: 'МИ', email: 'maria.i@mail.ru', date: 'Сегодня, 09:04', amount: 16_800, status: 'В обработке', color: 'green', method: 'Карта ···· 7712' },
+  { id: '#ORD-2043', customer: 'Алексей Морозов', initials: 'АМ', email: 'alex.morozov@inbox.ru', date: 'Вчера, 18:42', amount: 3_450, status: 'Отменён', color: 'cyan', method: 'Карта ···· 3186' },
+  { id: '#ORD-2042', customer: 'Ольга Новикова', initials: 'ОН', email: 'olga.novikova@gmail.com', date: 'Вчера, 17:16', amount: 9_200, status: 'Выполнен', color: 'yellow', method: 'СБП' },
+  { id: '#ORD-2041', customer: 'Иван Фёдоров', initials: 'ИФ', email: 'ivan.fedorov@mail.ru', date: 'Вчера, 16:28', amount: 18_600, status: 'В обработке', color: 'blue', method: 'Карта ···· 5501' },
+  { id: '#ORD-2040', customer: 'Софья Белова', initials: 'СБ', email: 's.belova@yandex.ru', date: 'Вчера, 15:03', amount: 6_790, status: 'Ожидает оплаты', color: 'pink', method: 'СБП' },
+  { id: '#ORD-2039', customer: 'Артём Соколов', initials: 'АС', email: 'a.sokolov@mail.ru', date: 'Вчера, 14:37', amount: 31_200, status: 'Выполнен', color: 'orange', method: 'Карта ···· 9240' },
+  { id: '#ORD-2038', customer: 'Полина Орлова', initials: 'ПО', email: 'polina.orlova@gmail.com', date: 'Вчера, 13:12', amount: 4_890, status: 'Отменён', color: 'violet', method: 'Карта ···· 1198' },
+  { id: '#ORD-2037', customer: 'Никита Павлов', initials: 'НП', email: 'nikita.pavlov@inbox.ru', date: 'Вчера, 11:49', amount: 14_500, status: 'В обработке', color: 'green', method: 'СБП' },
+];
+
+const initialColumns: { key: ColumnKey; label: string }[] = [
+  { key: 'order', label: 'ЗАКАЗ' }, { key: 'customer', label: 'КЛИЕНТ' }, { key: 'date', label: 'ДАТА' },
+  { key: 'amount', label: 'СУММА' }, { key: 'status', label: 'СТАТУС' }, { key: 'method', label: 'ОПЛАТА' },
+];
+
+function Icon({ name, size = 18 }: { name: string; size?: number }) {
+  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true as const };
+  const paths: Record<string, React.ReactNode> = {
+    grid: <><rect x=\"3.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/></>,
+    users: <><path d=\"M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20\"/><circle cx=\"10\" cy=\"7.5\" r=\"3.5\"/><path d=\"M16 4.3a3.6 3.6 0 0 1 0 6.9M20 20v-1.5a3.5 3.5 0 0 0-2.5-3.35\"/></>,
+    box: <><path d=\"m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z\"/><path d=\"m4.5 7.5 7.5 4 7.5-4M12 12v9M8 5l8 4.5\"/></>,
+    settings: <><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"m19.4 15 .1.1 1.1.9-1.5 2.6-1.4-.5a7.8 7.8 0 0 1-1.7 1l-.2 1.5h-3l-.3-1.5a7.8 7.8 0 0 1-1.7-1l-1.4.5-1.5-2.6 1.1-.9a7 7 0 0 1 0-2l-1.1-.9 1.5-2.6 1.4.5a7.8 7.8 0 0 1 1.7-1l.3-1.5h3l.2 1.5a7.8 7.8 0 0 1 1.7 1l1.4-.5 1.5 2.6-1.1.9a7 7 0 0 1 0 2Z\" transform=\"translate(-1 -1) scale(1.08)\"/></>,
+    search: <><circle cx=\"10.8\" cy=\"10.8\" r=\"6.3\"/><path d=\"m15.5 15.5 4.2 4.2\"/></>,
+    bell: <><path d=\"M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9\"/><path d=\"M10 21h4\"/></>,
+    chevron: <path d=\"m9 18 6-6-6-6\"/>,
+    down: <path d=\"m7 10 5 5 5-5\"/>,
+    grip: <><circle cx=\"9\" cy=\"6\" r=\".8\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"6\" r=\".8\" fill=\"currentColor\"/><circle cx=\"9\" cy=\"12\" r=\".8\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"12\" r=\".8\" fill=\"currentColor\"/><circle cx=\"9\" cy=\"18\" r=\".8\" fill=\"currentColor\"/><circle cx=\"15\" cy=\"18\" r=\".8\" fill=\"currentColor\"/></>,
+    filter: <><path d=\"M4 5h16l-6.5 7.5v5l-3 1.5v-6.5L4 5Z\"/></>,
+    download: <><path d=\"M12 3v12m-5-5 5 5 5-5\"/><path d=\"M5 17v3h14v-3\"/></>,
+    more: <><circle cx=\"5\" cy=\"12\" r=\"1\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/><circle cx=\"19\" cy=\"12\" r=\"1\"/></>,
+    plus: <path d=\"M12 5v14M5 12h14\"/>,
+    logout: <><path d=\"M10 17l5-5-5-5M15 12H3\"/><path d=\"M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6\"/></>,
+    sliders: <><path d=\"M4 7h9m4 0h3M4 17h3m4 0h9\"/><circle cx=\"15\" cy=\"7\" r=\"2\"/><circle cx=\"9\" cy=\"17\" r=\"2\"/></>,
+  };
+  return <svg {...common}>{paths[name] || paths.grid}</svg>;
+}
+
+function cellValue(order: Order, key: ColumnKey) {
+  switch (key) {
+    case 'order': return <span className=\"order-id\">{order.id}</span>;
+    case 'customer': return <div className=\"customer-cell\"><span className={`avatar ${order.color}`}>{order.initials}</span><span className=\"customer-copy\"><b>{order.customer}</b><small>{order.email}</small></span></div>;
+    case 'date': return <span className=\"muted-cell\">{order.date}</span>;
+    case 'amount': return <b className=\"amount\">₽ {order.amount.toLocaleString('ru-RU')}</b>;
+    case 'status': return <span className={`status-pill ${order.status === 'Выполнен' ? 'done' : order.status === 'В обработке' ? 'processing' : order.status === 'Отменён' ? 'cancelled' : 'pending'}`}><i />{order.status}</span>;
+    case 'method': return <span className=\"payment-cell\"><span className=\"payment-icon\">{order.method.startsWith('СБП') ? '↗' : '▰'}</span>{order.method}</span>;
+  }
+}
+
+export function App() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeNav, setActiveNav] = useState('Заказы');
+  const [selected, setSelected] = useState<string[]>([]);
+  const [columns, setColumns] = useState(initialColumns);
+  const [dragged, setDragged] = useState<ColumnKey | null>(null);
+  const [grouped, setGrouped] = useState(true);
+  const [query, setQuery] = useState('');
+  const [filter, setFilter] = useState('Все заказы');
+  const [page, setPage] = useState(1);
+
+  const filtered = useMemo(() => orders.filter((order) => {
+    const matchesQuery = `${order.id} ${order.customer} ${order.email}`.toLowerCase().includes(query.toLowerCase());
+    const matchesFilter = filter === 'Все заказы' || order.status === filter;
+    return matchesQuery && matchesFilter;
+  }), [query, filter]);
+  const groupedRows = useMemo(() => {
+    if (!grouped) return [{ status: '', rows: filtered }];
+    const rank: OrderStatus[] = ['Выполнен', 'В обработке', 'Ожидает оплаты', 'Отменён'];
+    return rank.map((status) => ({ status, rows: filtered.filter((order) => order.status === status) })).filter((group) => group.rows.length);
+  }, [filtered, grouped]);
+  const allSelected = filtered.length > 0 && filtered.every((order) => selected.includes(order.id));
+  const toggleAll = () => setSelected(allSelected ? selected.filter((id) => !filtered.some((order) => order.id === id)) : [...new Set([...selected, ...filtered.map((order) => order.id)])]);
+  const toggleRow = (id: string) => setSelected(selected.includes(id) ? selected.filter((item) => item !== id) : [...selected, id]);
+  const moveColumn = (target: ColumnKey) => {
+    if (!dragged || dragged === target) return;
+    const next = [...columns];
+    const from = next.findIndex((column) => column.key === dragged);
+    const to = next.findIndex((column) => column.key === target);
+    next.splice(to, 0, next.splice(from, 1)[0]);
+    setColumns(next);
+    setDragged(null);
+  };
+
+  const navItems = [{ label: 'Главная', icon: 'grid' }, { label: 'Пользователи', icon: 'users' }, { label: 'Заказы', icon: 'box', badge: '12' }, { label: 'Настройки', icon: 'settings' }];
+
+  return <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''}`}>
+    <aside className=\"sidebar\">
+      <div className=\"brand-row\"><div className=\"brand-mark\"><span /></div>{!collapsed && <span className=\"brand-name\">nord<span>line</span></span>}<button className=\"collapse-btn\" onClick={() => setCollapsed(!collapsed)} title={collapsed ? 'Развернуть меню' : 'Свернуть меню'}><Icon name=\"chevron\" size={16} /></button></div>
+      <div className=\"workspace-switch\"><span className=\"workspace-avatar\">N</span>{!collapsed && <><span className=\"workspace-copy\"><b>Nordline Store</b><small>Рабочее пространство</small></span><Icon name=\"down\" size={14} /></>}</div>
+      <div className=\"nav-label\">{!collapsed && 'МЕНЮ'}</div>
+      <nav className=\"main-nav\" aria-label=\"Основная навигация\">{navItems.map((item) => <button key={item.label} className={`nav-item ${activeNav === item.label ? 'active' : ''}`} onClick={() => setActiveNav(item.label)} title={collapsed ? item.label : undefined}><Icon name={item.icon} /><span>{!collapsed && item.label}</span>{!collapsed && item.badge && <em>{item.badge}</em>}</button>)}</nav>
+      <div className=\"sidebar-bottom\"><div className=\"help-card\"><div className=\"help-glyph\">✳</div>{!collapsed && <div><b>Нужна помощь?</b><small>Мы всегда на связи</small><button onClick={() => alert('Напишите нам: support@nordline.ru')}>Связаться с нами <Icon name=\"chevron\" size={12} /></button></div>}</div><div className=\"profile-row\"><span className=\"profile-avatar\">ИК</span>{!collapsed && <><span className=\"profile-copy\"><b>Ирина Кузнецова</b><small>Администратор</small></span><button className=\"profile-more\" title=\"Выйти\"><Icon name=\"logout\" size={16} /></button></>}</div></div>
+    </aside>
+
+    <main className=\"main-area\">
+      <header className=\"topbar\"><div className=\"breadcrumbs\"><span>Магазин</span><Icon name=\"chevron\" size={13} /><b>{activeNav}</b></div><div className=\"top-actions\"><span className=\"online-dot\" /><span className=\"store-status\">Магазин активен</span><button className=\"icon-button notification\" aria-label=\"Уведомления\"><Icon name=\"bell\" size={18} /><i /></button><span className=\"top-divider\" /><span className=\"top-profile\">ИК</span></div></header>
+
+      <div className=\"page-content\"><section className=\"page-heading\"><div><div className=\"eyebrow\">УПРАВЛЕНИЕ МАГАЗИНОМ <span>·</span> 04 НОЯБРЯ 2026</div><h1>Заказы</h1><p>Следите за заказами и управляйте покупками в одном месте.</p></div><button className=\"primary-button\" onClick={() => alert('Форма создания нового заказа')}><Icon name=\"plus\" size={17} /> Создать заказ</button></section>
+
+      <section className=\"metrics-grid\" aria-label=\"Сводка по заказам\"><article className=\"metric-card\"><div className=\"metric-top\"><span>Всего заказов</span><span className=\"metric-icon purple\"><Icon name=\"box\" size={17} /></span></div><div className=\"metric-value\">1 284</div><div className=\"metric-foot\"><span className=\"trend up\">↗ 12,8%</span><span>к прошлому месяцу</span></div><div className=\"sparkline purple-line\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></article><article className=\"metric-card\"><div className=\"metric-top\"><span>Выручка</span><span className=\"metric-icon green\"><b>₽</b></span></div><div className=\"metric-value\">₽ 2,4 млн</div><div className=\"metric-foot\"><span className=\"trend up\">↗ 8,2%</span><span>к прошлому месяцу</span></div><div className=\"sparkline green-line\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></article><article className=\"metric-card\"><div className=\"metric-top\"><span>В обработке</span><span className=\"metric-icon orange\"><span className=\"processing-ring\" /></span></div><div className=\"metric-value\">38</div><div className=\"metric-foot\"><span className=\"metric-note\">Требуют внимания</span><span>· сегодня</span></div><div className=\"sparkline orange-line\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></article><article className=\"metric-card\"><div className=\"metric-top\"><span>Средний чек</span><span className=\"metric-icon blue\"><span className=\"ruble\">₽</span></span></div><div className=\"metric-value\">₽ 1 869</div><div className=\"metric-foot\"><span className=\"trend down\">↘ 2,4%</span><span>к прошлому месяцу</span></div><div className=\"sparkline blue-line\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></article></section>
+
+      <section className=\"orders-panel\"><div className=\"panel-heading\"><div><h2>Все заказы <span className=\"count-chip\">1 284</span></h2><p>Просматривайте, сортируйте и управляйте заказами.</p></div><button className=\"outline-button\" onClick={() => alert('Отчёт по заказам подготовлен')}><Icon name=\"download\" size={16} /> Экспорт</button></div>
+        <div className=\"toolbar\"><label className=\"search-box\"><Icon name=\"search\" size={17} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder=\"Поиск по заказам...\" /><kbd>⌘ K</kbd></label><div className=\"toolbar-right\"><label className=\"filter-select\"><Icon name=\"filter\" size={16} /><select value={filter} onChange={(e) => setFilter(e.target.value)}><option>Все заказы</option><option>Выполнен</option><option>В обработке</option><option>Ожидает оплаты</option><option>Отменён</option></select><Icon name=\"down\" size={14} /></label><button className={`group-toggle ${grouped ? 'selected' : ''}`} onClick={() => setGrouped(!grouped)} title=\"Группировать по статусу\"><Icon name=\"sliders\" size={16} /><span>Группировка</span><i /></button><button className=\"icon-button view-more\" aria-label=\"Дополнительные действия\"><Icon name=\"more\" /></button></div></div>
+        {selected.length > 0 && <div className=\"selection-bar\"><b>Выбрано: {selected.length}</b><span>заказа</span><button onClick={() => setSelected([])}>Снять выделение</button><button className=\"bulk-action\" onClick={() => setFilter('В обработке')}>Изменить статус <Icon name=\"down\" size={13} /></button></div>}
+        <div className=\"table-scroll\"><table className=\"orders-table\"><thead><tr><th className=\"check-col\"><input type=\"checkbox\" checked={allSelected} onChange={toggleAll} aria-label=\"Выбрать все заказы\" /></th>{columns.map((column) => <th key={column.key} draggable onDragStart={() => setDragged(column.key)} onDragOver={(event) => event.preventDefault()} onDrop={() => moveColumn(column.key)} onDragEnd={() => setDragged(null)} className={dragged === column.key ? 'dragging' : ''}><span className=\"drag-handle\"><Icon name=\"grip\" size={13} /></span>{column.label}{column.key === 'date' && <Icon name=\"down\" size={12} />}</th>)}<th className=\"more-col\"><button aria-label=\"Настроить таблицу\"><Icon name=\"more\" size={17} /></button></th></tr></thead><tbody>{groupedRows.map((group) => <>{group.status && <tr className=\"group-row\" key={`group-${group.status}`}><td colSpan={columns.length + 2}><span className={`group-dot ${group.status === 'Выполнен' ? 'done' : group.status === 'В обработке' ? 'processing' : group.status === 'Отменён' ? 'cancelled' : 'pending'}`} /><b>{group.status}</b><span className=\"group-count\">{group.rows.length}</span><Icon name=\"down\" size={14} /></td></tr>}{group.rows.map((order) => <tr key={order.id} className={selected.includes(order.id) ? 'row-selected' : ''}><td className=\"check-col\"><input type=\"checkbox\" checked={selected.includes(order.id)} onChange={() => toggleRow(order.id)} aria-label={`Выбрать ${order.id}`} /></td>{columns.map((column) => <td key={column.key}>{cellValue(order, column.key)}</td>)}<td className=\"more-col\"><button aria-label={`Действия ${order.id}`}><Icon name=\"more\" size={17} /></button></td></tr>)}</>)}</tbody></table>{filtered.length === 0 && <div className=\"empty-state\"><span className=\"empty-icon\"><Icon name=\"search\" size={22} /></span><b>Заказы не найдены</b><span>Попробуйте изменить запрос или фильтр.</span></div>}</div>
+        <footer className=\"table-footer\"><span>Показано <b>{filtered.length ? (page - 1) * 10 + 1 : 0}–{Math.min(page * 10, filtered.length)}</b> из <b>{filtered.length}</b> заказов</span><div className=\"pagination\"><button disabled={page === 1} onClick={() => setPage(Math.max(1, page - 1))}>← <span>Назад</span></button><button className=\"page-number active-page\" onClick={() => setPage(1)}>1</button><button className=\"page-number\" onClick={() => setPage(2)}>2</button><button className=\"page-number\" onClick={() => setPage(3)}>3</button><span className=\"ellipsis\">…</span><button className=\"page-number\" onClick={() => setPage(12)}>12</button><button disabled={page >= 12} onClick={() => setPage(Math.min(12, page + 1))}><span>Далее</span> →</button></div></footer>
+      </section><div className=\"page-footnote\"><span>Последнее обновление: только что</span><button onClick={() => window.location.reload()}>Обновить данные ↻</button></div></div>
+    </main>
+  </div>;
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json includes only @gravity-ui/uikit and no @gravity-ui/navigation or @gravity-ui/table; src/App.tsx implements the sidebar as a native <aside> with custom buttons and the orders grid as a native <table>. Column drag, checkbox selection, and grouping are custom state/DOM logic, with no AsideHeader, useTable, or ColumnReorderingProvider present.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

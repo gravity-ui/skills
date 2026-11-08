@@ -1,0 +1,102 @@
+{
+  "status": "passed",
+  "duration": 164.943,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 67727,
+    "outputTokens": 1624,
+    "cacheReadTokens": 98624,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 93,
+    "totalTokens": 167975
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package.json ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; cat src/App.tsx; printf '\\\\n--- main ---\\\\n'; cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit -path '*docs*' -iname '*dialog*' -o -path '*docs*' -iname '*modal*' | head -20; printf '\\\\n--- dialog docs ---\\\\n'; if [ -f node_modules/@gravity-ui/uikit/build/docs/components/Dialog/README.md ]; then sed -n '1,180p' node_modules/@gravity-ui/uikit/build/docs/components/Dialog/README.md; elif [ -f node_modules/@gravity-ui/uikit/dist/docs/... ]; then :; fi\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -l \\\"declare const Dialog|interface DialogProps|type DialogProps|interface ModalProps|declare const Modal\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -20; printf '\\\\n--- docs dirs ---\\\\n'; find node_modules/@gravity-ui/uikit -maxdepth 3 -type d \\\\( -name docs -o -name README.md \\\\) | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts; printf '\\\\n--- types ---\\\\n'; rg -n \\\"DialogProps|ButtonProps|size|view|onUpdate|open\\\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts | head -100; printf '\\\\n--- button types ---\\\\n'; rg -n \\\"interface ButtonProps|view:|size:\\\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"view|size|onClick\\\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Button/*.d.ts | head -60; printf '\\\\n--- dialog footer/header props ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"type ButtonView|type ButtonSize\\\" node_modules/@gravity-ui/uikit/build/esm/components/Button -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; printf '\\\\n--- constants ---\\\\n'; rg -n \\\"BUTTON_VIEWS|BUTTON_SIZES\\\" node_modules/@gravity-ui/uikit/build/esm/components/Button -g '*.js' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 67727,
+      "outputTokens": 1624,
+      "cacheReadTokens": 98624,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 93,
+      "totalTokens": 167975
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

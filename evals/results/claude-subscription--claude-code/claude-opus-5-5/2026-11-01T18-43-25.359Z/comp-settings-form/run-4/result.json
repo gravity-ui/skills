@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "duration": 497.402,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 34,
+    "outputTokens": 14017,
+    "cacheReadTokens": 507226,
+    "cacheWriteTokens": 30852,
+    "totalTokens": 552129
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 2
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/options.ts",
+      "/home/sandbox/workspace/src/ProfileSettings.css",
+      "/home/sandbox/workspace/src/ProfileSettings.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git ls-files | head -50; ls node_modules 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cat src/*.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; ls -R __agent_eval__ | head; ls node_modules/@gravity-ui; ls node_modules/@gravity-ui/uikit/build/esm/components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Switch/Switch.d.ts Checkbox/Checkbox.d.ts 2>/dev/null | head -60; ls Select FilePreview Avatar 2>/dev/null; cat Select/types.d.ts | head -120",
+        "success": true
+      },
+      {
+        "command": "cat Avatar/types/*.d.ts | head -80; cat controls/TextInput/TextInput.d.ts | head -60; cat ../hooks/useFileInput/useFileInput.d.ts 2>/dev/null; ls ../hooks; cat ControlLabel/*.d.ts | head; ls layout; cat Text/Text.d.ts | head -30; cat ../../../package.json | grep -n '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && cat uikit/build/esm/components/Avatar/AvatarImage/types.d.ts uikit/build/esm/components/Avatar/AvatarText/types.d.ts; sed -n 1,80p uikit/build/esm/components/layout/Flex/Flex.d.ts | grep -nE 'gap|direction|alignItems|justify|wrap|spacing' ; cat uikit/build/esm/components/Card/Card.d.ts | head -30; ls icons | head -3; ls icons/*.js 2>/dev/null | grep -iE 'upload|person|trash' | head; grep -o \"'[a-z-]*'\" uikit/build/esm/components/Text/text/text.d.ts | sort -u | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "grep -n -A8 '\"dependencies\"\\|\"peerDependencies\"' uikit/package.json; ls icons/*.d.ts | grep -iE 'ArrowUpFromLine|TrashBin|Camera' ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -iE 'playwright|puppeteer|jsdom|testing-library|happy'",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { test, expect } from 'vitest';\nimport { App } from '/home/sandbox/workspace/src/App';\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  for (const s of ['Настройки профиля','Имя','Email','Загрузить фото','Язык интерфейса','Часовой пояс','Русский','(UTC+03:00) Москва','Двухфакторная авторизация','role=\"switch\"','Новости продукта','Системные алерты','Дайджест за неделю','Сохранить','Отмена','type=\"file\"']) expect(html, s).toContain(s);\n  expect((html.match(/type=\"checkbox\"/g)||[]).length).toBeGreaterThanOrEqual(3);\n});\nEOF\nnpx vitest run --root / /tmp/smoke/smoke.test.tsx 2>&1 | tail -15; rm -rf /tmp/smoke",
+        "success": true
+      },
+      {
+        "command": "rm -rf /tmp/smoke && cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { test, expect } from 'vitest';\nimport { App } from './App';\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  for (const s of ['Настройки профиля','Имя','Email','Загрузить фото','Язык интерфейса','Часовой пояс','Русский','(UTC+03:00) Москва','Двухфакторная авторизация','role=\"switch\"','Новости продукта','Системные алерты','Дайджест за неделю','Сохранить','Отмена','type=\"file\"']) expect(html, s).toContain(s);\n  expect((html.match(/type=\"checkbox\"/g)||[]).length).toBeGreaterThanOrEqual(3);\n});\nEOF\ntimeout 120 npx vitest run src/__smoke.test.tsx 2>&1 | tail -15; rm -f src/__smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { test, expect } from 'vitest';\nimport { App } from './App';\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  for (const s of ['Настройки профиля','Имя','Email','Загрузить фото','Язык интерфейса','Часовой пояс','Русский','(UTC+03:00) Москва','Двухфакторная авторизация','role=\"switch\"','Новости продукта','Системные алерты','Дайджест за неделю','Сохранить','Отмена','type=\"file\"']) expect(html, s).toContain(s);\n  expect((html.match(/type=\"checkbox\"/g)||[]).length).toBeGreaterThanOrEqual(3);\n});\nEOF\ntimeout 120 npx vitest run src/__smoke.test.tsx --server.deps.inline=@gravity-ui/uikit 2>&1 | tail -15; rm -f src/__smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > __smoke.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()], test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ncat > src/__smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { test, expect } from 'vitest';\nimport { App } from './App';\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  for (const s of ['Настройки профиля','Имя','Email','Загрузить фото','Язык интерфейса','Часовой пояс','Русский','(UTC+03:00) Москва','Двухфакторная авторизация','role=\"switch\"','Новости продукта','Системные алерты','Дайджест за неделю','Сохранить','Отмена','type=\"file\"']) expect(html, s).toContain(s);\n  expect((html.match(/type=\"checkbox\"/g)||[]).length).toBeGreaterThanOrEqual(3);\n});\nEOF\ntimeout 120 npx vitest run src/__smoke.test.tsx -c __smoke.config.ts 2>&1 | tail -15; rm -f src/__smoke.test.tsx __smoke.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 34,
+      "outputTokens": 14017,
+      "cacheReadTokens": 507226,
+      "cacheWriteTokens": 30852,
+      "totalTokens": 552129
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T15:36:13.241Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

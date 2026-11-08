@@ -1,0 +1,47 @@
+/* Корень графика растягивается по контейнеру; высоту задаёт родитель. */
+.cpu-load-chart {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 160px;
+}
+
+/*
+ * Chrome графика берёт цвета из токенов Gravity UI, поэтому автоматически
+ * следует за текущей темой (light / dark / *-hc) без дублирования значений.
+ * Yagr читает эти переменные через getComputedStyle корня и рисует ими на canvas.
+ */
+.cpu-load-chart .yagr {
+    --yagr-font-family: var(--g-font-family-sans, Inter, sans-serif);
+    --yagr-background: var(--g-color-base-background);
+    --yagr-grid: var(--g-color-line-generic);
+    --yagr-axis-stroke: var(--g-color-text-secondary);
+    background-color: transparent;
+}
+
+/* Маркер курсора: заливка цветом ряда задаётся Yagr, кольцо — цветом поверхности. */
+.cpu-load-chart .yagr-point > span {
+    box-shadow: 0 0 0 2px var(--g-color-base-background);
+}
+
+/* Тултип рендерится в body и наследует токены от body.g-root_theme_* */
+.yagr-tooltip.cpu-load-chart__tooltip {
+    --yagr-tooltip-font-family: var(--g-font-family-sans, Inter, sans-serif);
+    background-color: var(--g-color-base-float);
+    color: var(--g-color-text-primary);
+    border-radius: 8px;
+    box-shadow: 0 1px 5px var(--g-color-sfx-shadow);
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .__title {
+    color: var(--g-color-text-secondary);
+    font-weight: 500;
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .__section_scale {
+    background-color: var(--g-color-base-generic);
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .yagr-tooltip__item {
+    font-variant-numeric: tabular-nums;
+}

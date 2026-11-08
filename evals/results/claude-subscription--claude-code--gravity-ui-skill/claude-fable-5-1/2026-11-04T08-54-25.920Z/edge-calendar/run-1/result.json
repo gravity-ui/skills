@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 1100.311,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 418,
+    "outputTokens": 5854,
+    "cacheReadTokens": 492510,
+    "cacheWriteTokens": 31851,
+    "totalTokens": 530633
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ----; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui; echo ----; cat /home/sandbox/workspace/AGENTS.md; echo ----; ls /home/sandbox/workspace; cat /home/sandbox/workspace/package.json",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ----; rg -n -C 6 -i 'date-components|calendar' .agents/skills/gravity-ui/references/package-routing.md | head -80; echo ---- SRC; find src -type f | xargs -I{} sh -c 'echo \"== {}\"; cat {}'; echo ---- ; cat index.html tsconfig.json vite.config.ts; ls __agent_eval__; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; npm install @gravity-ui/date-components @gravity-ui/date-utils 2>&1 | tail -15; echo ---- INSTALLED; node -p \"require('@gravity-ui/date-components/package.json').version\"; node -p \"require('@gravity-ui/date-utils/package.json').version\"; node -p \"JSON.stringify(require('@gravity-ui/date-components/package.json').peerDependencies)\"; echo ---- DOCS; ls node_modules/@gravity-ui/date-components; ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null || ls node_modules/@gravity-ui/date-components/build/docs 2>/dev/null || echo \"no local docs dir\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; for v in $(npm view @gravity-ui/date-components versions --json | node -e 'const a=JSON.parse(require(\"fs\").readFileSync(0));console.log(a.filter(v=>!v.includes(\"-\")).slice(-12).join(\" \"))'); do echo \"$v: $(npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null | tr -d '\\n ')\"; done",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -5; echo ---- INSTALLED; node -p \"require('@gravity-ui/date-components/package.json').version\"; node -p \"require('@gravity-ui/date-utils/package.json').version\"; echo ---- DOCS; ls node_modules/@gravity-ui/date-components; ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null || ls node_modules/@gravity-ui/date-components/build/docs 2>/dev/null || echo \"no local docs dir\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat node_modules/@gravity-ui/date-components/dist/docs/INDEX.md; echo ---- README; rg -n -C 8 -i 'required setup|install|import' node_modules/@gravity-ui/date-components/README.md | head -80; echo ---- CALENDAR; ls node_modules/@gravity-ui/date-components/dist/docs/components; cat node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md 2>/dev/null || cat node_modules/@gravity-ui/date-components/dist/docs/components/Calendar/README.md; echo ---- DATEPICKER; rg -n -C 3 'value|onUpdate|format|import|label' node_modules/@gravity-ui/date-components/dist/docs/components/DatePicker*.md node_modules/@gravity-ui/date-components/dist/docs/components/DatePicker/README.md 2>/dev/null | head -120; echo ---- TRAPS; sed -n 1,400p .agents/skills/gravity-ui/rules/hallucination-traps.md | rg -n -C 2 -i 'typography|Text variant|header-|flex|min-width' | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; F=/home/node/.claude/projects/-home-sandbox-workspace/8a289495-b160-40d9-90c2-5c156097275b/tool-results/bkuql23w4.txt; sed -n '/^---- CALENDAR/,/^---- DATEPICKER/p' $F | head -170",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; F=/home/node/.claude/projects/-home-sandbox-workspace/8a289495-b160-40d9-90c2-5c156097275b/tool-results/bkuql23w4.txt; echo ---- README; sed -n '/^---- README/,/^---- CALENDAR/p' $F | head -60; echo ---- TRAPS; sed -n '/^---- TRAPS/,$p' $F; echo ---- DTS; rg -n 'onUpdate|value\\?|selectionMode' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/hooks/*.d.ts 2>/dev/null | head -30; rg -n 'format\\(|isSame' node_modules/@gravity-ui/date-utils/build/typings/dateTime.d.ts 2>/dev/null | head -8; ls node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/; ls node_modules/@gravity-ui/date-components/dist/ | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts; echo ---- HOOK; rg -n 'onUpdate|value' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/useCalendarState.d.ts 2>/dev/null | head -20; echo ---- CSS; rg -n \"\\.css\" node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.js | head -3; echo ---- UIKIT; rg -n \"export \\* from './(Text|Flex|Card)'\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; rg -n 'onUpdate|value\\?|defaultValue' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/useCalendarState.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/types.d.ts | head; ls node_modules/@gravity-ui/uikit/build/esm/components/ | rg -x 'Text|Flex|Card|layout' ; rg -n 'gap\\?|direction\\?' node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts | head -4",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Card, Flex, Text } from '@gravity-ui/uikit';\nimport { Calendar } from '@gravity-ui/date-components';\nimport { dateTime } from '@gravity-ui/date-utils';\nimport type { DateTime } from '@gravity-ui/date-utils';\n\nexport function App() {\n  const [date, setDate] = useState<DateTime | null>(() => dateTime());\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 24, maxWidth: 480 }}>\n      <Text variant=\"header-1\" as=\"h1\">\n        Выбор даты\n      </Text>\n\n      <Card view=\"outlined\" style={{ padding: 16 }}>\n        <Flex direction=\"column\" gap={3} alignItems=\"flex-start\">\n          <Calendar\n            aria-label=\"Календарь выбора даты\"\n            value={date}\n            onUpdate={setDate}\n            size=\"l\"\n          />\n          <Text variant=\"body-2\" color=\"secondary\">\n            Выбранная дата:{' '}\n            <Text variant=\"body-2\" color=\"primary\">\n              {date ? date.format('DD.MM.YYYY') : 'не выбрана'}\n            </Text>\n          </Text>\n        </Flex>\n      </Card>\n    </Flex>\n  );\n}\nEOF\nrg -n 'alignItems\\?' node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts | head -2; rg -n \"view\\?\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head -2; rg -n \"color\\?|as\\?\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts | head -4; echo ---- BUILD; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat .gitignore 2>/dev/null; git status --short | head; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; rm -rf dist; git diff package.json; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 418,
+      "outputTokens": 5854,
+      "cacheReadTokens": 492510,
+      "cacheWriteTokens": 31851,
+      "totalTokens": 530633
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

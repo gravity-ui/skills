@@ -1,0 +1,142 @@
+{
+  "status": "passed",
+  "duration": 311.094,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 36684,
+    "outputTokens": 4283,
+    "cacheReadTokens": 392164,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 873,
+    "totalTokens": 433131
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 17,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' -g 'src/**' -g '*.{ts,tsx,js,jsx,json,md}' | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; sed -n '1,240p' src/App.tsx; printf '\\\\n--- main ---\\\\n'; sed -n '1,120p' src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- uikit docs i18n/configure ---'; rg -n -i \\\"configure\\\\(|configure.*lang|I18n|lang\\\" node_modules/@gravity-ui/uikit/build/docs node_modules/@gravity-ui/uikit/README.md 2>/dev/null | head -80; printf '%s\\\\n' '--- i18n package presence ---'; cat node_modules/@gravity-ui/i18n/package.json 2>/dev/null | head -60 || true; printf '%s\\\\n' '--- uikit d.ts configure ---'; rg -n \\\"declare function configure|function configure|type Lang|Lang =\\\" node_modules/@gravity-ui/uikit/dist -g '*.d.ts' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '78,108p' node_modules/@gravity-ui/uikit/README.md; printf '\\\\n--- i18n docs/types ---\\\\n'; sed -n '1,220p' node_modules/@gravity-ui/i18n/README.md; printf '\\\\n--- i18n index types ---\\\\n'; sed -n '1,240p' node_modules/@gravity-ui/i18n/build/esm/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n -i \"''^#.*Select|<Select|onUpdate|value=|SelectProps\" node_modules/@gravity-ui/uikit/build/docs/components/select* node_modules/@gravity-ui/uikit/build/docs -g '\"'*.md' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit; find node_modules/@gravity-ui/uikit -maxdepth 3 -iname '*select*.d.ts' -o -iname '*select*.md' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit/build -iname '*select*.d.ts' -o -iname '*select*.js' | head -20; printf '\\\\n--- exports ---\\\\n'; rg -n \\\"export .*Select|declare const Select\\\" node_modules/@gravity-ui/uikit/build -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '45,140p' node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p src/i18n && ls'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n   const languageOptions = [\n-    { value: 'en', text: i18n.i18n('language', 'english') },\n-    { value: 'ru', text: i18n.i18n('language', 'russian') },\n+    { value: 'en' as const, text: i18n.i18n('language', 'english') },\n+    { value: 'ru' as const, text: i18n.i18n('language', 'russian') },\n   ];\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-  const languageOptions = [\n-    { value: 'en', text: i18n.i18n('language', 'english') },\n-    { value: 'ru', text: i18n.i18n('language', 'russian') },\n-  ];\n+  const languageOptions: { value: AppLanguage; text: string }[] = [\n+    { value: 'en', text: i18n.i18n('language', 'english') },\n+    { value: 'ru', text: i18n.i18n('language', 'russian') },\n+  ];\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || true; type -a apply_patch || true; find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-        onUpdate={([nextLanguage]) => nextLanguage && setLanguage(nextLanguage)}\n+        onUpdate={([nextLanguage]) => {\n+          if (nextLanguage === 'en' || nextLanguage === 'ru') {\n+            setLanguage(nextLanguage);\n+          }\n+        }}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('fs');const p='src/App.tsx';let s=fs.readFileSync(p,'utf8');s=s.replace(\\\\\\\"onUpdate={([nextLanguage]) => nextLanguage && setLanguage(nextLanguage)}\\\\\\\", \\\\\\\"onUpdate={([nextLanguage]) => {\\\\\\\\n          if (nextLanguage === 'en' || nextLanguage === 'ru') {\\\\\\\\n            setLanguage(nextLanguage);\\\\\\\\n          }\\\\\\\\n        }}\\\\\\\");fs.writeFileSync(p,s)\\\"; npm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36684,
+      "outputTokens": 4283,
+      "cacheReadTokens": 392164,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 873,
+      "totalTokens": 433131
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

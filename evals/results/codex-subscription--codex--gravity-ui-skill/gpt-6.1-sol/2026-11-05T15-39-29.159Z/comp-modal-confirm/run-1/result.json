@@ -1,0 +1,112 @@
+{
+  "status": "failed",
+  "duration": 534.557,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 36624,
+    "outputTokens": 13476,
+    "cacheReadTokens": 300800,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1136,
+    "totalTokens": 350900
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 11,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/SKILL.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!pnpm-lock.yaml'\"' -g '\"'!yarn.lock'\"' -g '\"'!*'\"\\\\.svg' -g '\"'!*'\"\\\\.png' -g '\"'!*'\"\\\\.jpg' -g '\"'!*'\"\\\\.woff*' -g '\"'!*'\"\\\\.ico' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/rules/hallucination-traps.md && cat AGENTS.md && cat CLAUDE.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,125p' .agents/skills/gravity-ui/references/package-routing.md && cat package.json && cat src/App.tsx && cat src/main.tsx && cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Modal Text Label && cat node_modules/@gravity-ui/uikit/README.md && rg -n 'Modal|Button|ThemeProvider|Text' node_modules/@gravity-ui/uikit/build/docs/INDEX.md\"",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc \"bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button Modal Text Label; cat node_modules/@gravity-ui/uikit/README.md; rg --files node_modules/@gravity-ui/uikit | rg '(Modal|Button|Text|Label|theme).*d.ts\"'$|docs/INDEX|Modal/README|Button/README'\"' | head -65\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Label/Label.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 3 'base-(float|background|generic|brand|positive)|line-generic|text-(secondary|hint|positive)|sfx-shadow|spacing|border-radius' .agents/skills/gravity-ui/references/theming.md | head -135; rg -n 'interface Popup|interface Overlay|aria-|disableEscape|disableOutside|onClose|focus' node_modules/@gravity-ui/uikit/build/esm/components/Popup/Popup.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Overlay/Overlay.d.ts; cat tsconfig.json; ls -a\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --check && git diff --stat && python3 - <<'PY'\nimport re\nfrom pathlib import Path\ncss = Path('src/App.css').read_text()\nused = set(re.findall(r'var\\\\((--g-[\\\\w-]+)', css))\nstyles = '\\\\n'.join(p.read_text() for p in Path('node_modules/@gravity-ui/uikit/styles').rglob('*.css'))\nmissing = sorted(t for t in used if t not in styles)\nprint('CSS tokens missing from installed theme:', missing)\nPY\nrg -n -C 2 'returnFocus|useRole|aria-labelledby|aria-describedby|role:|useDismiss' node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'JS'\nimport fs from 'node:fs';\nimport path from 'node:path';\nconst css = fs.readFileSync('src/App.css', 'utf8');\nconst tokens = [...new Set([...css.matchAll(/var\\\\((--g-[\\\\w-]+)/g)].map(m => m[1]))];\nfunction readCss(dir) { return fs.readdirSync(dir, {withFileTypes:true}).flatMap(e => e.isDirectory() ? readCss(path.join(dir,e.name)) : e.name.endsWith('.css') ? [fs.readFileSync(path.join(dir,e.name),'utf8')] : []); }\nconst theme = readCss('node_modules/@gravity-ui/uikit/styles').join('\\\\n');\nconsole.log('Missing theme tokens:',tokens.filter(t=>\"'!theme.includes(t)));\nJS\n git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36624,
+      "outputTokens": 13476,
+      "cacheReadTokens": 300800,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1136,
+      "totalTokens": 350900
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

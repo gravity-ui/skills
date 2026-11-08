@@ -1,0 +1,384 @@
+{
+  "status": "passed",
+  "duration": 1654.84,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.165.0"
+  },
+  "usage": {
+    "inputTokens": 147063,
+    "outputTokens": 38946,
+    "cacheReadTokens": 5129088,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 8351,
+    "totalTokens": 5315097
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 67,
+      "web_fetch": 0,
+      "web_search": 2,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 69,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*monitor*' -g '*Monitor*' -g '*theme*' -g '*Theme*' -g 'README*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g '\"'!node_modules'\"' -g '\"'!dist'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && find .. -name AGENTS.md -print && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!.git'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat tsconfig.json && rg 'useTheme|ThemeContext|interface ThemeProvider' node_modules/@gravity-ui/uikit/build/esm/components/theme -n && npm view @gravity-ui/yagr version description repository.url && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/yagr && npm view @playwright/test version && cat node_modules/@gravity-ui/yagr/package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/yagr/dist/index.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/index.d.ts && rg -n 'interface|theme|resize|setData|setTheme|setConfig|dispose|destroy' node_modules/@gravity-ui/yagr/dist/types.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/types.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/plotLines/types.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/dynamic-updates.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/types.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/plotLines/plotLines.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'dispose\\\\(|onResize =|reflow\\\\(|setTheme\\\\(|setSeries\\\\(|setScales\\\\(|onSelect|timeMultiplier' node_modules/@gravity-ui/yagr/dist/yagr.mjs | tail -45 && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/cursor/cursor.d.ts && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/legend/legend.d.ts && ls node_modules | rg 'playwright|puppeteer'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '7500,7545p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '8100,8158p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '8455,8555p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && cat index.html && cat vite.config.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeSettingsContext.d.ts && sed -n '8260,8310p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '7760,7800p' node_modules/@gravity-ui/yagr/dist/yagr.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {useMemo, useState, useSyncExternalStore} from 'react';\nimport {useThemeType} from '@gravity-ui/uikit';\nimport {CpuChart} from './CpuChart';\nimport {createDemoSource} from './telemetry';\nimport './styles.css';\n\ntype IconName = 'activity' | 'server' | 'clock' | 'chevron' | 'arrow' | 'download' | 'sun' | 'moon' | 'pause' | 'play' | 'reset' | 'settings' | 'cpu' | 'expand';\nfunction Icon({name, size = 18}: {name: IconName; size?: number}) {\n  const paths: Record<IconName, React.ReactNode> = {\n    activity: <path d=\\\"M3 12h4l3-8 4 16 3-8h4\\\" />,\n    server: <><rect x=\\\"4\\\" y=\\\"3\\\" width=\\\"16\\\" height=\\\"7\\\" rx=\\\"2\\\" /><rect x=\\\"4\\\" y=\\\"14\\\" width=\\\"16\\\" height=\\\"7\\\" rx=\\\"2\\\" /><path d=\\\"M8 6.5h.01M8 17.5h.01M15 6.5h2M15 17.5h2\\\" /></>,\n    clock: <><circle cx=\\\"12\\\" cy=\\\"12\\\" r=\\\"8.5\\\" /><path d=\\\"M12 7v5l3 2\\\" /></>,\n    chevron: <path d=\\\"m9 5 7 7-7 7\\\" />,\n    arrow: <path d=\\\"m7 14 4-4 3 3 4-6M13 7h5v5\\\" />,\n    download: <path d=\\\"M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4\\\" />,\n    sun: <><circle cx=\\\"12\\\" cy=\\\"12\\\" r=\\\"4\\\" /><path d=\\\"M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5\\\" /></>,\n    moon: <path d=\\\"M20.5 14A9 9 0 0 1 10 3.5 9 9 0 1 0 20.5 14Z\\\" />,\n    pause: <path d=\\\"M9 5v14M15 5v14\\\" />,\n    play: <path d=\\\"m8 5 11 7-11 7Z\\\" />,\n    reset: <path d=\\\"M4 10a8 8 0 1 1 1 7M4 4v6h6\\\" />,\n    settings: <><path d=\\\"M4 7h16M4 17h16\\\" /><circle cx=\\\"9\\\" cy=\\\"7\\\" r=\\\"2\\\" /><circle cx=\\\"15\\\" cy=\\\"17\\\" r=\\\"2\\\" /></>,\n    cpu: <><rect x=\\\"6\\\" y=\\\"6\\\" width=\\\"12\\\" height=\\\"12\\\" rx=\\\"2\\\" /><rect x=\\\"9\\\" y=\\\"9\\\" width=\\\"6\\\" height=\\\"6\\\" rx=\\\"1\\\" /><path d=\\\"M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3\\\" /></>,\n    expand: <path d=\\\"M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5\\\" />,\n  };\n  return <svg width={size} height={size} viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" stroke=\\\"currentColor\\\" strokeWidth=\\\"1.6\\\" strokeLinecap=\\\"round\\\" strokeLinejoin=\\\"round\\\" aria-hidden=\\\"true\\\">{paths[name]}</svg>;\n}\n\nconst percent = (value: number) => value.toLocaleString('ru-RU', {minimumFractionDigits: 1, maximumFractionDigits: 1});\nconst dateTime = (time: number) => new Date(time).toLocaleString('ru-RU', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'});\nconst noSubscription = () => () => {};\n\nexport function App({onToggleTheme}: {onToggleTheme: () => void}) {\n  const theme = useThemeType();\n  const [source] = useState(createDemoSource);\n  const [live, setLive] = useState(true);\n  const [hours, setHours] = useState(24);\n  const [resetToken, setResetToken] = useState(0);\n  const [threshold, setThreshold] = useState(true);\n  const [expanded, setExpanded] = useState(false);\n  const data = useSyncExternalStore(live ? source.subscribe : noSubscription, source.getSnapshot);\n  const start = data.updatedAt - hours * 3_600_000;\n  const rangeStats = useMemo(() => {\n    const first = data.timeline.findIndex((time) => time >= data.updatedAt - hours * 3_600_000);\n    const values = data.values.slice(Math.max(0, first));\n    let sum = 0;\n    let maximum = 0;\n    const histogram = new Uint32Array(1001);\n    for (const value of values) {\n      sum += value;\n      maximum = Math.max(maximum, value);\n      histogram[Math.round(value * 10)]++;\n    }\n    let count = 0;\n    let p95 = 0;\n    for (let i = 0; i < histogram.length; i++) {\n      count += histogram[i];\n      if (count >= Math.ceil(values.length * 0.95)) {p95 = i / 10; break;}\n    }\n    return {average: sum / (values.length || 1), maximum, p95};\n  }, [data, hours]);\n  const peaks = useMemo(() => {\n    const result: {time: number; value: number}[] = [];\n    for (let i = data.values.length - 2; i > 0; i--) {\n      if (data.values[i] >= 65 && data.values[i] >= data.values[i - 1] && data.values[i] > data.values[i + 1]\n        && (\"'!result.length || result.at(-1)!.time - data.timeline[i] > 3_600_000)) {\n        result.push({time: data.timeline[i], value: data.values[i]});\n        if (result.length === 3) break;\n      }\n    }\n    return result;\n  }, [data]);\n\n  function exportCsv() {\n    const rows = ['\"'timestamp,cpu_percent'];\n    data.timeline.forEach((time, index) => {\n      if (time >= start) rows.push(\"'`${new Date(time).toISOString()},${data.values[index]}`);\n    });\n    const url = URL.createObjectURL(new Blob([rows.join('\"'\\\\n')], {type: 'text/csv;charset=utf-8'}));\n    const link = document.createElement('a');\n    link.href = url;\n    link.download = \"'`cpu-${hours}h-${new Date(data.updatedAt).toISOString().slice(0, 10)}.csv`;\n    link.click();\n    setTimeout(() => URL.revokeObjectURL(url), 0);\n  }\n\n  return <div className=\"app-shell\" data-theme={theme}>\n    <aside className=\"sidebar\">\n      <a className=\"brand\" href=\"#overview\" aria-label=\"Pulse — главная\"><span className=\"brand-icon\"><Icon name=\"activity\" size={23} /></span>pulse<span className=\"brand-dot\">.</span></a>\n      <div className=\"workspace-label\">РАБОЧЕЕ ПРОСТРАНСТВО</div>\n      <div className=\"workspace\"><span className=\"workspace-avatar\">A</span><div><strong>Acme Infrastructure</strong><small>Основное пространство</small></div><span className=\"workspace-dots\">⌘</span></div>\n      <div className=\"nav-label\">ИНФРАСТРУКТУРА</div>\n      <nav aria-label=\"Основная навигация\">\n        <a href=\"#overview\" className=\"nav-item active\" aria-current=\"page\"><Icon name=\"activity\" />Мониторинг<span className=\"nav-active-dot\" /></a>\n        <a href=\"#system\" className=\"nav-item\"><Icon name=\"server\" />Сервер<span className=\"nav-count\">1</span></a>\n        <a href=\"#events\" className=\"nav-item\"><Icon name=\"clock\" />История нагрузки</a>\n      </nav>\n      <div className=\"sidebar-bottom\"><div className=\"connection\"><span className=\"status-dot\" />Демонстрационный режим</div><div className=\"profile\"><span className=\"profile-avatar\">АК</span><div><strong>Алексей К.</strong><small>Администратор</small></div><span className=\"profile-more\">···</span></div></div>\n    </aside>\n\n    <div className=\"page\">\n      <header className=\"topbar\"><div className=\"breadcrumbs\"><span>Инфраструктура</span><Icon name=\"chevron\" size={13} /><strong>Мониторинг</strong></div><div className=\"topbar-right\"><span className=\"environment\"><span className=\"status-dot\" />Production</span><span className=\"topbar-divider\" /><button className=\"icon-button theme-button\" onClick={onToggleTheme} aria-label={theme === '\"'light' ? 'Включить тёмную тему' : 'Включить светлую тему'} title=\\\"Переключить тему\\\"><Icon name={theme === 'light' ? 'moon' : 'sun'} /></button><span className=\\\"header-avatar\\\">АК</span></div></header>\n      <main id=\\\"overview\\\">\n        <div className=\\\"page-heading\\\"><div><div className=\\\"eyebrow\\\">ОБЗОР ИНФРАСТРУКТУРЫ</div><h1>Мониторинг</h1><p>Все показатели вашего сервера — в одном месте.</p></div><button className=\\\"button export-button\\\" onClick={exportCsv}><Icon name=\\\"download\\\" size={16} />Экспорт данных</button></div>\n\n        <div className=\\\"server-bar\\\"><div className=\\\"server-identity\\\"><span className=\\\"server-icon\\\"><Icon name=\\\"server\\\" size={19} /></span><strong>production-01</strong><span className=\\\"server-ip\\\">10.128.0.24</span><span className=\\\"healthy\\\"><span className=\\\"status-dot\\\" />В норме</span></div><span className=\\\"server-region\\\">eu-central-1 <span>·</span> Ubuntu 24.04</span></div>\n\n        <div className=\\\"metric-grid\\\">\n          {[\n            {label: 'Текущая загрузка', value: data.current, caption: live ? 'Обновляется каждые 2 секунды' : 'Обновления приостановлены', icon: 'cpu' as IconName, className: 'current'},\n            {label: 'Средняя загрузка', value: rangeStats.average, caption: \"'`За последние ${hours} ч`, icon: '\"'activity' as IconName, className: ''},\n            {label: 'Пиковая загрузка', value: rangeStats.maximum, caption: \"'`Максимум за ${hours} ч`, icon: '\"'arrow' as IconName, className: ''},\n            {label: '95-й перцентиль', value: rangeStats.p95, caption: '95% значений ниже этого уровня', icon: 'settings' as IconName, className: ''},\n          ].map((metric) => <article className={\"'`metric-card ${metric.className}`} key={metric.label}><div className=\"metric-label\">{metric.label}<Icon name={metric.icon} size={17} /></div><div className=\"metric-value\">{percent(metric.value)}<span>%</span>{metric.className === '\"'current' && <span className=\\\"metric-status\\\">В норме</span>}</div><div className=\\\"metric-caption\\\">{metric.className === 'current' && <span className={live ? 'status-dot' : 'status-dot paused-dot'} />}{metric.caption}</div></article>)}\n        </div>\n\n        <section className={\"'`chart-card ${expanded ? '\"'chart-expanded' : ''}\"'`} aria-labelledby=\"chart-title\">\n          <div className=\"chart-heading\"><div><div className=\"chart-title-line\"><h2 id=\"chart-title\">Загрузка CPU</h2><span className={`live-badge ${!live ? '\"'is-paused' : ''}\"'`}><span className=\"status-dot\" />{live ? '\"'В реальном времени' : 'На паузе'}</span></div><p>Использование процессора за последние {hours} часа</p></div><div className=\\\"chart-heading-actions\\\"><button className=\\\"icon-button\\\" onClick={() => setExpanded(\"'!expanded)} aria-label={expanded ? '\"'Свернуть график' : 'Развернуть график'} title={expanded ? 'Свернуть график' : 'Развернуть график'}><Icon name=\\\"expand\\\" size={16} /></button><details className=\\\"chart-settings\\\"><summary className=\\\"icon-button\\\" aria-label=\\\"Настройки графика\\\" title=\\\"Настройки графика\\\"><Icon name=\\\"settings\\\" size={17} /></summary><div className=\\\"settings-popover\\\"><strong>Отображение</strong><label><input type=\\\"checkbox\\\" checked={threshold} onChange={(e) => setThreshold(e.target.checked)} />Порог нагрузки 80%</label></div></details></div></div>\n          <div className=\\\"chart-toolbar\\\"><div className=\\\"range-control\\\" role=\\\"group\\\" aria-label=\\\"Период графика\\\">{[1, 6, 12, 24].map((value) => <button key={value} onClick={() => setHours(value)} className={hours === value ? 'selected' : ''} aria-pressed={hours === value}>{value} ч</button>)}</div><div className=\\\"chart-controls\\\"><button className=\\\"reset-button\\\" onClick={() => setResetToken((token) => token + 1)} title=\\\"Сбросить масштаб\\\"><Icon name=\\\"reset\\\" size={14} /><span>Сбросить масштаб</span></button><span className=\\\"control-divider\\\" /><button className={\"'`button live-control ${live ? '\"'' : 'resume'}\"'`} onClick={() => setLive(!live)}><Icon name={live ? '\"'pause' : 'play'} size={14} />{live ? 'Пауза' : 'Продолжить'}</button></div></div>\n          <div className=\\\"chart-legend\\\"><span><i className=\\\"legend-line\\\" />CPU, %</span>{threshold && <span><i className=\\\"legend-threshold\\\" />Порог 80%</span>}<span className=\\\"chart-date\\\">{dateTime(start)} — {dateTime(data.updatedAt)}</span></div>\n          <CpuChart source={source} live={live} hours={hours} resetToken={resetToken} threshold={threshold} />\n          <div className=\\\"chart-footer\\\"><span><Icon name=\\\"expand\\\" size={13} />Выделите область для увеличения · двойной клик для сброса</span><span><span className={live ? 'status-dot' : 'status-dot paused-dot'} />{data.values.length.toLocaleString('ru-RU')} точек<span className=\\\"footer-separator\\\">·</span>Шаг 2 сек</span></div>\n        </section>\n\n        <div className=\\\"details-grid\\\">\n          <section className=\\\"detail-card\\\" id=\\\"system\\\"><div className=\\\"detail-card-heading\\\"><h2>О сервере</h2><Icon name=\\\"server\\\" size={17} /></div><dl className=\\\"server-details\\\"><div><dt>Процессор</dt><dd>Intel Xeon Platinum</dd></div><div><dt>Виртуальные ядра</dt><dd>8 vCPU</dd></div><div><dt>Оперативная память</dt><dd>32 ГБ</dd></div><div><dt>Источник данных</dt><dd><span className=\\\"demo-label\\\">Демонстрационный поток</span></dd></div></dl></section>\n          <section className=\\\"detail-card\\\" id=\\\"events\\\"><div className=\\\"detail-card-heading\\\"><h2>Последние пики нагрузки</h2><span className=\\\"subtle-label\\\">За 24 часа</span></div><div className=\\\"events\\\">{peaks.length ? peaks.map((peak) => <div className=\\\"event\\\" key={peak.time}><span className={\"'`event-icon ${peak.value >= 80 ? '\"'warning' : ''}\"'`}><Icon name={peak.value >= 80 ? '\"'arrow' : 'activity'} size={15} /></span><div><strong>Загрузка CPU достигла {percent(peak.value)}%</strong><small>{peak.value >= 80 ? 'Превышен порог нагрузки 80%' : 'Нагрузка в пределах допустимого'}</small></div><time dateTime={new Date(peak.time).toISOString()}>{new Date(peak.time).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'})}</time></div>) : <p className=\\\"empty-events\\\">За последние сутки пиков выше 65% не было.</p>}</div></section>\n        </div>\n        <footer className=\\\"page-footer\\\"><span><span className=\\\"status-dot\\\" />Демонстрационные данные · без подключения к серверу</span><span>Последнее обновление: {new Date(data.updatedAt).toLocaleTimeString('ru-RU')}</span></footer>\n      </main>\n    </div>\n  </div>;\n}\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/styles.css <<'EOF'\n*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,\\\"YS Text\\\",-apple-system,BlinkMacSystemFont,\\\"Segoe UI\\\",sans-serif;-webkit-font-smoothing:antialiased}button,a,input,summary{-webkit-tap-highlight-color:transparent}button,input{font:inherit}button,a,summary{touch-action:manipulation}button{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid #ad94ff;outline-offset:3px}button{color:inherit}svg{flex-shrink:0}button{transition:background .15s,border-color .15s}button:disabled{cursor:default}.app-shell{--bg:#f7f8fb;--surface:#fff;--sidebar:#fff;--text:#252630;--muted:#858895;--secondary:#636775;--border:#e9eaf0;--subtle:#f8f9fb;--accent:#8060df;--accent-bg:#f0ebfc;--green:#299774;--green-bg:#edf8f3;min-height:100vh;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}.app-shell[data-theme=dark]{--bg:#15151d;--surface:#1d1d27;--sidebar:#191922;--text:#e9e8f0;--muted:#9391a4;--secondary:#b1adbf;--border:#30303e;--subtle:#24242f;--accent:#b39af7;--accent-bg:#302641;--green:#69c5a3;--green-bg:#21372f;color-scheme:dark}.sidebar{width:232px;position:fixed;inset:0 auto 0 0;background:var(--sidebar);border-right:1px solid var(--border);padding:30px 17px 0;display:flex;flex-direction:column;z-index:10}.brand{display:flex;align-items:center;font-size:29px;font-weight:750;letter-spacing:-1.3px;line-height:36px;padding-left:12px;width:fit-content}.brand-icon{background:#8562e6;color:#fff;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;margin-right:10px}.brand-dot{color:#9771ee}.workspace-label,.nav-label{font-size:9px;letter-spacing:1.25px;font-weight:650;color:var(--muted);padding-left:12px}.workspace-label{margin-top:43px;margin-bottom:12px}.workspace{display:flex;align-items:center;gap:9px;padding:10px 9px;border:1px solid var(--border);border-radius:7px}.workspace-avatar{display:grid;place-items:center;width:29px;height:29px;background:var(--accent-bg);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 15%,transparent);border-radius:6px;font-weight:600}.workspace strong{display:block;font-size:10.5px;font-weight:600}.workspace small{display:block;font-size:9px;color:var(--muted);margin-top:2px}.workspace-dots{margin-left:auto;color:var(--muted);font-size:14px}.nav-label{margin:32px 0 13px}.nav-item{display:flex;align-items:center;gap:11px;padding:11px 12px;margin:3px 0;color:var(--secondary);border-radius:6px;font-size:12px}.nav-item:hover{background:var(--subtle)}.nav-item.active{background:var(--accent-bg);color:var(--accent);font-weight:600}.nav-active-dot{margin-left:auto;width:5px;height:5px;border-radius:50%;background:var(--accent)}.nav-count{margin-left:auto;display:grid;place-items:center;font-size:10px;width:18px;height:18px;border-radius:4px;background:var(--subtle);border:1px solid var(--border)}.sidebar-bottom{margin-top:auto}.connection{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted);padding:20px 10px}.status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}.profile{border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:20px 8px}.profile-avatar,.header-avatar{background:#ece8f5;color:#756285;display:grid;place-items:center;border-radius:50%;font-size:10px;font-weight:600}.profile-avatar{width:33px;height:33px}.profile strong{font-size:11px;font-weight:600;display:block}.profile small{font-size:10px;color:var(--muted);display:block}.profile-more{margin-left:auto;letter-spacing:1px;color:var(--muted)}.page{margin-left:232px;min-width:0}.topbar{height:69px;display:flex;align-items:center;justify-content:space-between;padding:0 37px;background:var(--surface);border-bottom:1px solid var(--border)}.breadcrumbs{display:flex;align-items:center;gap:15px;font-size:11px;color:var(--muted)}.breadcrumbs strong{font-weight:500;color:var(--text)}.topbar-right{display:flex;align-items:center;gap:17px}.environment{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--secondary)}.topbar-divider{width:1px;height:18px;background:var(--border)}.icon-button{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:0;border-radius:5px;background:transparent;color:var(--muted)}.icon-button:hover{background:var(--subtle);color:var(--accent)}.header-avatar{width:29px;height:29px}main{max-width:1510px;margin:auto;padding:32px 37px 20px;scroll-margin-top:20px}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:25px}.eyebrow{font-size:9px;letter-spacing:1.35px;font-weight:600;color:var(--muted);margin-bottom:5px}h1{font-size:28px;font-weight:650;line-height:1.4;letter-spacing:-.8px;margin:0}h2{font-size:14px;font-weight:600;letter-spacing:-.2px;margin:0}p{margin:5px 0 0;color:var(--muted);font-size:12px}.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);padding:8px 12px;font-size:11px;font-weight:500;white-space:nowrap}.button:hover{background:var(--subtle);border-color:color-mix(in srgb,var(--muted) 40%,transparent)}.export-button{margin-top:12px;box-shadow:0 1px 2px #00000003}.server-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:19px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px 16px}.server-identity{display:flex;align-items:center;gap:11px}.server-icon{display:grid;place-items:center;background:var(--subtle);border:1px solid var(--border);border-radius:6px;width:31px;height:31px;color:var(--secondary)}.server-identity strong{font-size:12px;font-weight:600;letter-spacing:-.1px}.server-ip{font-size:10px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}.healthy{display:flex;align-items:center;gap:5px;background:var(--green-bg);color:var(--green);font-size:9px;border-radius:4px;padding:3px 7px;margin-left:4px}.healthy .status-dot{width:4px;height:4px}.server-region{font-size:10px;color:var(--muted)}.server-region span{margin:0 7px}.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:23px}.metric-card{padding:17px 18px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px}.metric-card.current{border-color:color-mix(in srgb,var(--accent) 39%,var(--surface));background:linear-gradient(120deg,var(--surface),color-mix(in srgb,var(--accent-bg) 35%,var(--surface)))}.metric-label{display:flex;align-items:center;justify-content:space-between;color:var(--secondary);font-size:11px;gap:6px}.metric-label svg{color:var(--muted)}.current .metric-label svg{color:var(--accent)}.metric-value{display:flex;align-items:baseline;font-size:29px;font-weight:600;letter-spacing:-1px;margin:12px 0 9px;line-height:1.2;font-variant-numeric:tabular-nums}.metric-value>span{font-size:18px;letter-spacing:0;color:var(--muted);margin-left:3px;font-weight:400}.metric-value .metric-status{font-size:8px;letter-spacing:0;font-weight:500;color:var(--green);background:var(--green-bg);border-radius:4px;margin-left:9px;padding:3px 5px;align-self:center}.metric-caption{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted);white-space:nowrap}.metric-caption .status-dot{width:5px;height:5px}.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:9px;overflow:hidden;box-shadow:0 2px 4px #00000002}.chart-heading{display:flex;align-items:center;justify-content:space-between;padding:22px 23px 17px}.chart-title-line{display:flex;align-items:center;gap:12px}.chart-title-line h2{font-size:15px}.live-badge{display:flex;align-items:center;gap:5px;font-size:9px;background:var(--green-bg);color:var(--green);border-radius:4px;padding:3px 7px}.live-badge .status-dot{width:4px;height:4px}.chart-heading p{font-size:10px;margin-top:6px}.chart-heading-actions{display:flex;gap:3px;align-self:flex-start}.chart-settings{position:relative}.chart-settings summary{list-style:none;cursor:pointer}.chart-settings summary::-webkit-details-marker{display:none}.settings-popover{position:absolute;right:0;top:36px;width:220px;z-index:20;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:15px;box-shadow:0 8px 30px #0002}.settings-popover strong{display:block;font-size:12px;margin-bottom:12px}.settings-popover label{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--secondary)}input{accent-color:#8262ec}.chart-toolbar{display:flex;align-items:center;justify-content:space-between;padding:0 23px 17px;border-bottom:1px solid var(--border);gap:12px}.range-control{display:flex;gap:3px;background:var(--subtle);border:1px solid var(--border);padding:3px;border-radius:6px}.range-control button{background:transparent;border:1px solid transparent;border-radius:4px;padding:4px 13px;line-height:1.4;font-size:10px;color:var(--secondary)}.range-control button:hover{color:var(--accent)}.range-control button.selected{background:var(--surface);border-color:var(--border);box-shadow:0 1px 3px #00000008;color:var(--accent);font-weight:600}.chart-controls{display:flex;gap:13px;align-items:center}.reset-button{display:flex;align-items:center;gap:6px;border:0;background:none;font-size:10px;color:var(--muted);padding:6px 0}.reset-button:hover{color:var(--accent)}.control-divider{height:16px;width:1px;background:var(--border)}.live-control{font-size:10px;padding:6px 10px;gap:5px}.resume{color:var(--accent)}.chart-legend{display:flex;align-items:center;gap:20px;padding:20px 24px 0 25px;font-size:10px;color:var(--secondary)}.chart-legend>span{display:flex;align-items:center;gap:7px}.legend-line{width:17px;height:3px;border-radius:2px;background:#8262ec}.legend-threshold{width:17px;height:0;border-top:2px dashed #dca24e}.chart-legend .chart-date{margin-left:auto;font-size:9px;color:var(--muted)}.cpu-chart{width:calc(100% - 32px);height:294px;margin:12px 16px 0;min-width:0;contain:layout style}.cpu-chart.yagr{background:transparent}.cpu-chart .u-axis{font-family:inherit}.chart-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--border);padding:12px 23px;font-size:9px;color:var(--muted);background:color-mix(in srgb,var(--subtle) 45%,var(--surface))}.chart-footer>span{display:flex;align-items:center;gap:6px}.chart-footer .status-dot{width:5px;height:5px}.footer-separator{margin:0 3px}.paused-dot,.is-paused .status-dot{background:#d6a35f}.is-paused{color:#b8883c;background:#b8883c12}.details-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;margin-top:22px}.detail-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 21px;scroll-margin-top:20px}.detail-card-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.detail-card-heading h2{font-size:12px}.detail-card-heading>svg{color:var(--muted)}.server-details{margin:0}.server-details>div{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:10px}.server-details dt{color:var(--muted)}.server-details dd{margin:0;color:var(--secondary);font-weight:500}.demo-label{color:var(--accent);background:var(--accent-bg);border-radius:3px;padding:2px 5px;font-size:9px}.subtle-label{font-size:9px;color:var(--muted)}.event{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}.event:first-child{padding-top:0}.event:last-child{border-bottom:0;padding-bottom:0}.event-icon{background:var(--green-bg);color:var(--green);width:28px;height:28px;border-radius:50%;display:grid;place-items:center}.event-icon.warning{color:#d4a04a;background:#d4a04a13}.event strong{font-size:10px;font-weight:500;display:block}.event small{font-size:9px;color:var(--muted);display:block;margin-top:3px}.event time{margin-left:auto;align-self:flex-start;font-size:9px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}.page-footer{display:flex;align-items:center;justify-content:space-between;margin-top:22px;font-size:9px;color:var(--muted);gap:12px}.page-footer>span:first-child{display:flex;align-items:center;gap:6px}.page-footer .status-dot{width:5px;height:5px}.empty-events{padding:20px 0;font-size:11px}.chart-expanded{position:fixed;inset:20px;z-index:50;box-shadow:0 0 0 25px #0008;display:flex;flex-direction:column}.chart-expanded .cpu-chart{flex:1;height:auto;min-height:150px}.chart-expanded .chart-footer{margin-top:auto}.chart-expanded .chart-heading{padding-top:25px}\n@media(min-width:1550px){main{padding-top:42px}.cpu-chart{height:370px}.metric-card{padding:21px 23px}.metric-value{font-size:34px;margin-top:17px}.metric-caption{font-size:10px}.metric-label{font-size:12px}.detail-card{padding:22px}.server-details>div{font-size:11px}.event strong{font-size:11px}.event small{font-size:10px}}\n@media(max-width:1180px){.sidebar{width:205px;padding-left:12px;padding-right:12px}.page{margin-left:205px}.topbar{padding:0 25px}main{padding:27px 25px 20px}.metric-grid{gap:10px}.metric-card{padding:15px 12px}.metric-caption{font-size:8px}.metric-value .metric-status{display:none}.server-ip{display:none}.details-grid{gap:15px}.chart-date{max-width:240px}.chart-footer{font-size:8px;gap:8px}.chart-footer>span{gap:4px}.workspace strong{font-size:10px}}\n@media(max-width:960px){.sidebar{width:70px;padding:27px 10px 0}.brand{padding:0;font-size:0;gap:0;justify-content:center;width:100%}.brand-icon{margin:0}.brand-dot,.workspace-label,.workspace,.nav-label,.connection,.profile,.nav-count,.nav-active-dot{display:none}.sidebar nav{margin-top:40px}.nav-item{font-size:0;justify-content:center;padding:13px 0;gap:0;margin-bottom:10px}.nav-item svg{width:20px;height:20px}.page{margin-left:70px}.server-region{font-size:9px}.metric-label{font-size:10px}.metric-value{font-size:27px}.chart-footer>span:first-child{max-width:60%}.chart-legend .chart-date{font-size:8px}.details-grid{grid-template-columns:1fr 1.15fr}.event{gap:7px}.event strong{font-size:9px}.event small{font-size:8px}.detail-card{padding:17px}.page-footer{font-size:8px}}\n@media(max-width:650px){.sidebar{display:none}.page{margin-left:0}.topbar{height:58px;padding:0 18px}.breadcrumbs{font-size:10px;gap:10px}.topbar-right{gap:10px}.environment{font-size:9px}.header-avatar,.topbar-divider{display:none}main{padding:24px 16px 16px}.page-heading{align-items:flex-start;margin-bottom:22px;gap:8px}h1{font-size:26px}.eyebrow{font-size:8px}.page-heading p{font-size:10px;max-width:210px}.export-button{font-size:0;padding:8px;margin-top:25px;gap:0}.export-button svg{width:17px;height:17px}.server-bar{padding:11px 12px;flex-wrap:wrap;gap:7px;margin-bottom:14px}.server-region{margin-left:41px}.server-identity{gap:9px}.server-identity strong{font-size:11px}.healthy{margin-left:5px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}.metric-card{padding:14px}.metric-label{font-size:10px}.metric-value{font-size:28px;margin:10px 0 9px}.metric-caption{font-size:8px}.chart-heading{padding:18px 15px 16px}.chart-title-line{gap:8px;flex-wrap:wrap}.chart-title-line h2{font-size:13px}.live-badge{font-size:7px;padding:3px 5px}.chart-heading-actions{gap:0}.chart-heading-actions .icon-button{width:25px;height:25px}.chart-heading p{font-size:9px}.chart-toolbar{padding:0 15px 14px}.range-control button{padding:4px 9px;font-size:9px}.chart-controls{gap:8px}.reset-button span,.control-divider{display:none}.live-control{padding:6px 8px;font-size:9px}.chart-legend{padding:16px 17px 0;gap:16px;font-size:9px;flex-wrap:wrap}.chart-legend .chart-date{margin:0;width:100%;font-size:8px}.cpu-chart{height:260px;width:calc(100% - 12px);margin:10px 6px 0}.chart-footer{padding:11px 15px;font-size:8px;flex-wrap:wrap;gap:9px}.chart-footer>span:first-child{max-width:100%;font-size:7px}.chart-footer>span:last-child{margin-left:auto}.details-grid{grid-template-columns:1fr;gap:15px;margin-top:16px}.detail-card{padding:18px}.server-details>div{font-size:11px}.event strong{font-size:10px}.event small{font-size:9px}.event{padding:12px 0}.page-footer{flex-wrap:wrap;font-size:8px;gap:7px;margin-top:17px}.chart-expanded{inset:8px}.chart-expanded .cpu-chart{min-height:100px}.chart-expanded .chart-footer{font-size:8px}}\n@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button{transition:none}}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"try { console.log(require.resolve('playwright')) } catch {}\\\" && ls /tmp && ls /root/.cache/ms-playwright /home/node/.cache/ms-playwright /home/sandbox/.cache/ms-playwright 2>/dev/null\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '7550,7615p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '7840,7915p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && git diff --stat\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --no-save --package-lock=false playwright && npx playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '7945,8055p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '8170,8255p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && git status --short && cat .gitignore\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '8050,8099p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '5940,5980p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && rg -n 'function configureScale|range:|scales\\\\[DEFAULT_X_SCALE\\\\]' node_modules/@gravity-ui/yagr/dist/yagr.mjs | tail -25\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '6190,6335p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '8400,8435p' node_modules/@gravity-ui/yagr/dist/yagr.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\np='src/App.tsx'\ns=open(p).read().replace('Использование процессора за последние {hours} часа', 'Использование процессора · последние {hours} ч')\nopen(p,'w').write(s)\nPY\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/telemetry.test.ts <<'EOF'\nimport {afterEach, describe, expect, it, vi} from 'vitest';\nimport {CpuHistory, createDemoSource, DAY_MS, SAMPLE_MS} from './telemetry';\n\nafterEach(() => vi.useRealTimers());\n\ndescribe('CpuHistory', () => {\n  it('keeps a chronological, aligned, bounded day after the ring wraps', () => {\n    const history = new CpuHistory();\n    for (let i = 0; i < 90_000; i++) history.append(i * SAMPLE_MS, i % 101);\n    const snapshot = history.snapshot();\n    expect(snapshot.timeline).toHaveLength(DAY_MS / SAMPLE_MS + 1);\n    expect(snapshot.timeline[0]).toBe(snapshot.updatedAt - DAY_MS);\n    snapshot.timeline.forEach((time, index) => {\n      expect(snapshot.values[index]).toBe((time / SAMPLE_MS) % 101);\n    });\n  });\n\n  it('expires stale history after a gap and rejects invalid/out-of-order samples', () => {\n    const history = new CpuHistory();\n    history.append(100, 20);\n    history.append(99, 40);\n    history.append(100, 50);\n    history.append(NaN, 20);\n    history.append(200, Infinity);\n    expect(history.snapshot().values).toEqual([20]);\n    history.append(DAY_MS + 101, 150);\n    history.append(DAY_MS + 102, -10);\n    expect(history.snapshot().values).toEqual([100, 0]);\n  });\n\n  it('computes summary values without sorting the full data set', () => {\n    const history = new CpuHistory();\n    for (let i = 1; i <= 100; i++) history.append(i, i);\n    expect(history.snapshot()).toMatchObject({current: 100, average: 50.5, maximum: 100, p95: 95});\n  });\n});\n\ndescribe('demo source lifecycle', () => {\n  it('uses one timer for all subscribers and stops it after the last unsubscribe', () => {\n    vi.useFakeTimers();\n    const source = createDemoSource();\n    const first = vi.fn();\n    const second = vi.fn();\n    expect(vi.getTimerCount()).toBe(0);\n    const unsubscribeFirst = source.subscribe(first);\n    const unsubscribeSecond = source.subscribe(second);\n    expect(vi.getTimerCount()).toBe(1);\n    vi.advanceTimersByTime(SAMPLE_MS);\n    expect(first).toHaveBeenCalledOnce();\n    expect(second).toHaveBeenCalledOnce();\n    unsubscribeFirst();\n    vi.advanceTimersByTime(SAMPLE_MS);\n    expect(first).toHaveBeenCalledOnce();\n    expect(second).toHaveBeenCalledTimes(2);\n    unsubscribeSecond();\n    expect(vi.getTimerCount()).toBe(0);\n  });\n\n  it('caches snapshots and catches up within a bounded day after resubscription', () => {\n    vi.useFakeTimers();\n    const source = createDemoSource();\n    const before = source.getSnapshot();\n    expect(source.getSnapshot()).toBe(before);\n    const stop = source.subscribe(() => {});\n    stop();\n    vi.advanceTimersByTime(2 * DAY_MS);\n    const stopAgain = source.subscribe(() => {});\n    vi.advanceTimersByTime(SAMPLE_MS);\n    const after = source.getSnapshot();\n    expect(after.timeline).toHaveLength(DAY_MS / SAMPLE_MS + 1);\n    expect(after.timeline[0]).toBe(after.updatedAt - DAY_MS);\n    expect(after.updatedAt).toBeGreaterThan(before.updatedAt + DAY_MS);\n    stopAgain();\n    expect(vi.getTimerCount()).toBe(0);\n  });\n});\nEOF\nnpx vitest run\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mkdir -p /tmp/pulse-check && cat > /tmp/pulse-check/check.mjs <<'EOF'\nimport {chromium} from '/home/sandbox/workspace/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch({headless:true, args:['--no-sandbox']});\nconst page = await browser.newPage({viewport:{width:1440,height:1050}, deviceScaleFactor:1});\nconst errors=[];\npage.on('pageerror', error=>errors.push(error.message));\npage.on('console', message=>{if(message.type()==='error') errors.push(message.text())});\nawait page.goto('http://localhost:5176', {waitUntil:'networkidle'});\nawait page.waitForSelector('.cpu-chart canvas');\nawait page.screenshot({path:'/tmp/pulse-check/light.png', fullPage:true});\nconsole.log('initial', await page.evaluate(()=>({canvas:document.querySelectorAll('canvas').length, chart:document.querySelector('.cpu-chart').getBoundingClientRect().toJSON(),text:document.querySelector('.chart-footer').textContent})));\nawait page.evaluate(()=>window.originalCanvas=document.querySelector('.cpu-chart canvas'));\nawait page.waitForTimeout(2300);\nconsole.log('same canvas after update',await page.evaluate(()=>window.originalCanvas===document.querySelector('.cpu-chart canvas')));\nawait page.getByRole('button',{name:'Пауза',exact:true}).click();\nconst frozen=await page.locator('.page-footer').innerText();\nawait page.waitForTimeout(2300);\nconsole.log('pause freezes',frozen===await page.locator('.page-footer').innerText());\nawait page.getByRole('button',{name:'Продолжить',exact:true}).click();\nawait page.getByRole('button',{name:'1 ч',exact:true}).click();\nawait page.getByRole('button',{name:'Включить тёмную тему'}).click();\nawait page.screenshot({path:'/tmp/pulse-check/dark.png',fullPage:true});\nconsole.log('dark',await page.locator('.cpu-chart').getAttribute('class'));\nconst box=await page.locator('.cpu-chart .u-over').boundingBox();\nawait page.mouse.move(box.x+box.width*.2,box.y+box.height*.4);\nawait page.mouse.down();\nawait page.mouse.move(box.x+box.width*.7,box.y+box.height*.4,{steps:12});\nawait page.mouse.up();\nawait page.waitForTimeout(100);\nconsole.log('same canvas after zoom/theme', await page.evaluate(()=>window.originalCanvas===document.querySelector('.cpu-chart canvas')));\nawait page.getByRole('button',{name:'Развернуть график',exact:true}).click();\nawait page.waitForTimeout(100);\nconsole.log('expanded',await page.locator('.chart-expanded').count());\nawait page.keyboard.press('Escape');\nconsole.log('escaped',await page.locator('.chart-expanded').count());\nawait page.getByRole('button',{name:'24 ч',exact:true}).click();\nconst downloadPromise=page.waitForEvent('download');\nawait page.getByRole('button',{name:'Экспорт данных',exact:true}).click();\nconst download=await downloadPromise;\nawait download.saveAs('/tmp/pulse-check/cpu.csv');\nconsole.log('export',download.suggestedFilename());\nawait page.setViewportSize({width:390,height:844});\nawait page.waitForTimeout(100);\nawait page.screenshot({path:'/tmp/pulse-check/mobile.png',fullPage:true});\nconsole.log('mobile overflow',await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth})));\nconsole.log('errors',errors);\nawait browser.close();\nEOF\nnode /tmp/pulse-check/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'id && command -v apt-get && command -v sudo && ls /usr/lib/aarch64-linux-gnu | head'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npx playwright install-deps chromium'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg 'not found' && cat /etc/os-release && ls /usr/lib\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/Использование процессора за последние {hours} часа/Использование процессора · последние {hours} ч/' src/App.tsx\nmkdir -p /tmp/pulse-libs\napt-get download libglib2.0-0 libnss3 libnspr4 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 libx11-6 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libxcb1 libxkbcommon0 libasound2 libpango-1.0-0 libcairo2\"",
+        "success": false,
+        "exitCode": -1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/Использование процессора за последние {hours} часа/Использование процессора · последние {hours} ч/' src/App.tsx\nmkdir -p /tmp/pulse-libs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'apt-get download libglib2.0-0 libnss3 libnspr4 libdbus-1-3 libatk1.0-0 libatk-bridge2.0-0 libatspi2.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff -- src/main.tsx package.json .gitignore && rg -n 'setScales|setSeries|useEffect|chart-title' src/CpuChart.tsx src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for package in *.deb; do dpkg-deb -x \"$package\" /tmp/pulse-libs/root; done\nLD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg '\"'not found'\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'apt-get download libdrm2 libxi6 libxrender1 libxshmfence1 libexpat1 libx11-xcb1'"
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu node /tmp/pulse-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'apt-get download libwayland-server0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier@3.6.2 --write src/App.tsx src/CpuChart.tsx src/main.tsx src/telemetry.ts src/telemetry.test.ts src/styles.css'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for package in *.deb; do dpkg-deb -x \"$package\" /tmp/pulse-libs/root; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat > README.md <<'EOF'\n# Pulse: мониторинг CPU\n\n\"'`npm run dev` запускает страницу, `npm run build` проверяет TypeScript и собирает приложение, `npm test` запускает тесты.\n\nГрафик на Yagr/uPlot отображает 43 201 точку за последние сутки с шагом 2 секунды. Он использует Canvas, обновляет существующую серию по ID, объединяет перерисовки через `requestAnimationFrame`, сохраняет выделенный интервал при обновлениях и отслеживает размер контейнера через `ResizeObserver`. Тема берётся из `ThemeProvider` Gravity UI; исходно используется системная тема.\n\nДоступны периоды 1/6/12/24 ч, подсказки при наведении, увеличение выделением, сброс двойным нажатием или кнопкой, пауза, разворачивание графика, порог 80% и экспорт выбранного периода в CSV. Статистика карточек относится к периоду кнопок; выделение мышью изменяет только масштаб графика.\n\nВ исходном проекте нет API метрик, поэтому страница явно использует демонстрационный поток. Сведения о сервере также демонстрационные. Для реального подключения замените `createDemoSource` в `src/App.tsx` адаптером `CpuSource` из `src/telemetry.ts`. Он должен возвращать кешированный снимок с возрастающими Unix timestamp в **миллисекундах**, выровненными массивами `timeline` и `values` (CPU в процентах), статистикой и временем обновления. `subscribe` уведомляет об изменении снимка и возвращает функцию отписки. Сетевое соединение следует закрывать после последней отписки. `CpuHistory` предоставляет ограниченный суточный буфер для источников с шагом не чаще 2 секунд.\n\nПри размонтировании график отключает observer, обработчики событий и подписку, отменяет запланированные кадры и вызывает `Yagr.dispose()`. Демонстрационный таймер работает только при наличии подписчиков; на паузе и после размонтирования он остановлен. В скрытой вкладке перерисовки пропускаются, а при возвращении выводится последний снимок.\nEOF\nnpm run build && npm test'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'apt-get download libsqlite3-0 fontconfig-config fonts-dejavu-core'"
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,270p' src/CpuChart.tsx && sed -n '1,80p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for package in *.deb; do dpkg-deb -x \"$package\" /tmp/pulse-libs/root; done\ncat > /tmp/pulse-libs/fonts.conf <<'\"'EOF'\n<?xml version=\\\"1.0\\\"?>\n<\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig><dir>/tmp/pulse-libs/root/usr/share/fonts/truetype/dejavu</dir><cachedir>/tmp/pulse-libs/font-cache</cachedir></fontconfig>\nEOF'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/check.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/.vite/deps | head -30 && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/plotLines/plotLines.d.ts && git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'renderClassName|boundClassName|tooltip_theme|yagr-tooltip' node_modules/@gravity-ui/yagr/dist/yagr.mjs | head -35 && head -c 3000 node_modules/@gravity-ui/yagr/dist/index.css && rg -n 'tooltip_default|tooltip__' node_modules/@gravity-ui/yagr/dist/yagr.mjs | head -25\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '6410,6478p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '6550,6690p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && rg -n 'yagr-tooltip' node_modules/@gravity-ui/yagr/dist/index.css | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '6025,6120p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '184,243p' node_modules/@gravity-ui/yagr/dist/index.css && cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/tooltip.d.ts | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat >> src/styles.css <<'EOF'\n\n.cpu-chart.yagr {\n  --yagr-background: var(--surface);\n  --yagr-axis-stroke: var(--muted);\n  --yagr-grid: var(--border);\n  --yagr-font-family: inherit;\n}\n.yagr-tooltip_default {\n  background: var(--g-color-base-modal, #fff);\n  color: var(--g-color-text-primary, #252630);\n  border: 1px solid var(--g-color-line-generic, #e9eaf0);\n  padding: 10px 12px;\n  border-radius: 7px;\n  box-shadow: 0 4px 20px #0002;\n  max-width: calc(100vw - 24px);\n}\n.yagr-tooltip_default .__title {\n  font-size: 11px;\n  font-weight: 500;\n  opacity: .7;\n  margin-bottom: 8px;\n}\nEOF\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/check.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/pulse-check/lifecycle.mjs <<'EOF'\nimport {chromium} from '/home/sandbox/workspace/node_modules/playwright/index.mjs';\nconst browser=await chromium.launch({headless:true,args:['--no-sandbox']});\nconst page=await browser.newPage({viewport:{width:1440,height:1000}});\nconst errors=[];page.on('pageerror',e=>errors.push(e.message));\nawait page.goto('http://localhost:5176',{waitUntil:'networkidle'});\nconsole.log(await page.evaluate(async()=>{\n  const React=(await import('/node_modules/.vite/deps/react.js')).default;\n  const {createRoot}=await import('/node_modules/.vite/deps/react-dom_client.js');\n  const {ThemeProvider}=await import('/node_modules/.vite/deps/@gravity-ui_uikit.js');\n  const {CpuChart}=await import('/src/CpuChart.tsx');\n  const sourceText=await (await fetch('/src/CpuChart.tsx')).text();\n  const yagrUrl=sourceText.match(/from\\\\s+\\\"([\"'^\"]*gravity-ui_yagr[''^'\"\\\\\\\"]*)\\\"/)[1];\n  const Yagr=(await import(yagrUrl)).default;\n  const oldSetSeries=Yagr.prototype.setSeries;\n  const instances=new Set();\n  Yagr.prototype.setSeries=function(...args){instances.add(this);return oldSetSeries.apply(this,args)};\n  const nativeObserver=window.ResizeObserver;\n  const observers=new Set();\n  window.ResizeObserver=class extends nativeObserver{\n    constructor(fn){super(fn);observers.add(this)}\n    disconnect(){observers.delete(this);super.disconnect()}\n  };\n  const time=Date.now();\n  let snapshot={timeline:[time-4000,time-2000,time],values:[30,40,50],current:50,average:40,maximum:50,p95:50,updatedAt:time};\n  const listeners=new Set();\n  const source={getSnapshot:()=>snapshot,subscribe:fn=>{listeners.add(fn);return ()=>listeners.delete(fn)}};\n  const host=document.createElement('div');host.style.cssText='width:600px;position:fixed;top:0;left:0';document.body.append(host);\n  const root=createRoot(host);\n  const render=(theme='light',hours=24)=>root.render(React.createElement(React.StrictMode,null,React.createElement(ThemeProvider,{theme,scoped:true},React.createElement(CpuChart,{source,live:true,hours,resetToken:0,threshold:true}))));\n  const settle=()=>new Promise(resolve=>setTimeout(resolve,80));\n  render();await settle();\n  const canvas=host.querySelector('canvas');\n  const chart=[...instances].at(-1);\n  const liveListeners=listeners.size;\n  const observeMounted=observers.size;\n  const firstYMax=chart.uplot.scales.y.max;\n  snapshot={...snapshot,timeline:[time-2000,time,time+2000],values:[40,50,60],updatedAt:time+2000};\n  for(const listener of listeners)listener();await settle();\n  const sameCanvas=canvas===host.querySelector('canvas');\n  const updated=chart.uplot.data[1].at(-1)===60;\n  chart.config.hooks.onSelect[0]({from:time-1500,to:time+500,chart});await settle();\n  const zoomBefore={min:chart.uplot.scales.x.min,max:chart.uplot.scales.x.max};\n  snapshot={...snapshot,timeline:[time,time+2000,time+4000],values:[50,60,70],updatedAt:time+4000};\n  for(const listener of listeners)listener();await settle();\n  const zoomRetained=chart.uplot.scales.x.min===zoomBefore.min&&chart.uplot.scales.x.max===zoomBefore.max;\n  render('dark',1);await settle();\n  const themed=host.querySelector('.cpu-chart').classList.contains('yagr_theme_dark');\n  const noRecreate=canvas===host.querySelector('canvas');\n  const fixedY=firstYMax===100&&chart.uplot.scales.y.max===100;\n  host.style.width='350px';await settle();\n  const resized=chart.uplot.width===350;\n  chart.plugins.tooltip.display({left:100,top:100,idx:1});\n  const tooltipCount=document.querySelectorAll('.yagr-tooltip').length;\n  // Schedule an update and a resize, then unmount before the queued frame runs.\n  for(const listener of listeners)listener();host.style.width='400px';root.unmount();await settle();\n  const result={liveListeners,observeMounted,sameCanvas,updated,zoomRetained,themed,noRecreate,fixedY,resized,\n    listenersAfterUnmount:listeners.size,observersAfterUnmount:observers.size,canvasAfterUnmount:host.querySelectorAll('canvas').length,\n    tooltipRemoved:document.querySelectorAll('.yagr-tooltip').length===tooltipCount-1};\n  window.ResizeObserver=nativeObserver;Yagr.prototype.setSeries=oldSetSeries;host.remove();\n  return result;\n}));\nconsole.log('errors',errors);\nawait browser.close();\nEOF\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'interface Grid|space\\\\??:|type Space' node_modules/uplot/dist/uPlot.d.ts | head -20 && sed -n '1070,1100p' node_modules/uplot/dist/uPlot.d.ts && tail -20 node_modules/.vite/deps/react-dom_client.js && cat node_modules/@gravity-ui/yagr/dist/YagrCore/defaults.d.ts | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/const {createRoot}=await import('\\\\/node_modules\\\\/.vite\\\\/deps\\\\/react-dom_client.js');/const {createRoot}=(await import('\\\\/node_modules\\\\/.vite\\\\/deps\\\\/react-dom_client.js')).default;/\\\" /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'function plotLinesPlugin|clear:|add:' node_modules/@gravity-ui/yagr/dist/yagr.mjs | head -20 && sed -n '7270,7380p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '1020,1055p' node_modules/uplot/dist/uPlot.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '7380,7455p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && rg -n 'AXIS.*space|_space|\\\\.space\\\\(' node_modules/uplot/dist/uPlot.esm.js | head -25\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/oldSetSeries=Yagr.prototype.setSeries/oldSetSeries=Yagr.prototype.reflow/g; s/Yagr.prototype.setSeries=function/Yagr.prototype.reflow=function/g; s/Yagr.prototype.setSeries=oldSetSeries/Yagr.prototype.reflow=oldSetSeries/g' /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/const firstYMax=chart.uplot.scales.y.max;/if (\"'!chart) return {debug:host.innerHTML,observers:observers.size,listeners:listeners.size,yagrUrl,methods:Object.getOwnPropertyNames(Yagr.prototype)}; const firstYMax=chart.uplot.scales.y.max;/'\"' /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"head -20 node_modules/.vite/deps/@gravity-ui_yagr.js && tail -20 node_modules/.vite/deps/@gravity-ui_yagr.js && sed -n '8320,8360p' node_modules/@gravity-ui/yagr/dist/yagr.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/const {ThemeProvider}=await import('\\\\/node_modules\\\\/.vite\\\\/deps\\\\/@gravity-ui_uikit.js');/const chartText=await (await fetch('\\\\/src\\\\/CpuChart.tsx')).text(); const uikitUrl=chartText.match(\\\\/from\\\\\\\\\\\\\\\\s+\\\\\\\"([\"'^'\"\\\\\\\"]*gravity-ui_uikit[\"'^'\"\\\\\\\"]*)\\\\\\\"\\\\/)[1]; const {ThemeProvider}=await import(uikitUrl);/\\\" /tmp/pulse-check/lifecycle.mjs\nhead -15 /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short && npm run build && npm test'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/const resized=chart.uplot.width===350;/const resized=chart.uplot.width===chart.root.clientWidth; const resizeDetails={width:chart.uplot.width,root:chart.root.clientWidth,ticks:chart.uplot.axes[0]._splits,space:chart.uplot.axes[0]._space};/' /tmp/pulse-check/lifecycle.mjs\nsed -i 's/fixedY,resized,/fixedY,resized,resizeDetails,/' /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/pulse-check/interactions.mjs <<'EOF'\nimport {chromium} from '/home/sandbox/workspace/node_modules/playwright/index.mjs';\nconst browser=await chromium.launch({headless:true,args:['--no-sandbox']});\nconst page=await browser.newPage({viewport:{width:1440,height:1050}});\nconst errors=[];page.on('pageerror',e=>errors.push(e.message));\nawait page.goto('http://localhost:5176',{waitUntil:'networkidle'});\nawait page.evaluate(()=>{const reflow=window.Yagr.prototype.reflow;window.Yagr.prototype.reflow=function(...args){window.chart=this;return reflow.apply(this,args)}});\nawait page.setViewportSize({width:1400,height:1000});await page.waitForTimeout(150);\nconsole.log('threshold',await page.evaluate(()=>window.chart.plugins.plotLines.get()));\nconst before=await page.evaluate(()=>window.chart.uplot.scales.x.max-window.chart.uplot.scales.x.min);\nconst box=await page.locator('.u-over').boundingBox();\nawait page.mouse.move(box.x+box.width*.2,box.y+box.height*.5);\nawait page.mouse.down();await page.mouse.move(box.x+box.width*.7,box.y+box.height*.5,{steps:12});await page.mouse.up();await page.waitForTimeout(100);\nconst after=await page.evaluate(()=>window.chart.uplot.scales.x.max-window.chart.uplot.scales.x.min);\nconsole.log('pointer zoom', {before,after,works:after<before*.7&&after>before*.3});\nawait page.waitForTimeout(2100);\nconsole.log('zoom retained on new sample',await page.evaluate(()=>window.chart.uplot.scales.x.max-window.chart.uplot.scales.x.min)===after);\nawait page.getByRole('button',{name:'Сбросить масштаб',exact:true}).click();await page.waitForTimeout(50);\nawait page.getByRole('button',{name:'Включить тёмную тему'}).click();await page.waitForTimeout(200);\nawait page.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await page.waitForTimeout(100);\nconsole.log('tooltip',await page.locator('.yagr-tooltip').evaluate(el=>({text:el.innerText,background:getComputedStyle(el).backgroundColor,color:getComputedStyle(el).color,display:getComputedStyle(el).display})));\nawait page.locator('.chart-settings summary').click();\nawait page.getByRole('checkbox',{name:'Порог нагрузки 80%'}).uncheck();\nconsole.log('threshold off',await page.evaluate(()=>window.chart.plugins.plotLines.get().length===0));\nawait page.setViewportSize({width:390,height:844});await page.waitForTimeout(150);\nconsole.log('mobile chart',await page.evaluate(()=>({canvasWidth:window.chart.uplot.width,containerWidth:window.chart.root.clientWidth,tickSpace:window.chart.uplot.axes[0]._space,tickCount:window.chart.uplot.axes[0]._splits.length,overflow:document.documentElement.scrollWidth>innerWidth})));\nconsole.log('errors',errors);\nawait browser.close();\nEOF\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/interactions.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier@3.6.2 --write src/CpuChart.tsx src/styles.css && npm run build && git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'X_AXIS_INCRS = ' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '85,115p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && sed -n '4400,4438p' node_modules/uplot/dist/uPlot.esm.js && sed -n '1545,1585p' node_modules/uplot/dist/uPlot.esm.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '125,175p' node_modules/@gravity-ui/yagr/dist/yagr.mjs && rg -n 'function findIncr' node_modules/uplot/dist/uPlot.esm.js && sed -n '220,248p' node_modules/@gravity-ui/yagr/dist/YagrCore/utils/axes.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '2870,2905p' node_modules/uplot/dist/uPlot.esm.js && rg -n 'function setSize|function _setSize|function redraw' node_modules/uplot/dist/uPlot.esm.js && sed -n '4890,4930p' node_modules/uplot/dist/uPlot.esm.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/Yagr.prototype.reflow/Yagr.prototype.initMixins/g' /tmp/pulse-check/lifecycle.mjs\nFONTCONFIG_FILE=/tmp/pulse-libs/fonts.conf LD_LIBRARY_PATH=/tmp/pulse-libs/root/usr/lib/aarch64-linux-gnu:/tmp/pulse-libs/root/lib/aarch64-linux-gnu node /tmp/pulse-check/lifecycle.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx --yes prettier@3.6.2 --write src/CpuChart.tsx && npm run build && npm test && git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --stat && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 147063,
+      "outputTokens": 38946,
+      "cacheReadTokens": 5129088,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 8351,
+      "totalTokens": 5315097
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

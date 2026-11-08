@@ -1,0 +1,97 @@
+{
+  "status": "failed",
+  "duration": 504.97,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 10955,
+    "outputTokens": 1860,
+    "cacheReadTokens": 97978,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 291,
+    "totalTokens": 110793
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 8,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 8,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat index.html && echo \"---\" && cat package.json && echo \"---\" && ls src/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx && echo \"---\" && cat src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg \"export.*Modal\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg -l \"Modal\" node_modules/@gravity-ui/uikit/build/esm/ 2>/dev/null | head -10'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'EOF'\nimport { useState } from 'react';\nimport { Button, Modal } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Button view=\\\"action\\\" size=\\\"l\\\" onClick={() => setOpen(true)}>\n        Открыть\n      </Button>\n\n      <Modal open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>\n        <div style={{ padding: '24px', maxWidth: '400px' }}>\n          <h2 style={{ margin: '0 0 16px' }}>Подтверждение</h2>\n          <p style={{ margin: '0 0 24px', lineHeight: 1.5 }}>\n            Вы уверены, что хотите выполнить это действие? Пожалуйста, подтвердите или отмените.\n          </p>\n          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>\n            <Button\n              view=\\\"normal\\\"\n              size=\\\"l\\\"\n              onClick={() => {\n                setOpen(false);\n              }}\n            >\n              Отменить\n            </Button>\n            <Button view=\\\"action\\\" size=\\\"l\\\" onClick={() => setOpen(false)}>\n              Подтвердить\n            </Button>\n          </div>\n        </div>\n      </Modal>\n    </div>\n  );\n}\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10955,
+      "outputTokens": 1860,
+      "cacheReadTokens": 97978,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 291,
+      "totalTokens": 110793
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

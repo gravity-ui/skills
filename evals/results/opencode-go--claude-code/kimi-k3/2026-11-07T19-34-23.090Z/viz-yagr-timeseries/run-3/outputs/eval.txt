@@ -1,0 +1,47 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (2 tests | 2 failed) 36033ms
+   × declares @gravity-ui/yagr as a dependency 4ms
+     → expected false to be true // Object.is equality
+   × judge: implements the task with the intended Gravity UI API 36028ms
+     → [judge:environment] FAIL — The CPU chart uses @gravity-ui/yagr (directly or through its official React wrapper) configured with a timeline and series data for tens of thousands of points, responsive (adaptive) sizing and the active Gravity theme; realtime updates mutate the existing chart (setConfig or the wrapper's data updates) instead of recreating it, and direct instances are disposed on unmount. A different charting library fails.
+  reason: The chart is built on the legacy unscoped package `yagr@^2.1.0` (package.json:12, node_modules/yagr/package.json -> repo github.com/yandex-cloud/yagr, last published 2022-12-08), not the required `@gravity-ui/yagr` (repo github.com/gravity-ui/yagr, current v5.3.1), which is neither declared in package.json nor installed, so the eval's own `Object.hasOwn(dependencies, '@gravity-ui/yagr')` assertion fails; src/cpu/CpuLoadChart.tsx imports from 'yagr'/'yagr/dist/index.css'. The other aspects are met (86,401-point timeline+area series, size.adaptive, chart appereance theme, incremental updates via yagr.uplot.setData, yagr.dispose() on unmount), but the specified Gravity UI charting package is absent.
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  19:49:43
+   Duration  36.18s (transform 34ms, setup 17ms, collect 17ms, tests 36.03s, environment 0ms, prepare 30ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > declares @gravity-ui/yagr as a dependency
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:67:59
+     65| 
+     66| test('declares @gravity-ui/yagr as a dependency', () => {
+     67|   expect(Object.hasOwn(dependencies, '@gravity-ui/yagr')).toBe(true);
+       |                                                           ^
+     68| });
+     69| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The CPU chart uses @gravity-ui/yagr (directly or through its official React wrapper) configured with a timeline and series data for tens of thousands of points, responsive (adaptive) sizing and the active Gravity theme; realtime updates mutate the existing chart (setConfig or the wrapper's data updates) instead of recreating it, and direct instances are disposed on unmount. A different charting library fails.
+  reason: The chart is built on the legacy unscoped package `yagr@^2.1.0` (package.json:12, node_modules/yagr/package.json -> repo github.com/yandex-cloud/yagr, last published 2022-12-08), not the required `@gravity-ui/yagr` (repo github.com/gravity-ui/yagr, current v5.3.1), which is neither declared in package.json nor installed, so the eval's own `Object.hasOwn(dependencies, '@gravity-ui/yagr')` assertion fails; src/cpu/CpuLoadChart.tsx imports from 'yagr'/'yagr/dist/index.css'. The other aspects are met (86,401-point timeline+area series, size.adaptive, chart appereance theme, incremental updates via yagr.uplot.setData, yagr.dispose() on unmount), but the specified Gravity UI charting package is absent.
+ ❯ EVAL.ts:74:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

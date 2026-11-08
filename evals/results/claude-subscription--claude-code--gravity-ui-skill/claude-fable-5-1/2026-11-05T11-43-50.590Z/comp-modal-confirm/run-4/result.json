@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "duration": 159.123,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 2739,
+    "cacheReadTokens": 171046,
+    "cacheWriteTokens": 24280,
+    "totalTokens": 198227
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ---; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui | head -100; echo ---; cat /home/sandbox/workspace/AGENTS.md; echo ---; ls -la /home/sandbox/workspace; cat /home/sandbox/workspace/package.json",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ---TRAPS; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ---SRC; find src -type f | xargs -I{} sh -c 'echo \"== {}\"; cat {}'; cat index.html tsconfig.json; echo ---INSPECT; ./.agents/skills/gravity-ui/scripts/inspect-package.sh uikit Dialog Modal Button 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Dialog Button 2>&1 | head -40; echo ---VER; node -p \"require('@gravity-ui/uikit/package.json').version\"; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; echo ---DIALOG; D=node_modules/@gravity-ui/uikit/build/esm/components/Dialog; ls $D; cat $D/Dialog.d.ts; echo ---FOOTER; cat $D/DialogFooter/DialogFooter.d.ts; echo ---HEADER; cat $D/DialogHeader/DialogHeader.d.ts; echo ---BODY; cat $D/DialogBody/DialogBody.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {Button, Dialog, Flex, Text} from '@gravity-ui/uikit';\n\nexport function App() {\n  const [open, setOpen] = React.useState(false);\n  const [confirmed, setConfirmed] = React.useState(false);\n\n  const handleClose = () => setOpen(false);\n\n  const handleConfirm = () => {\n    setConfirmed(true);\n    setOpen(false);\n  };\n\n  return (\n    <Flex direction=\"column\" gap={3} style={{padding: 'var(--g-spacing-6)'}}>\n      <div>\n        <Button view=\"action\" size=\"l\" onClick={() => setOpen(true)}>\n          Открыть окно\n        </Button>\n      </div>\n\n      {confirmed && (\n        <Text variant=\"body-1\" color=\"positive\">\n          Действие подтверждено\n        </Text>\n      )}\n\n      <Dialog\n        open={open}\n        onClose={handleClose}\n        size=\"s\"\n        aria-labelledby=\"confirm-dialog-title\"\n        initialFocus=\"cancel\"\n      >\n        <Dialog.Header id=\"confirm-dialog-title\" caption=\"Подтверждение\" />\n        <Dialog.Body>\n          <Text variant=\"body-1\">\n            Вы уверены, что хотите выполнить это действие? Отменить его будет нельзя.\n          </Text>\n        </Dialog.Body>\n        <Dialog.Footer\n          onClickButtonApply={handleConfirm}\n          onClickButtonCancel={handleClose}\n          textButtonApply=\"Подтвердить\"\n          textButtonCancel=\"Отменить\"\n        />\n      </Dialog>\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit && echo TSC_OK",
+        "success": true
+      },
+      {
+        "command": "npx vite build 2>&1 | tail -5",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 2739,
+      "cacheReadTokens": 171046,
+      "cacheWriteTokens": 24280,
+      "totalTokens": 198227
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "status": "passed",
+  "duration": 377.443,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 44,
+    "outputTokens": 13063,
+    "cacheReadTokens": 1157485,
+    "cacheWriteTokens": 53931,
+    "totalTokens": 1224523
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 11,
+    "toolCalls": {
+      "file_read": 5,
+      "file_write": 2,
+      "file_edit": 0,
+      "shell": 19,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 26,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/references/package-routing.md",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/rules/hallucination-traps.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && ls -la && cat package.json 2>/dev/null | head -100 && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat AGENTS.md && echo --- && cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -60 && echo --- && ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules | grep -i -E 'date|gravity' ; echo \"--- npm view:\"; npm view @gravity-ui/date-components version peerDependencies 2>&1 | tail -30; npm view @gravity-ui/date-utils version peerDependencies 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json 2>/dev/null | tail -40; for v in $(npm view @gravity-ui/date-components versions --json 2>/dev/null | tr -d '[],\"' | grep -E '^[0-9]' | tail -40); do echo -n \"$v uikit=\"; npm view @gravity-ui/date-components@$v peerDependencies.@gravity-ui/uikit 2>/dev/null | tr -d '\\n'; echo -n \" date-utils=\"; npm view @gravity-ui/date-components@$v peerDependencies.@gravity-ui/date-utils 2>/dev/null; echo; done 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "for v in 2.10.3 2.11.0 2.12.0 3.0.3 3.1.1 3.2.4 3.3.2 3.4.2 4.0.0 4.1.0; do echo -n \"$v uikit=\"; npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{const p=JSON.parse(s||\"{}\");console.log((p[\"@gravity-ui/uikit\"]||\"-\")+\" date-utils=\"+(p[\"@gravity-ui/date-utils\"]||\"-\")+\" react=\"+(p.react||\"-\"))})'; done",
+        "success": true
+      },
+      {
+        "command": "npm install --save-exact @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | grep -v 'npm warn Unknown env' | tail -20; echo \"---\"; git diff --stat; node -e 'for (const p of [\"date-components\",\"date-utils\",\"uikit\"]) console.log(p, require(\"./node_modules/@gravity-ui/\"+p+\"/package.json\").version)'; grep -A3 '\"dependencies\"' package.json",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh date-components Calendar DatePicker RangeCalendar CalendarDate 2>&1 | head -60; ls node_modules/@gravity-ui/date-components/; ls node_modules/@gravity-ui/date-components/dist | head -50",
+        "success": true
+      },
+      {
+        "command": "ls -R node_modules/@gravity-ui/date-components/dist/docs | head -40; echo ---; cat node_modules/@gravity-ui/date-components/dist/docs/INDEX.md 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components && grep -n \"types\\|typings\" package.json | head; f=$(grep -rl \"CalendarProps\" dist/esm --include=*.d.ts | head -3); echo \"$f\"; for x in $f; do echo \"== $x\"; done; grep -rn \"export.*Calendar\\b\\|export declare const Calendar\\|interface CalendarProps\\|onUpdate\\|value?:\\|defaultValue\" $(grep -rl \"CalendarProps\" dist --include=*.d.ts | head -5) | head -40; echo; cd /home/sandbox/workspace && grep -rn \"dateTime\\b\\|export.*dateTime\" node_modules/@gravity-ui/date-utils/dist/*.d.ts 2>/dev/null | head -5; ls node_modules/@gravity-ui/date-utils/dist | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components && cat dist/esm/components/Calendar/Calendar.d.ts; echo ====; grep -rn \"CalendarCommonProps\" dist/esm --include=*.d.ts | head -3; f=$(grep -rl \"interface CalendarCommonProps\\|type CalendarCommonProps\" dist/esm --include=*.d.ts | head -1); echo \"== $f\"; cat \"$f\" | head -80; echo ====; ls ../date-utils; grep -n '\"version\"\\|\"types\"' ../date-utils/package.json",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/useCalendarState.d.ts | head -60; echo ====; grep -n \"export\" node_modules/@gravity-ui/date-components/dist/esm/index.d.ts | head -20; echo ====; grep -n \"export declare function dateTime\\b\\|dateTime(\\|export.*dateTime\\b\" node_modules/@gravity-ui/date-utils/build/index.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"ValueBase\" -A12 node_modules/@gravity-ui/date-components/dist/esm/components/types/index.d.ts | head -30; echo ===; grep -n \"dateTime\\b\" node_modules/@gravity-ui/date-utils/build/*.d.ts | head -5; echo ===; cat src/vite-env.d.ts tsconfig.json; cat __agent_eval__/run.mjs | head -30",
+        "success": true
+      },
+      {
+        "command": "f=$(grep -rl \"interface ValueBase\\|type ValueBase\" node_modules/@gravity-ui/date-components/dist/esm --include=*.d.ts | head -1); echo $f; grep -n \"ValueBase\" -A10 \"$f\" | head -25; echo ===; grep -rn \"onUpdate\" node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/useCalendarState.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/types/*.d.ts 2>/dev/null | head; echo ===; grep -n \"export\" node_modules/@gravity-ui/date-utils/build/index.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -n \"lang\" node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider/*.d.ts node_modules/@gravity-ui/uikit/build/esm/components/*/ThemeProvider*.d.ts 2>/dev/null | head; grep -rln \"lang?:\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts | grep -i theme | head -3; echo ===; grep -n \"format\\|interface DateTime\\b\" node_modules/@gravity-ui/date-utils/build/typings.d.ts | head -10; echo ===; grep -rn \"loadLocale\" node_modules/@gravity-ui/date-utils/build --include=*.d.ts | head -3; echo ===; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/build/docs/guides 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/date-utils/build/ | head -30; grep -rn \"format(\" node_modules/@gravity-ui/date-utils/build --include=*.d.ts | head -5; echo ===; grep -rln \"interface DateTime\\b\\|type DateTime\\b\" node_modules/@gravity-ui/date-utils/build --include=*.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Flex Text ThemeProvider 2>&1 | head -40; echo ===; d=node_modules/@gravity-ui/uikit/build/esm; grep -n \"direction\\|gap\" $(grep -rl \"export interface FlexProps\\|FlexProps\" $d --include=*.d.ts | head -2) | head -12; echo ===; grep -n \"color\\|variant\" $(grep -rl \"export interface TextProps\\|TextProps\" $d/components/Text --include=*.d.ts | head -1) | head -12",
+        "success": true
+      },
+      {
+        "command": "grep -n \"color\" node_modules/@gravity-ui/uikit/build/esm/components/typography/Text/colorText/colorText.d.ts 2>/dev/null | head -8 || true; f=$(find node_modules/@gravity-ui/uikit/build/esm -name \"colorText.d.ts\" | head -1); echo \"$f\"; grep -n \"secondary\\|color\" \"$f\" | head -8",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "npm run build > /tmp/build.log 2>&1; echo \"exit=$?\"; grep -i \"error\\|warn\" /tmp/build.log | head; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44,
+      "outputTokens": 13063,
+      "cacheReadTokens": 1157485,
+      "cacheWriteTokens": 53931,
+      "totalTokens": 1224523
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "status": "passed",
+  "duration": 660.654,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 7623,
+    "outputTokens": 1258,
+    "cacheReadTokens": 107136,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 161,
+    "totalTokens": 116017
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*theme*' -g '*Theme*' -g '*.{tsx,jsx,html}' -g '*.{ts,js}' -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && cat index.html && rg --files src && find .. -name AGENTS.md -not -path '*/node_modules/*' -print\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'useTheme|updateTheme|ThemeProvider|ThemeContext' node_modules/@gravity-ui/uikit/build/esm/components/theme-provider -g '*.{ts,js}' && rg -n 'interface.*Switch|type.*Switch|onUpdate' node_modules/@gravity-ui/uikit/build/esm/components/Switch -g '*.ts' && cat tsconfig.json && git status --short\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '(ThemeProvider|theme|Switch)' | head -60; cat tsconfig.json; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/theme/{ThemeProvider.d.ts,ThemeProvider.js,types.d.ts,useThemeContext.d.ts}; cat node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --check && git diff -- src/App.tsx src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 7623,
+      "outputTokens": 1258,
+      "cacheReadTokens": 107136,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 161,
+      "totalTokens": 116017
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

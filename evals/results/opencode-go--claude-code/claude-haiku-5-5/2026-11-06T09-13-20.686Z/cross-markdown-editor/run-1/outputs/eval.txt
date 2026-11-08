@@ -1,0 +1,398 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 5 failed) 21428ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 1ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   × no react-markdown DIY preview 1ms
+     → expected true to be false // Object.is equality
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 1ms
+     → expected 'import { useState, type FormEvent } f…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 21421ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/MarkdownField.tsx builds the field from a @gravity-ui/uikit TextArea plus a separate react-markdown preview pane (imports at lines 2-3), and neither @gravity-ui/markdown-editor, useMarkdownEditor, nor MarkdownEditorView appears anywhere in the project or its package.json dependencies. This is exactly the forbidden raw-textarea-with-custom-preview approach, not the Gravity markdown editor.
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  09:17:12
+   Duration  21.66s (transform 49ms, setup 20ms, collect 24ms, tests 21.43s, environment 0ms, prepare 57ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  EVAL.ts > no react-markdown DIY preview
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:72:44
+     70| // Pulling react-markdown signals a DIY textarea+preview build instead…
+     71| test("no react-markdown DIY preview", () => {
+     72|   expect(dependsOn(src, "react-markdown")).toBe(false);
+       |                                            ^
+     73| });
+     74| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected 'import { useState, type FormEvent } f…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+"import { useState, type FormEvent } from 'react';
+import { Button, Text } from '@gravity-ui/uikit';
+
+import { MarkdownField } from './MarkdownField';
+
+export function App() {
+  const [text, setText] = useState('');
+  const [savedLength, setSavedLength] = useState<number | null>(null);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSavedLength(text.length);
+  }
+
+  return (
+    <div style={{ padding: 24, maxWidth: 1200 }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <MarkdownField
+          label=\"Текст (Markdown)\"
+          value={text}
+          onChange={setText}
+          placeholder={'# Заголовок\\n\\nТекст с **жирным** и *курсивом*.\\n\\n- пункт списка\\n- `код`'}
+        />
+        <div>
+          <Button type=\"submit\" view=\"action\" size=\"l\">
+            Отправить
+          </Button>
+        </div>
+      </form>
+
+      {savedLength !== null && (
+        <Text as=\"p\" variant=\"body-1\" style={{ marginTop: 16 }}>
+          Отправлено символов: {savedLength}
+        </Text>
+      )}
+    </div>
+  );
+}
+
+
+.md-field {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.md-field__pane {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.md-field__label {
+  font: var(--g-text-subheader-1-font);
+  color: var(--g-color-text-secondary);
+}
+
+.md-preview {
+  box-sizing: border-box;
+  min-height: 240px;
+  padding: 12px 16px;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: var(--g-border-radius-m);
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-primary);
+  font: var(--g-text-body-1-font);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.md-preview__empty {
+  margin: 0;
+  color: var(--g-color-text-hint);
+}
+
+.md-preview > :first-child {
+  margin-top: 0;
+}
+
+.md-preview > :last-child {
+  margin-bottom: 0;
+}
+
+.md-preview h1,
+.md-preview h2,
+.md-preview h3,
+.md-preview h4,
+.md-preview h5,
+.md-preview h6 {
+  margin: 1.2em 0 0.5em;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.md-preview h1 {
+  font-size: 1.75em;
+}
+
+.md-preview h2 {
+  font-size: 1.4em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.md-preview h3 {
+  font-size: 1.2em;
+}
+
+.md-preview h4,
+.md-preview h5,
+.md-preview h6 {
+  font-size: 1em;
+}
+
+.md-preview p,
+.md-preview ul,
+.md-preview ol,
+.md-preview blockquote,
+.md-preview pre,
+.md-preview table {
+  margin: 0 0 0.9em;
+}
+
+.md-preview ul,
+.md-preview ol {
+  padding-left: 1.6em;
+}
+
+.md-preview li + li {
+  margin-top: 0.25em;
+}
+
+.md-preview a {
+  color: var(--g-color-text-link);
+}
+
+.md-preview blockquote {
+  padding: 0 1em;
+  color: var(--g-color-text-secondary);
+  border-left: 3px solid var(--g-color-line-generic-hover);
+}
+
+.md-preview code {
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--g-color-base-neutral-light);
+  font-family: var(--g-font-family-monospace);
+  font-size: 0.9em;
+}
+
+.md-preview pre {
+  padding: 12px;
+  overflow-x: auto;
+  border-radius: var(--g-border-radius-m);
+  background: var(--g-color-base-neutral-light);
+}
+
+.md-preview pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.9em;
+}
+
+.md-preview table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.md-preview th,
+.md-preview td {
+  padding: 6px 10px;
+  border: 1px solid var(--g-color-line-generic);
+  text-align: left;
+}
+
+.md-preview th {
+  background: var(--g-color-base-neutral-light);
+  font-weight: 600;
+}
+
+.md-preview hr {
+  margin: 1.2em 0;
+  border: none;
+  border-top: 1px solid var(--g-color-line-generic);
+}
+
+.md-preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+.md-preview input[type='checkbox'] {
+  margin-right: 0.4em;
+}
+
+
+import { useDeferredValue, useId } from 'react';
+import { TextArea } from '@gravity-ui/uikit';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+import './MarkdownField.css';
+
+export interface MarkdownFieldProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  minRows?: number;
+}
+
+/**
+ * Поле для текста в Markdown: слева редактор, справа живой предпросмотр.
+ * ReactMarkdown не использует dangerouslySetInnerHTML и по умолчанию не
+ * пропускает сырой HTML, а небезопасные ссылки (javascript: и т.п.) вырезаются.
+ */
+export function MarkdownField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  minRows = 10,
+}: MarkdownFieldProps) {
+  const id = useId();
+  // Предпросмотр может отставать на один кадр при быстром наборе — ввод при этом не тормозит.
+  const deferredValue = useDeferredValue(value);
+  const isPreviewEmpty = deferredValue.trim() === '';
+
+  return (
+    <div className=\"md-field\">
+      <div className=\"md-field__pane\">
+        <label className=\"md-field__label\" htmlFor={id}>
+          {label}
+        </label>
+        <TextArea
+          id={id}
+          value={value}
+          onUpdate={onChange}
+          placeholder={placeholder}
+          minRows={minRows}
+          size=\"l\"
+        />
+      </div>
+
+      <div className=\"md-field__pane\">
+        <span className=\"md-field__label\">Предпросмотр</span>
+        <div className=\"md-preview\" aria-live=\"polite\">
+          {isPreviewEmpty ? (
+            <p className=\"md-preview__empty\">Здесь появится отформатированный текст</p>
+          ) : (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{deferredValue}</ReactMarkdown>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/MarkdownField.tsx builds the field from a @gravity-ui/uikit TextArea plus a separate react-markdown preview pane (imports at lines 2-3), and neither @gravity-ui/markdown-editor, useMarkdownEditor, nor MarkdownEditorView appears anywhere in the project or its package.json dependencies. This is exactly the forbidden raw-textarea-with-custom-preview approach, not the Gravity markdown editor.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

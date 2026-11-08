@@ -1,0 +1,105 @@
+{
+  "status": "passed",
+  "duration": 1243.721,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 322,
+    "outputTokens": 8251,
+    "cacheReadTokens": 375485,
+    "cacheWriteTokens": 30292,
+    "totalTokens": 414350
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 12,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ----; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui; echo ----; cat /home/sandbox/workspace/AGENTS.md; echo ----; ls -la /home/sandbox/workspace; cat /home/sandbox/workspace/package.json",
+        "success": true
+      },
+      {
+        "command": "find src -type f | xargs -I{} sh -c 'echo \"=== {}\"; cat {}'; echo \"=== index.html\"; cat index.html; echo \"=== tsconfig\"; cat tsconfig.json; echo \"=== vite\"; cat vite.config.ts; echo \"=== installed version\"; node -p \"require('./node_modules/@gravity-ui/uikit/package.json').version\"; ls node_modules/@gravity-ui/; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; ls node_modules/@gravity-ui/uikit/dist/docs 2>&1 | head; echo \"=== routing top\"; sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md; echo \"=== traps theming\"; rg -n -C 6 -i 'ThemeProvider|theme' .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme useThemeValue Switch SegmentedRadioGroup 2>&1 | head -80; echo \"=== icons\"; node -p \"require('./node_modules/@gravity-ui/icons/package.json').version\"; ls node_modules/@gravity-ui/icons/ | grep -iE '^(Sun|Moon)' ; echo \"=== theming ref useTheme\"; rg -n -C 3 'useTheme|useThemeValue|useThemeType|setTheme' .agents/skills/gravity-ui/references/theming.md | head -80",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme useThemeValue SegmentedRadioGroup 2>&1 | head -60; echo \"=== d.ts\"; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeValue.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts 2>&1; echo \"=== SegmentedRadioGroup\"; ls node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/ 2>&1 | head; sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>&1; echo \"=== Switch\"; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts; echo \"=== Icon\"; sed -n 1,30p node_modules/@gravity-ui/uikit/build/esm/components/Icon/Icon.d.ts; echo \"=== README required setup\"; rg -n -C 8 -i 'required setup|ThemeProvider' node_modules/@gravity-ui/uikit/README.md | head -80",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeContext.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeSettingsContext.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeSettings.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeType.d.ts; echo \"=== ControlGroup types\"; rg -n -A 14 'interface ControlGroupProps|interface ControlGroupOption' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; echo \"=== Option\"; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; echo \"=== theming ref ThemeProvider section\"; sed -n 50,80p .agents/skills/gravity-ui/references/theming.md; echo \"=== Button/Text/Flex exist\"; ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -E '^(Button|Text|Flex|Card|Icon|layout)$'",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts | rg -n 'gap|direction|alignItems|justifyContent|wrap' ; echo \"=== Text\"; rg -n \"TEXT_VARIANTS|'body-1'|'subheader-2'|'header-1'|'caption-2'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head; echo \"=== icons\"; ls node_modules/@gravity-ui/icons/ | grep -iE '^(Display|Monitor|Laptop|Gear|SunMoon)' ; rg -n 'Sun|Moon|Display' node_modules/@gravity-ui/icons/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cat > src/ThemeSwitcher.tsx <<'EOF'\nimport {Icon, SegmentedRadioGroup, Text, useTheme, useThemeValue} from '@gravity-ui/uikit';\nimport type {Theme} from '@gravity-ui/uikit';\nimport {Display, Moon, Sun} from '@gravity-ui/icons';\n\nexport type ThemeSwitcherProps = {\n  /** Called with the selected theme; the parent passes it to `ThemeProvider`'s `theme` prop. */\n  onUpdate: (theme: Theme) => void;\n};\n\n/**\n * Light / dark / system switcher for @gravity-ui/uikit v7.\n *\n * In v7 the theme is controlled by `ThemeProvider`'s `theme` prop, and\n * `useTheme()` only reads it — so the setter comes from the owner of that state.\n * `useThemeValue()` gives the resolved theme (`light` / `dark` / …) when `system` is selected.\n */\nexport function ThemeSwitcher({onUpdate}: ThemeSwitcherProps) {\n  const theme = useTheme();\n  const resolvedTheme = useThemeValue();\n\n  return (\n    <SegmentedRadioGroup<Theme>\n      value={theme}\n      onUpdate={onUpdate}\n      size=\"m\"\n      aria-label=\"Theme\"\n      title={theme === 'system' ? `System (${resolvedTheme})` : undefined}\n    >\n      <SegmentedRadioGroup.Option<Theme> value=\"light\" title=\"Light\">\n        <Icon data={Sun} size={16} />\n        <Text variant=\"body-1\" style={{marginInlineStart: 6}}>\n          Light\n        </Text>\n      </SegmentedRadioGroup.Option>\n      <SegmentedRadioGroup.Option<Theme> value=\"dark\" title=\"Dark\">\n        <Icon data={Moon} size={16} />\n        <Text variant=\"body-1\" style={{marginInlineStart: 6}}>\n          Dark\n        </Text>\n      </SegmentedRadioGroup.Option>\n      <SegmentedRadioGroup.Option<Theme> value=\"system\" title=\"System\">\n        <Icon data={Display} size={16} />\n        <Text variant=\"body-1\" style={{marginInlineStart: 6}}>\n          System\n        </Text>\n      </SegmentedRadioGroup.Option>\n    </SegmentedRadioGroup>\n  );\n}\nEOF\ncat > src/useAppTheme.ts <<'EOF'\nimport {useCallback, useState} from 'react';\nimport type {Theme} from '@gravity-ui/uikit';\n\nconst STORAGE_KEY = 'app-theme';\nconst KNOWN_THEMES: Theme[] = ['light', 'dark', 'light-hc', 'dark-hc', 'system'];\n\nfunction readStoredTheme(): Theme {\n  try {\n    const stored = window.localStorage.getItem(STORAGE_KEY);\n    if (stored && KNOWN_THEMES.includes(stored)) {\n      return stored;\n    }\n  } catch {\n    // localStorage may be unavailable (privacy mode, SSR) — fall through to the default.\n  }\n  return 'system';\n}\n\n/** App-level theme state that drives `ThemeProvider`'s `theme` prop, persisted in localStorage. */\nexport function useAppTheme(): [Theme, (theme: Theme) => void] {\n  const [theme, setThemeState] = useState<Theme>(readStoredTheme);\n\n  const setTheme = useCallback((next: Theme) => {\n    setThemeState(next);\n    try {\n      window.localStorage.setItem(STORAGE_KEY, next);\n    } catch {\n      // Ignore persistence failures; the in-memory state still updates.\n    }\n  }, []);\n\n  return [theme, setTheme];\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {Card, Flex, Text, ThemeProvider, useThemeValue} from '@gravity-ui/uikit';\n\nimport {ThemeSwitcher} from './ThemeSwitcher';\nimport {useAppTheme} from './useAppTheme';\n\nfunction Content() {\n  const resolvedTheme = useThemeValue();\n\n  return (\n    <Card view=\"filled\" style={{padding: 'var(--g-spacing-4)'}}>\n      <Text as=\"p\" variant=\"body-2\">\n        Active theme: <Text variant=\"code-inline-2\">{resolvedTheme}</Text>\n      </Text>\n    </Card>\n  );\n}\n\nexport function App() {\n  const [theme, setTheme] = useAppTheme();\n\n  return (\n    <ThemeProvider theme={theme}>\n      <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)'}}>\n        <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={4} wrap>\n          <Text variant=\"header-1\">Theme switcher</Text>\n          <ThemeSwitcher onUpdate={setTheme} />\n        </Flex>\n        <Content />\n      </Flex>\n    </ThemeProvider>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport {App} from './App';\n\n// `ThemeProvider` lives in App.tsx: in uikit v7 the theme is driven by its `theme` prop,\n// so the provider must sit next to the state that switches it (the outermost provider\n// is the one that writes the theme class to <body>).\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\nrg -n \"view\\?:\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; rg -n \"as\\?:\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; npx tsc --noEmit && echo TSC_OK",
+        "success": false
+      },
+      {
+        "command": "rg -n \"CardView =\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; sed -i \"/title={theme === 'system'/d\" src/ThemeSwitcher.tsx; npx tsc --noEmit && echo TSC_OK && npx vite build 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 322,
+      "outputTokens": 8251,
+      "cacheReadTokens": 375485,
+      "cacheWriteTokens": 30292,
+      "totalTokens": 414350
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T17:02:01.755Z",
+    "by": "claude-subscription--claude-code--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "status": "failed",
+  "duration": 1253.227,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 62,
+    "outputTokens": 29965,
+    "cacheReadTokens": 1490263,
+    "cacheWriteTokens": 59907,
+    "totalTokens": 1580197
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 17,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 6,
+      "file_edit": 4,
+      "shell": 27,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 39,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/i18n/translations.ts",
+      "/home/sandbox/workspace/src/i18n/I18nProvider.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/tmp/pwcheck/check.mjs",
+      "/home/sandbox/workspace/src/__i18n_check.test.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat package.json tsconfig.json vite.config.ts index.html .gitignore src/*.tsx src/*.ts && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "(npm ci 2>&1 | tail -15); ls node_modules/@gravity-ui/uikit/build 2>/dev/null | head -50; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm | head -80; grep -rl \"configure\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null; find node_modules/@gravity-ui/uikit/build/esm -maxdepth 2 -name \"*.d.ts\" | xargs grep -ln \"lang\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat utils/configure.d.ts; cat i18n/addComponentKeysets.d.ts; ls i18n; grep -n \"lang\" components/theme/ThemeProvider.d.ts components/*/ThemeProvider* 2>/dev/null; grep -rn \"lang\" --include=*.d.ts components | grep -i \"theme\\|provider\\|lang?:\" | head -20",
+        "success": true
+      },
+      {
+        "command": "find . -path \"*i18n*\" -name \"ru.json\" | head -40; grep -n \"export\" index.d.ts | head -20; grep -rn \"RadioButton\\b\" components/index.d.ts | head -3; grep -rn \"export.*Lang\\|configure\" index.d.ts components/index.d.ts | head; cat components/theme/useLang.d.ts",
+        "success": true
+      },
+      {
+        "command": "ls components | tr '\\n' ' '; echo; grep -o \"RadioButton\\|Card\\|TextInput\\|Button\\|Label\\|Text\\|Switch\\|Checkbox\\|Select\\|Pagination\\|Header\\|Flex\" components/index.d.ts | sort | uniq -c; cat components/controls/Button/i18n/ru.json 2>/dev/null; cat components/Pagination/i18n/ru.json; cat components/Pagination/i18n/en.json",
+        "success": true
+      },
+      {
+        "command": "cat components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -60; ls components/controls; grep -n \"TextInput\\|Pagination\\|Select\" components/controls/index.d.ts components/index.d.ts | head; sed -n 1,40p components/Card/Card.d.ts 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cat components/types.d.ts | grep -n -A8 \"ControlGroupOption\\b\\|ControlGroupProps\" | head -50; cat components/controls/TextInput/TextInput.d.ts | head -30; grep -n \"export\" components/Text/Text.d.ts components/Switch/Switch.d.ts components/Button/Button.d.ts | head; ls components/Text components/layout 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p components/Pagination/Pagination.d.ts; cat components/Text/Text.d.ts | head -30; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cat components/Pagination/types.d.ts | head -60; grep -n \"variant\" components/Text/text/text.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i playwright; python3 -c \"import playwright; print('py playwright ok')\" 2>&1 | tail -1; ls node_modules/.bin | grep -i \"vitest\\|playwright\" )",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pwcheck && cd /tmp/pwcheck && npm init -y >/dev/null && (npm i playwright@1 2>&1 | tail -3) && (timeout 280 npx playwright install --with-deps chromium 2>&1 | tail -5)",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwcheck && (timeout 280 npx playwright install chromium 2>&1 | tail -5); ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite preview --port 4173 --strictPort > /tmp/pwcheck/preview.log 2>&1 &) ; sleep 4; cat /tmp/pwcheck/preview.log; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:4173/",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/pwcheck && node check.mjs 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "ls /usr/lib/aarch64-linux-gnu 2>/dev/null | grep -i \"glib\\|nss3\" | head; ls /lib/aarch64-linux-gnu 2>/dev/null | grep -i glib | head -3; find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; ls /home/sandbox/workspace/node_modules | grep -i \"^jsdom\\|happy-dom\\|linkedom\"; uname -m",
+        "success": true
+      },
+      {
+        "command": "cp package-lock.json /tmp/pwcheck/lock.bak && (npm i --no-save jsdom@25 @testing-library/react@16 @testing-library/dom@10 2>&1 | tail -3) && git status --short",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npx vitest run src/__i18n_check.test.tsx 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npx vitest run src/__i18n_check.test.tsx --server.deps.inline=@gravity-ui/uikit,@gravity-ui/i18n 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.tmp.config.ts <<'EOF'\n// TEMPORARY — delete after verification.\nimport { defineConfig, mergeConfig } from 'vitest/config';\nimport base from './vite.config';\nexport default mergeConfig(base, defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } } } }));\nEOF\ntimeout 300 npx vitest run --config vitest.tmp.config.ts src/__i18n_check.test.tsx 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npx vitest run --config vitest.tmp.config.ts src/__i18n_check.test.tsx 2>&1 | tail -80",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite preview\" ; rm -f src/__i18n_check.test.tsx vitest.tmp.config.ts && rm -rf dist && rm -rf node_modules && (npm ci 2>&1 | grep -i \"added\\|error\" | head -3) && cmp package-lock.json /tmp/pwcheck/lock.bak && echo \"lock unchanged\" && npm run build 2>&1 | tail -4 && rm -rf dist && git status --short && git diff --stat",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite preview\"; then echo \"killing ${p#/proc/}\"; kill ${p#/proc/} 2>/dev/null; fi; done; sleep 1; for p in /proc/[0-9]*; do tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite preview\" && echo \"still running ${p#/proc/}\"; done; echo done",
+        "success": false
+      },
+      {
+        "command": "n=0; for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *\"node\"*\"vite\"*\"preview\"*) n=$((n+1));; esac; done; echo \"vite preview processes: $n\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      },
+      {
+        "command": "node -e \"require('net').connect(4173,'localhost').on('connect',()=>{console.log('port 4173 still open');process.exit()}).on('error',()=>console.log('port 4173 closed'))\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 62,
+      "outputTokens": 29965,
+      "cacheReadTokens": 1490263,
+      "cacheWriteTokens": 59907,
+      "totalTokens": 1580197
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

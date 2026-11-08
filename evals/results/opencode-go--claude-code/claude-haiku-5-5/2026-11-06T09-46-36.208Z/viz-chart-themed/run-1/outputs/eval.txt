@@ -1,0 +1,72 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 3 failed) 13910ms
+   × imports @gravity-ui/charts 4ms
+     → expected false to be true // Object.is equality
+   × depends on @gravity-ui/charts 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @gravity-ui/chartkit 0ms
+   ✓ no recharts 0ms
+   ✓ no chart.js 0ms
+   ✓ no raw <canvas> 0ms
+   × judge: implements the task with the intended Gravity UI API 13905ms
+     → [judge:environment] FAIL — The line chart is @gravity-ui/charts' Chart component with a series of type 'line'; it follows the app theme because it reads the active Gravity theme from the surrounding ThemeProvider, with no manual color wiring. Chartkit, recharts, chart.js or a raw canvas fail.
+  reason: The chart is a hand-rolled SVG implementation in src/LineChart.tsx (raw <svg>/<path> with manual light/dark series colours via SERIES_COLOR and useThemeType), not @gravity-ui/charts' Chart component; @gravity-ui/charts is neither imported nor present in package.json or node_modules (only @gravity-ui/uikit, i18n, icons are installed).
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  09:54:52
+   Duration  14.11s (transform 34ms, setup 17ms, collect 15ms, tests 13.91s, environment 0ms, prepare 56ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/charts
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:53
+     53| // The canonical themed-chart library must be imported; without it the…
+     54| test("imports @gravity-ui/charts", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/charts")).toBe(true);
+       |                                                     ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/charts
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:48
+     58| // package.json must declare the correct charting library, confirming …
+     59| test("depends on @gravity-ui/charts", () => {
+     60|   expect(dependsOn(src, "@gravity-ui/charts")).toBe(true);
+       |                                                ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The line chart is @gravity-ui/charts' Chart component with a series of type 'line'; it follows the app theme because it reads the active Gravity theme from the surrounding ThemeProvider, with no manual color wiring. Chartkit, recharts, chart.js or a raw canvas fail.
+  reason: The chart is a hand-rolled SVG implementation in src/LineChart.tsx (raw <svg>/<path> with manual light/dark series colours via SERIES_COLOR and useThemeType), not @gravity-ui/charts' Chart component; @gravity-ui/charts is neither imported nor present in package.json or node_modules (only @gravity-ui/uikit, i18n, icons are installed).
+ ❯ EVAL.ts:89:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

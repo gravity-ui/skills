@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "duration": 571.825,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 74619,
+    "outputTokens": 11184,
+    "cacheReadTokens": 70173,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 8282,
+    "totalTokens": 155976
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!node_modules'\"' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,90p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- uikit docs table refs ---\\\\n'; find node_modules/@gravity-ui/uikit -path '*docs*Table*' -o -path '*docs*Pagination*' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- table typings ---'; rg -n \\\"declare const Table|withTableSorting|withTableSelection|SortingDirection|onUpdateSort|selectedIds|onUpdateSelectedIds|sort\\\" node_modules/@gravity-ui/uikit/build/legacy/table/table.d.ts node_modules/@gravity-ui/uikit/build/legacy/table -g '*.d.ts' | head -180; printf '%s\\\\n' '--- pagination typings ---'; rg -n \\\"declare const Pagination|onUpdatePage|pageSize|page\\\" node_modules/@gravity-ui/uikit/build/legacy/Pagination/Pagination.d.ts | head -120\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit -name '*.d.ts' -print | rg -i 'table|pagination|legacy' | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- Table.d.ts ---'; sed -n '1,240p' node_modules/@gravity-ui/uikit/build/esm/components/Table/Table.d.ts; printf '%s\\\\n' '--- sorting hoc ---'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.d.ts; printf '%s\\\\n' '--- selection hoc ---'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection/withTableSelection.d.ts; printf '%s\\\\n' '--- Pagination ---'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Pagination/Pagination.d.ts; sed -n '1,140p' node_modules/@gravity-ui/uikit/build/esm/components/Pagination/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- exports ---'; cat node_modules/@gravity-ui/uikit/build/esm/components/Table/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/index.d.ts; printf '%s\\\\n' '--- sorting impl ---'; rg -n \\\"meta|sort\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.js | head -60; printf '%s\\\\n' '--- selection impl ---'; rg -n \\\"selectionColumnId|isRowSelectionDisabled|getRowId\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection/withTableSelection.js | head -60; printf '%s\\\\n' '--- app ---'; cat src/App.tsx src/main.tsx vite.config.ts tsconfig.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 74619,
+      "outputTokens": 11184,
+      "cacheReadTokens": 70173,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 8282,
+      "totalTokens": 155976
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

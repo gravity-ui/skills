@@ -1,0 +1,219 @@
+{
+  "status": "failed",
+  "duration": 759.033,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 64140,
+    "outputTokens": 20216,
+    "cacheReadTokens": 1859072,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 3462,
+    "totalTokens": 1943428
+  },
+  "model": "gpt-6-astra",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 34,
+      "web_fetch": 0,
+      "web_search": 1,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 35,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd; rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g '*monitor*' -g '*Monitoring*' -g '*Monitor*' -g 'README*' -g 'vite.config.*' -g 'tsconfig*'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la; rg --files -g '\"'!package-lock.json'\"' -g '\"'!node_modules/**'\"' -g '\"'!'\"\\\\.git/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json src/App.tsx src/main.tsx tsconfig.json; git status --short; ls node_modules | head -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm view @gravity-ui/yagr version; rg 'useTheme' node_modules/@gravity-ui/uikit/build/esm/components/theme -n\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/yagr@5.3.1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg --files node_modules/@gravity-ui/yagr | head -50; cat node_modules/@gravity-ui/yagr/package.json; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeSettingsContext.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/yagr/dist/YagrCore/index.d.ts; cat node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/dynamic-updates.d.ts; cat node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/dynamic-updates.js; cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/types.d.ts; rg -n 'dispose\\\\(|resizeOb|onResize|timeMultiplier' node_modules/@gravity-ui/yagr/dist/YagrCore/index.js; cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/cursor/cursor.d.ts; cat node_modules/@gravity-ui/yagr/dist/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/batch-updates.js; sed -n '95,125p' node_modules/@gravity-ui/yagr/dist/YagrCore/index.js; sed -n '255,280p' node_modules/@gravity-ui/yagr/dist/YagrCore/index.js; rg -n 'timeMultiplier|setScale|onSelect|range:' node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/create-options.js node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/transform-series.js node_modules/@gravity-ui/yagr/dist/YagrCore/defaults.js; cat node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/legend/legend.d.ts | head -90; cat node_modules/@gravity-ui/yagr/dist/index.css | head -c 800\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '40,85p' node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/create-options.js; cat node_modules/@gravity-ui/yagr/dist/YagrCore/utils/scales.js | head -180; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts; command -v chromium; test -d node_modules/@playwright && ls node_modules/@playwright\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {CpuChart} from './CpuChart';\nimport {demoCpuSource} from './cpuData';\nimport './monitoring.css';\n\nexport function App() {\n  return (\n    <main className=\\\"monitoring\\\">\n      <header className=\\\"monitoring-header\\\">\n        <div>\n          <p className=\\\"eyebrow\\\">СИСТЕМА / МЕТРИКИ</p>\n          <h1>Мониторинг</h1>\n          <p className=\\\"muted\\\">Производительность процессора за последние сутки</p>\n        </div>\n        <span className=\\\"demo-badge\\\">Демонстрационные данные</span>\n      </header>\n      <CpuChart source={demoCpuSource} />\n      <p className=\\\"monitoring-note\\\">\n        Тестовый поток: измерение каждые 2 секунды. Для подключения сервера замените источник метрик.\n      </p>\n    </main>\n  );\n}\nEOF\ncat > src/cpuData.ts <<'EOF'\nexport const DAY_MS = 24 * 60 * 60 * 1000;\n\nexport interface CpuSample {\n  /** Unix timestamp in milliseconds. */\n  timestamp: number;\n  /** CPU utilization, 0–100; null represents a missing measurement. */\n  value: number | null;\n}\n\nexport interface CpuDataSource {\n  /** History and live batches must be ordered by timestamp. */\n  getHistory: () => readonly CpuSample[];\n  /** Returns an unsubscribe function that releases the connection/timer. */\n  subscribe: (receive: (samples: readonly CpuSample[]) => void) => () => void;\n}\n\n/** Sliding window with amortized compaction, avoiding shift() for every sample. */\nexport class CpuWindow {\n  private samples: CpuSample[] = [];\n  private head = 0;\n\n  append(batch: readonly CpuSample[], now: number) {\n    this.prune(now);\n    for (const sample of batch) {\n      const {timestamp, value} = sample;\n      if (\"'!Number.isFinite(timestamp) || timestamp < now - DAY_MS || timestamp > now ||\n        (value !== null && (!Number.isFinite(value) || value < 0 || value > 100))) continue;\n      const last = this.samples.at(-1);\n      // Ignore late data; replace a repeated timestamp without duplicating it.\n      if (last && timestamp < last.timestamp) continue;\n      if (last && timestamp === last.timestamp) this.samples[this.samples.length - 1] = {...sample};\n      else this.samples.push({...sample});\n    }\n  }\n\n  prune(now: number) {\n    while (this.head < this.samples.length && this.samples[this.head].timestamp < now - DAY_MS) {\n      this.head++;\n    }\n    if (this.head > 0 && this.head >= this.samples.length / 2) {\n      this.samples = this.samples.slice(this.head);\n      this.head = 0;\n    }\n  }\n\n  snapshot(now: number) {\n    this.prune(now);\n    const size = this.samples.length - this.head;\n    const timeline = new Array<number>(size);\n    const values = new Array<number | null>(size);\n    for (let i = 0; i < size; i++) {\n      const sample = this.samples[this.head + i];\n      timeline[i] = sample.timestamp;\n      values[i] = sample.value;\n    }\n    return {timeline, values, count: size, latest: this.samples.at(-1) ?? null};\n  }\n}\n\nfunction demoValue(timestamp: number) {\n  const t = timestamp / 1000;\n  const baseline = 34 + 13 * Math.sin(t / 3200) + 6 * Math.sin(t / 540);\n  const burst = 35 * Math.exp(-(((t % 14400 - 8400) / 700) ** 2));\n  return Math.round(Math.min(100, Math.max(0, baseline + burst + 2 * Math.sin(t / 3))) * 10) / 10;\n}\n\n/** Explicit demo adapter; replace with a real metric service in production. */\nexport const demoCpuSource: CpuDataSource = {\n  getHistory() {\n    const now = Date.now();\n    return Array.from({length: DAY_MS / 2000 + 1}, (_, i) => {\n      const timestamp = now - DAY_MS + i * 2000;\n      return {timestamp, value: demoValue(timestamp)};\n    });\n  },\n  subscribe(receive) {\n    const timer = window.setInterval(() => {\n      const timestamp = Date.now();\n      receive([{timestamp, value: demoValue(timestamp)}]);\n    }, 2000);\n    return () => window.clearInterval(timer);\n  },\n};\nEOF\ncat > src/CpuChart.tsx <<'\"'EOF'\nimport {useEffect, useRef, useState} from 'react';\nimport {useThemeType} from '@gravity-ui/uikit';\nimport Yagr from '@gravity-ui/yagr';\nimport '@gravity-ui/yagr/index.css';\nimport {CpuWindow, DAY_MS, type CpuDataSource, type CpuSample} from './cpuData';\n\nconst timeFormat = new Intl.DateTimeFormat('ru-RU', {\n  day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',\n});\nconst numberFormat = new Intl.NumberFormat('ru-RU');\n\nexport function CpuChart({source}: {source: CpuDataSource}) {\n  const containerRef = useRef<HTMLDivElement>(null);\n  const chartRef = useRef<Yagr | null>(null);\n  const resetRef = useRef<() => void>(() => {});\n  const theme = useThemeType();\n  const themeRef = useRef(theme);\n  const [zoomed, setZoomed] = useState(false);\n  const [summary, setSummary] = useState<{count: number; latest: CpuSample | null}>({count: 0, latest: null});\n\n  useEffect(() => {\n    const container = containerRef.current\"'!;\n    const windowData = new CpuWindow();\n    windowData.append(source.getHistory(), Date.now());\n    let range: [number, number] | null = null;\n    let disposed = false;\n    let frame: number | null = null;\n    let resizePending = false;\n    const getRange = (): [number, number] => {\n      const now = Date.now();\n      return range ?? [now - DAY_MS, now];\n    };\n    const initial = windowData.snapshot(Date.now());\n    // Null endpoints keep an empty chart initialized and able to receive live data.\n    const chart = new Yagr(container, {\n      timeline: initial.count ? initial.timeline : getRange(),\n      series: [{\n        id: '\"'cpu', name: 'CPU', data: initial.count ? initial.values : [null, null],\n        type: 'line', color: '#5089f5', width: 1.5, spanGaps: false,\n      }],\n      chart: {\n        timeMultiplier: 1,\n        size: {adaptive: false},\n        appearance: {theme: themeRef.current, locale: 'ru'},\n        select: {zoom: false, minWidth: 8},\n      },\n      scales: {y: {min: 0, max: 100}},\n      axes: {y: {values: (_plot, ticks) => ticks.map((value) => \"'`${value}%`)}},\n      legend: {show: false},\n      markers: {show: false},\n      tooltip: {\n        show: true, strategy: '\"'none', title: ({x}) => timeFormat.format(x),\n        value: (value) => value === null ? 'Нет данных' : \"'`${Number(value).toFixed(1)} %`,\n      },\n      cursor: {x: {visible: true}, y: {visible: false}},\n      editUplotOptions: (options) => {\n        options.scales!.x = {...options.scales!.x, range: () => getRange()};\n        return options;\n      },\n      hooks: {\n        onSelect: [({from, to}) => {\n          if (to <= from) return;\n          range = [from, to];\n          setZoomed(true);\n          chart.uplot.setScale('\"'x', {min: from, max: to});\n        }],\n      },\n    });\n    chartRef.current = chart;\n    setZoomed(false);\n    setSummary({count: initial.count, latest: initial.latest});\n\n    function flush() {\n      frame = null;\n      if (disposed) return;\n      const snapshot = windowData.snapshot(Date.now());\n      // Updating one existing series avoids Yagr's full setConfig/setSeries rebuild.\n      // Keep its timeline aligned before Yagr processes the new values.\n      chart.config.timeline = snapshot.count ? snapshot.timeline : getRange();\n      chart.setSeries('cpu', {data: snapshot.count ? snapshot.values : [null, null]});\n      if (resizePending) {\n        resizePending = false;\n        if (container.clientWidth > 0 && container.clientHeight > 0) chart.reflow();\n      }\n      setSummary({count: snapshot.count, latest: snapshot.latest});\n    }\n\n    function schedule() {\n      if (\"'!disposed && frame === null) frame = requestAnimationFrame(flush);\n    }\n\n    resetRef.current = () => {\n      range = null;\n      setZoomed(false);\n      const [min, max] = getRange();\n      chart.uplot.setScale('\"'x', {min, max});\n    };\n\n    // Own the observer and animation frame so both can be cancelled on unmount.\n    const observer = new ResizeObserver(() => {\n      resizePending = true;\n      schedule();\n    });\n    observer.observe(container);\n    const unsubscribe = source.subscribe((samples) => {\n      if (disposed) return;\n      windowData.append(samples, Date.now());\n      schedule();\n    });\n    // Advance the 24-hour window even when no measurements arrive.\n    const timer = window.setInterval(schedule, 1000);\n\n    return () => {\n      disposed = true;\n      unsubscribe();\n      window.clearInterval(timer);\n      observer.disconnect();\n      if (frame \"'!== null) cancelAnimationFrame(frame);\n      resetRef.current = () => {};\n      chartRef.current = null;\n      chart.dispose();\n      container.replaceChildren();\n    };\n  }, [source]);\n\n  useEffect(() => {\n    themeRef.current = theme;\n    chartRef.current?.setTheme(theme);\n  }, [theme]);\n\n  return (\n    <section className=\"cpu-card\" aria-labelledby=\"cpu-title\">\n      <div className=\"cpu-toolbar\">\n        <div>\n          <h2 id=\"cpu-title\">Загрузка CPU</h2>\n          <p className=\"muted\">{zoomed ? '\"'Выбранный интервал' : 'Последние 24 часа'} · время браузера</p>\n        </div>\n        <div className=\\\"cpu-actions\\\">\n          <span className=\\\"live-badge\\\"><span /> Обновляется</span>\n          <button type=\\\"button\\\" onClick={() => resetRef.current()} disabled={\"'!zoomed}>Сбросить масштаб</button>\n        </div>\n      </div>\n      <div className=\"cpu-summary\">\n        <div><span className=\"muted\">Последнее измерение</span><strong>{summary.latest?.value == null ? '\"'—' : \"'`${summary.latest.value.toFixed(1)} %`}</strong></div>\n        <div><span className=\"muted\">Точек за сутки</span><strong>{numberFormat.format(summary.count)}</strong></div>\n        <div><span className=\"muted\">Обновлено</span><strong className=\"cpu-timestamp\">{summary.latest ? timeFormat.format(summary.latest.timestamp) : '\"'Нет данных'}</strong></div>\n      </div>\n      <div className=\\\"cpu-plot-wrap\\\">\n        <div ref={containerRef} className=\\\"cpu-plot\\\" role=\\\"img\\\"\n          aria-label=\\\"Интерактивный график загрузки CPU от 0 до 100 процентов за последние сутки\\\"\n          onDoubleClick={() => resetRef.current()} />\n        {summary.count === 0 && <p className=\\\"cpu-empty\\\">Ожидание данных CPU…</p>}\n      </div>\n      <footer className=\\\"cpu-footer\\\">\n        <span><i className=\\\"cpu-legend\\\" /> CPU, %</span>\n        <span>Наведите курсор для деталей · Выделите участок для увеличения</span>\n      </footer>\n    </section>\n  );\n}\nEOF\ncat > src/monitoring.css <<'EOF'\n* { box-sizing: border-box; }\nbody { margin: 0; }\nbutton { font: inherit; }\n.monitoring { max-width: 1600px; margin: 0 auto; padding: 40px clamp(16px, 4vw, 64px); color: var(--g-color-text-primary); }\n.monitoring-header { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 32px; }\n.eyebrow { font-size: 11px; letter-spacing: 1.5px; color: var(--g-color-text-secondary); margin: 0 0 12px; }\n.monitoring h1 { font-size: 30px; line-height: 1.2; margin: 0 0 12px; font-weight: 600; }\n.monitoring h2 { font-size: 20px; margin: 0 0 8px; font-weight: 600; }\n.muted { color: var(--g-color-text-secondary); margin: 0; }\n.demo-badge { border: 1px solid var(--g-color-line-generic); border-radius: 20px; padding: 8px 12px; color: var(--g-color-text-secondary); font-size: 12px; white-space: nowrap; }\n.cpu-card { min-width: 0; border: 1px solid var(--g-color-line-generic); border-radius: 16px; background: var(--g-color-base-background); padding: 24px; }\n.cpu-toolbar, .cpu-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }\n.cpu-actions button { color: var(--g-color-text-primary); background: var(--g-color-base-simple-hover); border: 1px solid var(--g-color-line-generic); border-radius: 8px; padding: 8px 12px; cursor: pointer; }\n.cpu-actions button:disabled { opacity: .45; cursor: default; }\n.cpu-actions button:focus-visible { outline: 2px solid #5089f5; outline-offset: 3px; }\n.live-badge { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--g-color-text-secondary); }\n.live-badge > span { width: 6px; height: 6px; background: #39a86d; border-radius: 50%; }\n.cpu-summary { display: flex; gap: clamp(24px, 5vw, 80px); flex-wrap: wrap; margin: 28px 0 22px; padding: 20px 0; border-block: 1px solid var(--g-color-line-generic); }\n.cpu-summary > div { display: flex; flex-direction: column; gap: 8px; }\n.cpu-summary .muted { font-size: 12px; }\n.cpu-summary strong { font-size: 26px; font-weight: 500; font-variant-numeric: tabular-nums; }\n.cpu-summary .cpu-timestamp { font-size: 18px; line-height: 32px; }\n.cpu-plot-wrap { position: relative; }\n.cpu-plot { width: 100%; height: clamp(280px, 45vh, 520px); min-width: 0; }\n.cpu-plot.yagr { --yagr-background: var(--g-color-base-background); }\n.cpu-empty { position: absolute; inset: 40% 0 auto; text-align: center; pointer-events: none; color: var(--g-color-text-secondary); }\n.cpu-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 20px; font-size: 12px; color: var(--g-color-text-secondary); }\n.cpu-legend { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; background: #5089f5; }\n.monitoring-note { font-size: 12px; color: var(--g-color-text-secondary); margin-top: 18px; }\n@media (max-width: 640px) {\n  .monitoring { padding-top: 24px; }\n  .monitoring-header { align-items: flex-start; flex-direction: column; gap: 16px; }\n  .cpu-card { padding: 16px 12px; }\n  .cpu-actions { gap: 12px; }\n  .cpu-summary { gap: 20px; }\n  .cpu-footer { line-height: 1.6; }\n}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'"
+      },
+      {
+        "command": "/bin/bash -lc 'ls -d /tmp/*playwright* /opt/* /root/.cache/ms-playwright/* /home/node/.cache/ms-playwright/* 2>/dev/null; npm exec --yes --package=@playwright/test -- playwright --version'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm exec --yes --package=@playwright/test -- playwright install chromium; rg --files /home/node/.npm/_npx -g 'package.json' | rg '/playwright/package.json\"'$'\"'\""
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '20,100p' node_modules/@gravity-ui/yagr/dist/YagrCore/index.js; cat node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/transform-series.js | head -150; rg -n 'isEmptyDataSet|empty' node_modules/@gravity-ui/yagr/dist/YagrCore/utils/series.js | head -20; cat .gitignore; cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx vitest run src/cpuData.test.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'isEmptyDataSet|isEmpty' node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/create-options.js; rg --files /home/node/.npm/_npx -g 'package.json' | rg '/playwright/package.json\"'$'\"'; sed -n '1,100p' node_modules/@gravity-ui/yagr/dist/YagrCore/utils/series.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/check-cpu.mjs <<'EOF'\nimport {chromium} from '/home/node/.npm/_npx/420ff84f11983ee5/node_modules/playwright/index.mjs';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless: true, executablePath:'/home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome', args:['--no-sandbox']});\nconst page = await browser.newPage({viewport:{width:1280,height:900}, colorScheme:'light'});\nconst errors = [];\npage.on('pageerror',e=>errors.push(e.message));\nawait page.goto('http://localhost:5175');\nawait page.waitForSelector('.cpu-plot canvas');\nawait page.waitForTimeout(400);\nawait page.evaluate(()=>window.firstCanvas = document.querySelector('.cpu-plot canvas'));\nconst before = await page.locator('.cpu-timestamp').textContent();\nawait page.waitForTimeout(2300);\nassert.notEqual(await page.locator('.cpu-timestamp').textContent(), before);\nassert.equal(await page.evaluate(()=>window.firstCanvas===document.querySelector('.cpu-plot canvas')),true);\nconst bounds = await page.locator('.u-over').boundingBox();\nawait page.mouse.move(bounds.x + bounds.width*.3, bounds.y + bounds.height*.5);\nawait page.waitForTimeout(100);\nconsole.log('tooltip', await page.locator('[class*=\\\"tooltip\\\"]').allTextContents());\nawait page.mouse.down();\nawait page.mouse.move(bounds.x+bounds.width*.6,bounds.y+bounds.height*.5,{steps:10});\nawait page.mouse.up();\nawait page.waitForTimeout(200);\nassert.equal(await page.getByRole('button',{name:'Сбросить масштаб'}).isEnabled(),true);\nawait page.waitForTimeout(1200);\nassert.equal(await page.getByRole('button',{name:'Сбросить масштаб'}).isEnabled(),true);\nawait page.getByRole('button',{name:'Сбросить масштаб'}).click();\nassert.equal(await page.getByRole('button',{name:'Сбросить масштаб'}).isEnabled(),false);\nawait page.screenshot({path:'/tmp/cpu-light.png',fullPage:true});\nawait page.emulateMedia({colorScheme:'dark'});\nawait page.waitForSelector('.yagr_theme_dark');\nassert.equal(await page.evaluate(()=>window.firstCanvas===document.querySelector('.cpu-plot canvas')),true);\nawait page.screenshot({path:'/tmp/cpu-dark.png',fullPage:true});\nawait page.setViewportSize({width:390,height:844});\nawait page.waitForTimeout(250);\nassert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);\nconst sizes = await page.evaluate(()=>({chart:document.querySelector('.cpu-plot').clientWidth,canvas:document.querySelector('canvas').getBoundingClientRect().width}));\nassert.ok(sizes.canvas<=sizes.chart);\nawait page.screenshot({path:'/tmp/cpu-mobile.png',fullPage:true});\nassert.deepEqual(errors,[]);\nconsole.log('PASS: 43k points, live updates, stable canvas, selection/reset, system theme, mobile resize; no browser errors.', sizes);\nawait browser.close();\nEOF\nnode /tmp/check-cpu.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm exec --yes --package=@playwright/test -- playwright install-deps chromium'"
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '125,145p' node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/create-options.js; git diff --stat\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"id; cat /etc/os-release; command -v sudo; command -v apt-get; ls /usr/lib/aarch64-linux-gnu | head; ldd /home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome | rg 'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/cpu-browser-libs; cd /tmp/cpu-browser-libs\napt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libcups2 libxkbcommon0 libasound2 libgbm1 libcairo2 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0 libavahi-client3 libavahi-common3 libdrm2 libxcb-render0 libxcb-shm0 libpixman-1-0 libthai0 libdatrie1 libgraphite2-3 libharfbuzz0b libfribidi0 libwayland-server0 libxshmfence1 libxrender1 libfontconfig1 libfreetype6 libpng16-16\nfor archive in ./*.deb; do dpkg-deb -x \"$archive\" root; done\nLD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome | rg '\"'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > README.md <<'EOF'\n# Мониторинг CPU\n\n\"'```sh\nnpm install\nnpm run dev\nnpm run build\nnpx vitest run\n```\n\n`src/CpuChart.tsx` отображает скользящее окно за последние 24 часа. Yagr/uPlot рисует\nлинию на Canvas без отдельных DOM-элементов для каждой точки. Поступающие пакеты\nобъединяются в одну отрисовку через `requestAnimationFrame`; данные и тема обновляются\nна существующем экземпляре. Выбранный масштаб сохраняется при обновлении данных.\n`ResizeObserver` отслеживает контейнер. При размонтировании удаляются подписка,\nтаймер, observer, ожидающий кадр и экземпляр графика, включая tooltip.\n\nТема берётся из Gravity UI `ThemeProvider`; приложение по умолчанию следует системной\nтеме. Наведение показывает время и процент CPU, выделение мышью увеличивает интервал.\nКнопка «Сбросить масштаб» или двойной щелчок возвращают последние сутки.\n\n## Подключение метрик\n\nВ репозитории нет API метрик. Страница явно помечена как демонстрационная:\n`demoCpuSource` генерирует около 43 200 точек и новое измерение каждые 2 секунды.\n\nПередайте в `CpuChart` стабильный объект `CpuDataSource` из `src/cpuData.ts`:\n\n- `getHistory()` возвращает загруженную историю;\n- `subscribe(receive)` передаёт новые пакеты и возвращает функцию отписки;\n- `timestamp` — Unix-время в **миллисекундах**, `value` — число от 0 до 100 или\n  `null` для разрыва линии при отсутствии измерения;\n- история и поток должны идти по возрастанию времени. Повтор последней временной\n  метки заменяет значение; запоздавшие, будущие и некорректные точки игнорируются.\n\nАсинхронную загрузку истории можно выполнить до монтирования компонента либо\nпередать историю первым пакетом подписки. Адаптер должен согласовать историю и\nпоток без пропусков, а функция отписки — закрывать соединение и отменять запросы.\nПри изменении объекта `source` компонент переподключается к новому источнику.\nДанные старше суток удаляются, даже если новых измерений нет. При высокой частоте\nизмерений серверу следует ограничивать объём истории согласованной детализацией.\nEOF\nnpx vitest run src/cpuData.test.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/cpu-browser-libs\napt-get download libxi6\ndpkg-deb -x libxi6*.deb root\nLD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/cpu-browser-libs\napt-get download libsqlite3-0 fonts-dejavu-core fontconfig-config\nfor archive in libsqlite3*.deb fonts-dejavu*.deb fontconfig-config*.deb; do dpkg-deb -x \"$archive\" root; done\ncat > fonts.conf <<'\"'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"urn:fontconfig:fonts.dtd\"><fontconfig><dir>/tmp/cpu-browser-libs/root/usr/share/fonts</dir><cachedir>/tmp/cpu-browser-libs/font-cache</cachedir></fontconfig>\nEOF\nFONTCONFIG_FILE=/tmp/cpu-browser-libs/fonts.conf LD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'theme|background|font-family|className' node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/tooltip.js node_modules/@gravity-ui/yagr/dist/index.css | head -90; sed -n '300,380p' node_modules/@gravity-ui/yagr/dist/index.css; cat node_modules/@gravity-ui/yagr/dist/YagrCore/defaults.js | rg -n 'CURSOR|stroke|red'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '180,250p' node_modules/@gravity-ui/yagr/dist/index.css; sed -n '530,553p' node_modules/@gravity-ui/yagr/dist/YagrCore/plugins/tooltip/tooltip.js; sed -n '132,153p' node_modules/@gravity-ui/yagr/dist/YagrCore/mixins/create-options.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/cpu-browser-libs/fonts.conf LD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > cpu-lifecycle-check.html <<'EOF'\n<html><body><div id=\\\"root\\\"></div><script type=\\\"module\\\" src=\\\"/src/cpu-lifecycle-check.tsx\\\"></script></body></html>\nEOF\ncat > src/cpu-lifecycle-check.tsx <<'EOF'\nimport React from 'react';\nimport {createRoot} from 'react-dom/client';\nimport {flushSync} from 'react-dom';\nimport {ThemeProvider} from '@gravity-ui/uikit';\nimport '@gravity-ui/uikit/styles/styles.css';\nimport Yagr from '@gravity-ui/yagr';\nimport {CpuChart} from './CpuChart';\nimport {demoCpuSource, type CpuSample} from './cpuData';\nconst tracker = {subscribed:0, unsubscribed:0, disposed:0, observers:0, frames:new Set<number>(), intervals:new Set<number>(), chart:null as Yagr|null, updates:0, durations:[] as number[], receive: (_samples:readonly CpuSample[])=>{}, unmount:()=>{}};\n(window as any).tracker = tracker;\nconst originalDispose = Yagr.prototype.dispose;\nYagr.prototype.dispose = function() {tracker.disposed++; return originalDispose.call(this);};\nconst originalReflow = Yagr.prototype.reflow;\nYagr.prototype.reflow = function(...args) {tracker.chart = this; return originalReflow.apply(this,args);};\nconst Observer = window.ResizeObserver;\nwindow.ResizeObserver = class extends Observer {\n  constructor(callback:ResizeObserverCallback) {super(callback); tracker.observers++;}\n  disconnect() {tracker.observers--; super.disconnect();}\n};\nconst raf = window.requestAnimationFrame;\nwindow.requestAnimationFrame = callback => {\n  const id = raf(time => {tracker.frames.delete(id); callback(time);});\n  tracker.frames.add(id); return id;\n};\nconst cancel = window.cancelAnimationFrame;\nwindow.cancelAnimationFrame = id => {tracker.frames.delete(id); cancel(id);};\nconst set = window.setInterval;\nwindow.setInterval = ((...args:Parameters<typeof set>)=>{const id=set(...args); tracker.intervals.add(id);return id;}) as typeof set;\nconst clear = window.clearInterval;\nwindow.clearInterval = id => {tracker.intervals.delete(id);clear(id);};\nconst source = {\n  getHistory: () => location.search.includes('empty') ? [] : demoCpuSource.getHistory(),\n  subscribe(receive:typeof tracker.receive) {tracker.subscribed++;tracker.receive=receive;return ()=>{tracker.unsubscribed++;};},\n};\nconst root = createRoot(document.getElementById('root')\"'!);\ntracker.unmount = () => flushSync(()=>root.unmount());\nroot.render(<React.StrictMode><ThemeProvider theme=\"light\"><CpuChart source={source}/></ThemeProvider></React.StrictMode>);\nEOF\ncat > /tmp/check-cpu-lifecycle.mjs <<'\"'EOF'\nimport {chromium} from '/home/node/.npm/_npx/420ff84f11983ee5/node_modules/playwright/index.mjs';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless:true, executablePath:'/home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome', args:['--no-sandbox']});\nconst page = await browser.newPage({viewport:{width:1200,height:900}});\nconst errors=[]; page.on('pageerror',e=>errors.push(e.message));\nawait page.goto('http://localhost:5175/cpu-lifecycle-check.html');\nawait page.waitForFunction(()=>window.tracker?.chart);\nassert.deepEqual(await page.evaluate(()=>({subscribed:tracker.subscribed,unsubscribed:tracker.unsubscribed,disposed:tracker.disposed,observers:tracker.observers})),{subscribed:2,unsubscribed:1,disposed:1,observers:1});\nawait page.evaluate(()=>{\n  const original = tracker.chart.setSeries;\n  tracker.chart.setSeries = function(...args) {const start=performance.now();tracker.updates++; const result=original.apply(this,args);tracker.durations.push(performance.now()-start);return result;};\n});\nconst bounds=await page.locator('.u-over').boundingBox();\nawait page.mouse.move(bounds.x+bounds.width*.2,bounds.y+bounds.height*.5);\nawait page.mouse.down();await page.mouse.move(bounds.x+bounds.width*.5,bounds.y+bounds.height*.5,{steps:10});await page.mouse.up();\nconst range=await page.evaluate(()=>[tracker.chart.uplot.scales.x.min,tracker.chart.uplot.scales.x.max]);\nawait page.waitForTimeout(150);\nconst before=await page.evaluate(()=>tracker.updates);\nawait page.evaluate(()=>{const timestamp=Date.now(); for(let i=0;i<100;i++)tracker.receive([{timestamp:timestamp + i/1000,value:50}]);});\nawait page.waitForTimeout(100);\nassert.equal(await page.evaluate(()=>tracker.updates),before+1);\nassert.deepEqual(await page.evaluate(()=>[tracker.chart.uplot.scales.x.min,tracker.chart.uplot.scales.x.max]),range);\nconst stats=await page.evaluate(()=>({count:tracker.chart.config.timeline.length,durations:tracker.durations}));\nassert.ok(stats.count>43000);\nawait page.evaluate(()=>{\n  tracker.receive([{timestamp:Date.now(),value:60}]);\n  tracker.unmount();\n  tracker.receive([{timestamp:Date.now(),value:70}]);\n});\nawait page.waitForTimeout(100);\nassert.deepEqual(await page.evaluate(()=>({unsubscribed:tracker.unsubscribed,disposed:tracker.disposed,observers:tracker.observers,frames:tracker.frames.size,intervals:tracker.intervals.size,tooltips:document.querySelectorAll('.yagr-tooltip').length,canvas:document.querySelectorAll('canvas').length})),{unsubscribed:2,disposed:2,observers:0,frames:0,intervals:0,tooltips:0,canvas:0});\nconsole.log('PASS: StrictMode, batched burst, preserved actual X range, no observers/intervals/frames/tooltips/canvas after unmount.',stats);\nawait page.goto('http://localhost:5175/cpu-lifecycle-check.html?empty');\nawait page.waitForFunction(()=>window.tracker?.chart);\nawait page.evaluate(()=>{window.emptyCanvas=document.querySelector('canvas');tracker.receive([{timestamp:Date.now()-1,value:40},{timestamp:Date.now(),value:55}]);});\nawait page.waitForTimeout(100);\nassert.equal(await page.evaluate(()=>window.emptyCanvas===document.querySelector('canvas')),true);\nassert.deepEqual(await page.evaluate(()=>tracker.chart.series[1]),[40,55]);\nassert.equal(await page.locator('.cpu-empty').count(),0);\nassert.deepEqual(errors,[]);\nconsole.log('PASS: empty-to-live transition without rebuilding canvas; no browser errors.');\nawait browser.close();\nEOF\nFONTCONFIG_FILE=/tmp/cpu-browser-libs/fonts.conf LD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu-lifecycle.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\np='/tmp/check-cpu-lifecycle.mjs'\ns=open(p).read().replace('const timestamp=Date.now(); for(let i=0;i<100;i++)tracker.receive([{timestamp:timestamp + i/1000,value:50}]);', 'const timestamp=Date.now()-100; for(let i=0;i<100;i++)tracker.receive([{timestamp:timestamp + i,value:50}]);')\nopen(p,'w').write(s)\nPY\nFONTCONFIG_FILE=/tmp/cpu-browser-libs/fonts.conf LD_LIBRARY_PATH=/tmp/cpu-browser-libs/root/usr/lib/aarch64-linux-gnu:/tmp/cpu-browser-libs/root/lib/aarch64-linux-gnu node /tmp/check-cpu-lifecycle.mjs\nrm cpu-lifecycle-check.html src/cpu-lifecycle-check.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build; git diff --check; git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff -- package.json src/main.tsx; nl -ba src/CpuChart.tsx | tail -15; nl -ba src/cpuData.ts | tail -25'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 64140,
+      "outputTokens": 20216,
+      "cacheReadTokens": 1859072,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 3462,
+      "totalTokens": 1943428
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

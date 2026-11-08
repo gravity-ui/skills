@@ -1,0 +1,242 @@
+{
+  "status": "passed",
+  "duration": 523.968,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 376315,
+    "outputTokens": 6705,
+    "cacheReadTokens": 1233024,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 490,
+    "totalTokens": 1616044
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 37,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 37,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- routing ---'; sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md; printf '%s\\\\n' '--- package ---'; cat package.json; printf '%s\\\\n' '--- app ---'; cat src/App.tsx; printf '%s\\\\n' '--- main ---'; cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/charts && node -e \\\"const p=require('./node_modules/@gravity-ui/charts/package.json'); console.log(p.version, JSON.stringify(p.peerDependencies))\\\" && if [ -f node_modules/@gravity-ui/charts/dist/docs/INDEX.md ]; then sed -n '1,180p' node_modules/@gravity-ui/charts/dist/docs/INDEX.md; else cat node_modules/@gravity-ui/charts/README.md; fi\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @gravity-ui/charts@1 version peerDependencies --json | tail -40'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/charts@''^1.73.0 && node -e \"const p=require('\"'./node_modules/@gravity-ui/charts/package.json'); console.log(p.version)\\\" && if [ -f node_modules/@gravity-ui/charts/dist/docs/INDEX.md ]; then sed -n '1,200p' node_modules/@gravity-ui/charts/dist/docs/INDEX.md; else cat node_modules/@gravity-ui/charts/README.md; fi\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/charts/dist/docs/guides/series-types/line.md; printf '\\\\n--- theming ---\\\\n'; cat node_modules/@gravity-ui/charts/dist/docs/guides/theming.md; printf '\\\\n--- legend ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/charts/dist/docs/guides/legend.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' node_modules/@gravity-ui/charts/dist/docs/guides/theming.md; printf '\\\\n--- get started ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/charts/dist/docs/get-started.md; printf '\\\\n--- uikit theming tokens relevant ---\\\\n'; rg -n \\\"ThemeProvider|theme=|direction|useTheme|--g-color\\\" node_modules/@gravity-ui/uikit/build/docs/guides/theming.md | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit/dist/docs/guides/theming.md 2>/dev/null || find node_modules/@gravity-ui/uikit -name theming.md | head; printf '\\\\n--- theme props ---\\\\n'; rg -n \\\"export declare (const|function) ThemeProvider|interface ThemeProviderProps|type Theme\\\" node_modules/@gravity-ui/uikit/dist -g '*.d.ts' | head -40; printf '\\\\n--- palette hook candidates ---\\\\n'; rg -n \\\"useTheme|theme\\\" node_modules/@gravity-ui/uikit/dist/*.d.ts node_modules/@gravity-ui/uikit/dist/**/*.d.ts 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find node_modules/@gravity-ui/uikit -maxdepth 3 -type f | head -60; rg -n \"declare.*ThemeProvider|ThemeProviderProps\" node_modules/@gravity-ui/uikit | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts 2>/dev/null; rg -n \\\"export.*useTheme\\\" node_modules/@gravity-ui/uikit/build/esm/components/theme node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30; printf '\\\\n--- chart colors ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/charts/dist/docs/guides/colors.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeValue.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts; printf '\\\\n--- chart Chart d.ts ---\\\\n'; rg -n \\\"export.*function Chart|interface ChartProps|type ChartData\\\" node_modules/@gravity-ui/charts/dist -g '*.d.ts' | head -30; printf '\\\\n--- config artifacts ---\\\\n'; ls node_modules/@gravity-ui/charts/dist | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' node_modules/@gravity-ui/charts/dist/esm/components/index.d.ts; printf '\\\\n--- package exports ---\\\\n'; node -e \\\"const p=require('./node_modules/@gravity-ui/charts/package.json'); console.log(JSON.stringify(p.exports,null,2))\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"interface BoxProps|export.*Box|spacing|radius\\\" node_modules/@gravity-ui/uikit/build/esm/components/Layout/Box/Box.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Layout -g '*.d.ts' | head -60; printf '\\\\n--- docs layout ---\\\\n'; find node_modules/@gravity-ui/uikit -name 'layout.md' | head; printf '\\\\n--- chart types line ---\\\\n'; rg -n \\\"export interface LineSeries|type ChartSeries|CategoryValue\\\" node_modules/@gravity-ui/charts/dist/esm/types.d.ts node_modules/@gravity-ui/charts/dist/esm -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,65p' node_modules/@gravity-ui/charts/dist/esm/core/types/chart/line.d.ts; printf '\\\\n--- box package ---\\\\n'; rg -n \\\"export.*const Box|declare.*Box\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm -g '*Box*.d.ts' | head -30; find node_modules/@gravity-ui/uikit/build/esm -iname '*box*' -maxdepth 5 | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,130p' node_modules/@gravity-ui/uikit/build/esm/components/layout/Box/types.d.ts; sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/layout/Box/Box.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"header-|interface TextProps\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text -g '*.d.ts' | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"as\\\\?\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '85,125p' node_modules/@gravity-ui/charts/dist/esm/core/types/chart/line.d.ts; sed -n '1,80p' node_modules/@gravity-ui/charts/dist/esm/components/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/charts/dist/esm/core/types -name 'chart.d.ts' -o -name 'base.d.ts'; rg -n \\\"export interface ChartData|export interface BaseSeriesData|SERIES_TYPE\\\" node_modules/@gravity-ui/charts/dist/esm/core/types -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"Line = |type ChartInteractionItem\\\" node_modules/@gravity-ui/charts/dist/esm/core/constants.d.ts node_modules/@gravity-ui/charts/dist/esm/core -g '*.d.ts' | head -20; sed -n '35,60p' node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"const SERIES_TYPE|SERIES_TYPE =\\\" node_modules/@gravity-ui/charts/dist/esm -g '*.js' | head -10\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/charts/dist/esm/core/constants/chart-types.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"export.*SERIES_TYPE\" node_modules/@gravity-ui/charts/dist/esm/index.d.ts node_modules/@gravity-ui/charts/dist/esm/core/index.d.ts'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'head -50 node_modules/@gravity-ui/charts/dist/esm/index.d.ts; head -80 node_modules/@gravity-ui/charts/dist/esm/core/types/chart/base.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export \\\\* from './constants'|export.*constants|SERIES_TYPE\\\" node_modules/@gravity-ui/charts/dist/esm/types.d.ts node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/charts/dist/esm -maxdepth 2 -name 'types*' -o -name 'constants*'; rg -n \\\"export.*from.*constants|SERIES_TYPE\\\" node_modules/@gravity-ui/charts/dist/esm --glob '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find node_modules/@gravity-ui/charts/dist/esm/types -maxdepth 2 -type f | head -30; find node_modules/@gravity-ui/charts/dist/esm -maxdepth 1 -type f | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/charts/dist/esm/types/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'head -80 node_modules/@gravity-ui/charts/dist/esm/core/index.d.ts; rg -n \"export\" node_modules/@gravity-ui/charts/dist/esm/core/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx | sed -n '1,110p'; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat .gitignore 2>/dev/null | head -20; git diff -- package.json src/App.tsx | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"generate|transpile\\\" node_modules/@gravity-ui/charts/dist/config -g '*.d.ts' | head -20; cat node_modules/@gravity-ui/charts/dist/config/chart-config.d.ts | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"headless|server|ssr\\\" node_modules/@gravity-ui/charts/dist/docs/examples.md node_modules/@gravity-ui/charts/dist/docs -g '*.md' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && rg -n \\\"ThemeProvider|lang=\\\\\\\"ru\\\\\\\"\\\" src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 376315,
+      "outputTokens": 6705,
+      "cacheReadTokens": 1233024,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 490,
+      "totalTokens": 1616044
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

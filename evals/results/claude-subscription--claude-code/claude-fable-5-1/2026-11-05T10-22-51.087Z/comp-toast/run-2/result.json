@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "duration": 900.175,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 2495,
+    "cacheReadTokens": 131559,
+    "cacheWriteTokens": 12767,
+    "totalTokens": 146983
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore; echo ---; cat __agent_eval__/run.mjs; echo ---; ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ 2>/dev/null; ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/hooks 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/*.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Toaster/constants.js",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { useCallback, useRef } from 'react';\nimport { Button, Toaster, ToasterComponent, ToasterProvider, useToaster } from '@gravity-ui/uikit';\n\n/** Через сколько миллисекунд уведомление исчезнет само. */\nconst TOAST_AUTO_HIDE_MS = 4000;\n\n/** Один экземпляр Toaster на приложение: хранит список активных уведомлений. */\nconst toaster = new Toaster();\n\nfunction NotifyButton() {\n  const { add } = useToaster();\n  const counterRef = useRef(0);\n\n  const showNotification = useCallback(() => {\n    counterRef.current += 1;\n    add({\n      // Уникальное имя — чтобы повторные клики создавали новые тосты, а не обновляли один.\n      name: `notification-${counterRef.current}`,\n      title: 'Уведомление',\n      content: 'Действие выполнено. Это сообщение закроется автоматически.',\n      theme: 'success',\n      autoHiding: TOAST_AUTO_HIDE_MS,\n      isClosable: true,\n    });\n  }, [add]);\n\n  return (\n    <div style={{ position: 'fixed', right: 24, bottom: 24 }}>\n      <Button view=\"action\" size=\"l\" onClick={showNotification}>\n        Показать уведомление\n      </Button>\n    </div>\n  );\n}\n\nexport function App() {\n  return (\n    <ToasterProvider toaster={toaster}>\n      <div style={{ padding: 24 }}>\n        <p>Нажмите кнопку в правом нижнем углу экрана, чтобы показать всплывающее уведомление.</p>\n      </div>\n      <NotifyButton />\n      {/* Контейнер, в котором рендерятся тосты (в портале, в углу экрана). */}\n      <ToasterComponent />\n    </ToasterProvider>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 2495,
+      "cacheReadTokens": 131559,
+      "cacheWriteTokens": 12767,
+      "totalTokens": 146983
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

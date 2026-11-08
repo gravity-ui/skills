@@ -1,0 +1,88 @@
+.viz-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px 20px;
+    border-radius: 12px;
+    background: var(--viz-surface);
+    box-shadow: 0 0 0 1px var(--g-color-line-generic);
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.viz-widget__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.viz-widget__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.viz-widget__title {
+    margin: 0;
+}
+
+.viz-widget__engine {
+    font-variant-numeric: tabular-nums;
+}
+
+.viz-widget__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.viz-widget__option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.viz-widget__body {
+    position: relative;
+    min-height: 120px;
+    transition: opacity 160ms ease;
+}
+
+/* Пока грузится новый движок, держим прошлый кадр приглушённым — без скелетона и скачков. */
+.viz-widget__body_stale {
+    opacity: 0.45;
+}
+
+.viz-widget__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.viz-widget__state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Линии сетки и осей Gravity Charts — тонкие, сплошные, на шаг от поверхности. */
+.viz-widget .gcharts-chart {
+    --gcharts-axis-line-color: var(--viz-axis);
+    --gcharts-grid-line-color: var(--viz-grid);
+}
+
+/* Yagr читает цвета фона, сетки и осей из своих CSS-переменных — подменяем их цветами поверхности виджета. */
+.viz-widget .yagr {
+    --yagr-background: var(--viz-surface);
+    --yagr-grid: var(--viz-grid);
+    --yagr-axis-stroke: var(--viz-muted);
+    --yagr-font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}

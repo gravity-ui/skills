@@ -1,0 +1,45 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (2 tests | 2 failed) 17769ms
+   × declares @gravity-ui/yagr as a dependency 4ms
+     → expected false to be true // Object.is equality
+   × judge: implements the task with the intended Gravity UI API 17765ms
+     → [judge:environment] FAIL — The CPU chart uses @gravity-ui/yagr (directly or through its official React wrapper) configured with a timeline and series data for tens of thousands of points, responsive (adaptive) sizing and the active Gravity theme; realtime updates mutate the existing chart (setConfig or the wrapper's data updates) instead of recreating it, and direct instances are disposed on unmount. A different charting library fails.
+  reason: The project does not declare @gravity-ui/yagr and src/App.tsx renders a hand-drawn <canvas> chart using CanvasRenderingContext2D, with ResizeObserver and a 1-second timer; no Yagr timeline/series configuration, adaptive Yagr sizing, setConfig/wrapper data updates, or chart disposal exists. The CPU chart is therefore implemented with a different charting approach and fails the criterion.
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  20:21:30
+   Duration  17.94s (transform 32ms, setup 16ms, collect 16ms, tests 17.77s, environment 0ms, prepare 31ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > declares @gravity-ui/yagr as a dependency
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:67:59
+     65| 
+     66| test('declares @gravity-ui/yagr as a dependency', () => {
+     67|   expect(Object.hasOwn(dependencies, '@gravity-ui/yagr')).toBe(true);
+       |                                                           ^
+     68| });
+     69| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The CPU chart uses @gravity-ui/yagr (directly or through its official React wrapper) configured with a timeline and series data for tens of thousands of points, responsive (adaptive) sizing and the active Gravity theme; realtime updates mutate the existing chart (setConfig or the wrapper's data updates) instead of recreating it, and direct instances are disposed on unmount. A different charting library fails.
+  reason: The project does not declare @gravity-ui/yagr and src/App.tsx renders a hand-drawn <canvas> chart using CanvasRenderingContext2D, with ResizeObserver and a 1-second timer; no Yagr timeline/series configuration, adaptive Yagr sizing, setConfig/wrapper data updates, or chart disposal exists. The CPU chart is therefore implemented with a different charting approach and fails the criterion.
+ ❯ EVAL.ts:74:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

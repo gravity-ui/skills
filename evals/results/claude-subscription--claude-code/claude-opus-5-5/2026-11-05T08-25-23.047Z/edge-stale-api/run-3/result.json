@@ -1,0 +1,88 @@
+{
+  "status": "passed",
+  "duration": 317.238,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 16,
+    "outputTokens": 6203,
+    "cacheReadTokens": 182362,
+    "cacheWriteTokens": 19013,
+    "totalTokens": 207594
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json && git ls-files && find . -path ./node_modules -prune -o -type f -print | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/*.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; cat node_modules/@gravity-ui/uikit/package.json | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && ls components/theme; cat components/theme/ThemeProvider.d.ts components/theme/ThemeProvider.js components/theme/types.d.ts components/theme/index.d.ts; ls components/theme/*/ 2>/dev/null; cat components/Switch/Switch.d.ts",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"deprecated\" components/theme components/Switch components/Portal components/SegmentedRadioGroup 2>/dev/null | head; cat components/theme/useTheme.d.ts components/theme/useThemeType.d.ts components/theme/useThemeValue.d.ts components/theme/useThemeSettings.d.ts; cat components/types.d.ts | sed -n '1,60p'; cat components/Portal/Portal.js | head -40; ls components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "grep -n \"gap\\|direction\\|alignItems\" components/layout/Flex/Flex.d.ts | head; grep -n \"variant\\|color\" components/Text/Text.d.ts | head -5; grep -n \"view\\|type\" components/Card/Card.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/themeStorage.ts <<'EOF'\nimport type { RealTheme } from '@gravity-ui/uikit';\n\nexport type AppTheme = Extract<RealTheme, 'light' | 'dark'>;\n\nconst STORAGE_KEY = 'app-theme';\n\n/** Сохранённая тема, иначе — системная (prefers-color-scheme). */\nexport function getInitialTheme(): AppTheme {\n  try {\n    const saved = window.localStorage.getItem(STORAGE_KEY);\n    if (saved === 'light' || saved === 'dark') {\n      return saved;\n    }\n  } catch {\n    // localStorage может быть недоступен (приватный режим и т.п.)\n  }\n  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n}\n\nexport function saveTheme(theme: AppTheme) {\n  try {\n    window.localStorage.setItem(STORAGE_KEY, theme);\n  } catch {\n    // игнорируем: тема просто не запомнится\n  }\n}\nEOF\ncat > src/ThemeSwitcher.tsx <<'EOF'\nimport { Switch, useThemeType } from '@gravity-ui/uikit';\n\nimport type { AppTheme } from './themeStorage';\n\nexport interface ThemeSwitcherProps {\n  onThemeChange: (theme: AppTheme) => void;\n}\n\nexport function ThemeSwitcher({ onThemeChange }: ThemeSwitcherProps) {\n  // Текущий тип темы берём из контекста ThemeProvider\n  const isDark = useThemeType() === 'dark';\n\n  return (\n    <Switch\n      size=\"l\"\n      checked={isDark}\n      onUpdate={(checked) => onThemeChange(checked ? 'dark' : 'light')}\n      content=\"Тёмная тема\"\n    />\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Button, Card, Flex, Text, useThemeValue } from '@gravity-ui/uikit';\n\nimport { ThemeSwitcher } from './ThemeSwitcher';\nimport type { AppTheme } from './themeStorage';\n\nexport interface AppProps {\n  onThemeChange: (theme: AppTheme) => void;\n}\n\nexport function App({ onThemeChange }: AppProps) {\n  const themeValue = useThemeValue();\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 24 }}>\n      <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={4}>\n        <Text variant=\"header-1\">Настройки</Text>\n        <ThemeSwitcher onThemeChange={onThemeChange} />\n      </Flex>\n\n      <Card view=\"outlined\" style={{ padding: 16 }}>\n        <Flex direction=\"column\" gap={2} alignItems=\"flex-start\">\n          <Text variant=\"subheader-2\">Пример контента</Text>\n          <Text color=\"secondary\">\n            Текущая тема: <b>{themeValue}</b>\n          </Text>\n          <Flex gap={2}>\n            <Button view=\"action\">Основная кнопка</Button>\n            <Button view=\"outlined\">Второстепенная</Button>\n          </Flex>\n        </Flex>\n      </Card>\n    </Flex>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\n// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nimport { App } from './App';\nimport { type AppTheme, getInitialTheme, saveTheme } from './themeStorage';\n\n// Состояние темы живёт у корневого ThemeProvider: только он (не scoped)\n// выставляет класс темы на <body>, так что фон страницы и порталы\n// (попапы, тултипы) тоже переключаются.\nfunction Root() {\n  const [theme, setTheme] = React.useState<AppTheme>(getInitialTheme);\n\n  const handleThemeChange = React.useCallback((next: AppTheme) => {\n    setTheme(next);\n    saveTheme(next);\n  }, []);\n\n  return (\n    <ThemeProvider theme={theme}>\n      <App onThemeChange={handleThemeChange} />\n    </ThemeProvider>\n  );\n}\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <Root />\n  </React.StrictMode>,\n);\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 16,
+      "outputTokens": 6203,
+      "cacheReadTokens": 182362,
+      "cacheWriteTokens": 19013,
+      "totalTokens": 207594
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T16:58:38.086Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

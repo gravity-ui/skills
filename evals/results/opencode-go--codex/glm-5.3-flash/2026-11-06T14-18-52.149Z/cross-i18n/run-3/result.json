@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "duration": 348.125,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 44351,
+    "outputTokens": 3199,
+    "cacheReadTokens": 153600,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 205,
+    "totalTokens": 201150
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' && rg --files -g '\"'!node_modules'\"' | head -100\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && find . -maxdepth 3 -type f -not -path '*/node_modules/*' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json && cat src/App.tsx && cat index.html && cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"interface ConfigProviderProps|const ConfigProvider|function ConfigProvider\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -30 && rg \\\"type Lang|type MobileOS\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"ConfigProvider\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"ConfigProvider|UIKitConfigProvider\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -30 && rg \\\"locale\\\" node_modules/@gravity-ui/uikit/build/esm/ConfigProvider -g '*.d.ts' 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@gravity-ui/uikit/build/esm | head -50 && rg -n \"export .*Provider\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"Provider\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -50'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { useMemo, useState } from 'react';\n+import { Button, SegmentedRadioGroup, Text, configure } from '@gravity-ui/uikit';\n+\n+type Language = 'en' | 'ru';\n+\n+const translations = {\n+  en: {\n+    language: 'Language',\n+    welcome: 'Welcome',\n+    description: 'Switch the interface between English and Russian.',\n+  },\n+  ru: {\n+    language: 'Язык',\n+    welcome: 'Добро пожаловать',\n+    description: 'Переключайте интерфейс между английским и русским языками.',\n+  },\n+} satisfies Record<Language, Record<string, string>>;\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [language, setLanguage] = useState<Language>('en');\n+\n+  const text = useMemo(() => translations[language], [language]);\n+\n+  const changeLanguage = (nextLanguage: Language) => {\n+    setLanguage(nextLanguage);\n+    configure({ lang: nextLanguage, fallbackLang: 'en' });\n+  };\n+\n+  return (\n+    <div\n+      style={{\n+        padding: 24,\n+        display: 'flex',\n+        flexDirection: 'column',\n+        gap: 16,\n+        alignItems: 'flex-start',\n+      }}\n+    >\n+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>\n+        <Text variant=\\\"caption-1\\\">{text.language}</Text>\n+        <SegmentedRadioGroup\n+          value={language}\n+          onUpdate={(value) => changeLanguage(value as Language)}\n+        >\n+          <SegmentedRadioGroup.Option value=\\\"en\\\">English</SegmentedRadioGroup.Option>\n+          <SegmentedRadioGroup.Option value=\\\"ru\\\">Русский</SegmentedRadioGroup.Option>\n+        </SegmentedRadioGroup>\n+      </div>\n+\n+      <Text variant=\\\"header-1\\\">{text.welcome}</Text>\n+      <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n+        {text.description}\n+      </Text>\n+    </div>\n+  );\n }\n*** End Patch\nPATCH\napply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, configure } from '@gravity-ui/uikit';\n \n import { App } from './App';\n \n+configure({ lang: 'en', fallbackLang: 'en' });\n+\n ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n*** End Patch\nPATCH\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/i18n.patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import { useMemo, useState } from 'react';\n+import { SegmentedRadioGroup, Text, configure } from '@gravity-ui/uikit';\n+\n+type Language = 'en' | 'ru';\n+\n+const translations = {\n+  en: {\n+    language: 'Language',\n+    welcome: 'Welcome',\n+    description: 'Switch the interface between English and Russian.',\n+  },\n+  ru: {\n+    language: 'Язык',\n+    welcome: 'Добро пожаловать',\n+    description: 'Переключайте интерфейс между английским и русским языками.',\n+  },\n+} satisfies Record<Language, Record<string, string>>;\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [language, setLanguage] = useState<Language>('en');\n+\n+  const text = useMemo(() => translations[language], [language]);\n+\n+  const changeLanguage = (nextLanguage: Language) => {\n+    setLanguage(nextLanguage);\n+    configure({ lang: nextLanguage, fallbackLang: 'en' });\n+  };\n+\n+  return (\n+    <div\n+      style={{\n+        padding: 24,\n+        display: 'flex',\n+        flexDirection: 'column',\n+        gap: 16,\n+        alignItems: 'flex-start',\n+      }}\n+    >\n+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>\n+        <Text variant=\\\"caption-1\\\">{text.language}</Text>\n+        <SegmentedRadioGroup\n+          value={language}\n+          onUpdate={(value) => changeLanguage(value as Language)}\n+        >\n+          <SegmentedRadioGroup.Option value=\\\"en\\\">English</SegmentedRadioGroup.Option>\n+          <SegmentedRadioGroup.Option value=\\\"ru\\\">Русский</SegmentedRadioGroup.Option>\n+        </SegmentedRadioGroup>\n+      </div>\n+\n+      <Text variant=\\\"header-1\\\">{text.welcome}</Text>\n+      <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n+        {text.description}\n+      </Text>\n+    </div>\n+  );\n }\n*** Update File: src/main.tsx\n@@\n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, configure } from '@gravity-ui/uikit';\n \n import { App } from './App';\n \n+configure({ lang: 'en', fallbackLang: 'en' });\n+\n ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n*** End Patch\nPATCH\napply_patch < /tmp/i18n.patch'",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'which -a apply_patch || command -v apply_patch || ls /usr/bin/apply_patch /usr/local/bin/apply_patch 2>/dev/null'",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\nimport { SegmentedRadioGroup, Text, configure } from '@gravity-ui/uikit';\n\ntype Language = 'en' | 'ru';\n\nconst translations = {\n  en: {\n    language: 'Language',\n    welcome: 'Welcome',\n    description: 'Switch the interface between English and Russian.',\n  },\n  ru: {\n    language: 'Язык',\n    welcome: 'Добро пожаловать',\n    description: 'Переключайте интерфейс между английским и русским языками.',\n  },\n} satisfies Record<Language, Record<string, string>>;\n\nexport function App() {\n  const [language, setLanguage] = useState<Language>('en');\n\n  const text = useMemo(() => translations[language], [language]);\n\n  const changeLanguage = (nextLanguage: Language) => {\n    setLanguage(nextLanguage);\n    configure({ lang: nextLanguage, fallbackLang: 'en' });\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        display: 'flex',\n        flexDirection: 'column',\n        gap: 16,\n        alignItems: 'flex-start',\n      }}\n    >\n      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>\n        <Text variant=\\\"caption-1\\\">{text.language}</Text>\n        <SegmentedRadioGroup\n          value={language}\n          onUpdate={(value) => changeLanguage(value as Language)}\n        >\n          <SegmentedRadioGroup.Option value=\\\"en\\\">English</SegmentedRadioGroup.Option>\n          <SegmentedRadioGroup.Option value=\\\"ru\\\">Русский</SegmentedRadioGroup.Option>\n        </SegmentedRadioGroup>\n      </div>\n\n      <Text variant=\\\"header-1\\\">{text.welcome}</Text>\n      <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n        {text.description}\n      </Text>\n    </div>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\n// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider, configure } from '@gravity-ui/uikit';\n\nimport { App } from './App';\n\nconfigure({ lang: 'en', fallbackLang: 'en' });\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>,\n);\nEOF\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/import \\\\{ useMemo, useState \\\\} from 'react';/import { useEffect, useMemo, useState } from 'react';/\\\" src/App.tsx\nperl -0pi -e \\\"s/  const text = useMemo\\\\(\\\\(\\\\) => translations\\\\[language\\\\], \\\\[language\\\\]\\\\);\\\\n/  const text = useMemo(() => translations[language], [language]);\\\\n\\\\n  useEffect(() => {\\\\n    document.documentElement.lang = language;\\\\n  }, [language]);\\\\n/\\\" src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx | sed -n '1,80p' && git diff -- src/App.tsx src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44351,
+      "outputTokens": 3199,
+      "cacheReadTokens": 153600,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 205,
+      "totalTokens": 201150
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

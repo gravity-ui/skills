@@ -1,0 +1,481 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 5 failed) 14061ms
+   × depends on @gravity-ui/markdown-editor 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 0ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   × no react-markdown DIY preview 0ms
+     → expected true to be false // Object.is equality
+   × no raw textarea input 0ms
+     → expected 'import {useEffect, useRef, useState} …' not to match /<textarea[\s/>]/>]
+   ✓ no dangerouslySetInnerHTML preview 0ms
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 14056ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx imports ReactMarkdown and renders a raw <textarea> for the markdown field with a separate ReactMarkdown preview; it does not use useMarkdownEditor or MarkdownEditorView. package.json lists react-markdown and has no @gravity-ui/markdown-editor dependency.
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 4 passed (9)
+   Start at  21:23:17
+   Duration  14.20s (transform 26ms, setup 14ms, collect 12ms, tests 14.06s, environment 0ms, prepare 32ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  EVAL.ts > no react-markdown DIY preview
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:72:44
+     70| // Pulling react-markdown signals a DIY textarea+preview build instead…
+     71| test("no react-markdown DIY preview", () => {
+     72|   expect(dependsOn(src, "react-markdown")).toBe(false);
+       |                                            ^
+     73| });
+     74| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  EVAL.ts > no raw textarea input
+AssertionError: expected 'import {useEffect, useRef, useState} …' not to match /<textarea[\s/>]/>]
+
+[32m- Expected:[39m 
+/<textarea[\s/>]/
+
+[31m+ Received:[39m 
+"import {useEffect, useRef, useState} from 'react';
+import {Button, Modal, TextInput} from '@gravity-ui/uikit';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import './styles.css';
+
+type IconName = 'write' | 'files' | 'book' | 'arrow' | 'check' | 'help' | 'chevron' | 'link' | 'list' | 'quote' | 'code' | 'expand' | 'close' | 'eye';
+function Icon({name, size = 20}: {name: IconName; size?: number}) {
+  const paths: Record<IconName, React.ReactNode> = {
+    write: <><path d=\"m14 4 6 6M4 20l4.5-1L21 6.5a2.1 2.1 0 0 0-3-3L5.5 16Z\"/><path d=\"M12 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-6\"/></>,
+    files: <><path d=\"M7 3h9l4 4v13H7z\"/><path d=\"M16 3v5h4M4 7v14M10 12h7M10 16h5\"/></>,
+    book: <><path d=\"M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1ZM12 5v15\"/></>,
+    arrow: <path d=\"M5 12h14m-5-5 5 5-5 5\"/>,
+    check: <path d=\"m5 12 4 4L19 6\"/>,
+    help: <><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9a2.5 2.5 0 0 1 5 .5c0 2-2.5 2-2.5 4M12 17h.01\"/></>,
+    chevron: <path d=\"m9 5 7 7-7 7\"/>,
+    link: <><path d=\"m10 13 4-4M9 15l-2 2a3 3 0 0 1-4-4l4-4a3 3 0 0 1 4 0M13 7l2-2a3 3 0 0 1 4 4l-4 4a3 3 0 0 1-4 0\"/></>,
+    list: <path d=\"M9 6h12M9 12h12M9 18h12M3 6h.01M3 12h.01M3 18h.01\"/>,
+    quote: <path d=\"M4 7h6v6H5c0 3 2 4 4 4M14 7h6v6h-5c0 3 2 4 4 4\"/>,
+    code: <path d=\"m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16\"/>,
+    expand: <path d=\"M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5\"/>,
+    close: <path d=\"m6 6 12 12M6 18 18 6\"/>,
+    eye: <><path d=\"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></>,
+  };
+  return <svg width={size} height={size} viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\">{paths[name]}</svg>;
+}
+
+const initialText = `## Место, где идеи обретают форму
+
+Всё начинается с чистого листа. И одной мысли,
+которой хочется поделиться.
+
+### Просто начните писать
+
+Не ищите идеальные слова — **дайте идеям место**.
+А с оформлением поможет Markdown:
+
+- Выделяйте **главное**
+- Добавляйте *немного акцентов*
+- Собирайте мысли в списки
+
+> Хороший текст начинается не с правил,
+> а с желания что-то сказать.
+
+Больше о разметке — в [руководстве по Markdown](https://www.markdownguide.org/basic-syntax/).
+`;
+type Draft = {title: string; text: string; updated: string};
+const storageKey = 'folio-publication-draft';
+function readDraft(): Draft | null {
+  try {
+    const draft = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    return draft && typeof draft.title === 'string' && typeof draft.text === 'string' && typeof draft.updated === 'string' ? draft : null;
+  } catch { return null; }
+}
+
+export function App() {
+  const [existing] = useState(readDraft);
+  const [title, setTitle] = useState(existing?.title ?? 'У каждой идеи есть история');
+  const [text, setText] = useState(existing?.text ?? initialText);
+  const [saved, setSaved] = useState<Draft | null>(existing);
+  const [view, setView] = useState<'editor' | 'drafts'>('editor');
+  const [mode, setMode] = useState<'split' | 'write' | 'preview'>('split');
+  const [help, setHelp] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [toast, setToast] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const textarea = useRef<HTMLTextAreaElement>(null);
+  const lines = useRef<HTMLDivElement>(null);
+  const isSaved = saved?.title === title && saved?.text === text;
+  const wordCount = text.trim() ? text.trim().split(/\\s+/).length : 0;
+
+  useEffect(() => {
+    if (!toast) return;
+    const timeout = window.setTimeout(() => setToast(''), 3500);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {if (event.key === 'Escape') setExpanded(false);};
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  function saveDraft() {
+    if (!title.trim() || !text.trim()) {
+      setSaveError(!title.trim() ? 'Добавьте название публикации.' : 'Добавьте текст публикации.');
+      if (!text.trim()) {setMode('split'); requestAnimationFrame(() => textarea.current?.focus());}
+      return;
+    }
+    const draft = {title, text, updated: new Date().toISOString()};
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(draft));
+      setSaved(draft); setSaveError(''); setToast('Черновик сохранён в этом браузере');
+    } catch { setSaveError('Не удалось сохранить черновик. Проверьте доступ к хранилищу браузера.'); }
+  }
+
+  function format(before: string, after = '', placeholder = 'текст') {
+    const field = textarea.current;
+    if (!field) return;
+    const start = field.selectionStart;
+    const end = field.selectionEnd;
+    const selected = text.slice(start, end) || placeholder;
+    setText(text.slice(0, start) + before + selected + after + text.slice(end));
+    requestAnimationFrame(() => {
+      field.focus(); field.setSelectionRange(start + before.length, start + before.length + selected.length);
+    });
+  }
+
+  const formatting = [
+    {label: 'Жирный (Ctrl+B)', content: <b>B</b>, action: () => format('**', '**')},
+    {label: 'Курсив (Ctrl+I)', content: <i>I</i>, action: () => format('*', '*')},
+    {label: 'Заголовок', content: <span className=\"heading-icon\">H<span>2</span></span>, action: () => format('\\n## ', '\\n', 'Заголовок')},
+    {label: 'Вставить ссылку', content: <Icon name=\"link\" size={18}/>, action: () => format('[', '](https://example.com)', 'Текст ссылки')},
+    {label: 'Список', content: <Icon name=\"list\" size={18}/>, action: () => format('\\n- ', '\\n', 'Пункт списка')},
+    {label: 'Цитата', content: <Icon name=\"quote\" size={18}/>, action: () => format('\\n> ', '\\n', 'Цитата')},
+    {label: 'Код', content: <Icon name=\"code\" size={18}/>, action: () => format('`', '`', 'код')},
+  ];
+
+  return <div className=\"app-shell\">
+    <aside className=\"sidebar\">
+      <a href=\"#\" className=\"brand\" onClick={(e) => {e.preventDefault(); setView('editor');}} aria-label=\"Folio — редактор\"><span className=\"brand-symbol\"><span/><span/><span/></span>folio<span className=\"brand-dot\">.</span></a>
+      <div className=\"workspace\"><span className=\"workspace-icon\"><Icon name=\"book\" size={19}/></span><div><strong>Моё пространство</strong><span>Место для ваших идей</span></div></div>
+      <span className=\"nav-caption\">РАБОЧЕЕ ПРОСТРАНСТВО</span>
+      <nav aria-label=\"Основное меню\">
+        <button className={`nav-item ${view === 'editor' ? 'active' : ''}`} aria-label=\"Редактор\" onClick={() => setView('editor')}><Icon name=\"write\"/>Редактор<span className=\"nav-indicator\"/></button>
+        <button className={`nav-item ${view === 'drafts' ? 'active' : ''}`} aria-label=\"Черновики\" onClick={() => setView('drafts')}><Icon name=\"files\"/>Черновики<span className=\"nav-count\">{saved ? 1 : 0}</span></button>
+      </nav>
+      <div className=\"sidebar-bottom\">
+        <div className=\"inspiration\"><span className=\"sparkle\">✳</span><p>Большие истории<br/>начинаются с одной мысли.</p><span>Пусть ваша будет следующей.</span></div>
+        <button className=\"help-nav\" aria-label=\"Помощь с Markdown\" onClick={() => setHelp(true)}><Icon name=\"help\" size={19}/>Помощь с Markdown<Icon name=\"chevron\" size={14}/></button>
+        <div className=\"profile\"><span className=\"avatar\">В</span><div><strong>Ваше пространство</strong><span>Локальный редактор</span></div><span className=\"online-dot\"/></div>
+      </div>
+    </aside>
+    <div className=\"main-shell\">
+      <header className=\"topbar\"><div className=\"breadcrumbs\"><span>Рабочее пространство</span><Icon name=\"chevron\" size={13}/><span className=\"current\">{view === 'editor' ? 'Новая публикация' : 'Черновики'}</span></div><span className=\"topbar-note\"><span/>Ваши мысли. Ваши слова.</span></header>
+      <main>
+        <div className=\"page-heading\"><div><div className=\"eyebrow\">СЛОВА, КОТОРЫЕ ИМЕЮТ ЗНАЧЕНИЕ</div><h1>{view === 'editor' ? 'Новая публикация' : 'Ваши черновики'}<span className=\"title-dot\">.</span></h1><p>{view === 'editor' ? 'Запишите идею. Придайте ей форму. Поделитесь с миром.' : 'Идеи, к которым хочется вернуться.'}</p></div><span className=\"draft-badge\"><span/>{view === 'editor' ? 'Черновик' : 'Локальное хранилище'}</span></div>
+        {view === 'drafts' ? <section className=\"drafts-section\">
+          {saved ? <button className=\"draft-card\" onClick={() => {setTitle(saved.title); setText(saved.text); setView('editor');}}><span className=\"draft-card-icon\"><Icon name=\"files\" size={26}/></span><span><strong>{saved.title || 'Без названия'}</strong><span>Сохранено {new Date(saved.updated).toLocaleString('ru-RU', {day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'})}</span></span><Icon name=\"arrow\"/></button> : <div className=\"empty-drafts\"><Icon name=\"files\" size={36}/><h2>Здесь появятся ваши идеи</h2><p>Сохраните публикацию как черновик, чтобы вернуться к ней позже.</p><Button size=\"l\" onClick={() => setView('editor')}>Открыть редактор</Button></div>}
+          <p className=\"storage-note\">Черновик хранится только в этом браузере.</p>
+        </section> : <form onSubmit={(event) => {event.preventDefault(); saveDraft();}}>
+          <section className=\"title-section\"><label htmlFor=\"publication-title\">Название публикации <span>*</span></label><TextInput id=\"publication-title\" name=\"title\" size=\"xl\" value={title} onUpdate={setTitle} placeholder=\"Дайте своей истории название\" controlProps={{maxLength: 150, required: true}} hasClear/><span className=\"field-hint\">Хорошее название — начало интересной истории.<span>{title.length}/150</span></span></section>
+          <div className=\"content-label\"><label htmlFor=\"markdown-content\">Текст публикации <span>*</span></label><span className=\"markdown-label\"><span className=\"md-symbol\">M↓</span> Markdown</span></div>
+          <section className={`editor ${expanded ? 'editor-expanded' : ''} mode-${mode}`} aria-label=\"Редактор Markdown\">
+            <div className=\"editor-toolbar\"><div className=\"formatting-tools\">{formatting.map((tool, index) => <span className={index === 3 || index === 6 ? 'tool-group' : ''} key={tool.label}><Button view=\"flat\" size=\"m\" type=\"button\" title={tool.label} aria-label={tool.label} onClick={() => {if (mode === 'preview') setMode('split'); tool.action();}}>{tool.content}</Button></span>)}</div><div className=\"editor-views\"><div className=\"view-switch\" aria-label=\"Вид редактора\">{([{key: 'write', label: 'Текст'}, {key: 'split', label: 'Разделить'}, {key: 'preview', label: 'Просмотр'}] as const).map(item => <button key={item.key} type=\"button\" className={mode === item.key ? 'selected' : ''} aria-pressed={mode === item.key} onClick={() => setMode(item.key)}>{item.label}</button>)}</div><Button view=\"flat\" type=\"button\" title={expanded ? 'Свернуть редактор' : 'Развернуть редактор'} aria-label={expanded ? 'Свернуть редактор' : 'Развернуть редактор'} onClick={() => setExpanded(!expanded)}><Icon name={expanded ? 'close' : 'expand'} size={17}/></Button></div></div>
+            <div className=\"editor-panels\">
+              <div className=\"source-panel\"><div className=\"panel-caption\"><span><Icon name=\"code\" size={14}/> MARKDOWN</span><span>Пишите здесь</span></div><div className=\"source-body\"><div className=\"line-numbers\" ref={lines} aria-hidden=\"true\">{text.split('\\n').map((_, index) => <div key={index}>{index + 1}</div>)}</div><textarea ref={textarea} id=\"markdown-content\" name=\"content\" aria-label=\"Текст публикации в Markdown\" value={text} aria-required=\"true\" spellCheck={false} placeholder=\"Начните свою историю…\" onChange={event => setText(event.target.value)} onScroll={event => {if (lines.current) lines.current.scrollTop = event.currentTarget.scrollTop;}} onKeyDown={event => {if ((event.ctrlKey || event.metaKey) && ['b', 'i'].includes(event.key.toLowerCase())) {event.preventDefault(); const marker = event.key.toLowerCase() === 'b' ? '**' : '*'; format(marker, marker);}}}/></div></div>
+              <div className=\"preview-panel\"><div className=\"panel-caption\"><span><Icon name=\"eye\" size={15}/> ПРЕДПРОСМОТР</span><span className=\"live-label\"><span/>В реальном времени</span></div><div className=\"markdown-preview\" role=\"region\" aria-label=\"Предпросмотр Markdown\">{text.trim() ? <ReactMarkdown remarkPlugins={[remarkGfm]} components={{a: ({node, ...props}) => <a {...props} target=\"_blank\" rel=\"noopener noreferrer\"/>}}>{text}</ReactMarkdown> : <div className=\"empty-preview\"><Icon name=\"write\" size={29}/><p>Здесь оживёт ваш текст</p><span>Начните писать в редакторе</span></div>}</div></div>
+            </div>
+            <div className=\"editor-status\"><span><span className=\"status-dot\"/>Все изменения видны сразу</span><span>{wordCount} слов<span className=\"status-separator\">·</span>{text.length} символов</span></div>
+          </section>
+          <div className=\"editor-help\"><Icon name=\"help\" size={16}/><span>Немного разметки — много возможностей.</span><button type=\"button\" onClick={() => setHelp(true)}>Шпаргалка по Markdown<Icon name=\"arrow\" size={14}/></button></div>
+          {saveError && <p className=\"error-message\" role=\"alert\">{saveError}</p>}
+          <div className=\"form-footer\"><span className=\"save-status\"><Icon name={isSaved ? 'check' : 'files'} size={17}/>{isSaved ? 'Черновик сохранён в этом браузере' : 'Ваша история ещё не сохранена'}</span><Button className=\"save-button\" view=\"action\" size=\"xl\" type=\"submit\"><Icon name=\"check\" size={18}/>Сохранить черновик</Button></div>
+        </form>}
+        <footer className=\"page-footer\"><span>Сделано для мыслей, которыми хочется делиться.</span><span>Пишите с удовольствием <span className=\"footer-flower\">✳</span></span></footer>
+      </main>
+    </div>
+    <Modal open={help} onOpenChange={setHelp} aria-labelledby=\"help-title\"><div className=\"help-modal\"><div className=\"modal-heading\"><span className=\"eyebrow\">ПРОСТО О ФОРМАТИРОВАНИИ</span><Button view=\"flat\" aria-label=\"Закрыть подсказку\" onClick={() => setHelp(false)}><Icon name=\"close\"/></Button></div><h2 id=\"help-title\">Знакомьтесь, Markdown<span className=\"title-dot\">.</span></h2><p>Добавьте несколько символов, и текст преобразится.<br/>Результат сразу появится в предпросмотре.</p><div className=\"syntax-table\">{[['## Заголовок', 'Заголовок второго уровня'], ['**Жирный текст**', 'Выделение главного'], ['*Курсив*', 'Лёгкий акцент'], ['- Пункт списка', 'Маркированный список'], ['> Цитата', 'Блок с цитатой'], ['[Текст](https://example.com)', 'Ссылка'], ['`код`', 'Фрагмент кода'], ['- [ ] Задача', 'Список задач']].map(([syntax, description]) => <div key={syntax}><code>{syntax}</code><span>{description}</span></div>)}</div><Button view=\"action\" size=\"l\" width=\"max\" onClick={() => setHelp(false)}>Всё понятно, пишем!</Button></div></Modal>
+    {toast && <div className=\"toast\" role=\"status\"><span><Icon name=\"check\" size={17}/></span>{toast}<button aria-label=\"Закрыть уведомление\" onClick={() => setToast('')}><Icon name=\"close\" size={16}/></button></div>}
+  </div>;
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;450;500;550;600;650;700;750&family=IBM+Plex+Mono:wght@400;450;500&display=swap');
+
+:root {font-family: 'Golos Text', sans-serif; color: #282c29; background: #fff; font-synthesis: none; --border: #e9eae5;}
+* {box-sizing: border-box;}
+body {margin: 0; min-width: 360px;}
+button, input, textarea {font: inherit;}
+button {cursor: pointer;}
+button:focus-visible, a:focus-visible {outline: 2px solid #34775a; outline-offset: 3px;}
+.g-root {--g-font-family-sans: 'Golos Text', sans-serif; --g-color-base-brand: #34775a; --g-color-base-brand-hover: #286348; --g-color-text-brand: #34775a; --g-color-text-brand-heavy: #34775a; --g-color-text-brand-contrast: white; --g-color-line-brand: #34775a; --g-color-base-selection: #edf3ed; --g-color-base-selection-hover: #e4ede4; --g-border-radius-l: 8px;}
+.app-shell {min-height: 100vh; display: flex; font-size: 13px;}
+.sidebar {width: 238px; padding: 38px 21px 0; background: #f7f8f3; border-right: 1px solid #e9ebe3; display: flex; flex-direction: column; position: fixed; inset: 0 auto 0 0;}
+.brand {color: #263f30; display: flex; align-items: center; text-decoration: none; font-size: 36px; font-weight: 750; letter-spacing: -2px; gap: 11px; width: fit-content; margin: 0 12px 39px; line-height: 1;}
+.brand-dot {color: #60916a; margin-left: -11px;}
+.brand-symbol {display: block; position: relative; width: 27px; height: 30px; transform: rotate(-8deg);}
+.brand-symbol span {position: absolute; background: #397453; width: 12px; height: 23px; border-radius: 2px 9px 2px 9px; left: 1px; top: 4px; transform: rotate(-17deg);}
+.brand-symbol span:nth-child(2) {background: #8da780; left: 13px; height: 19px; top: 0; transform: rotate(22deg);}
+.brand-symbol span:nth-child(3) {background: #b2c4a4; left: 15px; top: 18px; height: 11px; width: 9px; transform: rotate(35deg);}
+.workspace {display: flex; align-items: center; gap: 10px; padding: 14px 8px 25px; border-bottom: 1px solid #e4e7dd; margin-bottom: 26px;}
+.workspace-icon {display: grid; place-items: center; width: 35px; height: 36px; background: #e9eee2; color: #59734e; border-radius: 8px;}
+.workspace strong {display: block; font-size: 12px; font-weight: 550; margin-bottom: 5px;}
+.workspace div>span {font-size: 10px; color: #92968a;}
+.nav-caption {font-size: 9px; letter-spacing: 1.1px; color: #95998e; padding: 0 11px; margin-bottom: 13px;}
+nav {display: flex; flex-direction: column; gap: 6px;}
+.nav-item {border: 0; background: transparent; display: flex; width: 100%; align-items: center; gap: 11px; padding: 12px; border-radius: 6px; color: #737a6d; font-size: 12px; text-align: left; height: 43px;}
+.nav-item.active {background: #e7edde; color: #365a3f; font-weight: 550;}
+.nav-item:hover {background: #ebefe5;}
+.nav-indicator {margin-left: auto; width: 5px; height: 5px; background: #4b7952; border-radius: 50%;}
+.nav-count {margin-left: auto; color: #8f9688; font-size: 11px; background: #e9ece3; border-radius: 4px; padding: 1px 5px;}
+.sidebar-bottom {margin-top: auto; padding-top: 60px;}
+.inspiration {margin: 0 11px 33px;}
+.sparkle {font-size: 35px; color: #8a9d70; line-height: 1;}
+.inspiration p {font-size: 13px; line-height: 1.8; font-weight: 500; color: #63705a; margin: 14px 0 7px;}
+.inspiration>span:last-child {font-size: 10px; color: #9ba28e;}
+.help-nav {border: 0; background: none; color: #7b8371; display: flex; align-items: center; gap: 8px; font-size: 10px; width: 100%; padding: 13px 8px 20px;}
+.help-nav svg:last-child {margin-left: auto;}
+.profile {border-top: 1px solid #e2e7dc; display: flex; gap: 10px; align-items: center; padding: 23px 3px 25px;}
+.avatar {width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #e4e8d6; color: #77815c; font-family: Georgia, serif; font-size: 16px;}
+.profile strong {display: block; font-size: 10px; font-weight: 550; margin-bottom: 5px;}
+.profile div>span {font-size: 9px; color: #969c8d;}
+.online-dot {width: 6px; height: 6px; background: #95a985; border-radius: 50%; margin-left: auto;}
+.main-shell {margin-left: 238px; flex: 1; min-width: 0;}
+.topbar {height: 77px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 47px;}
+.breadcrumbs {display: flex; align-items: center; gap: 15px; font-size: 11px; color: #959991;}
+.breadcrumbs svg {color: #b0b4ac;}
+.breadcrumbs .current {color: #62675f;}
+.topbar-note {display: flex; align-items: center; gap: 7px; font-size: 10px; color: #90978b;}
+.topbar-note>span {height: 5px; width: 5px; background: #8a9e72; border-radius: 50%;}
+main {max-width: 1270px; padding: 43px 47px 0; margin: 0 auto;}
+.page-heading {display: flex; align-items: center; justify-content: space-between; margin-bottom: 35px;}
+.eyebrow {font-size: 9px; letter-spacing: 1.7px; font-weight: 500; color: #8d9785;}
+h1 {font-size: 34px; font-weight: 550; letter-spacing: -1.4px; line-height: 1.2; margin: 13px 0 12px;}
+.title-dot {color: #6e9566;}
+.page-heading p {margin: 0; color: #90948c; font-size: 12px; line-height: 1.7;}
+.draft-badge {font-size: 10px; color: #7b846b; display: flex; gap: 7px; align-items: center; border: 1px solid #e3e8db; background: #fafbf6; border-radius: 5px; padding: 7px 11px; align-self: flex-start; margin-top: 34px;}
+.draft-badge>span {width: 5px; height: 5px; background: #9aa780; border-radius: 50%;}
+.title-section {margin-bottom: 30px;}
+label {display: block; font-size: 12px; font-weight: 550; margin-bottom: 11px;}
+label>span {color: #8c9b7c; margin-left: 3px;}
+.title-section .g-text-input {--g-text-input-border-radius: 7px; --g-text-input-border-color: #e1e5dc; --g-text-input-border-color-hover: #aab99e; --g-text-input-border-color-active: #6b976a; --g-text-input-background-color: #fff;}
+.title-section .g-text-input__control {font-size: 13px; padding-left: 15px;}
+.field-hint {display: flex; align-items: center; justify-content: space-between; font-size: 10px; color: #a0a399; margin-top: 9px;}
+.content-label {display: flex; align-items: center; justify-content: space-between; margin-bottom: 11px;}
+.content-label label {margin: 0;}
+.markdown-label {display: flex; align-items: center; gap: 6px; font-size: 10px; color: #939a8b;}
+.md-symbol {font-size: 9px; font-weight: 750; border: 1px solid #a4ad9b; border-radius: 2px; line-height: 12px; padding: 0 3px;}
+.editor {border: 1px solid #dfe4d9; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 3px 9px #293d1d03;}
+.editor-toolbar {height: 55px; border-bottom: 1px solid #e5e8df; background: #fbfcf9; display: flex; align-items: center; justify-content: space-between; padding: 0 13px; gap: 8px;}
+.formatting-tools {display: flex; align-items: center; gap: 1px; color: #66705e;}
+.formatting-tools .g-button {min-width: 30px; --g-button-text-color: #68705f;}
+.formatting-tools .g-button__text {display: flex; align-items: center; justify-content: center; margin: 0 6px;}
+.formatting-tools b {font-family: Georgia, serif; font-size: 17px;}
+.formatting-tools i {font-family: Georgia, serif; font-size: 18px;}
+.heading-icon {font-family: Georgia, serif; font-size: 17px;}
+.heading-icon>span {font-size: 10px; margin-left: 1px;}
+.tool-group {margin-left: 5px; padding-left: 5px; border-left: 1px solid #e2e7db;}
+.editor-views {display: flex; align-items: center; gap: 12px;}
+.editor-views>.g-button {--g-button-text-color: #8d9683; min-width: 24px;}
+.editor-views>.g-button .g-button__text {display: flex; margin: 0 3px;}
+.view-switch {display: flex; padding: 3px; background: #eef0e9; border-radius: 5px;}
+.view-switch button {border: 0; background: none; padding: 5px 10px; font-size: 10px; color: #909687; border-radius: 3px; line-height: 17px;}
+.view-switch button.selected {background: #fff; box-shadow: 0 1px 4px #202c1714; color: #547348; font-weight: 500;}
+.editor-panels {display: grid; grid-template-columns: 1fr 1fr; height: 441px;}
+.source-panel {min-width: 0; min-height: 0; border-right: 1px solid #e6e9e0; display: flex; flex-direction: column; background: #fdfdfb;}
+.preview-panel {min-width: 0; min-height: 0; display: flex; flex-direction: column;}
+.panel-caption {display: flex; flex: 0 0 40px; align-items: center; justify-content: space-between; padding: 0 20px; font-size: 9px; color: #a2a99a;}
+.panel-caption>span:first-child {display: flex; align-items: center; gap: 7px; letter-spacing: 1px; font-size: 8px; font-weight: 500; color: #8b9580;}
+.live-label {display: flex; align-items: center; gap: 5px; font-size: 8px;}
+.live-label>span {height: 4px; width: 4px; background: #88a67c; border-radius: 50%;}
+.source-body {display: flex; flex: 1; min-height: 0; padding-top: 11px; padding-bottom: 17px;}
+.line-numbers {flex: 0 0 43px; color: #c0c5b7; text-align: right; padding-right: 13px; overflow: hidden; font: 10px/23px 'IBM Plex Mono', monospace; user-select: none;}
+.source-body textarea {resize: none; width: 100%; min-width: 0; border: none; outline: none; padding: 0 17px 40px 0; color: #69725e; background: transparent; font: 11px/23px 'IBM Plex Mono', monospace; overflow: auto; tab-size: 2; white-space: pre;}
+.source-body textarea::selection {background: #dbe7cf;}
+.source-body textarea::placeholder {color: #a5ac9d;}
+.source-body:focus-within {box-shadow: inset 0 0 0 1px #88a67c;}
+.markdown-preview {padding: 9px 27px 28px; overflow: auto; flex: 1; color: #636a5b; font-size: 12px; line-height: 1.95; overflow-wrap: anywhere;}
+.markdown-preview>:first-child {margin-top: 0;}
+.markdown-preview h1 {font-size: 25px; color: #323f2d; letter-spacing: -.7px; line-height: 1.45; margin: 20px 0 14px;}
+.markdown-preview h2 {font-size: 21px; line-height: 1.45; font-weight: 550; letter-spacing: -.6px; color: #343f2d; margin: 20px 0 14px;}
+.markdown-preview h3 {font-size: 14px; color: #3a4532; font-weight: 550; margin: 23px 0 9px;}
+.markdown-preview p {margin: 0 0 13px;}
+.markdown-preview strong {font-weight: 600; color: #3e4a34;}
+.markdown-preview ul, .markdown-preview ol {padding-left: 19px; margin: 13px 0 18px;}
+.markdown-preview li {padding-left: 3px; margin-bottom: 3px;}
+.markdown-preview li::marker {color: #91a67f;}
+.markdown-preview blockquote {margin: 17px 0; padding: 10px 15px; border-left: 3px solid #afc49b; background: #f7f9f2; font-size: 11px; font-style: italic; border-radius: 0 3px 3px 0; color: #748167;}
+.markdown-preview blockquote p {margin: 0;}
+.markdown-preview a {color: #5c7c48; text-underline-offset: 3px;}
+.markdown-preview pre {background: #f2f5ed; padding: 12px; border-radius: 5px; overflow: auto; font-size: 10px;}
+.markdown-preview code {font-family: 'IBM Plex Mono', monospace; background: #eef2e7; padding: 2px 4px; border-radius: 3px; font-size: .9em;}
+.markdown-preview pre code {padding: 0;}
+.markdown-preview img {max-width: 100%; border-radius: 4px;}
+.markdown-preview table {width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 11px;}
+.markdown-preview th, .markdown-preview td {border: 1px solid #e1e6d9; text-align: left; padding: 6px 9px;}
+.markdown-preview th {background: #f4f7ed;}
+.markdown-preview hr {border: 0; border-top: 1px solid #dfe6d6; margin: 20px 0;}
+.markdown-preview .contains-task-list {list-style: none; padding-left: 0;}
+.markdown-preview input[type=checkbox] {accent-color: #568151;}
+.editor-status {display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e7eae2; background: #fcfdfb; min-height: 34px; padding: 0 17px; color: #9aa18f; font-size: 9px;}
+.editor-status>span {display: flex; align-items: center;}
+.status-dot {width: 4px; height: 4px; background: #8ba37d; border-radius: 50%; margin-right: 6px;}
+.status-separator {margin: 0 8px; color: #c3c8ba;}
+.mode-write .editor-panels, .mode-preview .editor-panels {grid-template-columns: 1fr;}
+.mode-write .preview-panel, .mode-preview .source-panel {display: none;}
+.mode-write .source-panel {border: 0;}
+.mode-preview .markdown-preview {max-width: 720px; width: 100%; margin: 0 auto;}
+.editor-expanded {position: fixed; inset: 24px; z-index: 50; box-shadow: 0 0 0 40px #f5f7f0f5; display: flex; flex-direction: column;}
+.editor-expanded .editor-panels {height: auto; flex: 1; min-height: 0;}
+.editor-expanded .editor-toolbar {flex: 0 0 55px;}
+.editor-expanded .editor-status {flex: 0 0 34px;}
+.editor-expanded textarea {font-size: 12px; line-height: 25px;}
+.editor-expanded .line-numbers {line-height: 25px;}
+.editor-expanded .markdown-preview {font-size: 14px; padding: 20px 40px;}
+.editor-help {display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 10px; color: #9aa18f;}
+.editor-help>svg {color: #a9b19e;}
+.editor-help button {color: #758a63; border: 0; background: none; display: flex; align-items: center; gap: 5px; font-size: 10px; padding: 0 0 0 4px;}
+.editor-help button:hover {text-decoration: underline;}
+.form-footer {display: flex; align-items: center; justify-content: space-between; margin-top: 29px; padding-top: 23px; border-top: 1px solid var(--border);}
+.save-status {display: flex; align-items: center; gap: 7px; font-size: 10px; color: #9ba28f;}
+.save-button {--g-button-border-radius: 6px; --g-button-text-color: #fff;}
+.save-button .g-button__text {display: flex; align-items: center; gap: 9px; font-size: 11px; margin: 0 18px;}
+.page-footer {margin-top: 39px; border-top: 1px solid #f0f1ec; padding: 20px 0 24px; display: flex; align-items: center; justify-content: space-between; color: #b0b5a6; font-size: 9px;}
+.page-footer>span:last-child {display: flex; align-items: center; gap: 8px;}
+.footer-flower {font-size: 17px; color: #99ab85;}
+.empty-preview {height: 100%; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #a6b098; text-align: center;}
+.empty-preview p {font-size: 14px; color: #7d8c6d; margin: 16px 0 3px;}
+.empty-preview span {font-size: 11px;}
+.help-modal {padding: 30px 34px; width: min(550px, calc(100vw - 32px));}
+.modal-heading {display: flex; align-items: center; justify-content: space-between;}
+.modal-heading .g-button__text {display: flex; align-items: center;}
+.help-modal h2 {font-size: 25px; font-weight: 550; letter-spacing: -1px; margin: 12px 0;}
+.help-modal>p {color: #8b9480; font-size: 12px; line-height: 1.8;}
+.syntax-table {margin: 23px 0;}
+.syntax-table>div {display: grid; grid-template-columns: 1.2fr 1fr; gap: 15px; border-bottom: 1px solid #edf0e7; padding: 11px 0; font-size: 11px;}
+.syntax-table code {color: #62844e; font-size: 10px;}
+.syntax-table span {color: #8b9480;}
+.help-modal>.g-button {--g-button-text-color: #fff;}
+.toast {position: fixed; bottom: 26px; left: calc(50% + 100px); transform: translateX(-50%); z-index: 100; display: flex; gap: 10px; align-items: center; background: #fff; padding: 13px 15px; border: 1px solid #dfe8d7; box-shadow: 0 4px 30px #263b1b15; border-radius: 9px; color: #576c49; font-size: 12px; max-width: calc(100vw - 30px);}
+.toast>span {border-radius: 50%; width: 25px; height: 25px; background: #edf4e7; display: grid; place-items: center; flex-shrink: 0;}
+.toast button {border: none; background: none; color: #9aa58f; display: flex; padding: 5px; margin-left: 10px;}
+.error-message {font-size: 12px; color: #b44343;}
+.draft-card {width: 100%; background: #fff; border: 1px solid #e4e8de; border-radius: 8px; padding: 24px; display: flex; align-items: center; gap: 20px; text-align: left;}
+.draft-card:hover {border-color: #97ad83; background: #fcfdf9;}
+.draft-card>span:nth-child(2) {display: flex; flex-direction: column; gap: 9px;}
+.draft-card strong {font-size: 15px; color: #47573c; font-weight: 500;}
+.draft-card>span:nth-child(2)>span {font-size: 11px; color: #909b83;}
+.draft-card-icon {display: grid; place-items: center; padding: 15px; background: #f0f4e8; color: #80996b; border-radius: 7px;}
+.draft-card>svg {margin-left: auto; color: #8ca378; flex-shrink: 0;}
+.storage-note {font-size: 11px; color: #a3ab99; margin-top: 15px;}
+.empty-drafts {text-align: center; padding: 60px 20px; border: 1px dashed #d7dfce; border-radius: 8px; color: #869879;}
+.empty-drafts h2 {font-size: 20px; font-weight: 500; color: #627851;}
+.empty-drafts p {font-size: 12px; margin: 15px 0 25px; color: #929e86;}
+@media(min-width: 1500px) {main {padding-top: 55px;} .page-heading {margin-bottom: 42px;} .editor-panels {height: 485px;} .markdown-preview {font-size: 12px;} .source-body textarea {font-size: 11px;} .panel-caption {flex-basis: 45px;}}
+@media(max-width: 1200px) {.sidebar {width: 210px; padding-left: 15px; padding-right: 15px;} .main-shell {margin-left: 210px;} main {padding: 36px 30px 0;} .topbar {padding: 0 30px;} .editor-toolbar {padding: 0 8px;} .editor-views {gap: 5px;} .view-switch button {padding: 5px 7px;} .formatting-tools .g-button {min-width: 26px;} .formatting-tools .g-button__text {margin: 0 5px;} .tool-group {margin-left: 2px; padding-left: 2px;} .markdown-preview {padding-left: 21px; padding-right: 21px;} .panel-caption {padding: 0 15px;} .live-label {font-size: 7px;}}
+@media(max-width: 1000px) {.sidebar {width: 185px; padding-left: 12px; padding-right: 12px;} .main-shell {margin-left: 185px;} .workspace {padding-left: 3px; gap: 7px;} .workspace strong {font-size: 10px;} .workspace div>span {font-size: 8px;} .nav-caption {font-size: 8px; letter-spacing: .6px;} .inspiration {margin-left: 7px;} .inspiration p {font-size: 12px;} .inspiration>span:last-child {font-size: 8px;} main {padding-left: 25px; padding-right: 25px;} .topbar {padding: 0 25px;} .topbar-note {display: none;} .editor-toolbar {flex-wrap: wrap; height: auto; padding: 8px; gap: 8px;} .editor-views {gap: 6px;} .view-switch button {font-size: 9px; padding: 5px 6px;} .formatting-tools .g-button {min-width: 24px;} .formatting-tools .g-button__text {margin: 0 4px;} .live-label {font-size: 0;} .panel-caption>span:first-child {font-size: 7px;} .line-numbers {flex-basis: 32px; padding-right: 9px;} .editor-help {flex-wrap: wrap; row-gap: 7px;} .editor-help>span, .editor-help button {font-size: 9px;} .page-footer {font-size: 8px; gap: 10px;}}
+@media(max-width: 760px) {.sidebar {width: 69px; padding: 29px 10px 0;} .main-shell {margin-left: 69px;} .brand {font-size: 0; margin: 0 auto 32px; gap: 0;} .brand-dot {display: none;} .workspace, .nav-caption, .inspiration, .profile {display: none;} .nav-item {font-size: 0; padding: 13px; justify-content: center; height: 46px; gap: 0;} .nav-item svg {flex-shrink: 0;} .nav-indicator, .nav-count {display: none;} .help-nav {font-size: 0; justify-content: center; padding: 16px 0 25px; gap: 0;} .help-nav svg:last-child {display: none;} .topbar {height: 67px; padding: 0 23px;} main {padding: 30px 23px 0;} .page-heading {margin-bottom: 29px;} h1 {font-size: 29px;} .page-heading p {font-size: 11px; max-width: 300px;} .eyebrow {font-size: 8px; letter-spacing: 1.1px;} .draft-badge {font-size: 9px; margin-top: 29px;} .editor-views {margin-left: auto;} .view-switch button {padding: 4px 8px;} .markdown-preview {padding-left: 17px; padding-right: 17px;} .markdown-preview h2 {font-size: 19px;} .markdown-preview h3 {font-size: 13px;} .form-footer {gap: 20px;} .save-status {font-size: 9px;} .save-button .g-button__text {font-size: 10px; margin: 0 12px;} .page-footer>span:first-child {max-width: 160px; line-height: 1.8;} .toast {left: 50%;} .editor-expanded .editor-toolbar {flex: 0 0 auto;}}
+@media(max-width: 560px) {.sidebar {width: 59px; padding-left: 7px; padding-right: 7px;} .main-shell {margin-left: 59px;} main {padding: 28px 16px 0;} .topbar {padding: 0 16px; height: 61px;} .breadcrumbs {font-size: 9px; gap: 7px;} h1 {font-size: 26px; margin-top: 11px;} .page-heading p {font-size: 10px; max-width: 250px;} .draft-badge {display: none;} .title-section {margin-bottom: 25px;} .field-hint {font-size: 8px; gap: 10px;} .title-section .g-text-input__control {font-size: 11px;} .editor-toolbar {justify-content: center; padding: 7px;} .formatting-tools {justify-content: flex-start; width: 100%;} .editor-views {width: 100%; border-top: 1px solid #e7eae0; padding-top: 6px; justify-content: space-between;} .view-switch {flex: 1;} .view-switch button {flex: 1; font-size: 9px;} .editor-panels {grid-template-columns: 1fr; height: 670px; grid-template-rows: 1fr 1fr;} .source-panel {border-right: none; border-bottom: 1px solid #e6e9e0; min-height: 0;} .preview-panel {min-height: 0;} .panel-caption {flex-basis: 32px;} .panel-caption>span:first-child {font-size: 8px;} .live-label {font-size: 8px;} .source-body {padding-top: 4px;} .source-body textarea, .line-numbers {line-height: 21px;} .markdown-preview {font-size: 11px;} .markdown-preview h2 {font-size: 20px;} .mode-write .editor-panels, .mode-preview .editor-panels {height: 450px; grid-template-rows: 1fr;} .editor-status {font-size: 8px; padding: 0 9px;} .editor-status>span:first-child {font-size: 0;} .status-dot {margin-right: 0;} .editor-help {font-size: 9px; gap: 5px;} .editor-help>span {font-size: 8px;} .editor-help button {margin-left: 20px; padding-left: 0;} .form-footer {align-items: flex-start; flex-direction: column-reverse; gap: 15px; margin-top: 24px; padding-top: 19px;} .save-button {width: 100%;} .save-button .g-button__text {justify-content: center; font-size: 11px;} .page-footer {margin-top: 28px; flex-direction: column; align-items: flex-start; gap: 10px;} .page-footer>span:first-child {max-width: none;} .editor-expanded {inset: 12px;} .editor-expanded .editor-panels {grid-template-rows: 1fr 1fr;} .editor-expanded.mode-write .editor-panels, .editor-expanded.mode-preview .editor-panels {grid-template-rows: 1fr;} .editor-expanded .markdown-preview {font-size: 12px; padding: 15px 20px;} .help-modal {padding: 22px;} .help-modal h2 {font-size: 23px;} .syntax-table>div {font-size: 10px; grid-template-columns: 1.2fr 1fr; gap: 10px;} .syntax-table code {font-size: 9px; overflow-wrap: anywhere;} .toast {font-size: 10px; width: max-content;} .draft-card {padding: 17px; gap: 13px;} .draft-card strong {font-size: 12px;} .draft-card-icon {padding: 8px;}}
+@media(max-width: 560px) {
+  .formatting-tools>span {display: flex; flex: 1; min-width: 0;}
+  .formatting-tools .g-button {width: 100%; min-width: 0;}
+  .formatting-tools .g-button__text {margin: 0 3px;}
+  .formatting-tools .tool-group {margin-left: 2px; padding-left: 2px;}
+  .source-body textarea {font-size: 10px;}
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:77:19
+     75| // A hand-rolled <textarea> as the markdown input is the forbidden raw…
+     76| test("no raw textarea input", () => {
+     77|   expect(src).not.toMatch(new RegExp("<textarea[\\s/>]"));
+       |                   ^
+     78| });
+     79| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: src/App.tsx imports ReactMarkdown and renders a raw <textarea> for the markdown field with a separate ReactMarkdown preview; it does not use useMarkdownEditor or MarkdownEditorView. package.json lists react-markdown and has no @gravity-ui/markdown-editor dependency.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

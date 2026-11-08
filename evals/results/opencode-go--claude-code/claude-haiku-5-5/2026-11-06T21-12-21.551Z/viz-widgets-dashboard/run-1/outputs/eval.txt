@@ -1,0 +1,92 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 4 failed) 8285ms
+   × imports @gravity-ui/dashkit 4ms
+     → expected false to be true // Object.is equality
+   × @gravity-ui/dashkit in package.json 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct react-grid-layout import 0ms
+   ✓ react-grid-layout not a direct dep 0ms
+   ✓ no hand-rolled CSS grid layout 0ms
+   × no hand-rolled CSS-file grid 0ms
+     → expected false to be true // Object.is equality
+   × judge: implements the task with the intended Gravity UI API 8279ms
+     → [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: No @gravity-ui/dashkit anywhere: package.json lacks the dependency and src has no DashKit import, registerPlugins/reloadPlugins or editMode usage. The grid is hand-rolled in src/dashboard/Dashboard.tsx via custom pointer-event gestures, applyChange-based collision/gravity logic in grid.ts, and absolutely-positioned cells in dashboard.css.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 3 passed (7)
+   Start at  21:30:21
+   Duration  8.46s (transform 36ms, setup 19ms, collect 18ms, tests 8.28s, environment 0ms, prepare 30ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/dashkit
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:54
+     53| // DashKit is the canonical Gravity library for a configurable, drag-a…
+     54| test("imports @gravity-ui/dashkit", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                      ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > @gravity-ui/dashkit in package.json
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:49
+     58| // The dashboard-grid dependency must be declared, confirming the mode…
+     59| test("@gravity-ui/dashkit in package.json", () => {
+     60|   expect(dependsOn(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                 ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled CSS-file grid
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:87:91
+     85| // The camelCase check only catches JS inline styles; a самописная сет…
+     86| test("no hand-rolled CSS-file grid", () => {
+     87|   expect(usesDashKit || !new RegExp("grid-template-(columns|rows|areas…
+       |                                                                                           ^
+     88| });
+     89| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: No @gravity-ui/dashkit anywhere: package.json lacks the dependency and src has no DashKit import, registerPlugins/reloadPlugins or editMode usage. The grid is hand-rolled in src/dashboard/Dashboard.tsx via custom pointer-event gestures, applyChange-based collision/gravity logic in grid.ts, and absolutely-positioned cells in dashboard.css.
+ ❯ EVAL.ts:94:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

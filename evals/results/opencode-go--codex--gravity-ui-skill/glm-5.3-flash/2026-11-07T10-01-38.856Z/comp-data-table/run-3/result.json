@@ -1,0 +1,122 @@
+{
+  "status": "passed",
+  "duration": 414.761,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 18687,
+    "outputTokens": 5139,
+    "cacheReadTokens": 269824,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 505,
+    "totalTokens": 293650
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 12,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; cat src/App.tsx; printf '\\\\n--- main ---\\\\n'; cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null || true; rg -n \"withTableSorting|withTableSelection|TableSortingProps|TableSelectionProps|function Pagination|declare const Pagination\" node_modules/@gravity-ui/uikit/dist node_modules/@gravity-ui/uikit/build 2>/dev/null | head -120'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.d.ts; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSelection/withTableSelection.d.ts; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Pagination/Pagination.d.ts; sed -n '1,130p' node_modules/@gravity-ui/uikit/build/esm/components/Pagination/PaginationPageSizer/PaginationPageSizer.d.ts; rg -n \\\"export interface TableProps|export type TableProps|columns:|data:|getRowId|selectedIds|onSelectedIdsChange\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table/Table*.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Table -g '*.d.ts' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Pagination/types.d.ts; sed -n '1,125p' node_modules/@gravity-ui/uikit/build/esm/components/Table/Table.d.ts; rg -n \\\"sortable|meta\\\" node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting/withTableSorting.js | head -30; rg -n \\\"withTableSelection|selectedIds|Pagination\\\" node_modules/@gravity-ui/uikit/README.md node_modules/@gravity-ui/uikit/build/docs -g '*.md' 2>/dev/null | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+import { useMemo, useState } from 'react';\n+\n+import {\n+  Pagination,\n+  Table,\n+  withTableSelection,\n+  withTableSorting,\n+  type TableColumnConfig,\n+  type TableSortState,\n+} from '@gravity-ui/uikit';\n+\n+type Employee = {\n+  id: string;\n+  name: string;\n+  role: string;\n+  team: string;\n+  startedAt: string;\n+  rating: number;\n+};\n+\n+const employees: Employee[] = [\n+  { id: '1', name: 'Anna Volkova', role: 'Product designer', team: 'Growth', startedAt: '2022-03-14', rating: 4.6 },\n+  { id: '2', name: 'Dmitry Ivanov', role: 'Frontend developer', team: 'Core', startedAt: '2021-09-01', rating: 4.2 },\n+  { id: '3', name: 'Elena Petrova', role: 'QA engineer', team: 'Core', startedAt: '2023-01-23', rating: 4.8 },\n+  { id: '4', name: 'Igor Sokolov', role: 'Backend developer', team: 'Payments', startedAt: '2020-06-15', rating: 4.4 },\n+  { id: '5', name: 'Marina Kuznetsova', role: 'Product manager', team: 'Growth', startedAt: '2022-11-07', rating: 4.1 },\n+  { id: '6', name: 'Nikita Orlov', role: 'Frontend developer', team: 'Payments', startedAt: '2021-02-08', rating: 3.9 },\n+  { id: '7', name: 'Olga Smirnova', role: 'Data analyst', team: 'Analytics', startedAt: '2023-04-03', rating: 4.7 },\n+  { id: '8', name: 'Pavel Lebedev', role: 'Backend developer', team: 'Core', startedAt: '2020-10-19', rating: 4.5 },\n+  { id: '9', name: 'Sofia Morozova', role: 'UX researcher', team: 'Growth', startedAt: '2022-07-25', rating: 4.3 },\n+  { id: '10', name: 'Timur Galiev', role: 'DevOps engineer', team: 'Infrastructure', startedAt: '2021-12-13', rating: 4.0 },\n+  { id: '11', name: 'Yulia Chernova', role: 'Product designer', team: 'Core', startedAt: '2023-08-28', rating: 4.9 },\n+  { id: '12', name: 'Artem Belov', role: 'Data engineer', team: 'Analytics', startedAt: '2020-04-30', rating: 4.2 },\n+];\n+\n+type SortableColumn<T> = TableColumnConfig<T> & {\n+  meta?: {\n+    sort?: (left: T, right: T) => number;\n+    defaultSortOrder?: 'asc' | 'desc';\n+  };\n+};\n+\n+const SelectionTable = withTableSelection(Table);\n+const SelectableSortableTable = withTableSorting(SelectionTable);\n+\n+const columns: SortableColumn<Employee>[] = [\n+  {\n+    id: 'name',\n+    name: 'Name',\n+    meta: { sort: (left, right) => left.name.localeCompare(right.name) },\n+  },\n+  {\n+    id: 'role',\n+    name: 'Role',\n+    meta: { sort: (left, right) => left.role.localeCompare(right.role) },\n+  },\n+  {\n+    id: 'team',\n+    name: 'Team',\n+    meta: { sort: (left, right) => left.team.localeCompare(right.team) },\n+  },\n+  {\n+    id: 'startedAt',\n+    name: 'Start date',\n+    meta: { sort: (left, right) => left.startedAt.localeCompare(right.startedAt) },\n+  },\n+  {\n+    id: 'rating',\n+    name: 'Rating',\n+    align: 'end',\n+    meta: { sort: (left, right) => left.rating - right.rating },\n+  },\n+];\n+\n+export function App() {\n+  const [page, setPage] = useState(1);\n+  const [pageSize, setPageSize] = useState(5);\n+  const [sortState, setSortState] = useState<TableSortState>([\n+    { column: 'name', order: 'asc' },\n+  ]);\n+  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n+\n+  const sortedEmployees = useMemo(() => {\n+    const activeSort = sortState[0];\n+\n+    if (\"'!activeSort) {\n+      return employees;\n+    }\n+\n+    const sort = columns\n+      .find(({ id }) => id === activeSort.column)\n+      ?.meta?.sort;\n+\n+    if (!sort) {\n+      return employees;\n+    }\n+\n+    return [...employees].sort((left, right) => {\n+      const result = sort(left, right);\n+      return activeSort.order === '\"'desc' ? -result : result;\n+    });\n+  }, [sortState]);\n+\n+  const pageEmployees = useMemo(() => {\n+    const startIndex = (page - 1) * pageSize;\n+    return sortedEmployees.slice(startIndex, startIndex + pageSize);\n+  }, [page, pageSize, sortedEmployees]);\n+\n+  const updatePage = (nextPage: number, nextPageSize: number) => {\n+    setPage(nextPage);\n+    setPageSize(nextPageSize);\n+  };\n+\n+  return (\n+    <main style={{ padding: '24px', maxWidth: 960, margin: '0 auto' }}>\n+      <h1 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 600 }}>Employees</h1>\n+      <SelectableSortableTable\n+        columns={columns}\n+        data={pageEmployees}\n+        getRowId={(employee) => employee.id}\n+        selectedIds={selectedIds}\n+        onSelectionChange={setSelectedIds}\n+        sortState={sortState}\n+        onSortStateChange={setSortState}\n+      />\n+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>\n+        <Pagination\n+          page={page}\n+          pageSize={pageSize}\n+          pageSizeOptions={[5, 10, 20]}\n+          total={employees.length}\n+          onUpdate={updatePage}\n+        />\n+      </div>\n+    </main>\n+  );\n+}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\n\nimport {\n  Pagination,\n  Table,\n  withTableSelection,\n  withTableSorting,\n  type TableColumnConfig,\n  type TableSortState,\n} from '@gravity-ui/uikit';\n\ntype Employee = {\n  id: string;\n  name: string;\n  role: string;\n  team: string;\n  startedAt: string;\n  rating: number;\n};\n\nconst employees: Employee[] = [\n  { id: '1', name: 'Anna Volkova', role: 'Product designer', team: 'Growth', startedAt: '2022-03-14', rating: 4.6 },\n  { id: '2', name: 'Dmitry Ivanov', role: 'Frontend developer', team: 'Core', startedAt: '2021-09-01', rating: 4.2 },\n  { id: '3', name: 'Elena Petrova', role: 'QA engineer', team: 'Core', startedAt: '2023-01-23', rating: 4.8 },\n  { id: '4', name: 'Igor Sokolov', role: 'Backend developer', team: 'Payments', startedAt: '2020-06-15', rating: 4.4 },\n  { id: '5', name: 'Marina Kuznetsova', role: 'Product manager', team: 'Growth', startedAt: '2022-11-07', rating: 4.1 },\n  { id: '6', name: 'Nikita Orlov', role: 'Frontend developer', team: 'Payments', startedAt: '2021-02-08', rating: 3.9 },\n  { id: '7', name: 'Olga Smirnova', role: 'Data analyst', team: 'Analytics', startedAt: '2023-04-03', rating: 4.7 },\n  { id: '8', name: 'Pavel Lebedev', role: 'Backend developer', team: 'Core', startedAt: '2020-10-19', rating: 4.5 },\n  { id: '9', name: 'Sofia Morozova', role: 'UX researcher', team: 'Growth', startedAt: '2022-07-25', rating: 4.3 },\n  { id: '10', name: 'Timur Galiev', role: 'DevOps engineer', team: 'Infrastructure', startedAt: '2021-12-13', rating: 4.0 },\n  { id: '11', name: 'Yulia Chernova', role: 'Product designer', team: 'Core', startedAt: '2023-08-28', rating: 4.9 },\n  { id: '12', name: 'Artem Belov', role: 'Data engineer', team: 'Analytics', startedAt: '2020-04-30', rating: 4.2 },\n];\n\ntype SortableColumn<T> = TableColumnConfig<T> & {\n  meta?: {\n    sort?: (left: T, right: T) => number;\n    defaultSortOrder?: 'asc' | 'desc';\n  };\n};\n\nconst SelectionTable = withTableSelection(Table);\nconst SelectableSortableTable = withTableSorting(SelectionTable);\n\nconst columns: SortableColumn<Employee>[] = [\n  {\n    id: 'name',\n    name: 'Name',\n    meta: { sort: (left, right) => left.name.localeCompare(right.name) },\n  },\n  {\n    id: 'role',\n    name: 'Role',\n    meta: { sort: (left, right) => left.role.localeCompare(right.role) },\n  },\n  {\n    id: 'team',\n    name: 'Team',\n    meta: { sort: (left, right) => left.team.localeCompare(right.team) },\n  },\n  {\n    id: 'startedAt',\n    name: 'Start date',\n    meta: { sort: (left, right) => left.startedAt.localeCompare(right.startedAt) },\n  },\n  {\n    id: 'rating',\n    name: 'Rating',\n    align: 'end',\n    meta: { sort: (left, right) => left.rating - right.rating },\n  },\n];\n\nexport function App() {\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(5);\n  const [sortState, setSortState] = useState<TableSortState>([\n    { column: 'name', order: 'asc' },\n  ]);\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n\n  const sortedEmployees = useMemo(() => {\n    const activeSort = sortState[0];\n\n    if (\"'!activeSort) {\n      return employees;\n    }\n\n    const sort = columns.find(({ id }) => id === activeSort.column)?.meta?.sort;\n\n    if (!sort) {\n      return employees;\n    }\n\n    return [...employees].sort((left, right) => {\n      const result = sort(left, right);\n      return activeSort.order === '\"'desc' ? -result : result;\n    });\n  }, [sortState]);\n\n  const pageEmployees = useMemo(() => {\n    const startIndex = (page - 1) * pageSize;\n    return sortedEmployees.slice(startIndex, startIndex + pageSize);\n  }, [page, pageSize, sortedEmployees]);\n\n  const updatePage = (nextPage: number, nextPageSize: number) => {\n    setPage(nextPage);\n    setPageSize(nextPageSize);\n  };\n\n  return (\n    <main style={{ padding: '24px', maxWidth: 960, margin: '0 auto' }}>\n      <h1 style={{ margin: '0 0 20px', fontSize: 24, fontWeight: 600 }}>Employees</h1>\n      <SelectableSortableTable\n        columns={columns}\n        data={pageEmployees}\n        getRowId={(employee) => employee.id}\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        sortState={sortState}\n        onSortStateChange={setSortState}\n      />\n      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>\n        <Pagination\n          page={page}\n          pageSize={pageSize}\n          pageSizeOptions={[5, 10, 20]}\n          total={employees.length}\n          onUpdate={updatePage}\n        />\n      </div>\n    </main>\n  );\n}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/\"'^const SelectionTable = withTableSelection(Table);$/const SelectionTable = withTableSelection<Employee>(Table);/; s/''^const SelectableSortableTable = withTableSorting(SelectionTable);$/const SelectableSortableTable = withTableSorting<Employee>(SelectionTable);/'\"' src/App.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'sed -i \"s/const SelectionTable = withTableSelection<Employee>(Table);/const SelectableSortableTable = withTableSorting(withTableSelection(Table));/; /const SelectableSortableTable = withTableSorting<Employee>(SelectionTable);/d\" src/App.tsx\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/withTableSorting(withTableSelection(Table))/withTableSorting(withTableSelection<Employee>(Table))/' src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx | sed -n '1,180p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i 's/  const updatePage = (nextPage: number, nextPageSize: number) => {\\\\n    setPage(nextPage);/&/' src/App.tsx\nawk 'BEGIN{done=0} /const updatePage =/ && \"'!done {print; getline; print; print \"    if (nextPageSize !== pageSize) {\"; print \"      setPage(1);\"; print \"    }\"; done=1; next} {print}'\"' src/App.tsx > src/App.tsx.tmp && mv src/App.tsx.tmp src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 18687,
+      "outputTokens": 5139,
+      "cacheReadTokens": 269824,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 505,
+      "totalTokens": 293650
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

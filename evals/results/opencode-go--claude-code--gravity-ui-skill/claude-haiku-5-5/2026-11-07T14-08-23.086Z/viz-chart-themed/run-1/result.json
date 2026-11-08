@@ -1,0 +1,131 @@
+{
+  "status": "passed",
+  "duration": 307.626,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 42,
+    "outputTokens": 13228,
+    "cacheReadTokens": 1034804,
+    "cacheWriteTokens": 56130,
+    "totalTokens": 1104204
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 19,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 1,
+      "file_edit": 1,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && git status --short && cat package.json 2>/dev/null; find . -path ./node_modules -prune -o -type f \\( -name \"*.tsx\" -o -name \"*.ts\" -o -name \"*.jsx\" -o -name \"*.js\" -o -name \"*.html\" -o -name \"*.css\" \\) -print | grep -v node_modules | head -100",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx; echo ----; cat src/main.tsx; echo ----; cat index.html; echo ----; cat vite.config.ts tsconfig.json; echo ----; cat AGENTS.md; echo ----; ls .agents/skills/gravity-ui/ .agents/skills/gravity-ui/references .agents/skills/gravity-ui/rules .agents/skills/gravity-ui/scripts; echo ----; ls node_modules/@gravity-ui/; echo ----; sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md",
+        "success": true
+      },
+      {
+        "command": "grep -n -i \"charts\" .agents/skills/gravity-ui/references/package-routing.md | head -30; echo ----; awk '/## Charts|## .*@gravity-ui\\/charts/{f=1} f{print; n++} n>40{exit}' .agents/skills/gravity-ui/references/package-routing.md; echo ----; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; echo ----; cat .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": "sed -n 150,400p .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----THEMING; cat .agents/skills/gravity-ui/references/theming.md | head -250",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/charts version peerDependencies dependencies 2>&1 | head -60; echo ----; ls node_modules/@gravity-ui/uikit/build/ | head -30; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -40",
+        "success": true
+      },
+      {
+        "command": "for v in $(npm view @gravity-ui/charts versions --json 2>/dev/null | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{for(const v of JSON.parse(s).slice(-40))console.log(v)})'); do echo -n \"$v  \"; npm view @gravity-ui/charts@$v peerDependencies --json 2>/dev/null | tr -d '\\n' | grep -o '\"@gravity-ui/uikit\": *\"[^\"]*\"' ; echo; done 2>/dev/null | tail -45",
+        "success": true
+      },
+      {
+        "command": "npm install --save-exact @gravity-ui/charts@1.73.0 2>&1 | grep -v \"npm warn Unknown env\" | tail -15; echo ----; grep '\"version\"' node_modules/@gravity-ui/charts/package.json; grep -A4 '\"dependencies\"' package.json; ls node_modules/@gravity-ui/charts/; ls node_modules/@gravity-ui/charts/dist/docs 2>/dev/null; ls node_modules/@gravity-ui/charts/build/docs 2>/dev/null; cat node_modules/@gravity-ui/charts/README.md 2>/dev/null | head -120",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/docs && wc -l INDEX.md; ls guides; echo ----; rg -n -i \"theme\" INDEX.md | head -40; echo ----; cat guides/theming.md 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,125p INDEX.md | head -125 | cut -c1-220; echo ----COLORS; cat guides/colors.md | head -80; echo ----LINE; ls guides/series-types; cat guides/series-types/line.md 2>/dev/null | head -120",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist && ls; D=$(find . -name \"index.d.ts\" | head -3); echo \"$D\"; grep -rn \"export declare const Chart\\b\\|declare function Chart\\b\\|export declare const Chart:\" --include=*.d.ts . | head -5; echo ----; grep -rln \"interface ChartData\\b\\|type ChartData\\b\" --include=*.d.ts . | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/esm && grep -n \"ChartComponent\\b\" -A6 components/index.d.ts | head -30; echo ----; grep -n \"export interface ChartData\\b\" -A40 core/types/index.d.ts | head -60; echo ----LEG; grep -rn \"export interface ChartData\\|colors?:\\|legend?:\\|title?:\\|xAxis?:\\|yAxis?:\" core/types/index.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -rn -i \"theme\" --include=*.d.ts . | grep -v \"^./docs\" | head -20; echo ----; grep -rn \"g-color-text-primary\\|g-color-line-generic\\|g-color-base-background\" --include=*.js . | head -5 | cut -c1-250; echo; grep -rln \"useThemeType\\|useThemeValue\\|getRootClassName\" . | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Card Text 2>&1 | head -20; echo ----; f=$(ls node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts 2>/dev/null); echo \"$f\"; [ -n \"$f\" ] && sed -n 1,60p \"$f\"; echo ----AXIS; sed -n 1,60p node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-types.md | cut -c1-240",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Card Text 2>&1 | head -8; echo ----; rg -n -C 3 \"categor\" node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-types.md | head -60 | cut -c1-220; echo ----; grep -rn \"categories\" node_modules/@gravity-ui/charts/dist/esm/core/types/*.d.ts node_modules/@gravity-ui/charts/dist/esm/core/types/**/*.d.ts 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/esm/core/types && grep -rn \"export interface ChartLegend\\b\\|export interface ChartTitle\\b\" -A12 . | grep -v \"^\\s*\\*\" | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit; echo \"tsc exit=$?\"; cat .gitignore; echo ----; git status --short; echo ----; git diff --stat; grep -n \"charts\\|uikit\" package.json",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 42,
+      "outputTokens": 13228,
+      "cacheReadTokens": 1034804,
+      "cacheWriteTokens": 56130,
+      "totalTokens": 1104204
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

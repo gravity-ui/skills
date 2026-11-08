@@ -1,0 +1,97 @@
+{
+  "status": "passed",
+  "duration": 509.691,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 27854,
+    "outputTokens": 2030,
+    "cacheReadTokens": 69120,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 446,
+    "totalTokens": 99004
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 8,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 8,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"rg --files -g '\"'!*node_modules*'\"' | head -100 && rg -n \\\"theme|dark|light|localStorage\\\" -S --glob '\"'!*node_modules*'\"'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/App.tsx && printf '\\\\n--- main.tsx ---\\\\n' && cat src/main.tsx && printf '\\\\n--- index.html ---\\\\n' && cat index.html && printf '\\\\n--- package.json ---\\\\n' && cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import React, { useCallback, useState } from 'react';\n-import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import ReactDOM from 'react-dom/client';\n+import { ThemeProvider, type Theme } from '@gravity-ui/uikit';\n@@\n import { App } from './App';\n+\n+const THEME_STORAGE_KEY = 'theme';\n+\n+function getInitialTheme(): Theme {\n+  return window.localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';\n+}\n \n-ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n+ReactDOM.createRoot(document.getElementById('\"'root')\"'!).render(\n   <React.StrictMode>\n-    <ThemeProvider theme=\"light\">\n-      <App />\n-    </ThemeProvider>\n-  </React.StrictMode>,\n+    <ThemeState />\n+  </React.StrictMode>,\n );\n+\n+function ThemeState() {\n+  const [theme, setTheme] = useState<Theme>(getInitialTheme);\n+  const handleThemeChange = useCallback((newTheme: Theme) => {\n+    setTheme(newTheme);\n+    window.localStorage.setItem(THEME_STORAGE_KEY, newTheme);\n+  }, []);\n+\n+  return (\n+    <ThemeProvider theme={theme}>\n+      <App theme={theme} onThemeChange={handleThemeChange} />\n+    </ThemeProvider>\n+  );\n+}\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+import { Switch, type Theme } from '\"'@gravity-ui/uikit';\n+\n+type AppProps = {\n+  theme: Theme;\n+  onThemeChange: (theme: Theme) => void;\n+};\n+\n+export function App({ theme, onThemeChange }: AppProps) {\n+  const darkThemeSelected = theme === 'dark';\n+\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <Switch\n+        checked={darkThemeSelected}\n+        onChange={(event) => onThemeChange(event.target.checked ? 'dark' : 'light')}\n+        label=\\\"Dark theme\\\"\n+      />\n+    </div>\n+  );\n }\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('node:fs');\n\nfs.writeFileSync('src/main.tsx', \"'`// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\nimport '\"'@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React, { useCallback, useState } from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider, type Theme } from '@gravity-ui/uikit';\n\nimport { App } from './App';\n\nconst THEME_STORAGE_KEY = 'theme';\n\nfunction getInitialTheme(): Theme {\n  return window.localStorage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';\n}\n\nfunction ThemeState() {\n  const [theme, setTheme] = useState<Theme>(getInitialTheme);\n  const handleThemeChange = useCallback((newTheme: Theme) => {\n    setTheme(newTheme);\n    window.localStorage.setItem(THEME_STORAGE_KEY, newTheme);\n  }, []);\n\n  return (\n    <ThemeProvider theme={theme}>\n      <App theme={theme} onThemeChange={handleThemeChange} />\n    </ThemeProvider>\n  );\n}\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeState />\n  </React.StrictMode>,\n);\n`);\n\nfs.writeFileSync('\"'src/App.tsx', \"'`import { Switch, type Theme } from '\"'@gravity-ui/uikit';\n\ntype AppProps = {\n  theme: Theme;\n  onThemeChange: (theme: Theme) => void;\n};\n\nexport function App({ theme, onThemeChange }: AppProps) {\n  const darkThemeSelected = theme === 'dark';\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Switch\n        checked={darkThemeSelected}\n        onChange={(event) => onThemeChange(event.target.checked ? 'dark' : 'light')}\n        label=\\\"Dark theme\\\"\n      />\n    </div>\n  );\n}\n\"'`);\nNODE\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('node:fs');\nlet app = fs.readFileSync('src/App.tsx', 'utf8');\napp = app.replace(\n  /<Switch\\\\n([\\\\s\\\\S]*?) \\\\/ >/m,\n  \"'`<Switch\n$1>Dark theme</Switch>`.replace('\"' / >', '')\n);\nfs.writeFileSync('src/App.tsx', app);\nNODE\ncat src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst fs = require('node:fs');\nconst app = fs.readFileSync('src/App.tsx', 'utf8');\nfs.writeFileSync(\n  'src/App.tsx',\n  app.replace(/<Switch\\\\n([\\\\s\\\\S]*?)\\\\/>/m, \"'`<Switch'\"\\\\n\"'$1>Dark theme</Switch>`)\n);\nNODE\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i '/label=/d' src/App.tsx && npm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba src/main.tsx && nl -ba src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 27854,
+      "outputTokens": 2030,
+      "cacheReadTokens": 69120,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 446,
+      "totalTokens": 99004
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

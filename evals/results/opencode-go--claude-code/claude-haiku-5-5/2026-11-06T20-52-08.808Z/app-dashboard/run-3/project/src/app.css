@@ -1,0 +1,283 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  height: 100%;
+  background: var(--g-color-base-background);
+  color: var(--g-color-text-primary);
+}
+
+/* ---------- Боковая навигация ---------- */
+
+.sidebar {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 8px;
+  border-right: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-float);
+  transition: width 0.2s ease;
+}
+
+.sidebar.is-collapsed {
+  width: 64px;
+}
+
+.sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 4px;
+}
+
+.sidebar__brand {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--g-color-text-primary);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--g-color-base-simple-hover);
+}
+
+.nav-item[aria-current='page'] {
+  background: var(--g-color-base-generic);
+  font-weight: 600;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: -2px;
+}
+
+.sidebar.is-collapsed .nav-item {
+  justify-content: center;
+  padding: 0;
+}
+
+/* ---------- Основная область ---------- */
+
+.app__main {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 24px 32px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.page-placeholder {
+  color: var(--g-color-text-secondary);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 20px 0 24px;
+}
+
+.kpi {
+  padding: 16px;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  background: var(--g-color-base-float);
+}
+
+.kpi__label {
+  font-size: 13px;
+  color: var(--g-color-text-secondary);
+}
+
+.kpi__value {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Таблица заказов ---------- */
+
+.orders-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.orders-toolbar__right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--g-color-text-secondary);
+}
+
+.orders-table__scroll {
+  overflow: auto;
+  max-height: calc(100vh - 260px);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  background: var(--g-color-base-background);
+}
+
+.orders-table__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.orders-table__table th,
+.orders-table__table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.orders-table__table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--g-color-base-float);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--g-color-text-secondary);
+  cursor: grab;
+  user-select: none;
+}
+
+.orders-table__table thead th:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: -2px;
+}
+
+.orders-table__table thead th.is-dragging {
+  opacity: 0.5;
+}
+
+.orders-table__table thead th.is-drop-before {
+  box-shadow: inset 2px 0 0 var(--g-color-base-brand);
+}
+
+.orders-table__table thead th.is-drop-after {
+  box-shadow: inset -2px 0 0 var(--g-color-base-brand);
+}
+
+.th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.th-content .grip {
+  color: var(--g-color-text-hint);
+}
+
+.orders-table__table .cell-check {
+  width: 40px;
+  padding-right: 0;
+}
+
+.orders-table__table .is-numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.orders-table__table tbody tr:not(.group-row):hover td {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders-table__table tbody tr.is-selected td {
+  background: var(--g-color-base-selection);
+}
+
+.orders-table__table tbody tr.is-selected:hover td {
+  background: var(--g-color-base-selection-hover);
+}
+
+.orders-table__table tr.group-row td {
+  background: var(--g-color-base-generic);
+  font-weight: 600;
+}
+
+.group-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.group-toggle:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: 2px;
+}
+
+.group-count {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--g-color-text-secondary);
+}
+
+.orders-table__empty {
+  padding: 32px 12px;
+  text-align: center;
+  color: var(--g-color-text-secondary);
+}

@@ -1,0 +1,71 @@
+{
+  "status": "passed",
+  "duration": 475.815,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 10,
+    "outputTokens": 5144,
+    "cacheReadTokens": 91235,
+    "cacheWriteTokens": 10857,
+    "totalTokens": 107246
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 4,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 4,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -30; node -v; npm -v",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html tsconfig.json vite.config.ts .gitignore; find src __agent_eval__ -type f | head -50; for f in $(find src -type f); do echo \"--- $f\"; cat $f; done; ls node_modules | grep -i router",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/pages && cat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\nimport './app.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\ncat > src/router.ts <<'EOF'\nimport { useEffect, useState } from 'react';\n\nexport type Route = 'home' | 'tasks' | 'about';\n\nexport const ROUTES: {id: Route; path: string; title: string}[] = [\n  { id: 'home', path: '/', title: 'Главная' },\n  { id: 'tasks', path: '/tasks', title: 'Задачи' },\n  { id: 'about', path: '/about', title: 'О приложении' },\n];\n\nfunction currentPath(): string {\n  return window.location.hash.replace(/^#/, '') || '/';\n}\n\n/** Минимальный hash-роутер: ссылки вида #/tasks, работает без настройки сервера. */\nexport function useRoute(): Route {\n  const [path, setPath] = useState(currentPath);\n\n  useEffect(() => {\n    const onChange = () => setPath(currentPath());\n    window.addEventListener('hashchange', onChange);\n    return () => window.removeEventListener('hashchange', onChange);\n  }, []);\n\n  return ROUTES.find((r) => r.path === path)?.id ?? 'home';\n}\nEOF\ncat > src/useTheme.ts <<'EOF'\nimport { useCallback, useEffect, useState } from 'react';\n\nexport type AppTheme = 'light' | 'dark';\n\nconst STORAGE_KEY = 'app-theme';\n\nfunction initialTheme(): AppTheme {\n  const saved = localStorage.getItem(STORAGE_KEY);\n  if (saved === 'light' || saved === 'dark') return saved;\n  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n}\n\nexport function useTheme() {\n  const [theme, setTheme] = useState<AppTheme>(initialTheme);\n\n  useEffect(() => {\n    localStorage.setItem(STORAGE_KEY, theme);\n  }, [theme]);\n\n  const toggle = useCallback(() => setTheme((t) => (t === 'dark' ? 'light' : 'dark')), []);\n\n  return { theme, toggle };\n}\nEOF\ncat > src/app.css <<'EOF'\nbody { margin: 0; }\n\n.app { min-height: 100vh; display: flex; flex-direction: column; background: var(--g-color-base-background); }\n\n.app__header {\n  display: flex; align-items: center; justify-content: space-between; gap: 16px;\n  padding: 12px 24px; border-bottom: 1px solid var(--g-color-line-generic);\n}\n.app__nav { display: flex; gap: 8px; flex-wrap: wrap; }\n.app__main { flex: 1; width: 100%; max-width: 720px; margin: 0 auto; padding: 32px 24px; box-sizing: border-box; }\n.page { display: flex; flex-direction: column; gap: 16px; }\n.tasks__form { display: flex; gap: 8px; }\n.tasks__form > :first-child { flex: 1; }\n.tasks__list { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }\n.tasks__item { display: flex; align-items: center; justify-content: space-between; gap: 12px; }\nEOF\ncat > src/pages/HomePage.tsx <<'EOF'\nimport { Card, Text } from '@gravity-ui/uikit';\n\nexport function HomePage() {\n  return (\n    <section className=\"page\">\n      <Text variant=\"display-1\" as=\"h1\">Добро пожаловать</Text>\n      <Text variant=\"body-2\" color=\"secondary\">\n        Небольшое приложение из трёх страниц: переключайтесь между ними в шапке и меняйте тему\n        переключателем справа. Выбор темы запоминается.\n      </Text>\n      <Card view=\"outlined\" type=\"container\" style={{ padding: 16 }}>\n        <Text variant=\"subheader-2\">Что внутри</Text>\n        <Text as=\"p\" variant=\"body-1\">\n          Страница «Задачи» — простой список дел, «О приложении» — описание стека.\n        </Text>\n      </Card>\n    </section>\n  );\n}\nEOF\ncat > src/pages/TasksPage.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Card, Checkbox, Text, TextInput } from '@gravity-ui/uikit';\n\ntype Task = { id: number; title: string; done: boolean };\n\nexport function TasksPage() {\n  const [tasks, setTasks] = useState<Task[]>([\n    { id: 1, title: 'Попробовать тёмную тему', done: false },\n    { id: 2, title: 'Открыть страницу «О приложении»', done: false },\n  ]);\n  const [title, setTitle] = useState('');\n\n  const add = () => {\n    const value = title.trim();\n    if (!value) return;\n    setTasks((prev) => [...prev, { id: Date.now(), title: value, done: false }]);\n    setTitle('');\n  };\n\n  const toggle = (id: number) =>\n    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));\n  const remove = (id: number) => setTasks((prev) => prev.filter((t) => t.id !== id));\n\n  return (\n    <section className=\"page\">\n      <Text variant=\"display-1\" as=\"h1\">Задачи</Text>\n      <form\n        className=\"tasks__form\"\n        onSubmit={(e) => {\n          e.preventDefault();\n          add();\n        }}\n      >\n        <TextInput placeholder=\"Новая задача\" value={title} onUpdate={setTitle} />\n        <Button type=\"submit\" view=\"action\" disabled={!title.trim()}>Добавить</Button>\n      </form>\n\n      {tasks.length === 0 ? (\n        <Text color=\"secondary\">Задач нет — добавьте первую.</Text>\n      ) : (\n        <ul className=\"tasks__list\">\n          {tasks.map((t) => (\n            <li key={t.id}>\n              <Card view=\"outlined\" type=\"container\" className=\"tasks__item\" style={{ padding: '8px 12px' }}>\n                <Checkbox checked={t.done} onUpdate={() => toggle(t.id)}>\n                  <span style={{ textDecoration: t.done ? 'line-through' : undefined }}>{t.title}</span>\n                </Checkbox>\n                <Button view=\"flat-danger\" size=\"s\" onClick={() => remove(t.id)}>Удалить</Button>\n              </Card>\n            </li>\n          ))}\n        </ul>\n      )}\n    </section>\n  );\n}\nEOF\ncat > src/pages/AboutPage.tsx <<'EOF'\nimport { Text } from '@gravity-ui/uikit';\n\nexport function AboutPage() {\n  return (\n    <section className=\"page\">\n      <Text variant=\"display-1\" as=\"h1\">О приложении</Text>\n      <Text variant=\"body-2\" color=\"secondary\">Собрано на:</Text>\n      <ul>\n        <li><Text>React 18 + TypeScript</Text></li>\n        <li><Text>Vite</Text></li>\n        <li><Text>Gravity UI — компоненты и светлая/тёмная темы</Text></li>\n        <li><Text>Собственный hash-роутер (без внешних зависимостей)</Text></li>\n      </ul>\n    </section>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Button, Switch, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { AboutPage } from './pages/AboutPage';\nimport { HomePage } from './pages/HomePage';\nimport { TasksPage } from './pages/TasksPage';\nimport { ROUTES, useRoute } from './router';\nimport { useTheme } from './useTheme';\n\nconst PAGES = { home: HomePage, tasks: TasksPage, about: AboutPage };\n\nexport function App() {\n  const route = useRoute();\n  const { theme, toggle } = useTheme();\n  const Page = PAGES[route];\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div className=\"app\">\n        <header className=\"app__header\">\n          <nav className=\"app__nav\" aria-label=\"Основная навигация\">\n            {ROUTES.map((r) => (\n              <Button\n                key={r.id}\n                view={r.id === route ? 'normal' : 'flat'}\n                selected={r.id === route}\n                href={`#${r.path}`}\n                aria-current={r.id === route ? 'page' : undefined}\n              >\n                {r.title}\n              </Button>\n            ))}\n          </nav>\n          <Switch checked={theme === 'dark'} onUpdate={toggle} content=\"Тёмная тема\" />\n        </header>\n        <main className=\"app__main\">\n          <Page />\n        </main>\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\nsed -i 's/<html lang=\"en\">/<html lang=\"ru\">/; s/<title>.*<\\/title>/<title>Мини-приложение<\\/title>/' index.html\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10,
+      "outputTokens": 5144,
+      "cacheReadTokens": 91235,
+      "cacheWriteTokens": 10857,
+      "totalTokens": 107246
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

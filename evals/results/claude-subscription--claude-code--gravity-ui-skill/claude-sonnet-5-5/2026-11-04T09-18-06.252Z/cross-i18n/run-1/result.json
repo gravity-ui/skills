@@ -1,0 +1,108 @@
+{
+  "status": "passed",
+  "duration": 521.189,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 7006,
+    "cacheReadTokens": 452809,
+    "cacheWriteTokens": 34212,
+    "totalTokens": 494053
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 0,
+      "file_edit": 1,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/rules/hallucination-traps.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -a && cat package.json && git ls-files | head -50 && find .agents -type f | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx AGENTS.md; ls __agent_eval__; grep -n -i -B2 -A25 \"i18n\" .agents/skills/gravity-ui/references/package-routing.md | head -120",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -30; cat __agent_eval__/run.mjs | head -40",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh i18n; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit configure Select SegmentedRadioGroup RadioButton Text; grep '\"version\"' node_modules/@gravity-ui/i18n/package.json; cat node_modules/@gravity-ui/i18n/README.md | head -150; ls node_modules/@gravity-ui/i18n/build 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit configure Lang Select SegmentedRadioGroup RadioButton Text; ls node_modules/@gravity-ui/i18n/build/esm; cat node_modules/@gravity-ui/i18n/build/esm/index.d.ts | head -60; cat tsconfig.json; grep -rn \"lang\\|Lang\" node_modules/@gravity-ui/uikit/build/esm/components/utils/configure.d.ts",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -n -i \"configure\\|useUIKitContext\" README.md | head; find . -name \"configure*.d.ts\" -not -path \"./node_modules/*\" | head; find . -path \"*SegmentedRadioGroup*\" -name \"*.d.ts\" | head -3; find . -path \"*Select/types.d.ts\" | head -2",
+        "success": true
+      },
+      {
+        "command": "sed -n 80,115p README.md; cat build/esm/utils/configure.d.ts; cat build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts; cat build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n -A25 \"interface ControlGroupProps\" components/types.d.ts; cat utils/configure.js; cat components/utils/addComponentKeysets.js 2>/dev/null | head -30; grep -rn \"subscribeConfigure\" --include=*.js . | head",
+        "success": true
+      },
+      {
+        "command": "cat components/theme/useLang.js; grep -n \"lang\" components/theme/ThemeProvider.d.ts components/theme/ThemeProvider.js; cat i18n/i18n.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && mkdir -p src/i18n && cat > src/i18n/keysets.ts <<'EOF'\nexport type AppLang = 'en' | 'ru';\n\nexport const APP_LANGS: AppLang[] = ['en', 'ru'];\n\nexport const keysets = {\n  en: {\n    app: {\n      title: 'Language switcher',\n      description: 'Switch the interface language between English and Russian.',\n      language_label: 'Interface language',\n      lang_en: 'English',\n      lang_ru: 'Русский',\n      name_label: 'Your name',\n      name_placeholder: 'Enter your name',\n      greeting: 'Hello, {{name}}!',\n      greeting_anonymous: 'Hello, stranger!',\n      items_count: {\n        one: '{{count}} item in the cart',\n        other: '{{count}} items in the cart',\n        zero: 'The cart is empty',\n      },\n      add: 'Add item',\n      reset: 'Reset',\n    },\n  },\n  ru: {\n    app: {\n      title: 'Переключение языка',\n      description: 'Переключайте язык интерфейса между английским и русским.',\n      language_label: 'Язык интерфейса',\n      lang_en: 'English',\n      lang_ru: 'Русский',\n      name_label: 'Ваше имя',\n      name_placeholder: 'Введите имя',\n      greeting: 'Привет, {{name}}!',\n      greeting_anonymous: 'Привет, незнакомец!',\n      items_count: {\n        one: '{{count}} товар в корзине',\n        few: '{{count}} товара в корзине',\n        many: '{{count}} товаров в корзине',\n        other: '{{count}} товара в корзине',\n        zero: 'Корзина пуста',\n      },\n      add: 'Добавить товар',\n      reset: 'Сбросить',\n    },\n  },\n};\nEOF\ncat > src/i18n/index.tsx <<'EOF'\nimport React from 'react';\nimport {I18N} from '@gravity-ui/i18n';\nimport {configure, ThemeProvider} from '@gravity-ui/uikit';\nimport type {ThemeProviderProps} from '@gravity-ui/uikit';\n\nimport {APP_LANGS, keysets} from './keysets';\nimport type {AppLang} from './keysets';\n\nconst STORAGE_KEY = 'app-lang';\n\nconst i18n = new I18N({fallbackLang: 'en'});\nfor (const lang of APP_LANGS) {\n  i18n.registerKeysets(lang, keysets[lang]);\n}\n\nfunction isAppLang(value: unknown): value is AppLang {\n  return APP_LANGS.includes(value as AppLang);\n}\n\nfunction detectInitialLang(): AppLang {\n  try {\n    const stored = localStorage.getItem(STORAGE_KEY);\n    if (isAppLang(stored)) {\n      return stored;\n    }\n  } catch {\n    // localStorage may be unavailable\n  }\n  return navigator.language?.toLowerCase().startsWith('ru') ? 'ru' : 'en';\n}\n\ninterface LangContextValue {\n  lang: AppLang;\n  setLang: (lang: AppLang) => void;\n}\n\nconst LangContext = React.createContext<LangContextValue | null>(null);\n\n/** Owns the current language and passes it to uikit components via ThemeProvider. */\nexport function LangThemeProvider({\n  children,\n  ...themeProps\n}: Omit<ThemeProviderProps, 'lang'>) {\n  const [lang, setLangState] = React.useState<AppLang>(detectInitialLang);\n\n  // Sync the module-level i18n instance during render so children\n  // read the right strings in the very same render pass.\n  i18n.setLang(lang);\n\n  React.useEffect(() => {\n    configure({lang}); // keeps uikit's global i18n in sync\n    document.documentElement.lang = lang;\n    try {\n      localStorage.setItem(STORAGE_KEY, lang);\n    } catch {\n      // ignore\n    }\n  }, [lang]);\n\n  const value = React.useMemo(() => ({lang, setLang: setLangState}), [lang]);\n\n  return (\n    <LangContext.Provider value={value}>\n      <ThemeProvider {...themeProps} lang={lang}>\n        {children}\n      </ThemeProvider>\n    </LangContext.Provider>\n  );\n}\n\nexport function useLanguage(): LangContextValue {\n  const ctx = React.useContext(LangContext);\n  if (!ctx) {\n    throw new Error('useLanguage must be used within LangThemeProvider');\n  }\n  return ctx;\n}\n\ntype Params = Record<string, string | number>;\n\n/** Returns a translate function for the `app` keyset; re-renders on language change. */\nexport function useTranslation() {\n  const {lang} = useLanguage();\n  return React.useMemo(() => {\n    const keyset = i18n.keyset('app');\n    void lang; // translations resolve against the current i18n language\n    return (key: string, params?: Params) => keyset(key, params);\n  }, [lang]);\n}\n\nexport type {AppLang};\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {Button, Flex, SegmentedRadioGroup, Text, TextInput} from '@gravity-ui/uikit';\n\nimport {useLanguage, useTranslation} from './i18n';\nimport type {AppLang} from './i18n';\n\nexport function App() {\n  const t = useTranslation();\n  const {lang, setLang} = useLanguage();\n  const [name, setName] = React.useState('');\n  const [count, setCount] = React.useState(0);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{padding: 24, maxWidth: 480}}>\n      <Flex direction=\"column\" gap={1}>\n        <Text variant=\"header-1\">{t('title')}</Text>\n        <Text variant=\"body-1\" color=\"secondary\">\n          {t('description')}\n        </Text>\n      </Flex>\n\n      <Flex direction=\"column\" gap={2}>\n        <Text variant=\"subheader-1\">{t('language_label')}</Text>\n        <SegmentedRadioGroup<AppLang>\n          value={lang}\n          onUpdate={setLang}\n          aria-label={t('language_label')}\n        >\n          <SegmentedRadioGroup.Option value=\"en\">{t('lang_en')}</SegmentedRadioGroup.Option>\n          <SegmentedRadioGroup.Option value=\"ru\">{t('lang_ru')}</SegmentedRadioGroup.Option>\n        </SegmentedRadioGroup>\n      </Flex>\n\n      <TextInput\n        label={t('name_label')}\n        placeholder={t('name_placeholder')}\n        value={name}\n        onUpdate={setName}\n        hasClear\n      />\n      <Text variant=\"body-2\">\n        {name.trim() ? t('greeting', {name: name.trim()}) : t('greeting_anonymous')}\n      </Text>\n\n      <Flex alignItems=\"center\" gap={2}>\n        <Button view=\"action\" onClick={() => setCount((c) => c + 1)}>\n          {t('add')}\n        </Button>\n        <Button view=\"flat\" onClick={() => setCount(0)} disabled={count === 0}>\n          {t('reset')}\n        </Button>\n        <Text variant=\"body-1\" style={{flex: 1, minWidth: 0}}>\n          {t('items_count', {count})}\n        </Text>\n      </Flex>\n    </Flex>\n  );\n}\nEOF\npython3 - <<'EOF'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\",\"\")\ns=s.replace(\"import { App } from './App';\",\"import { App } from './App';\\nimport { LangThemeProvider } from './i18n';\")\ns=s.replace('<ThemeProvider theme=\"light\">','<LangThemeProvider theme=\"light\">').replace('</ThemeProvider>','</LangThemeProvider>')\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/i18n-check.test.ts <<'EOF'\nEOF\nnpm run build 2>&1 | tail -8; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist /tmp/i18n-check.test.ts && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 7006,
+      "cacheReadTokens": 452809,
+      "cacheWriteTokens": 34212,
+      "totalTokens": 494053
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

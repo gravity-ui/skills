@@ -1,0 +1,147 @@
+{
+  "status": "failed",
+  "duration": 256.473,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 10266,
+    "outputTokens": 4878,
+    "cacheReadTokens": 252928,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1894,
+    "totalTokens": 268072
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json && echo \"---\" && cat index.html && echo \"---\" && cat src/*.ts 2>/dev/null; ls -la src/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx && echo \"---\" && cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npm install marked'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/ 2>/dev/null | head -60; echo \"---\"; ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/ 2>/dev/null | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts 2>/dev/null; echo \"===TEXTAREA===\"; ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/ 2>/dev/null | grep -i area; echo \"===TEXTINPUT===\"; ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/ 2>/dev/null | grep -i text; echo \"===CARD===\"; cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/ | sort'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/controls/ && echo \"---\" && cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/controls/index.d.ts 2>/dev/null | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextArea.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/layout/ && echo \"===BOX===\" && cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/layout/Box.d.ts 2>/dev/null; echo \"===FLEX===\" && cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex.d.ts 2>/dev/null; echo \"===CONTAINER===\" && cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/layout/Container.d.ts 2>/dev/null'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/layout/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/node_modules/marked/package.json | head -20; echo \"---\"; cat /home/sandbox/workspace/node_modules/marked/lib/marked.esm.js 2>/dev/null | head -5; echo \"---\"; ls /home/sandbox/workspace/node_modules/marked/lib/ 2>/dev/null'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/MarkdownEditor.tsx << 'EOF'\nimport React, { useState } from 'react';\nimport { TextArea, Card, Text, Flex } from '@gravity-ui/uikit';\nimport { marked } from 'marked';\n\nconst renderMarkdown = (raw: string): string => {\n  if (\"'!raw.trim()) return '\"'';\n  return marked.parse(raw, { breaks: true }) as string;\n};\n\nexport function MarkdownEditor() {\n  const [text, setText] = useState(\n    '# Hello, Markdown\"'!'\"\\\\n\\\\nType **markdown** here and see the *live preview*.\\\\n\\\\n- item 1\\\\n- item 2\\\\n\\\\n> A blockquote\\\\n\\\\n\"'```js'\"\\\\nconsole.log(\\\"code block\\\");\\\\n\"'```'\"',\n  );\n\n  return (\n    <Flex gap={4} style={{ height: 'calc(100vh - 48px)' }}>\n      <Card style={{ flex: 1, padding: 16 }} view=\\\"outlined\\\" type=\\\"container\\\">\n        <Text variant=\\\"subheader-2\\\" style={{ marginBottom: 8 }}>\n          Markdown\n        </Text>\n        <TextArea\n          value={text}\n          onUpdate={setText}\n          minRows={20}\n          controlProps={{\n            style: {\n              fontFamily: 'monospace',\n              height: '100%',\n              resize: 'none',\n            },\n          }}\n        />\n      </Card>\n\n      <Card style={{ flex: 1, padding: 16, overflow: 'auto' }} view=\\\"outlined\\\" type=\\\"container\\\">\n        <Text variant=\\\"subheader-2\\\" style={{ marginBottom: 8 }}>\n          Preview\n        </Text>\n        <div\n          className=\\\"markdown-preview\\\"\n          dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}\n        />\n      </Card>\n    </Flex>\n  );\n}\nEOF\necho \\\"Done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'EOF'\nimport { MarkdownEditor } from './MarkdownEditor';\n\nexport function App() {\n  return (\n    <div style={{ padding: 24 }}>\n      <MarkdownEditor />\n    </div>\n  );\n}\nEOF\necho \\\"Done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/markdown.css << 'EOF'\n.markdown-preview {\n  line-height: 1.65;\n}\n\n.markdown-preview h1,\n.markdown-preview h2,\n.markdown-preview h3,\n.markdown-preview h4,\n.markdown-preview h5,\n.markdown-preview h6 {\n  margin-top: 1em;\n  margin-bottom: 0.5em;\n  font-weight: 600;\n  line-height: 1.25;\n}\n\n.markdown-preview p {\n  margin: 0.5em 0;\n}\n\n.markdown-preview code {\n  background: rgba(0, 0, 0, 0.06);\n  padding: 0.15em 0.4em;\n  border-radius: 3px;\n  font-size: 0.9em;\n}\n\n.markdown-preview pre {\n  background: rgba(0, 0, 0, 0.04);\n  padding: 12px 16px;\n  border-radius: 6px;\n  overflow-x: auto;\n  margin: 0.5em 0;\n}\n\n.markdown-preview pre code {\n  background: none;\n  padding: 0;\n}\n\n.markdown-preview blockquote {\n  margin: 0.5em 0;\n  padding: 0 1em;\n  border-left: 3px solid rgba(0, 0, 0, 0.15);\n  color: rgba(0, 0, 0, 0.65);\n}\n\n.markdown-preview ul,\n.markdown-preview ol {\n  padding-left: 1.5em;\n  margin: 0.5em 0;\n}\n\n.markdown-preview li {\n  margin: 0.25em 0;\n}\n\n.markdown-preview a {\n  color: #0a6cff;\n}\nEOF\necho \\\"Done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/MarkdownEditor.tsx << 'EOF'\nimport React, { useState } from 'react';\nimport { TextArea, Card, Text, Flex } from '@gravity-ui/uikit';\nimport { marked } from 'marked';\nimport './markdown.css';\n\nconst renderMarkdown = (raw: string): string => {\n  if (\"'!raw.trim()) return '\"'';\n  return marked.parse(raw, { breaks: true }) as string;\n};\n\nexport function MarkdownEditor() {\n  const [text, setText] = useState(\n    '# Hello, Markdown\"'!'\"\\\\n\\\\nType **markdown** here and see the *live preview*.\\\\n\\\\n- item 1\\\\n- item 2\\\\n\\\\n> A blockquote\\\\n\\\\n\"'```js'\"\\\\nconsole.log(\\\"code block\\\");\\\\n\"'```'\"',\n  );\n\n  return (\n    <Flex gap={4} style={{ height: 'calc(100vh - 48px)' }}>\n      <Card style={{ flex: 1, padding: 16 }} view=\\\"outlined\\\" type=\\\"container\\\">\n        <Text variant=\\\"subheader-2\\\" style={{ marginBottom: 8 }}>\n          Markdown\n        </Text>\n        <TextArea\n          value={text}\n          onUpdate={setText}\n          minRows={20}\n          controlProps={{\n            style: {\n              fontFamily: 'monospace',\n              height: '100%',\n              resize: 'none',\n            },\n          }}\n        />\n      </Card>\n\n      <Card style={{ flex: 1, padding: 16, overflow: 'auto' }} view=\\\"outlined\\\" type=\\\"container\\\">\n        <Text variant=\\\"subheader-2\\\" style={{ marginBottom: 8 }}>\n          Preview\n        </Text>\n        <div\n          className=\\\"markdown-preview\\\"\n          dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}\n        />\n      </Card>\n    </Flex>\n  );\n}\nEOF\necho \\\"Done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10266,
+      "outputTokens": 4878,
+      "cacheReadTokens": 252928,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1894,
+      "totalTokens": 268072
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

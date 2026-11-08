@@ -1,0 +1,147 @@
+{
+  "status": "passed",
+  "duration": 672.969,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 52119,
+    "outputTokens": 3508,
+    "cacheReadTokens": 225536,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 425,
+    "totalTokens": 281163
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 18,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'index.html' -g 'src/**' -g '\"'!node_modules'\"' | sed -n '1,120p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App.tsx ---\\\\n' && sed -n '1,240p' src/App.tsx && printf '\\\\n--- main.tsx ---\\\\n' && sed -n '1,160p' src/main.tsx && printf '\\\\n--- index.html ---\\\\n' && sed -n '1,120p' index.html && printf '\\\\n--- styles? ---\\\\n' && rg --files -g '*.css' -g '*.scss' -g '*.module.*'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"trigger.*click\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' -g '*.md' | sed -n '1,80p' && rg \\\"export declare function Dropdown|declare const Dropdown|DropdownItem\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | sed -n '1,60p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"Dropdown\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | sed -n '1,80p' && rg \\\"function Dropdown\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit/build/esm/components | sed -n '1,120p'; rg \\\"export.*Dropdown|Dropdown\\\" node_modules/@gravity-ui/uikit/build/esm/index.js | sed -n '1,80p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Menu/Menu.d.ts; printf '\\\\n--- Popup ---\\\\n'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Popup/Popup.d.ts; printf '\\\\n--- DropdownMenu ---\\\\n'; sed -n '1,260p' node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts; printf '\\\\n--- Item ---\\\\n'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Menu/MenuItem.d.ts; printf '\\\\n--- Button ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"@gravity-ui/icons\\\" package.json node_modules/@gravity-ui/icons -l | sed -n '1,20p'; rg \\\"export const ArrowsExpandVertically|export const ChevronDown\\\" node_modules/@gravity-ui/icons -g '*.d.ts' | sed -n '1,20p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"ArrowToggle\" node_modules/@gravity-ui/uikit/build/esm/index.js | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"ArrowToggle\" node_modules/@gravity-ui/uikit/build/esm/components/index.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n const actions = [\n-  { id: 'duplicate', text: 'Дублировать' },\n-  { id: 'rename', text: 'Переименовать' },\n-  { id: 'share', text: 'Поделиться' },\n-  { id: 'delete', text: 'Удалить', theme: 'danger' as const },\n+  { id: 'duplicate', text: 'Дублировать' },\n+  { id: 'rename', text: 'Переименовать' },\n+  { id: 'share', text: 'Поделиться' },\n+  { id: 'delete', text: 'Удалить', theme: 'danger' as const },\n ];\n \n export function App() {\n   const [lastAction, setLastAction] = useState<string | null>(null);\n+\n+  const items = actions.map(({ id, text, theme }) => ({\n+    id,\n+    text,\n+    theme,\n+    action: () => setLastAction(text),\n+  }));\n \n   return (\n@@\n       <DropdownMenu\n-        items={[actions]}\n+        items={[items]}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nprint(Path('src/App.tsx').read_text())\nPY\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apply_patch || true; type apply_patch || true; ls /usr/bin | rg 'patch|apply' || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/app.patch <<'PATCH'\n*** Begin Patch\n*** Delete File: src/App.tsx\n*** Add File: src/App.tsx\n+import { useState } from 'react';\n+\n+import { ArrowToggle, Button, DropdownMenu } from '@gravity-ui/uikit';\n+\n+const actions = [\n+  { id: 'duplicate', text: 'Дублировать' },\n+  { id: 'rename', text: 'Переименовать' },\n+  { id: 'share', text: 'Поделиться' },\n+  { id: 'delete', text: 'Удалить', theme: 'danger' as const },\n+];\n+\n+export function App() {\n+  const [lastAction, setLastAction] = useState<string | null>(null);\n+\n+  const items = actions.map(({ id, text, theme }) => ({\n+    id,\n+    text,\n+    theme,\n+    action: () => setLastAction(text),\n+  }));\n+\n+  return (\n+    <div style={{ display: 'grid', gap: 12, justifyItems: 'start', padding: 24 }}>\n+      <DropdownMenu\n+        items={[items]}\n+        renderSwitcher={(props) => (\n+          <Button {...props} view=\\\"normal\\\">\n+            Действия\n+            <ArrowToggle direction=\\\"bottom\\\" />\n+          </Button>\n+        )}\n+        size=\\\"m\\\"\n+      />\n+\n+      {lastAction && <div>Последнее действие: {lastAction}</div>}\n+    </div>\n+  );\n+}\n*** End Patch\nPATCH\napply_patch < /tmp/app.patch\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'find / -name apply_patch -type f 2>/dev/null | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node - <<'NODE'\nconst fs = require('fs');\nconst content = \"'`import { useState } from '\"'react';\n\nimport { ArrowToggle, Button, DropdownMenu } from '@gravity-ui/uikit';\n\nconst actions = [\n  { id: 'duplicate', text: 'Дублировать' },\n  { id: 'rename', text: 'Переименовать' },\n  { id: 'share', text: 'Поделиться' },\n  { id: 'delete', text: 'Удалить', theme: 'danger' as const },\n];\n\nexport function App() {\n  const [lastAction, setLastAction] = useState<string | null>(null);\n\n  const items = actions.map(({ id, text, theme }) => ({\n    id,\n    text,\n    theme,\n    action: () => setLastAction(text),\n  }));\n\n  return (\n    <div style={{ display: 'grid', gap: 12, justifyItems: 'start', padding: 24 }}>\n      <DropdownMenu\n        items={[items]}\n        renderSwitcher={(props) => (\n          <Button {...props} view=\\\"normal\\\">\n            Действия\n            <ArrowToggle direction=\\\"bottom\\\" />\n          </Button>\n        )}\n        size=\\\"m\\\"\n      />\n\n      {lastAction && <div>Последнее действие: {lastAction}</div>}\n    </div>\n  );\n}\n\"'`;\nfs.writeFileSync('\"'src/App.tsx', content);\nNODE\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 127.0.0.1 --port 5173 > /tmp/vite.log 2>&1 & pid=$!; sleep 2; curl -fsS http://127.0.0.1:5173/ >/tmp/page.html; rg -o '\"'<div id=\\\"root\\\"></div>|Gravity UI eval' /tmp/page.html; kill \"'$pid; wait $pid 2>/dev/null || true; cat /tmp/vite.log'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 52119,
+      "outputTokens": 3508,
+      "cacheReadTokens": 225536,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 425,
+      "totalTokens": 281163
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

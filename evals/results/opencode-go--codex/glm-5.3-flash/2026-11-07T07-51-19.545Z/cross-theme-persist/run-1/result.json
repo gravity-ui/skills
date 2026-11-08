@@ -1,0 +1,142 @@
+{
+  "status": "passed",
+  "duration": 347.823,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 47507,
+    "outputTokens": 4389,
+    "cacheReadTokens": 297216,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 804,
+    "totalTokens": 349112
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 17,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' && rg -n \\\"theme|dark|light|localStorage|data-theme|color-scheme\\\" -S . -g '\"'!node_modules'\"' | head -200\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && find . -maxdepth 3 -type f -not -path './.git/*' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- html ---\\\\n' && cat index.html && printf '\\\\n--- pkg ---\\\\n' && cat package.json && printf '\\\\n--- all src ---\\\\n' && find src -maxdepth 2 -type f -print\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"type Theme|ThemeProviderProps|declare function ThemeProvider|const ThemeProvider|interface ThemeProviderProps\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts && rg -n \\\"onThemeChange|useTheme|ThemeProvider\\\" node_modules/@gravity-ui/uikit/build/esm/hooks node_modules/@gravity-ui/uikit/build/esm/components/theme -g '*.d.ts' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts && sed -n 1,120p node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts 2>/dev/null || find node_modules/@gravity-ui/uikit/build/esm -iname '*Switch*.d.ts' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, type Theme } from '@gravity-ui/uikit';\n \n-import { App } from './App';\n+import { App, THEME_STORAGE_KEY } from './App';\n+\n+function readStoredTheme(): Theme {\n+  try {\n+    const theme = localStorage.getItem(THEME_STORAGE_KEY);\n+\n+    return theme === 'dark' ? 'dark' : 'light';\n+  } catch {\n+    return 'light';\n+  }\n+}\n+\n+const root = ReactDOM.createRoot(document.getElementById('root')\"'!);\n+\n+root.render(\n+  <React.StrictMode>\n+    <ThemeProvider theme={readStoredTheme()}>\n+      <App />\n+    </ThemeProvider>\n+  </React.StrictMode>,\n+);\n*** End Patch\nPATCH\napply_patch <<'\"'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+import { Switch, useTheme, type Theme } from '@gravity-ui/uikit';\n+\n+export const THEME_STORAGE_KEY = 'app-theme';\n+\n+interface ThemeSwitcherProps {\n+  onThemeChange: (theme: Theme) => void;\n+}\n+\n+export function ThemeSwitcher({ onThemeChange }: ThemeSwitcherProps) {\n+  const { themeValue } = useTheme();\n+  const isDarkTheme = themeValue === 'dark';\n+\n+  return (\n+    <label style={{ alignItems: 'center', display: 'inline-flex', gap: 8 }}>\n+      <Switch checked={isDarkTheme} onChange={(event) => onThemeChange(event.target.checked ? 'dark' : 'light')} />\n+      {isDarkTheme ? 'Тёмная тема' : 'Светлая тема'}\n+    </label>\n+  );\n+}\n+\n+export function App({ onThemeChange }: ThemeSwitcherProps) {\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <ThemeSwitcher onThemeChange={onThemeChange} />\n+    </div>\n+  );\n }\n*** End Patch\nPATCH\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc 'which git apply && git apply --help | head -5'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/theme.patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/main.tsx\n@@\n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, type Theme } from '@gravity-ui/uikit';\n \n-import { App } from './App';\n+import { App, THEME_STORAGE_KEY } from './App';\n+\n+function readStoredTheme(): Theme {\n+  try {\n+    const theme = localStorage.getItem(THEME_STORAGE_KEY);\n+\n+    return theme === 'dark' ? 'dark' : 'light';\n+  } catch {\n+    return 'light';\n+  }\n+}\n+\n+const root = ReactDOM.createRoot(document.getElementById('root')\"'!);\n+\n+root.render(\n+  <React.StrictMode>\n+    <ThemeProvider theme={readStoredTheme()}>\n+      <App />\n+    </ThemeProvider>\n+  </React.StrictMode>,\n+);\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+import { Switch, useTheme, type Theme } from '\"'@gravity-ui/uikit';\n+\n+export const THEME_STORAGE_KEY = 'app-theme';\n+\n+interface ThemeSwitcherProps {\n+  onThemeChange: (theme: Theme) => void;\n+}\n+\n+export function ThemeSwitcher({ onThemeChange }: ThemeSwitcherProps) {\n+  const { themeValue } = useTheme();\n+  const isDarkTheme = themeValue === 'dark';\n+\n+  return (\n+    <label style={{ alignItems: 'center', display: 'inline-flex', gap: 8 }}>\n+      <Switch checked={isDarkTheme} onChange={(event) => onThemeChange(event.target.checked ? 'dark' : 'light')} />\n+      {isDarkTheme ? 'Тёмная тема' : 'Светлая тема'}\n+    </label>\n+  );\n+}\n+\n+export function App({ onThemeChange }: ThemeSwitcherProps) {\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <ThemeSwitcher onThemeChange={onThemeChange} />\n+    </div>\n+  );\n }\n*** End Patch\nPATCH\npython3 - <<'PY'\nfrom pathlib import Path\n\npatch = Path('/tmp/theme.patch').read_text()\nsections = patch.split('*** Update File: ')\nfor section in sections[1:]:\n    path = section.splitlines()[0].split(' ', 1)[0]\n    lines = section.splitlines()\n    header = lines.index('@@')\n    changes = lines[header:]\n    target = Path(path)\n    original = target.read_text().splitlines()\n    result = []\n    index = 0\n    for line in changes[1:]:\n        if line.startswith('+'):\n            result.append(line[1:])\n        elif line.startswith('-'):\n            index += 1\n        elif line.startswith(' '):\n            result.append(line[1:])\n            index += 1\n    target.write_text('\\\\n'.join(result) + '\\\\n')\nPY\ncat src/main.tsx && cat src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'which node npm pnpm yarn bun; node --version; npm --version'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst { readFileSync, writeFileSync } = require('fs');\n\nfunction write(file, content) {\n  writeFileSync(file, content);\n}\n\nwrite('src/main.tsx', \"'`// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).'\"\\\\n// Implement the requested feature in App.tsx (you may add sibling files).\\\\nimport '@gravity-ui/uikit/styles/fonts.css';\\\\nimport '@gravity-ui/uikit/styles/styles.css';\\\\n\\\\nimport React from 'react';\\\\nimport ReactDOM from 'react-dom/client';\\\\nimport { ThemeProvider, type Theme } from '@gravity-ui/uikit';\\\\n\\\\nimport { App, THEME_STORAGE_KEY } from './App';\\\\n\\\\nfunction readStoredTheme(): Theme {\\\\n  try {\\\\n    const theme = localStorage.getItem(THEME_STORAGE_KEY);\\\\n\\\\n    return theme === 'dark' ? 'dark' : 'light';\\\\n  } catch {\\\\n    return 'light';\\\\n  }\\\\n}\\\\n\\\\nReactDOM.createRoot(document.getElementById('root')\"'!).render('\"\\\\n  <React.StrictMode>\\\\n    <ThemeProvider theme={readStoredTheme()}>\\\\n      <App />\\\\n    </ThemeProvider>\\\\n  </React.StrictMode>,\\\\n);\\\\n\"'`);\n\nwrite('\"'src/App.tsx', \"'`import { Switch, useTheme, type Theme } from '\"'@gravity-ui/uikit';\\\\n\\\\nexport const THEME_STORAGE_KEY = 'app-theme';\\\\n\\\\ninterface ThemeSwitcherProps {\\\\n  onThemeChange: (theme: Theme) => void;\\\\n}\\\\n\\\\nexport function ThemeSwitcher({ onThemeChange }: ThemeSwitcherProps) {\\\\n  const { themeValue } = useTheme();\\\\n  const isDarkTheme = themeValue === 'dark';\\\\n\\\\n  return (\\\\n    <label style={{ alignItems: 'center', display: 'inline-flex', gap: 8 }}>\\\\n      <Switch checked={isDarkTheme} onChange={(event) => onThemeChange(event.target.checked ? 'dark' : 'light')} />\\\\n      {isDarkTheme ? 'Тёмная тема' : 'Светлая тема'}\\\\n    </label>\\\\n  );\\\\n}\\\\n\\\\nexport function App({ onThemeChange }: ThemeSwitcherProps) {\\\\n  return (\\\\n    <div style={{ padding: 24 }}>\\\\n      <ThemeSwitcher onThemeChange={onThemeChange} />\\\\n    </div>\\\\n  );\\\\n}\\\\n\"'`);\nNODE\ncat src/main.tsx && printf '\"'\\\\n---\\\\n' && cat src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst { readFileSync, writeFileSync } = require('fs');\nconst file = 'src/main.tsx';\nlet content = readFileSync(file, 'utf8');\ncontent = content.replace(\\\"import React from 'react';\\\", \\\"import React, { useState } from 'react';\\\");\ncontent = content.replace(\\\"const root = ReactDOM.createRoot\\\", \\\"const root = ReactDOM.createRoot\\\"); // no-op if absent\ncontent = content.replace(\"'`ReactDOM.createRoot(document.getElementById('\"'root')\"'!).render('\"\\\\n  <React.StrictMode>\\\\n    <ThemeProvider theme={readStoredTheme()}>\\\\n      <App />\\\\n    </ThemeProvider>\\\\n  </React.StrictMode>,\\\\n);\"'`, `function Root() {'\"\\\\n  const [theme, setTheme] = useState<Theme>(readStoredTheme);\\\\n\\\\n  return (\\\\n    <ThemeProvider theme={theme}>\\\\n      <App\\\\n        onThemeChange={(nextTheme) => {\\\\n          try {\\\\n            localStorage.setItem(THEME_STORAGE_KEY, nextTheme);\\\\n          } catch {\\\\n            // Ignore storage restrictions and keep the current theme active.\\\\n          }\\\\n          setTheme(nextTheme);\\\\n        }}\\\\n      />\\\\n    </ThemeProvider>\\\\n  );\\\\n}\\\\n\\\\nReactDOM.createRoot(document.getElementById('root')\"'!).render('\"\\\\n  <React.StrictMode>\\\\n    <Root />\\\\n  </React.StrictMode>,\\\\n);\"'`);\nwriteFileSync(file, content);\nNODE\ncat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"declare function useTheme\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.js && sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | rg -n \"ControlProps|onChange\" -C 3'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node <<'NODE'\nconst { readFileSync, writeFileSync } = require('fs');\nconst file = 'src/App.tsx';\nlet content = readFileSync(file, 'utf8');\ncontent = content.replace(\\\"import { Switch, useTheme, type Theme } from '@gravity-ui/uikit';\\\", \\\"import { Switch, useThemeValue, type Theme } from '@gravity-ui/uikit';\\\");\ncontent = content.replace('const { themeValue } = useTheme();', 'const themeValue = useThemeValue();');\nwriteFileSync(file, content);\nNODE\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 47507,
+      "outputTokens": 4389,
+      "cacheReadTokens": 297216,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 804,
+      "totalTokens": 349112
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

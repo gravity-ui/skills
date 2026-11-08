@@ -1,0 +1,104 @@
+{
+  "status": "passed",
+  "duration": 951.529,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 22,
+    "outputTokens": 4739,
+    "cacheReadTokens": 313416,
+    "cacheWriteTokens": 28228,
+    "totalTokens": 346405
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 2,
+      "file_edit": 2,
+      "shell": 8,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 16,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/rules/hallucination-traps.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -a && cat package.json && ls .agents/skills/gravity-ui -R | head -50 && cat AGENTS.md | head -30",
+        "success": true
+      },
+      {
+        "command": "grep '\"version\"' node_modules/@gravity-ui/uikit/package.json; find src __agent_eval__ -type f | head -30; cat src/*.tsx | head -80; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useThemeValue useTheme Switch 2>&1 | head -50",
+        "success": true
+      },
+      {
+        "command": "rg -n -C 3 \"useTheme|ThemeProvider|system|setTheme|theme=\" .agents/skills/gravity-ui/references/theming.md | head -120; ls node_modules/@gravity-ui/uikit/build/esm/components/theme/ ; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat useThemeValue.d.ts useThemeType.d.ts useThemeSettings.d.ts ThemeSettingsContext.d.ts ThemeContext.d.ts index.d.ts useThemeContext.d.ts; cat useTheme.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Switch/Switch.d.ts SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -80; grep -n \"onUpdate\\|options\\|value\" RadioGroup/RadioGroup.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "grep -n \"interface ControlProps\" -A 25 types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 - <<'E'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\",\"\")\ns=s.replace(\"import { App } from './App';\",\"import { App } from './App';\\nimport { AppThemeProvider } from './theme';\")\ns=s.replace('<ThemeProvider theme=\"light\">','<AppThemeProvider>').replace('</ThemeProvider>','</AppThemeProvider>')\nopen(p,'w').write(s)\nE\ncat src/main.tsx | tail -12; npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -12; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 22,
+      "outputTokens": 4739,
+      "cacheReadTokens": 313416,
+      "cacheWriteTokens": 28228,
+      "totalTokens": 346405
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T17:04:15.686Z",
+    "by": "claude-subscription--claude-code--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

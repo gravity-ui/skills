@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "duration": 599.688,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 20,
+    "outputTokens": 7646,
+    "cacheReadTokens": 250520,
+    "cacheWriteTokens": 22634,
+    "totalTokens": 280820
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; head -c 600 package-lock.json",
+        "success": true
+      },
+      {
+        "command": "cat index.html .gitignore tsconfig.json vite.config.ts; find src __agent_eval__ -type f | head -50; for f in $(find src -type f); do echo \"--- $f\"; cat $f; done; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls build/esm/components/Table build/esm/components/Table/hoc build/esm/components/Pagination 2>/dev/null; cat build/esm/components/Table/hoc/withTableSorting/withTableSorting.d.ts build/esm/components/Table/hoc/withTableSelection/withTableSelection.d.ts build/esm/components/Pagination/Pagination.d.ts; sed -n 1,200p build/esm/components/Table/Table.d.ts; cat build/esm/components/Table/hoc/withTableSelection/withTableSelection.js | head -120",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,140p Table/hoc/withTableSorting/withTableSorting.js; cat Pagination/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"static getRowId\" -A 14 components/Table/Table.js; ls components/Pagination/i18n components/Table/i18n; grep -n \"lang\" components/utils/configure.d.ts utils/configure.d.ts 2>/dev/null | head; grep -n \"Lang\\b\" -r components/utils/configure.d.ts | head -3; cd ../..; grep -n '\"Label\\|ru' build/esm/components/utils/configure.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src && cat > /home/sandbox/workspace/src/data.ts <<'EOF'\nexport type Status = 'active' | 'pending' | 'blocked';\n\nexport interface User {\n  id: string;\n  name: string;\n  email: string;\n  role: string;\n  status: Status;\n  score: number;\n  createdAt: string; // ISO date\n}\n\nconst FIRST = ['Анна', 'Иван', 'Мария', 'Пётр', 'Ольга', 'Дмитрий', 'Елена', 'Сергей', 'Наталья', 'Алексей'];\nconst LAST = ['Иванов', 'Петров', 'Сидоров', 'Кузнецов', 'Смирнов', 'Попов', 'Васильев', 'Новиков'];\nconst ROLES = ['Администратор', 'Редактор', 'Аналитик', 'Разработчик', 'Менеджер'];\nconst STATUSES: Status[] = ['active', 'pending', 'blocked'];\n\n// Детерминированная генерация — данные одинаковы между перезагрузками.\nexport const USERS: User[] = Array.from({ length: 57 }, (_, i) => {\n  const day = new Date(Date.UTC(2024, 0, 1) + ((i * 37) % 600) * 86_400_000);\n  return {\n    id: String(i + 1),\n    name: `${FIRST[i % FIRST.length]} ${LAST[(i * 3) % LAST.length]}`,\n    email: `user${i + 1}@example.com`,\n    role: ROLES[(i * 7) % ROLES.length],\n    status: STATUSES[(i * 5) % STATUSES.length],\n    score: (i * 53) % 101,\n    createdAt: day.toISOString().slice(0, 10),\n  };\n});\nEOF\ncat > /home/sandbox/workspace/src/UsersTable.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\nimport {\n  Button,\n  Label,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n} from '@gravity-ui/uikit';\nimport type { LabelProps, TableColumnConfig, TableSortState } from '@gravity-ui/uikit';\n\nimport type { Status, User } from './data';\n\n// Сортировка внешняя (по всему набору данных, до разбиения на страницы),\n// поэтому HOC сортировки используется только для заголовков и состояния.\nconst SelectableSortableTable = withTableSorting(withTableSelection(Table<User>));\n\nconst STATUS_LABEL: Record<Status, { text: string; theme: LabelProps['theme'] }> = {\n  active: { text: 'Активен', theme: 'success' },\n  pending: { text: 'Ожидает', theme: 'warning' },\n  blocked: { text: 'Заблокирован', theme: 'danger' },\n};\n\nconst collator = new Intl.Collator('ru', { numeric: true, sensitivity: 'base' });\n\nfunction compare(a: User, b: User, column: string): number {\n  const x = a[column as keyof User];\n  const y = b[column as keyof User];\n  if (typeof x === 'number' && typeof y === 'number') return x - y;\n  return collator.compare(String(x), String(y));\n}\n\nconst COLUMNS: TableColumnConfig<User>[] = [\n  { id: 'name', name: 'Имя', meta: { sort: true } },\n  { id: 'email', name: 'Email', meta: { sort: true } },\n  { id: 'role', name: 'Роль', meta: { sort: true } },\n  {\n    id: 'status',\n    name: 'Статус',\n    meta: { sort: true },\n    template: (u) => (\n      <Label theme={STATUS_LABEL[u.status].theme}>{STATUS_LABEL[u.status].text}</Label>\n    ),\n  },\n  { id: 'score', name: 'Рейтинг', align: 'end', meta: { sort: true, defaultSortOrder: 'desc' } },\n  {\n    id: 'createdAt',\n    name: 'Создан',\n    meta: { sort: true },\n    template: (u) => new Date(u.createdAt).toLocaleDateString('ru-RU'),\n  },\n];\n\nconst PAGE_SIZES = [5, 10, 20];\n\nexport function UsersTable({ data }: { data: User[] }) {\n  const [sortState, setSortState] = useState<TableSortState>([]);\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(10);\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n\n  const sorted = useMemo(() => {\n    if (sortState.length === 0) return data;\n    return data.slice().sort((a, b) => {\n      for (const { column, order } of sortState) {\n        const result = compare(a, b, column);\n        if (result !== 0) return order === 'asc' ? result : -result;\n      }\n      return 0;\n    });\n  }, [data, sortState]);\n\n  const pageItems = useMemo(\n    () => sorted.slice((page - 1) * pageSize, page * pageSize),\n    [sorted, page, pageSize],\n  );\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>\n      <div style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 28 }}>\n        <Text variant=\"body-2\" color=\"secondary\">\n          Выбрано: {selectedIds.length} из {data.length}\n        </Text>\n        {selectedIds.length > 0 && (\n          <Button view=\"flat\" size=\"s\" onClick={() => setSelectedIds([])}>\n            Снять выделение\n          </Button>\n        )}\n      </div>\n\n      <SelectableSortableTable\n        data={pageItems}\n        columns={COLUMNS}\n        getRowDescriptor={(u) => ({ id: u.id })}\n        selectedIds={selectedIds}\n        onSelectionChange={setSelectedIds}\n        sortState={sortState}\n        onSortStateChange={(next) => {\n          setSortState(next);\n          setPage(1);\n        }}\n        emptyMessage=\"Нет данных\"\n      />\n\n      <Pagination\n        page={page}\n        pageSize={pageSize}\n        total={sorted.length}\n        pageSizeOptions={PAGE_SIZES}\n        onUpdate={(nextPage, nextSize) => {\n          setPage(nextSize === pageSize ? nextPage : 1);\n          setPageSize(nextSize);\n        }}\n      />\n    </div>\n  );\n}\nEOF\ncat > /home/sandbox/workspace/src/App.tsx <<'EOF'\nimport { configure } from '@gravity-ui/uikit';\n\nimport { USERS } from './data';\nimport { UsersTable } from './UsersTable';\n\nconfigure({ lang: 'ru' });\n\nexport function App() {\n  return (\n    <div style={{ padding: 24, maxWidth: 1000 }}>\n      <UsersTable data={USERS} />\n    </div>\n  );\n}\nEOF\ncd /home/sandbox/workspace && npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short; ls node_modules | grep -E \"^(jsdom|happy-dom|playwright|puppeteer|@testing-library)\" ; ls node_modules/@testing-library 2>/dev/null; which chromium chromium-browser google-chrome 2>/dev/null; cat __agent_eval__/run.mjs | head -30",
+        "success": true
+      },
+      {
+        "command": "cat > tmp-smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { test, expect } from 'vitest';\nimport { ThemeProvider, configure } from '@gravity-ui/uikit';\nimport { UsersTable } from './src/UsersTable';\nimport { USERS } from './src/data';\n\nconfigure({ lang: 'ru' });\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><UsersTable data={USERS} /></ThemeProvider>);\n  const rows = html.match(/<tbody.*<\\/tbody>/s)![0].match(/<tr/g)!.length;\n  console.log('body rows', rows, 'checkboxes', (html.match(/type=\"checkbox\"/g) || []).length);\n  console.log('sort headers', (html.match(/role=\"button\"/g) || []).length);\n  console.log('has Выбрано', html.includes('Выбрано: 0 из 57'));\n  console.log('pagination', /g-pagination/.test(html), html.match(/aria-label=\"[^\"]*\"/g)?.slice(0, 12));\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run tmp-smoke.test.tsx 2>&1 | tail -25; rm -f tmp-smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > tmp-smoke.test.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { test, expect } from 'vitest';\nimport { ThemeProvider, configure } from '@gravity-ui/uikit';\nimport { UsersTable } from './src/UsersTable';\nimport { USERS } from './src/data';\n\nconfigure({ lang: 'ru' });\ntest('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><UsersTable data={USERS} /></ThemeProvider>);\n  const rows = html.match(/<tbody.*<\\/tbody>/s)![0].match(/<tr/g)!.length;\n  console.log('body rows', rows, 'checkboxes', (html.match(/type=\"checkbox\"/g) || []).length);\n  console.log('sort headers', (html.match(/role=\"button\"/g) || []).length);\n  console.log('has Выбрано', html.includes('Выбрано: 0 из 57'));\n  console.log('pagination', /pagination/.test(html));\n  expect(rows).toBe(10);\n});\nEOF\ncat > tmp-vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()], test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\nnpx vitest run --config tmp-vitest.config.ts tmp-smoke.test.tsx 2>&1 | tail -25; rm -f tmp-smoke.test.tsx tmp-vitest.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 20,
+      "outputTokens": 7646,
+      "cacheReadTokens": 250520,
+      "cacheWriteTokens": 22634,
+      "totalTokens": 280820
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

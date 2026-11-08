@@ -1,0 +1,107 @@
+{
+  "status": "failed",
+  "duration": 370.613,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 33243,
+    "outputTokens": 12113,
+    "cacheReadTokens": 339456,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1423,
+    "totalTokens": 384812
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!*node_modules*'\"' -g '\"'!*.lock'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && sed -n '1,240p' src/App.tsx && sed -n '1,200p' src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat index.html; cat vite.config.ts; rg 'useTheme|theme=' node_modules/@gravity-ui/uikit/build -g '*.d.ts' | head -30; rg --files node_modules/@gravity-ui/uikit | head -15\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -- '--g-color-base-background|--g-color-text-primary|--g-color-line-generic' node_modules/@gravity-ui/uikit/styles/themes/light/base.scss node_modules/@gravity-ui/uikit/styles/themes/dark/base.scss | head -25; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && git diff --stat && git diff -- src/main.tsx | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -maxdepth 2 -type f -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python -c \\\"from pathlib import Path; p=Path('dist'); [(x.unlink() if x.is_file() else None) for x in p.rglob('*')]; [x.rmdir() for x in sorted(p.rglob('*'), key=lambda q: len(q.parts), reverse=True) if x.is_dir()]; p.rmdir()\\\" && git status --short\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"python3 -c \\\"from pathlib import Path; p=Path('dist'); [(x.unlink() if x.is_file() else None) for x in p.rglob('*')]; [x.rmdir() for x in sorted(p.rglob('*'), key=lambda q: len(q.parts), reverse=True) if x.is_dir()]; p.rmdir()\\\" && git status --short\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('fs');for(const f of fs.readdirSync('dist/assets'))fs.unlinkSync('dist/assets/'+f);fs.rmdirSync('dist/assets');fs.unlinkSync('dist/index.html');fs.rmdirSync('dist')\\\" && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 33243,
+      "outputTokens": 12113,
+      "cacheReadTokens": 339456,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1423,
+      "totalTokens": 384812
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

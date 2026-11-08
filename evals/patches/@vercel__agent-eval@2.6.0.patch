@@ -1,0 +1,164 @@
+diff --git a/dist/lib/agents/codex/agent.js b/dist/lib/agents/codex/agent.js
+index 81f6cfa065870893a11b00fa16885dc2bb9449ad..0430ce8b2a8915a0d9be261012676970a9df28ce 100644
+--- a/dist/lib/agents/codex/agent.js
++++ b/dist/lib/agents/codex/agent.js
+@@ -50,7 +50,11 @@ export function parseModelString(model) {
+  * runnerExtra() (the CLI args), which MUST agree — so the parse happens once.
+  */
+ function parseOptionsModel(options) {
+-    return options.model ? parseModelString(options.model) : { model: undefined, reasoningEffort: undefined };
++    const parsed = options.model ? parseModelString(options.model) : { model: undefined, reasoningEffort: undefined };
++    // `agentOptions.reasoningEffort` is an alternative to the `?reasoningEffort=` model suffix, for
++    // result trees that must not contain `?` in directory names.
++    const fromOptions = options.agentOptions?.reasoningEffort;
++    return parsed.reasoningEffort === undefined && typeof fromOptions === 'string' ? { ...parsed, reasoningEffort: fromOptions } : parsed;
+ }
+ /**
+  * Default reasoning effort and verbosity baked into the generated Codex
+@@ -82,7 +86,7 @@ const WEB_RESEARCH_PROTOCOL = 'live-v1';
+  *
+  * Stays host-side (and exported) — the unit tests import it directly.
+  */
+-export function generateCodexConfig(model, useVercelAiGateway, reasoningEffort, webResearch, disableBundledSkills) {
++export function generateCodexConfig(model, useVercelAiGateway, reasoningEffort, webResearch, disableBundledSkills, modelProvider) {
+     // Codex replaced the legacy boolean [tools].web_search setting with this
+     // top-level mode. Custom providers must also declare standalone support or
+     // the CLI omits the tool before it sends a Responses request.
+@@ -107,10 +111,16 @@ ${webResearch ? 'supports_standalone_web_search = true\n' : ''}${bundledSkillsSe
+     else {
+         // Direct OpenAI API — use the built-in "openai" provider (no custom provider needed).
+         // Native-default runs intentionally omit model and reasoning overrides.
+-        const directModel = model ? (model.includes('/') ? model.split('/').pop() : model) : undefined;
++        // agentOptions.modelProvider = { name, toml }: route the direct mode through a custom
++        // OpenAI-compatible provider (a `[model_providers.<name>]` table) instead of api.openai.com.
++        // Per experiment, not process env, so several gateways can share one agent-eval process; a
++        // wrapping agent definition can inject it for judge runs too. The model id is then passed
++        // verbatim, since such gateways use namespaced ids.
++        const provider = modelProvider;
++        const directModel = model ? (provider || !model.includes('/') ? model : model.split('/').pop()) : undefined;
+         return `# Direct OpenAI API configuration
+-model_provider = "openai"
+-${directModel ? `model = "${directModel}"\n` : ''}${model ? `model_reasoning_effort = "${reasoningEffort ?? DEFAULT_REASONING_EFFORT}"\nmodel_verbosity = "${DEFAULT_MODEL_VERBOSITY}"\n` : ''}${webSearchSetting}${bundledSkillsSection}`;
++model_provider = "${provider?.name || 'openai'}"
++${directModel ? `model = "${directModel}"\n` : ''}${model ? `model_reasoning_effort = "${reasoningEffort ?? DEFAULT_REASONING_EFFORT}"\nmodel_verbosity = "${DEFAULT_MODEL_VERBOSITY}"\n` : ''}${webSearchSetting}${provider ? `${provider.toml}\n` : ''}${bundledSkillsSection}`;
+     }
+ }
+ /**
+@@ -156,7 +166,7 @@ export function createCodexDefinition({ useVercelAiGateway }) {
+             // value is visible in saved configs and so the CLI's own default of "low"
+             // can't sneak through. For native-default runs we omit these settings.
+             const parsed = parseOptionsModel(options);
+-            const configContent = generateCodexConfig(parsed.model, useVercelAiGateway, parsed.reasoningEffort, options.webResearch, options.disableBundledSkills);
++            const configContent = generateCodexConfig(parsed.model, useVercelAiGateway, parsed.reasoningEffort, options.webResearch, options.disableBundledSkills, options.agentOptions?.modelProvider);
+             // Absolute `~` path writeFiles can't target → heredoc via shell. Combines the
+             // old `mkdir -p ~/.codex` + `cat > ~/.codex/default.config.toml << 'EOF'`.
+             return [
+diff --git a/dist/lib/agents/codex/run.mjs b/dist/lib/agents/codex/run.mjs
+index 4744950bd1c360b95c667e61cf59c968eb1f5447..e7d90311d479e08d8a36be88c8aa7372ed35e46b 100644
+--- a/dist/lib/agents/codex/run.mjs
++++ b/dist/lib/agents/codex/run.mjs
+@@ -179,6 +179,16 @@ export function buildCodexLoginArgs() {
+   return ['login', '--with-api-key'];
+ }
+ 
++/** True when $CODEX_HOME/auth.json (default ~/.codex/auth.json) is a ChatGPT subscription login. */
++function hasChatGptAuth() {
++  try {
++    const home = process.env.CODEX_HOME || join(homedir(), '.codex');
++    return JSON.parse(readFileSync(join(home, 'auth.json'), 'utf8')).auth_mode === 'chatgpt';
++  } catch {
++    return false;
++  }
++}
++
+ /**
+  * Build the `codex exec` arg list, reproducing the old shell command verbatim:
+  *   codex exec --profile default[ --model <m>] --dangerously-bypass-approvals-and-sandbox
+@@ -480,10 +490,13 @@ export async function runAgent(input) {
+   // mode while never carrying the secret in the argv JSON.
+   const apiKey = process.env.AI_GATEWAY_API_KEY || process.env.OPENAI_API_KEY || '';
+ 
+-  // Step 1: codex login --with-api-key (key piped on stdin). The built-in openai
+-  // provider requires bearer auth; the gateway provider reads env_key but login is
+-  // harmless/consistent there too. This is the left side of the old `&&`.
+-  const login = spawnSync('codex', buildCodexLoginArgs(), {
++  // ChatGPT subscription: when the caller's setup placed a `auth_mode: "chatgpt"` auth.json in the
++  // sandbox home, keep it — `codex login --with-api-key` would overwrite it, and an OPENAI_API_KEY
++  // placeholder in the env would take precedence over it.
++  if (hasChatGptAuth()) {
++    delete process.env.OPENAI_API_KEY;
++  }
++  const login = hasChatGptAuth() ? { status: 0, stdout: 'reusing ChatGPT subscription auth.json', stderr: '' } : spawnSync('codex', buildCodexLoginArgs(), {
+     cwd: input.cwd,
+     env: process.env,
+     input: apiKey,
+diff --git a/dist/lib/config.js b/dist/lib/config.js
+index 5fd0f6496fe58920a3dc869c87543d02b44c55fd..6666604f1313fbcc619bb20cb84867aae0c331ed 100644
+--- a/dist/lib/config.js
++++ b/dist/lib/config.js
+@@ -60,19 +60,8 @@ const experimentConfigSchema = z.object({
+     // required (pinning the judge model is the point).
+     judge: z
+         .object({
+-        agent: z
+-            .enum([
+-            'vercel-ai-gateway/claude-code',
+-            'claude-code',
+-            'vercel-ai-gateway/codex',
+-            'codex',
+-            'vercel-ai-gateway/opencode',
+-            'vercel-ai-gateway/fx',
+-            'gemini',
+-            'cursor',
+-            'vercel-ai-gateway/pi-coding-agent',
+-        ])
+-            .optional(),
++        // Any registered agent may judge, including custom gateway agents (registerAgent).
++        agent: z.string().min(1).optional(),
+         model: z.string(),
+     })
+         .optional(),
+diff --git a/dist/lib/docker-sandbox.js b/dist/lib/docker-sandbox.js
+index 849aed8ba6e6a9bc4e79297eea8a894df0cc021b..847c5a0682de453e8ab13f2461ad6de28ec78986 100644
+--- a/dist/lib/docker-sandbox.js
++++ b/dist/lib/docker-sandbox.js
+@@ -61,7 +61,9 @@ export class DockerSandboxManager {
+      * Initialize the sandbox by pulling image and creating container.
+      */
+     async initialize() {
+-        const imageName = DOCKER_IMAGES[this.runtime];
++        // AGENT_EVAL_DOCKER_IMAGE: boot a prepared image (same node:*-slim lineage, uid 1000 `node` user)
++        // instead of the stock runtime image, e.g. one with a private CA baked in.
++        const imageName = process.env.AGENT_EVAL_DOCKER_IMAGE || DOCKER_IMAGES[this.runtime];
+         if (!imageName) {
+             throw new Error(`Unsupported runtime: ${this.runtime}`);
+         }
+@@ -73,8 +75,13 @@ export class DockerSandboxManager {
+             Cmd: ['sleep', 'infinity'], // Keep container running
+             WorkingDir: CONTAINER_WORKDIR,
+             Tty: true,
++            // Lets a wrapper find sandboxes this process failed to stop (e.g. a timeout on the last
++            // attempt, after which the CLI exits before the abort handler's stop() completes).
++            Labels: { 'agent-eval.sandbox': 'true' },
+             HostConfig: {
+                 AutoRemove: true, // Clean up when stopped
++                // AGENT_EVAL_DOCKER_NETWORK: e.g. `host` for gateways only reachable over the host's IPv6/VPN.
++                ...(process.env.AGENT_EVAL_DOCKER_NETWORK ? { NetworkMode: process.env.AGENT_EVAL_DOCKER_NETWORK } : {}),
+             },
+         });
+         this._containerId = this.container.id;
+diff --git a/dist/lib/housekeeping.js b/dist/lib/housekeeping.js
+index 424bc5ad236150dcfcb87a1c34cb888787cd6161..498e988c70567f87e45151e64c5fc19585ab30d4 100644
+--- a/dist/lib/housekeeping.js
++++ b/dist/lib/housekeeping.js
+@@ -31,6 +31,10 @@ export function housekeep(resultsDir, experimentName, options) {
+     try {
+         timestamps = readdirSync(experimentDir)
+             .filter((t) => !t.startsWith('.'))
++            // Multi-model runs nest results as <experiment>/<model>/<timestamp>/; a single-model run
++            // of the same experiment is housekept at <experiment>/ and must not mistake those model
++            // directories for incomplete timestamp results (it deleted them wholesale).
++            .filter((t) => /^\d{4}-\d{2}-\d{2}T/.test(t))
+             .filter((t) => {
+             try {
+                 return statSync(join(experimentDir, t)).isDirectory();

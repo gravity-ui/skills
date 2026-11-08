@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "duration": 482.236,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 450,
+    "outputTokens": 12730,
+    "cacheReadTokens": 488175,
+    "cacheWriteTokens": 29979,
+    "totalTokens": 531334
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 14,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 14,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -i theme; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/uikit/build/esm/components/theme; cat $D/ThemeProvider.d.ts $D/ThemeProvider.js $D/useTheme.d.ts $D/ThemeContext.d.ts $D/types.d.ts; echo \"=== eval\"; cat __agent_eval__/run.mjs; echo \"=== comps\"; ls node_modules/@gravity-ui/uikit/build/esm/components/ | tr '\\n' ' '; echo; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -40; cat node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts; npx tsc --version",
+        "success": true
+      },
+      {
+        "command": "C=node_modules/@gravity-ui/uikit/build/esm/components; grep -n -A12 'interface ControlGroupProps' $C/types.d.ts; grep -n -A8 'interface ControlGroupOption' $C/types.d.ts; cat $C/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; ls node_modules | grep -iE 'jsdom|happy-dom|testing-library|playwright' ; cat $C/theme/constants.js",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/theme/dom-helpers.js",
+        "success": true
+      },
+      {
+        "command": "cat > src/themeStorage.ts <<'EOF'\nexport const THEME_STORAGE_KEY = 'theme';\n\nexport const APP_THEMES = ['light', 'dark'] as const;\nexport type AppTheme = (typeof APP_THEMES)[number];\n\nexport const DEFAULT_APP_THEME: AppTheme = 'light';\n\nexport function isAppTheme(value: unknown): value is AppTheme {\n  return typeof value === 'string' && (APP_THEMES as readonly string[]).includes(value);\n}\n\n/** Reads the persisted theme. Returns `null` if nothing valid is stored or storage is unavailable. */\nexport function readStoredTheme(): AppTheme | null {\n  try {\n    const raw = window.localStorage.getItem(THEME_STORAGE_KEY);\n    return isAppTheme(raw) ? raw : null;\n  } catch {\n    // localStorage can throw (disabled storage, privacy mode, SSR without window).\n    return null;\n  }\n}\n\nexport function writeStoredTheme(theme: AppTheme): void {\n  try {\n    window.localStorage.setItem(THEME_STORAGE_KEY, theme);\n  } catch {\n    // Persisting is best-effort: the in-memory theme still applies for this session.\n  }\n}\nEOF\n\ncat > src/useStoredTheme.ts <<'EOF'\nimport { useCallback, useEffect, useState } from 'react';\n\nimport {\n  type AppTheme,\n  DEFAULT_APP_THEME,\n  THEME_STORAGE_KEY,\n  isAppTheme,\n  readStoredTheme,\n  writeStoredTheme,\n} from './themeStorage';\n\n/**\n * Theme state backed by localStorage.\n * The initial value is read synchronously so the first render already uses the saved theme.\n * Changes made in another tab are picked up through the `storage` event.\n */\nexport function useStoredTheme(): [AppTheme, (theme: AppTheme) => void] {\n  const [theme, setThemeState] = useState<AppTheme>(() => readStoredTheme() ?? DEFAULT_APP_THEME);\n\n  const setTheme = useCallback((next: AppTheme) => {\n    setThemeState(next);\n    writeStoredTheme(next);\n  }, []);\n\n  useEffect(() => {\n    const onStorage = (event: StorageEvent) => {\n      if (event.key !== THEME_STORAGE_KEY) return;\n      setThemeState(isAppTheme(event.newValue) ? event.newValue : DEFAULT_APP_THEME);\n    };\n    window.addEventListener('storage', onStorage);\n    return () => window.removeEventListener('storage', onStorage);\n  }, []);\n\n  return [theme, setTheme];\n}\nEOF\n\ncat > src/ThemeSwitcher.tsx <<'EOF'\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\n\nimport type { AppTheme } from './themeStorage';\n\ninterface ThemeSwitcherProps {\n  value: AppTheme;\n  onChange: (theme: AppTheme) => void;\n}\n\nexport function ThemeSwitcher({ value, onChange }: ThemeSwitcherProps) {\n  return (\n    <SegmentedRadioGroup<AppTheme>\n      name=\"theme\"\n      aria-label=\"Theme\"\n      value={value}\n      onUpdate={onChange}\n      qa=\"theme-switcher\"\n    >\n      <SegmentedRadioGroup.Option value=\"light\" qa=\"theme-light\">\n        Light\n      </SegmentedRadioGroup.Option>\n      <SegmentedRadioGroup.Option value=\"dark\" qa=\"theme-dark\">\n        Dark\n      </SegmentedRadioGroup.Option>\n    </SegmentedRadioGroup>\n  );\n}\nEOF\n\ncat > src/App.tsx <<'EOF'\nimport { Card, Text, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { ThemeSwitcher } from './ThemeSwitcher';\nimport { useStoredTheme } from './useStoredTheme';\n\nexport function App() {\n  const [theme, setTheme] = useStoredTheme();\n\n  return (\n    <ThemeProvider theme={theme}>\n      <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>\n        <Card view=\"filled\" style={{ padding: 16, display: 'flex', alignItems: 'center', gap: 16 }}>\n          <Text variant=\"subheader-2\">Theme</Text>\n          <ThemeSwitcher value={theme} onChange={setTheme} />\n        </Card>\n        <Text variant=\"body-1\" color=\"secondary\">\n          Current theme: <Text variant=\"body-1\" color=\"primary\" qa=\"current-theme\">{theme}</Text>.\n          The choice is saved to localStorage and restored on reload.\n        </Text>\n      </div>\n    </ThemeProvider>\n  );\n}\nEOF\n\ncat > src/main.tsx <<'EOF'\n// Gravity UI CSS is wired here. The root ThemeProvider lives in App.tsx so it can\n// receive the persisted theme (a nested ThemeProvider would be scoped and would not\n// update the <body> theme class).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\n\n# Apply the saved theme to <body> before React loads so a dark user does not see a light flash.\npython3 - <<'EOF'\np='index.html'; s=open(p).read()\nsnippet='''  <body>\n    <script>\n      (function () {\n        try {\n          var t = localStorage.getItem('theme');\n          if (t === 'light' || t === 'dark') {\n            document.body.classList.add('g-root', 'g-root_theme_' + t);\n          }\n        } catch (e) {}\n      })();\n    </script>\n'''\ns=s.replace('  <body>\\n', snippet, 1); open(p,'w').write(s)\nEOF\ncat index.html; npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "sed -i 's/ qa=\"theme-light\"//; s/ qa=\"theme-dark\"//' src/ThemeSwitcher.tsx && cat > /tmp/snippet.html <<'EOF'\n    <script>\n      // Apply the saved theme before React loads so a dark-theme user does not see a light flash.\n      (function () {\n        try {\n          var t = localStorage.getItem('theme');\n          if (t === 'light' || t === 'dark') {\n            document.body.classList.add('g-root', 'g-root_theme_' + t);\n          }\n        } catch (e) {}\n      })();\n    </script>\nEOF\nsed -i '/^  <body>$/r /tmp/snippet.html' index.html && cat index.html && npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome node 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -iE '^(jsdom|happy-dom|playwright|puppeteer)' ; git status --short; rm -rf dist",
+        "success": true
+      },
+      {
+        "command": "timeout 90 npm i -D --no-save jsdom @testing-library/react 2>&1 | tail -3; ls node_modules | grep -E '^jsdom$'; ls node_modules/@testing-library 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/themetest && cat > /tmp/themetest/theme.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { cleanup, fireEvent, render, screen } from '@testing-library/react';\nimport { afterEach, beforeEach, expect, test } from 'vitest';\n\nimport { App } from '/home/sandbox/workspace/src/App';\n\nbeforeEach(() => {\n  localStorage.clear();\n  document.body.className = '';\n});\nafterEach(cleanup);\n\ntest('defaults to light and persists a switch to dark', () => {\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('light');\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(true);\n\n  fireEvent.click(screen.getByLabelText('Dark'));\n\n  expect(localStorage.getItem('theme')).toBe('dark');\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(false);\n});\n\ntest('restores the stored theme on a fresh mount (simulated reload)', () => {\n  localStorage.setItem('theme', 'dark');\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect((screen.getByLabelText('Dark') as HTMLInputElement).checked).toBe(true);\n});\n\ntest('ignores garbage in storage and falls back to light', () => {\n  localStorage.setItem('theme', 'purple');\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('light');\n});\n\ntest('follows a change made in another tab via the storage event', () => {\n  render(<App />);\n  localStorage.setItem('theme', 'dark');\n  fireEvent(window, new StorageEvent('storage', { key: 'theme', newValue: 'dark' }));\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n});\nEOF\nnpx vitest run --root /home/sandbox/workspace --dir /tmp/themetest /tmp/themetest/theme.test.tsx 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/__tmp__ && sed \"s#'/home/sandbox/workspace/src/App'#'../App'#\" /tmp/themetest/theme.test.tsx > src/__tmp__/theme.test.tsx && npx vitest run src/__tmp__ 2>&1 | tail -25; rm -rf src/__tmp__ /tmp/themetest; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/__tmp__ && sed \"s#'/home/sandbox/workspace/src/App'#'../App'#\" <<'EOF' > src/__tmp__/theme.test.tsx\n// @vitest-environment jsdom\nimport { cleanup, fireEvent, render, screen } from '@testing-library/react';\nimport { afterEach, beforeEach, expect, test } from 'vitest';\n\nimport { App } from '/home/sandbox/workspace/src/App';\n\nbeforeEach(() => {\n  localStorage.clear();\n  document.body.className = '';\n});\nafterEach(cleanup);\n\ntest('defaults to light and persists a switch to dark', () => {\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('light');\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(true);\n\n  fireEvent.click(screen.getByLabelText('Dark'));\n\n  expect(localStorage.getItem('theme')).toBe('dark');\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(false);\n});\n\ntest('restores the stored theme on a fresh mount (simulated reload)', () => {\n  localStorage.setItem('theme', 'dark');\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect((screen.getByLabelText('Dark') as HTMLInputElement).checked).toBe(true);\n});\n\ntest('ignores garbage in storage and falls back to light', () => {\n  localStorage.setItem('theme', 'purple');\n  render(<App />);\n  expect(screen.getByTestId('current-theme').textContent).toBe('light');\n});\n\ntest('follows a change made in another tab via the storage event', () => {\n  render(<App />);\n  localStorage.setItem('theme', 'dark');\n  fireEvent(window, new StorageEvent('storage', { key: 'theme', newValue: 'dark' }));\n  expect(screen.getByTestId('current-theme').textContent).toBe('dark');\n});\nEOF\ncat > vitest.tmp.config.ts <<'EOF'\nimport react from '@vitejs/plugin-react';\nimport { defineConfig } from 'vitest/config';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    environment: 'jsdom',\n    css: false,\n    server: { deps: { inline: ['@gravity-ui/uikit'] } },\n  },\n});\nEOF\nnpx vitest run --config vitest.tmp.config.ts src/__tmp__ 2>&1 | tail -25; rm -rf src/__tmp__ vitest.tmp.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/__tmp__ && cat > src/__tmp__/theme.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { cleanup, fireEvent, render, screen } from '@testing-library/react';\nimport { afterEach, beforeEach, expect, test } from 'vitest';\n\nimport { App } from '../App';\n\nconst current = () => document.querySelector('[data-qa=\"current-theme\"]')!.textContent;\n\nbeforeEach(() => {\n  localStorage.clear();\n  document.body.className = '';\n});\nafterEach(cleanup);\n\ntest('defaults to light and persists a switch to dark', () => {\n  render(<App />);\n  expect(current()).toBe('light');\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(true);\n\n  fireEvent.click(screen.getByLabelText('Dark'));\n\n  expect(localStorage.getItem('theme')).toBe('dark');\n  expect(current()).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect(document.body.classList.contains('g-root_theme_light')).toBe(false);\n});\n\ntest('restores the stored theme on a fresh mount (simulated reload)', () => {\n  localStorage.setItem('theme', 'dark');\n  render(<App />);\n  expect(current()).toBe('dark');\n  expect(document.body.classList.contains('g-root_theme_dark')).toBe(true);\n  expect((screen.getByLabelText('Dark') as HTMLInputElement).checked).toBe(true);\n});\n\ntest('ignores garbage in storage and falls back to light', () => {\n  localStorage.setItem('theme', 'purple');\n  render(<App />);\n  expect(current()).toBe('light');\n});\n\ntest('follows a change made in another tab via the storage event', () => {\n  render(<App />);\n  localStorage.setItem('theme', 'dark');\n  fireEvent(window, new StorageEvent('storage', { key: 'theme', newValue: 'dark' }));\n  expect(current()).toBe('dark');\n});\nEOF\ncat > vitest.tmp.config.ts <<'EOF'\nimport react from '@vitejs/plugin-react';\nimport { defineConfig } from 'vitest/config';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    environment: 'jsdom',\n    css: false,\n    server: { deps: { inline: ['@gravity-ui/uikit'] } },\n  },\n});\nEOF\nnpx vitest run --config vitest.tmp.config.ts src/__tmp__ 2>&1 | grep -vE '^\\s*$' | tail -25; rm -rf src/__tmp__ vitest.tmp.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "grep -c '\"node_modules/jsdom\"' package-lock.json; npm run build 2>&1 | tail -3; rm -rf dist; git diff --stat",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 450,
+      "outputTokens": 12730,
+      "cacheReadTokens": 488175,
+      "cacheWriteTokens": 29979,
+      "totalTokens": 531334
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

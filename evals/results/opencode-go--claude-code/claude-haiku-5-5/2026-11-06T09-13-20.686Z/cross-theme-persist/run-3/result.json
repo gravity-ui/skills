@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 347.856,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 8915,
+    "cacheReadTokens": 309980,
+    "cacheWriteTokens": 18582,
+    "totalTokens": 337503
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 1,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git ls-files | head -100 && cat package.json 2>/dev/null | head -50",
+        "success": true
+      },
+      {
+        "command": "grep -ril --exclude-dir=node_modules --exclude-dir=.git -E 'theme|тема' . | head -50",
+        "success": true
+      },
+      {
+        "command": "for f in index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; done",
+        "success": true
+      },
+      {
+        "command": "ls -la && ls node_modules 2>/dev/null | wc -l; node -v; npm -v; git log --oneline | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep '\"version\"' && find . -path ./node_modules -prune -o -name \"*.d.ts\" -print | grep -i theme | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components/theme && cat ThemeProvider.d.ts types.d.ts constants.d.ts; cat ../../../../../../uikit/build/esm/components/theme/ThemeProvider.js 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs && grep -o \"SegmentedRadioGroup\" index.d.ts components/index.d.ts 2>/dev/null | sort -u; ls components/controls | head -40; sed -n 1,80p components/theme/ThemeProvider.js 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/cjs/components && ls | grep -i segment; cat SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && (which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i -E \"playwright|puppeteer|jsdom|happy-dom\" ) ; echo done",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/theme-check && cat > /tmp/theme-check/check.mts <<'EOF'\nimport { loadStoredTheme, saveTheme, THEME_STORAGE_KEY } from '/home/sandbox/workspace/src/theme.ts';\nimport assert from 'node:assert/strict';\n\nconst store = new Map<string, string>();\n(globalThis as any).window = {\n  localStorage: {\n    getItem: (k: string) => (store.has(k) ? store.get(k)! : null),\n    setItem: (k: string, v: string) => void store.set(k, String(v)),\n  },\n};\n\nassert.equal(loadStoredTheme(), 'light', 'empty storage -> default');\nsaveTheme('dark');\nassert.equal(store.get(THEME_STORAGE_KEY), 'dark');\nassert.equal(loadStoredTheme(), 'dark', 'after \"reload\" dark is restored');\nsaveTheme('light');\nassert.equal(loadStoredTheme(), 'light');\nstore.set(THEME_STORAGE_KEY, 'purple');\nassert.equal(loadStoredTheme(), 'light', 'invalid value -> default');\n\n(globalThis as any).window = {\n  localStorage: {\n    getItem: () => { throw new Error('denied'); },\n    setItem: () => { throw new Error('denied'); },\n  },\n};\nassert.equal(loadStoredTheme(), 'light', 'storage throws on read -> default');\nassert.doesNotThrow(() => saveTheme('dark'), 'storage throws on write -> no crash');\nconsole.log('ALL OK');\nEOF\ncd /tmp/theme-check && node --experimental-strip-types check.mts 2>&1 | grep -v ExperimentalWarning",
+        "success": true
+      },
+      {
+        "command": "rm -rf /tmp/theme-check && git status --short && git diff --stat",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 8915,
+      "cacheReadTokens": 309980,
+      "cacheWriteTokens": 18582,
+      "totalTokens": 337503
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

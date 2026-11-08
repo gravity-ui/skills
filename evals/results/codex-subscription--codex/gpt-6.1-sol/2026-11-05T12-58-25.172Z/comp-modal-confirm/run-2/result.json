@@ -1,0 +1,231 @@
+{
+  "status": "passed",
+  "duration": 1057.479,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 72268,
+    "outputTokens": 12925,
+    "cacheReadTokens": 1335040,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2663,
+    "totalTokens": 1420233
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 36,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 36,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' -g '\"'!*lock*'\"' -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g 'README*' -g '*config*' -g '*css' -g '*tsx' -g '*jsx' -g '*vue' -g '*svelte'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && cat vite.config.ts && find .. -name AGENTS.md -print'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '/(Dialog|Modal|Button)/.*(d.ts|css)\"'$'\"' | head -35 && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.js && cat tsconfig.json && cat index.html && rg --files node_modules | rg '(playwright|puppeteer)' | head -15\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.js && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.css && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.js && ls node_modules/.bin'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) { try {console.log(p,import.meta.resolve(p))} catch {console.log(p,'not installed')} }\\\" && ls -d /tmp/* /opt/* 2>/dev/null | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css | head -100 && cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.css | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/modal-browser-check playwright --no-package-lock --no-audit --no-fund'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module -e \\\"import {chromium} from '/tmp/modal-browser-check/node_modules/playwright/index.mjs'; const b = await chromium.launch({headless:true}); console.log('Browser available'); await b.close();\\\"\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'node /tmp/modal-browser-check/node_modules/playwright/cli.js install chromium --only-shell'"
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && git diff --stat && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.css && cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.css'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/modal-browser-check/check.mjs <<'EOF'\nimport {chromium} from 'playwright';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless: true, args: ['--no-sandbox']});\nconst page = await browser.newPage({viewport: {width: 1440, height: 1000}, deviceScaleFactor: 1});\nconst errors = [];\npage.on('pageerror', e => errors.push(e.message));\nawait page.goto('http://localhost:5174');\nconst trigger = page.getByRole('button', {name: 'Открыть модальное окно'});\nconst dialog = page.getByRole('dialog');\nawait page.screenshot({path: '/tmp/modal-browser-check/desktop.png', fullPage: true});\nawait trigger.click();\nawait dialog.waitFor({state: 'visible'});\nawait page.waitForTimeout(250);\nassert.equal(await page.evaluate(() => document.activeElement.textContent), 'Отменить');\nawait page.screenshot({path: '/tmp/modal-browser-check/dialog.png', fullPage: true});\nawait page.getByRole('button', {name: 'Отменить', exact: true}).click();\nawait dialog.waitFor({state: 'hidden'});\nassert.equal(await trigger.evaluate(el => el === document.activeElement), true);\nassert.equal(await page.getByText('Действие успешно подтверждено', {exact: true}).count(), 0);\nawait trigger.click();\nawait page.keyboard.press('Escape');\nawait dialog.waitFor({state: 'hidden'});\nawait trigger.click();\nawait page.waitForTimeout(200);\nawait page.mouse.click(12, 12);\nawait dialog.waitFor({state: 'hidden'});\nawait trigger.click();\nawait page.getByRole('button', {name: 'Подтвердить', exact: true}).click();\nawait dialog.waitFor({state: 'hidden'});\nassert.equal(await page.getByText('Действие успешно подтверждено', {exact: true}).isVisible(), true);\nassert.equal(await page.getByText('Действие подтверждено', {exact: true}).isVisible(), true);\nawait page.getByRole('button', {name: 'Закрыть уведомление'}).click();\nawait page.setViewportSize({width: 375, height: 812});\nawait page.screenshot({path: '/tmp/modal-browser-check/mobile.png', fullPage: true});\nassert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);\nawait trigger.click();\nawait page.waitForTimeout(200);\nawait page.screenshot({path: '/tmp/modal-browser-check/mobile-dialog.png', fullPage: true});\nassert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);\nconst bounds = await dialog.boundingBox();\nassert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 375);\nawait page.setViewportSize({width: 320, height: 640});\nconst cancelBounds = await page.getByRole('button', {name: 'Отменить', exact: true}).boundingBox();\nconst applyBounds = await page.getByRole('button', {name: 'Подтвердить', exact: true}).boundingBox();\nassert.ok(cancelBounds.x >= 0 && applyBounds.x + applyBounds.width <= 320);\nassert.deepEqual(errors, []);\nconsole.log('PASS: opening, initial focus, cancel, focus restoration, Escape, outside click, confirmation, notification, mobile layout (375px / 320px), and no browser errors.');\nawait browser.close();\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .gitignore && git ls-files && ls -l /home/node/.cache/ms-playwright/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'node /tmp/modal-browser-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'id && command -v sudo && command -v apt-get && ls /usr/lib/aarch64-linux-gnu/libglib* /usr/bin/chrom* 2>/dev/null'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apt-get; command -v dpkg-deb; cat /etc/os-release; ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg 'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/modal-browser-check/libs && cd /tmp/modal-browser-check/libs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0'"
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --numstat && ls /tmp/modal-browser-check/libs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -lh /tmp/modal-browser-check/libs && ps -eo pid,etime,args | rg 'apt-get|/http'\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np = Path('src/App.css')\ns = p.read_text()\ns = s.replace('font-size: 8px; font-weight: 500; letter-spacing: 1.4px;', 'font-size: 9px; font-weight: 500; letter-spacing: 1.4px;')\ns = s.replace('color: #92909a;', 'color: #817c8c;').replace('color: #96919f;', 'color: #827b8d;')\np.write_text(s)\nPY\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module -e \\\"import fs from 'node:fs'; const p='src/App.css'; let s=fs.readFileSync(p,'utf8'); s=s.replace('font-size: 8px; font-weight: 500; letter-spacing: 1.4px;', 'font-size: 9px; font-weight: 500; letter-spacing: 1.4px;').replace('color: #92909a;', 'color: #817c8c;').replace('color: #96919f;', 'color: #827b8d;'); fs.writeFileSync(p,s);\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for archive in /tmp/modal-browser-check/libs/*.deb; do dpkg-deb -x \"$archive\" /tmp/modal-browser-check/runtime; done\nLD_LIBRARY_PATH=/tmp/modal-browser-check/runtime/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | rg '\"'not found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/modal-browser-check/libs && apt-get download libxrender1 libdrm2 libwayland-server0 libxi6 libdrm-common'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for archive in /tmp/modal-browser-check/libs/*.deb; do dpkg-deb -x \"$archive\" /tmp/modal-browser-check/runtime; done\nLD_LIBRARY_PATH=/tmp/modal-browser-check/runtime/usr/lib/aarch64-linux-gnu:/tmp/modal-browser-check/runtime/lib/aarch64-linux-gnu node /tmp/modal-browser-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/modal-browser-check/runtime/usr/lib/aarch64-linux-gnu:/tmp/modal-browser-check/runtime/lib/aarch64-linux-gnu node /tmp/modal-browser-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/modal-browser-check/libs && apt-get download libsqlite3-0 fontconfig-config && for archive in libsqlite3*.deb fontconfig-config*.deb; do dpkg-deb -x \"$archive\" /tmp/modal-browser-check/runtime; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_PATH=/tmp/modal-browser-check/runtime/etc/fonts LD_LIBRARY_PATH=/tmp/modal-browser-check/runtime/usr/lib/aarch64-linux-gnu:/tmp/modal-browser-check/runtime/lib/aarch64-linux-gnu node /tmp/modal-browser-check/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba /tmp/modal-browser-check/check.mjs | head -45'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"head -45 node_modules/@gravity-ui/uikit/styles/fonts.css && ls /tmp/modal-browser-check/runtime/etc/fonts && ls -d /usr/share/fonts/* 2>/dev/null && rg 'font-family' node_modules/@gravity-ui/uikit/styles/styles.css | head\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cd /tmp/modal-browser-check/libs && apt-get download fonts-dejavu-core && dpkg-deb -x fonts-dejavu-core*.deb /tmp/modal-browser-check/runtime\ncat > /tmp/modal-browser-check/fonts.conf <<'EOF'\n<?xml version=\\\"1.0\\\"?><\"'!DOCTYPE fontconfig SYSTEM \"fonts.dtd\"><fontconfig><dir>/tmp/modal-browser-check/runtime/usr/share/fonts</dir><cachedir>/tmp/modal-browser-check/font-cache</cachedir></fontconfig>\nEOF\nnode --input-type=module -e \"import fs from '\"'node:fs'; const p='/tmp/modal-browser-check/check.mjs'; let s=fs.readFileSync(p,'utf8'); s=s.replace(\\\\\\\"await page.goto('http://localhost:5174');\\\\\\\",\\\\\\\"await page.goto('http://localhost:5174'); await page.evaluate(() => document.fonts.ready);\\\\\\\"); fs.writeFileSync(p,s);\\\"\"",
+        "success": false,
+        "exitCode": 143
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/modal-browser-check/fonts.conf LD_LIBRARY_PATH=/tmp/modal-browser-check/runtime/usr/lib/aarch64-linux-gnu:/tmp/modal-browser-check/runtime/lib/aarch64-linux-gnu node /tmp/modal-browser-check/check.mjs'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 72268,
+      "outputTokens": 12925,
+      "cacheReadTokens": 1335040,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2663,
+      "totalTokens": 1420233
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

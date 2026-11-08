@@ -1,0 +1,427 @@
+/* Роли цветов для графиков. Значения — из валидированной референсной палитры (dataviz). */
+.g-root {
+  --viz-surface: #fcfcfb;
+  --viz-text-primary: #0b0b0b;
+  --viz-text-secondary: #52514e;
+  --viz-text-muted: #898781;
+  --viz-grid: #e1e0d9;
+  --viz-axis: #c3c2b7;
+  --viz-series-1: #2a78d6;
+  --viz-series-2: #eb6834;
+  --viz-series-3: #1baf7a;
+  --viz-series-4: #eda100;
+  --viz-series-5: #e87ba4;
+  --viz-seq-track: #cde2fb;
+  --viz-delta-up: #006300;
+  --viz-delta-down: #d03b3b;
+  --viz-status-good: #0ca30c;
+  --viz-status-warning: #fab219;
+  --viz-status-critical: #d03b3b;
+  --viz-label-on-fill: #ffffff;
+  --viz-label-on-yellow: #0b0b0b;
+}
+
+.g-root_theme_dark,
+.g-root_theme_dark-hc {
+  --viz-surface: #1a1a19;
+  --viz-text-primary: #f0efec;
+  --viz-text-secondary: #c3c2b7;
+  --viz-text-muted: #898781;
+  --viz-grid: #2c2c2a;
+  --viz-axis: #383835;
+  --viz-series-1: #3987e5;
+  --viz-series-2: #d95926;
+  --viz-series-3: #199e70;
+  --viz-series-4: #c98500;
+  --viz-series-5: #d55181;
+  --viz-seq-track: #184f95;
+  --viz-delta-up: #0ca30c;
+  --viz-delta-down: #e66767;
+}
+
+.viz {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  flex-direction: column;
+  font-family: var(--g-text-body-font-family);
+}
+
+.viz__plot {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.viz__plot svg {
+  display: block;
+  overflow: visible;
+}
+
+.viz__plot svg:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.viz__grid line {
+  stroke: var(--viz-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.viz__axis-line {
+  stroke: var(--viz-axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.viz__tick {
+  fill: var(--viz-text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz__line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.viz__area {
+  opacity: 0.1;
+}
+
+.viz__marker {
+  stroke: var(--viz-surface);
+  stroke-width: 2;
+}
+
+.viz__end-label {
+  fill: var(--viz-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.viz__crosshair {
+  stroke: var(--viz-axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.viz__bar {
+  transition: opacity 0.12s ease;
+}
+
+.viz__bar-hit {
+  fill: transparent;
+  cursor: default;
+}
+
+.viz__bar-hit:hover + .viz__bar,
+.viz__bar-hit:focus-visible + .viz__bar {
+  opacity: 0.8;
+}
+
+.viz__bar-label {
+  fill: var(--viz-text-primary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz__cat-label {
+  fill: var(--viz-text-secondary);
+  font-size: 12px;
+}
+
+/* Легенда */
+.viz__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+  color: var(--g-color-text-secondary);
+  font-size: 12px;
+}
+
+.viz__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.viz__legend-key {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.viz__legend-key_line {
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* Тултип */
+.viz-tooltip {
+  position: absolute;
+  z-index: 5;
+  min-width: 120px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--g-color-base-float);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  font-size: 12px;
+  color: var(--g-color-text-primary);
+}
+
+.viz-tooltip__title {
+  margin-bottom: 6px;
+  color: var(--g-color-text-secondary);
+}
+
+.viz-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 18px;
+}
+
+.viz-tooltip__key {
+  flex: 0 0 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.viz-tooltip__key_rect {
+  height: 10px;
+  border-radius: 2px;
+}
+
+.viz-tooltip__value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-tooltip__name {
+  color: var(--g-color-text-secondary);
+}
+
+/* Таблица-дубль графика */
+.viz__table {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.viz__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  margin-bottom: 4px;
+}
+
+/* Stat tile */
+.stat-tile {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.stat-tile__value {
+  font-size: clamp(24px, 12cqi, 28px);
+  line-height: 1.2;
+  white-space: nowrap;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.stat-tile__value_hero {
+  font-size: clamp(28px, 12cqi, 44px);
+  line-height: 1.1;
+}
+
+@container (max-width: 240px) {
+  .stat-tile__delta-period {
+    display: none;
+  }
+}
+
+@container (max-width: 180px) {
+  .stat-tile__spark {
+    display: none;
+  }
+}
+
+@container (max-width: 260px) {
+  .activity__item {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+
+  .activity__time {
+    display: none;
+  }
+}
+
+.stat-tile__row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat-tile__delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.stat-tile__delta_up {
+  color: var(--viz-delta-up);
+}
+
+.stat-tile__delta_down {
+  color: var(--viz-delta-down);
+}
+
+.stat-tile__delta-period {
+  margin-left: 4px;
+  font-weight: 400;
+  color: var(--g-color-text-hint);
+}
+
+.stat-tile__spark {
+  flex: 0 1 auto;
+  min-width: 48px;
+  width: 96px;
+  height: 32px;
+}
+
+/* Сегментная шкала */
+.share-bar {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.share-bar__track {
+  display: flex;
+  gap: 2px;
+  height: 28px;
+}
+
+.share-bar__part {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 600;
+  overflow: visible;
+  transition: opacity 0.12s ease;
+  cursor: default;
+}
+
+.share-bar__part:hover,
+.share-bar__part:focus-visible {
+  opacity: 0.85;
+  outline: none;
+}
+
+.share-bar__part:focus-visible {
+  box-shadow: 0 0 0 2px var(--g-color-line-focus);
+}
+
+/* Индикаторы */
+.meters {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  overflow: auto;
+}
+
+.meters__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  align-items: center;
+}
+
+.meters__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.meters__bar {
+  grid-column: 1 / -1;
+}
+
+/* Лента событий */
+.activity {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: auto;
+}
+
+.activity__item {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  gap: 2px 10px;
+  align-items: start;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.activity__item:last-child {
+  border-bottom: 0;
+}
+
+.activity__icon {
+  display: flex;
+  align-items: center;
+  height: 18px;
+}
+
+.activity__icon_good {
+  color: var(--viz-status-good);
+}
+
+.activity__icon_warning {
+  color: var(--viz-status-warning);
+}
+
+.activity__icon_critical {
+  color: var(--viz-status-critical);
+}
+
+.activity__meta {
+  grid-column: 2;
+}

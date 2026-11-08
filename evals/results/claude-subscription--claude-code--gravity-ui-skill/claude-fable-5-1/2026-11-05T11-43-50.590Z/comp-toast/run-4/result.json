@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "duration": 320.046,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 258,
+    "outputTokens": 5241,
+    "cacheReadTokens": 291673,
+    "cacheWriteTokens": 28777,
+    "totalTokens": 325949
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 8,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 10,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ---; ls -la /home/sandbox/workspace; echo ---; cat /home/sandbox/workspace/AGENTS.md; echo ---; find /home/sandbox/workspace -path '*/node_modules' -prune -o -type f -print | grep -v '^/home/sandbox/workspace/.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat package.json tsconfig.json vite.config.ts index.html src/App.tsx src/main.tsx; echo ---; sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ---; rg -n -i -C 3 'toast|notification' .agents/skills/gravity-ui/references/package-routing.md | head -60; echo ---; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Toaster ToasterProvider ToasterComponent useToaster Button 2>&1 | head -60; echo ---; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/build/components/Toaster/; echo ---; cat node_modules/@gravity-ui/uikit/build/components/Toaster/README.md 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Toaster ToasterProvider ToasterComponent useToaster Button 2>&1 | head -60; echo ---; ls node_modules/@gravity-ui/uikit/; echo ---; find node_modules/@gravity-ui/uikit -maxdepth 3 -iname '*toaster*' | head; echo ---; find node_modules/@gravity-ui/uikit -maxdepth 4 -name 'README.md' -ipath '*toaster*' -exec cat {} \\; | head -200",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.d.ts 2>/dev/null; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.d.ts 2>/dev/null; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/hooks/useToaster.d.ts 2>/dev/null; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/toaster-singleton.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toaster.d.ts; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/constants.d.ts; echo ---; grep -n \"autoHiding\\|DEFAULT_TIMEOUT\\|addedAt\" node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toast/Toast.js | head -20; echo ---; grep -rn \"ToasterProvider\\|ToasterComponent\\|useToaster\" node_modules/@gravity-ui/uikit/README.md | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.js; echo ---; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/hooks/useToaster.js; echo ---; grep -n \"position\\|bottom\\|right\\|inset\" node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToastList/ToastList.css | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace; cat > src/App.tsx <<'EOF'\nimport {Button, Flex, Text, Toaster, ToasterComponent, ToasterProvider, useToaster} from '@gravity-ui/uikit';\n\n// Single toaster instance for the whole app (see Toaster.Provider in uikit docs).\nconst toaster = new Toaster();\n\n// Toast disappears on its own after this delay (uikit default is 5000 ms).\nconst TOAST_AUTO_HIDE_MS = 4000;\n\nfunction NotifyButton() {\n  const {add} = useToaster();\n\n  const handleClick = () => {\n    add({\n      // Unique name per toast so repeated clicks stack instead of replacing one another.\n      name: `notification-${Date.now()}`,\n      title: 'Уведомление',\n      content: 'Действие выполнено успешно.',\n      theme: 'success',\n      autoHiding: TOAST_AUTO_HIDE_MS,\n      isClosable: true,\n    });\n  };\n\n  return (\n    <Button view=\"action\" size=\"l\" onClick={handleClick}>\n      Показать уведомление\n    </Button>\n  );\n}\n\nexport function App() {\n  return (\n    <ToasterProvider toaster={toaster}>\n      <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)'}}>\n        <Text variant=\"header-1\">Toast demo</Text>\n        <Text variant=\"body-1\" color=\"secondary\">\n          Нажмите на кнопку — в правом нижнем углу экрана появится уведомление, которое исчезнет\n          само через несколько секунд.\n        </Text>\n        <div>\n          <NotifyButton />\n        </div>\n      </Flex>\n      {/* Renders the toast list in a portal, fixed to the screen corner. */}\n      <ToasterComponent />\n    </ToasterProvider>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 258,
+      "outputTokens": 5241,
+      "cacheReadTokens": 291673,
+      "cacheWriteTokens": 28777,
+      "totalTokens": 325949
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

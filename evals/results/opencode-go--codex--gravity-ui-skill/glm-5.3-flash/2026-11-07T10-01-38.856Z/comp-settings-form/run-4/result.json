@@ -1,0 +1,279 @@
+{
+  "status": "passed",
+  "duration": 883.904,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 237066,
+    "outputTokens": 39070,
+    "cacheReadTokens": 1361488,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 30476,
+    "totalTokens": 1637624
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 22,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 43,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 43,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | sed -n '1,160p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- package.json ---\\\\n'; cat package.json; printf '\\\\n--- app ---\\\\n'; sed -n '1,220p' src/App.tsx; printf '\\\\n--- main ---\\\\n'; cat src/main.tsx; printf '\\\\n--- AGENTS ---\\\\n'; cat AGENTS.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const p=require('@gravity-ui/uikit/package.json');console.log('uikit',p.version)\\\"; node -e \\\"try{console.log('components',require('@gravity-ui/components/package.json').version)}catch(e){console.log('components missing')}\\\"; printf '\\\\n--- docs candidates ---\\\\n'; find node_modules/@gravity-ui/uikit -path '*docs*INDEX.md' -o -name README.md | head -10; find node_modules/@gravity-ui/components \\\\( -path '*docs*INDEX.md' -o -name README.md \\\\) 2>/dev/null | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('fs');const p=JSON.parse(fs.readFileSync('node_modules/@gravity-ui/uikit/package.json'));console.log('uikit',p.version)\\\"; rg -n \\\"FormRow|FileUpload|Avatar|Toggle|Checkbox|Select\\\" node_modules/@gravity-ui/uikit/README.md | head -40; printf '\\\\n--- exports relevant d.ts ---\\\\n'; rg -l \\\"interface FileUploadProps|interface SelectProps|interface CheckboxProps|interface ToggleProps|FormRow\\\" node_modules/@gravity-ui/uikit/dist node_modules/@gravity-ui/uikit/build 2>/dev/null | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- uikit index exports ---'; rg -n \\\"FileUpload|TextInput|Select|Checkbox|Toggle|Avatar|Button\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -80; printf '%s\\\\n' '--- select dts ---'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts 2>/dev/null || true; printf '%s\\\\n' '--- toggle dts ---'; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/Toggle/Toggle.d.ts; printf '%s\\\\n' '--- text input dts ---'; sed -n '1,200p' node_modules/@gravity-ui/uikit/build/esm/components/TextInput/TextInput.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/uikit/build/esm -maxdepth 3 -type d | rg 'FileUpload|Toggle|TextInput|Avatar|Upload|Card|Flex|Layout|Icon' | sort | head -80; printf '\\\\n--- exported symbols ---\\\\n'; rg -n \\\"\"'^export\" node_modules/@gravity-ui/uikit/build/esm/index.ts | rg \"FileUpload|TextInput|Select|Checkbox|Toggle|Avatar|Button|Icon|Flex\" | head -100'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit/build/esm | head; find node_modules/@gravity-ui/uikit/build/esm -maxdepth 2 -name '*.d.ts' | rg 'index|components' | head -30; find node_modules/@gravity-ui/uikit/build/esm -maxdepth 4 -type f \\\\( -iname '*upload*' -o -iname '*toggle*' \\\\) | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"FileUpload|TextInput|Select|Checkbox|Toggle|Avatar|Button|Icon\\\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head -120; printf '\\\\n--- relevant export modules ---\\\\n'; rg -n \\\"Toggle|FileUpload|TextInput\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.js | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.d.ts; printf '\\\\n--- controls index ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/controls/index.d.ts; printf '\\\\n--- switch ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts; printf '\\\\n--- checkbox ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Checkbox/Checkbox.d.ts; printf '\\\\n--- avatar ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Avatar/Avatar.d.ts; printf '\\\\n--- button ---\\\\n'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 3 \\\"FileUpload|FormRow|@gravity-ui/components\\\" .agents/skills/gravity-ui/references/*.md; rg -n \\\"FileUpload\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' -g '*.js' | head -30; printf '\\\\n--- package-lock components ---\\\\n'; rg -n '\\\"@gravity-ui/components\\\"' package-lock.json | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/components@latest'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"npm view @gravity-ui/components versions --json | node -e \\\"let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const v=JSON.parse(s);console.log(v.join('\\\\n'))})\\\" | tail -40; npm view @gravity-ui/components@4 peerDependencies --json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm view @gravity-ui/components@4.24.1 peerDependencies --json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for v in 4.24.0 4.23.1 4.23.0; do echo -n \"$v \"; npm view \"@gravity-ui/components@$v\" peerDependencies.'\"'@gravity-ui/uikit' 2>/dev/null; done\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/components@4.23.1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"find node_modules/@gravity-ui/components -maxdepth 3 -type d | rg 'FormRow|Upload' | head -30; rg -n \\\"interface FormRowProps|FormRowProps\\\" node_modules/@gravity-ui/components/dist node_modules/@gravity-ui/components/build node_modules/@gravity-ui/components 2>/dev/null -g '*.d.ts' | head -30; rg -n \\\"FileUpload|Upload\\\" node_modules/@gravity-ui/components/dist node_modules/@gravity-ui/components/build node_modules/@gravity-ui/components 2>/dev/null -g '*.d.ts' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/components/build/esm/components/FormRow/types.d.ts; printf '\\\\n--- package setup ---\\\\n'; rg -n -C 3 \\\"Required setup|styles.css|ThemeProvider\\\" node_modules/@gravity-ui/components/README.md node_modules/@gravity-ui/components/package.json | head -80; printf '\\\\n--- docs index ---\\\\n'; find node_modules/@gravity-ui/components -path '*docs*INDEX.md' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"FormRow\\\" node_modules/@gravity-ui/components/README.md | head -20; sed -n '1,120p' node_modules/@gravity-ui/components/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n -C 4 \"TextInput|Select|Switch|Checkbox|Button|FormRow|FileUpload|Avatar|Flex|Box|Container\" .agents/skills/gravity-ui/rules/hallucination-traps.md | head -220'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- main/index ---'; rg -n \\\"settings-page|index|import\\\" src/main.tsx src/index.tsx src/App.tsx 2>/dev/null; printf '%s\\\\n' '--- root files ---'; ls src; printf '%s\\\\n' '--- package scripts ---'; node -e \\\"const p=require('./package.json');console.log(p.scripts)\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/settings-page.tsx\n@@\n import type { ProfileSettings, ProfileSettingsErrors } from './settings-types';\n+import './settings-page.css';\n*** End Patch\nPATCH\nnpx tsc --noEmit\"",
+        "success": false,
+        "exitCode": -1
+      },
+      {
+        "command": "/bin/bash -lc 'npx tsc --noEmit'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Avatar/Avatar.d.ts; rg -n \\\"className|errorPlacement|validationState|errorMessage\\\" node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.d.ts | head -40; rg -n \\\"className|controlClassName|selectClassName\\\" node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.d.ts | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Avatar/types/main.d.ts; sed -n '1,260p' node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"interface AvatarImageProps|type AvatarImageProps\\\" node_modules/@gravity-ui/uikit/build/esm/components/Avatar/types/*.d.ts; rg -n \\\"export type DOMProps|interface DOMProps\\\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/Avatar/types/main.d.ts; printf '\\\\n--- AvatarImage ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/AvatarImage/AvatarImage.d.ts; printf '\\\\n--- Select types relevant ---\\\\n'; rg -n \\\"className|width|value|onUpdate\\\" node_modules/@gravity-ui/uikit/build/esm/components/Select/types.ts node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts; printf '\\\\n--- avatar variants ---\\\\n'; find node_modules/@gravity-ui/uikit/build/esm/components/Avatar -maxdepth 3 -type f -name '*.d.ts' -print -exec sed -n '1,100p' {} \\\\;\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/settings-page.tsx\n@@\n-                                    <Avatar\n-                                        imageUrl={settings.avatarPreviewUrl}\n-                                        size=\\\"xl\\\"\n-                                        className=\\\"profile-settings__avatar\\\"\n-                                    />\n+                                    <Avatar\n+                                        imgUrl={settings.avatarPreviewUrl}\n+                                        size=\\\"xl\\\"\n+                                        className=\\\"profile-settings__avatar\\\"\n+                                    />\n@@\n-const selectStyle = { width: '100%' } satisfies React.CSSProperties;\n-\n export function SettingsPage({\n@@\n-                                width=\\\"max\\\"\n-                                style={selectStyle}\n+                                width=\\\"max\\\"\n@@\n-                                width=\\\"max\\\"\n-                                style={selectStyle}\n+                                width=\\\"max\\\"\n*** End Patch\nPATCH\nnpx tsc --noEmit\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"imageUrl|imgUrl|selectStyle|width=\\\\\\\"max\\\\\\\"\\\" src/settings-page.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '40,60p;196,214p;274,310p' src/settings-page.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx tsc --noEmit'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"formRow|getComposedRefs|combineRefs|form\\\\b|fieldset|aria\\\" node_modules/@gravity-ui/components/build/esm/components/FormRow/FormRow.js | head -60; sed -n '1,220p' node_modules/@gravity-ui/components/build/esm/components/FormRow/FormRow.js; sed -n '1,220p' src/settings-page.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Checkbox/Checkbox.d.ts | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/settings-page.tsx\n@@\n-    Box,\n     Button,\n*** End Patch\nPATCH\nnpx tsc --noEmit\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/settings-page.tsx\n@@\n-    Box,\n     Button,\n*** End Patch\nPATCH\nnpx tsc --noEmit\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npx tsc --noEmit'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"color.*danger|TextProps|interface TextProps\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/*.d.ts | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"ColorTextBaseProps|color\" node_modules/@gravity-ui/uikit/build/esm/components/Text/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/*.ts | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/colorText.d.ts; rg -n \\\"TEXT_COLORS\\\" node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/colorText.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/settings-page.tsx\n@@\n     const resetForm = useCallback(() => {\n-        if (settings.avatarPreviewUrl?.startsWith('blob:')) {\n-            URL.revokeObjectURL(settings.avatarPreviewUrl);\n-        }\n+        const currentAvatarPreviewUrl = settings.avatarPreviewUrl;\n \n         setSettings(initialProfileSettings);\n         setErrors({});\n+\n+        if (currentAvatarPreviewUrl?.startsWith('blob:')) {\n+            URL.revokeObjectURL(currentAvatarPreviewUrl);\n+        }\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [
+      "Reconnecting... 1/3 (stream disconnected before completion: stream closed before response.completed)"
+    ],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 237066,
+      "outputTokens": 39070,
+      "cacheReadTokens": 1361488,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 30476,
+      "totalTokens": 1637624
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T16:54:00.969Z",
+    "by": "openrouter--codex--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

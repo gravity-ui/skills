@@ -1,0 +1,238 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 22520ms
+   × imports @gravity-ui/navigation 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 1ms
+     → expected 'import React, { useMemo, useState } f…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 22515ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json contains only @gravity-ui/uikit and lacks @gravity-ui/navigation and @gravity-ui/table. src/App.tsx implements a custom <aside> and native <table> with hand-coded checkbox selection, draggable headers, and status grouping; it does not use AsideHeader, useTable, or ColumnReorderingProvider.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  13:38:02
+   Duration  22.69s (transform 33ms, setup 14ms, collect 17ms, tests 22.52s, environment 0ms, prepare 46ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected 'import React, { useMemo, useState } f…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+"import React, { useMemo, useState } from 'react';
+import './app.css';
+
+type OrderStatus = 'В обработке' | 'Отправлен' | 'Доставлен' | 'Отменён';
+type Order = { id: string; customer: string; initials: string; email: string; date: string; product: string; amount: number; status: OrderStatus; color: string; channel: string };
+type Column = { key: keyof Order | 'customer'; label: string; className?: string };
+
+const orders: Order[] = [
+  { id: 'ORD-2841', customer: 'Анастасия Морозова', initials: 'АМ', email: 'a.morozova@mail.ru', date: 'Сегодня, 14:32', product: 'Кресло Runa', amount: 24_900, status: 'В обработке', color: 'lilac', channel: 'Сайт' },
+  { id: 'ORD-2840', customer: 'Михаил Волков', initials: 'МВ', email: 'm.volkov@gmail.com', date: 'Сегодня, 13:18', product: 'Настольная лампа N°4', amount: 8_400, status: 'Отправлен', color: 'peach', channel: 'Сайт' },
+  { id: 'ORD-2839', customer: 'Екатерина Белова', initials: 'ЕБ', email: 'kate.belova@yandex.ru', date: 'Сегодня, 12:56', product: 'Стол журнальный Line', amount: 32_000, status: 'Доставлен', color: 'mint', channel: 'Маркетплейс' },
+  { id: 'ORD-2838', customer: 'Дмитрий Соколов', initials: 'ДС', email: 'dsokolov@mail.ru', date: 'Сегодня, 11:40', product: 'Ваза Forma, 2 шт.', amount: 6_200, status: 'В обработке', color: 'blue', channel: 'Сайт' },
+  { id: 'ORD-2837', customer: 'Полина Кузнецова', initials: 'ПК', email: 'polina.k@inbox.ru', date: 'Сегодня, 10:22', product: 'Диван Soft, бежевый', amount: 84_500, status: 'Отправлен', color: 'rose', channel: 'Шоурум' },
+  { id: 'ORD-2836', customer: 'Артём Фёдоров', initials: 'АФ', email: 'art.fedorov@gmail.com', date: 'Вчера, 18:05', product: 'Кресло Runa', amount: 24_900, status: 'Доставлен', color: 'sand', channel: 'Сайт' },
+  { id: 'ORD-2835', customer: 'Валерия Смирнова', initials: 'ВС', email: 'val.smirnova@mail.ru', date: 'Вчера, 16:47', product: 'Плед Waffle, молочный', amount: 4_800, status: 'Отменён', color: 'mint', channel: 'Маркетплейс' },
+  { id: 'ORD-2834', customer: 'Илья Андреев', initials: 'ИА', email: 'ilya.andreev@mail.ru', date: 'Вчера, 15:12', product: 'Стол журнальный Line', amount: 32_000, status: 'В обработке', color: 'blue', channel: 'Сайт' },
+  { id: 'ORD-2833', customer: 'Мария Лебедева', initials: 'МЛ', email: 'm.lebedeva@yandex.ru', date: 'Вчера, 12:30', product: 'Настольная лампа N°4', amount: 8_400, status: 'Отправлен', color: 'lilac', channel: 'Шоурум' },
+  { id: 'ORD-2832', customer: 'Никита Павлов', initials: 'НП', email: 'n.pavlov@gmail.com', date: 'Вчера, 11:06', product: 'Кресло Runa', amount: 24_900, status: 'Доставлен', color: 'peach', channel: 'Сайт' },
+];
+const initialColumns: Column[] = [
+  { key: 'id', label: 'Заказ' }, { key: 'customer', label: 'Покупатель' }, { key: 'date', label: 'Дата' },
+  { key: 'product', label: 'Товар' }, { key: 'amount', label: 'Сумма', className: 'amount-col' }, { key: 'status', label: 'Статус' }, { key: 'channel', label: 'Канал' },
+];
+const nav = [
+  { label: 'Главная', icon: 'grid' }, { label: 'Пользователи', icon: 'users', count: '24' },
+  { label: 'Заказы', icon: 'bag', count: '12' }, { label: 'Настройки', icon: 'settings' },
+];
+
+function Icon({ name, size = 18 }: { name: string; size?: number }) {
+  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  const paths: Record<string, React.ReactNode> = {
+    grid: <><rect x=\"3.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"13.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/></>,
+    users: <><path d=\"M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20\"/><circle cx=\"9.5\" cy=\"7.5\" r=\"3.5\"/><path d=\"M17 4.2a3.5 3.5 0 0 1 0 6.7M21 20v-1.5a4 4 0 0 0-3-3.87\"/></>,
+    bag: <><path d=\"M4 8h16l-1.2 12H5.2L4 8Z\"/><path d=\"M9 9V6a3 3 0 0 1 6 0v3\"/></>,
+    settings: <><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"m19.4 15 .1.1 1.2.9-1.2 2.1-1.5-.6a8 8 0 0 1-1.6.9l-.3 1.6h-2.4l-.3-1.6a8 8 0 0 1-1.7-.9l-1.5.6-1.2-2.1 1.3-1a7 7 0 0 1 0-1.9l-1.3-1 1.2-2.1 1.5.6a8 8 0 0 1 1.7-.9l.3-1.6h2.4l.3 1.6a8 8 0 0 1 1.6.9l1.5-.6 1.2 2.1-1.2.9a7 7 0 0 1-.1 2Z\" transform=\"translate(-1 -1)\"/></>,
+    search: <><circle cx=\"10.8\" cy=\"10.8\" r=\"6.3\"/><path d=\"m15.5 15.5 4.2 4.2\"/></>,
+    bell: <><path d=\"M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9\"/><path d=\"M10 21h4\"/></>,
+    down: <path d=\"m7 10 5 5 5-5\"/>,
+    chevron: <path d=\"m9 18 6-6-6-6\"/>,
+    plus: <><path d=\"M12 5v14M5 12h14\"/></>,
+    sliders: <><path d=\"M4 7h10M18 7h2M4 17h2M10 17h10\"/><circle cx=\"16\" cy=\"7\" r=\"2\"/><circle cx=\"8\" cy=\"17\" r=\"2\"/></>,
+    more: <><circle cx=\"5\" cy=\"12\" r=\".8\" fill=\"currentColor\"/><circle cx=\"12\" cy=\"12\" r=\".8\" fill=\"currentColor\"/><circle cx=\"19\" cy=\"12\" r=\".8\" fill=\"currentColor\"/></>,
+    export: <><path d=\"M12 15V3m-4 4 4-4 4 4\"/><path d=\"M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6\"/></>,
+    collapse: <><path d=\"M4 5h16M4 12h16M4 19h16\"/><path d=\"m10 9 3 3-3 3\"/></>,
+    spark: <><path d=\"m12 3 1.6 5.4L19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z\"/><path d=\"m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z\"/></>,
+  };
+  return <svg {...common}>{paths[name] ?? paths.grid}</svg>;
+}
+
+const formatMoney = (amount: number) => new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
+
+export function App() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [columns, setColumns] = useState(initialColumns);
+  const [dragged, setDragged] = useState<string | null>(null);
+  const [grouped, setGrouped] = useState(true);
+  const [openGroups, setOpenGroups] = useState<OrderStatus[]>(['В обработке', 'Отправлен', 'Доставлен', 'Отменён']);
+  const [query, setQuery] = useState('');
+  const [activeNav, setActiveNav] = useState('Заказы');
+  const filtered = useMemo(() => orders.filter(o => `${o.id} ${o.customer} ${o.email} ${o.product}`.toLowerCase().includes(query.toLowerCase())), [query]);
+  const statuses: OrderStatus[] = ['В обработке', 'Отправлен', 'Доставлен', 'Отменён'];
+  const allVisibleSelected = filtered.length > 0 && filtered.every(o => selected.includes(o.id));
+  const toggleRow = (id: string) => setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  const moveColumn = (target: string) => {
+    if (!dragged || dragged === target) return;
+    setColumns(current => { const next = [...current]; const from = next.findIndex(c => c.key === dragged); const to = next.findIndex(c => c.key === target); const [item] = next.splice(from, 1); next.splice(to, 0, item); return next; });
+    setDragged(null);
+  };
+  const renderCell = (order: Order, column: Column) => {
+    switch (column.key) {
+      case 'id': return <span className=\"order-id\">{order.id}</span>;
+      case 'customer': return <div className=\"customer\"><span className={`avatar ${order.color}`}>{order.initials}</span><span><b>{order.customer}</b><small>{order.email}</small></span></div>;
+      case 'date': return <span className=\"date-cell\">{order.date}</span>;
+      case 'product': return <span className=\"product-cell\">{order.product}</span>;
+      case 'amount': return <b className=\"amount-cell\">{formatMoney(order.amount)}</b>;
+      case 'status': return <span className={`status status-${order.status === 'В обработке' ? 'pending' : order.status === 'Отправлен' ? 'sent' : order.status === 'Доставлен' ? 'done' : 'cancelled'}`}><i />{order.status}</span>;
+      case 'channel': return <span className=\"channel-cell\"><span className=\"channel-mark\">{order.channel === 'Сайт' ? '↗' : order.channel === 'Шоурум' ? '⌂' : '◈'}</span>{order.channel}</span>;
+      default: return null;
+    }
+  };
+
+  return <div className=\"app-shell\">
+    <aside className={`sidebar ${collapsed ? 'is-collapsed' : ''}`}>
+      <div className=\"brand-row\"><div className=\"brand-symbol\"><span /></div>{!collapsed && <div className=\"brand-name\">forma<span>.</span><small>ПАНЕЛЬ УПРАВЛЕНИЯ</small></div>}<button className=\"collapse-btn\" onClick={() => setCollapsed(!collapsed)} title={collapsed ? 'Развернуть меню' : 'Свернуть меню'}><Icon name=\"collapse\" size={19} /></button></div>
+      {!collapsed && <div className=\"workspace-switch\"><div className=\"workspace-logo\">F</div><span><b>Forma studio</b><small>Интернет-магазин</small></span><Icon name=\"down\" size={15} /></div>}
+      <div className=\"nav-caption\">{!collapsed && 'МЕНЮ'}</div>
+      <nav className=\"side-nav\">{nav.map(item => <button key={item.label} title={collapsed ? item.label : undefined} className={`nav-item ${activeNav === item.label ? 'active' : ''}`} onClick={() => setActiveNav(item.label)}><Icon name={item.icon} size={19} /><span>{!collapsed && item.label}</span>{!collapsed && item.count && <small>{item.count}</small>}</button>)}</nav>
+      {!collapsed && <div className=\"sidebar-bottom\"><div className=\"help-card\"><div className=\"help-art\"><span /><span /><span /></div><b>Нужна помощь?</b><p>Мы всегда на связи и готовы помочь.</p><button onClick={() => alert('Напишите нам: hello@forma.studio')}>Связаться с нами <Icon name=\"chevron\" size={14}/></button></div><div className=\"profile-row\"><div className=\"profile-avatar\">ЕК</div><span><b>Елена Крылова</b><small>Администратор</small></span><Icon name=\"more\" size={18}/></div></div>}
+      {collapsed && <div className=\"collapsed-profile\">ЕК</div>}
+    </aside>
+    <main className=\"main-area\">
+      <header className=\"topbar\"><div className=\"breadcrumbs\"><span>Управление</span><Icon name=\"chevron\" size={14}/><b>{activeNav}</b></div><div className=\"top-actions\"><button className=\"icon-button notification\" aria-label=\"Уведомления\"><Icon name=\"bell\" size={19}/><i /></button><div className=\"top-divider\"/><div className=\"top-user\"><div className=\"profile-avatar small\">ЕК</div><span>Елена К.</span><Icon name=\"down\" size={15}/></div></div></header>
+      <div className=\"page-content\">
+        <div className=\"page-heading\"><div><div className=\"eyebrow\">СРЕДА, 12 ИЮНЯ 2024</div><h1>Заказы <span className=\"title-count\">128</span></h1><p className=\"page-subtitle\">Следите за заказами и управляйте ими в одном месте.</p></div><div className=\"heading-actions\"><button className=\"button secondary\"><Icon name=\"export\" size={16}/>Экспорт</button><button className=\"button primary\" onClick={() => alert('Форма создания заказа')}><Icon name=\"plus\" size={17}/>Создать заказ</button></div></div>
+        <section className=\"metrics-grid\">
+          <div className=\"metric-card\"><div className=\"metric-top\"><span>Выручка за месяц</span><span className=\"metric-icon green\"><Icon name=\"spark\" size={16}/></span></div><div className=\"metric-value\">1 284 500 <small>₽</small></div><div className=\"metric-foot\"><span className=\"trend up\">↗ 12,8%</span><span>к прошлому месяцу</span><div className=\"sparkline\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></div></div>
+          <div className=\"metric-card\"><div className=\"metric-top\"><span>Новые заказы</span><span className=\"metric-icon violet\"><Icon name=\"bag\" size={16}/></span></div><div className=\"metric-value\">128</div><div className=\"metric-foot\"><span className=\"trend up\">↗ 8,2%</span><span>к прошлому месяцу</span><div className=\"sparkline purple\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></div></div>
+          <div className=\"metric-card\"><div className=\"metric-top\"><span>Средний чек</span><span className=\"metric-icon amber\"><span>₽</span></span></div><div className=\"metric-value\">10 035 <small>₽</small></div><div className=\"metric-foot\"><span className=\"trend down\">↘ 2,4%</span><span>к прошлому месяцу</span><div className=\"sparkline orange\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></div></div>
+          <div className=\"metric-card\"><div className=\"metric-top\"><span>В обработке</span><span className=\"metric-icon blue\"><span className=\"processing-dot\"/></span></div><div className=\"metric-value\">12 <small className=\"metric-unit\">заказов</small></div><div className=\"metric-foot\"><span className=\"metric-note\">Требуют вашего внимания</span><div className=\"sparkline blue-line\"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div></div></div>
+        </section>
+        <section className=\"orders-section\">
+          <div className=\"section-top\"><div><h2>Все заказы <span>128</span></h2><p>Управляйте текущими заказами вашего магазина</p></div><button className=\"range-button\">Последние 30 дней <Icon name=\"down\" size={15}/></button></div>
+          <div className=\"table-toolbar\"><div className=\"toolbar-left\"><label className=\"search-box\"><Icon name=\"search\" size={17}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder=\"Поиск заказов...\"/><kbd>⌘ K</kbd></label><button className=\"filter-button\" onClick={() => setGrouped(!grouped)}><Icon name=\"sliders\" size={16}/>Фильтры<span className=\"filter-count\">2</span></button><button className={`group-button ${grouped ? 'on' : ''}`} onClick={() => setGrouped(!grouped)}><span className=\"group-icon\">≡</span>Группировать: <b>{grouped ? 'Статус' : 'Нет'}</b><Icon name=\"down\" size={14}/></button></div><button className=\"icon-button table-settings\" title=\"Настроить таблицу\"><Icon name=\"sliders\" size={17}/></button></div>
+          {selected.length > 0 && <div className=\"selection-bar\"><span>Выбрано: <b>{selected.length}</b></span><button onClick={() => setSelected([])}>Снять выделение</button><span className=\"selection-spacer\"/><button className=\"selection-action\">Изменить статус <Icon name=\"down\" size={14}/></button><button className=\"selection-action\">Экспортировать</button><button className=\"selection-more\"><Icon name=\"more\" size={17}/></button></div>}
+          <div className=\"table-scroll\"><table className=\"orders-table\"><thead><tr><th className=\"check-column\"><input type=\"checkbox\" checked={allVisibleSelected} onChange={() => setSelected(allVisibleSelected ? selected.filter(id => !filtered.some(o => o.id === id)) : [...new Set([...selected, ...filtered.map(o => o.id)])])}/></th>{columns.map(column => <th key={column.key} className={column.className} draggable onDragStart={() => setDragged(String(column.key))} onDragOver={e => e.preventDefault()} onDrop={() => moveColumn(String(column.key))} onDragEnd={() => setDragged(null)}><span className={dragged === column.key ? 'dragging' : ''}>{column.label}<span className=\"drag-dots\">⠿</span></span></th>)}<th className=\"row-actions-head\"/></tr></thead><tbody>
+            {grouped ? statuses.map(status => { const group = filtered.filter(o => o.status === status); if (!group.length) return null; const isOpen = openGroups.includes(status); return <React.Fragment key={status}><tr className=\"group-row\"><td colSpan={columns.length + 2}><button onClick={() => setOpenGroups(isOpen ? openGroups.filter(s => s !== status) : [...openGroups, status])}><Icon name={isOpen ? 'down' : 'chevron'} size={15}/><span className={`group-status-dot ${status === 'В обработке' ? 'pending' : status === 'Отправлен' ? 'sent' : status === 'Доставлен' ? 'done' : 'cancelled'}`}/><b>{status}</b><small>{group.length} {group.length === 1 ? 'заказ' : group.length > 1 && group.length < 5 ? 'заказа' : 'заказов'}</small></button></td></tr>{isOpen && group.map(order => <tr key={order.id} className={selected.includes(order.id) ? 'selected-row' : ''}><td className=\"check-column\"><input type=\"checkbox\" checked={selected.includes(order.id)} onChange={() => toggleRow(order.id)}/></td>{columns.map(column => <td key={column.key}>{renderCell(order, column)}</td>)}<td className=\"row-actions\"><button aria-label=\"Действия с заказом\"><Icon name=\"more\" size={17}/></button></td></tr>)}</React.Fragment>}) : filtered.map(order => <tr key={order.id} className={selected.includes(order.id) ? 'selected-row' : ''}><td className=\"check-column\"><input type=\"checkbox\" checked={selected.includes(order.id)} onChange={() => toggleRow(order.id)}/></td>{columns.map(column => <td key={column.key}>{renderCell(order, column)}</td>)}<td className=\"row-actions\"><button aria-label=\"Действия с заказом\"><Icon name=\"more\" size={17}/></button></td></tr>)}
+            {filtered.length === 0 && <tr><td colSpan={columns.length + 2} className=\"empty-state\">Заказы не найдены. Попробуйте изменить запрос.</td></tr>}
+          </tbody></table></div>
+          <div className=\"table-footer\"><span>Показано <b>{filtered.length ? 1 : 0}–{filtered.length}</b> из <b>128</b> заказов</span><div className=\"pagination\"><button disabled>←</button><button className=\"current-page\">1</button><button>2</button><button>3</button><span>…</span><button>13</button><button>→</button></div><button className=\"per-page\">10 на странице <Icon name=\"down\" size={14}/></button></div>
+        </section>
+        <footer className=\"page-footer\"><span>© 2024 Forma Studio</span><span><a>База знаний</a><a>Поддержка</a><span className=\"status-online\"><i/>Все системы работают</span></span></footer>
+      </div>
+    </main>
+  </div>;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#20262d;background:#f5f6f8;font-synthesis:none;text-rendering:optimizeLegibility;font-smoothing:antialiased;font-weight:400}*{box-sizing:border-box}body{margin:0;min-width:360px;min-height:100vh}button,input{font:inherit}button{cursor:pointer}.app-shell{min-height:100vh;display:flex;background:#f6f7f9}.sidebar{width:248px;min-width:248px;background:#20272b;color:#d8dedf;display:flex;flex-direction:column;padding:25px 15px 15px;transition:width .2s ease,min-width .2s ease;position:relative;z-index:3}.sidebar.is-collapsed{width:76px;min-width:76px;padding-left:12px;padding-right:12px}.brand-row{display:flex;align-items:center;height:42px;padding:0 4px 0 7px;gap:10px;position:relative}.brand-symbol{width:30px;height:30px;border-radius:10px;background:#d5f378;display:grid;place-items:center;flex:none;position:relative;overflow:hidden}.brand-symbol:before,.brand-symbol:after,.brand-symbol span{content:'';position:absolute;background:#26312a;border-radius:2px;transform:rotate(40deg)}.brand-symbol:before{width:5px;height:22px;left:10px;top:5px}.brand-symbol:after{width:5px;height:22px;right:10px;top:5px}.brand-symbol span{height:5px;width:20px;left:5px;top:12px}.brand-name{font:800 20px 'Manrope',sans-serif;color:#fff;letter-spacing:-1px;line-height:17px}.brand-name>span{color:#d5f378}.brand-name small{display:block;font:500 8px 'DM Sans',sans-serif;letter-spacing:1.05px;color:#8a9799;margin-top:6px}.collapse-btn{background:transparent;border:0;color:#8c989a;width:27px;height:29px;display:grid;place-items:center;margin-left:auto;border-radius:6px}.collapse-btn:hover{background:#303a3e;color:#fff}.is-collapsed .brand-row{padding:0;justify-content:center}.is-collapsed .collapse-btn{position:absolute;top:40px;right:12px;transform:rotate(180deg);background:#303a3e}.workspace-switch{margin:33px 0 30px;padding:10px 9px;border:1px solid #394347;border-radius:9px;display:flex;align-items:center;gap:10px;color:#f6f8f8}.workspace-logo{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;background:#e9ded0;color:#745d42;font:700 14px 'Manrope'}.workspace-switch>span{min-width:0;flex:1}.workspace-switch b,.workspace-switch small,.profile-row b,.profile-row small{display:block}.workspace-switch b{font-size:11px;font-weight:600}.workspace-switch small{font-size:9px;color:#8d9a9b;margin-top:3px}.workspace-switch>svg{color:#849092}.nav-caption{padding:0 10px;margin-bottom:8px;color:#758184;font-size:9px;letter-spacing:1.1px;font-weight:700}.side-nav{display:grid;gap:3px}.nav-item{width:100%;height:40px;border:0;background:transparent;color:#aeb8b9;display:flex;align-items:center;gap:12px;padding:0 10px;border-radius:7px;text-align:left;font-size:12px;transition:background .15s,color .15s}.nav-item:hover{background:#2a3337;color:#fff}.nav-item.active{background:#303a3e;color:#ddf59a;font-weight:600;box-shadow:inset 2px 0 #d5f378}.nav-item>svg{flex:none}.nav-item span{flex:1}.nav-item small{font-size:10px;color:#889597;background:#3a4549;border-radius:5px;padding:2px 6px}.is-collapsed .nav-caption{height:29px;margin:22px 0 8px}.is-collapsed .side-nav{margin-top:22px}.is-collapsed .nav-item{justify-content:center;padding:0}.is-collapsed .nav-item.active{box-shadow:inset 0 -2px #d5f378}.sidebar-bottom{margin-top:auto}.help-card{background:#293236;border:1px solid #394346;border-radius:9px;padding:13px 12px 12px;position:relative;overflow:hidden}.help-art{height:24px;display:flex;align-items:center;gap:3px;margin-bottom:7px}.help-art span{display:block;border:1px solid #9cb06a;width:10px;height:19px;border-radius:9px;transform:rotate(35deg)}.help-art span:nth-child(2){height:13px;transform:rotate(-34deg);border-color:#d8e8a0}.help-art span:nth-child(3){height:17px;transform:rotate(55deg);border-color:#73834e}.help-card>b{font-size:11px;color:#edf1eb}.help-card p{font-size:10px;color:#94a0a0;line-height:1.5;margin:5px 0 11px}.help-card button{border:0;background:none;color:#d9ef9b;font-size:10px;padding:0;display:flex;gap:5px;align-items:center}.profile-row{display:flex;align-items:center;gap:9px;border-top:1px solid #3a4447;padding:14px 3px 1px;margin-top:15px}.profile-avatar{width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#e5c4a8;color:#5d4230;font-weight:700;font-size:9px;flex:none}.profile-row span{flex:1}.profile-row b{font-size:10px;color:#edf0ee;font-weight:600}.profile-row small{font-size:9px;color:#879395;margin-top:3px}.profile-row>svg{color:#8b9798}.collapsed-profile{margin-top:auto;border-top:1px solid #394347;padding:14px 0 0;text-align:center;color:#303f2d}.collapsed-profile:before{content:'ЕК';display:inline-grid;place-items:center;width:31px;height:31px;background:#e5c4a8;border-radius:50%;font-size:9px;font-weight:700}
+.main-area{flex:1;min-width:0}.topbar{height:68px;background:#fff;border-bottom:1px solid #eaedf0;display:flex;align-items:center;justify-content:space-between;padding:0 40px}.breadcrumbs{display:flex;align-items:center;gap:9px;color:#9aa2a9;font-size:11px}.breadcrumbs svg{transform:scale(.75);color:#bec4c9}.breadcrumbs b{color:#4c555c;font-weight:600}.top-actions{display:flex;align-items:center;gap:18px}.icon-button{border:0;background:transparent;color:#707b82;display:grid;place-items:center;position:relative}.icon-button:hover{color:#242d33}.notification{width:32px;height:32px}.notification i{width:5px;height:5px;border-radius:50%;background:#e9866c;position:absolute;right:5px;top:5px;border:1px solid #fff}.top-divider{height:24px;width:1px;background:#e7eaed}.top-user{display:flex;align-items:center;gap:9px;color:#424b51;font-size:11px}.top-user>svg{color:#8c959b}.profile-avatar.small{width:28px;height:28px;font-size:8px}.page-content{max-width:1440px;padding:33px 40px 24px;margin:0 auto}.page-heading{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:25px}.eyebrow{font-size:9px;letter-spacing:1.25px;color:#919ba0;font-weight:700;margin-bottom:9px}.page-heading h1{font:700 27px 'Manrope',sans-serif;letter-spacing:-.8px;color:#232a2e;margin:0;line-height:1.2}.title-count{vertical-align:middle;display:inline-grid;place-items:center;background:#e9edf0;border-radius:5px;padding:3px 7px;font:600 10px 'DM Sans';letter-spacing:0;color:#758087;margin-left:5px}.page-subtitle{font-size:11px;color:#929ba0;margin:7px 0 0}.heading-actions{display:flex;gap:9px}.button{height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;font-size:10px;font-weight:600;transition:all .15s}.button.secondary{color:#525c62;background:white;border:1px solid #e3e7e9}.button.secondary:hover{background:#f8f9fa;border-color:#cfd5d8}.button.primary{background:#27312f;border:1px solid #27312f;color:#e6f8ba;box-shadow:0 2px 4px #1d28201a}.button.primary:hover{background:#38433c}.metrics-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:28px}.metric-card{height:122px;background:#fff;border:1px solid #e9ecef;border-radius:8px;padding:15px 16px 11px;box-shadow:0 1px 2px #16212b05;position:relative;overflow:hidden}.metric-top{display:flex;align-items:center;justify-content:space-between;color:#818b90;font-size:10px}.metric-icon{width:25px;height:25px;border-radius:7px;display:grid;place-items:center}.metric-icon.green{background:#f0f6e6;color:#7c9e43}.metric-icon.violet{background:#f2effa;color:#8773b2}.metric-icon.amber{background:#fbf3e7;color:#d39d4f;font-size:14px;font-weight:700}.metric-icon.blue{background:#ebf3f7}.processing-dot{width:7px;height:7px;border-radius:50%;background:#69a0b2;box-shadow:0 0 0 3px #d1e6ed}.metric-value{font:700 23px 'Manrope',sans-serif;letter-spacing:-.8px;color:#293136;margin-top:7px}.metric-value small{font:600 12px 'Manrope';letter-spacing:0;color:#727d81}.metric-value .metric-unit{font:500 10px 'DM Sans';color:#8b9599;margin-left:3px}.metric-foot{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:9px;color:#a0a8ac;white-space:nowrap}.trend{font-size:9px;font-weight:600}.trend.up{color:#6e9d49}.trend.down{color:#c28364}.metric-note{color:#91a0a2}.sparkline{height:23px;display:flex;align-items:flex-end;gap:3px;position:absolute;right:15px;bottom:12px;opacity:.8}.sparkline i{width:3px;border-radius:3px 3px 0 0;background:#d5e4bd;height:8px}.sparkline i:nth-child(2n){height:12px}.sparkline i:nth-child(3n){height:17px}.sparkline i:nth-child(4n){height:10px}.sparkline i:nth-child(5n){height:20px}.sparkline i:nth-child(7n){height:15px}.sparkline i:last-child{height:22px;background:#9dbb71}.sparkline.purple i{background:#e0d9f0}.sparkline.purple i:last-child{background:#9e8cc4}.sparkline.orange i{background:#f2e2c8}.sparkline.orange i:last-child{background:#d6ab6c}.sparkline.blue-line i{background:#d4e7eb}.sparkline.blue-line i:last-child{background:#85b2be}.orders-section{background:#fff;border:1px solid #e8ebed;border-radius:8px;box-shadow:0 1px 2px #16212b05;overflow:hidden}.section-top{padding:20px 20px 17px;display:flex;align-items:center;justify-content:space-between}.section-top h2{margin:0;color:#293136;font:700 15px 'Manrope',sans-serif;letter-spacing:-.2px}.section-top h2 span{font:600 10px 'DM Sans';vertical-align:2px;color:#90999d;background:#f1f3f4;padding:3px 6px;border-radius:4px;margin-left:4px}.section-top p{color:#9aa2a6;font-size:10px;margin:5px 0 0}.range-button{height:31px;padding:0 10px;border:1px solid #e5e9eb;background:#fff;border-radius:5px;display:flex;align-items:center;gap:12px;color:#687379;font-size:9px}.range-button:hover{border-color:#cbd2d6}.range-button svg{color:#9aa3a7}.table-toolbar{height:52px;padding:0 17px;border-top:1px solid #eff1f2;border-bottom:1px solid #eff1f2;display:flex;align-items:center;justify-content:space-between}.toolbar-left{display:flex;align-items:center;gap:8px}.search-box{height:30px;width:226px;border:1px solid #e7eaec;border-radius:5px;display:flex;align-items:center;gap:7px;padding:0 8px;color:#96a0a4}.search-box:focus-within{border-color:#adbf83;box-shadow:0 0 0 2px #d5e8b244}.search-box input{border:0;outline:none;min-width:0;flex:1;font-size:10px;color:#414b50}.search-box input::placeholder{color:#a0a8ac}.search-box kbd{font:9px 'DM Sans';border:1px solid #e6e9eb;border-radius:3px;padding:2px 4px;color:#a0a8ac}.filter-button,.group-button{height:30px;border:1px solid #e7eaec;border-radius:5px;background:#fff;color:#667177;display:flex;align-items:center;gap:6px;padding:0 9px;font-size:9px}.filter-button:hover,.group-button:hover{border-color:#cfd6d9;background:#fbfcfc}.filter-count{background:#eef2e5;color:#6e824d;padding:2px 5px;border-radius:3px;font-weight:700}.group-button{border-color:transparent;padding-left:8px}.group-button.on{color:#717c81}.group-button b{font-weight:600;color:#414c51}.group-icon{font-size:14px;color:#839088}.table-settings{border:1px solid #e6eaec;width:30px;height:30px;border-radius:5px}.table-settings:hover{background:#f6f8f8}.selection-bar{height:39px;background:#f5f8ec;border-bottom:1px solid #e8eddd;display:flex;align-items:center;gap:13px;padding:0 17px;color:#67734d;font-size:10px}.selection-bar button{border:0;background:transparent;padding:0;color:#727e59;font-size:9px}.selection-bar button:hover{color:#36432e}.selection-bar .selection-spacer{flex:1}.selection-action{border:1px solid #dfe6ce!important;border-radius:4px;padding:5px 7px!important;display:flex;align-items:center;gap:5px}.selection-more{display:grid;place-items:center;width:22px;height:23px}.table-scroll{overflow:auto}.orders-table{border-collapse:collapse;width:100%;min-width:950px;table-layout:auto}.orders-table thead{background:#fafbfb}.orders-table th{height:38px;border-bottom:1px solid #edf0f1;color:#929ca0;font-size:9px;font-weight:600;text-align:left;white-space:nowrap}.orders-table th>span{display:flex;align-items:center;gap:6px}.orders-table th[draggable=\"true\"]{cursor:grab;user-select:none}.orders-table th[draggable=\"true\"]:active{cursor:grabbing}.orders-table th .dragging{opacity:.4}.drag-dots{font-size:13px;color:#c1c8ca;opacity:0;transition:opacity .12s}.orders-table th:hover .drag-dots{opacity:1}.check-column{width:42px!important;padding-left:17px!important;padding-right:4px!important}.orders-table input[type=checkbox]{appearance:none;width:13px;height:13px;border:1px solid #cbd2d5;border-radius:3px;background:#fff;margin:0;vertical-align:middle;cursor:pointer;position:relative}.orders-table input[type=checkbox]:checked{border-color:#758c4f;background:#819b56}.orders-table input[type=checkbox]:checked:after{content:'';position:absolute;left:3px;top:1px;width:4px;height:7px;border:solid #fff;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}.orders-table tbody tr:not(.group-row){height:55px;border-bottom:1px solid #f0f2f3;transition:background .12s}.orders-table tbody tr:not(.group-row):hover{background:#fbfcfa}.orders-table tbody tr.selected-row{background:#f7faef}.orders-table td{font-size:10px;color:#515c61;white-space:nowrap}.order-id{font:600 9px 'DM Sans';color:#718249;letter-spacing:.1px}.customer{display:flex;align-items:center;gap:9px}.avatar{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:8px;font-weight:700;flex:none}.avatar.lilac{background:#eee8f6;color:#7e6e99}.avatar.peach{background:#f8e9df;color:#aa765b}.avatar.mint{background:#e5f1e8;color:#5f8a6b}.avatar.blue{background:#e3edf2;color:#648493}.avatar.rose{background:#f4e4e8;color:#a2717c}.avatar.sand{background:#f0e9db;color:#99815b}.customer b{display:block;color:#3b454a;font-weight:600;font-size:10px}.customer small{display:block;color:#a1aaad;font-size:9px;margin-top:3px}.date-cell{color:#778287}.product-cell{color:#606a6e}.amount-cell{font-size:10px;color:#394349;font-weight:600}.status{display:inline-flex;align-items:center;gap:6px;padding:4px 7px;border-radius:4px;font-size:9px;font-weight:500}.status i,.group-status-dot{width:6px;height:6px;border-radius:50%;display:inline-block}.status-pending{background:#f8f2e8;color:#aa8850}.status-pending i,.group-status-dot.pending{background:#caa563}.status-sent{background:#eaf2f5;color:#6b919f}.status-sent i,.group-status-dot.sent{background:#78a5b4}.status-done{background:#edf4e9;color:#789463}.status-done i,.group-status-dot.done{background:#8eac74}.status-cancelled{background:#f7eded;color:#ad7773}.status-cancelled i,.group-status-dot.cancelled{background:#c08480}.channel-cell{display:inline-flex;align-items:center;gap:6px;color:#768185}.channel-mark{width:17px;height:17px;border:1px solid #ebeff0;border-radius:4px;display:grid;place-items:center;font-size:11px;color:#82927b}.row-actions-head{width:37px}.row-actions{width:37px;text-align:center}.row-actions button{border:0;background:transparent;color:#a5adb0;display:inline-grid;place-items:center;width:25px;height:26px;border-radius:4px}.row-actions button:hover{color:#4f5c5f;background:#eef1ef}.group-row{height:34px;background:#fbfcfc;border-bottom:1px solid #f0f2f3}.group-row td{padding:0!important}.group-row button{width:100%;height:100%;display:flex;align-items:center;gap:8px;padding:0 17px;border:0;background:transparent;text-align:left;color:#576166}.group-row button>svg{color:#a0a9ad}.group-row button b{font-size:9px;font-weight:600}.group-row button small{color:#a4acae;font-size:9px}.group-status-dot{width:6px;height:6px}.empty-state{text-align:center;height:100px;color:#90999d!important}.table-footer{height:51px;padding:0 17px;display:flex;align-items:center;color:#9ba4a8;font-size:9px}.table-footer>span b{color:#6a7479;font-weight:600}.pagination{display:flex;align-items:center;gap:3px;margin:0 auto}.pagination button{width:24px;height:24px;border:0;border-radius:4px;background:transparent;color:#7b858a;font-size:9px}.pagination button:hover:not(:disabled){background:#f1f4f3}.pagination button:disabled{color:#d2d7d9}.pagination .current-page{background:#eef2e7;color:#637747;font-weight:700}.pagination>span{font-size:10px;padding:0 2px}.per-page{display:flex;align-items:center;gap:10px;border:1px solid #e8ebed;background:white;height:26px;border-radius:4px;color:#7c868b;font-size:9px;padding:0 8px}.per-page svg{color:#a1a9ad}.page-footer{display:flex;align-items:center;justify-content:space-between;padding:18px 2px 0;color:#a3abad;font-size:9px}.page-footer>span:last-child{display:flex;align-items:center;gap:20px}.page-footer a{color:#838e92;text-decoration:none;cursor:pointer}.page-footer a:hover{color:#4d5a60}.status-online{display:flex;align-items:center;gap:5px}.status-online i{width:5px;height:5px;border-radius:50%;background:#84ae6b}
+@media(max-width:1180px){.page-content{padding-left:26px;padding-right:26px}.topbar{padding:0 26px}.metrics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric-card{height:116px}}
+@media(max-width:760px){.sidebar{width:64px;min-width:64px;padding:17px 9px 12px}.sidebar:not(.is-collapsed){width:64px;min-width:64px;padding:17px 9px 12px}.brand-row{padding:0;justify-content:center}.brand-name,.collapse-btn,.workspace-switch,.nav-caption,.nav-item span,.nav-item small,.sidebar-bottom{display:none!important}.brand-symbol{width:31px;height:31px}.side-nav{margin-top:32px;gap:7px}.nav-item{height:42px;justify-content:center;padding:0}.nav-item.active{box-shadow:inset 0 -2px #d5f378}.collapsed-profile{margin-top:auto}.main-area{width:calc(100% - 64px)}.topbar{height:58px;padding:0 16px}.top-user>span,.top-user>svg{display:none}.top-actions{gap:11px}.page-content{padding:24px 16px 18px}.page-heading{align-items:flex-start;gap:14px;flex-direction:column;margin-bottom:18px}.page-heading h1{font-size:24px}.heading-actions{width:100%}.heading-actions .button{flex:1}.metrics-grid{gap:9px;margin-bottom:18px}.metric-card{padding:12px;height:109px}.metric-top{font-size:9px}.metric-value{font-size:20px}.metric-foot{font-size:8px}.sparkline{right:9px;bottom:8px;opacity:.5}.section-top{padding:15px 13px}.section-top p{font-size:9px}.range-button{font-size:0;gap:0;width:32px;justify-content:center}.range-button svg{width:16px}.table-toolbar{padding:0 10px}.toolbar-left{gap:5px;flex:1}.search-box{width:min(43vw,226px)}.search-box kbd{display:none}.filter-button{font-size:0;gap:4px;padding:0 7px}.filter-button svg{width:16px}.filter-count{font-size:9px}.group-button{font-size:0;gap:4px;padding:0 4px}.group-button .group-icon{font-size:13px}.group-button b{font-size:9px}.group-button svg{width:12px}.table-settings{flex:none}.table-footer{padding:0 10px}.table-footer>span{font-size:8px}.pagination{gap:0}.pagination button{width:21px}.per-page{font-size:0;gap:0;width:25px;justify-content:center;padding:0}.per-page svg{width:14px}.page-footer{font-size:8px}.page-footer>span:last-child{gap:9px}.page-footer>span:last-child a:first-child{display:none}}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json contains only @gravity-ui/uikit and lacks @gravity-ui/navigation and @gravity-ui/table. src/App.tsx implements a custom <aside> and native <table> with hand-coded checkbox selection, draggable headers, and status grouping; it does not use AsideHeader, useTable, or ColumnReorderingProvider.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

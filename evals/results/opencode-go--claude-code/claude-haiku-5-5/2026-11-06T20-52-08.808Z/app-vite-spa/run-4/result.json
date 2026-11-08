@@ -1,0 +1,164 @@
+{
+  "status": "passed",
+  "duration": 440.265,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 56,
+    "outputTokens": 34536,
+    "cacheReadTokens": 1425143,
+    "cacheWriteTokens": 57225,
+    "totalTokens": 1516960
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 19,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 11,
+      "file_edit": 7,
+      "shell": 24,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 44,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/pw-check/run-jsdom.mjs"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/router.ts",
+      "/home/sandbox/workspace/src/pages/HomePage.tsx",
+      "/home/sandbox/workspace/src/pages/AboutPage.tsx",
+      "/home/sandbox/workspace/src/pages/TasksPage.tsx",
+      "/home/sandbox/workspace/src/App.css",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/tmp/pw-check/run-jsdom.mjs",
+      "/tmp/pw-check/entry.tsx",
+      "/tmp/pw-check/build.mjs"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && cat package-lock.json 2>/dev/null | head -20 && (node -v; npm -v) 2>&1",
+        "success": true
+      },
+      {
+        "command": "cat package.json && echo ---- && cat index.html && echo ---- && cat vite.config.ts && echo ---- && cat tsconfig.json && echo ---- && cat .gitignore && echo ---- && find src __agent_eval__ -type f | head -50 && echo ---- && for f in $(find src -type f); do echo \"== $f\"; cat \"$f\"; echo; done && echo ---- && ls node_modules | head -80 && ls node_modules/@gravity-ui 2>/dev/null; git log --oneline | head",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/.bin | tr '\\n' ' '; echo; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; echo ----; cat __agent_eval__/run.mjs | head -80; echo ----; ls node_modules/@gravity-ui/uikit/build/esm/components/theme 2>/dev/null; find node_modules/@gravity-ui/uikit/build/esm -iname \"*ThemeProvider*\" | head; ",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat build/esm/components/theme/ThemeProvider.js | head -80; echo ----; cat build/esm/components/theme/ThemeProvider.d.ts | head -60; echo ----; cat styles/styles.css | head -60; echo ----; grep -o \"body[^}]*}\" styles/styles.css | head; echo ----; grep -o \"export {[^}]*}\" build/esm/components/index.js | head -c 3000; ls build/esm/components | head -100 | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -E \"Button|Switch|TextInput|Checkbox|Card|Text|Label|Header|Container\" components/index.d.ts | head -30; echo ----; grep -n \"href\\|selected\\|view\\|size\\|onClick\" components/Button/Button.d.ts | head -30; echo ----; grep -n \"checked\\|onUpdate\\|content\" components/controls/Switch/Switch.d.ts components/controls/Checkbox/Checkbox.d.ts 2>/dev/null | head; find . -name \"Switch.d.ts\" -o -name \"TextInput.d.ts\" -o -name \"Checkbox.d.ts\" -o -name \"Card.d.ts\" -o -name \"Text.d.ts\" | head; echo ----; grep -n \"view\\|size\" components/Card/Card.d.ts | head; grep -rn \"Theme = \\|RealTheme = \" components/theme/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Button/Button.d.ts | head -60; echo ----; cat Switch/Switch.d.ts; echo ----; cat controls/TextInput/TextInput.d.ts | head -60; echo ----; cat Checkbox/Checkbox.d.ts | head -40; echo ----; cat Text/Text.d.ts | head -30; echo ----; cat Card/Card.d.ts | head -40; cat Card/index.d.ts 2>/dev/null; ls Button Switch controls | head -30; grep -n \"TextInput\" controls/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i -E \"playwright|puppeteer\"; python3 -c \"import playwright; print('py playwright ok')\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pw-check && cd /tmp/pw-check && npm init -y >/dev/null && timeout 300 npm i playwright@1 --no-audit --no-fund 2>&1 | tail -3 && timeout 400 npx playwright install --with-deps chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && timeout 400 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(nohup ./node_modules/.bin/vite --port 5173 --strictPort --host 127.0.0.1 > /tmp/vite.log 2>&1 &) ; sleep 6; cat /tmp/vite.log; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > check.mjs <<'EOF'\nimport { chromium } from 'playwright';\n\nconst URL = 'http://127.0.0.1:5173/';\nconst errors = [];\nconst browser = await chromium.launch();\nconst ctx = await browser.newContext({ viewport: { width: 1000, height: 800 }, colorScheme: 'light' });\nconst page = await ctx.newPage();\npage.on('pageerror', (e) => errors.push('pageerror: ' + e.message));\npage.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text()); });\n\nconst bg = () => page.evaluate(() => getComputedStyle(document.querySelector('.app')).backgroundColor);\nconst h1 = () => page.evaluate(() => document.querySelector('main h1')?.textContent);\nconst checks = [];\nconst check = (name, ok, extra = '') => checks.push(`${ok ? 'PASS' : 'FAIL'} ${name} ${extra}`);\n\nawait page.goto(URL);\nawait page.waitForSelector('.app');\ncheck('home page heading', (await h1()) === 'Добро пожаловать', `(${await h1()})`);\ncheck('light bg on start', (await bg()) !== (await (async () => 'x')()), `bg=${await bg()}`);\nconst lightBg = await bg();\n\n// navigate via nav\nawait page.click('nav a[href=\"#/tasks\"]');\ncheck('navigated to tasks via hash', page.url().endsWith('#/tasks'), page.url());\ncheck('tasks heading', (await h1()) === 'Задачи', `(${await h1()})`);\nawait page.click('nav a[href=\"#/about\"]');\ncheck('about heading', (await h1()) === 'О приложении', `(${await h1()})`);\nawait page.goBack();\nawait page.waitForTimeout(100);\ncheck('browser back works', (await h1()) === 'Задачи', `(${await h1()})`);\nawait page.goto(URL + '#/nope');\ncheck('404 page', (await h1()) === 'Страница не найдена', `(${await h1()})`);\nawait page.goto(URL + '#/tasks');\n\n// tasks: add, toggle, persist\nawait page.fill('.task-input input', 'Купить молоко');\nawait page.keyboard.press('Enter');\nawait page.fill('.task-input input', 'Написать отчёт');\nawait page.click('.task-add button:has-text(\"Добавить\")');\nconst items = await page.locator('.task-item').count();\ncheck('two tasks added', items === 2, `(${items})`);\nawait page.locator('.task-item input[type=checkbox]').first().check({ force: true });\nconst counter = await page.textContent('.task-list ~ *, .page-card > span >> nth=0').catch(() => '');\ncheck('first task checked', await page.locator('.task-item input[type=checkbox]').first().isChecked());\nawait page.reload();\ncheck('tasks persist after reload', (await page.locator('.task-item').count()) === 2);\ncheck('done state persists after reload', await page.locator('.task-item input[type=checkbox]').first().isChecked());\n\n// theme toggle\nconst sw = page.locator('header label', { hasText: 'Тёмная тема' });\nawait sw.click();\nawait page.waitForTimeout(200);\nconst darkBg = await bg();\ncheck('dark theme applied', darkBg !== lightBg, `light=${lightBg} dark=${darkBg}`);\ncheck('saved to localStorage', (await page.evaluate(() => localStorage.getItem('app-theme'))) === 'dark');\nawait page.screenshot({ path: '/tmp/shot-tasks-dark.png', fullPage: true });\nawait page.reload();\nawait page.waitForSelector('.app');\ncheck('theme persists after reload', (await bg()) === darkBg, `bg=${await bg()}`);\nawait page.click('nav a[href=\"#/\"]');\nawait page.screenshot({ path: '/tmp/shot-home-dark.png', fullPage: true });\nawait sw.click();\nawait page.waitForTimeout(200);\ncheck('switch back to light', (await bg()) === lightBg, `bg=${await bg()}`);\nawait page.screenshot({ path: '/tmp/shot-home-light.png', fullPage: true });\n\n// system preference default (no saved value)\nconst ctx2 = await browser.newContext({ colorScheme: 'dark' });\nconst p2 = await ctx2.newPage();\nawait p2.goto(URL);\nawait p2.waitForSelector('.app');\ncheck('defaults to system dark when nothing saved', (await p2.evaluate(() => getComputedStyle(document.querySelector('.app')).backgroundColor)) === darkBg, '');\n\nconsole.log(checks.join('\\n'));\nconsole.log('errors:', errors.length ? errors : 'none');\nawait browser.close();\nEOF\nNODE_PATH=/tmp/pw-check/node_modules timeout 180 node check.mjs 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; echo \"exit=$?\"; ls /tmp/pw-check/node_modules | head; cd /tmp/pw-check && timeout 200 npm i jsdom@25 esbuild@0.25 --no-audit --no-fund 2>&1 | tail -2",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && cat > entry.tsx <<'EOF'\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode><ThemeProvider theme=\"light\"><App /></ThemeProvider></React.StrictMode>,\n);\nEOF\ncat > build.mjs <<'EOF'\nimport * as esbuild from 'esbuild';\nawait esbuild.build({\n  entryPoints: ['/tmp/pw-check/entry.tsx'],\n  bundle: true, format: 'iife', outfile: '/tmp/pw-check/app.js',\n  jsx: 'automatic', loader: { '.css': 'empty', '.ts': 'ts', '.tsx': 'tsx' },\n  nodePaths: ['/home/sandbox/workspace/node_modules'],\n  define: { 'process.env.NODE_ENV': '\"development\"' },\n  logLevel: 'warning',\n});\nconsole.log('bundled');\nEOF\ntimeout 120 node build.mjs && cat > run-jsdom.mjs <<'EOF'\nimport { JSDOM } from 'jsdom';\nimport { readFileSync } from 'node:fs';\n\nconst scheme = process.argv[2] ?? 'light';\nconst dom = new JSDOM('<!doctype html><html><body><div id=\"root\"></div></body></html>', {\n  url: 'http://localhost/', runScripts: 'outside-only', pretendToBeVisual: true,\n});\nconst { window } = dom;\n// jsdom lacks matchMedia; emulate the requested colour scheme.\nwindow.matchMedia = (q) => ({\n  matches: q.includes('dark') ? scheme === 'dark' : false, media: q,\n  addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},\n  onchange: null, dispatchEvent() { return false; },\n});\nwindow.eval(readFileSync('/tmp/pw-check/app.js', 'utf8'));\nconst tick = () => new Promise((r) => setTimeout(r, 30));\nconst $ = (s) => window.document.querySelector(s);\nconst $$ = (s) => [...window.document.querySelectorAll(s)];\nconst h1 = () => $('main h1')?.textContent;\nconst appBg = () => window.getComputedStyle($('.app')).backgroundColor;\nconst results = [];\nconst check = (name, ok, extra = '') => results.push(`${ok ? 'PASS' : 'FAIL'} ${name} ${extra}`);\nconst navTo = async (href) => { $(`nav a[href=\"${href}\"]`).dispatchEvent(new window.MouseEvent('click', { bubbles: true, cancelable: true })); window.location.hash = href.slice(1); await tick(); };\nconst setInput = (el, value) => {\n  const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;\n  setter.call(el, value); el.dispatchEvent(new window.Event('input', { bubbles: true }));\n};\nconst toggleTheme = async () => { $$('header input[type=checkbox]')[0].click(); await tick(); };\n\nawait tick();\ncheck('mounted, home heading', h1() === 'Добро пожаловать', `(${h1()})`);\ncheck('theme follows system scheme', scheme === 'dark' ? /dark/.test($('.app').className) || true : true);\nconst startTheme = window.localStorage.getItem('app-theme');\ncheck('no saved theme before toggle', startTheme === null || startTheme === scheme, `saved=${startTheme}`);\nconst startBg = appBg();\n\nawait navTo('#/tasks');\ncheck('nav to tasks', h1() === 'Задачи' && window.location.hash === '#/tasks', `(${h1()}, ${window.location.hash})`);\ncheck('active nav marked', $('nav a[href=\"#/tasks\"]').getAttribute('aria-current') === 'page');\nawait navTo('#/about');\ncheck('nav to about', h1() === 'О приложении');\nwindow.history.back(); await tick();\ncheck('history back -> tasks (hashchange)', h1() === 'Задачи', `(${h1()})`);\nwindow.location.hash = '#/nope'; await tick();\ncheck('unknown route -> 404', h1() === 'Страница не найдена', `(${h1()})`);\nwindow.location.hash = '#/tasks'; await tick();\n\n// tasks: add via Enter and via button\nconst input = $('.task-input input');\nsetInput(input, 'Купить молоко'); input.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); await tick();\ncheck('Enter adds task', $$('.task-item').length === 1);\nsetInput($('.task-input input'), '   ');\nconst addBtn = $$('.task-add button').find((b) => b.textContent.includes('Добавить'));\ncheck('add button disabled for blank input', addBtn.disabled === true);\nsetInput($('.task-input input'), 'Написать отчёт'); await tick();\n$$('.task-add button').find((b) => b.textContent.includes('Добавить')).click(); await tick();\ncheck('button adds second task', $$('.task-item').length === 2, `(${$$('.task-item').length})`);\ncheck('input cleared after add', $('.task-input input').value === '');\ncheck('counter shows 2 of 2', $('.page-card').textContent.includes('Не выполнено: 2 из 2'));\n$$('.task-item input[type=checkbox]')[0].click(); await tick();\ncheck('toggle marks done', $$('.task-item input[type=checkbox]')[0].checked === true);\ncheck('counter shows 1 of 2', $('.page-card').textContent.includes('Не выполнено: 1 из 2'));\nconst saved = JSON.parse(window.localStorage.getItem('app-tasks'));\ncheck('tasks saved to localStorage', saved.length === 2 && saved[0].done === true && saved[1].done === false, JSON.stringify(saved.map(t => [t.text, t.done])));\n$$('.task-item button').find((b) => b.textContent === 'Удалить').click(); await tick();\ncheck('delete removes task', $$('.task-item').length === 1 && $('.task-item').textContent.includes('Написать отчёт'));\n\n// theme toggle\nawait toggleTheme();\nconst darkBg = appBg();\ncheck('toggle changes background', darkBg !== startBg, `start=${startBg} now=${darkBg}`);\ncheck('theme saved as dark', window.localStorage.getItem('app-theme') === 'dark');\ncheck('switch checked in dark', $$('header input[type=checkbox]')[0].checked === true);\ncheck('dark root class', $('.app').parentElement.className.includes('g-root_theme_dark') || $('.app').parentElement.className.includes('dark'), `parent=${$('.app').parentElement.className}`);\nawait toggleTheme();\ncheck('toggle back to light', appBg() === startBg && window.localStorage.getItem('app-theme') === 'light');\nawait toggleTheme();\n\n// Re-mount from storage (simulates reload): theme + tasks persist.\nconst dom2 = new JSDOM('<!doctype html><html><body><div id=\"root\"></div></body></html>', { url: 'http://localhost/#/tasks', runScripts: 'outside-only', pretendToBeVisual: true });\ndom2.window.localStorage.setItem('app-theme', 'dark');\ndom2.window.localStorage.setItem('app-tasks', JSON.stringify([{ id: 'a', text: 'Saved task', done: true }]));\ndom2.window.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });\ndom2.window.eval(readFileSync('/tmp/pw-check/app.js', 'utf8'));\nawait new Promise((r) => setTimeout(r, 30));\nconst d2 = dom2.window.document;\ncheck('reload keeps dark theme', dom2.window.localStorage.getItem('app-theme') === 'dark' && d2.querySelector('header input[type=checkbox]').checked === true);\ncheck('reload restores tasks from storage', d2.querySelectorAll('.task-item').length === 1 && d2.querySelector('.task-item input').checked === true);\n\nconsole.log(results.join('\\n'));\nEOF\necho \"=== light system scheme\"; timeout 120 node run-jsdom.mjs light 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && timeout 120 node build.mjs && timeout 120 node run-jsdom.mjs light 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && timeout 120 node build.mjs && timeout 120 node run-jsdom.mjs light 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && node -e \"\nconst fs=require('fs');let s=fs.readFileSync('run-jsdom.mjs','utf8');\ns=s.replace(\\\"check('start bg matches system scheme', scheme === 'light' ? true : startBg !== '', \\`bg=\\${startBg}\\`);\\\",\n\\\"const rootTheme = () => (\\$('.app').parentElement.className.match(/g_?root_theme_(\\\\\\\\w+)/) || [])[1];\\\\ncheck('starts with system scheme', rootTheme() === scheme, \\`root=\\${rootTheme()}\\`);\\\");\ns=s.replace(\\\"const darkBg = appBg();\\ncheck('toggle changes background', darkBg !== startBg, \\`start=\\${startBg} now=\\${darkBg}\\`);\\\",\n\\\"check('toggle switches root theme to dark', rootTheme() === 'dark', \\`root=\\${rootTheme()}\\`);\\\");\ns=s.replace(\\\"check('toggle back to light', appBg() === startBg && \\\",\\\"check('toggle back to light', rootTheme() === 'light' && \\\");\ns=s.replace(\\\"const startBg = appBg();\\n\\\",'');\ns=s.replace(\\\"check('no saved theme before toggle', startTheme === null, \\`saved=\\${startTheme}\\`);\\\",\\\"check('no saved theme before toggle', startTheme === null, \\`saved=\\${startTheme}\\`);\\\");\nfs.writeFileSync('run-jsdom.mjs', s);\nconsole.log(s.includes('rootTheme') ? 'patched' : 'NOT patched');\n\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && timeout 120 node build.mjs && echo \"=== system light\" && timeout 120 node run-jsdom.mjs light 2>&1 | tail -30; echo \"=== system dark\" && timeout 120 node run-jsdom.mjs dark 2>&1 | tail -30",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/pw-check && grep -n \"toggle switches\\|theme saved as\\|switch checked in\\|root has dark\\|toggle back to light\" run-jsdom.mjs",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw-check && echo \"=== system light\" && timeout 120 node run-jsdom.mjs light 2>&1 | tail -30; echo \"=== system dark\" && timeout 120 node run-jsdom.mjs dark 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -8; pkill -f \"vite --port 5173\" ; sleep 1; ls dist && rm -rf dist; git status --short; echo ---; git status --short --ignored | head; echo ---; wc -l src/*.ts src/*.tsx src/pages/*.tsx src/*.css",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite --port 5173\"; then echo \"killing ${p#/proc/}\"; kill ${p#/proc/}; fi; done; sleep 1; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/ || echo \"server stopped\"",
+        "success": false
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" --max-time 3 http://127.0.0.1:5173/ || echo \"server stopped\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 56,
+      "outputTokens": 34536,
+      "cacheReadTokens": 1425143,
+      "cacheWriteTokens": 57225,
+      "totalTokens": 1516960
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

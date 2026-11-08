@@ -1,0 +1,221 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (4 tests | 2 failed) 22568ms
+   ✓ imports @gravity-ui/uikit 1ms
+   ✓ no @tanstack/react-table dependency 0ms
+   × no raw HTML <table> 2ms
+     → expected 'import { useMemo, useState } from \'r…' not to match /<table[\s>]/
+   × judge: implements the task with the intended Gravity UI API 22564ms
+     → [judge:environment] FAIL — The data table is @gravity-ui/uikit's Table with column sorting (withTableSorting or an equivalent uikit mechanism), checkbox row selection (withTableSelection with selectedIds/onSelectionChange or equivalent) and pagination through uikit's Pagination component driving the displayed slice of rows.
+  reason: src/App.tsx renders a native <table> and implements sorting and row selection with local state and custom buttons/checkboxes; it does not use @gravity-ui/uikit Table or withTableSorting/withTableSelection. Pagination is a custom <div> of buttons, while displayed rows are sliced manually with pageEmployees, and no uikit Pagination component drives that slice.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  14:08:18
+   Duration  22.73s (transform 32ms, setup 18ms, collect 12ms, tests 22.57s, environment 0ms, prepare 45ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no raw HTML <table>
+AssertionError: expected 'import { useMemo, useState } from \'r…' not to match /<table[\s>]/
+
+[32m- Expected:[39m 
+/<table[\s>]/
+
+[31m+ Received:[39m 
+"import { useMemo, useState } from 'react';
+import './app.css';
+
+type Employee = {
+  id: number;
+  name: string;
+  initials: string;
+  color: string;
+  email: string;
+  role: string;
+  department: string;
+  status: 'Активен' | 'В отпуске' | 'Неактивен';
+  startDate: string;
+  salary: number;
+};
+
+type SortKey = 'name' | 'role' | 'department' | 'status' | 'startDate' | 'salary';
+
+const employees: Employee[] = [
+  { id: 1, name: 'Александр Смирнов', initials: 'АС', color: 'lavender', email: 'a.smirnov@northstar.ru', role: 'Руководитель продукта', department: 'Продукт', status: 'Активен', startDate: '2021-03-15', salary: 245000 },
+  { id: 2, name: 'Мария Кузнецова', initials: 'МК', color: 'peach', email: 'm.kuznetsova@northstar.ru', role: 'Дизайнер интерфейсов', department: 'Дизайн', status: 'Активен', startDate: '2022-06-01', salary: 185000 },
+  { id: 3, name: 'Дмитрий Волков', initials: 'ДВ', color: 'mint', email: 'd.volkov@northstar.ru', role: 'Frontend-разработчик', department: 'Разработка', status: 'В отпуске', startDate: '2020-11-23', salary: 220000 },
+  { id: 4, name: 'Анна Морозова', initials: 'АМ', color: 'blue', email: 'a.morozova@northstar.ru', role: 'Менеджер проектов', department: 'Операции', status: 'Активен', startDate: '2023-02-06', salary: 170000 },
+  { id: 5, name: 'Илья Петров', initials: 'ИП', color: 'rose', email: 'i.petrov@northstar.ru', role: 'Backend-разработчик', department: 'Разработка', status: 'Активен', startDate: '2021-09-13', salary: 230000 },
+  { id: 6, name: 'Екатерина Соколова', initials: 'ЕС', color: 'yellow', email: 'e.sokolova@northstar.ru', role: 'Специалист по маркетингу', department: 'Маркетинг', status: 'Неактивен', startDate: '2019-05-20', salary: 155000 },
+  { id: 7, name: 'Никита Орлов', initials: 'НО', color: 'mint', email: 'n.orlov@northstar.ru', role: 'Аналитик данных', department: 'Аналитика', status: 'Активен', startDate: '2022-10-10', salary: 195000 },
+  { id: 8, name: 'Ольга Васильева', initials: 'ОВ', color: 'peach', email: 'o.vasilyeva@northstar.ru', role: 'HR-партнёр', department: 'Люди', status: 'Активен', startDate: '2020-01-27', salary: 165000 },
+  { id: 9, name: 'Сергей Фёдоров', initials: 'СФ', color: 'blue', email: 's.fedorov@northstar.ru', role: 'QA-инженер', department: 'Разработка', status: 'В отпуске', startDate: '2023-08-14', salary: 160000 },
+  { id: 10, name: 'Полина Николаева', initials: 'ПН', color: 'rose', email: 'p.nikolaeva@northstar.ru', role: 'Контент-менеджер', department: 'Маркетинг', status: 'Активен', startDate: '2022-01-17', salary: 145000 },
+  { id: 11, name: 'Максим Павлов', initials: 'МП', color: 'lavender', email: 'm.pavlov@northstar.ru', role: 'Системный администратор', department: 'ИТ', status: 'Активен', startDate: '2018-07-02', salary: 180000 },
+  { id: 12, name: 'Виктория Белова', initials: 'ВБ', color: 'yellow', email: 'v.belova@northstar.ru', role: 'Финансовый аналитик', department: 'Финансы', status: 'Неактивен', startDate: '2021-12-06', salary: 190000 },
+  { id: 13, name: 'Роман Захаров', initials: 'РЗ', color: 'peach', email: 'r.zakharov@northstar.ru', role: 'Мобильный разработчик', department: 'Разработка', status: 'Активен', startDate: '2024-01-15', salary: 215000 },
+  { id: 14, name: 'София Андреева', initials: 'СА', color: 'mint', email: 's.andreeva@northstar.ru', role: 'Исследователь UX', department: 'Дизайн', status: 'Активен', startDate: '2023-04-24', salary: 175000 },
+  { id: 15, name: 'Тимур Егоров', initials: 'ТЕ', color: 'blue', email: 't.egorov@northstar.ru', role: 'Технический писатель', department: 'Продукт', status: 'Активен', startDate: '2020-04-06', salary: 150000 },
+  { id: 16, name: 'Дарья Михайлова', initials: 'ДМ', color: 'rose', email: 'd.mikhailova@northstar.ru', role: 'Рекрутер', department: 'Люди', status: 'В отпуске', startDate: '2022-08-29', salary: 140000 },
+  { id: 17, name: 'Кирилл Семёнов', initials: 'КС', color: 'yellow', email: 'k.semenov@northstar.ru', role: 'DevOps-инженер', department: 'ИТ', status: 'Активен', startDate: '2019-11-11', salary: 225000 },
+  { id: 18, name: 'Алина Григорьева', initials: 'АГ', color: 'lavender', email: 'a.grigorieva@northstar.ru', role: 'Бизнес-аналитик', department: 'Аналитика', status: 'Активен', startDate: '2024-03-04', salary: 185000 },
+];
+
+const pageSize = 7;
+const formatDate = (date: string) => new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(`${date}T00:00:00`));
+const formatSalary = (salary: number) => new Intl.NumberFormat('ru-RU').format(salary) + ' ₽';
+
+export function App() {
+  const [sortKey, setSortKey] = useState<SortKey>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<number[]>([]);
+
+  const sortedEmployees = useMemo(() => [...employees].sort((a, b) => {
+    const first = a[sortKey];
+    const second = b[sortKey];
+    const result = typeof first === 'number' && typeof second === 'number'
+      ? first - second
+      : String(first).localeCompare(String(second), 'ru');
+    return sortDirection === 'asc' ? result : -result;
+  }), [sortKey, sortDirection]);
+
+  const pageCount = Math.ceil(sortedEmployees.length / pageSize);
+  const pageEmployees = sortedEmployees.slice((page - 1) * pageSize, page * pageSize);
+  const allOnPageSelected = pageEmployees.every((employee) => selected.includes(employee.id));
+  const firstItem = (page - 1) * pageSize + 1;
+  const lastItem = Math.min(page * pageSize, employees.length);
+
+  const changeSort = (key: SortKey) => {
+    if (key === sortKey) setSortDirection((direction) => direction === 'asc' ? 'desc' : 'asc');
+    else {
+      setSortKey(key);
+      setSortDirection('asc');
+    }
+  };
+
+  const toggleRow = (id: number) => setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  const togglePage = () => setSelected((current) => allOnPageSelected
+    ? current.filter((id) => !pageEmployees.some((employee) => employee.id === id))
+    : [...new Set([...current, ...pageEmployees.map((employee) => employee.id)])]);
+
+  const sortButton = (key: SortKey, label: string, align?: string) => (
+    <th className={align ? `align-${align}` : ''} aria-sort={sortKey === key ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}>
+      <button className=\"sort-button\" onClick={() => changeSort(key)}>
+        {label}<span className={`sort-indicator ${sortKey === key ? 'is-active' : ''}`}>{sortKey === key ? (sortDirection === 'asc' ? '↑' : '↓') : '↕'}</span>
+      </button>
+    </th>
+  );
+
+  return (
+    <main className=\"workspace\">
+      <aside className=\"sidebar\">
+        <div className=\"brand\"><span className=\"brand-mark\">n</span><span>northstar</span></div>
+        <div className=\"workspace-label\">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+        <nav className=\"nav-list\" aria-label=\"Основная навигация\">
+          <a className=\"nav-item\" href=\"#overview\"><span className=\"nav-icon\">◫</span>Обзор</a>
+          <a className=\"nav-item\" href=\"#projects\"><span className=\"nav-icon\">▦</span>Проекты</a>
+          <a className=\"nav-item active\" href=\"#team\" aria-current=\"page\"><span className=\"nav-icon\">♧</span>Команда<span className=\"nav-chevron\">⌄</span></a>
+          <a className=\"nav-subitem selected\" href=\"#employees\">Сотрудники</a>
+          <a className=\"nav-subitem\" href=\"#departments\">Отделы</a>
+          <a className=\"nav-item\" href=\"#reports\"><span className=\"nav-icon\">▤</span>Отчёты</a>
+        </nav>
+        <div className=\"sidebar-bottom\">
+          <div className=\"help-card\"><span className=\"help-spark\">✳</span><strong>Нужна помощь?</strong><span>Загляните в центр поддержки</span><a href=\"#help\">Открыть справку <span>↗</span></a></div>
+          <div className=\"profile\"><div className=\"profile-avatar\">ЕП</div><div className=\"profile-info\"><strong>Елена Петрова</strong><span>Администратор</span></div><span className=\"profile-menu\">···</span></div>
+        </div>
+      </aside>
+
+      <section className=\"main-content\">
+        <header className=\"topbar\"><div className=\"breadcrumbs\">Команда <span>/</span> <strong>Сотрудники</strong></div><div className=\"topbar-actions\"><button className=\"icon-button\" aria-label=\"Уведомления\">♧<i /></button><div className=\"topbar-divider\" /><span className=\"topbar-avatar\">ЕП</span></div></header>
+        <div className=\"content-wrap\">
+          <div className=\"page-heading\">
+            <div><div className=\"eyebrow\">КОМАНДА</div><h1>Сотрудники</h1><p>Управляйте сотрудниками и следите за составом команды.</p></div>
+            <div className=\"heading-note\"><span className=\"online-dot\" />Команда растёт</div>
+          </div>
+
+          <div className=\"stats-row\" aria-label=\"Сводка по сотрудникам\">
+            <div className=\"stat-card\"><div className=\"stat-top\"><span>Всего сотрудников</span><span className=\"stat-icon purple\">♧</span></div><div className=\"stat-number\">{employees.length}<span className=\"stat-unit\">человек</span></div><div className=\"stat-foot\"><span className=\"trend\">↗ 12%</span> за последние 6 месяцев</div></div>
+            <div className=\"stat-card\"><div className=\"stat-top\"><span>Активны сейчас</span><span className=\"stat-icon green\">●</span></div><div className=\"stat-number\">{employees.filter((employee) => employee.status === 'Активен').length}<span className=\"stat-unit\">человек</span></div><div className=\"stat-foot\"><span className=\"status-dot\" />Все отделы работают</div></div>
+            <div className=\"stat-card\"><div className=\"stat-top\"><span>Отделы</span><span className=\"stat-icon orange\">▦</span></div><div className=\"stat-number\">{new Set(employees.map((employee) => employee.department)).size}<span className=\"stat-unit\">направлений</span></div><div className=\"stat-foot\">Больше всего — в разработке</div></div>
+          </div>
+
+          <section className=\"table-card\" aria-label=\"Список сотрудников\">
+            <div className=\"table-toolbar\"><div><h2>Все сотрудники <span className=\"count-pill\">{employees.length}</span></h2><p>Список всех участников команды</p></div><div className=\"toolbar-right\"><span className=\"table-updated\"><i />Данные актуальны</span></div></div>
+            {selected.length > 0 && <div className=\"selection-bar\"><span>Выбрано: <strong>{selected.length}</strong></span><button onClick={() => setSelected([])}>Снять выделение</button></div>}
+            <div className=\"table-scroll\"><table>
+              <thead><tr>
+                <th className=\"check-cell\"><input type=\"checkbox\" aria-label=\"Выбрать все строки на странице\" checked={allOnPageSelected} onChange={togglePage} /></th>
+                {sortButton('name', 'Сотрудник')}{sortButton('role', 'Должность')}{sortButton('department', 'Отдел')}{sortButton('status', 'Статус')}{sortButton('startDate', 'Дата приёма')}{sortButton('salary', 'Зарплата', 'right')}
+              </tr></thead>
+              <tbody>{pageEmployees.map((employee) => <tr key={employee.id} className={selected.includes(employee.id) ? 'row-selected' : ''}>
+                <td className=\"check-cell\"><input type=\"checkbox\" aria-label={`Выбрать ${employee.name}`} checked={selected.includes(employee.id)} onChange={() => toggleRow(employee.id)} /></td>
+                <td><div className=\"person-cell\"><div className={`avatar ${employee.color}`}>{employee.initials}</div><div className=\"person-copy\"><strong>{employee.name}</strong><span>{employee.email}</span></div></div></td>
+                <td className=\"muted-cell\">{employee.role}</td><td><span className=\"department-chip\">{employee.department}</span></td>
+                <td><span className={`status-pill ${employee.status === 'Активен' ? 'status-active' : employee.status === 'В отпуске' ? 'status-away' : 'status-inactive'}`}><i />{employee.status}</span></td>
+                <td className=\"muted-cell date-cell\">{formatDate(employee.startDate)}</td><td className=\"salary-cell\">{formatSalary(employee.salary)}</td>
+              </tr>)}</tbody>
+            </table></div>
+            <footer className=\"table-footer\"><span className=\"range-label\">Показано <strong>{firstItem}–{lastItem}</strong> из <strong>{employees.length}</strong> сотрудников</span><div className=\"pagination\"><button className=\"page-arrow\" aria-label=\"Предыдущая страница\" disabled={page === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>‹</button>{Array.from({ length: pageCount }, (_, index) => <button key={index + 1} className={`page-number ${page === index + 1 ? 'current' : ''}`} aria-current={page === index + 1 ? 'page' : undefined} onClick={() => setPage(index + 1)}>{index + 1}</button>)}<button className=\"page-arrow\" aria-label=\"Следующая страница\" disabled={page === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))}>›</button></div></footer>
+          </section>
+          <div className=\"page-footnote\"><span>✦</span>Данные обновлены сегодня в 09:41</div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#20232d;background:#f7f8fa;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-optical-sizing:auto;font-size:14px}*{box-sizing:border-box}body{margin:0;min-width:320px;min-height:100vh}button,a,input{font:inherit}button{cursor:pointer}.workspace{min-height:100vh}.sidebar{width:248px;position:fixed;inset:0 auto 0 0;background:#fff;border-right:1px solid #eceef2;display:flex;flex-direction:column;padding:28px 16px 14px;z-index:2}.brand{display:flex;align-items:center;gap:10px;padding:0 13px;margin-bottom:47px;color:#24263b;font-family:Manrope,sans-serif;font-size:18px;font-weight:800;letter-spacing:-.7px}.brand-mark{width:27px;height:27px;background:#6658d7;border-radius:9px;color:white;display:grid;place-items:center;font-size:20px;font-weight:800;line-height:1;transform:rotate(-6deg)}.workspace-label,.eyebrow{font-size:10px;font-weight:700;letter-spacing:1.1px;color:#a0a3af}.workspace-label{padding:0 13px;margin-bottom:13px}.nav-list{display:flex;flex-direction:column;gap:3px}.nav-item,.nav-subitem{color:#777b8a;text-decoration:none;display:flex;align-items:center;min-height:40px;border-radius:8px;padding:0 12px;font-weight:500;transition:background .15s,color .15s}.nav-item:hover,.nav-subitem:hover{background:#f7f6fc;color:#5548c4}.nav-item.active{color:#4d42b3;background:#f0effb;font-weight:600}.nav-icon{font-size:17px;width:27px;color:#9295a4}.active .nav-icon{color:#6459cb}.nav-chevron{margin-left:auto;color:#777b8a}.nav-subitem{min-height:34px;margin-left:37px;padding-left:13px;font-size:13px}.nav-subitem.selected{color:#554bc0;font-weight:600;position:relative}.nav-subitem.selected:before{content:'';position:absolute;left:0;width:2px;height:16px;background:#7167dc;border-radius:3px}.sidebar-bottom{margin-top:auto}.help-card{background:#f7f6fc;border:1px solid #eeecf8;border-radius:10px;padding:15px 14px 13px;margin:0 2px 20px;display:flex;flex-direction:column;align-items:flex-start;gap:5px}.help-spark{font-size:20px;color:#7468d8;margin-bottom:3px}.help-card strong{font-size:12px}.help-card>span:not(.help-spark){font-size:11px;color:#8c8e9a}.help-card a{margin-top:7px;text-decoration:none;color:#6459cb;font-size:11px;font-weight:600}.help-card a span{padding-left:4px}.profile{border-top:1px solid #eff0f3;padding:16px 7px 0;display:flex;align-items:center;gap:10px}.profile-avatar,.topbar-avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e7e2ff;color:#5b4caf;font-size:11px;font-weight:700}.profile-info{display:flex;flex-direction:column;gap:3px;min-width:0}.profile-info strong{font-size:11px;font-weight:600}.profile-info span{font-size:10px;color:#9a9ca7}.profile-menu{margin-left:auto;color:#8d8f9a;font-size:19px;letter-spacing:1px}.main-content{margin-left:248px;min-height:100vh}.topbar{height:68px;background:#fff;border-bottom:1px solid #eceef2;padding:0 52px;display:flex;align-items:center;justify-content:space-between}.breadcrumbs{color:#9295a1;font-size:12px}.breadcrumbs span{padding:0 10px;color:#c3c5cc}.breadcrumbs strong{color:#4c4f5c;font-weight:600}.topbar-actions{display:flex;align-items:center;gap:17px}.icon-button{border:0;background:none;color:#747787;font-size:18px;position:relative}.icon-button i{position:absolute;width:6px;height:6px;background:#e88f74;border:1px solid white;border-radius:50%;right:1px;top:2px}.topbar-divider{height:22px;width:1px;background:#eceef2}.topbar-avatar{width:30px;height:30px;font-size:10px}.content-wrap{max-width:1410px;padding:38px 52px 32px;margin:0 auto}.page-heading{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:25px}.eyebrow{margin-bottom:9px;color:#7772ba}h1{font-family:Manrope,sans-serif;letter-spacing:-1.15px;font-size:29px;line-height:1.2;margin:0 0 8px;font-weight:700;color:#242632}.page-heading p{margin:0;color:#8d909c;font-size:13px}.heading-note{font-size:11px;color:#868995;padding-bottom:3px;display:flex;align-items:center;gap:7px}.online-dot{width:7px;height:7px;background:#55b88b;border-radius:50%;box-shadow:0 0 0 3px #e6f5ed}.stats-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:24px}.stat-card{background:#fff;border:1px solid #eceef2;border-radius:10px;padding:16px 19px 15px;min-height:121px}.stat-top{display:flex;align-items:center;justify-content:space-between;color:#858895;font-size:11px;font-weight:500}.stat-icon{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:12px}.stat-icon.purple{color:#685ed0;background:#f1efff}.stat-icon.green{color:#48a981;background:#e9f7ef;font-size:8px}.stat-icon.orange{color:#ce8b50;background:#fff3e8}.stat-number{font-family:Manrope,sans-serif;font-size:24px;font-weight:700;letter-spacing:-.7px;margin:8px 0 5px}.stat-unit{font-family:'DM Sans',sans-serif;font-weight:400;font-size:11px;letter-spacing:0;color:#9a9ca6;margin-left:6px}.stat-foot{font-size:10px;color:#9a9ca6}.trend{color:#43a77d;font-weight:600;margin-right:5px}.status-dot{display:inline-block;width:6px;height:6px;background:#53b88a;border-radius:50%;margin:0 6px 1px 0}.table-card{background:#fff;border:1px solid #e9ebf0;border-radius:11px;overflow:hidden;box-shadow:0 2px 8px rgba(27,30,48,.025)}.table-toolbar{min-height:75px;padding:17px 21px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eff0f3}.table-toolbar h2{font-size:14px;margin:0 0 5px;font-weight:600;letter-spacing:-.1px}.table-toolbar p{font-size:11px;color:#9a9ca6;margin:0}.count-pill{display:inline-grid;place-items:center;vertical-align:1px;margin-left:5px;background:#f0effb;color:#655bc7;height:19px;min-width:21px;border-radius:10px;font-size:10px;font-weight:600;padding:0 6px}.toolbar-right{display:flex;gap:8px}.filter-button,.view-button{height:32px;padding:0 11px;background:white;border:1px solid #e8e9ed;border-radius:6px;color:#676a77;font-size:11px;font-weight:500}.filter-button>span:first-child{font-size:15px;color:#9698a3;margin-right:3px}.filter-count{background:#f0effb;color:#665cc6;padding:1px 5px;border-radius:8px;font-size:9px;margin-left:4px}.view-button{width:33px;padding:0;font-size:15px;color:#858895}.selection-bar{height:38px;background:#f4f3ff;border-bottom:1px solid #e8e6fa;padding:0 21px;display:flex;align-items:center;justify-content:space-between;color:#6259b2;font-size:11px}.selection-bar button{background:none;border:0;color:#6259b2;text-decoration:underline;font-size:11px}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;white-space:nowrap}thead{background:#fbfbfc}th{height:39px;color:#9699a5;font-size:10px;font-weight:600;letter-spacing:.15px;border-bottom:1px solid #eff0f3}th.check-cell,td.check-cell{width:46px;padding-left:21px;padding-right:8px}.check-cell input{appearance:none;-webkit-appearance:none;width:15px;height:15px;border:1px solid #d6d8df;border-radius:4px;background:#fff;margin:0;vertical-align:middle;cursor:pointer;position:relative}.check-cell input:checked{background:#685ed0;border-color:#685ed0}.check-cell input:checked:after{content:'✓';position:absolute;left:2px;top:-2px;color:white;font-size:12px;font-weight:700}.check-cell input:focus-visible{outline:3px solid #d9d5ff;outline-offset:2px}.sort-button{height:39px;border:0;background:none;color:inherit;padding:0;display:flex;align-items:center;gap:6px;font-size:inherit;font-weight:inherit;cursor:pointer}.sort-button:hover{color:#5850b3}.sort-indicator{font-size:13px;color:#c5c6cd}.sort-indicator.is-active{color:#655bc7}.align-right .sort-button{margin-left:auto;margin-right:17px}.align-right{text-align:right}.more-cell{width:41px;text-align:center;padding-right:9px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}tbody tr{height:59px;border-bottom:1px solid #f0f1f4;transition:background .12s}tbody tr:last-child{border-bottom:0}tbody tr:hover{background:#fafafe}tbody tr.row-selected{background:#f8f7ff}td{font-size:11px;color:#4f5260}.person-cell{display:flex;align-items:center;gap:10px;min-width:206px}.avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:700;flex:none}.avatar.lavender{background:#ebe8ff;color:#6257bf}.avatar.peach{background:#ffede4;color:#c17b57}.avatar.mint{background:#e1f4ec;color:#438b6c}.avatar.blue{background:#e3efff;color:#4e7faf}.avatar.rose{background:#ffe8ed;color:#bc6175}.avatar.yellow{background:#fff2d8;color:#a47c2f}.person-copy{display:flex;flex-direction:column;gap:3px}.person-copy strong{font-size:11px;font-weight:600;color:#333642}.person-copy span{font-size:10px;color:#a0a2ad}.muted-cell{color:#717481}.department-chip{background:#f5f5f8;padding:5px 8px;border-radius:5px;color:#737582;font-size:10px}.status-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:12px;font-size:10px;font-weight:500}.status-pill i{width:5px;height:5px;border-radius:50%;background:currentColor}.status-active{background:#eaf7ef;color:#398b62}.status-away{background:#fff5e5;color:#b27a28}.status-inactive{background:#f0f1f4;color:#858793}.date-cell{font-variant-numeric:tabular-nums}.salary-cell{text-align:right;padding-right:18px;font-weight:600;color:#4c4f5b;font-variant-numeric:tabular-nums}.row-more{border:0;background:none;color:#a1a3ae;font-size:17px;letter-spacing:1px;padding:4px 5px;line-height:1}.row-more:hover{color:#6259b2}.table-footer{border-top:1px solid #eff0f3;min-height:55px;padding:0 20px;display:flex;align-items:center;justify-content:space-between}.range-label{color:#9698a3;font-size:10px}.range-label strong{color:#656875;font-weight:600}.pagination{display:flex;align-items:center;gap:4px}.page-arrow,.page-number{width:27px;height:27px;border:0;background:white;border-radius:6px;color:#81838f;font-size:12px;display:grid;place-items:center}.page-arrow{border:1px solid #ececf0;font-size:17px}.page-arrow:disabled{color:#c9cad1;cursor:default}.page-number{font-size:11px}.page-number:hover{background:#f5f4fc;color:#6259bd}.page-number.current{background:#eeeefe;color:#5f56bd;font-weight:700}.page-footnote{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:14px;color:#a2a4ae;font-size:10px}.page-footnote span{color:#9389d8;font-size:13px}
+
+@media(max-width:1050px){.sidebar{width:210px}.main-content{margin-left:210px}.topbar{padding:0 30px}.content-wrap{padding:32px 30px}.table-scroll table{min-width:990px}}
+@media(max-width:760px){.sidebar{width:62px;padding:20px 8px 12px;align-items:center}.brand{padding:0;margin:0 0 36px}.brand>span:last-child,.workspace-label,.nav-item:not(.active),.nav-item.active:not(:has(.nav-icon)),.nav-item.active .nav-chevron,.nav-subitem,.sidebar-bottom{display:none}.nav-list{width:100%}.nav-item{justify-content:center;padding:0}.nav-icon{width:auto;font-size:20px}.nav-item.active{height:42px}.main-content{margin-left:62px}.topbar{height:58px;padding:0 20px}.content-wrap{padding:28px 18px}.page-heading{align-items:flex-start}.heading-note{display:none}.stats-row{grid-template-columns:1fr;gap:9px}.stat-card{min-height:100px}.table-toolbar{padding:15px}.table-scroll table{min-width:990px}.table-footer{padding:0 14px}.range-label{font-size:9px}}
+.table-updated{display:flex;align-items:center;gap:7px;color:#8c8f9a;font-size:10px}.table-updated i{width:6px;height:6px;background:#52b487;border-radius:50%}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:68:19
+     66| // A hand-built lowercase <table> means sorting/selection/pagination w…
+     67| test("no raw HTML <table>", () => {
+     68|   expect(src).not.toMatch(new RegExp("<table[\\s>]"));
+       |                   ^
+     69| });
+     70| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The data table is @gravity-ui/uikit's Table with column sorting (withTableSorting or an equivalent uikit mechanism), checkbox row selection (withTableSelection with selectedIds/onSelectionChange or equivalent) and pagination through uikit's Pagination component driving the displayed slice of rows.
+  reason: src/App.tsx renders a native <table> and implements sorting and row selection with local state and custom buttons/checkboxes; it does not use @gravity-ui/uikit Table or withTableSorting/withTableSelection. Pagination is a custom <div> of buttons, while displayed rows are sliced manually with pageEmployees, and no uikit Pagination component drives that slice.
+ ❯ EVAL.ts:75:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

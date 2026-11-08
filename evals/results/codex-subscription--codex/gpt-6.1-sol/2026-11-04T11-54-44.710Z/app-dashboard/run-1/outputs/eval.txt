@@ -1,0 +1,4112 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 23299ms
+   × imports @gravity-ui/navigation 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 1ms
+     → expected 'import React, { useEffect, useMemo, u…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 23293ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json includes only @gravity-ui/uikit, with no @gravity-ui/navigation or @gravity-ui/table; src/App.tsx implements its own <aside className="sidebar"> and native <table className="orders-table">. Column drag, selection, and status grouping are hand-coded, and there is no AsideHeader, useTable, or ColumnReorderingProvider.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  12:34:02
+   Duration  23.47s (transform 30ms, setup 15ms, collect 19ms, tests 23.30s, environment 0ms, prepare 43ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected 'import React, { useEffect, useMemo, u…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+"import React, { useEffect, useMemo, useRef, useState } from \"react\";
+import \"./styles.css\";
+
+type IconName =
+  | \"grid\"
+  | \"users\"
+  | \"bag\"
+  | \"settings\"
+  | \"chevron\"
+  | \"collapse\"
+  | \"search\"
+  | \"bell\"
+  | \"plus\"
+  | \"download\"
+  | \"arrow\"
+  | \"trend\"
+  | \"clock\"
+  | \"check\"
+  | \"wallet\"
+  | \"filter\"
+  | \"group\"
+  | \"columns\"
+  | \"more\"
+  | \"close\"
+  | \"help\"
+  | \"logout\"
+  | \"calendar\"
+  | \"grip\"
+  | \"external\"
+  | \"mail\"
+  | \"box\"
+  | \"refresh\";
+function Icon({
+  name,
+  size = 20,
+  ...props
+}: {
+  name: IconName;
+  size?: number;
+  className?: string;
+}) {
+  const paths: Record<IconName, React.ReactNode> = {
+    grid: (
+      <>
+        <rect x=\"3.5\" y=\"3.5\" width=\"6\" height=\"6\" rx=\"1.5\" />
+        <rect x=\"14.5\" y=\"3.5\" width=\"6\" height=\"6\" rx=\"1.5\" />
+        <rect x=\"3.5\" y=\"14.5\" width=\"6\" height=\"6\" rx=\"1.5\" />
+        <rect x=\"14.5\" y=\"14.5\" width=\"6\" height=\"6\" rx=\"1.5\" />
+      </>
+    ),
+    users: (
+      <>
+        <path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m20 0v-2a4 4 0 0 0-3-3.87M15 3.13a4 4 0 0 1 0 7.75\" />
+        <circle cx=\"9\" cy=\"7\" r=\"4\" />
+      </>
+    ),
+    bag: (
+      <>
+        <path d=\"M5 7h14l1 14H4L5 7Z\" />
+        <path d=\"M9 8V6a3 3 0 0 1 6 0v2\" />
+      </>
+    ),
+    settings: (
+      <>
+        <path d=\"m10 3-1 3-3 1-3-1-1 3 2 2v3l-2 2 2 3 3-1 2 1 1 3h4l1-3 3-1 3 1 1-3-2-2v-3l2-2-2-3-3 1-2-1-1-3Z\" />
+        <circle cx=\"12\" cy=\"12\" r=\"3\" />
+      </>
+    ),
+    chevron: <path d=\"m9 5 7 7-7 7\" />,
+    collapse: (
+      <>
+        <rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\" />
+        <path d=\"M9 4v16m7-11-3 3 3 3\" />
+      </>
+    ),
+    search: (
+      <>
+        <circle cx=\"10.5\" cy=\"10.5\" r=\"6.5\" />
+        <path d=\"m16 16 4 4\" />
+      </>
+    ),
+    bell: (
+      <>
+        <path d=\"M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-9 12a3 3 0 0 0 6 0\" />
+      </>
+    ),
+    plus: <path d=\"M12 5v14M5 12h14\" />,
+    download: (
+      <>
+        <path d=\"M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5\" />
+      </>
+    ),
+    arrow: <path d=\"M7 17 17 7M7 7h10v10\" />,
+    trend: (
+      <>
+        <path d=\"m3 17 6-6 4 3 8-9m-6 0h6v6\" />
+      </>
+    ),
+    clock: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <path d=\"M12 7v5l3 2\" />
+      </>
+    ),
+    check: <path d=\"m5 12 4 4L19 6\" />,
+    wallet: (
+      <>
+        <path d=\"M20 7H5a2 2 0 0 1 0-4h13v4M4 7v13h16V7m0 5h-6v4h6\" />
+      </>
+    ),
+    filter: (
+      <>
+        <path d=\"M4 6h16M7 12h10m-7 6h4\" />
+        <circle cx=\"8\" cy=\"6\" r=\"2\" fill=\"currentColor\" stroke=\"none\" />
+        <circle cx=\"15\" cy=\"12\" r=\"2\" fill=\"currentColor\" stroke=\"none\" />
+      </>
+    ),
+    group: (
+      <>
+        <rect x=\"3\" y=\"4\" width=\"18\" height=\"5\" rx=\"1.5\" />
+        <rect x=\"3\" y=\"13\" width=\"7\" height=\"7\" rx=\"1.5\" />
+        <rect x=\"14\" y=\"13\" width=\"7\" height=\"7\" rx=\"1.5\" />
+      </>
+    ),
+    columns: (
+      <>
+        <rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\" />
+        <path d=\"M10 4v16m5-16v16\" />
+      </>
+    ),
+    more: (
+      <>
+        <circle cx=\"5\" cy=\"12\" r=\"1\" fill=\"currentColor\" />
+        <circle cx=\"12\" cy=\"12\" r=\"1\" fill=\"currentColor\" />
+        <circle cx=\"19\" cy=\"12\" r=\"1\" fill=\"currentColor\" />
+      </>
+    ),
+    close: <path d=\"m6 6 12 12M6 18 18 6\" />,
+    help: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <path d=\"M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16v.1\" />
+      </>
+    ),
+    logout: (
+      <>
+        <path d=\"M9 4H4v16h5m5-13 5 5-5 5m-6-5h13\" />
+      </>
+    ),
+    calendar: (
+      <>
+        <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\" />
+        <path d=\"M7 3v4m10-4v4M3 11h18m-13 4h2m4 0h2\" />
+      </>
+    ),
+    grip: (
+      <>
+        <path
+          d=\"M9 5v.1M15 5v.1M9 12v.1M15 12v.1M9 19v.1M15 19v.1\"
+          strokeWidth=\"3\"
+        />
+      </>
+    ),
+    external: (
+      <>
+        <path d=\"M14 3h7v7m0-7L10 14M10 3H3v18h18v-7\" />
+      </>
+    ),
+    mail: (
+      <>
+        <rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\" />
+        <path d=\"m3 6 9 7 9-7\" />
+      </>
+    ),
+    box: (
+      <>
+        <path d=\"m12 3 9 5v9l-9 5-9-5V8l9-5Zm0 9 9-4m-9 4L3 8m9 4v10M7.5 5.5l9 5\" />
+      </>
+    ),
+    refresh: (
+      <>
+        <path d=\"M20 10a8 8 0 0 0-14-5L3 8m0-5v5h5m-4 6a8 8 0 0 0 14 5l3-3m0 5v-5h-5\" />
+      </>
+    ),
+  };
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox=\"0 0 24 24\"
+      fill=\"none\"
+      stroke=\"currentColor\"
+      strokeWidth=\"1.65\"
+      strokeLinecap=\"round\"
+      strokeLinejoin=\"round\"
+      {...props}
+    >
+      {paths[name]}
+    </svg>
+  );
+}
+type Status = \"new\" | \"processing\" | \"completed\" | \"cancelled\";
+type Order = {
+  id: string;
+  name: string;
+  email: string;
+  date: string;
+  status: Status;
+  amount: number;
+  paid: boolean;
+  color: string;
+  items: number;
+};
+const statusInfo: Record<Status, { label: string; color: string }> = {
+  new: { label: \"Новый\", color: \"blue\" },
+  processing: { label: \"В обработке\", color: \"orange\" },
+  completed: { label: \"Выполнен\", color: \"green\" },
+  cancelled: { label: \"Отменён\", color: \"gray\" },
+};
+const initialOrders: Order[] = [
+  {
+    id: \"ORD-2028\",
+    name: \"Александр Иванов\",
+    email: \"alex.ivanov@mail.ru\",
+    date: \"2026-11-04\",
+    status: \"new\",
+    amount: 12500,
+    paid: true,
+    color: \"lavender\",
+    items: 3,
+  },
+  {
+    id: \"ORD-2027\",
+    name: \"Мария Смирнова\",
+    email: \"m.smirnova@gmail.com\",
+    date: \"2026-11-04\",
+    status: \"new\",
+    amount: 8240,
+    paid: true,
+    color: \"rose\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2026\",
+    name: \"Дмитрий Козлов\",
+    email: \"d.kozlov@yandex.ru\",
+    date: \"2026-11-04\",
+    status: \"new\",
+    amount: 3490,
+    paid: false,
+    color: \"sand\",
+    items: 1,
+  },
+  {
+    id: \"ORD-2025\",
+    name: \"Анна Петрова\",
+    email: \"anna.petrova@mail.ru\",
+    date: \"2026-11-03\",
+    status: \"processing\",
+    amount: 21900,
+    paid: true,
+    color: \"sage\",
+    items: 4,
+  },
+  {
+    id: \"ORD-2024\",
+    name: \"Михаил Соколов\",
+    email: \"m.sokolov@gmail.com\",
+    date: \"2026-11-03\",
+    status: \"processing\",
+    amount: 5670,
+    paid: true,
+    color: \"sky\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2023\",
+    name: \"Екатерина Волкова\",
+    email: \"kate.volkova@mail.ru\",
+    date: \"2026-11-03\",
+    status: \"processing\",
+    amount: 14800,
+    paid: false,
+    color: \"lavender\",
+    items: 3,
+  },
+  {
+    id: \"ORD-2022\",
+    name: \"Иван Морозов\",
+    email: \"ivan.m@yandex.ru\",
+    date: \"2026-11-02\",
+    status: \"completed\",
+    amount: 7490,
+    paid: true,
+    color: \"sand\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2021\",
+    name: \"Ольга Новикова\",
+    email: \"o.novikova@gmail.com\",
+    date: \"2026-11-02\",
+    status: \"completed\",
+    amount: 18300,
+    paid: true,
+    color: \"rose\",
+    items: 5,
+  },
+  {
+    id: \"ORD-2020\",
+    name: \"Сергей Лебедев\",
+    email: \"s.lebedev@mail.ru\",
+    date: \"2026-11-01\",
+    status: \"completed\",
+    amount: 4200,
+    paid: true,
+    color: \"sage\",
+    items: 1,
+  },
+  {
+    id: \"ORD-2019\",
+    name: \"Наталья Орлова\",
+    email: \"n.orlova@yandex.ru\",
+    date: \"2026-11-01\",
+    status: \"cancelled\",
+    amount: 9600,
+    paid: false,
+    color: \"sky\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2018\",
+    name: \"Артём Васильев\",
+    email: \"artem.v@mail.ru\",
+    date: \"2026-10-31\",
+    status: \"completed\",
+    amount: 6900,
+    paid: true,
+    color: \"lavender\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2017\",
+    name: \"Полина Фёдорова\",
+    email: \"p.fedorova@gmail.com\",
+    date: \"2026-10-30\",
+    status: \"new\",
+    amount: 11200,
+    paid: false,
+    color: \"rose\",
+    items: 3,
+  },
+  {
+    id: \"ORD-2016\",
+    name: \"Максим Егоров\",
+    email: \"max.egorov@mail.ru\",
+    date: \"2026-10-29\",
+    status: \"completed\",
+    amount: 2850,
+    paid: true,
+    color: \"sage\",
+    items: 1,
+  },
+  {
+    id: \"ORD-2015\",
+    name: \"Алиса Белова\",
+    email: \"alisa.b@gmail.com\",
+    date: \"2026-10-28\",
+    status: \"processing\",
+    amount: 16400,
+    paid: true,
+    color: \"sand\",
+    items: 4,
+  },
+  {
+    id: \"ORD-2014\",
+    name: \"Андрей Титов\",
+    email: \"a.titov@yandex.ru\",
+    date: \"2026-10-27\",
+    status: \"completed\",
+    amount: 5320,
+    paid: true,
+    color: \"sky\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2013\",
+    name: \"Вера Павлова\",
+    email: \"vera.p@mail.ru\",
+    date: \"2026-10-26\",
+    status: \"cancelled\",
+    amount: 8700,
+    paid: false,
+    color: \"rose\",
+    items: 2,
+  },
+  {
+    id: \"ORD-2012\",
+    name: \"Роман Алексеев\",
+    email: \"roman.a@mail.ru\",
+    date: \"2026-10-25\",
+    status: \"completed\",
+    amount: 13600,
+    paid: true,
+    color: \"sage\",
+    items: 3,
+  },
+  {
+    id: \"ORD-2011\",
+    name: \"София Сергеева\",
+    email: \"sofia.s@gmail.com\",
+    date: \"2026-10-24\",
+    status: \"new\",
+    amount: 4100,
+    paid: false,
+    color: \"lavender\",
+    items: 1,
+  },
+];
+const money = (n: number) => new Intl.NumberFormat(\"ru-RU\").format(n) + \" ₽\";
+const initials = (s: string) =>
+  s
+    .split(\" \")
+    .map((x) => x[0])
+    .slice(0, 2)
+    .join(\"\");
+type Col = \"id\" | \"client\" | \"date\" | \"status\" | \"amount\" | \"payment\";
+const colNames: Record<Col, string> = {
+  id: \"Номер заказа\",
+  client: \"Клиент\",
+  date: \"Дата\",
+  status: \"Статус\",
+  amount: \"Сумма\",
+  payment: \"Оплата\",
+};
+const allCols: Col[] = [\"id\", \"client\", \"date\", \"status\", \"amount\", \"payment\"];
+
+export function App() {
+  const [collapsed, setCollapsed] = useState(false),
+    [section, setSection] = useState(\"Заказы\"),
+    [orders, setOrders] = useState(initialOrders);
+  const [query, setQuery] = useState(\"\"),
+    [tab, setTab] = useState(\"all\"),
+    [grouped, setGrouped] = useState(true),
+    [closedGroups, setClosedGroups] = useState<Status[]>([]);
+  const [selected, setSelected] = useState<Set<string>>(new Set()),
+    [columns, setColumns] = useState<Col[]>(allCols),
+    [hidden, setHidden] = useState<Col[]>([]);
+  const [dragging, setDragging] = useState<Col | null>(null),
+    [dragOver, setDragOver] = useState<Col | null>(null),
+    [popover, setPopover] = useState<string | null>(null);
+  const [paymentFilter, setPaymentFilter] = useState(\"all\"),
+    [period, setPeriod] = useState(\"month\"),
+    [page, setPage] = useState(1),
+    [pageSize, setPageSize] = useState(10);
+  const [toast, setToast] = useState(\"\"),
+    [modal, setModal] = useState(false),
+    [detail, setDetail] = useState<Order | null>(null),
+    [notifications, setNotifications] = useState(false);
+  const [sort, setSort] = useState<{ col: Col; asc: boolean } | null>(null),
+    [storeName, setStoreName] = useState(\"Мой магазин\"),
+    [savedName, setSavedName] = useState(\"Мой магазин\");
+  const searchRef = useRef<HTMLInputElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const notify = (message: string) => setToast(message);
+  useEffect(() => {
+    if (toast) {
+      const t = setTimeout(() => setToast(\"\"), 3500);
+      return () => clearTimeout(t);
+    }
+  }, [toast]);
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === \"k\") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key === \"Escape\") {
+        setPopover(null);
+        setModal(false);
+        setDetail(null);
+        setNotifications(false);
+      }
+    };
+    window.addEventListener(\"keydown\", fn);
+    return () => window.removeEventListener(\"keydown\", fn);
+  }, []);
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node))
+        setPopover((prev) => (prev === \"help\" ? prev : null));
+    };
+    document.addEventListener(\"mousedown\", fn);
+    return () => document.removeEventListener(\"mousedown\", fn);
+  }, []);
+  useEffect(() => setPage(1), [query, tab, paymentFilter, period, pageSize]);
+  const filtered = useMemo(() => {
+    let result = orders.filter(
+      (o) =>
+        (tab === \"all\" || o.status === tab) &&
+        `${o.id} ${o.name} ${o.email}`
+          .toLowerCase()
+          .includes(query.toLowerCase()) &&
+        (paymentFilter === \"all\" || o.paid === (paymentFilter === \"paid\")) &&
+        (period !== \"today\" || o.date === \"2026-11-04\") &&
+        (period !== \"week\" || o.date >= \"2026-10-29\"),
+    );
+    if (sort) {
+      result = [...result].sort((a, b) => {
+        const av =
+          sort.col === \"client\"
+            ? a.name
+            : sort.col === \"payment\"
+              ? Number(a.paid)
+              : a[sort.col];
+        const bv =
+          sort.col === \"client\"
+            ? b.name
+            : sort.col === \"payment\"
+              ? Number(b.paid)
+              : b[sort.col];
+        return (
+          (typeof av === \"number\"
+            ? av - Number(bv)
+            : String(av).localeCompare(String(bv), \"ru\")) * (sort.asc ? 1 : -1)
+        );
+      });
+    }
+    return result;
+  }, [orders, tab, query, paymentFilter, period, sort]);
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, pages),
+    shown = filtered.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize,
+    ),
+    visibleCols = columns.filter((c) => !hidden.includes(c));
+  const toggleSelect = (id: string) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  const allSelected =
+    shown.length > 0 && shown.every((o) => selected.has(o.id));
+  const selectAll = () =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      shown.forEach((o) => (allSelected ? next.delete(o.id) : next.add(o.id)));
+      return next;
+    });
+  const exportOrders = () => {
+    const rows = selected.size
+      ? orders.filter((o) => selected.has(o.id))
+      : filtered;
+    const csv =
+      \"\\uFEFF\" +
+      [
+        \"Номер;Клиент;Email;Дата;Статус;Сумма;Оплата\",
+        ...rows.map((o) =>
+          [
+            o.id,
+            o.name,
+            o.email,
+            o.date,
+            statusInfo[o.status].label,
+            o.amount,
+            o.paid ? \"Оплачен\" : \"Ожидает\",
+          ].join(\";\"),
+        ),
+      ].join(\"\\n\");
+    const a = document.createElement(\"a\");
+    a.href = URL.createObjectURL(
+      new Blob([csv], { type: \"text/csv;charset=utf-8;\" }),
+    );
+    a.download = \"orders.csv\";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    notify(`Экспортировано заказов: ${rows.length}`);
+  };
+  const changeStatus = (id: string, status: Status) => {
+    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
+    setDetail((prev) => (prev?.id === id ? { ...prev, status } : prev));
+    notify(\"Статус заказа обновлён\");
+  };
+  const togglePop = (id: string) => setPopover(popover === id ? null : id);
+  const dropCol = (target: Col) => {
+    if (dragging && dragging !== target) {
+      const next = columns.filter((c) => c !== dragging);
+      next.splice(next.indexOf(target), 0, dragging);
+      setColumns(next);
+    }
+    setDragging(null);
+    setDragOver(null);
+  };
+  const statCards = [
+    {
+      label: \"Всего заказов\",
+      value: String(orders.length).padStart(2, \"0\"),
+      change: \"+12,8%\",
+      icon: \"bag\" as IconName,
+      tone: \"coral\",
+      sub: \"за последний месяц\",
+      line: \"0,27 8,24 15,28 23,17 31,20 39,14 47,18 55,7 63,10 72,2\",
+    },
+    {
+      label: \"В обработке\",
+      value: String(
+        orders.filter((o) => o.status === \"processing\").length,
+      ).padStart(2, \"0\"),
+      change: \"+8,2%\",
+      icon: \"clock\" as IconName,
+      tone: \"amber\",
+      sub: \"за последний месяц\",
+      line: \"0,28 8,26 16,19 24,21 32,13 40,18 48,10 56,12 64,4 72,6\",
+    },
+    {
+      label: \"Выполнено\",
+      value: String(
+        orders.filter((o) => o.status === \"completed\").length,
+      ).padStart(2, \"0\"),
+      change: \"+18,6%\",
+      icon: \"check\" as IconName,
+      tone: \"mint\",
+      sub: \"за последний месяц\",
+      line: \"0,29 8,23 16,25 24,18 32,21 40,10 48,13 56,5 64,9 72,2\",
+    },
+    {
+      label: \"Выручка\",
+      value: money(
+        orders
+          .filter((o) => o.paid && o.status !== \"cancelled\")
+          .reduce((s, o) => s + o.amount, 0),
+      ),
+      change: \"+15,3%\",
+      icon: \"wallet\" as IconName,
+      tone: \"violet\",
+      sub: \"за последний месяц\",
+      line: \"0,27 8,29 16,22 24,23 32,15 40,18 48,8 56,12 64,5 72,2\",
+    },
+  ];
+  function renderCell(o: Order, c: Col) {
+    switch (c) {
+      case \"id\":
+        return (
+          <button className=\"order-link\" onClick={() => setDetail(o)}>
+            #{o.id}
+          </button>
+        );
+      case \"client\":
+        return (
+          <div className=\"client\">
+            <span className={`avatar ${o.color}`}>{initials(o.name)}</span>
+            <span>
+              <span className=\"client-name\">{o.name}</span>
+              <span className=\"client-email\">{o.email}</span>
+            </span>
+          </div>
+        );
+      case \"date\":
+        return (
+          <span className=\"date-cell\">
+            {new Date(o.date + \"T12:00:00\")
+              .toLocaleDateString(\"ru-RU\", { day: \"2-digit\", month: \"short\" })
+              .replace(\".\", \"\")}
+            , 2026
+          </span>
+        );
+      case \"status\":
+        return (
+          <span className={`status ${statusInfo[o.status].color}`}>
+            <i />
+            {statusInfo[o.status].label}
+          </span>
+        );
+      case \"amount\":
+        return <strong className=\"amount\">{money(o.amount)}</strong>;
+      case \"payment\":
+        return (
+          <span className={`payment ${o.paid ? \"paid\" : \"\"}`}>
+            <Icon name={o.paid ? \"check\" : \"clock\"} size={14} />
+            {o.paid ? \"Оплачен\" : \"Ожидает\"}
+          </span>
+        );
+    }
+  }
+  function renderRow(o: Order) {
+    return (
+      <tr
+        key={o.id}
+        className={selected.has(o.id) ? \"selected\" : \"\"}
+        onClick={() => toggleSelect(o.id)}
+      >
+        <td className=\"check-cell\" onClick={(e) => e.stopPropagation()}>
+          <input
+            aria-label={`Выбрать ${o.id}`}
+            type=\"checkbox\"
+            checked={selected.has(o.id)}
+            onChange={() => toggleSelect(o.id)}
+          />
+        </td>
+        {visibleCols.map((c) => (
+          <td
+            key={c}
+            className={`cell-${c}`}
+            onClick={c === \"id\" ? (e) => e.stopPropagation() : undefined}
+          >
+            {renderCell(o, c)}
+          </td>
+        ))}
+        <td className=\"row-menu-cell\" onClick={(e) => e.stopPropagation()}>
+          <button
+            className=\"icon-button row-more\"
+            aria-label={`Открыть заказ ${o.id}`}
+            onClick={() => setDetail(o)}
+          >
+            <Icon name=\"more\" size={18} />
+          </button>
+        </td>
+      </tr>
+    );
+  }
+  return (
+    <div className={`app ${collapsed ? \"is-collapsed\" : \"\"}`}>
+      <aside className=\"sidebar\">
+        <a
+          className=\"brand\"
+          href=\"#\"
+          onClick={(e) => {
+            e.preventDefault();
+            setSection(\"Заказы\");
+          }}
+        >
+          <span className=\"brand-symbol\">
+            <span />
+            <span />
+            <span />
+          </span>
+          {!collapsed && (
+            <span>
+              orderly<span className=\"brand-dot\">.</span>
+            </span>
+          )}
+        </a>
+        <button
+          className=\"workspace-switch\"
+          onClick={() => {
+            setSection(\"Настройки\");
+          }}
+          title={savedName}
+        >
+          <span className=\"workspace-icon\">
+            <Icon name=\"bag\" size={18} />
+          </span>
+          {!collapsed && (
+            <>
+              <span className=\"workspace-text\">
+                <strong>{savedName}</strong>
+                <small>Рабочее пространство</small>
+              </span>
+              <Icon name=\"chevron\" size={14} />
+            </>
+          )}
+        </button>
+        <div className=\"nav-label\">{collapsed ? \"•••\" : \"УПРАВЛЕНИЕ\"}</div>
+        <nav>
+          {(
+            [
+              { label: \"Главная\", icon: \"grid\" },
+              { label: \"Пользователи\", icon: \"users\" },
+              { label: \"Заказы\", icon: \"bag\" },
+              { label: \"Настройки\", icon: \"settings\" },
+            ] as { label: string; icon: IconName }[]
+          ).map((item) => (
+            <button
+              key={item.label}
+              aria-label={item.label}
+              title={item.label}
+              className={`nav-item ${section === item.label ? \"active\" : \"\"}`}
+              onClick={() => {
+                setSection(item.label);
+                setQuery(\"\");
+              }}
+            >
+              <Icon name={item.icon} />
+              {!collapsed && (
+                <>
+                  <span>{item.label}</span>
+                  {item.label === \"Заказы\" && (
+                    <span className=\"nav-count\">{orders.length}</span>
+                  )}
+                </>
+              )}
+            </button>
+          ))}
+        </nav>
+        <div className=\"sidebar-bottom\">
+          {!collapsed && (
+            <div className=\"help-card\">
+              <span className=\"help-icon\">
+                <Icon name=\"box\" size={21} />
+              </span>
+              <strong>Всё под контролем</strong>
+              <p>
+                Ваш бизнес — в одном месте.
+                <br />
+                Мы рядом, если нужна помощь.
+              </p>
+              <button
+                onClick={() => {
+                  setPopover(\"help\");
+                }}
+              >
+                Центр помощи <Icon name=\"external\" size={13} />
+              </button>
+            </div>
+          )}
+          <button
+            className=\"collapse-button\"
+            onClick={() => setCollapsed(!collapsed)}
+            title={collapsed ? \"Развернуть меню\" : \"Свернуть меню\"}
+          >
+            <Icon name=\"collapse\" size={19} />
+            {!collapsed && <span>Свернуть меню</span>}
+          </button>
+          <div className=\"sidebar-profile\">
+            <span className=\"avatar profile-avatar\">АС</span>
+            {!collapsed && (
+              <>
+                <span>
+                  <strong>Алексей Смирнов</strong>
+                  <small>Администратор</small>
+                </span>
+                <button
+                  className=\"icon-button\"
+                  aria-label=\"Профиль\"
+                  onClick={() => setSection(\"Настройки\")}
+                >
+                  <Icon name=\"more\" size={18} />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </aside>
+      <div className=\"main-shell\">
+        <header className=\"topbar\">
+          <div className=\"breadcrumb\">
+            <span>Рабочее пространство</span>
+            <Icon name=\"chevron\" size={13} />
+            <strong>{section}</strong>
+          </div>
+          <div className=\"topbar-right\">
+            <span className=\"live-status\">
+              <i />
+              Магазин работает
+            </span>
+            <span className=\"topbar-divider\" />
+            <button
+              className=\"icon-button notification-button\"
+              aria-label=\"Уведомления\"
+              onClick={() => setNotifications(!notifications)}
+            >
+              <Icon name=\"bell\" />
+              <i />
+            </button>
+            <button
+              className=\"avatar top-avatar\"
+              aria-label=\"Настройки профиля\"
+              onClick={() => setSection(\"Настройки\")}
+            >
+              АС
+            </button>
+          </div>
+        </header>
+        <main>
+          <div className=\"page-heading\">
+            <div>
+              <div className=\"heading-eyebrow\">ВАШ БИЗНЕС В ДЕТАЛЯХ</div>
+              <h1>{section === \"Главная\" ? \"Обзор магазина\" : section}</h1>
+              <p>
+                {section === \"Заказы\"
+                  ? \"Управляйте заказами и следите за каждым этапом.\"
+                  : section === \"Главная\"
+                    ? \"Главные показатели и последние события вашего магазина.\"
+                    : section === \"Пользователи\"
+                      ? \"Ваши клиенты и история взаимодействий с ними.\"
+                      : \"Настройте рабочее пространство под себя.\"}
+              </p>
+            </div>
+            <div className=\"heading-actions\">
+              {(section === \"Заказы\" || section === \"Главная\") && (
+                <>
+                  <button className=\"button\" onClick={exportOrders}>
+                    <Icon name=\"download\" size={17} />
+                    Экспорт
+                  </button>
+                  <button
+                    className=\"button primary\"
+                    onClick={() => setModal(true)}
+                  >
+                    <Icon name=\"plus\" size={18} />
+                    Создать заказ
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+          {(section === \"Заказы\" || section === \"Главная\") && (
+            <>
+              <div className=\"stats-grid\">
+                {statCards.map((s, i) => (
+                  <div className=\"stat-card\" key={s.label}>
+                    <div className=\"stat-top\">
+                      <span>{s.label}</span>
+                      <span className={`stat-icon ${s.tone}`}>
+                        <Icon name={s.icon} size={18} />
+                      </span>
+                    </div>
+                    <div className={`stat-value ${i === 3 ? \"revenue\" : \"\"}`}>
+                      {s.value}
+                      <svg
+                        className={`sparkline ${s.tone}`}
+                        viewBox=\"0 0 74 34\"
+                      >
+                        <polyline
+                          points={s.line}
+                          fill=\"none\"
+                          stroke=\"currentColor\"
+                          strokeWidth=\"1.7\"
+                          strokeLinejoin=\"round\"
+                        />
+                      </svg>
+                    </div>
+                    <div className=\"stat-bottom\">
+                      <span className=\"stat-change\">
+                        <Icon name=\"trend\" size={12} />
+                        {s.change}
+                      </span>
+                      <span>{s.sub}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <section className=\"orders-panel\">
+                <div className=\"panel-title\">
+                  <div>
+                    <h2>
+                      {section === \"Главная\"
+                        ? \"Последние заказы\"
+                        : \"Все заказы\"}
+                      <span className=\"total-pill\">{orders.length}</span>
+                    </h2>
+                    <p>Все заказы вашего магазина в одном месте.</p>
+                  </div>
+                  <div className=\"period-wrap\">
+                    <Icon name=\"calendar\" size={16} />
+                    <select
+                      aria-label=\"Период\"
+                      value={period}
+                      onChange={(e) => setPeriod(e.target.value)}
+                    >
+                      <option value=\"month\">Последние 30 дней</option>
+                      <option value=\"week\">Последние 7 дней</option>
+                      <option value=\"today\">Сегодня</option>
+                    </select>
+                  </div>
+                </div>
+                <div className=\"tabs\">
+                  {[
+                    { id: \"all\", label: \"Все заказы\" },
+                    { id: \"new\", label: \"Новые\" },
+                    { id: \"processing\", label: \"В обработке\" },
+                    { id: \"completed\", label: \"Выполненные\" },
+                    { id: \"cancelled\", label: \"Отменённые\" },
+                  ].map((t) => (
+                    <button
+                      key={t.id}
+                      className={tab === t.id ? \"active\" : \"\"}
+                      onClick={() => setTab(t.id)}
+                    >
+                      {t.label}
+                      <span>
+                        {t.id === \"all\"
+                          ? orders.length
+                          : orders.filter((o) => o.status === t.id).length}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <div className=\"table-toolbar\" ref={popoverRef}>
+                  <div className=\"search-field\">
+                    <Icon name=\"search\" size={17} />
+                    <input
+                      ref={searchRef}
+                      placeholder=\"Поиск по номеру, имени или email...\"
+                      aria-label=\"Поиск заказов\"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query ? (
+                      <button
+                        className=\"clear-search\"
+                        aria-label=\"Очистить поиск\"
+                        onClick={() => setQuery(\"\")}
+                      >
+                        <Icon name=\"close\" size={14} />
+                      </button>
+                    ) : (
+                      <kbd>⌘ K</kbd>
+                    )}
+                  </div>
+                  <div className=\"toolbar-actions\">
+                    <div className=\"popover-anchor\">
+                      <button
+                        className={`button toolbar-button ${paymentFilter !== \"all\" ? \"filter-active\" : \"\"}`}
+                        aria-label=\"Фильтры\"
+                        onClick={() => togglePop(\"filter\")}
+                      >
+                        <Icon name=\"filter\" size={17} />
+                        <span>Фильтры</span>
+                        {paymentFilter !== \"all\" && (
+                          <span className=\"filter-dot\" />
+                        )}
+                      </button>
+                      {popover === \"filter\" && (
+                        <div className=\"popover filter-popover\">
+                          <h4>Статус оплаты</h4>
+                          {[
+                            { id: \"all\", label: \"Все заказы\" },
+                            { id: \"paid\", label: \"Оплаченные\" },
+                            { id: \"unpaid\", label: \"Ожидают оплаты\" },
+                          ].map((f) => (
+                            <button
+                              className=\"popover-option\"
+                              key={f.id}
+                              onClick={() => {
+                                setPaymentFilter(f.id);
+                                setPopover(null);
+                              }}
+                            >
+                              {f.label}
+                              {paymentFilter === f.id && (
+                                <Icon name=\"check\" size={15} />
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className=\"popover-anchor\">
+                      <button
+                        className={`button toolbar-button group-button ${grouped ? \"group-active\" : \"\"}`}
+                        onClick={() => togglePop(\"group\")}
+                      >
+                        <Icon name=\"group\" size={16} />
+                        <span>
+                          Группировка
+                          {grouped && (
+                            <>
+                              <b>:</b> Статус
+                            </>
+                          )}
+                        </span>
+                        <Icon
+                          name=\"chevron\"
+                          size={12}
+                          className=\"chevron-down\"
+                        />
+                      </button>
+                      {popover === \"group\" && (
+                        <div className=\"popover\">
+                          <h4>Группировать заказы</h4>
+                          <button
+                            className=\"popover-option\"
+                            onClick={() => {
+                              setGrouped(true);
+                              setPopover(null);
+                            }}
+                          >
+                            По статусу
+                            {grouped && <Icon name=\"check\" size={15} />}
+                          </button>
+                          <button
+                            className=\"popover-option\"
+                            onClick={() => {
+                              setGrouped(false);
+                              setPopover(null);
+                            }}
+                          >
+                            Без группировки
+                            {!grouped && <Icon name=\"check\" size={15} />}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div className=\"popover-anchor\">
+                      <button
+                        className=\"button toolbar-button\"
+                        onClick={() => togglePop(\"columns\")}
+                      >
+                        <Icon name=\"columns\" size={17} />
+                        <span>Колонки</span>
+                      </button>
+                      {popover === \"columns\" && (
+                        <div className=\"popover columns-popover\">
+                          <h4>Видимые колонки</h4>
+                          {columns.map((c, i) => (
+                            <div className=\"column-option\" key={c}>
+                              <label>
+                                <input
+                                  type=\"checkbox\"
+                                  checked={!hidden.includes(c)}
+                                  onChange={() =>
+                                    setHidden((prev) =>
+                                      prev.includes(c)
+                                        ? prev.filter((x) => x !== c)
+                                        : [...prev, c],
+                                    )
+                                  }
+                                />
+                                {colNames[c]}
+                              </label>
+                              <button
+                                title=\"Переместить влево\"
+                                disabled={i === 0}
+                                onClick={() =>
+                                  setColumns((prev) => {
+                                    const next = [...prev];
+                                    [next[i], next[i - 1]] = [
+                                      next[i - 1],
+                                      next[i],
+                                    ];
+                                    return next;
+                                  })
+                                }
+                              >
+                                <Icon
+                                  name=\"chevron\"
+                                  size={12}
+                                  className=\"rotate-180\"
+                                />
+                              </button>
+                              <button
+                                title=\"Переместить вправо\"
+                                disabled={i === columns.length - 1}
+                                onClick={() =>
+                                  setColumns((prev) => {
+                                    const next = [...prev];
+                                    [next[i], next[i + 1]] = [
+                                      next[i + 1],
+                                      next[i],
+                                    ];
+                                    return next;
+                                  })
+                                }
+                              >
+                                <Icon name=\"chevron\" size={12} />
+                              </button>
+                            </div>
+                          ))}
+                          <p className=\"popover-hint\">
+                            Перетаскивайте заголовки в таблице,
+                            <br />
+                            чтобы изменить порядок.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {selected.size > 0 && (
+                  <div className=\"selection-bar\">
+                    <span>
+                      <strong>Выбрано: {selected.size}</strong>
+                      <button onClick={() => setSelected(new Set())}>
+                        Снять выделение
+                      </button>
+                    </span>
+                    <span>
+                      <button onClick={exportOrders}>
+                        <Icon name=\"download\" size={15} />
+                        Экспорт
+                      </button>
+                      <button
+                        onClick={() => {
+                          setOrders((prev) =>
+                            prev.map((o) =>
+                              selected.has(o.id)
+                                ? { ...o, status: \"completed\" }
+                                : o,
+                            ),
+                          );
+                          setSelected(new Set());
+                          notify(\"Выбранные заказы выполнены\");
+                        }}
+                      >
+                        <Icon name=\"check\" size={15} />
+                        Выполнить
+                      </button>
+                    </span>
+                  </div>
+                )}
+                <div className=\"table-scroll\">
+                  <table className=\"orders-table\">
+                    <thead>
+                      <tr>
+                        <th className=\"check-cell\">
+                          <input
+                            aria-label=\"Выбрать все заказы на странице\"
+                            type=\"checkbox\"
+                            checked={allSelected}
+                            ref={(el) => {
+                              if (el)
+                                el.indeterminate =
+                                  !allSelected &&
+                                  shown.some((o) => selected.has(o.id));
+                            }}
+                            onChange={selectAll}
+                          />
+                        </th>
+                        {visibleCols.map((c) => (
+                          <th
+                            key={c}
+                            draggable
+                            onDragStart={(e) => {
+                              setDragging(c);
+                              e.dataTransfer.effectAllowed = \"move\";
+                              e.dataTransfer.setData(\"text/plain\", c);
+                            }}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              setDragOver(c);
+                            }}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              dropCol(c);
+                            }}
+                            onDragEnd={() => {
+                              setDragging(null);
+                              setDragOver(null);
+                            }}
+                            className={`col-${c} ${dragOver === c ? \"drag-over\" : \"\"} ${dragging === c ? \"dragging\" : \"\"}`}
+                            title=\"Перетащите, чтобы переместить колонку\"
+                          >
+                            <button
+                              className=\"column-heading\"
+                              onClick={() =>
+                                setSort({
+                                  col: c,
+                                  asc: sort?.col === c ? !sort.asc : true,
+                                })
+                              }
+                            >
+                              {colNames[c]}
+                              <span className=\"sort-indicator\">
+                                {sort?.col === c ? (sort.asc ? \"↑\" : \"↓\") : \"↕\"}
+                              </span>
+                              <Icon name=\"grip\" size={12} />
+                            </button>
+                          </th>
+                        ))}
+                        <th className=\"row-menu-cell\" />
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {grouped
+                        ? (
+                            [
+                              \"new\",
+                              \"processing\",
+                              \"completed\",
+                              \"cancelled\",
+                            ] as Status[]
+                          ).map((status) => {
+                            const rows = shown.filter(
+                              (o) => o.status === status,
+                            );
+                            if (!rows.length) return null;
+                            const isClosed = closedGroups.includes(status);
+                            return (
+                              <React.Fragment key={status}>
+                                <tr className=\"group-row\">
+                                  <td colSpan={visibleCols.length + 2}>
+                                    <button
+                                      onClick={() =>
+                                        setClosedGroups((prev) =>
+                                          prev.includes(status)
+                                            ? prev.filter((s) => s !== status)
+                                            : [...prev, status],
+                                        )
+                                      }
+                                    >
+                                      <Icon
+                                        name=\"chevron\"
+                                        size={13}
+                                        className={
+                                          isClosed ? \"\" : \"chevron-down\"
+                                        }
+                                      />
+                                      <i
+                                        className={`group-dot ${statusInfo[status].color}`}
+                                      />
+                                      <strong>
+                                        {status === \"new\"
+                                          ? \"Новые\"
+                                          : status === \"completed\"
+                                            ? \"Выполненные\"
+                                            : status === \"cancelled\"
+                                              ? \"Отменённые\"
+                                              : \"В обработке\"}
+                                      </strong>
+                                      <span className=\"group-count\">
+                                        {rows.length}
+                                      </span>
+                                      <span className=\"group-total\">
+                                        {money(
+                                          rows.reduce(
+                                            (s, o) => s + o.amount,
+                                            0,
+                                          ),
+                                        )}
+                                      </span>
+                                    </button>
+                                  </td>
+                                </tr>
+                                {!isClosed && rows.map(renderRow)}
+                              </React.Fragment>
+                            );
+                          })
+                        : shown.map(renderRow)}
+                    </tbody>
+                  </table>
+                  {shown.length === 0 && (
+                    <div className=\"empty-state\">
+                      <span>
+                        <Icon name=\"search\" size={30} />
+                      </span>
+                      <h3>Заказы не найдены</h3>
+                      <p>Попробуйте изменить запрос или сбросить фильтры.</p>
+                      <button
+                        className=\"button\"
+                        onClick={() => {
+                          setQuery(\"\");
+                          setTab(\"all\");
+                          setPaymentFilter(\"all\");
+                          setPeriod(\"month\");
+                        }}
+                      >
+                        Сбросить фильтры
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div className=\"table-footer\">
+                  <span>
+                    Показано{\" \"}
+                    <strong>
+                      {filtered.length ? (currentPage - 1) * pageSize + 1 : 0}–
+                      {Math.min(currentPage * pageSize, filtered.length)}
+                    </strong>{\" \"}
+                    из <strong>{filtered.length}</strong> заказов
+                  </span>
+                  <div className=\"pagination\">
+                    <span className=\"per-page\">
+                      На странице:{\" \"}
+                      <select
+                        value={pageSize}
+                        aria-label=\"Заказов на странице\"
+                        onChange={(e) => setPageSize(Number(e.target.value))}
+                      >
+                        <option>10</option>
+                        <option>15</option>
+                        <option>20</option>
+                      </select>
+                    </span>
+                    <button
+                      className=\"pagination-button\"
+                      disabled={currentPage === 1}
+                      onClick={() => setPage(currentPage - 1)}
+                      aria-label=\"Предыдущая страница\"
+                    >
+                      <Icon name=\"chevron\" size={15} className=\"rotate-180\" />
+                    </button>
+                    {Array.from({ length: pages }, (_, i) => (
+                      <button
+                        key={i}
+                        className={`pagination-button ${currentPage === i + 1 ? \"current\" : \"\"}`}
+                        onClick={() => setPage(i + 1)}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      className=\"pagination-button\"
+                      disabled={currentPage === pages}
+                      onClick={() => setPage(currentPage + 1)}
+                      aria-label=\"Следующая страница\"
+                    >
+                      <Icon name=\"chevron\" size={15} />
+                    </button>
+                  </div>
+                </div>
+              </section>
+              <div className=\"page-footnote\">
+                <span>
+                  <Icon name=\"refresh\" size={13} />
+                  Данные обновлены только что
+                </span>
+                <span>Порядок в заказах. Простор для роста.</span>
+              </div>
+            </>
+          )}
+          {section === \"Пользователи\" && (
+            <section className=\"users-panel\">
+              <div className=\"section-search search-field\">
+                <Icon name=\"search\" size={18} />
+                <input
+                  placeholder=\"Найти клиента...\"
+                  aria-label=\"Поиск клиентов\"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+              <div className=\"customer-grid\">
+                {orders
+                  .filter((o) =>
+                    (o.name + \" \" + o.email)
+                      .toLowerCase()
+                      .includes(query.toLowerCase()),
+                  )
+                  .map((o) => (
+                    <button
+                      key={o.id}
+                      className=\"customer-card\"
+                      onClick={() => setDetail(o)}
+                    >
+                      <span className={`avatar ${o.color}`}>
+                        {initials(o.name)}
+                      </span>
+                      <strong>{o.name}</strong>
+                      <span>{o.email}</span>
+                      <div>
+                        Последний заказ <b>#{o.id}</b>
+                        <Icon name=\"chevron\" size={14} />
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            </section>
+          )}
+          {section === \"Настройки\" && (
+            <section className=\"settings-panel\">
+              <h2>Рабочее пространство</h2>
+              <p>Основная информация о вашем магазине.</p>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setSavedName(storeName);
+                  notify(\"Настройки сохранены\");
+                }}
+              >
+                <label>
+                  Название магазина
+                  <input
+                    required
+                    value={storeName}
+                    onChange={(e) => setStoreName(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Email администратора
+                  <input
+                    type=\"email\"
+                    defaultValue=\"alexey@orderly.ru\"
+                    required
+                  />
+                </label>
+                <label>
+                  Валюта
+                  <select defaultValue=\"rub\">
+                    <option value=\"rub\">Российский рубль (₽)</option>
+                  </select>
+                </label>
+                <label>
+                  Часовой пояс
+                  <select>
+                    <option>Москва (UTC+3)</option>
+                    <option>Екатеринбург (UTC+5)</option>
+                    <option>Новосибирск (UTC+7)</option>
+                  </select>
+                </label>
+                <button className=\"button primary\" type=\"submit\">
+                  Сохранить изменения
+                </button>
+              </form>
+            </section>
+          )}
+        </main>
+      </div>
+      {toast && (
+        <div className=\"toast\" role=\"status\">
+          <span>
+            <Icon name=\"check\" size={16} />
+          </span>
+          {toast}
+          <button aria-label=\"Закрыть уведомление\" onClick={() => setToast(\"\")}>
+            <Icon name=\"close\" size={15} />
+          </button>
+        </div>
+      )}
+      {notifications && (
+        <>
+          <div
+            className=\"popover-dismiss\"
+            onClick={() => setNotifications(false)}
+          />
+          <div className=\"notifications-panel\">
+            <div className=\"floating-heading\">
+              <h3>
+                Уведомления <span>2</span>
+              </h3>
+              <button
+                className=\"icon-button\"
+                aria-label=\"Закрыть уведомления\"
+                onClick={() => setNotifications(false)}
+              >
+                <Icon name=\"close\" size={18} />
+              </button>
+            </div>
+            <div className=\"notification-item\">
+              <span className=\"stat-icon coral\">
+                <Icon name=\"bag\" size={17} />
+              </span>
+              <div>
+                <strong>Новый заказ #{orders[0].id}</strong>
+                <p>
+                  {orders[0].name} · {money(orders[0].amount)}
+                </p>
+                <small>Только что</small>
+              </div>
+            </div>
+            <div className=\"notification-item\">
+              <span className=\"stat-icon mint\">
+                <Icon name=\"check\" size={17} />
+              </span>
+              <div>
+                <strong>Оплата получена</strong>
+                <p>Заказ #ORD-2027 успешно оплачен</p>
+                <small>15 минут назад</small>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {popover === \"help\" && (
+        <div className=\"modal-backdrop\" onClick={() => setPopover(null)}>
+          <div
+            className=\"modal help-modal\"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className=\"modal-close icon-button\"
+              aria-label=\"Закрыть\"
+              onClick={() => setPopover(null)}
+            >
+              <Icon name=\"close\" />
+            </button>
+            <span className=\"help-modal-icon\">
+              <Icon name=\"help\" size={30} />
+            </span>
+            <h2>Всегда рядом</h2>
+            <p>
+              Выделяйте заказы чекбоксами для массовых действий. Перетаскивайте
+              заголовки колонок, чтобы настроить таблицу. Нажмите на номер
+              заказа для просмотра деталей.
+            </p>
+            <a className=\"button primary\" href=\"mailto:support@orderly.ru\">
+              <Icon name=\"mail\" size={17} />
+              Написать в поддержку
+            </a>
+          </div>
+        </div>
+      )}
+      {modal && (
+        <div className=\"modal-backdrop\" onClick={() => setModal(false)}>
+          <div
+            className=\"modal\"
+            role=\"dialog\"
+            aria-modal=\"true\"
+            aria-label=\"Создать заказ\"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className=\"modal-close icon-button\"
+              aria-label=\"Закрыть\"
+              onClick={() => setModal(false)}
+            >
+              <Icon name=\"close\" />
+            </button>
+            <div className=\"modal-eyebrow\">НОВЫЙ ЗАКАЗ</div>
+            <h2>Начнём с деталей</h2>
+            <p>Добавьте информацию о клиенте и заказе.</p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const f = new FormData(e.currentTarget);
+                const newOrder: Order = {
+                  id: `ORD-${Math.max(...orders.map((o) => Number(o.id.split(\"-\")[1]))) + 1}`,
+                  name: String(f.get(\"name\")),
+                  email: String(f.get(\"email\")),
+                  amount: Number(f.get(\"amount\")),
+                  items: Number(f.get(\"items\")),
+                  date: \"2026-11-04\",
+                  status: \"new\",
+                  paid: f.get(\"paid\") === \"on\",
+                  color: \"lavender\",
+                };
+                setOrders((prev) => [newOrder, ...prev]);
+                setModal(false);
+                setTab(\"all\");
+                setQuery(\"\");
+                setPage(1);
+                setPeriod(\"month\");
+                setPaymentFilter(\"all\");
+                notify(`Заказ #${newOrder.id} создан`);
+              }}
+            >
+              <label>
+                Имя и фамилия
+                <input
+                  name=\"name\"
+                  placeholder=\"Например, Алексей Смирнов\"
+                  required
+                  autoFocus
+                />
+              </label>
+              <label>
+                Email клиента
+                <input
+                  name=\"email\"
+                  type=\"email\"
+                  placeholder=\"client@example.ru\"
+                  required
+                />
+              </label>
+              <div className=\"form-row\">
+                <label>
+                  Сумма, ₽
+                  <input
+                    name=\"amount\"
+                    type=\"number\"
+                    min=\"1\"
+                    step=\"0.01\"
+                    placeholder=\"0\"
+                    required
+                  />
+                </label>
+                <label>
+                  Товаров
+                  <input
+                    name=\"items\"
+                    type=\"number\"
+                    min=\"1\"
+                    defaultValue=\"1\"
+                    required
+                  />
+                </label>
+              </div>
+              <label className=\"checkbox-label\">
+                <input name=\"paid\" type=\"checkbox\" />
+                Заказ уже оплачен
+              </label>
+              <div className=\"modal-actions\">
+                <button
+                  type=\"button\"
+                  className=\"button\"
+                  onClick={() => setModal(false)}
+                >
+                  Отмена
+                </button>
+                <button className=\"button primary\" type=\"submit\">
+                  <Icon name=\"plus\" size={17} />
+                  Создать заказ
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {detail && (
+        <div className=\"drawer-backdrop\" onClick={() => setDetail(null)}>
+          <aside className=\"order-drawer\" onClick={(e) => e.stopPropagation()}>
+            <div className=\"floating-heading\">
+              <span className=\"modal-eyebrow\">ДЕТАЛИ ЗАКАЗА</span>
+              <button
+                className=\"icon-button\"
+                aria-label=\"Закрыть заказ\"
+                onClick={() => setDetail(null)}
+              >
+                <Icon name=\"close\" />
+              </button>
+            </div>
+            <h2>#{detail.id}</h2>
+            <span className={`status ${statusInfo[detail.status].color}`}>
+              <i />
+              {statusInfo[detail.status].label}
+            </span>
+            <div className=\"drawer-section\">
+              <h3>Клиент</h3>
+              <div className=\"client\">
+                <span className={`avatar ${detail.color}`}>
+                  {initials(detail.name)}
+                </span>
+                <span>
+                  <span className=\"client-name\">{detail.name}</span>
+                  <a className=\"client-email\" href={`mailto:${detail.email}`}>
+                    {detail.email}
+                  </a>
+                </span>
+              </div>
+            </div>
+            <div className=\"drawer-section\">
+              <h3>Информация о заказе</h3>
+              <div className=\"detail-line\">
+                <span>Дата создания</span>
+                <strong>
+                  {new Date(detail.date).toLocaleDateString(\"ru-RU\")}
+                </strong>
+              </div>
+              <div className=\"detail-line\">
+                <span>Количество товаров</span>
+                <strong>{detail.items}</strong>
+              </div>
+              <div className=\"detail-line\">
+                <span>Оплата</span>
+                <span className={`payment ${detail.paid ? \"paid\" : \"\"}`}>
+                  {detail.paid ? \"Оплачен\" : \"Ожидает оплаты\"}
+                </span>
+              </div>
+              <div className=\"detail-line detail-total\">
+                <span>Итого</span>
+                <strong>{money(detail.amount)}</strong>
+              </div>
+            </div>
+            <label className=\"status-select-label\">
+              Статус заказа
+              <select
+                value={detail.status}
+                onChange={(e) =>
+                  changeStatus(detail.id, e.target.value as Status)
+                }
+              >
+                {Object.entries(statusInfo).map(([s, v]) => (
+                  <option key={s} value={s}>
+                    {v.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {!detail.paid && (
+              <button
+                className=\"button primary drawer-pay\"
+                onClick={() => {
+                  setOrders((prev) =>
+                    prev.map((o) =>
+                      o.id === detail.id ? { ...o, paid: true } : o,
+                    ),
+                  );
+                  setDetail({ ...detail, paid: true });
+                  notify(\"Заказ отмечен оплаченным\");
+                }}
+              >
+                <Icon name=\"check\" size={18} />
+                Отметить оплаченным
+              </button>
+            )}
+          </aside>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+@import url(\"https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;450;500;550;600;650;700;750;800&display=swap\");
+:root {
+  font-family: \"Golos Text\", Arial, sans-serif;
+  color: #282b30;
+  background: #f7f8fa;
+  font-synthesis: none;
+  font-weight: 400;
+  font-size: 13px;
+  font-feature-settings: \"ss01\" on;
+  --accent: #ed7655;
+  --line: #eceef0;
+  --muted: #92959e;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-width: 375px;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button {
+  color: inherit;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #ed765560;
+  outline-offset: 3px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  border: 0;
+  background: none;
+}
+svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+input[type=\"checkbox\"] {
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1.4px solid #d9dce0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  margin: 0;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+input[type=\"checkbox\"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type=\"checkbox\"]:checked:after {
+  content: \"\";
+  width: 7px;
+  height: 4px;
+  border-left: 1.8px solid white;
+  border-bottom: 1.8px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+input[type=\"checkbox\"]:indeterminate {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type=\"checkbox\"]:indeterminate:after {
+  content: \"\";
+  width: 7px;
+  height: 2px;
+  background: white;
+}
+input,
+select {
+  outline: none;
+}
+input:focus,
+select:focus {
+  border-color: #ed987e !important;
+  box-shadow: 0 0 0 3px #ed765510;
+}
+input::placeholder {
+  color: #a1a3ac;
+}
+select {
+  cursor: pointer;
+}
+.app {
+  font-family: \"Golos Text\", Arial, sans-serif;
+  background: #f7f8fa;
+  color: #282b30;
+  --sidebar-width: 232px;
+  min-height: 100vh;
+}
+.app.is-collapsed {
+  --sidebar-width: 76px;
+}
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  inset: 0 auto 0 0;
+  background: #fdfdfd;
+  border-right: 1px solid #e7e9ed;
+  padding: 31px 17px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+  transition: width 0.2s;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 29px;
+  font-weight: 750;
+  letter-spacing: -1.3px;
+  padding-left: 11px;
+  white-space: nowrap;
+  height: 34px;
+  line-height: 1;
+}
+.brand-dot {
+  color: var(--accent);
+}
+.brand-symbol {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 28px;
+  transform: rotate(-13deg);
+}
+.brand-symbol span {
+  width: 6px;
+  border-radius: 3px;
+  background: var(--accent);
+  display: block;
+  height: 18px;
+}
+.brand-symbol span:first-child {
+  height: 12px;
+  margin-top: 8px;
+}
+.brand-symbol span:last-child {
+  height: 25px;
+  margin-bottom: 7px;
+}
+.workspace-switch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 34px;
+  padding: 11px 9px;
+  border: 1px solid #e8e9ed;
+  border-radius: 8px;
+  text-align: left;
+  min-height: 58px;
+  width: 100%;
+}
+.workspace-icon {
+  width: 32px;
+  height: 32px;
+  background: #f3f1ed;
+  color: #78756e;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+.workspace-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
+}
+.workspace-text strong {
+  font-size: 11.5px;
+  font-weight: 550;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.workspace-text small {
+  color: #97999f;
+  font-size: 9px;
+  white-space: nowrap;
+}
+.workspace-switch > svg {
+  color: #9a9ba2;
+}
+.nav-label {
+  font-size: 9px;
+  color: #a0a2aa;
+  letter-spacing: 1.1px;
+  padding: 28px 11px 13px;
+}
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 12px 12px;
+  gap: 11px;
+  color: #71747f;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  height: 43px;
+  font-size: 12px;
+  font-weight: 450;
+  white-space: nowrap;
+}
+.nav-item > svg {
+  width: 19px;
+  height: 19px;
+}
+.nav-item:hover {
+  background: #f4f4f5;
+}
+.nav-item.active {
+  background: #fcece6;
+  color: #da6948;
+  font-weight: 550;
+}
+.nav-count {
+  font-size: 10px;
+  background: #f8d9cc;
+  border-radius: 5px;
+  padding: 2px 6px;
+  margin-left: auto;
+  color: #cb6549;
+}
+.sidebar-bottom {
+  margin-top: auto;
+}
+.help-card {
+  margin: 25px 4px 19px;
+  padding: 17px 13px 14px;
+  border: 1px solid #eee9e3;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #f8f6f2, #fdfbf8);
+  position: relative;
+  overflow: hidden;
+}
+.help-card:after {
+  content: \"\";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 1px solid #eee6d9;
+  border-radius: 50%;
+  right: -35px;
+  top: -29px;
+  box-shadow:
+    0 0 0 12px #f5f0e6,
+    0 0 0 13px #eee6d9;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.help-icon {
+  display: block;
+  margin-bottom: 12px;
+  color: #9e8b6b;
+}
+.help-card strong {
+  font-size: 11px;
+  font-weight: 550;
+}
+.help-card p {
+  font-size: 9.5px;
+  line-height: 1.7;
+  color: #93908d;
+  margin: 7px 0 14px;
+  white-space: nowrap;
+}
+.help-card button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  font-weight: 550;
+  background: white;
+  border: 1px solid #e7e2dc;
+  border-radius: 5px;
+  padding: 8px 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+.collapse-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #90929b;
+  font-size: 11px;
+  padding: 12px;
+  margin-bottom: 17px;
+  white-space: nowrap;
+}
+.sidebar-profile {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  border-top: 1px solid #ebedf0;
+  margin: 0 -17px;
+  padding: 18px 18px 20px;
+}
+.sidebar-profile > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  white-space: nowrap;
+}
+.sidebar-profile strong {
+  font-size: 10px;
+  font-weight: 550;
+}
+.sidebar-profile small {
+  font-size: 9px;
+  color: #9b9da4;
+}
+.sidebar-profile .icon-button {
+  width: 18px;
+}
+.avatar {
+  height: 32px;
+  width: 32px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 500;
+}
+.profile-avatar {
+  background: #efe3d6;
+  color: #776451;
+  border: 3px solid #f7f0e9;
+  width: 34px;
+  height: 34px;
+}
+.is-collapsed .sidebar {
+  padding-left: 13px;
+  padding-right: 13px;
+}
+.is-collapsed .brand {
+  padding-left: 10px;
+}
+.is-collapsed .workspace-switch {
+  padding: 7px;
+  border: none;
+  margin-top: 33px;
+}
+.is-collapsed .nav-item {
+  padding: 12px 15px;
+}
+.is-collapsed .nav-label {
+  text-align: center;
+}
+.is-collapsed .sidebar-profile {
+  margin: 0 -13px;
+  padding: 18px 21px;
+}
+.is-collapsed .collapse-button {
+  padding: 15px;
+}
+.main-shell {
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.2s;
+}
+.topbar {
+  height: 75px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 10.5px;
+}
+.breadcrumb > span {
+  color: #9699a2;
+}
+.breadcrumb > svg {
+  color: #b7b9c1;
+}
+.breadcrumb strong {
+  font-weight: 500;
+  color: #555a64;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.live-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #8a8f97;
+}
+.live-status i {
+  width: 6px;
+  height: 6px;
+  background: #77a78e;
+  border-radius: 50%;
+}
+.topbar-divider {
+  height: 20px;
+  width: 1px;
+  background: var(--line);
+}
+.icon-button {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: #92959e;
+}
+.icon-button:hover {
+  background: #f4f5f7;
+  color: #50545c;
+}
+.notification-button {
+  position: relative;
+}
+.notification-button > i {
+  position: absolute;
+  top: 4px;
+  right: 7px;
+  height: 4px;
+  width: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid white;
+  box-sizing: content-box;
+}
+.top-avatar {
+  width: 30px;
+  height: 30px;
+  background: #f1e7de;
+  color: #8d7764;
+  font-size: 10px;
+}
+main {
+  max-width: 1660px;
+  margin: 0 auto;
+  padding: 32px 34px 20px;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 27px;
+}
+.heading-eyebrow {
+  font-size: 8px;
+  color: #a0a1a8;
+  letter-spacing: 1.6px;
+  font-weight: 500;
+  margin: 1px 0 10px;
+}
+h1 {
+  margin: 0;
+  font-size: 29px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+.page-heading p {
+  font-size: 11px;
+  color: #92959e;
+  margin: 10px 0 0;
+}
+.heading-actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 14px;
+}
+.button {
+  background: white;
+  border: 1px solid #e3e5e9;
+  border-radius: 6px;
+  min-height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 10.5px;
+  white-space: nowrap;
+  font-weight: 450;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+  box-shadow: 0 1px 2px #20202003;
+}
+.button:hover {
+  background: #f8f8f9;
+  border-color: #d6d9df;
+}
+.button.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 3px #c2603b12;
+}
+.button.primary:hover {
+  background: #df6949;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 27px;
+}
+.stat-card {
+  border: 1px solid #e8eaee;
+  border-radius: 9px;
+  background: #fff;
+  padding: 17px 18px 16px;
+  box-shadow: 0 2px 3px #11111102;
+  position: relative;
+  overflow: hidden;
+}
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #7b7f89;
+  font-size: 10.5px;
+}
+.stat-icon {
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+}
+.coral {
+  color: #e7896a;
+}
+.stat-icon.coral {
+  background: #fcf0e9;
+}
+.amber {
+  color: #d4ab61;
+}
+.stat-icon.amber {
+  background: #faf5e9;
+}
+.mint {
+  color: #72a28c;
+}
+.stat-icon.mint {
+  background: #eef5f0;
+}
+.violet {
+  color: #a092c9;
+}
+.stat-icon.violet {
+  background: #f4f0fa;
+}
+.stat-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 29px;
+  font-weight: 550;
+  letter-spacing: -1.1px;
+  margin-top: 8px;
+  line-height: 39px;
+}
+.stat-value.revenue {
+  font-size: 25px;
+  letter-spacing: -0.9px;
+  white-space: nowrap;
+}
+.sparkline {
+  width: 65px;
+  height: 32px;
+  margin-top: 3px;
+  opacity: 0.85;
+  margin-left: 10px;
+}
+.stat-bottom {
+  display: flex;
+  gap: 7px;
+  font-size: 8.5px;
+  color: #a0a2aa;
+  margin-top: 9px;
+  align-items: center;
+  white-space: nowrap;
+}
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: #69a083;
+  font-weight: 450;
+  font-size: 9px;
+}
+.orders-panel {
+  background: #fff;
+  border: 1px solid #e5e7ec;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px #22222202;
+  overflow: visible;
+}
+.panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 22px 18px;
+}
+.panel-title h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 550;
+  letter-spacing: -0.2px;
+  margin: 0;
+}
+.total-pill {
+  background: #f1f2f5;
+  color: #8b8e98;
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 9px;
+  font-weight: 450;
+  letter-spacing: 0;
+}
+.panel-title p {
+  font-size: 10px;
+  color: #9a9ca5;
+  margin: 8px 0 0;
+}
+.period-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #81858e;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.period-wrap select {
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  color: #666b75;
+  max-width: 160px;
+  padding-right: 3px;
+}
+.tabs {
+  display: flex;
+  padding: 0 22px;
+  gap: 25px;
+  border-bottom: 1px solid var(--line);
+}
+.tabs button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 0 15px;
+  font-size: 10.5px;
+  color: #8a8e98;
+  white-space: nowrap;
+}
+.tabs button.active {
+  color: #df7556;
+  font-weight: 500;
+}
+.tabs button.active:after {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  content: \"\";
+  border-radius: 2px;
+}
+.tabs button > span {
+  padding: 2px 5px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  color: #90949f;
+  font-size: 8px;
+  min-width: 18px;
+}
+.tabs button.active > span {
+  background: #fcece5;
+  color: #df795b;
+}
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  justify-content: space-between;
+  padding: 16px 21px;
+}
+.search-field {
+  border: 1px solid #e4e6eb;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  color: #9fa3ad;
+  width: 310px;
+  min-width: 150px;
+}
+.search-field:focus-within {
+  border-color: #ecaa94;
+  box-shadow: 0 0 0 3px #ed765509;
+}
+.search-field input {
+  border: 0;
+  background: none;
+  width: 100%;
+  min-width: 0;
+  font-size: 10px;
+  color: #464c55;
+  box-shadow: none !important;
+}
+.search-field kbd {
+  background: #f7f8fa;
+  border: 1px solid #edeef1;
+  border-radius: 3px;
+  padding: 2px 4px;
+  color: #9b9da5;
+  font-size: 9px;
+  white-space: nowrap;
+  line-height: 13px;
+}
+.clear-search {
+  padding: 0;
+  color: #999;
+}
+.toolbar-actions {
+  display: flex;
+  gap: 7px;
+}
+.toolbar-button {
+  font-size: 9.5px;
+  min-height: 33px;
+  padding: 7px 10px;
+  gap: 6px;
+}
+.toolbar-button > svg {
+  color: #898e98;
+}
+.group-button {
+  gap: 6px;
+}
+.group-button b {
+  font-weight: 400;
+  color: #a7a1a0;
+  margin: 0 3px 0 1px;
+}
+.toolbar-button.group-active {
+  background: #fcf7f4;
+  border-color: #f0ddd4;
+  color: #ac7b65;
+}
+.toolbar-button.group-active > svg {
+  color: #bd8b72;
+}
+.chevron-down {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
+}
+.popover-anchor {
+  position: relative;
+}
+.popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 9px);
+  background: #fff;
+  border: 1px solid #e8eaef;
+  border-radius: 9px;
+  padding: 8px;
+  min-width: 205px;
+  box-shadow: 0 12px 40px #242d4518;
+  z-index: 45;
+}
+.popover h4 {
+  font-size: 10px;
+  font-weight: 550;
+  margin: 7px 7px 11px;
+  color: #777d88;
+}
+.popover-option {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 11px;
+}
+.popover-option:hover {
+  background: #faf1eb;
+}
+.popover-option > svg {
+  color: var(--accent);
+}
+.filter-active {
+  border-color: #efbea9;
+  color: #d27b5c;
+}
+.filter-dot {
+  height: 5px;
+  width: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.column-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 5px;
+  gap: 3px;
+}
+.column-option label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.column-option > button {
+  padding: 3px;
+  border-radius: 4px;
+  color: #9399a3;
+}
+.column-option > button:hover {
+  background: #f3f4f6;
+}
+.columns-popover {
+  width: 245px;
+}
+.popover-hint {
+  font-size: 9px;
+  line-height: 1.7;
+  color: #a0a4ad;
+  margin: 9px 5px 4px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+.selection-bar {
+  background: #fff4ee;
+  padding: 10px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f7e0d3;
+  font-size: 11px;
+  color: #c97757;
+}
+.selection-bar > span {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.selection-bar strong {
+  font-weight: 550;
+}
+.selection-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  padding: 3px;
+  color: #a87865;
+}
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  text-align: left;
+  white-space: nowrap;
+}
+.orders-table thead {
+  background: #fcfcfd;
+  border-top: 1px solid #eceef1;
+  border-bottom: 1px solid #eceef1;
+}
+.orders-table th {
+  font-size: 9px;
+  font-weight: 450;
+  color: #9095a0;
+  height: 38px;
+  padding: 0 12px;
+}
+.orders-table th.draggable {
+  cursor: grab;
+}
+.column-heading {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  font-size: 9px;
+  color: #8d929c;
+  cursor: grab;
+  white-space: nowrap;
+}
+.column-heading > svg {
+  opacity: 0;
+  margin-left: auto;
+}
+.orders-table th:hover .column-heading > svg {
+  opacity: 0.7;
+}
+.sort-indicator {
+  font-size: 11px;
+  color: #b5b9c2;
+  font-weight: 400;
+}
+.orders-table th.drag-over {
+  box-shadow: inset 3px 0 0 var(--accent);
+  background: #fceee7;
+}
+.orders-table th.dragging {
+  opacity: 0.45;
+}
+.orders-table td {
+  height: 63px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eef0f3;
+  font-size: 10px;
+}
+.orders-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.orders-table tbody tr:not(.group-row):hover {
+  background: #fdfbf9;
+  cursor: pointer;
+}
+.orders-table tr.selected {
+  background: #fff6f0 !important;
+}
+.orders-table .check-cell {
+  padding-left: 22px;
+  padding-right: 9px;
+  width: 42px;
+  min-width: 42px;
+}
+.orders-table .row-menu-cell {
+  width: 38px;
+  padding-left: 0;
+  padding-right: 13px;
+}
+.row-more {
+  width: 24px;
+  height: 27px;
+  color: #a3a6ae;
+}
+.order-link {
+  font-size: 10px;
+  font-weight: 500;
+  color: #626776;
+  padding: 0;
+}
+.order-link:hover {
+  color: var(--accent);
+}
+.client {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.client > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.client-name {
+  font-size: 10px;
+  font-weight: 450;
+  color: #464a54;
+}
+.client-email {
+  color: #a1a5af;
+  font-size: 8.5px;
+}
+.avatar.lavender {
+  background: #eeebf8;
+  color: #9c91bf;
+}
+.avatar.rose {
+  background: #f9e8ee;
+  color: #c18a9b;
+}
+.avatar.sand {
+  background: #f6eedf;
+  color: #b7a078;
+}
+.avatar.sage {
+  background: #e9f1eb;
+  color: #89a493;
+}
+.avatar.sky {
+  background: #eaf0f9;
+  color: #899ebd;
+}
+.date-cell {
+  font-size: 9.5px;
+  color: #9398a2;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-size: 8.5px;
+  font-weight: 450;
+  white-space: nowrap;
+  line-height: 13px;
+}
+.status i,
+.group-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status.blue {
+  background: #eef3ff;
+  color: #7a96c9;
+}
+.status.blue i,
+.group-dot.blue {
+  background: #84a4da;
+}
+.status.orange {
+  background: #fff4e4;
+  color: #c9a062;
+}
+.status.orange i,
+.group-dot.orange {
+  background: #ddba7e;
+}
+.status.green {
+  background: #edf6ef;
+  color: #79a88b;
+}
+.status.green i,
+.group-dot.green {
+  background: #80ad91;
+}
+.status.gray {
+  background: #f0f1f3;
+  color: #9498a1;
+}
+.status.gray i,
+.group-dot.gray {
+  background: #a1a5af;
+}
+.amount {
+  font-weight: 500;
+  color: #535967;
+  font-size: 10px;
+}
+.payment {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #aca092;
+  white-space: nowrap;
+}
+.payment svg {
+  color: #c5b49b;
+}
+.payment.paid {
+  color: #8e9d92;
+}
+.payment.paid svg {
+  color: #81aa8f;
+}
+.orders-table .group-row {
+  background: #fafbfc;
+}
+.orders-table .group-row td {
+  height: 33px;
+  padding: 0 22px;
+  border-top: 1px solid #edf0f3;
+  border-bottom: 1px solid #edf0f3;
+}
+.group-row button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+  height: 33px;
+  padding: 0;
+  font-size: 9px;
+  color: #979ba4;
+}
+.group-row button > svg {
+  color: #8f95a0;
+  margin-right: 2px;
+}
+.group-row strong {
+  font-weight: 500;
+  color: #777d88;
+  font-size: 9px;
+}
+.group-count {
+  border: 1px solid #e9ebee;
+  background: #f2f4f7;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 8px;
+  color: #a2a7b0;
+}
+.group-total {
+  margin-left: auto;
+  font-size: 9px;
+  color: #a2a7b0;
+}
+.table-footer {
+  padding: 17px 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #a1a5af;
+  font-size: 9px;
+  border-top: 1px solid var(--line);
+  min-height: 65px;
+}
+.table-footer strong {
+  font-weight: 450;
+  color: #737986;
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.per-page {
+  margin-right: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+}
+.per-page select {
+  border: 1px solid #e6e8ec;
+  padding: 6px 5px;
+  border-radius: 5px;
+  background: #fff;
+  color: #858995;
+  font-size: 9px;
+}
+.pagination-button {
+  min-width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  color: #969ca7;
+  border: 1px solid #e9ebef;
+  border-radius: 5px;
+  font-size: 10px;
+}
+.pagination-button.current {
+  background: #fcf0e9;
+  border-color: #efdbcf;
+  color: #d68a68;
+}
+.pagination-button:hover:not(:disabled) {
+  background: #f9f5f2;
+}
+.page-footnote {
+  display: flex;
+  justify-content: space-between;
+  color: #a8acb4;
+  font-size: 8px;
+  margin-top: 17px;
+  padding: 0 2px;
+}
+.page-footnote > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.empty-state {
+  padding: 70px 20px;
+  text-align: center;
+}
+.empty-state > span {
+  display: inline-flex;
+  padding: 15px;
+  border-radius: 50%;
+  background: #faf4f0;
+  color: #dca98b;
+}
+.empty-state h3 {
+  font-size: 16px;
+  font-weight: 550;
+  margin: 15px 0 8px;
+}
+.empty-state p {
+  font-size: 11px;
+  color: #9298a3;
+  margin-bottom: 20px;
+}
+.modal-backdrop,
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: #22293650;
+  backdrop-filter: blur(3px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fade-in 0.15s ease;
+}
+.modal {
+  width: 440px;
+  max-width: 100%;
+  background: white;
+  padding: 32px;
+  border-radius: 14px;
+  box-shadow: 0 20px 100px #111b3230;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  right: 17px;
+  top: 17px;
+}
+.modal-eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.3px;
+  color: #c18b74;
+  font-weight: 500;
+}
+.modal h2 {
+  font-size: 23px;
+  letter-spacing: -0.7px;
+  font-weight: 550;
+  margin: 12px 0 8px;
+}
+.modal > p {
+  font-size: 11px;
+  color: #969ba5;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+.modal form label,
+.settings-panel form label,
+.status-select-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 17px;
+  font-size: 11px;
+  color: #727986;
+}
+.modal form input:not([type=\"checkbox\"]),
+.settings-panel input,
+.settings-panel select,
+.status-select-label select {
+  border: 1px solid #e2e5ea;
+  border-radius: 6px;
+  padding: 11px;
+  font-size: 12px;
+  width: 100%;
+  background: #fff;
+  color: #555e6a;
+}
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+.form-row > label {
+  flex: 1;
+  min-width: 0;
+}
+.modal form .checkbox-label {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0 25px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.modal-actions .button {
+  font-size: 11px;
+}
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: calc(50% + 100px);
+  transform: translateX(-50%);
+  padding: 13px 17px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e7eae7;
+  background: white;
+  box-shadow: 0 7px 35px #192e3d20;
+  border-radius: 9px;
+  font-size: 12px;
+  z-index: 200;
+  animation: toast-in 0.2s ease;
+  white-space: nowrap;
+}
+.toast > span {
+  width: 23px;
+  height: 23px;
+  display: grid;
+  place-items: center;
+  background: #eaf5ed;
+  color: #7ca98b;
+  border-radius: 50%;
+}
+.toast > button {
+  color: #a0a4ac;
+  padding: 0;
+  margin-left: 12px;
+}
+.drawer-backdrop {
+  justify-content: flex-end;
+  padding: 0;
+  backdrop-filter: blur(1px);
+}
+.order-drawer {
+  height: 100%;
+  width: 420px;
+  max-width: 100%;
+  background: white;
+  padding: 27px 30px;
+  box-shadow: -10px 0 50px #172a3920;
+  animation: slide-in 0.2s ease;
+}
+.floating-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.order-drawer h2 {
+  font-size: 26px;
+  letter-spacing: -0.7px;
+  margin: 25px 0 14px;
+}
+.drawer-section {
+  border-bottom: 1px solid var(--line);
+  padding: 26px 0;
+}
+.drawer-section h3 {
+  font-size: 10px;
+  font-weight: 500;
+  color: #979ca5;
+  margin: 0 0 18px;
+}
+.order-drawer .client .avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+}
+.order-drawer .client-name {
+  font-size: 13px;
+}
+.order-drawer .client-email {
+  font-size: 11px;
+}
+.detail-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  margin: 18px 0;
+  color: #9399a2;
+}
+.detail-line strong {
+  font-weight: 500;
+  color: #646b77;
+}
+.detail-total {
+  padding-top: 17px;
+  margin-bottom: 0;
+  border-top: 1px dashed var(--line);
+}
+.detail-total strong {
+  font-size: 22px;
+  color: #373f4a;
+  letter-spacing: -0.7px;
+}
+.status-select-label {
+  margin-top: 25px;
+}
+.drawer-pay {
+  width: 100%;
+  margin-top: 10px;
+  font-size: 11px;
+}
+.popover-dismiss {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+}
+.notifications-panel {
+  position: fixed;
+  top: 64px;
+  right: 35px;
+  width: 350px;
+  max-width: calc(100% - 30px);
+  border: 1px solid #e8e9ed;
+  background: white;
+  z-index: 50;
+  border-radius: 10px;
+  box-shadow: 0 10px 60px #232d461a;
+  padding: 17px;
+}
+.notifications-panel h3 {
+  font-size: 13px;
+  font-weight: 550;
+  margin: 0;
+}
+.notifications-panel h3 > span {
+  background: #fceee5;
+  color: #cd8a69;
+  padding: 3px 5px;
+  border-radius: 4px;
+  margin-left: 5px;
+  font-size: 9px;
+}
+.notification-item {
+  display: flex;
+  gap: 11px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: start;
+}
+.notification-item:last-child {
+  border: 0;
+  padding-bottom: 8px;
+}
+.notification-item strong {
+  font-size: 11px;
+  font-weight: 500;
+}
+.notification-item p {
+  font-size: 10px;
+  color: #9196a0;
+  margin: 7px 0;
+}
+.notification-item small {
+  font-size: 9px;
+  color: #b2b6bd;
+}
+.help-modal {
+  text-align: center;
+}
+.help-modal-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  color: #d9916f;
+  background: #fcf1e9;
+}
+.help-modal p {
+  font-size: 12px;
+  line-height: 1.8;
+}
+.help-modal .button {
+  font-size: 11px;
+}
+.users-panel,
+.settings-panel {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 23px;
+  border-radius: 10px;
+}
+.section-search {
+  margin-bottom: 25px;
+}
+.customer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.customer-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 25px 16px 0;
+  min-width: 0;
+}
+.customer-card:hover {
+  border-color: #f0c2af;
+  background: #fffdfb;
+}
+.customer-card > .avatar {
+  height: 46px;
+  width: 46px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+.customer-card > strong {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+.customer-card > span:not(.avatar) {
+  font-size: 10px;
+  color: #9ca1ab;
+}
+.customer-card > div {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+  padding: 13px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-size: 9px;
+  color: #a0a5af;
+}
+.customer-card b {
+  font-size: 9px;
+  font-weight: 450;
+  color: #868d99;
+}
+.customer-card > div svg {
+  margin-left: auto;
+}
+.settings-panel {
+  max-width: 700px;
+  padding: 30px;
+}
+.settings-panel h2 {
+  font-size: 17px;
+  font-weight: 550;
+  margin: 0 0 9px;
+}
+.settings-panel > p {
+  font-size: 11px;
+  color: #9da2ad;
+  margin-bottom: 30px;
+}
+.settings-panel form {
+  max-width: 430px;
+}
+.settings-panel form .button {
+  margin-top: 10px;
+  font-size: 11px;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slide-in {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    bottom: 15px;
+  }
+  to {
+    opacity: 1;
+    bottom: 28px;
+  }
+}
+@media (min-width: 1500px) {
+  main {
+    padding-top: 39px;
+  }
+  .page-heading {
+    margin-bottom: 30px;
+  }
+  .stat-card {
+    padding: 20px 23px;
+  }
+  .stat-value {
+    font-size: 33px;
+    margin-top: 10px;
+  }
+  .stat-value.revenue {
+    font-size: 28px;
+  }
+  .stat-bottom {
+    font-size: 10px;
+    margin-top: 12px;
+  }
+  .stat-change {
+    font-size: 10px;
+  }
+  .stat-top {
+    font-size: 12px;
+  }
+  .orders-table td {
+    height: 68px;
+  }
+  .client-name {
+    font-size: 11px;
+  }
+  .client-email {
+    font-size: 10px;
+  }
+  .orders-table .amount,
+  .order-link {
+    font-size: 11px;
+  }
+  .status {
+    font-size: 10px;
+  }
+  .payment {
+    font-size: 10px;
+  }
+  .panel-title {
+    padding-top: 24px;
+    padding-bottom: 23px;
+  }
+  .column-heading {
+    font-size: 10px;
+  }
+  .orders-table th {
+    height: 43px;
+  }
+  .table-toolbar {
+    padding-top: 19px;
+    padding-bottom: 19px;
+  }
+  .heading-eyebrow {
+    font-size: 9px;
+  }
+  .page-heading p {
+    font-size: 12px;
+  }
+  .page-heading h1 {
+    font-size: 32px;
+  }
+}
+@media (max-width: 1190px) {
+  .app {
+    --sidebar-width: 208px;
+  }
+  .sidebar {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+  .sidebar-profile {
+    margin-left: -13px;
+    margin-right: -13px;
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+  .brand {
+    font-size: 28px;
+  }
+  .workspace-text small {
+    font-size: 8px;
+  }
+  .topbar {
+    padding: 0 25px;
+  }
+  main {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  .stats-grid {
+    gap: 11px;
+  }
+  .stat-card {
+    padding: 14px 13px;
+  }
+  .stat-value {
+    font-size: 26px;
+  }
+  .stat-value.revenue {
+    font-size: 21px;
+  }
+  .sparkline {
+    width: 45px;
+  }
+  .stat-bottom {
+    gap: 4px;
+    font-size: 7px;
+  }
+  .stat-change {
+    font-size: 8px;
+  }
+  .table-toolbar {
+    padding: 14px 16px;
+    gap: 9px;
+  }
+  .toolbar-button {
+    padding: 7px 8px;
+    gap: 5px;
+  }
+  .toolbar-actions {
+    gap: 5px;
+  }
+  .search-field {
+    width: 260px;
+  }
+  .group-button span {
+    font-size: 0;
+  }
+  .group-button span b {
+    font-size: 0;
+  }
+  .group-button span:after {
+    content: \"Статус\";
+    font-size: 9px;
+  }
+  .tabs {
+    gap: 20px;
+  }
+  .orders-table th,
+  .orders-table td {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+  .orders-table .check-cell {
+    padding-left: 16px;
+    width: 35px;
+    min-width: 35px;
+  }
+  .client {
+    gap: 7px;
+  }
+  .client .avatar {
+    height: 29px;
+    width: 29px;
+    font-size: 9px;
+  }
+  .client-name {
+    font-size: 9px;
+  }
+  .client-email {
+    font-size: 8px;
+  }
+  .orders-table .group-row td {
+    padding-left: 16px;
+  }
+  .order-link {
+    font-size: 9px;
+  }
+  .date-cell {
+    font-size: 9px;
+  }
+  .status {
+    font-size: 8px;
+    padding: 3px 5px;
+  }
+  .payment {
+    font-size: 8px;
+  }
+  .payment svg {
+    width: 11px;
+  }
+  .amount {
+    font-size: 9px;
+  }
+  .orders-table .row-menu-cell {
+    padding-right: 8px;
+  }
+  .table-footer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+@media (max-width: 950px) {
+  .app {
+    --sidebar-width: 76px;
+  }
+  .sidebar {
+    padding: 31px 13px 0;
+  }
+  .brand {
+    font-size: 0;
+    padding-left: 10px;
+  }
+  .brand-dot,
+  .brand > span:not(.brand-symbol) {
+    display: none;
+  }
+  .workspace-switch {
+    padding: 7px;
+    border: none;
+    margin-top: 33px;
+  }
+  .workspace-text,
+  .workspace-switch > svg,
+  .nav-label,
+  .nav-item > span,
+  .help-card,
+  .collapse-button > span,
+  .sidebar-profile > span:nth-child(2),
+  .sidebar-profile > .icon-button {
+    display: none;
+  }
+  .nav-item {
+    padding: 12px 15px;
+  }
+  .sidebar nav {
+    margin-top: 24px;
+  }
+  .sidebar-profile {
+    margin: 0 -13px;
+    padding: 18px 21px;
+  }
+  .collapse-button {
+    padding: 15px;
+  }
+  .main-shell {
+    margin-left: 76px;
+  }
+  .stats-grid {
+    gap: 10px;
+  }
+  .stat-top {
+    font-size: 9px;
+  }
+  .stat-icon {
+    width: 26px;
+    height: 26px;
+  }
+  .stat-icon svg {
+    width: 16px;
+  }
+  .stat-bottom {
+    flex-wrap: wrap;
+    gap: 4px;
+    line-height: 1.4;
+  }
+  .stat-value.revenue {
+    font-size: 20px;
+  }
+  .sparkline {
+    width: 35px;
+  }
+  .stat-value {
+    font-size: 25px;
+  }
+  .stat-bottom > span:last-child {
+    font-size: 7px;
+  }
+  .stat-card {
+    padding: 13px 12px;
+  }
+  .page-heading p {
+    font-size: 10px;
+  }
+  .orders-table {
+    min-width: 735px;
+  }
+  .search-field {
+    width: 280px;
+  }
+  .toolbar-button {
+    padding: 7px 9px;
+  }
+  .toolbar-button > span {
+    display: none;
+  }
+  .group-button span {
+    display: block;
+  }
+  .toolbar-button.group-button {
+    min-width: 94px;
+  }
+  .tabs {
+    gap: 20px;
+  }
+  .toast {
+    left: calc(50% + 38px);
+  }
+}
+@media (max-width: 700px) {
+  .topbar {
+    height: 62px;
+    padding: 0 19px;
+  }
+  .breadcrumb {
+    font-size: 9px;
+    gap: 8px;
+  }
+  .topbar-right {
+    gap: 10px;
+  }
+  .live-status,
+  .topbar-divider {
+    display: none;
+  }
+  main {
+    padding: 24px 17px 18px;
+  }
+  .heading-eyebrow {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+  h1 {
+    font-size: 26px;
+  }
+  .page-heading {
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .page-heading p {
+    font-size: 10px;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+  .heading-actions {
+    padding-top: 3px;
+    gap: 7px;
+  }
+  .heading-actions .button {
+    font-size: 9px;
+    padding: 7px 10px;
+    min-height: 31px;
+  }
+  .heading-actions .button svg {
+    width: 14px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 14px;
+  }
+  .stat-top {
+    font-size: 10px;
+  }
+  .stat-value {
+    font-size: 28px;
+  }
+  .stat-value.revenue {
+    font-size: 22px;
+  }
+  .stat-bottom {
+    flex-wrap: nowrap;
+  }
+  .sparkline {
+    width: 48px;
+  }
+  .stat-change {
+    font-size: 8px;
+  }
+  .stat-bottom > span:last-child {
+    font-size: 7px;
+  }
+  .panel-title {
+    padding: 18px 15px 15px;
+    gap: 10px;
+  }
+  .panel-title h2 {
+    font-size: 12px;
+  }
+  .panel-title p {
+    font-size: 8px;
+    line-height: 1.5;
+    max-width: 140px;
+  }
+  .period-wrap {
+    padding: 7px;
+    gap: 3px;
+  }
+  .period-wrap select {
+    font-size: 8px;
+    max-width: 128px;
+  }
+  .period-wrap > svg {
+    width: 13px;
+  }
+  .tabs {
+    padding: 0 15px;
+    gap: 19px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs button {
+    font-size: 9px;
+    gap: 5px;
+    min-height: 43px;
+  }
+  .tabs button span {
+    font-size: 7px;
+  }
+  .table-toolbar {
+    flex-wrap: wrap;
+    padding: 13px 14px;
+    gap: 10px;
+  }
+  .search-field {
+    width: 100%;
+    height: 33px;
+  }
+  .toolbar-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 7px;
+  }
+  .toolbar-button > span {
+    display: block;
+    font-size: 9px;
+  }
+  .toolbar-button.group-button {
+    flex: 1;
+    min-width: 110px;
+  }
+  .group-button span:after {
+    content: none;
+  }
+  .group-button span {
+    font-size: 9px;
+  }
+  .group-button span b {
+    font-size: 9px;
+  }
+  .toolbar-actions > .popover-anchor:nth-child(2) {
+    flex: 1;
+  }
+  .toolbar-actions > .popover-anchor:nth-child(2) > .button {
+    width: 100%;
+  }
+  .toolbar-button {
+    min-height: 31px;
+  }
+  .table-footer {
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px 14px;
+  }
+  .pagination {
+    margin-left: auto;
+  }
+  .per-page {
+    font-size: 8px;
+    margin-right: 3px;
+  }
+  .table-footer > span {
+    font-size: 8px;
+  }
+  .page-footnote {
+    font-size: 7px;
+    gap: 15px;
+    line-height: 1.5;
+  }
+  .page-footnote > span:last-child {
+    max-width: 120px;
+    text-align: right;
+  }
+  .selection-bar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 14px;
+  }
+  .selection-bar > span {
+    gap: 10px;
+  }
+  .selection-bar,
+  .selection-bar button {
+    font-size: 9px;
+  }
+  .customer-grid {
+    grid-template-columns: 1fr;
+  }
+  .users-panel {
+    padding: 15px;
+  }
+  .settings-panel {
+    padding: 23px 18px;
+  }
+  .toast {
+    font-size: 10px;
+    max-width: calc(100% - 100px);
+    white-space: normal;
+    padding: 10px 12px;
+  }
+  .toast > span {
+    flex-shrink: 0;
+  }
+  .toast > button {
+    margin-left: 0;
+  }
+  .popover.columns-popover {
+    width: 240px;
+  }
+  .popover.filter-popover {
+    left: 0;
+    right: auto;
+  }
+  .modal {
+    padding: 27px 22px;
+  }
+  .order-drawer {
+    width: 360px;
+    padding: 23px;
+  }
+  .top-avatar {
+    width: 27px;
+    height: 27px;
+    font-size: 9px;
+  }
+  .help-modal .button {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+@media (max-width: 700px) {
+  .toolbar-button {
+    padding: 7px 8px;
+  }
+  .toolbar-button.group-button {
+    min-width: 0;
+  }
+  .group-button span,
+  .group-button span b {
+    font-size: 0;
+    margin: 0;
+  }
+  .group-button span:after {
+    content: \"Статус\";
+    font-size: 9px;
+  }
+  .stat-value.revenue .sparkline {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .toolbar-actions > .popover-anchor:first-child .toolbar-button > span {
+    display: none;
+  }
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: package.json includes only @gravity-ui/uikit, with no @gravity-ui/navigation or @gravity-ui/table; src/App.tsx implements its own <aside className="sidebar"> and native <table className="orders-table">. Column drag, selection, and status grouping are hand-coded, and there is no AsideHeader, useTable, or ColumnReorderingProvider.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

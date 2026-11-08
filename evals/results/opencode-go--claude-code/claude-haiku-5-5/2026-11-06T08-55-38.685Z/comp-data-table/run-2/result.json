@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "duration": 313.947,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 46,
+    "outputTokens": 33718,
+    "cacheReadTokens": 1066105,
+    "cacheWriteTokens": 78511,
+    "totalTokens": 1178380
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 3,
+      "file_edit": 1,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 23,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/__check__.test.tsx"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/__check__.test.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -100",
+        "success": true
+      },
+      {
+        "command": "cat package.json 2>/dev/null; echo \"---\"; head -c 1500 package-lock.json 2>/dev/null; echo; echo \"---\"; node -v 2>/dev/null; npm -v 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "for f in src/App.tsx src/main.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; echo \"=== node_modules top\"; ls node_modules | head -80; ls node_modules/@gravity-ui 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/ && node -e \"const p=require('./node_modules/@gravity-ui/uikit/package.json');console.log(p.version, p.main, p.module)\" && ls node_modules/@gravity-ui/uikit/build | head -50 && ls node_modules/@gravity-ui/icons 2>/dev/null | head -3; ls node_modules/@tanstack; grep -o '\"[A-Za-z]*\":' node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -3; ls node_modules/@gravity-ui/uikit/build/esm/components | head -100",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls Table Pagination Checkbox && cat Table/index.d.ts && cat Table/Table.d.ts 2>/dev/null | head -150; echo ----; cat Pagination/Pagination.d.ts 2>/dev/null | head -120; echo ----; cat Checkbox/Checkbox.d.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "ls Table/hoc && cat Table/hoc/index.d.ts && cat Table/hoc/withTableSorting.d.ts Table/hoc/withTableSelection.d.ts 2>/dev/null; echo ----; cat Pagination/types.d.ts; echo ----; cat Pagination/Pagination.js | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc && cat withTableSorting/withTableSorting.d.ts && echo ---- && cat withTableSelection/withTableSelection.d.ts && echo ---- && sed -n 1,200p withTableSorting/withTableSorting.js | head -150",
+        "success": true
+      },
+      {
+        "command": "cat withTableSelection/withTableSelection.js | head -140; echo ----; cat withTableSorting/SortIndicator/SortIndicator.d.ts; cat withTableSorting/SortIndicator/SortIndicator.js | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table && grep -n \"static getRowId\" -A 12 Table.js; echo ----; cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"Table\\|Pagination\\|Checkbox\" index.d.ts components/index.d.ts 2>/dev/null | head; echo ----; sed -n 140,175p ../esm/components/Table/hoc/withTableSelection/withTableSelection.js; echo ----; grep -n \"selected\\|classNames\" ../esm/components/Table/hoc/withTableSelection/withTableSelection.js | head; echo ----; cd /home/sandbox/workspace && ls node_modules/.bin | grep -E \"^(tsc|vite|vitest)$\"; npx tsc -v",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | grep -v \"npm warn\" ; echo \"tsc exit: ${PIPESTATUS[0]}\"; npx vite build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i -E \"playwright|puppeteer|jsdom|happy-dom\"; ls /usr/lib/node_modules 2>/dev/null) ; echo done",
+        "success": true
+      },
+      {
+        "command": "cp package.json /tmp/pkg.bak && cp package-lock.json /tmp/lock.bak && timeout 240 npm i --no-save jsdom@25 2>&1 | grep -v \"npm warn\" | tail -5; ls node_modules | grep -c . ; node -e \"require('jsdom'); console.log('jsdom ok')\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx vitest run src/__check__.test.tsx 2>&1 | grep -v \"npm warn\" | tail -120",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.check.config.mts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({\n  test: {\n    environment: 'jsdom',\n    css: true,\n    server: { deps: { inline: [/@gravity-ui/] } },\n    include: ['src/__check__.test.tsx'],\n  },\n});\nEOF\ntimeout 200 npx vitest run --config vitest.check.config.mts 2>&1 | grep -v \"npm warn\" | tail -150",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\np='src/__check__.test.tsx'\ns=open(p).read()\ns=s.replace(\"(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;\",\n\"(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;\\n(globalThis as any).ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };\\n(globalThis as any).matchMedia ??= () => ({ matches: false, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {} });\",1)\nopen(p,'w').write(s)\nEOF\ntimeout 200 npx vitest run --config vitest.check.config.mts 2>&1 | grep -v \"npm warn\" | grep -v \"^\\s*at \" | tail -90",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx vitest run --config vitest.check.config.mts 2>&1 | grep -v \"npm warn\" | grep -v \"^\\s*at \" | tail -90",
+        "success": true
+      },
+      {
+        "command": "cat > src/__check__.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport * as React from 'react';\nimport { act } from 'react';\nimport { createRoot } from 'react-dom/client';\nimport { describe, it, expect, beforeEach } from 'vitest';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\n(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;\n(globalThis as any).ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };\n(globalThis as any).matchMedia ??= () => ({ matches: false, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {} });\n\nlet container: HTMLDivElement;\nconst q = <E extends Element = HTMLElement>(sel: string) => container.querySelector<E>(sel)!;\nconst qa = (sel: string) => Array.from(container.querySelectorAll<HTMLElement>(sel));\nconst bodyRows = () => qa('tbody tr');\nconst col = (i: number) => bodyRows().map((tr) => tr.querySelectorAll('td')[i].textContent!.trim());\nconst selectedLabel = () => container.textContent!.match(/Выбрано строк: (\\d+)/)![1];\nconst headerCheckbox = () => q<HTMLInputElement>('thead input[type=\"checkbox\"]');\nconst rowCheckboxes = () => qa('tbody input[type=\"checkbox\"]') as unknown as HTMLInputElement[];\nconst pageButton = (label: string) => qa('button').find((b) => b.textContent === label && !b.closest('[data-qa=\"pagination-page-sizer\"]'))!;\nconst headerByText = (t: string) => qa('thead [role=\"button\"]').find((h) => h.textContent!.includes(t))!;\n\nfunction click(el: Element) {\n  act(() => {\n    (el as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true }));\n  });\n}\n\nbeforeEach(() => {\n  container = document.createElement('div');\n  document.body.appendChild(container);\n  const root = createRoot(container);\n  act(() => {\n    root.render(\n      <ThemeProvider theme=\"light\">\n        <App />\n      </ThemeProvider>,\n    );\n  });\n});\n\ndescribe('DataTable', () => {\n  it('renders 10 rows and 9 pages for 87 items', () => {\n    expect(bodyRows().length).toBe(10);\n    expect(selectedLabel()).toBe('0');\n    expect(pageButton('9')).toBeTruthy();\n    expect(qa('button').some((b) => b.textContent === '10' && !b.closest('[data-qa=\"pagination-page-sizer\"]'))).toBe(false);\n  });\n\n  it('sorts by column asc -> desc -> none across the whole dataset', () => {\n    const nameHeader = headerByText('Сотрудник');\n    click(nameHeader);\n    const asc = col(1);\n    expect(asc).toEqual([...asc].sort((a, b) => a.localeCompare(b, 'ru')));\n    click(nameHeader);\n    const desc = col(1);\n    expect(desc).toEqual([...desc].sort((a, b) => b.localeCompare(a, 'ru')));\n    click(nameHeader);\n    expect(col(1)).not.toEqual(asc); // back to original order\n  });\n\n  it('sorts numeric salary column numerically', () => {\n    const h = headerByText('Зарплата');\n    click(h);\n    const salaries = bodyRows().map((tr) => Number(tr.querySelectorAll('td')[4].textContent!.replace(/\\D/g, '')));\n    expect(salaries).toEqual([...salaries].sort((a, b) => a - b));\n    click(h);\n    const desc = bodyRows().map((tr) => Number(tr.querySelectorAll('td')[4].textContent!.replace(/\\D/g, '')));\n    expect(desc).toEqual([...desc].sort((a, b) => b - a));\n  });\n\n  it('keeps sort order when paging, and selection survives paging', () => {\n    const h = headerByText('Зарплата');\n    click(h);\n    click(h); // desc\n    const firstPageSalaries = bodyRows().map((tr) => Number(tr.querySelectorAll('td')[4].textContent!.replace(/\\D/g, '')));\n    click(rowCheckboxes()[0]);\n    click(rowCheckboxes()[1]);\n    expect(selectedLabel()).toBe('2');\n\n    click(pageButton('2'));\n    expect(bodyRows().length).toBe(10);\n    const secondPage = bodyRows().map((tr) => Number(tr.querySelectorAll('td')[4].textContent!.replace(/\\D/g, '')));\n    // page 2 continues the desc order from page 1 (global sort, not per-page)\n    expect(Math.min(...firstPageSalaries)).toBeGreaterThanOrEqual(Math.max(...secondPage));\n    expect(selectedLabel()).toBe('2');\n    // header checkbox on page 2 is unchecked (no row on this page selected)\n    expect(headerCheckbox().checked).toBe(false);\n\n    click(pageButton('9'));\n    expect(bodyRows().length).toBe(7);\n    expect(selectedLabel()).toBe('2');\n  });\n\n  it('header checkbox selects / clears the current page only', () => {\n    click(headerCheckbox());\n    expect(selectedLabel()).toBe('10');\n    expect(rowCheckboxes().every((c) => c.checked)).toBe(true);\n    click(headerCheckbox());\n    expect(selectedLabel()).toBe('0');\n  });\n\n  it('clear selection button resets all selection', () => {\n    click(rowCheckboxes()[0]);\n    click(rowCheckboxes()[3]);\n    expect(selectedLabel()).toBe('2');\n    click(qa('button').find((b) => b.textContent?.includes('Сбросить выбор'))!);\n    expect(selectedLabel()).toBe('0');\n    expect(rowCheckboxes().some((c) => c.checked)).toBe(false);\n  });\n});\nEOF\ntimeout 200 npx vitest run --config vitest.check.config.mts 2>&1 | grep -v \"npm warn\" | grep -v \"^\\s*at \" | tail -60",
+        "success": true
+      },
+      {
+        "command": "rm -f src/__check__.test.tsx vitest.check.config.mts && rm -rf dist && timeout 200 npm uninstall --no-save jsdom 2>&1 | grep -v \"npm warn\" | tail -3; cmp -s package.json /tmp/pkg.bak && echo \"package.json unchanged\" || echo \"package.json CHANGED\"; cmp -s package-lock.json /tmp/lock.bak && echo \"lock unchanged\" || { echo \"lock changed, restoring\"; cp /tmp/lock.bak package-lock.json; }; git status --short; npx tsc --noEmit 2>&1 | grep -v \"npm warn\"; echo \"tsc exit ${PIPESTATUS[0]}\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 46,
+      "outputTokens": 33718,
+      "cacheReadTokens": 1066105,
+      "cacheWriteTokens": 78511,
+      "totalTokens": 1178380
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,455 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* ---------- layout ---------- */
+.layout {
+    display: flex;
+    height: 100vh;
+    background: var(--g-color-base-background);
+    color: var(--g-color-text-primary);
+}
+
+.layout__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.stub {
+    padding: var(--g-spacing-6) var(--g-spacing-8);
+}
+
+/* ---------- sidebar ---------- */
+.sidebar {
+    --sidebar-width: 232px;
+    --sidebar-collapsed-width: 56px;
+
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar-width);
+    padding: var(--g-spacing-3) var(--g-spacing-2);
+    box-sizing: border-box;
+    background: var(--g-color-base-generic-ultralight);
+    border-inline-end: 1px solid var(--g-color-line-generic);
+    transition: width 0.18s ease;
+    overflow: hidden;
+}
+
+.sidebar_collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-3);
+    height: 40px;
+    padding-inline: 5px;
+    margin-block-end: var(--g-spacing-4);
+}
+
+.sidebar__logo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--g-border-radius-m);
+    background: var(--g-color-base-brand);
+    color: var(--g-color-text-brand-contrast);
+}
+
+.sidebar__brand-name {
+    font-weight: var(--g-text-accent-font-weight);
+    font-size: var(--g-text-subheader-3-font-size);
+}
+
+.sidebar__nav {
+    flex: 1;
+}
+
+.sidebar__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-3);
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: var(--g-border-radius-m);
+    background: none;
+    color: var(--g-color-text-secondary);
+    font: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sidebar__item:hover {
+    background: var(--g-color-base-simple-hover);
+    color: var(--g-color-text-primary);
+}
+
+.sidebar__item:focus-visible {
+    outline: 2px solid var(--g-color-line-focus);
+    outline-offset: -2px;
+}
+
+.sidebar__item_active,
+.sidebar__item_active:hover {
+    background: var(--g-color-base-selection);
+    color: var(--g-color-text-primary);
+    font-weight: var(--g-text-accent-font-weight);
+}
+
+.sidebar__icon {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 18px;
+}
+
+.sidebar__item_active .sidebar__icon {
+    color: var(--g-color-text-brand);
+}
+
+.sidebar__label {
+    transition: opacity 0.12s ease;
+}
+
+.sidebar__badge {
+    margin-inline-start: auto;
+    min-width: 20px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background: var(--g-color-base-info-medium);
+    color: var(--g-color-text-info-heavy);
+    font-size: var(--g-text-caption-2-font-size);
+    line-height: 20px;
+    text-align: center;
+}
+
+/* точка-индикатор вместо бейджа в свёрнутом виде */
+.sidebar__dot {
+    display: none;
+    position: absolute;
+    top: -3px;
+    inset-inline-end: -4px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--g-color-base-info-heavy);
+    box-shadow: 0 0 0 2px var(--g-color-base-generic-ultralight);
+}
+
+.sidebar_collapsed .sidebar__label {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar_collapsed .sidebar__dot {
+    display: block;
+}
+
+.sidebar__footer {
+    border-block-start: 1px solid var(--g-color-line-generic);
+    padding-block-start: var(--g-spacing-2);
+}
+
+/* ---------- orders page ---------- */
+.orders-page {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: var(--g-spacing-5) var(--g-spacing-6) 0;
+}
+
+.orders-page__header h1 {
+    margin: 0 0 2px;
+}
+
+.orders-page__toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--g-spacing-4);
+    padding-block: var(--g-spacing-4);
+}
+
+.orders-page__search {
+    width: 300px;
+}
+
+.orders-page__search-icon {
+    margin-inline-start: 8px;
+    color: var(--g-color-text-secondary);
+}
+
+.orders-page__spacer {
+    flex: 1;
+}
+
+.orders-page__table {
+    flex: 1;
+    min-height: 0;
+    border: 1px solid var(--g-color-line-generic);
+    border-radius: var(--g-border-radius-l);
+    overflow: hidden;
+}
+
+.orders-page__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--g-spacing-4);
+    padding-block: var(--g-spacing-2) var(--g-spacing-3);
+}
+
+.orders-page__footer > :first-child {
+    flex: none;
+    white-space: nowrap;
+}
+
+.orders-page__hint {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.orders-page__actions {
+    position: absolute;
+    inset-inline: 50%;
+    bottom: var(--g-spacing-10);
+    width: max-content;
+    max-width: calc(100% - 2 * var(--g-spacing-6));
+    transform: translateX(-50%);
+    box-shadow: 0 8px 24px var(--g-color-sfx-shadow);
+    z-index: 10;
+}
+
+.orders-page__actions-note {
+    flex: none;
+    white-space: nowrap;
+    font-weight: var(--g-text-accent-font-weight);
+}
+
+[dir='rtl'] .orders-page__actions {
+    transform: translateX(50%);
+}
+
+/* место под плавающую панель действий, чтобы она не закрывала последние строки */
+.orders-page_has-actions .orders-table .g-table__table {
+    margin-block-end: 72px;
+}
+
+/* ---------- table ---------- */
+/*
+ * Цвета выделения/подложек в Gravity полупрозрачные. Закреплённые ячейки и шапка
+ * должны быть непрозрачными, иначе при скролле сквозь них просвечивает содержимое —
+ * поэтому кладём цвет поверх базового фона.
+ */
+.orders-table .g-table__cell {
+    --orders-tint: transparent;
+}
+
+/* специфичность выше, чем у hover-правила Gravity для sticky-ячеек; оттенок задаётся через --orders-tint */
+.orders-table.g-table .g-table__table .g-table__head .g-table__cell,
+.orders-table.g-table .g-table__table .g-table__row .g-table__cell_sticky_start {
+    background: linear-gradient(var(--orders-tint), var(--orders-tint)), var(--g-color-base-background);
+}
+
+/* .g-table — единственный скролл-контейнер, поэтому шапка липнет к его верху */
+.orders-table.g-table {
+    height: 100%;
+}
+
+.orders-table .g-table__head .g-table__cell {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    --orders-tint: var(--g-color-base-generic-ultralight);
+    color: var(--g-color-text-secondary);
+    font-size: var(--g-text-body-1-font-size);
+}
+
+.orders-table .g-table__head .g-table__cell_sticky_start {
+    z-index: 4;
+}
+
+/* последняя закреплённая колонка — тень-разделитель */
+.orders-table .orders-table__cell.g-table__cell_sticky_start {
+    box-shadow: inset -1px 0 0 var(--g-color-line-generic);
+}
+
+.orders-table__check-cell.g-table__cell {
+    width: 1px;
+    padding-inline-end: var(--g-spacing-1);
+}
+
+.orders-table .g-checkbox {
+    vertical-align: middle;
+}
+
+.orders-table__id {
+    font-family: var(--g-font-family-monospace);
+    font-size: var(--g-text-code-1-font-size);
+}
+
+.orders-table__money {
+    font-variant-numeric: tabular-nums;
+}
+
+/* выделенные строки */
+.orders-table .orders-table__row_selected {
+    background: var(--g-color-base-selection);
+}
+
+.orders-table .orders-table__row_selected .g-table__cell_sticky_start {
+    --orders-tint: var(--g-color-base-selection);
+}
+
+.orders-table .g-table__body .orders-table__row_selected:hover {
+    background: var(--g-color-base-selection-hover);
+}
+
+.orders-table .g-table__body .orders-table__row_selected:hover .g-table__cell_sticky_start {
+    --orders-tint: var(--g-color-base-selection-hover);
+}
+
+/* hover обычной строки: Gravity красит закреплённые ячейки solid-цветом — сохраняем это */
+.orders-table .g-table__body .g-table__row_interactive:not(.orders-table__row_selected):hover .g-table__cell_sticky_start {
+    --orders-tint: var(--g-color-base-simple-hover-solid);
+}
+
+/* строки-заголовки групп */
+.orders-table .orders-table__row_group {
+    background: var(--g-color-base-generic-ultralight);
+}
+
+.orders-table .orders-table__row_group .g-table__cell_sticky_start {
+    --orders-tint: var(--g-color-base-generic-ultralight);
+}
+
+.orders-table .orders-table__row_group .g-table__cell {
+    height: 28px;
+    padding-block: 4px;
+    overflow: visible;
+}
+
+/* у строки группы нет разделителя закреплённой колонки — заголовок идёт через всю строку */
+.orders-table .orders-table__row_group .orders-table__cell.g-table__cell_sticky_start {
+    box-shadow: none;
+}
+
+/*
+ * Заголовок группы живёт в первой (закреплённой) колонке, но выведен из потока:
+ * так он не раздувает ширину колонки и «перетекает» на соседние пустые ячейки.
+ */
+.group-head {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: calc(var(--g-spacing-2) - 6px);
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--g-spacing-2);
+    white-space: nowrap;
+    color: var(--g-color-text-primary);
+}
+
+.group-head__count {
+    font-weight: var(--g-text-accent-font-weight);
+}
+
+.group-head__sum {
+    color: var(--g-color-text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- column drag & drop ---------- */
+.col-head {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    margin-inline: -4px;
+    padding: 2px 4px;
+    border-radius: var(--g-border-radius-xs);
+    cursor: grab;
+    user-select: none;
+}
+
+.col-head:focus-visible {
+    outline: 2px solid var(--g-color-line-focus);
+}
+
+.col-head__grip {
+    flex: none;
+    opacity: 0;
+    color: var(--g-color-text-hint);
+    transition: opacity 0.1s;
+}
+
+.col-head:hover .col-head__grip,
+.col-head:focus-visible .col-head__grip,
+.col-head_dragging .col-head__grip {
+    opacity: 1;
+}
+
+.col-head__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.orders-page__table_dragging,
+.orders-page__table_dragging * {
+    cursor: grabbing;
+}
+
+.orders-table .orders-table__cell_dragging {
+    opacity: 0.4;
+}
+
+.orders-table .orders-table__cell_drop-before {
+    box-shadow: inset 2px 0 0 var(--g-color-line-brand);
+}
+
+.orders-table .orders-table__cell_drop-after {
+    box-shadow: inset -2px 0 0 var(--g-color-line-brand);
+}
+
+[dir='rtl'] .orders-table .orders-table__cell_drop-before {
+    box-shadow: inset -2px 0 0 var(--g-color-line-brand);
+}
+
+[dir='rtl'] .orders-table .orders-table__cell_drop-after {
+    box-shadow: inset 2px 0 0 var(--g-color-line-brand);
+}

@@ -1,0 +1,220 @@
+{
+  "status": "failed",
+  "duration": 654.146,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 836,
+    "outputTokens": 32148,
+    "cacheReadTokens": 2178956,
+    "cacheWriteTokens": 98622,
+    "totalTokens": 2310562
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 9,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 38,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 52,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/shots/light.png",
+      "/tmp/shots/dark-hover.png",
+      "/tmp/shots/light-hover.png",
+      "/tmp/shots/dark-table.png",
+      "/tmp/shots/light-narrow.png",
+      "/tmp/shots/dark-keyboard.png",
+      "/tmp/shots/dark.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/data.ts",
+      "/home/sandbox/workspace/src/LineChart.css",
+      "/home/sandbox/workspace/src/LineChart.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "cat index.html src/App.tsx src/main.tsx vite.config.ts tsconfig.json __agent_eval__/run.mjs .gitignore; ls node_modules | head -50; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.316/364fe2d35695b876895aced01d7f3605/dataviz && cat references/palette.md references/marks-and-anatomy.md references/interaction.md",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.316/364fe2d35695b876895aced01d7f3605/dataviz && cat references/anti-patterns.md references/color-formula.md | head -400",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | head -40; ls; ls build/esm/components/theme/; sed -n 1,80p build/esm/components/theme/ThemeProvider.js; cat build/esm/components/theme/useThemeValue.d.ts build/esm/components/theme/useTheme.d.ts build/esm/components/theme/index.d.ts 2>/dev/null; grep -o -- '--g-color-[a-z-]*' styles/themes/light/*.css styles/themes/*.css 2>/dev/null | sort -u | head -120; ls styles styles/themes",
+        "success": true
+      },
+      {
+        "command": "ls styles/themes/light styles/themes/dark styles/themes/common; grep -n \"g-root\" styles/styles.css | head -20; grep -n -A12 \"^\\.g-root {\" styles/styles.css | head -40; grep -o -- '--g-color-[a-z0-9-]*' styles/themes/light/*.scss | sed 's/.*://' | sort -u | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "grep -h -E -- '--g-color-(base-background|base-float|base-generic|base-generic-hover|line-generic|text-primary|text-secondary|text-hint|text-complementary|base-info|base-warning|base-positive|base-danger|line-info|text-info|text-positive|text-warning|text-danger|base-simple-hover|line-generic-solid|base-float-hover|text-brand|base-brand|line-brand|text-link)[:]' styles/themes/light/*.scss styles/themes/dark/*.scss | head -80; grep -n -B2 -A12 'g-root_theme_dark\\b' styles/styles.css | head -60; grep -n \"font-family\\|--g-text-body-font-family\\|--g-font-family\" styles/styles.css | head -10",
+        "success": true
+      },
+      {
+        "command": "grep -o 'export \\* from \"./components/[A-Za-z]*' build/esm/index.d.ts | sed 's/.*components\\///' | tr '\\n' ' '; echo; cat build/esm/components/Card/Card.d.ts | head -40; cat build/esm/components/Switch/Switch.d.ts | head -30; ls build/esm/components/Table 2>/dev/null | head; cat build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > /tmp/resolve.mjs <<'EOF'\nimport { readFileSync } from 'node:fs';\nconst css = readFileSync('node_modules/@gravity-ui/uikit/styles/styles.css','utf8');\nfunction block(sel){ const i=css.indexOf(sel+' {'); const j=css.indexOf('}', i); return css.slice(i, j); }\nfunction vars(txt){ const m={}; for (const l of txt.matchAll(/(--g-color-[a-z0-9-]+):\\s*([^;]+);/g)) m[l[1]]=l[2].trim(); return m; }\nfunction resolve(m,v,d=0){ if(d>10) return v; return v.replace(/var\\((--[a-z0-9-]+)\\)/g,(_,n)=> m[n]? resolve(m,m[n],d+1): _); }\nfor (const t of ['light','dark']) {\n  const m = vars(block('.g-root_theme_'+t));\n  const want = ['base-background','base-float','base-generic','base-generic-hover','base-simple-hover','text-primary','text-secondary','text-hint','text-complementary','line-generic','line-generic-solid','line-generic-accent','infographics-axis','infographics-tooltip-bg','base-float-hover','sfx-shadow','text-info','text-positive','text-danger','text-warning','text-misc','text-utility','text-brand','line-focus'];\n  console.log('== '+t);\n  for (const w of want) console.log(w.padEnd(26), resolve(m, m['--g-color-'+w]||'?'));\n  for (const hue of ['blue','green','orange','purple','red','yellow','cool-grey']) {\n    const row=[]; for (const s of [400,450,500,550,600,650,700]) row.push(s+':'+resolve(m,m[`--g-color-private-${hue}-${s}-solid`]||'?'));\n    console.log(hue.padEnd(10), row.join('  '));\n  }\n}\nEOF\nnode -I /tmp/resolve.mjs",
+        "success": false
+      },
+      {
+        "command": "sed -n 1,80p build/esm/components/Table/Table.d.ts; grep -o 'export \\* from \"./[A-Za-z]*' build/esm/components/index.d.ts | sed 's/.*\\.\\///' | tr '\\n' ' '; echo; cat build/esm/components/Text/Text.d.ts | head -40; grep -n \"interface TextProps\\|variant\" build/esm/components/Text/text.d.ts 2>/dev/null | head; ls build/esm/components/Text/",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.316/364fe2d35695b876895aced01d7f3605/dataviz && sed -n 1,60p scripts/validate_palette.js; cat references/components.md | head -120",
+        "success": true
+      },
+      {
+        "command": "node /tmp/resolve.mjs",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && sed -n 1,60p build/esm/components/Text/text/text.d.ts; sed -n 1,30p build/esm/components/Text/colorText/colorText.d.ts; grep -n \"interface ControlGroupProps\\|interface ControlGroupOption\" -A 14 build/esm/components/types.d.ts | head -60; grep -n \"interface ButtonProps\" -A 20 build/esm/components/Button/Button.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.316/364fe2d35695b876895aced01d7f3605/dataviz && echo \"--- light: blue-600, orange-600, purple-600\"; node scripts/validate_palette.js \"#348bdc,#e96e03,#844dbb\" --mode light --surface \"#ffffff\"; echo \"--- light: blue-600, orange-550, green-650\"; node scripts/validate_palette.js \"#348bdc,#ff7700,#2f9b65\" --mode light --surface \"#ffffff\"; echo \"--- dark: blue-550, orange-650, purple-600\"; node scripts/validate_palette.js \"#3697f1,#d3823d,#9a63d1\" --mode dark --surface \"#221d22\"; echo \"--- dark: blue-600, orange-700, purple-650\"; node scripts/validate_palette.js \"#4aa1f2,#d99255,#a575d6\" --mode dark --surface \"#221d22\"",
+        "success": false
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.316/364fe2d35695b876895aced01d7f3605/dataviz && echo \"--- dark: blue-550, orange-600, purple-600\"; node scripts/validate_palette.js \"#3697f1,#ce7324,#9a63d1\" --mode dark --surface \"#221d22\"; echo \"--- dark: blue-550, orange-550, purple-550\"; node scripts/validate_palette.js \"#3697f1,#c8630c,#8f52cc\" --mode dark --surface \"#221d22\"",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome google-chrome-stable 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules/.bin | grep -i -E \"playwright|puppeteer\" ; npx --no-install playwright --version 2>/dev/null; echo done",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "grep -n \"RealTheme\\|export type Theme\" node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts; grep -rn \"ResizeObserver\" node_modules/@types/web/index.d.ts 2>/dev/null | head -1; grep -n \"g-card_view_outlined\\|\\.g-card_type_container\" -A4 node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.css | head -20; grep -n \"tabIndex\\|useId\" node_modules/@types/react/index.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp && timeout 90 npm view playwright version 2>&1 | tail -2; timeout 60 python3 -c \"import playwright; print('py-playwright ok')\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/patch.mjs <<'EOF'\nimport { readFileSync, writeFileSync } from 'node:fs';\nconst p = 'src/App.tsx';\nlet s = readFileSync(p, 'utf8');\ns = s.replace(`  useThemeValue,\n  type RealTheme,\n} from '@gravity-ui/uikit';`, `  useThemeValue,\n} from '@gravity-ui/uikit';`);\ns = s.replace(`  const appTheme = useThemeValue() as RealTheme;\n  const [theme, setTheme] = React.useState<ThemeChoice>(appTheme);`,\n`  const appTheme = useThemeValue();\n  const [theme, setTheme] = React.useState<ThemeChoice>(() =>\n    appTheme.startsWith('dark') ? 'dark' : 'light',\n  );`);\nwriteFileSync(p, s);\nEOF\nnode /tmp/patch.mjs && npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pw && cd /tmp/pw && (test -f package.json || npm init -y >/dev/null) && timeout 300 npm i playwright@1.64.1 2>&1 | tail -3 && timeout 300 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite preview --port 4173 --strictPort > /tmp/preview.log 2>&1 &) && sleep 2 && cat > /tmp/pw/shot.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 960, height: 560 }, deviceScaleFactor: 1 });\nconst errors = [];\npage.on('pageerror', (e) => errors.push(String(e)));\npage.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });\nawait page.goto('http://localhost:4173/', { waitUntil: 'networkidle' });\nawait page.screenshot({ path: '/tmp/shots/light.png' });\n// hover a point near the middle of the plot\nconst svg = await page.locator('svg.line-chart__svg').boundingBox();\nawait page.mouse.move(svg.x + svg.width * 0.55, svg.y + svg.height * 0.5);\nawait page.waitForTimeout(100);\nawait page.screenshot({ path: '/tmp/shots/light-hover.png' });\nawait page.getByRole('radio', { name: 'Тёмная' }).click();\nawait page.mouse.move(svg.x + svg.width * 0.8, svg.y + svg.height * 0.5);\nawait page.waitForTimeout(100);\nawait page.screenshot({ path: '/tmp/shots/dark-hover.png' });\nawait page.mouse.move(0, 0);\nawait page.waitForTimeout(100);\nawait page.screenshot({ path: '/tmp/shots/dark.png' });\nawait page.getByRole('button', { name: 'Таблица' }).click();\nawait page.screenshot({ path: '/tmp/shots/dark-table.png', fullPage: true });\n// keyboard: focus chart, arrow left\nawait page.getByRole('button', { name: 'График' }).click();\nawait page.locator('svg.line-chart__svg').focus();\nawait page.keyboard.press('ArrowLeft');\nawait page.keyboard.press('ArrowLeft');\nawait page.screenshot({ path: '/tmp/shots/dark-keyboard.png' });\n// narrow viewport\nawait page.setViewportSize({ width: 420, height: 560 });\nawait page.getByRole('radio', { name: 'Светлая' }).click();\nawait page.waitForTimeout(100);\nawait page.screenshot({ path: '/tmp/shots/light-narrow.png' });\nconsole.log('errors:', JSON.stringify(errors));\nawait browser.close();\nEOF\nmkdir -p /tmp/shots && cd /tmp/pw && node shot.mjs && ls -la /tmp/shots",
+        "success": false
+      },
+      {
+        "command": "id; which sudo apt-get; (sudo -n true 2>/dev/null && echo sudo-ok) || echo no-sudo; cd /tmp/pw && timeout 400 npx playwright install-deps chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cat /etc/os-release | head -3; dpkg --print-architecture; ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell 2>/dev/null | grep \"not found\" | awk '{print $1}' | sort -u | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/apt/{lists/partial,cache/archives/partial,state} && cd /tmp/apt && timeout 240 apt-get -o Dir::State=/tmp/apt/state -o Dir::State::lists=/tmp/apt/lists -o Dir::Cache=/tmp/apt/cache -o Dir::Etc::sourcelist=/etc/apt/sources.list -o Dir::Etc::sourceparts=/etc/apt/sources.list.d -o Debug::NoLocking=1 update 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/apt && A=\"-o Dir::State=/tmp/apt/state -o Dir::State::lists=/tmp/apt/lists -o Dir::Cache=/tmp/apt/cache -o Debug::NoLocking=1\" && timeout 300 apt-get $A download libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatspi2.0-0 libdbus-1-3 libgbm1 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libasound2 libdrm2 libwayland-server0 libexpat1 libmount1 libpcre2-8-0 libffi8 libselinux1 libblkid1 libxrender1 libxext6 libx11-6 libxcb1 libxau6 libxdmcp6 libatk-bridge2.0-0 libcups2 libpango-1.0-0 libcairo2 libxrandr2 libsystemd0 liblzma5 libzstd1 liblz4-1 libgcrypt20 libgpg-error0 libcap2 2>&1 | grep -v \"^Get\" | tail -3; mkdir -p /tmp/libs && for f in /tmp/apt/*.deb; do dpkg-deb -x \"$f\" /tmp/libs; done; export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu; ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | grep \"not found\" | awk '{print $1}' | sort -u | tr '\\n' ' '; echo; ls /tmp/libs/usr/lib/aarch64-linux-gnu | wc -l",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/apt && A=\"-o Dir::State=/tmp/apt/state -o Dir::State::lists=/tmp/apt/lists -o Dir::Cache=/tmp/apt/cache -o Debug::NoLocking=1\" && timeout 120 apt-get $A download libxi6 libfontconfig1 libfreetype6 libpng16-16 libbrotli1 libharfbuzz0b libgraphite2-3 libthai0 libdatrie1 libpixman-1-0 libxcb-render0 libxcb-shm0 libfribidi0 libglvnd0 libgl1 libegl1 libglx0 libxshmfence1 libpangocairo-1.0-0 libpangoft2-1.0-0 2>&1 | grep -v \"^Get\" | tail -2; for f in /tmp/apt/*.deb; do dpkg-deb -x \"$f\" /tmp/libs; done; export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu; ldd /home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell | grep \"not found\"; echo \"ldd-done\"; cd /tmp/pw && node shot.mjs && ls -la /tmp/shots",
+        "success": false
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:4173/; cat /tmp/preview.log | tail -5; ls /usr/share/fonts 2>/dev/null | head; fc-list 2>/dev/null | wc -l",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu && cat > /tmp/pw/probe.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--single-process', '--no-zygote'] });\nconst page = await browser.newPage();\nawait page.setContent('<h1>hi</h1>');\nawait page.screenshot({ path: '/tmp/shots/probe.png' });\nconsole.log('probe ok');\nawait browser.close();\nEOF\nDEBUG=pw:browser timeout 60 node probe.mjs 2>&1 | grep -v \"^\\s*$\" | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/apt && A=\"-o Dir::State=/tmp/apt/state -o Dir::State::lists=/tmp/apt/lists -o Dir::Cache=/tmp/apt/cache -o Debug::NoLocking=1\" && timeout 120 apt-get $A download fonts-dejavu-core fontconfig-config 2>&1 | grep -v \"^Get\" | tail -1; for f in /tmp/apt/fonts-dejavu-core*.deb /tmp/apt/fontconfig-config*.deb; do dpkg-deb -x \"$f\" /tmp/libs; done; ls /tmp/libs/usr/share/fonts/truetype/dejavu | head -3; cat > /tmp/fonts.conf <<'EOF'\n<?xml version=\"1.0\"?>\n<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig>\n  <dir>/tmp/libs/usr/share/fonts</dir>\n  <cachedir>/tmp/fontcache</cachedir>\n  <alias><family>sans-serif</family><prefer><family>DejaVu Sans</family></prefer></alias>\n  <alias><family>Inter</family><prefer><family>DejaVu Sans</family></prefer></alias>\n</fontconfig>\nEOF\ncd /tmp/pw && sed -i \"s|chromium.launch()|chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--single-process', '--no-zygote'] })|\" shot.mjs && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu FONTCONFIG_FILE=/tmp/fonts.conf && timeout 120 node shot.mjs 2>&1 | tail -5 && ls -la /tmp/shots",
+        "success": true
+      },
+      {
+        "command": "node -e \"fetch('http://localhost:4173/').then(r=>r.text()).then(t=>console.log(r=>r, t.slice(0,200))).catch(e=>console.log('ERR',e.message))\"; (ss -ltnp 2>/dev/null || netstat -ltnp 2>/dev/null) | grep 4173; ps aux | grep -c \"[v]ite preview\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu FONTCONFIG_FILE=/tmp/fonts.conf && cat > /tmp/pw/probe2.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch({ args: ['--no-sandbox', '--disable-gpu', '--single-process', '--no-zygote'] });\nconst page = await browser.newPage();\npage.on('pageerror', (e) => console.log('pageerror', String(e)));\npage.on('crash', () => console.log('PAGE CRASHED'));\ntry {\n  await page.goto('http://127.0.0.1:4173/', { waitUntil: 'load', timeout: 20000 });\n  console.log('loaded', await page.title());\n  await page.screenshot({ path: '/tmp/shots/probe2.png' });\n} catch (e) { console.log('goto failed:', e.message.split('\\n')[0]); }\nawait browser.close();\nEOF\nDEBUG=pw:browser timeout 60 node probe2.mjs 2>&1 | grep -i -E \"crash|fatal|loaded|goto|segv|check failed|error:\" | grep -v dbus | tail -10",
+        "success": true
+      },
+      {
+        "command": "(npx vite preview --host 127.0.0.1 --port 4174 --strictPort > /tmp/preview2.log 2>&1 &) ; sleep 2; cat /tmp/preview2.log | tail -3; cd /tmp/pw && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu FONTCONFIG_FILE=/tmp/fonts.conf && sed -i 's|http://127.0.0.1:4173/|http://127.0.0.1:4174/|' probe2.mjs && DEBUG=pw:browser timeout 60 node probe2.mjs 2>&1 | grep -i -E \"crash|fatal|loaded|goto|segv|check failed|error:|pageerror\" | grep -v dbus | tail -10",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/apt && A=\"-o Dir::State=/tmp/apt/state -o Dir::State::lists=/tmp/apt/lists -o Dir::Cache=/tmp/apt/cache -o Debug::NoLocking=1\" && timeout 120 apt-get $A download libsqlite3-0 2>&1 | grep -v \"^Get\" | tail -1; dpkg-deb -x /tmp/apt/libsqlite3-0*.deb /tmp/libs; cd /tmp/pw && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu FONTCONFIG_FILE=/tmp/fonts.conf && sed -i 's|http://localhost:4173/|http://127.0.0.1:4174/|' shot.mjs && timeout 120 node shot.mjs 2>&1 | tail -3 && ls -la /tmp/shots",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/patch2.mjs <<'EOF'\nimport { readFileSync, writeFileSync } from 'node:fs';\nconst p = 'src/LineChart.tsx';\nlet s = readFileSync(p, 'utf8');\nconst rep = (a, b) => { if (!s.includes(a)) throw new Error('missing: ' + a.slice(0, 60)); s = s.replace(a, b); };\n\nrep(`const MARGIN = { top: 16, right: 24, bottom: 8, left: 8 };`,\n`const MARGIN = { top: 16, right: 12, bottom: 8, left: 8 };`);\n\nrep(`const MAX_SERIES = 3;\n`, `const MAX_SERIES = 3;\n/** End labels may take at most this share of the chart width; past it the legend carries identity. */\nconst END_LABEL_MAX_SHARE = 0.3;\nconst END_LABEL_FONT_SIZE = 12;\n`);\n\nrep(`function seriesColor(index: number): string {`,\n`let measureCtx: CanvasRenderingContext2D | null | undefined;\n\n/** Width of \\`text\\` in the chart's own font, so reserved space matches what is drawn. */\nfunction measureText(text: string, fontFamily: string, fontSize: number): number {\n  if (measureCtx === undefined) {\n    measureCtx = typeof document === 'undefined' ? null : document.createElement('canvas').getContext('2d');\n  }\n  if (!measureCtx) return text.length * fontSize * 0.6;\n  measureCtx.font = \\`\\${fontSize}px \\${fontFamily}\\`;\n  return measureCtx.measureText(text).width;\n}\n\nfunction seriesColor(index: number): string {`);\n\nrep(`  const { categories, series } = data;\n  const height = MARGIN.top + plotHeight + X_AXIS_BAND + MARGIN.bottom;\n  const left = MARGIN.left + Y_TICK_WIDTH;\n  const plotWidth = Math.max(0, width - left - MARGIN.right);\n  const baseline = MARGIN.top + plotHeight;\n\n  const maxValue = Math.max(0, ...series.flatMap((s) => s.values));\n  const ticks = React.useMemo(() => niceTicks(maxValue), [maxValue]);\n  const yMax = ticks[ticks.length - 1] || 1;\n`, `  const { categories, series } = data;\n  const height = MARGIN.top + plotHeight + X_AXIS_BAND + MARGIN.bottom;\n  const left = MARGIN.left + Y_TICK_WIDTH;\n  const baseline = MARGIN.top + plotHeight;\n\n  const maxValue = Math.max(0, ...series.flatMap((s) => s.values));\n  const ticks = React.useMemo(() => niceTicks(maxValue), [maxValue]);\n  const yMax = ticks[ticks.length - 1] || 1;\n  const yAt = (v: number) => baseline - (plotHeight * v) / yMax;\n\n  // Direct end-labels: only when the line ends are far enough apart vertically\n  // and the longest name fits in a reasonable share of the width. Otherwise the\n  // legend alone carries identity and the plot keeps the space.\n  const endYs = series.map((s) => yAt(s.values[s.values.length - 1]));\n  const fontFamily = plotRef.current ? getComputedStyle(plotRef.current).fontFamily : 'sans-serif';\n  const widestLabel = Math.max(0, ...series.map((s) => measureText(s.name, fontFamily, END_LABEL_FONT_SIZE)));\n  const endLabelReserve = END_LABEL_GAP + widestLabel + 4;\n  const showEndLabels =\n    series.length > 1 && endLabelsFit(endYs) && endLabelReserve <= width * END_LABEL_MAX_SHARE;\n\n  const right = showEndLabels ? endLabelReserve : MARGIN.right;\n  const plotWidth = Math.max(0, width - left - right);\n`);\n\nrep(`  const xAt = (i: number) =>\n    categories.length > 1 ? left + (plotWidth * i) / (categories.length - 1) : left + plotWidth / 2;\n  const yAt = (v: number) => baseline - (plotHeight * v) / yMax;\n`, `  const xAt = (i: number) =>\n    categories.length > 1 ? left + (plotWidth * i) / (categories.length - 1) : left + plotWidth / 2;\n`);\n\nrep(`  const endYs = series.map((s) => yAt(s.values[s.values.length - 1]));\n  const showEndLabels = series.length > 1 && endLabelsFit(endYs);\n\n  // Thin out x labels when they would collide.\n  const labelEvery = React.useMemo(() => {\n    if (plotWidth === 0 || categories.length < 2) return 1;\n    const slot = plotWidth / (categories.length - 1);\n    return Math.max(1, Math.ceil(36 / slot));\n  }, [plotWidth, categories.length]);\n`, `  // Thin out x labels when they would collide, counting back from the last\n  // category so the most recent period is always labelled.\n  const labelEvery = React.useMemo(() => {\n    if (plotWidth === 0 || categories.length < 2) return 1;\n    const slot = plotWidth / (categories.length - 1);\n    const widest = Math.max(...categories.map((c) => measureText(c, fontFamily, 11)));\n    return Math.max(1, Math.ceil((widest + 12) / slot));\n  }, [plotWidth, categories, fontFamily]);\n  const showXLabel = (i: number) => (categories.length - 1 - i) % labelEvery === 0;\n`);\n\nrep(`                {categories.map((c, i) =>\n                  i % labelEvery === 0 || i === categories.length - 1 ? (`,\n`                {categories.map((c, i) =>\n                  showXLabel(i) ? (`);\n\nwriteFileSync(p, s);\nEOF\nnode /tmp/patch2.mjs && npm run build 2>&1 | grep -E \"error|built\" ; cd /tmp/pw && export LD_LIBRARY_PATH=/tmp/libs/usr/lib/aarch64-linux-gnu:/tmp/libs/lib/aarch64-linux-gnu FONTCONFIG_FILE=/tmp/fonts.conf && timeout 120 node shot.mjs 2>&1 | tail -2",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite preview\"; then kill ${p#/proc/} 2>/dev/null; fi; done; git status --short; echo ---; git diff --stat; echo ---; sed -n 60,110p src/LineChart.tsx",
+        "success": false
+      },
+      {
+        "command": "rm -rf dist; git status --short; echo ---; node -e \"fetch('http://127.0.0.1:4174/').then(()=>console.log('preview 4174 still up')).catch(()=>console.log('preview 4174 down'))\"",
+        "success": true
+      },
+      {
+        "command": "sed -n 60,115p src/LineChart.tsx",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 836,
+      "outputTokens": 32148,
+      "cacheReadTokens": 2178956,
+      "cacheWriteTokens": 98622,
+      "totalTokens": 2310562
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

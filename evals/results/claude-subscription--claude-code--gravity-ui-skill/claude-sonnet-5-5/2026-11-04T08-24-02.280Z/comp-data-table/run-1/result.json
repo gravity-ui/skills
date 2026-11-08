@@ -1,0 +1,94 @@
+{
+  "status": "passed",
+  "duration": 480.108,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 20,
+    "outputTokens": 5120,
+    "cacheReadTokens": 339061,
+    "cacheWriteTokens": 35103,
+    "totalTokens": 379304
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 11,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/rules/hallucination-traps.md"
+    ],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json AGENTS.md && ls -R .agents | head -50",
+        "success": true
+      },
+      {
+        "command": "head -60 .agents/skills/gravity-ui/references/package-routing.md; echo ------; rg -n -i -C 4 \"table\" .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,120p; echo -----; ls -R src; cat src/*; cat tsconfig.json index.html vite.config.ts; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination Checkbox 2>&1 | head -60; grep '\"version\"' node_modules/@gravity-ui/uikit/package.json",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls; ls build/esm/components/Table build/esm/components/Pagination 2>&1 | head -40; grep -n \"Table\\|Pagination\" build/esm/components/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Table/Table.d.ts Table/index.d.ts; ls Table/hoc Table/hoc/*; cat Table/hoc/withTableSorting/withTableSorting.d.ts Table/hoc/withTableSelection/withTableSelection.d.ts; cat Pagination/Pagination.d.ts Pagination/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc && cat withTableSorting/withTableSorting.js | head -120; grep -n \"getRowId\\|getRowDescriptor\\|selectedIds\" withTableSelection/withTableSelection.js | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/data.ts <<'EOF'\nexport interface Employee {\n  id: string;\n  name: string;\n  department: string;\n  position: string;\n  salary: number;\n  hiredAt: string;\n}\n\nconst NAMES = [\n  'Анна Смирнова', 'Борис Иванов', 'Виктория Кузнецова', 'Глеб Попов', 'Дарья Соколова',\n  'Егор Лебедев', 'Жанна Козлова', 'Захар Новиков', 'Ирина Морозова', 'Кирилл Петров',\n  'Лариса Волкова', 'Максим Соловьёв', 'Наталья Васильева', 'Олег Зайцев', 'Полина Павлова',\n];\nconst DEPARTMENTS = ['Разработка', 'Дизайн', 'Аналитика', 'Маркетинг', 'Поддержка'];\nconst POSITIONS = ['Стажёр', 'Специалист', 'Старший специалист', 'Руководитель группы'];\n\nexport const EMPLOYEES: Employee[] = Array.from({length: 57}, (_, i) => {\n  const month = (i * 5) % 12;\n  const day = ((i * 7) % 28) + 1;\n  return {\n    id: String(i + 1),\n    name: `${NAMES[i % NAMES.length]}`,\n    department: DEPARTMENTS[(i * 3) % DEPARTMENTS.length],\n    position: POSITIONS[(i * 7) % POSITIONS.length],\n    salary: 60000 + ((i * 7919) % 90) * 1000,\n    hiredAt: new Date(Date.UTC(2018 + (i % 7), month, day)).toISOString().slice(0, 10),\n  };\n});\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {\n  Button,\n  Flex,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n} from '@gravity-ui/uikit';\nimport type {TableColumnConfig, TableSortState} from '@gravity-ui/uikit';\n\nimport {EMPLOYEES} from './data';\nimport type {Employee} from './data';\n\nconst SelectableSortableTable = withTableSelection(withTableSorting(Table<Employee>));\n\nconst PAGE_SIZE_OPTIONS = [5, 10, 20];\n\nconst salaryFormatter = new Intl.NumberFormat('ru-RU');\n\nconst columns: TableColumnConfig<Employee>[] = [\n  {id: 'name', name: 'Сотрудник', primary: true, meta: {sort: true}},\n  {id: 'department', name: 'Отдел', meta: {sort: true}},\n  {id: 'position', name: 'Должность', meta: {sort: true}},\n  {\n    id: 'salary',\n    name: 'Зарплата, ₽',\n    align: 'end',\n    template: (item) => salaryFormatter.format(item.salary),\n    meta: {sort: true},\n  },\n  {id: 'hiredAt', name: 'Дата найма', meta: {sort: true}},\n];\n\nfunction sortEmployees(items: Employee[], sortState: TableSortState): Employee[] {\n  if (sortState.length === 0) {\n    return items;\n  }\n  return items.slice().sort((a, b) => {\n    for (const {column, order} of sortState) {\n      const key = column as keyof Employee;\n      const left = a[key];\n      const right = b[key];\n      const result =\n        typeof left === 'number' && typeof right === 'number'\n          ? left - right\n          : String(left).localeCompare(String(right), 'ru');\n      if (result !== 0) {\n        return order === 'asc' ? result : -result;\n      }\n    }\n    return 0;\n  });\n}\n\nconst getRowDescriptor = (item: Employee) => ({id: item.id});\n\nexport function App() {\n  const [sortState, setSortState] = React.useState<TableSortState>([]);\n  const [page, setPage] = React.useState(1);\n  const [pageSize, setPageSize] = React.useState(PAGE_SIZE_OPTIONS[1]);\n  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);\n\n  // Sorting is applied to the whole dataset first, then the page is sliced out.\n  const sorted = React.useMemo(() => sortEmployees(EMPLOYEES, sortState), [sortState]);\n  const pageItems = React.useMemo(\n    () => sorted.slice((page - 1) * pageSize, page * pageSize),\n    [sorted, page, pageSize],\n  );\n\n  // The table reports the selection of the visible page only; merge it with\n  // the selection made on other pages so it survives sorting and pagination.\n  const handleSelectionChange = React.useCallback(\n    (pageSelectedIds: string[]) => {\n      const pageIds = new Set(pageItems.map((item) => item.id));\n      setSelectedIds((prev) => [...prev.filter((id) => !pageIds.has(id)), ...pageSelectedIds]);\n    },\n    [pageItems],\n  );\n\n  const handlePaginationUpdate = React.useCallback(\n    (nextPage: number, nextPageSize: number) => {\n      setPage(nextPage);\n      setPageSize(nextPageSize);\n    },\n    [],\n  );\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{padding: 24, maxWidth: 1000}}>\n      <Text variant=\"header-1\">Сотрудники</Text>\n\n      <Flex alignItems=\"center\" gap={3} style={{minHeight: 28}}>\n        <Text variant=\"body-2\" color=\"secondary\">\n          Выбрано: {selectedIds.length} из {EMPLOYEES.length}\n        </Text>\n        {selectedIds.length > 0 && (\n          <Button view=\"flat\" size=\"s\" onClick={() => setSelectedIds([])}>\n            Сбросить выделение\n          </Button>\n        )}\n      </Flex>\n\n      <div style={{overflowX: 'auto', maxWidth: '100%'}}>\n        <SelectableSortableTable\n          data={pageItems}\n          columns={columns}\n          getRowDescriptor={getRowDescriptor}\n          sortState={sortState}\n          onSortStateChange={setSortState}\n          selectedIds={selectedIds}\n          onSelectionChange={handleSelectionChange}\n          emptyMessage=\"Нет данных\"\n        />\n      </div>\n\n      <Pagination\n        page={page}\n        pageSize={pageSize}\n        total={sorted.length}\n        pageSizeOptions={PAGE_SIZE_OPTIONS}\n        onUpdate={handlePaginationUpdate}\n      />\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -15; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 20,
+      "outputTokens": 5120,
+      "cacheReadTokens": 339061,
+      "cacheWriteTokens": 35103,
+      "totalTokens": 379304
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 651.843,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 27532,
+    "outputTokens": 7189,
+    "cacheReadTokens": 267776,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1001,
+    "totalTokens": 302497
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!pnpm-lock.yaml'\"' -g '\"'!yarn.lock'\"' -g '\"'!*lock*'\"' -g '\"'!dist'\"' -g '\"'!build'\"' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .agents/skills/gravity-ui/SKILL.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,88p' .agents/skills/gravity-ui/references/package-routing.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json src/App.tsx src/main.tsx index.html && cat .agents/skills/gravity-ui/rules/hallucination-traps.md'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc '.agents/skills/gravity-ui/scripts/inspect-package.sh uikit DropdownMenu Button Text Label Toaster && cat node_modules/@gravity-ui/uikit/README.md'",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'DropdownMenu|Required setup' node_modules/@gravity-ui/uikit -g '*.d.ts' -g '*README*' -g 'INDEX.md' | head -55 && rg --files -g '*lock*' -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!'\"\\\\.agents/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit DropdownMenu Button Text Label && cat node_modules/@gravity-ui/uikit/README.md && cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Menu/MenuItem.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Popup/Popup.d.ts && rg -n 'base-float|base-simple-hover|line-generic|spacing-\\\\d|border-radius|sfx-shadow' node_modules/@gravity-ui/uikit/styles/styles.css | head -35 && cat tsconfig.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build && git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python - <<'PY'\nimport re\nfrom pathlib import Path\ncss=Path('src/App.css').read_text()\ntokens=set(re.findall(r'var\\\\((--g-[\\\\w-]+)\\\\)',css))\nsource=Path('node_modules/@gravity-ui/uikit/styles/styles.css').read_text()\nmissing=sorted(token for token in tokens if token+':' not in source)\nprint('CSS tokens checked:',len(tokens))\nprint('Missing tokens:',missing)\nPY\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module -e 'import fs from \\\"node:fs\\\"; const css=fs.readFileSync(\\\"src/App.css\\\",\\\"utf8\\\"); const source=fs.readFileSync(\\\"node_modules/@gravity-ui/uikit/styles/styles.css\\\",\\\"utf8\\\"); const tokens=[...new Set([...css.matchAll(/var\\\\((--g-[\\\\w-]+)\\\\)/g)].map(match=>match[1]))]; console.log(\\\"CSS tokens checked:\\\",tokens.length); console.log(\\\"Missing tokens:\\\",tokens.filter(token=>\"'!source.includes(token+\":\")));'\"'\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 27532,
+      "outputTokens": 7189,
+      "cacheReadTokens": 267776,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1001,
+      "totalTokens": 302497
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

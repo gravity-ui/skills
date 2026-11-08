@@ -1,0 +1,32 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 1 failed) 101632ms
+   ✓ imports @gravity-ui/charts 1ms
+   ✓ depends on @gravity-ui/charts 0ms
+   ✓ no @gravity-ui/chartkit 0ms
+   ✓ no recharts 0ms
+   ✓ no chart.js 0ms
+   ✓ no raw <canvas> 0ms
+   × judge: implements the task with the intended Gravity UI API 101630ms
+     → [judge:environment] FAIL — The line chart is @gravity-ui/charts' Chart component with a series of type 'line'; it follows the app theme because it reads the active Gravity theme from the surrounding ThemeProvider, with no manual color wiring. Chartkit, recharts, chart.js or a raw canvas fail.
+  reason: The library/API half holds (src/App.tsx imports {Chart} from '@gravity-ui/charts' and every series has type: 'line', inside the existing @gravity-ui/uikit ThemeProvider in src/main.tsx), but the criterion's 'no manual color wiring' clause is literally violated: App.tsx defines a SERIES_COLORS map ('var(--g-color-text-info)', 'var(--g-color-text-danger)', 'var(--g-color-text-positive)') and assigns it via an explicit `color:` prop on each of the three series (lines 13, 29, 36, 43), so the chart's series colors come from hand-wired per-series values rather than from the component's automatic theme. No chartkit/recharts/chart.js/canvas is present.
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  14:13:48
+   Duration  101.81s (transform 31ms, setup 19ms, collect 13ms, tests 101.63s, environment 0ms, prepare 43ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The line chart is @gravity-ui/charts' Chart component with a series of type 'line'; it follows the app theme because it reads the active Gravity theme from the surrounding ThemeProvider, with no manual color wiring. Chartkit, recharts, chart.js or a raw canvas fail.
+  reason: The library/API half holds (src/App.tsx imports {Chart} from '@gravity-ui/charts' and every series has type: 'line', inside the existing @gravity-ui/uikit ThemeProvider in src/main.tsx), but the criterion's 'no manual color wiring' clause is literally violated: App.tsx defines a SERIES_COLORS map ('var(--g-color-text-info)', 'var(--g-color-text-danger)', 'var(--g-color-text-positive)') and assigns it via an explicit `color:` prop on each of the three series (lines 13, 29, 36, 43), so the chart's series colors come from hand-wired per-series values rather than from the component's automatic theme. No chartkit/recharts/chart.js/canvas is present.
+ ❯ EVAL.ts:89:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

@@ -1,0 +1,162 @@
+{
+  "status": "failed",
+  "duration": 413.508,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 14911,
+    "outputTokens": 13429,
+    "cacheReadTokens": 282104,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 8322,
+    "totalTokens": 310444
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 21,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la /home/sandbox/workspace'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/package.json && echo \"---\" && cat /home/sandbox/workspace/index.html && echo \"---\" && cat /home/sandbox/workspace/tsconfig.json && echo \"---\" && cat /home/sandbox/workspace/vite.config.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace/src -type f | sort'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/src/main.tsx && echo \"---\" && cat /home/sandbox/workspace/src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /home/sandbox/workspace/src/widgets/ChartWidget'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/types.ts << 'TYPESEOF'\nimport type {ReactNode} from 'react';\n\n/** Два режима отображения виджета. */\nexport type ChartMode = 'sales' | 'monitor';\n\n/** Одна точка данных для графика продаж. */\nexport interface SalesPoint {\n  label: string;\n  value: number;\n}\n\n/** Одна точка данных для мониторинга — плотный временной ряд. */\nexport interface MonitorPoint {\n  ts: number;   // unix ms\n  value: number;\n}\n\n/** Единый контракт данных, принимаемый виджетом. */\nexport interface ChartWidgetData {\n  sales: SalesPoint[];\n  monitor: MonitorPoint[];\n}\n\n/** Пропсы виджета. */\nexport interface ChartWidgetProps {\n  data: ChartWidgetData;\n  initialMode?: ChartMode;\n  className?: string;\n}\n\n/** Контракт движка графика: функция-рендерер, принимающая данные. */\nexport type ChartEngine<P> = (props: P & {className?: string}) => ReactNode;\n\n/** Пропсы движка продаж. */\nexport interface SalesEngineProps {\n  data: SalesPoint[];\n  className?: string;\n}\n\n/** Пропсы движка мониторинга. */\nexport interface MonitorEngineProps {\n  data: MonitorPoint[];\n  className?: string;\n}\nTYPESEOF\necho \\\"types.ts done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/SalesEngine.tsx << 'EOF'\nimport type {SalesEngineProps} from './types';\n\n/** Рендерит обычный линейный график на SVG без внешних зависимостей. */\nexport default function SalesEngine({data, className}: SalesEngineProps) {\n  if (data.length === 0) {\n    return <div className={className}>Нет данных продаж</div>;\n  }\n\n  const w = 600;\n  const h = 280;\n  const pad = {top: 20, right: 20, bottom: 40, left: 50};\n  const plotW = w - pad.left - pad.right;\n  const plotH = h - pad.top - pad.bottom;\n\n  const max = Math.max(...data.map((d) => d.value), 1);\n  const min = 0;\n\n  const xs = (i: number) => pad.left + (i / Math.max(data.length - 1, 1)) * plotW;\n  const ys = (v: number) => pad.top + plotH - ((v - min) / (max - min)) * plotH;\n\n  const points = data.map((d, i) => \"'`${xs(i)},${ys(d.value)}`).join('\"' ');\n\n  return (\n    <div className={className}>\n      <svg viewBox={\"'`0 0 ${w} ${h}`} style={{width: '\"'100%', maxWidth: w, font: '11px sans-serif'}}>\n        {/* оси */}\n        <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + plotH} stroke=\\\"#ccc\\\" />\n        <line x1={pad.left} y1={pad.top + plotH} x2={pad.left + plotW} y2={pad.top + plotH} stroke=\\\"#ccc\\\" />\n\n        {/* сетка Y */}\n        {[0, 0.25, 0.5, 0.75, 1].map((frac) => {\n          const y = ys(min + frac * (max - min));\n          return (\n            <g key={\"'`gy-${frac}`}>\n              <line x1={pad.left} y1={y} x2={pad.left + plotW} y2={y} stroke=\"#eee\" />\n              <text x={pad.left - 6} y={y + 4} textAnchor=\"end\" fill=\"#666\">\n                {Math.round(min + frac * (max - min)).toLocaleString('\"'ru')}\n              </text>\n            </g>\n          );\n        })}\n\n        {/* ломаная */}\n        <polyline points={points} fill=\\\"none\\\" stroke=\\\"#5282ff\\\" strokeWidth={2} />\n\n        {/* точки */}\n        {data.map((d, i) => (\n          <circle key={\"'`pt-${i}`} cx={xs(i)} cy={ys(d.value)} r={3} fill=\"#5282ff\" />\n        ))}\n\n        {/* подписи X */}\n        {data.map((d, i) => {\n          const step = Math.max(1, Math.floor(data.length / 8));\n          if (i % step !== 0 && i !== data.length - 1) return null;\n          return (\n            <text key={`xl-${i}`} x={xs(i)} y={pad.top + plotH + 16} textAnchor=\"middle\" fill=\"#666\">\n              {d.label}\n            </text>\n          );\n        })}\n      </svg>\n    </div>\n  );\n}\nEOF\necho \"SalesEngine.tsx done\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/MonitorEngine.tsx << 'EOF'\nimport type {MonitorEngineProps} from './types';\n\nfunction fmtTime(ts: number) {\n  const d = new Date(ts);\n  const hh = String(d.getHours()).padStart(2, '0');\n  const mm = String(d.getMinutes()).padStart(2, '0');\n  return \"'`${hh}:${mm}`;\n}\n\n/** Плотный временной ряд мониторинга — залитая область на SVG. */\nexport default function MonitorEngine({data, className}: MonitorEngineProps) {\n  if (data.length === 0) {\n    return <div className={className}>Нет данных мониторинга</div>;\n  }\n\n  const w = 600;\n  const h = 280;\n  const pad = {top: 20, right: 20, bottom: 40, left: 60};\n  const plotW = w - pad.left - pad.right;\n  const plotH = h - pad.top - pad.bottom;\n\n  const max = Math.max(...data.map((d) => d.value), 1);\n  const min = Math.min(...data.map((d) => d.value), 0);\n\n  const range = max - min || 1;\n\n  const xs = (i: number) => pad.left + (i / Math.max(data.length - 1, 1)) * plotW;\n  const ys = (v: number) => pad.top + plotH - ((v - min) / range) * plotH;\n  const baseline = pad.top + plotH;\n\n  const areaPoints =\n    data.map((d, i) => `${xs(i)},${ys(d.value)}`).join('\"' ') +\n    \"'` ${pad.left + plotW},${baseline} ${pad.left},${baseline}`;\n\n  return (\n    <div className={className}>\n      <svg viewBox={`0 0 ${w} ${h}`} style={{width: '\"'100%', maxWidth: w, font: '11px sans-serif'}}>\n        <defs>\n          <linearGradient id=\\\"monitorGrad\\\" x1=\\\"0\\\" y1=\\\"0\\\" x2=\\\"0\\\" y2=\\\"1\\\">\n            <stop offset=\\\"0%\\\" stopColor=\\\"#ff6d5a\\\" stopOpacity={0.35} />\n            <stop offset=\\\"100%\\\" stopColor=\\\"#ff6d5a\\\" stopOpacity={0.02} />\n          </linearGradient>\n        </defs>\n\n        {/* оси */}\n        <line x1={pad.left} y1={pad.top} x2={pad.left} y2={pad.top + plotH} stroke=\\\"#ccc\\\" />\n        <line x1={pad.left} y1={pad.top + plotH} x2={pad.left + plotW} y2={pad.top + plotH} stroke=\\\"#ccc\\\" />\n\n        {/* сетка Y */}\n        {[0, 0.25, 0.5, 0.75, 1].map((frac) => {\n          const y = ys(min + frac * range);\n          return (\n            <g key={\"'`gy-${frac}`}>\n              <line x1={pad.left} y1={y} x2={pad.left + plotW} y2={y} stroke=\"#eee\" />\n              <text x={pad.left - 6} y={y + 4} textAnchor=\"end\" fill=\"#666\">\n                {(min + frac * range).toFixed(1)}\n              </text>\n            </g>\n          );\n        })}\n\n        {/* залитая область */}\n        <polygon points={areaPoints} fill=\"url(#monitorGrad)\" stroke=\"#ff6d5a\" strokeWidth={1.2} />\n\n        {/* подписи X — только границы */}\n        <text x={pad.left} y={pad.top + plotH + 16} textAnchor=\"middle\" fill=\"#666\">\n          {fmtTime(data[0].ts)}\n        </text>\n        <text x={pad.left + plotW} y={pad.top + plotH + 16} textAnchor=\"middle\" fill=\"#666\">\n          {fmtTime(data[data.length - 1].ts)}\n        </text>\n      </svg>\n    </div>\n  );\n}\nEOF\necho \"MonitorEngine.tsx done\"'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/ChartWidget.tsx << 'EOF'\nimport React, {useCallback, useState} from 'react';\nimport {RadioButton, Card, Text} from '@gravity-ui/uikit';\nimport type {ChartWidgetProps, ChartMode} from './types';\n\nconst SalesEngine = React.lazy(() => import('./SalesEngine'));\nconst MonitorEngine = React.lazy(() => import('./MonitorEngine'));\n\nconst MODE_OPTIONS: {value: ChartMode; content: string}[] = [\n  {value: 'sales', content: 'Продажи'},\n  {value: 'monitor', content: 'Мониторинг'},\n];\n\nexport function ChartWidget({data, initialMode = 'sales', className}: ChartWidgetProps) {\n  const [mode, setMode] = useState<ChartMode>(initialMode);\n\n  const onModeChange = useCallback(\n    (ev: React.ChangeEvent<HTMLInputElement>) => setMode(ev.target.value as ChartMode),\n    [],\n  );\n\n  return (\n    <Card className={className} style={{padding: 16}}>\n      <div style={{display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 12}}>\n        <Text variant=\\\"header-1\\\">Виджет</Text>\n        <RadioButton value={mode} onChange={onModeChange}>\n          {MODE_OPTIONS.map((opt) => (\n            <RadioButton.Option key={opt.value} value={opt.value} content={opt.content} />\n          ))}\n        </RadioButton>\n      </div>\n\n      <React.Suspense fallback={<div style={{height: 280}}>Загрузка графика…</div>}>\n        {mode === 'sales' ? (\n          <SalesEngine data={data.sales} />\n        ) : (\n          <MonitorEngine data={data.monitor} />\n        )}\n      </React.Suspense>\n    </Card>\n  );\n}\nEOF\necho \\\"ChartWidget.tsx done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/index.ts << 'EOF'\nexport {ChartWidget} from './ChartWidget';\nexport type {ChartWidgetProps, ChartWidgetData, ChartMode, SalesPoint, MonitorPoint} from './types';\nEOF\necho \\\"index.ts done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx << 'EOF'\nimport {ChartWidget} from './widgets/ChartWidget';\nimport type {ChartWidgetData} from './widgets/ChartWidget';\n\nfunction makeSalesData() {\n  const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];\n  return months.map((m) => ({label: m, value: Math.floor(Math.random() * 80000 + 20000)}));\n}\n\nfunction makeMonitorData() {\n  const now = Date.now();\n  return Array.from({length: 60}, (_, i) => ({\n    ts: now - (59 - i) * 60_000,\n    value: Math.round((Math.sin(i * 0.25) * 15 + 40 + Math.random() * 6) * 10) / 10,\n  }));\n}\n\nconst DEMO_DATA: ChartWidgetData = {\n  sales: makeSalesData(),\n  monitor: makeMonitorData(),\n};\n\nexport function App() {\n  return (\n    <div style={{padding: 24, maxWidth: 700, margin: '0 auto'}}>\n      <ChartWidget data={DEMO_DATA} />\n    </div>\n  );\n}\nEOF\necho \\\"App.tsx done\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg \"RadioButton\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts -A 3 | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg \"''^export \" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg \"''^export \" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head -60'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/widgets/ChartWidget/ChartWidget.tsx << 'EOF'\nimport React, {useCallback, useState} from 'react';\nimport {SegmentedRadioGroup, Card, Text} from '@gravity-ui/uikit';\nimport type {ChartWidgetProps, ChartMode} from './types';\n\nconst SalesEngine = React.lazy(() => import('./SalesEngine'));\nconst MonitorEngine = React.lazy(() => import('./MonitorEngine'));\n\nconst MODE_OPTIONS: {value: ChartMode; content: string}[] = [\n  {value: 'sales', content: 'Продажи'},\n  {value: 'monitor', content: 'Мониторинг'},\n];\n\nexport function ChartWidget({data, initialMode = 'sales', className}: ChartWidgetProps) {\n  const [mode, setMode] = useState<ChartMode>(initialMode);\n\n  const onModeChange = useCallback(\n    (value: string) => setMode(value as ChartMode),\n    [],\n  );\n\n  return (\n    <Card className={className} style={{padding: 16}}>\n      <div style={{display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 12}}>\n        <Text variant=\\\"header-1\\\">Виджет</Text>\n        <SegmentedRadioGroup value={mode} onUpdate={onModeChange}>\n          {MODE_OPTIONS.map((opt) => (\n            <SegmentedRadioGroup.Option key={opt.value} value={opt.value} content={opt.content} />\n          ))}\n        </SegmentedRadioGroup>\n      </div>\n\n      <React.Suspense fallback={<div style={{height: 280}}>Загрузка графика…</div>}>\n        {mode === 'sales' ? (\n          <SalesEngine data={data.sales} />\n        ) : (\n          <MonitorEngine data={data.monitor} />\n        )}\n      </React.Suspense>\n    </Card>\n  );\n}\nEOF\necho \\\"ChartWidget.tsx updated\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && rg \"ControlGroupProps\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts -A 10'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx vite build 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 14911,
+      "outputTokens": 13429,
+      "cacheReadTokens": 282104,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 8322,
+      "totalTokens": 310444
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

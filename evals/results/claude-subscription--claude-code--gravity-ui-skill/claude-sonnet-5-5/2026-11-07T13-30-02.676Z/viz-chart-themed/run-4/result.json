@@ -1,0 +1,113 @@
+{
+  "status": "passed",
+  "duration": 518.093,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 28,
+    "outputTokens": 4653,
+    "cacheReadTokens": 422847,
+    "cacheWriteTokens": 28495,
+    "totalTokens": 456023
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 14,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat package.json; ls; ls src 2>/dev/null; ls node_modules/@gravity-ui 2>/dev/null; grep -n -i -E \"chart|график|line\" .agents/skills/gravity-ui/references/package-routing.md | head -40",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json AGENTS.md; ls __agent_eval__; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,45p .agents/skills/gravity-ui/references/package-routing.md; sed -n 148,170p .agents/skills/gravity-ui/references/package-routing.md",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/charts version peerDependencies 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/charts versions --json | tr -d ' \\n' | grep -o '\"[01]\\.[0-9]*\\.[0-9]*\"' | tail -8; for v in 1.30.0; do :; done; npm view @gravity-ui/charts@1 version peerDependencies --json 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/charts@^1.73.0 2>&1 | tail -8; grep '\"version\"' node_modules/@gravity-ui/charts/package.json; ls node_modules/@gravity-ui/charts/dist/docs node_modules/@gravity-ui/charts/build/docs 2>&1 | head; ls node_modules/@gravity-ui/charts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/docs && cat INDEX.md | head -60; cat get-started.md | head -80; grep -rn -i -E \"theme|dark\" --include=*.md -l .",
+        "success": true
+      },
+      {
+        "command": "cat guides/theming.md; ls guides",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && grep -n -E \"useThemeValue|useTheme|ThemeProvider\" node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/*.d.ts | head -20; sed -n 1,60p .agents/skills/gravity-ui/rules/hallucination-traps.md | head -5",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/charts/dist/docs/guides/colors.md | head -50; ls node_modules/@gravity-ui/charts/dist/docs/guides/series-types; grep -n -i -E \"theme|ThemeProvider\" .agents/skills/gravity-ui/rules/hallucination-traps.md | head -30; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts | head -40; sed -n 1,80p node_modules/@gravity-ui/charts/dist/docs/guides/series-types/line.md; grep -n -E \"useThemeContext|useThemeType\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "grep -n -B2 -A14 \"datetime\" node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-types.md | head -60; grep -n -E \"ChartData|export\" node_modules/@gravity-ui/charts/dist/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport {Text} from '@gravity-ui/uikit';\nimport {Chart} from '@gravity-ui/charts';\nimport type {ChartData} from '@gravity-ui/charts';\n\nconst DAY = 24 * 60 * 60 * 1000;\nconst START = Date.UTC(2025, 0, 1);\n\nconst visits = [120, 132, 101, 134, 190, 230, 210, 245, 260, 240, 280, 310];\nconst orders = [40, 52, 38, 61, 80, 96, 90, 110, 118, 105, 126, 150];\n\nconst toPoints = (values: number[]) =>\n  values.map((y, i) => ({x: START + i * 30 * DAY, y}));\n\n// No hardcoded colors: the chart takes its palette, axes, grid and tooltip\n// colors from the --g-* tokens of the surrounding ThemeProvider, so it follows\n// the current light/dark theme automatically.\nconst data: ChartData = {\n  series: {\n    data: [\n      {type: 'line', name: 'Визиты', data: toPoints(visits)},\n      {type: 'line', name: 'Заказы', data: toPoints(orders)},\n    ],\n  },\n  xAxis: {type: 'datetime'},\n  yAxis: [{title: {text: 'Количество'}}],\n};\n\nexport function App() {\n  return (\n    <div style={{padding: 24}}>\n      <Text variant=\"header-1\" as=\"h1\">\n        Динамика за год\n      </Text>\n      <div style={{height: 360, marginTop: 16}}>\n        <Chart data={data} />\n      </div>\n    </div>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -20",
+        "success": true
+      },
+      {
+        "command": "npx vite build 2>&1 | tail -8",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 28,
+      "outputTokens": 4653,
+      "cacheReadTokens": 422847,
+      "cacheWriteTokens": 28495,
+      "totalTokens": 456023
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

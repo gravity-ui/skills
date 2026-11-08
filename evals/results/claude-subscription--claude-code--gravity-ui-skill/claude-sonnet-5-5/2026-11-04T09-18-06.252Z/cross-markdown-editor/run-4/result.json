@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "duration": 820.362,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 44,
+    "outputTokens": 6934,
+    "cacheReadTokens": 741332,
+    "cacheWriteTokens": 33318,
+    "totalTokens": 781628
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat package.json && ls && git ls-files | head -50 && rg -n -i -C 3 \"markdown|editor\" .agents/skills/gravity-ui/references/package-routing.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cat AGENTS.md; cat src/App.tsx src/main.tsx vite.config.ts tsconfig.json; ls __agent_eval__ node_modules/@gravity-ui; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; cat .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/markdown-editor version peerDependencies 2>&1 | head -60; ls node_modules | head -5; ls node_modules/@gravity-ui/uikit/build/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/markdown-editor peerDependenciesMeta 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/markdown-editor @gravity-ui/components katex markdown-it @diplodoc/transform @diplodoc/cut-extension @diplodoc/file-extension @diplodoc/tabs-extension 2>&1 | tail -15; ls node_modules/@gravity-ui/markdown-editor; ls node_modules/@gravity-ui/markdown-editor/build/docs 2>&1 | head; grep '\"version\"' node_modules/@gravity-ui/markdown-editor/package.json",
+        "success": false
+      },
+      {
+        "command": "npm view @gravity-ui/components versions --json 2>/dev/null | tr -d ' \\n' | grep -o '\"4\\.[0-9]*\\.[0-9]*\"' | tr -d '\"' | tail -25 | while read v; do echo \"$v $(npm view @gravity-ui/components@$v peerDependencies.@gravity-ui/uikit 2>/dev/null)\"; done",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/markdown-editor @gravity-ui/components@4.23.1 katex markdown-it @diplodoc/transform @diplodoc/cut-extension @diplodoc/file-extension @diplodoc/tabs-extension 2>&1 | tail -15; grep '\"version\"' node_modules/@gravity-ui/markdown-editor/package.json; ls node_modules/@gravity-ui/markdown-editor; ls node_modules/@gravity-ui/markdown-editor/build/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/docs && cat INDEX.md | head -80; ls -R guides | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -n 1,200p node_modules/@gravity-ui/markdown-editor/build/docs/guides/how-to-add-preview.md | head -90; bash .agents/skills/gravity-ui/scripts/inspect-package.sh markdown-editor useMarkdownEditor MarkdownEditorView 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build && ls; grep -rn \"initialMarkup\\|initialEditorMode\\|initialSplitModeEnabled\\|'change'\\|\\\"change\\\"\" --include=*.d.ts . | head -20; grep -n \"setup\\|configure\\|styles\\|css\" ../README.md | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor && grep -n '\"types\"\\|\"exports\"\\|\"main\"\\|\"module\"' package.json | head; find build/esm -name \"bundle\" -maxdepth 2 | head; find build/esm -path \"*bundle*\" -name \"useMarkdownEditor.d.ts\" -o -path \"*bundle*\" -name \"Editor.d.ts\" -o -name \"MarkdownEditorView.d.ts\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm/bundle && cat useMarkdownEditor.d.ts; grep -n \"initial\\|on(\\|EditorEvent\\|change\\|getValue\\|replace\\|focus\" Editor.d.ts | head -40; grep -n \"Props\\|className\\|height\\|autofocus\\|settingsVisible\\|toolbarsPreset\" MarkdownEditorView.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cat types.d.ts | sed -n 1,140p; grep -n \"change\\|on(\\|off(\" editor-public-types.d.ts | head -20; sed -n 1,30p MarkdownEditorView.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat editor-public-types.d.ts | sed -n 1,60p; grep -n \"change\\|submit\\|Event\" ../core/*.d.ts Editor.d.ts | grep -i \"event\\|change\" | head -20; grep -rn \"YfmStaticView\" ../index.d.ts ../view/index.d.ts 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm && cat bundle/events.d.ts | head -40; sed -n 20,40p core/Editor.d.ts; grep -n \"CommonEditor\" -A20 common/*.d.ts | head -30; grep -rln \"YfmStaticView\" --include=index.d.ts . | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor && grep -n '\"\\./' package.json | head -30; grep -n -i \"css\\|yfm.css\" README.md build/docs/guides/how-to-add-editor-with-create-react-app.md | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/MarkdownField.tsx <<'EOF'\nimport React from 'react';\nimport {Flex, Text} from '@gravity-ui/uikit';\nimport {MarkdownEditorView, useMarkdownEditor} from '@gravity-ui/markdown-editor';\n\nexport type MarkdownFieldHandle = {\n  getValue: () => string;\n  clear: () => void;\n};\n\ntype MarkdownFieldProps = {\n  label: string;\n  /** Called on every document change with the current markdown markup. */\n  onChange?: (value: string) => void;\n  error?: string;\n  minHeight?: number;\n};\n\n/**\n * Markdown field: the user types markdown syntax (`**bold**`, `# Heading`, `- list`)\n * and sees the formatting immediately (WYSIWYG mode). The toolbar/settings allow switching\n * to the raw markup mode.\n */\nexport const MarkdownField = React.forwardRef<MarkdownFieldHandle, MarkdownFieldProps>(\n  function MarkdownField({label, onChange, error, minHeight = 200}, ref) {\n    const editor = useMarkdownEditor({\n      allowHTML: false,\n      initial: {mode: 'wysiwyg', toolbarVisible: true},\n    });\n\n    React.useImperativeHandle(\n      ref,\n      () => ({getValue: () => editor.getValue(), clear: () => editor.clear()}),\n      [editor],\n    );\n\n    React.useEffect(() => {\n      if (!onChange) return undefined;\n      const handler = () => onChange(editor.getValue());\n      editor.on('change', handler);\n      return () => {\n        editor.off('change', handler);\n      };\n    }, [editor, onChange]);\n\n    return (\n      <Flex direction=\"column\" gap={1}>\n        <Text variant=\"subheader-1\">{label}</Text>\n        <div\n          style={{\n            minHeight,\n            border: '1px solid var(--g-color-line-generic)',\n            borderRadius: 'var(--g-border-radius-m)',\n            overflow: 'auto',\n          }}\n        >\n          <MarkdownEditorView stickyToolbar={false} editor={editor} />\n        </div>\n        {error ? (\n          <Text variant=\"caption-2\" color=\"danger\">\n            {error}\n          </Text>\n        ) : null}\n      </Flex>\n    );\n  },\n);\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {Button, Card, Flex, Text, TextInput} from '@gravity-ui/uikit';\nimport {MarkdownField, type MarkdownFieldHandle} from './MarkdownField';\n\nexport function App() {\n  const [title, setTitle] = React.useState('');\n  const [error, setError] = React.useState<string>();\n  const [submitted, setSubmitted] = React.useState<{title: string; body: string}>();\n  const bodyRef = React.useRef<MarkdownFieldHandle>(null);\n\n  const handleBodyChange = React.useCallback((value: string) => {\n    if (value.trim()) setError(undefined);\n  }, []);\n\n  const handleSubmit = (event: React.FormEvent) => {\n    event.preventDefault();\n    const body = bodyRef.current?.getValue() ?? '';\n    if (!body.trim()) {\n      setError('Введите текст');\n      return;\n    }\n    setSubmitted({title, body});\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{padding: 24, maxWidth: 800, margin: '0 auto'}}>\n      <Flex direction=\"column\" gap={4}>\n        <Text variant=\"header-1\">Новая заметка</Text>\n        <TextInput\n          label=\"Заголовок\"\n          placeholder=\"Заголовок\"\n          value={title}\n          onUpdate={setTitle}\n        />\n        <MarkdownField\n          ref={bodyRef}\n          label=\"Текст (markdown)\"\n          onChange={handleBodyChange}\n          error={error}\n        />\n        <Flex>\n          <Button type=\"submit\" view=\"action\" size=\"l\">\n            Отправить\n          </Button>\n        </Flex>\n        {submitted ? (\n          <Card view=\"outlined\" type=\"container\" style={{padding: 16}}>\n            <Flex direction=\"column\" gap={2}>\n              <Text variant=\"subheader-1\">{submitted.title || 'Без заголовка'}</Text>\n              <Text variant=\"code-2\" style={{whiteSpace: 'pre-wrap'}}>\n                {submitted.body}\n              </Text>\n            </Flex>\n          </Card>\n        ) : null}\n      </Flex>\n    </form>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -i 's/allowHTML: false,/md: {html: false},/' src/MarkdownField.tsx && npx tsc --noEmit 2>&1 | head -20 && npx vite build 2>&1 | tail -15",
+        "success": false
+      },
+      {
+        "command": "sed -i 's/allowHTML: false,/md: {html: false},/' src/MarkdownField.tsx && npx tsc --noEmit 2>&1 | head -20 && npx vite build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44,
+      "outputTokens": 6934,
+      "cacheReadTokens": 741332,
+      "cacheWriteTokens": 33318,
+      "totalTokens": 781628
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "status": "failed",
+  "duration": 587.172,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 10,
+    "outputTokens": 2370,
+    "cacheReadTokens": 87484,
+    "cacheWriteTokens": 7648,
+    "totalTokens": 97512
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 4,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 4,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null | head -20",
+        "success": true
+      },
+      {
+        "command": "cat index.html tsconfig.json vite.config.ts .gitignore && find src __agent_eval__ -type f | head -50 && for f in $(find src -type f); do echo \"=== $f\"; cat $f; done",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { Button, Card, Text } from '@gravity-ui/uikit';\n\nconst CTA_HREF = '#'; // TODO: подставить реальную ссылку на регистрацию\n\nconst features = [\n  {\n    title: 'Учёт в один клик',\n    text: 'Запускайте таймер или добавляйте время вручную — без лишних полей и настроек.',\n  },\n  {\n    title: 'Картина по всей команде',\n    text: 'Видно, кто над чем работает и сколько времени уходит на каждый проект.',\n  },\n  {\n    title: 'Отчёты без таблиц',\n    text: 'Готовые сводки по людям и проектам — выгружайте или просто смотрите на экране.',\n  },\n];\n\nconst section: React.CSSProperties = {\n  maxWidth: 960,\n  margin: '0 auto',\n  padding: '64px 24px',\n};\n\nexport function App() {\n  return (\n    <main>\n      <header style={{ ...section, textAlign: 'center' }}>\n        <Text as=\"h1\" variant=\"display-3\" style={{ margin: 0 }}>\n          Учёт времени команды без лишней рутины\n        </Text>\n        <Text\n          as=\"p\"\n          variant=\"body-3\"\n          color=\"secondary\"\n          style={{ maxWidth: 600, margin: '24px auto 32px' }}\n        >\n          Простой инструмент, который показывает, куда уходит рабочее время, и помогает планировать\n          нагрузку точнее.\n        </Text>\n        <Button view=\"action\" size=\"xl\" href={CTA_HREF}>\n          Попробовать бесплатно\n        </Button>\n      </header>\n\n      <section\n        style={{\n          ...section,\n          paddingTop: 0,\n          display: 'grid',\n          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',\n          gap: 16,\n        }}\n      >\n        {features.map(({ title, text }) => (\n          <Card key={title} type=\"container\" view=\"outlined\" style={{ padding: 24 }}>\n            <Text as=\"h2\" variant=\"header-2\" style={{ margin: 0 }}>\n              {title}\n            </Text>\n            <Text as=\"p\" variant=\"body-2\" color=\"secondary\" style={{ margin: '12px 0 0' }}>\n              {text}\n            </Text>\n          </Card>\n        ))}\n      </section>\n\n      <footer style={{ ...section, paddingTop: 0, textAlign: 'center' }}>\n        <Text as=\"h2\" variant=\"display-1\" style={{ margin: '0 0 24px' }}>\n          Начните считать время уже сегодня\n        </Text>\n        <Button view=\"action\" size=\"xl\" href={CTA_HREF}>\n          Попробовать бесплатно\n        </Button>\n      </footer>\n    </main>\n  );\n}\nEOF\nsed -i 's/<html lang=\"en\">/<html lang=\"ru\">/; s#<title>.*</title>#<title>Учёт времени команды</title>#' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10,
+      "outputTokens": 2370,
+      "cacheReadTokens": 87484,
+      "cacheWriteTokens": 7648,
+      "totalTokens": 97512
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

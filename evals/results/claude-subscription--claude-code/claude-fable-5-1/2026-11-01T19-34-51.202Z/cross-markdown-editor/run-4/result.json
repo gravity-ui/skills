@@ -1,0 +1,113 @@
+{
+  "status": "failed",
+  "duration": 825.042,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 354,
+    "outputTokens": 12469,
+    "cacheReadTokens": 353973,
+    "cacheWriteTokens": 28209,
+    "totalTokens": 395005
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 15,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && git ls-files | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore; ls __agent_eval__; ls node_modules | head -80; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -iE 'mark|remark|md|dompurify|highlight' ; ls node_modules/@uiw; cat __agent_eval__/run.mjs | head -60; grep -oE '\"(TextArea|Text|Card|Label|Button|TextInput)\"' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | head; ls node_modules/@gravity-ui/uikit/build/esm/components | head -100",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/controls node_modules/@gravity-ui/uikit/build/esm/components/layout; sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/controls/TextArea/TextArea.d.ts; sed -n 1,60p node_modules/@gravity-ui/uikit/build/esm/components/controls/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; sed -n 1,40p node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts; sed -n 1,30p node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts"
+      },
+      {
+        "command": "timeout 20 npm view marked version 2>&1 | tail -3; node --version",
+        "success": true
+      },
+      {
+        "command": "npm install react-markdown@^9 remark-gfm@^4 2>&1 | tail -5 && cat node_modules/react-markdown/package.json | grep '\"version\"'"
+      },
+      {
+        "command": "grep -oE \"'[a-z]+-[0-9]'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | sort -u | tr '\\n' ' '; echo; sed -n 1,30p node_modules/@gravity-ui/uikit/build/esm/components/Link/Link.d.ts; grep -oE \"'[a-z-]+'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText/colorText.d.ts | sort -u | tr '\\n' ' '; echo; grep -rn \"g-color-base-generic\\b\\|--g-color-line-generic\\b\\|--g-color-base-float\\b\\|--g-color-text-secondary\\b\\|--g-border-radius-m\\b\" node_modules/@gravity-ui/uikit/styles/themes/light/*.css 2>/dev/null | head -5; ls node_modules/@gravity-ui/uikit/styles",
+        "success": true
+      },
+      {
+        "command": "grep -oE 'text_variant_[a-z0-9-]+' node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.css | sort -u | tr '\\n' ' '; echo; grep -ohE -- '--g-(color-(base-generic|line-generic|text-secondary|base-float|text-primary|base-misc-light|text-link|line-brand)|border-radius-m|text-code-font-family|text-code-1-font-size|text-code-1-line-height|text-body-1-font-size|spacing-[0-9])\\b' node_modules/@gravity-ui/uikit/styles/styles.css node_modules/@gravity-ui/uikit/build/esm/components/variables.css node_modules/@gravity-ui/uikit/styles/themes/*.css 2>/dev/null | sort -u | tr '\\n' ' '; echo; ls node_modules/@gravity-ui/uikit/styles/themes; grep -rn \"ControlGroupProps\" -A12 node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cat > src/MarkdownField.tsx <<'EOF'\nimport React, { useId, useState } from 'react';\nimport ReactMarkdown from 'react-markdown';\nimport remarkGfm from 'remark-gfm';\nimport { Link, SegmentedRadioGroup, Text, TextArea } from '@gravity-ui/uikit';\n\nimport './MarkdownField.css';\n\ntype ViewMode = 'split' | 'write' | 'preview';\n\nexport interface MarkdownFieldProps {\n  /** Field label shown above the editor */\n  label: string;\n  /** Current markdown source (controlled) */\n  value: string;\n  /** Called with the new markdown source on every keystroke */\n  onUpdate: (value: string) => void;\n  /** Form `name` attribute of the underlying textarea */\n  name?: string;\n  placeholder?: string;\n  /** Helper text under the label */\n  hint?: React.ReactNode;\n  errorMessage?: string;\n  disabled?: boolean;\n  minRows?: number;\n  maxRows?: number;\n}\n\n/**\n * Form field for markdown text with a live preview.\n *\n * Preview is rendered with `react-markdown` (+ GFM: tables, task lists,\n * strikethrough, autolinks). Raw HTML in the source is NOT rendered,\n * so the preview is safe against script injection.\n */\nexport function MarkdownField({\n  label,\n  value,\n  onUpdate,\n  name,\n  placeholder = 'Напишите текст с markdown-разметкой…',\n  hint,\n  errorMessage,\n  disabled,\n  minRows = 10,\n  maxRows = 24,\n}: MarkdownFieldProps) {\n  const id = useId();\n  const [mode, setMode] = useState<ViewMode>('split');\n\n  const showEditor = mode !== 'preview';\n  const showPreview = mode !== 'write';\n\n  return (\n    <div className=\"md-field\">\n      <div className=\"md-field__header\">\n        <div>\n          <Text as=\"label\" variant=\"subheader-1\" htmlFor={id}>\n            {label}\n          </Text>\n          {hint && (\n            <Text as=\"div\" variant=\"body-1\" color=\"secondary\" className=\"md-field__hint\">\n              {hint}\n            </Text>\n          )}\n        </div>\n\n        <SegmentedRadioGroup<ViewMode>\n          size=\"s\"\n          value={mode}\n          onUpdate={setMode}\n          aria-label=\"Режим отображения\"\n        >\n          <SegmentedRadioGroup.Option value=\"write\">Редактор</SegmentedRadioGroup.Option>\n          <SegmentedRadioGroup.Option value=\"split\">Рядом</SegmentedRadioGroup.Option>\n          <SegmentedRadioGroup.Option value=\"preview\">Превью</SegmentedRadioGroup.Option>\n        </SegmentedRadioGroup>\n      </div>\n\n      <div className={`md-field__panes md-field__panes_mode_${mode}`}>\n        {showEditor && (\n          <div className=\"md-field__pane\">\n            <TextArea\n              id={id}\n              name={name}\n              value={value}\n              onUpdate={onUpdate}\n              placeholder={placeholder}\n              minRows={minRows}\n              maxRows={maxRows}\n              disabled={disabled}\n              validationState={errorMessage ? 'invalid' : undefined}\n              errorMessage={errorMessage}\n              controlProps={{\n                spellCheck: false,\n                'aria-describedby': `${id}-preview`,\n                className: 'md-field__textarea',\n              }}\n            />\n          </div>\n        )}\n\n        {showPreview && (\n          <div\n            id={`${id}-preview`}\n            className=\"md-field__pane md-field__preview\"\n            aria-live=\"polite\"\n            aria-label=\"Предпросмотр\"\n          >\n            {value.trim() ? (\n              <MarkdownPreview source={value} />\n            ) : (\n              <Text variant=\"body-1\" color=\"hint\">\n                Здесь появится отформатированный текст\n              </Text>\n            )}\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n\n/** Renders markdown source into React elements using Gravity UI typography. */\nexport function MarkdownPreview({ source }: { source: string }) {\n  return (\n    <div className=\"md-preview\">\n      <ReactMarkdown\n        remarkPlugins={[remarkGfm]}\n        components={{\n          h1: ({ children }) => (\n            <Text as=\"h1\" variant=\"header-2\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          h2: ({ children }) => (\n            <Text as=\"h2\" variant=\"header-1\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          h3: ({ children }) => (\n            <Text as=\"h3\" variant=\"subheader-3\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          h4: ({ children }) => (\n            <Text as=\"h4\" variant=\"subheader-2\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          h5: ({ children }) => (\n            <Text as=\"h5\" variant=\"subheader-1\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          h6: ({ children }) => (\n            <Text as=\"h6\" variant=\"body-2\" className=\"md-preview__heading\">\n              {children}\n            </Text>\n          ),\n          p: ({ children }) => (\n            <Text as=\"p\" variant=\"body-1\" className=\"md-preview__p\">\n              {children}\n            </Text>\n          ),\n          a: ({ href, children }) => (\n            <Link href={href ?? '#'} target=\"_blank\" rel=\"noopener noreferrer\">\n              {children}\n            </Link>\n          ),\n          code: ({ className, children }) => {\n            // Block code has a `language-*` class (or is inside <pre>); inline code has none.\n            const isBlock = /language-/.test(className ?? '');\n            return (\n              <code className={isBlock ? 'md-preview__code' : 'md-preview__code-inline'}>\n                {children}\n              </code>\n            );\n          },\n          pre: ({ children }) => <pre className=\"md-preview__pre\">{children}</pre>,\n          blockquote: ({ children }) => (\n            <blockquote className=\"md-preview__blockquote\">{children}</blockquote>\n          ),\n          table: ({ children }) => (\n            <div className=\"md-preview__table-wrap\">\n              <table className=\"md-preview__table\">{children}</table>\n            </div>\n          ),\n          hr: () => <hr className=\"md-preview__hr\" />,\n          input: ({ checked }) => (\n            <input type=\"checkbox\" checked={Boolean(checked)} readOnly disabled className=\"md-preview__checkbox\" />\n          ),\n        }}\n      >\n        {source}\n      </ReactMarkdown>\n    </div>\n  );\n}\nEOF\ncat > src/MarkdownField.css <<'EOF'\n.md-field {\n  display: flex;\n  flex-direction: column;\n  gap: var(--g-spacing-2);\n}\n\n.md-field__header {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: var(--g-spacing-3);\n  flex-wrap: wrap;\n}\n\n.md-field__hint {\n  margin-top: var(--g-spacing-1);\n}\n\n.md-field__panes {\n  display: grid;\n  grid-template-columns: 1fr;\n  gap: var(--g-spacing-3);\n  align-items: stretch;\n}\n\n.md-field__panes_mode_split {\n  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);\n}\n\n@media (max-width: 720px) {\n  .md-field__panes_mode_split {\n    grid-template-columns: 1fr;\n  }\n}\n\n.md-field__pane {\n  min-width: 0;\n}\n\n.md-field__textarea {\n  font-family: var(--g-text-code-font-family);\n  font-size: var(--g-text-code-1-font-size);\n  line-height: var(--g-text-code-1-line-height);\n  resize: vertical;\n}\n\n.md-field__preview {\n  box-sizing: border-box;\n  min-height: 100%;\n  padding: var(--g-spacing-3) var(--g-spacing-4);\n  border: 1px solid var(--g-color-line-generic);\n  border-radius: var(--g-border-radius-m);\n  background: var(--g-color-base-generic-ultralight, var(--g-color-base-float));\n  overflow: auto;\n  overflow-wrap: anywhere;\n}\n\n/* Rendered markdown */\n.md-preview > :first-child {\n  margin-top: 0;\n}\n\n.md-preview > :last-child {\n  margin-bottom: 0;\n}\n\n.md-preview__heading {\n  display: block;\n  margin: var(--g-spacing-4) 0 var(--g-spacing-2);\n}\n\n.md-preview__p {\n  display: block;\n  margin: 0 0 var(--g-spacing-3);\n}\n\n.md-preview ul,\n.md-preview ol {\n  margin: 0 0 var(--g-spacing-3);\n  padding-inline-start: var(--g-spacing-6);\n}\n\n.md-preview li {\n  margin: var(--g-spacing-1) 0;\n}\n\n.md-preview li > .md-preview__p {\n  margin: 0;\n}\n\n.md-preview li.task-list-item {\n  list-style: none;\n  margin-inline-start: calc(-1 * var(--g-spacing-5));\n}\n\n.md-preview__checkbox {\n  margin-inline-end: var(--g-spacing-2);\n  vertical-align: middle;\n}\n\n.md-preview__code-inline {\n  font-family: var(--g-text-code-font-family);\n  font-size: 0.9em;\n  padding: 1px var(--g-spacing-1);\n  border-radius: var(--g-border-radius-xs, 3px);\n  background: var(--g-color-base-misc-light);\n}\n\n.md-preview__pre {\n  margin: 0 0 var(--g-spacing-3);\n  padding: var(--g-spacing-3);\n  border-radius: var(--g-border-radius-m);\n  background: var(--g-color-base-misc-light);\n  overflow-x: auto;\n}\n\n.md-preview__code {\n  font-family: var(--g-text-code-font-family);\n  font-size: var(--g-text-code-1-font-size);\n  line-height: var(--g-text-code-1-line-height);\n}\n\n.md-preview__blockquote {\n  margin: 0 0 var(--g-spacing-3);\n  padding: var(--g-spacing-1) var(--g-spacing-4);\n  border-inline-start: 3px solid var(--g-color-line-brand);\n  color: var(--g-color-text-secondary);\n}\n\n.md-preview__blockquote > :last-child {\n  margin-bottom: 0;\n}\n\n.md-preview__table-wrap {\n  margin: 0 0 var(--g-spacing-3);\n  overflow-x: auto;\n}\n\n.md-preview__table {\n  border-collapse: collapse;\n  width: 100%;\n}\n\n.md-preview__table th,\n.md-preview__table td {\n  padding: var(--g-spacing-2) var(--g-spacing-3);\n  border: 1px solid var(--g-color-line-generic);\n  text-align: start;\n}\n\n.md-preview__table th {\n  background: var(--g-color-base-generic);\n  font-weight: 600;\n}\n\n.md-preview__hr {\n  margin: var(--g-spacing-4) 0;\n  border: 0;\n  border-top: 1px solid var(--g-color-line-generic);\n}\n\n.md-preview img {\n  max-width: 100%;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport React, { useState } from 'react';\nimport { Button, Flex, Text, TextInput } from '@gravity-ui/uikit';\n\nimport { MarkdownField } from './MarkdownField';\n\nconst INITIAL_DESCRIPTION = `# Заголовок\n\nОбычный текст с **жирным**, *курсивом*, ~~зачёркнутым~~ и \\`inline code\\`.\n\n- Пункт списка\n- Ещё пункт\n  - Вложенный пункт\n\n1. Первый\n2. Второй\n\n> Цитата с [ссылкой](https://gravity-ui.com)\n\n\\`\\`\\`ts\nconst answer = 42;\n\\`\\`\\`\n\n| Колонка | Значение |\n| ------- | -------- |\n| A       | 1        |\n| B       | 2        |\n\n- [x] Сделано\n- [ ] Не сделано\n`;\n\nexport function App() {\n  const [title, setTitle] = useState('');\n  const [description, setDescription] = useState(INITIAL_DESCRIPTION);\n  const [submitted, setSubmitted] = useState<{ title: string; description: string } | null>(null);\n\n  const titleError = submitted !== null && !title.trim() ? 'Укажите название' : undefined;\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    setSubmitted({ title, description });\n  };\n\n  return (\n    <form onSubmit={handleSubmit} style={{ padding: 24, maxWidth: 1200, margin: '0 auto' }}>\n      <Flex direction=\"column\" gap={5}>\n        <Text as=\"h1\" variant=\"header-2\">\n          Новая запись\n        </Text>\n\n        <Flex direction=\"column\" gap={2}>\n          <Text as=\"label\" variant=\"subheader-1\" htmlFor=\"entry-title\">\n            Название\n          </Text>\n          <TextInput\n            id=\"entry-title\"\n            name=\"title\"\n            size=\"l\"\n            value={title}\n            onUpdate={setTitle}\n            placeholder=\"Например, Заметки о релизе\"\n            validationState={titleError ? 'invalid' : undefined}\n            errorMessage={titleError}\n            hasClear\n          />\n        </Flex>\n\n        <MarkdownField\n          label=\"Описание\"\n          name=\"description\"\n          hint=\"Поддерживается Markdown: заголовки, списки, ссылки, код, таблицы.\"\n          value={description}\n          onUpdate={setDescription}\n        />\n\n        <Flex gap={2}>\n          <Button type=\"submit\" view=\"action\" size=\"l\">\n            Сохранить\n          </Button>\n          <Button\n            type=\"button\"\n            view=\"flat\"\n            size=\"l\"\n            onClick={() => {\n              setTitle('');\n              setDescription('');\n              setSubmitted(null);\n            }}\n          >\n            Очистить\n          </Button>\n        </Flex>\n\n        {submitted && title.trim() && (\n          <Text variant=\"body-1\" color=\"positive\">\n            Сохранено: «{submitted.title}», {submitted.description.length} символов описания.\n          </Text>\n        )}\n      </Flex>\n    </form>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/smoke.test.tsx <<'EOF'\nimport { describe, it, expect } from 'vitest';\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\nimport { MarkdownPreview } from '/home/sandbox/workspace/src/MarkdownField';\n\ndescribe('markdown preview', () => {\n  it('renders the form with editor and preview', () => {\n    const html = renderToStaticMarkup(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n    expect(html).toContain('<textarea');\n    expect(html).toContain('md-field__preview');\n    expect(html).toMatch(/<h1[^>]*>Заголовок<\\/h1>/);\n    expect(html).toContain('<strong>жирным</strong>');\n    expect(html).toContain('<del>зачёркнутым</del>');\n    expect(html).toContain('<table');\n    expect(html).toContain('md-preview__code');\n    expect(html).toContain('type=\"checkbox\"');\n    expect(html).toContain('href=\"https://gravity-ui.com\"');\n  });\n  it('does not render raw HTML from the source', () => {\n    const html = renderToStaticMarkup(<MarkdownPreview source={'<script>alert(1)</script>\\n\\n<img src=x onerror=alert(1)>\\n\\nok'} />);\n    expect(html).not.toContain('<script');\n    expect(html).not.toContain('onerror');\n    expect(html).toContain('ok');\n  });\n});\nEOF\ncp /tmp/smoke.test.tsx src/__smoke.test.tsx && npx vitest run src/__smoke.test.tsx 2>&1 | tail -25; rm -f src/__smoke.test.tsx",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -iE 'playwright|puppeteer'; echo \"---\"; echo done",
+        "success": true
+      },
+      {
+        "command": "cp /tmp/smoke.test.tsx src/__smoke.test.tsx && npx vitest run src/__smoke.test.tsx --server.deps.inline=\"@gravity-ui/uikit\" 2>&1 | tail -25; rm -f src/__smoke.test.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/vitest.smoke.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  root: '/home/sandbox/workspace',\n  plugins: [react()],\n  test: {\n    include: ['src/__smoke.test.tsx'],\n    css: false,\n    server: { deps: { inline: [/@gravity-ui\\/uikit/] } },\n  },\n});\nEOF\ncp /tmp/smoke.test.tsx src/__smoke.test.tsx && npx vitest run --config /tmp/vitest.smoke.config.ts 2>&1 | tail -25; rm -f src/__smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "sed 's#/tmp/vitest.smoke.config.ts##' /tmp/vitest.smoke.config.ts > vitest.smoke.config.ts && cp /tmp/smoke.test.tsx src/__smoke.test.tsx && npx vitest run --config vitest.smoke.config.ts 2>&1 | tail -25; rm -f src/__smoke.test.tsx vitest.smoke.config.ts; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 354,
+      "outputTokens": 12469,
+      "cacheReadTokens": 353973,
+      "cacheWriteTokens": 28209,
+      "totalTokens": 395005
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

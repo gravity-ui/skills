@@ -1,0 +1,123 @@
+{
+  "status": "failed",
+  "duration": 452.258,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.312 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 36,
+    "outputTokens": 12992,
+    "cacheReadTokens": 622530,
+    "cacheWriteTokens": 37213,
+    "totalTokens": 672771
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 20,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/LineChart.tsx",
+      "/home/sandbox/workspace/src/LineChart.css",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files | head -100 && cat package.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore; ls node_modules 2>/dev/null | head -50; ls node_modules/@gravity-ui 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.312/4d78d071bf2ce8b88ed0ed3da0aa26fc/dataviz && cat references/palette.md && sed -n 1,200p references/marks-and-anatomy.md && sed -n 1,120p references/interaction.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && ls; ls styles; grep -o -- '--g-color-[a-z0-9-]*' styles/styles.css | sort -u | grep -E 'text|line|background|base-(generic|float)|private-(blue|purple|orange|green)-[0-9]+-solid' | head -80",
+        "success": true
+      },
+      {
+        "command": "grep -rl \"useThemeType\\|useTheme\\b\" build/esm/index.d.ts build/esm/components/theme/index.d.ts 2>/dev/null; cat build/esm/components/theme/index.d.ts 2>/dev/null; grep -E -- '--g-color-(text-(primary|secondary|complementary|hint)|base-background|line-generic|base-float|private-(blue|orange)-(500|550|600)-solid):' styles/styles.css | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.312/4d78d071bf2ce8b88ed0ed3da0aa26fc/dataviz && node scripts/validate_palette.js \"#2a78d6,#eb6834\" --mode light --surface \"#ffffff\"; node scripts/validate_palette.js \"#3987e5,#d95926\" --mode dark --surface \"#221d22\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 1,60p SegmentedRadioGroup/SegmentedRadioGroup.d.ts; grep -n \"align\\|name\\|id:\" Table/Table.d.ts | head -20; grep -n \"variant\" Text/Text.d.ts | head; grep -rn \"TextVariants\\|subheader-\\|body-\" text/*.d.ts 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat build/esm/components/theme/useThemeType.d.ts; grep -n \"ThemeType\\b.*=\" build/esm/components/theme/types.d.ts; for v in sfx-shadow text-caption-2-font-size text-accent-font-weight border-radius-m border-radius-s text-body-font-family color-line-generic-active color-line-generic-accent color-line-focus text-body-1-font-size; do printf \"%s: \" $v; grep -c -- \"--g-$v:\" styles/styles.css; done",
+        "success": true
+      },
+      {
+        "command": "grep -o -- '--g-color-sfx-[a-z-]*' styles/styles.css | sort -u",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -15; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules/.bin | grep -i -E \"playwright|puppeteer\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp && timeout 60 npm view playwright version 2>&1 | tail -2",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && npm i playwright@1.64.1 >/dev/null 2>&1 && npx playwright install --with-deps chromium 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw && npx playwright install chromium 2>&1 | tail -2 && cat > shot.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst [url, out, theme] = process.argv.slice(2);\nconst b = await chromium.launch();\nconst p = await b.newPage({ viewport: { width: 1000, height: 520 } });\nawait p.goto(url);\nawait p.waitForSelector('svg path.line-chart__line');\nif (theme === 'dark') {\n  await p.evaluate(() => { const r = document.querySelector('.g-root'); r.classList.replace('g-root_theme_light', 'g-root_theme_dark'); });\n}\nconst box = await p.locator('.line-chart__canvas svg').boundingBox();\nawait p.mouse.move(box.x + box.width * 0.55, box.y + 100);\nawait p.screenshot({ path: out });\nawait b.close();\nEOF\necho ok",
+        "success": true
+      },
+      {
+        "command": "sed -i 's/theme=\"light\"/theme=\"dark\"/' src/main.tsx && npx vite build --outDir /tmp/dist-dark >/dev/null 2>&1; git checkout src/main.tsx && git diff --stat src/main.tsx; sed -i \"/classList.replace/d\" /tmp/pw/shot.mjs\n(npx vite preview --port 4173 --strictPort >/tmp/prev-light.log 2>&1 &) ; (npx vite preview --port 4174 --strictPort --outDir /tmp/dist-dark >/tmp/prev-dark.log 2>&1 &); sleep 3\ncd /tmp/pw && node shot.mjs http://localhost:4173 /tmp/pw/light.png && node shot.mjs http://localhost:4174 /tmp/pw/dark.png && echo done",
+        "success": false
+      },
+      {
+        "command": "pkill -f \"vite preview\"; rm -rf /tmp/dist-dark; cd /home/sandbox/workspace && sed -i 's/const END_LABEL_WIDTH = 132;/const END_LABEL_WIDTH = 160;/' src/LineChart.tsx && npm run build 2>&1 | tail -2 && rm -rf dist && git status --short",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *\"vite preview\"*) kill ${p#/proc/} && echo \"killed ${p#/proc/}\";; esac; done",
+        "success": false
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 36,
+      "outputTokens": 12992,
+      "cacheReadTokens": 622530,
+      "cacheWriteTokens": 37213,
+      "totalTokens": 672771
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

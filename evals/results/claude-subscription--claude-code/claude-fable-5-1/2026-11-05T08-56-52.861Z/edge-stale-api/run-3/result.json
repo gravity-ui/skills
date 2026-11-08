@@ -1,0 +1,168 @@
+{
+  "status": "passed",
+  "duration": 1609.912,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 546,
+    "outputTokens": 21920,
+    "cacheReadTokens": 967933,
+    "cacheWriteTokens": 70473,
+    "totalTokens": 1060872
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 28,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 28,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore && echo ---- && cat __agent_eval__/run.mjs && echo ---- && cat node_modules/@gravity-ui/uikit/package.json | head -40 && ls node_modules/@gravity-ui/uikit/build/esm/components/theme/ && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/uikit dist-tags time.modified 2>&1 | head -20; echo ----; npm view @gravity-ui/uikit versions --json 2>/dev/null | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && for f in types ThemeProvider ThemeContext ThemeSettingsContext useTheme useThemeValue useThemeType useSystemTheme useThemeContext constants; do echo \"=== $f.d.ts\"; cat $f.d.ts; done; echo \"=== ThemeProvider.js\"; cat ThemeProvider.js",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/uikit8 && cd /tmp/uikit8 && npm pack @gravity-ui/uikit@8.0.0 --silent 2>&1 | tail -1 && tar xzf gravity-ui-uikit-8.0.0.tgz && cd package && echo \"=== peerDeps\" && node -e 'const p=require(\"./package.json\");console.log(JSON.stringify({peer:p.peerDependencies,deps:p.dependencies,exports:Object.keys(p.exports)},null,1))' && echo \"=== theme dir\" && ls build/esm/components/theme/ && echo \"=== CHANGELOG 8.0.0\" && awk '/^## \\[8\\.0\\.0\\]/{p=1} p&&/^## \\[7\\./{exit} p' CHANGELOG.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8/package && ls && echo \"=== styles\" && ls styles | head -30 && cd build/esm/components/theme && for f in index types Provider ThemeProvider ThemeContext useTheme useThemeValue useThemeType useThemeContext useSystemTheme constants; do echo \"=== $f.d.ts\"; cat $f.d.ts; done; echo \"=== Provider.js\"; cat Provider.js; echo \"=== ThemeProvider.js\"; cat ThemeProvider.js",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8/package/build/esm && echo \"=== root index theme exports\" && grep -n -i \"theme\\|Provider\" index.d.ts components/index.d.ts | head -40; echo \"=== Switch.d.ts\"; cat components/Switch/Switch.d.ts 2>/dev/null; echo \"=== Button.d.ts\"; cat components/Button/Button.d.ts 2>/dev/null | head -60; echo \"=== Icon.d.ts\"; cat components/Icon/Icon.d.ts 2>/dev/null | head -40; echo \"=== SegmentedRadioGroup\"; ls components/SegmentedRadioGroup 2>/dev/null; cat components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -40; echo \"=== gravity icons moon/sun\"; ls /tmp/uikit8/package/node_modules 2>/dev/null | head; npm view @gravity-ui/icons version 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8/package && echo \"=== README provider mentions\" && grep -n -i -B2 -A12 \"Provider\" README.md | head -80; echo \"=== docs listing\"; curl -s https://api.github.com/repos/gravity-ui/uikit/contents/docs | grep '\"path\"'; curl -s https://api.github.com/repos/gravity-ui/uikit/contents/docs/migration 2>/dev/null | grep '\"path\"'",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8/package/build/esm/components && echo \"=== ControlProps/ControlGroupProps\" && grep -n -A12 \"interface ControlProps\\|interface ControlGroupProps\\|interface ControlGroupOption\" types.d.ts; echo \"=== Button types\"; sed -n 1,80p Button/types.d.ts; echo \"=== icons installed\"; cat /home/sandbox/workspace/node_modules/@gravity-ui/icons/package.json | grep '\"version\"'; ls /home/sandbox/workspace/node_modules/@gravity-ui/icons/ | grep -i -E \"^(Sun|Moon|Display|Monitor|Gear)\" ",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8 && node -e '\nconst u=\"https://raw.githubusercontent.com/gravity-ui/uikit/main/docs/migration-to-v8.md\";\nfetch(u).then(r=>r.text()).then(t=>{require(\"fs\").writeFileSync(\"migration-to-v8.md\",t);console.log(t.length)})' && grep -n -i -B2 -A25 \"theme\\|Provider\" migration-to-v8.md | head -220",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/uikit8 && node -e '\nconst u=\"https://raw.githubusercontent.com/gravity-ui/uikit/main/docs/theming.md\";\nfetch(u).then(r=>r.text()).then(t=>{require(\"fs\").writeFileSync(\"theming.md\",t);console.log(t.length)})' && sed -n 1,200p theming.md"
+      },
+      {
+        "command": "cd /tmp/uikit8/package && sed -n '/Documentation for AI agents/,$p' README.md | head -60",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/uikit@^8.0.0 @gravity-ui/icons@^2.23.1 2>&1 | tail -8 && grep -A3 '\"dependencies\"' package.json && node -e 'console.log(require(\"@gravity-ui/uikit/package.json\").version)'"
+      },
+      {
+        "command": "cd /tmp/uikit8/package/build/docs && cat INDEX.md | head -60; echo \"=== theme-related docs\"; grep -ril \"useTheme\\|switch.*theme\\|theme.*switch\" . | head; echo \"=== SegmentedRadioGroup doc\"; find . -iname \"*segmented*\" | head -3; f=$(find . -iname \"*SegmentedRadioGroup*\" | head -1); [ -n \"$f\" ] && sed -n 1,120p \"$f\""
+      },
+      {
+        "command": "cd /tmp/uikit8 && sed -n 200,420p theming.md",
+        "success": true
+      },
+      {
+        "command": "grep '\"version\"' node_modules/@gravity-ui/uikit/package.json && cd node_modules/@gravity-ui/uikit/build/esm/components && echo \"=== SRG index\" && cat SegmentedRadioGroup/index.d.ts && echo \"=== Icon index\" && cat Icon/index.d.ts && echo \"=== Flex\" && sed -n 1,80p layout/Flex/Flex.d.ts && echo \"=== Text props\" && grep -n \"export interface TextProps\" -A20 Text/Text.d.ts && echo \"=== Card\" && grep -n \"CardView\\|CardTheme\\|CardType\\|CardSize\\|export interface CardProps\" -A6 Card/Card.d.ts | head -60 && echo \"=== layout index\" && cat layout/index.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /home/sandbox/workspace/src/theme && cat > /home/sandbox/workspace/src/theme/AppThemeProvider.tsx <<'EOF'\nimport * as React from 'react';\nimport {Provider} from '@gravity-ui/uikit';\nimport type {ProviderProps, Theme} from '@gravity-ui/uikit';\n\n/**\n * Темы, между которыми переключается пользователь.\n * `system` — значение по умолчанию в uikit: следует за prefers-color-scheme ОС\n * и разрешается в `light` или `dark` (см. systemLightTheme / systemDarkTheme у Provider).\n */\nexport const APP_THEMES = ['light', 'dark', 'system'] as const satisfies readonly Theme[];\nexport type AppTheme = (typeof APP_THEMES)[number];\n\nexport const THEME_STORAGE_KEY = 'app-theme';\n\nexport function isAppTheme(value: unknown): value is AppTheme {\n    return typeof value === 'string' && (APP_THEMES as readonly string[]).includes(value);\n}\n\nfunction readStoredTheme(): AppTheme | undefined {\n    try {\n        const stored = window.localStorage.getItem(THEME_STORAGE_KEY);\n        return isAppTheme(stored) ? stored : undefined;\n    } catch {\n        return undefined;\n    }\n}\n\nfunction writeStoredTheme(theme: AppTheme) {\n    try {\n        window.localStorage.setItem(THEME_STORAGE_KEY, theme);\n    } catch {\n        // localStorage недоступен (приватный режим, SSR, запрет политикой) — просто не сохраняем.\n    }\n}\n\nexport interface ThemeSwitchContextValue {\n    /** Выбранная пользователем тема (то, что передаётся в `theme` у Provider). */\n    theme: AppTheme;\n    setTheme: (theme: AppTheme) => void;\n}\n\nconst ThemeSwitchContext = React.createContext<ThemeSwitchContextValue | undefined>(undefined);\n\n/**\n * Доступ к выбранной теме и её сеттеру.\n * Разрешённое значение темы (`light`/`dark`) читайте через `useThemeValue` / `useThemeType` из uikit.\n */\nexport function useThemeSwitch(): ThemeSwitchContextValue {\n    const context = React.useContext(ThemeSwitchContext);\n    if (!context) {\n        throw new Error('useThemeSwitch must be used within <AppThemeProvider>');\n    }\n    return context;\n}\n\nexport interface AppThemeProviderProps extends Omit<ProviderProps, 'theme'> {\n    /** Тема, если в localStorage ещё нет сохранённого выбора. */\n    defaultTheme?: AppTheme;\n}\n\n/**\n * Прикладной провайдер поверх `Provider` из @gravity-ui/uikit v8:\n * хранит выбранную тему, сохраняет её в localStorage и прокидывает в `theme`.\n * Остальные props (`lang`, `layout`, `defaultProps`, `direction`, mobile-настройки) идут в `Provider` как есть.\n */\nexport function AppThemeProvider({children, defaultTheme = 'system', ...providerProps}: AppThemeProviderProps) {\n    const [theme, setThemeState] = React.useState<AppTheme>(() => readStoredTheme() ?? defaultTheme);\n\n    const setTheme = React.useCallback((next: AppTheme) => {\n        setThemeState(next);\n        writeStoredTheme(next);\n    }, []);\n\n    const contextValue = React.useMemo<ThemeSwitchContextValue>(() => ({theme, setTheme}), [theme, setTheme]);\n\n    return (\n        <ThemeSwitchContext.Provider value={contextValue}>\n            <Provider {...providerProps} theme={theme}>\n                {children}\n            </Provider>\n        </ThemeSwitchContext.Provider>\n    );\n}\nEOF\ncat > /home/sandbox/workspace/src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport {App} from './App';\nimport {AppThemeProvider} from './theme/AppThemeProvider';\n\n// AppThemeProvider оборачивает `Provider` из @gravity-ui/uikit v8 и управляет его prop `theme`.\nReactDOM.createRoot(document.getElementById('root')!).render(\n    <React.StrictMode>\n        <AppThemeProvider defaultTheme=\"system\" lang=\"ru\">\n            <App />\n        </AppThemeProvider>\n    </React.StrictMode>,\n);\nEOF\necho written",
+        "success": true
+      },
+      {
+        "command": "echo \"=== layout types\" && grep -n \"gap\\|Space\\b\\|type Space\\|SpaceToken\\|spacing\" layout/types.d.ts | head -30 && echo \"=== Box props\" && grep -n \"interface BoxProps\" -A30 layout/Box/Box.d.ts | head -50 && echo \"=== Text variants\" && grep -n \"TEXT_VARIANTS\\|TextVariant\\b\" -A8 Text/text/text.d.ts | head -30 && grep -rn \"header-1\\|body-1\" Text/text/text.d.ts | head -5 && grep -n \"color?\" -A2 Text/colorText/colorText.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > /home/sandbox/workspace/src/theme/ThemeSwitcher.tsx <<'EOF'\nimport {Display, Moon, Sun} from '@gravity-ui/icons';\nimport {Flex, Icon, SegmentedRadioGroup, useThemeType} from '@gravity-ui/uikit';\nimport type {IconData, SegmentedRadioGroupProps} from '@gravity-ui/uikit';\n\nimport type {AppTheme} from './AppThemeProvider';\nimport {useThemeSwitch} from './AppThemeProvider';\n\ninterface ThemeOption {\n    value: AppTheme;\n    label: string;\n    icon: IconData;\n}\n\nconst THEME_OPTIONS: readonly ThemeOption[] = [\n    {value: 'light', label: 'Светлая', icon: Sun},\n    {value: 'dark', label: 'Тёмная', icon: Moon},\n    {value: 'system', label: 'Системная', icon: Display},\n];\n\nexport interface ThemeSwitcherProps\n    extends Pick<SegmentedRadioGroupProps<AppTheme>, 'size' | 'width' | 'className' | 'style' | 'qa'> {\n    /** Скрыть подписи и оставить только иконки (например, для тулбара). */\n    iconsOnly?: boolean;\n}\n\n/**\n * Переключатель темы: светлая / тёмная / системная.\n * Значение берётся из AppThemeProvider, разрешённая тема — из uikit (`useThemeType`).\n */\nexport function ThemeSwitcher({iconsOnly = false, size = 'm', ...rest}: ThemeSwitcherProps) {\n    const {theme, setTheme} = useThemeSwitch();\n    // Во что фактически разрешилась тема (`system` -> `light` | `dark`), по данным ThemeProvider uikit.\n    const resolvedType = useThemeType();\n\n    return (\n        <SegmentedRadioGroup<AppTheme>\n            {...rest}\n            name=\"app-theme\"\n            size={size}\n            value={theme}\n            onUpdate={setTheme}\n            aria-label=\"Тема интерфейса\"\n        >\n            {THEME_OPTIONS.map((option) => {\n                const title =\n                    option.value === 'system'\n                        ? `${option.label} (сейчас: ${resolvedType === 'dark' ? 'тёмная' : 'светлая'})`\n                        : option.label;\n\n                return (\n                    <SegmentedRadioGroup.Option key={option.value} value={option.value} title={title}>\n                        <Flex as=\"span\" inline alignItems=\"center\" gap={1}>\n                            <Icon data={option.icon} size={16} />\n                            {iconsOnly ? null : option.label}\n                        </Flex>\n                    </SegmentedRadioGroup.Option>\n                );\n            })}\n        </SegmentedRadioGroup>\n    );\n}\nEOF\ncat > /home/sandbox/workspace/src/theme/index.ts <<'EOF'\nexport {AppThemeProvider, useThemeSwitch, isAppTheme, APP_THEMES, THEME_STORAGE_KEY} from './AppThemeProvider';\nexport type {AppTheme, AppThemeProviderProps, ThemeSwitchContextValue} from './AppThemeProvider';\nexport {ThemeSwitcher} from './ThemeSwitcher';\nexport type {ThemeSwitcherProps} from './ThemeSwitcher';\nEOF\necho written",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && sed -i 's/gap={1}/gap=\"spacing-1\"/' src/theme/ThemeSwitcher.tsx && grep -n 'gap=' src/theme/ThemeSwitcher.tsx && sed -n 100,200p node_modules/@gravity-ui/uikit/build/esm/components/layout/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport {Button, Card, Container, Flex, Text, useTheme, useThemeValue} from '@gravity-ui/uikit';\n\nimport {ThemeSwitcher} from './theme';\n\nexport function App() {\n    // Актуальный API темы uikit: useTheme — запрошенная тема (включая `system`),\n    // useThemeValue — во что она разрешилась (light / dark / light-hc / dark-hc).\n    const requestedTheme = useTheme();\n    const resolvedTheme = useThemeValue();\n\n    return (\n        <Container maxWidth=\"m\">\n            <Flex direction=\"column\" gap=\"spacing-6\" paddingBlock=\"spacing-6\">\n                <Flex as=\"header\" alignItems=\"center\" justifyContent=\"space-between\" gap=\"spacing-4\" wrap>\n                    <Text as=\"h1\" variant=\"header-1\">\n                        Gravity UI\n                    </Text>\n                    <ThemeSwitcher />\n                </Flex>\n\n                <Card type=\"container\" view=\"outlined\" size=\"l\">\n                    <Flex direction=\"column\" gap=\"spacing-3\">\n                        <Text variant=\"subheader-2\">Текущая тема</Text>\n                        <Text color=\"secondary\">\n                            Выбрано: <Text variant=\"code-1\">{requestedTheme}</Text>, применено:{' '}\n                            <Text variant=\"code-1\">{resolvedTheme}</Text>\n                        </Text>\n                        <Flex gap=\"spacing-2\" wrap>\n                            <Button view=\"action\">Action</Button>\n                            <Button view=\"normal\">Normal</Button>\n                            <Button view=\"outlined\">Outlined</Button>\n                            <Button view=\"flat\">Flat</Button>\n                        </Flex>\n                    </Flex>\n                </Card>\n            </Flex>\n        </Container>\n    );\n}\nEOF\nnpm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome google-chrome-stable 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules/.bin | grep -i -E \"playwright|puppeteer\" ; echo \"browser-check-done\"",
+        "success": true
+      },
+      {
+        "command": "git status --short && echo \"=== lock uikit\" && grep -n '\"node_modules/@gravity-ui/uikit\"' -A2 package-lock.json | head -4",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/smoke.tsx <<'EOF'\nimport {renderToString} from 'react-dom/server';\nimport {AppThemeProvider} from '/home/sandbox/workspace/src/theme/AppThemeProvider';\nimport {App} from '/home/sandbox/workspace/src/App';\n\nfor (const theme of ['light', 'dark', 'system'] as const) {\n    const html = renderToString(\n        <AppThemeProvider defaultTheme={theme}>\n            <App />\n        </AppThemeProvider>,\n    );\n    const inputs = [...html.matchAll(/<input[^>]*value=\"(light|dark|system)\"[^>]*>/g)].map((m) => ({\n        value: m[1],\n        checked: m[0].includes('checked'),\n    }));\n    const resolved = html.match(/применено:\\s*(?:<!-- -->)?\\s*<span[^>]*>([^<]+)<\\/span>/)?.[1];\n    console.log(theme, JSON.stringify(inputs), 'resolved=', resolved, 'aria-label=', html.includes('aria-label=\"Тема интерфейса\"'));\n}\nEOF\nnpx vite-node /tmp/smoke/smoke.tsx 2>&1 | tail -10"
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      },
+      {
+        "command": "sed -e \"s#/home/sandbox/workspace/src/#./#g\" /tmp/smoke/smoke.tsx > src/__smoke__.tsx && npx vite-node src/__smoke__.tsx 2>&1 | tail -12; rm -f src/__smoke__.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke__.test.tsx <<'EOF'\nimport {expect, test} from 'vitest';\nimport {renderToString} from 'react-dom/server';\n\nimport {AppThemeProvider} from './theme/AppThemeProvider';\nimport {App} from './App';\n\nfor (const theme of ['light', 'dark', 'system'] as const) {\n    test(`renders with ${theme} selected`, () => {\n        const html = renderToString(\n            <AppThemeProvider defaultTheme={theme}>\n                <App />\n            </AppThemeProvider>,\n        );\n        const inputs = [...html.matchAll(/<input[^>]*value=\"(light|dark|system)\"[^>]*>/g)].map((m) => ({\n            value: m[1],\n            checked: m[0].includes('checked'),\n        }));\n        console.log(theme, JSON.stringify(inputs), 'resolved:', html.match(/применено:.*?<\\/span>/)?.[0]);\n        expect(inputs.map((i) => i.value)).toEqual(['light', 'dark', 'system']);\n        expect(inputs.find((i) => i.checked)?.value).toBe(theme);\n        expect(html).toContain('aria-label=\"Тема интерфейса\"');\n    });\n}\nEOF\nnpx vitest run src/__smoke__.test.tsx 2>&1 | grep -v \"^$\" | tail -25; rm -f src/__smoke__.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.smoke.config.ts <<'EOF'\nimport react from '@vitejs/plugin-react';\nimport {defineConfig} from 'vitest/config';\n\nexport default defineConfig({\n    plugins: [react()],\n    test: {\n        environment: 'node',\n        include: ['src/__smoke__.test.tsx'],\n        server: {deps: {inline: [/@gravity-ui\\/uikit/]}},\n    },\n});\nEOF\ncat > src/__smoke__.test.tsx <<'EOF'\nimport {expect, test} from 'vitest';\nimport {renderToString} from 'react-dom/server';\n\nimport {AppThemeProvider} from './theme/AppThemeProvider';\nimport {App} from './App';\n\nfor (const theme of ['light', 'dark', 'system'] as const) {\n    test(`renders with ${theme} selected`, () => {\n        const html = renderToString(\n            <AppThemeProvider defaultTheme={theme}>\n                <App />\n            </AppThemeProvider>,\n        );\n        const inputs = [...html.matchAll(/<input[^>]*value=\"(light|dark|system)\"[^>]*>/g)].map((m) => ({\n            value: m[1],\n            checked: m[0].includes('checked'),\n        }));\n        console.log(theme, JSON.stringify(inputs), 'resolved:', html.match(/применено:.*?<\\/span>/)?.[0]);\n        expect(inputs.map((i) => i.value)).toEqual(['light', 'dark', 'system']);\n        expect(inputs.find((i) => i.checked)?.value).toBe(theme);\n        expect(html).toContain('aria-label=\"Тема интерфейса\"');\n    });\n}\nEOF\nnpx vitest run -c vitest.smoke.config.ts 2>&1 | grep -v \"^$\" | tail -25; rm -f src/__smoke__.test.tsx vitest.smoke.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 546,
+      "outputTokens": 21920,
+      "cacheReadTokens": 967933,
+      "cacheWriteTokens": 70473,
+      "totalTokens": 1060872
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T16:58:01.258Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

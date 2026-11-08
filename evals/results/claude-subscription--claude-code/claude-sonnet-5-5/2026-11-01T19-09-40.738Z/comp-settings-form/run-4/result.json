@@ -1,0 +1,91 @@
+{
+  "status": "passed",
+  "duration": 484.203,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 20,
+    "outputTokens": 11262,
+    "cacheReadTokens": 237735,
+    "cacheWriteTokens": 20663,
+    "totalTokens": 269680
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 2,
+      "file_edit": 8,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/ProfileSettings.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git ls-files | head -50",
+        "success": true
+      },
+      {
+        "command": "cat index.html src/App.tsx src/main.tsx src/vite-env.d.ts tsconfig.json vite.config.ts .gitignore; ls -R __agent_eval__ | head; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep '\"version\"'; ls build/esm/components | tr '\\n' ' '; echo; sed -n 1,80p build/esm/components/Select/types.d.ts | head -100; cat build/esm/components/Avatar/Avatar.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -E \"TextInput|layout|Switch|Checkbox|Avatar|Divider|Card\" components/index.d.ts; ls components/layout; grep -n \"errorMessage\\|errorPlacement\\|validationState\\|hasClear\" components/controls/TextInput/TextInput.d.ts; sed -n 1,50p components/Avatar/types/main.d.ts; grep -n \"content\\|onUpdate\\|size\" components/Switch/Switch.d.ts components/Checkbox/Checkbox.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 -I - <<'EOF'\np='src/ProfileSettings.tsx'\ns=open(p).read()\ndef rep(a,b):\n    global s\n    assert a in s, a\n    s=s.replace(a,b,1)\nrep(\"function isEqual(a: ProfileSettingsValues, b: ProfileSettingsValues, aFile: File | null) {\\n  return (\\n    !aFile &&\",\n\"function isEqual(\\n  a: ProfileSettingsValues,\\n  b: ProfileSettingsValues,\\n  aFile: File | null,\\n  bFile: File | null,\\n) {\\n  return (\\n    aFile === bFile &&\")\nrep(\"  const [avatarFile, setAvatarFile] = React.useState<File | null>(null);\\n\",\n\"  const [avatarFile, setAvatarFile] = React.useState<File | null>(null);\\n  const [savedFile, setSavedFile] = React.useState<File | null>(null);\\n\")\nrep(\"isEqual(values, saved, avatarFile)\",\"isEqual(values, saved, avatarFile, savedFile)\")\nrep(\"      avatarUrl: avatarSrc,\\n    };\",\"    };\")\nrep(\"      // файл остаётся источником превью, поэтому фиксируем его как «сохранённый» URL\\n      setAvatarFile(null);\\n\",\n\"      setSavedFile(avatarFile); // файл остаётся источником превью, пока сервер не вернёт URL\\n\")\nrep(\"    setValues(saved);\\n    setAvatarFile(null);\",\"    setValues(saved);\\n    setAvatarFile(savedFile);\")\nopen(p,'w').write(s)\nEOF\nnpx tsc --noEmit && npx vite build 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npx tsc --noEmit && npx vite build 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 20,
+      "outputTokens": 11262,
+      "cacheReadTokens": 237735,
+      "cacheWriteTokens": 20663,
+      "totalTokens": 269680
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T15:36:28.538Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

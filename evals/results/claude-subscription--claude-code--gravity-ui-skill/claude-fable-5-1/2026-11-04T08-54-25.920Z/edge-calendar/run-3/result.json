@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 793.092,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 418,
+    "outputTokens": 5560,
+    "cacheReadTokens": 530225,
+    "cacheWriteTokens": 34425,
+    "totalTokens": 570628
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ---; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui; echo ---; cat /home/sandbox/workspace/AGENTS.md; echo ---; ls /home/sandbox/workspace; cat /home/sandbox/workspace/package.json",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ---RG; rg -n -C 4 -i 'date-components|calendar|date-utils' .agents/skills/gravity-ui/references/package-routing.md | head -80; echo ---SRC; find src -type f | xargs -I{} sh -c 'echo \"=== {}\"; cat {}'; echo ---HTML; cat index.html; echo ---TRAPS; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ---NM; ls node_modules/@gravity-ui/; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/date-components @gravity-ui/date-utils 2>&1 | tail -5; grep -A3 '\"version\"' node_modules/@gravity-ui/date-components/package.json | head -2; grep '\"version\"' node_modules/@gravity-ui/date-utils/package.json; grep -A6 peerDependencies node_modules/@gravity-ui/date-components/package.json; ls node_modules/@gravity-ui/date-components/build/docs 2>/dev/null || ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null || echo \"NO LOCAL DOCS\"; ls node_modules/@gravity-ui/date-components/",
+        "success": false
+      },
+      {
+        "command": "cat /home/node/.npm/_logs/2026-11-04T09_06_21_359Z-eresolve-report.txt | head -40; echo ---; npm view @gravity-ui/date-components version peerDependencies 2>&1 | head -20",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json 2>/dev/null | tr -d '[]\",' | tr -s ' \\n' ' ' | tr ' ' '\\n' | grep -E '^4\\.' | tail -3; echo ---; npm view @gravity-ui/date-components@4 peerDependencies 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/date-components@^4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -3; grep '\"version\"' node_modules/@gravity-ui/date-components/package.json node_modules/@gravity-ui/date-utils/package.json; echo ---DOCS; ls node_modules/@gravity-ui/date-components/build/docs 2>/dev/null; ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null; ls node_modules/@gravity-ui/date-components/; echo ---README; sed -n 1,80p node_modules/@gravity-ui/date-components/README.md",
+        "success": true
+      },
+      {
+        "command": "sed -n 80,120p node_modules/@gravity-ui/date-components/README.md; echo ---INDEX; cat node_modules/@gravity-ui/date-components/INDEX.md | head -60; echo ---COMPONENTS; ls node_modules/@gravity-ui/date-components/components; echo ---CALENDAR; cat node_modules/@gravity-ui/date-components/components/Calendar.md 2>/dev/null || cat node_modules/@gravity-ui/date-components/components/Calendar/README.md 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/docs; sed -n 1,60p $D/INDEX.md; echo ---LS; ls $D/components; echo ---CAL; C=$(find $D/components -iname 'Calendar*' -o -iname 'README.md' -path '*Calendar/*' | head -3); echo \"$C\"; f=$(find $D/components -ipath '*Calendar*' -name '*.md' | grep -vi 'range\\|view' | head -1); sed -n 1,200p \"$f\"",
+        "success": true
+      },
+      {
+        "command": "rg -n 'export .*\\bdateTime\\b|format\\(' node_modules/@gravity-ui/date-utils/build/index.d.ts node_modules/@gravity-ui/date-utils/build/typings/dateTime.d.ts 2>/dev/null | head -8; ls node_modules/@gravity-ui/date-utils/build | head; echo ---CAL; rg -n 'onUpdate|value\\?' node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/hooks/useCalendarState.d.ts 2>/dev/null | head; find node_modules/@gravity-ui/date-components/dist -name 'Calendar.d.ts' | head -2",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/Calendar.d.ts | head -60; echo ---STATE; rg -n 'onUpdate|value\\?:|defaultValue' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/useCalendarState.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/Calendar/hooks/*.d.ts 2>/dev/null | head -12",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport {Calendar} from '@gravity-ui/date-components';\nimport type {DateTime} from '@gravity-ui/date-utils';\nimport {Flex, Text} from '@gravity-ui/uikit';\n\nexport function App() {\n  const [date, setDate] = React.useState<DateTime | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{padding: 24}}>\n      <Text variant=\"header-1\">Выбор даты</Text>\n\n      <Calendar aria-label=\"Календарь выбора даты\" value={date} onUpdate={setDate} />\n\n      <Text variant=\"body-2\">\n        {date ? `Выбранная дата: ${date.format('DD.MM.YYYY')}` : 'Дата не выбрана'}\n      </Text>\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit && echo TSC_OK && npx vite build 2>&1 | tail -4",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore 2>/dev/null; echo ---; git status --short | head; echo ---; git diff package.json",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 418,
+      "outputTokens": 5560,
+      "cacheReadTokens": 530225,
+      "cacheWriteTokens": 34425,
+      "totalTokens": 570628
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

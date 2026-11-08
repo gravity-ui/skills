@@ -1,0 +1,94 @@
+{
+  "status": "passed",
+  "duration": 312.64,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 22,
+    "outputTokens": 5256,
+    "cacheReadTokens": 224620,
+    "cacheWriteTokens": 12403,
+    "totalTokens": 242301
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 4,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files && cat package.json && ls",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json; ls __agent_eval__; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cat __agent_eval__/run.mjs | head -40; grep -n \"configure\\|useLang\\|Lang\\b\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts node_modules/@gravity-ui/uikit/build/esm/components/utils/configure.d.ts 2>/dev/null | head -20; ls node_modules/@gravity-ui/uikit/build/esm/components/utils/ | head -30",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/utils/configure.d.ts; ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -i \"segmented\\|radio\\|select\\|button\" ; grep -n \"SegmentedRadioGroup\\|export.*Select\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/i18n && cat > src/i18n/messages.ts <<'EOF'\nexport type Language = 'en' | 'ru';\n\nexport const LANGUAGES: readonly Language[] = ['en', 'ru'];\n\nconst en = {\n  'app.title': 'Welcome',\n  'app.description': 'Choose the interface language using the switcher below.',\n  'language.label': 'Interface language',\n  'language.en': 'English',\n  'language.ru': 'Русский',\n  'app.current': 'Current language: {language}',\n} as const;\n\nexport type MessageKey = keyof typeof en;\n\nconst ru: Record<MessageKey, string> = {\n  'app.title': 'Добро пожаловать',\n  'app.description': 'Выберите язык интерфейса с помощью переключателя ниже.',\n  'language.label': 'Язык интерфейса',\n  'language.en': 'English',\n  'language.ru': 'Русский',\n  'app.current': 'Текущий язык: {language}',\n};\n\nexport const messages: Record<Language, Record<MessageKey, string>> = { en, ru };\nEOF\ncat > src/i18n/I18nProvider.tsx <<'EOF'\nimport React from 'react';\nimport { configure } from '@gravity-ui/uikit';\n\nimport { LANGUAGES, messages, type Language, type MessageKey } from './messages';\n\nconst STORAGE_KEY = 'app-language';\n\ntype Params = Record<string, string | number>;\n\ninterface I18nContextValue {\n  language: Language;\n  setLanguage: (language: Language) => void;\n  t: (key: MessageKey, params?: Params) => string;\n}\n\nconst I18nContext = React.createContext<I18nContextValue | null>(null);\n\nfunction isLanguage(value: unknown): value is Language {\n  return LANGUAGES.includes(value as Language);\n}\n\nfunction detectInitialLanguage(): Language {\n  try {\n    const saved = window.localStorage.getItem(STORAGE_KEY);\n    if (isLanguage(saved)) return saved;\n  } catch {\n    // localStorage may be unavailable (private mode, etc.)\n  }\n  return navigator.language?.toLowerCase().startsWith('ru') ? 'ru' : 'en';\n}\n\n/** Applies the language to Gravity UI built-in texts and to the <html lang> attribute. */\nfunction applyLanguage(language: Language) {\n  configure({ lang: language });\n  document.documentElement.lang = language;\n}\n\nexport function I18nProvider({ children }: { children: React.ReactNode }) {\n  const [language, setLanguageState] = React.useState<Language>(() => {\n    const initial = detectInitialLanguage();\n    // Configure before the first render so uikit components start in the right language.\n    applyLanguage(initial);\n    return initial;\n  });\n\n  const setLanguage = React.useCallback((next: Language) => {\n    applyLanguage(next);\n    try {\n      window.localStorage.setItem(STORAGE_KEY, next);\n    } catch {\n      // ignore persistence errors\n    }\n    setLanguageState(next);\n  }, []);\n\n  const value = React.useMemo<I18nContextValue>(\n    () => ({\n      language,\n      setLanguage,\n      t: (key, params) => {\n        const template = messages[language][key];\n        return params\n          ? template.replace(/\\{(\\w+)\\}/g, (match, name: string) =>\n              name in params ? String(params[name]) : match,\n            )\n          : template;\n      },\n    }),\n    [language, setLanguage],\n  );\n\n  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;\n}\n\nexport function useI18n(): I18nContextValue {\n  const ctx = React.useContext(I18nContext);\n  if (!ctx) throw new Error('useI18n must be used within I18nProvider');\n  return ctx;\n}\nEOF\ncat > src/i18n/LanguageSwitcher.tsx <<'EOF'\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\n\nimport { useI18n } from './I18nProvider';\nimport { LANGUAGES, type Language } from './messages';\n\nexport function LanguageSwitcher() {\n  const { language, setLanguage, t } = useI18n();\n\n  return (\n    <SegmentedRadioGroup\n      aria-label={t('language.label')}\n      value={language}\n      onUpdate={(value) => setLanguage(value as Language)}\n    >\n      {LANGUAGES.map((lang) => (\n        <SegmentedRadioGroup.Option key={lang} value={lang} content={t(`language.${lang}`)} />\n      ))}\n    </SegmentedRadioGroup>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Text } from '@gravity-ui/uikit';\n\nimport { LanguageSwitcher } from './i18n/LanguageSwitcher';\nimport { useI18n } from './i18n/I18nProvider';\n\nexport function App() {\n  const { t } = useI18n();\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>\n      <Text variant=\"header-1\" as=\"h1\">\n        {t('app.title')}\n      </Text>\n      <Text variant=\"body-2\" color=\"secondary\">\n        {t('app.description')}\n      </Text>\n      <LanguageSwitcher />\n      <Text variant=\"body-1\">{t('app.current', { language: t(`language.${useI18n().language}`) })}</Text>\n    </div>\n  );\n}\nEOF\n",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='src/App.tsx'\ns=open(p).read()\ns=s.replace(\"const { t } = useI18n();\",\"const { t, language } = useI18n();\")\ns=s.replace(\"t(`language.${useI18n().language}`)\",\"t(`language.${language}`)\")\nopen(p,'w').write(s)\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { App } from './App';\",\"import { App } from './App';\\nimport { I18nProvider } from './i18n/I18nProvider';\")\ns=s.replace(\"      <App />\",\"      <I18nProvider>\\n        <App />\\n      </I18nProvider>\")\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -12; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 22,
+      "outputTokens": 5256,
+      "cacheReadTokens": 224620,
+      "cacheWriteTokens": 12403,
+      "totalTokens": 242301
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

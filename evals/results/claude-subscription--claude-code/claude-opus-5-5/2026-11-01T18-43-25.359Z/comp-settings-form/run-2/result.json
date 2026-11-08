@@ -1,0 +1,130 @@
+{
+  "status": "passed",
+  "duration": 318.437,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 40,
+    "outputTokens": 19515,
+    "cacheReadTokens": 705338,
+    "cacheWriteTokens": 39187,
+    "totalTokens": 764080
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 5,
+      "file_edit": 0,
+      "shell": 16,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/ProfileSettings/options.ts",
+      "/home/sandbox/workspace/src/ProfileSettings/types.ts",
+      "/home/sandbox/workspace/src/ProfileSettings/ProfileSettings.css",
+      "/home/sandbox/workspace/src/ProfileSettings/ProfileSettings.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git log --stat | head -50; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx tsconfig.json vite.config.ts index.html .gitignore; ls node_modules/@gravity-ui; ls node_modules/@gravity-ui/uikit/build/esm/components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -o '\"@gravity-ui/icons\"[^,]*' package.json; ls build/esm/components/controls build/esm/components/layout; cat build/esm/components/Avatar/types/main.d.ts build/esm/components/Avatar/types/common.d.ts 2>/dev/null | head -80; ls build/esm/components/Avatar build/esm/components/Avatar/types",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Avatar/AvatarImage/types.d.ts Avatar/AvatarText/types.d.ts; cat Switch/Switch.d.ts Checkbox/Checkbox.d.ts; sed -n 1,200p Select/types.d.ts | grep -nE '^\\s+(value|options|onUpdate|filterable|label|errorMessage|validationState|id|width|placeholder|hasClear|renderOption|size|name|title|controlProps|getOptionHeight)\\??:' ; cat controls/TextInput/TextInput.d.ts | head -60; ls ../hooks 2>/dev/null | head; grep -n \"useFileInput\" ../hooks/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat hooks/useFileInput/useFileInput.d.ts; cat components/types.d.ts | sed -n 1,60p; grep -n \"export\" components/index.d.ts | head -80; ls components/Checkbox components/layout/Flex; sed -n 1,40p components/Text/Text.d.ts; sed -n 1,60p components/Button/Button.d.ts | grep -E \"view|loading|type|extraProps\"",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && sed -n 60,115p Select/types.d.ts; grep -n \"aria\\|onUpdate\\|value\" Select/types.d.ts | head; sed -n 1,40p Alert/types.d.ts | grep -E \"^\\s+\\w+\\??:\"; grep -E \"^\\s+\\w+\\??:\" layout/Flex/Flex.d.ts | head -20; grep -rn \"supportedValuesOf\" /home/sandbox/workspace/node_modules/typescript/lib/*.d.ts 2>/dev/null | head -3; ls /home/sandbox/workspace/node_modules/typescript/lib | head; grep -n \"type?\" Button/Button.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat hooks/useFileInput/useFileInput.js | sed -n 1,60p; grep -n \"id\" components/Select/components/SelectControl/SelectControl.js | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/src/ProfileSettings && python3 - <<'EOF'\np='ProfileSettings.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"            style={{ marginBottom: 16 }}\n\"\"\",\"\"\"            className=\"profile-settings__alert\"\n\"\"\")\ns=s.replace(\"\"\"              <Text as=\"div\" variant=\"body-2\">\n                {item.title}\n              </Text>\n              <Text as=\"div\" variant=\"body-1\" color=\"secondary\">\n                {item.description}\n              </Text>\"\"\",\"\"\"              <Text variant=\"body-2\" className=\"profile-settings__checkbox-title\">\n                {item.title}\n              </Text>\n              <Text variant=\"body-1\" color=\"secondary\">\n                {item.description}\n              </Text>\"\"\")\ns=s.replace(\"\"\"<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>\"\"\",\"\"\"<div className=\"profile-settings__avatar\">\"\"\")\ns=s.replace(\"\"\"<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>\"\"\",\"\"\"<div className=\"profile-settings__avatar-controls\">\"\"\")\ns=s.replace(\"\"\"<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>\"\"\",\"\"\"<div className=\"profile-settings__avatar-actions\">\"\"\")\nopen(p,'w').write(s)\nEOF\ngrep -n \"style=\" ProfileSettings.tsx\ncat >> ProfileSettings.css <<'EOF'\n\n.profile-settings__avatar {\n  display: flex;\n  align-items: center;\n  gap: 16px;\n}\n\n.profile-settings__avatar-controls {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n.profile-settings__avatar-actions {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 8px;\n}\n\n.profile-settings__checkbox-title {\n  display: block;\n}\n\n.profile-settings__alert {\n  margin-bottom: 16px;\n}\nEOF",
+        "success": true
+      },
+      {
+        "command": "node - <<'EOF'\nconst fs=require('fs');const p='ProfileSettings.tsx';let s=fs.readFileSync(p,'utf8');\nconst r=(a,b)=>{if(!s.includes(a))throw new Error('missing: '+a);s=s.split(a).join(b);};\nr(`            style={{ marginBottom: 16 }}\n`,`            className=\"profile-settings__alert\"\n`);\nr(`              <Text as=\"div\" variant=\"body-2\">\n                {item.title}\n              </Text>\n              <Text as=\"div\" variant=\"body-1\" color=\"secondary\">\n                {item.description}\n              </Text>`,`              <Text variant=\"body-2\" className=\"profile-settings__checkbox-title\">\n                {item.title}\n              </Text>\n              <Text variant=\"body-1\" color=\"secondary\">\n                {item.description}\n              </Text>`);\nr(`<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>`,`<div className=\"profile-settings__avatar\">`);\nr(`<div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>`,`<div className=\"profile-settings__avatar-controls\">`);\nr(`<div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>`,`<div className=\"profile-settings__avatar-actions\">`);\nfs.writeFileSync(p,s);\nEOF\ngrep -n \"style=\" ProfileSettings.tsx; echo ok",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules | grep -iE \"playwright|puppeteer|jsdom|testing-library|happy-dom\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/ssrcheck && cat > /tmp/ssrcheck/check.mjs <<'EOF'\nimport { createServer } from 'vite';\nconst server = await createServer({ root: process.cwd(), server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });\ntry {\n  const React = await server.ssrLoadModule('react');\n  const { renderToString } = await server.ssrLoadModule('react-dom/server');\n  const { ThemeProvider } = await server.ssrLoadModule('@gravity-ui/uikit');\n  const { App } = await server.ssrLoadModule('/src/App.tsx');\n  const { TIME_ZONE_OPTIONS } = await server.ssrLoadModule('/src/ProfileSettings/options.ts');\n  const html = renderToString(React.createElement(ThemeProvider, { theme: 'light' }, React.createElement(App)));\n  console.log('tz count', TIME_ZONE_OPTIONS.length, TIME_ZONE_OPTIONS.slice(0,2).map(o=>o.text), TIME_ZONE_OPTIONS.find(o=>o.value==='Europe/Moscow')?.text);\n  for (const s of ['Настройки профиля','Загрузить фото','Язык интерфейса','Часовой пояс','Двухфакторная','Новости продукта','Системные алерты','Дайджест за неделю','Сохранить','Отмена','for=\"profile-name\"','id=\"profile-name\"','id=\"profile-language\"','id=\"profile-timezone\"','type=\"file\"','aria-labelledby=\"profile-2fa-label\"'])\n    console.log(html.includes(s) ? 'OK ' : 'MISSING ', s);\n} finally { await server.close(); }\nEOF\nnode /tmp/ssrcheck/check.mjs 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s#from 'vite'#from '/home/sandbox/workspace/node_modules/vite/dist/node/index.js'#\" /tmp/ssrcheck/check.mjs && node /tmp/ssrcheck/check.mjs 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "node - <<'EOF'\nconst fs=require('fs');const p='/tmp/ssrcheck/check.mjs';let s=fs.readFileSync(p,'utf8');\ns=s.replace(\"const React = await server.ssrLoadModule('react');\",\"const { createRequire } = await import('node:module'); const req = createRequire('/home/sandbox/workspace/package.json'); const React = req('react');\");\ns=s.replace(\"const { renderToString } = await server.ssrLoadModule('react-dom/server');\",\"const { renderToString } = req('react-dom/server');\");\nfs.writeFileSync(p,s);\nEOF\nnode /tmp/ssrcheck/check.mjs 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s#appType: 'custom', logLevel: 'error'#appType: 'custom', logLevel: 'error', ssr: { noExternal: ['@gravity-ui/uikit'] }#\" /tmp/ssrcheck/check.mjs && node /tmp/ssrcheck/check.mjs 2>&1 | grep -v \"^\\s*at \" | tail -25",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s/const sign = minutes < 0 ? '−' : '+';/const sign = minutes < 0 ? '-' : '+';/\" src/ProfileSettings/options.ts && sed -i 's/filterPlaceholder=\"Поиск: город или UTC+3\"/filterPlaceholder=\"Поиск: Moscow, UTC+03\"/' src/ProfileSettings/ProfileSettings.tsx && grep -n \"const sign = minutes\\|filterPlaceholder\" src/ProfileSettings/*.ts* && npm run build 2>&1 | tail -3 && rm -rf dist /tmp/ssrcheck && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 40,
+      "outputTokens": 19515,
+      "cacheReadTokens": 705338,
+      "cacheWriteTokens": 39187,
+      "totalTokens": 764080
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T15:29:26.087Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

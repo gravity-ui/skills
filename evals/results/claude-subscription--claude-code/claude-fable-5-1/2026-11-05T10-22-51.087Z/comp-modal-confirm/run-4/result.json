@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "duration": 1061.029,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 162,
+    "outputTokens": 2240,
+    "cacheReadTokens": 122010,
+    "cacheWriteTokens": 10072,
+    "totalTokens": 134484
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 5,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 5,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json && ls node_modules/@gravity-ui/uikit/build/esm/components/ | grep -i -E 'dialog|modal|button' && sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Dialog, Text } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [open, setOpen] = useState(false);\n  const [result, setResult] = useState<'confirmed' | 'cancelled' | null>(null);\n\n  const handleConfirm = () => {\n    setResult('confirmed');\n    setOpen(false);\n  };\n\n  const handleCancel = () => {\n    setResult('cancelled');\n    setOpen(false);\n  };\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>\n      <Button view=\"action\" size=\"l\" onClick={() => setOpen(true)}>\n        Открыть окно\n      </Button>\n\n      {result && (\n        <Text color={result === 'confirmed' ? 'positive' : 'secondary'} data-qa=\"result\">\n          {result === 'confirmed' ? 'Действие подтверждено' : 'Действие отменено'}\n        </Text>\n      )}\n\n      <Dialog\n        open={open}\n        onClose={handleCancel}\n        size=\"s\"\n        aria-labelledby=\"confirm-dialog-title\"\n        qa=\"confirm-dialog\"\n      >\n        <Dialog.Header caption=\"Подтверждение действия\" id=\"confirm-dialog-title\" />\n        <Dialog.Body>\n          <Text variant=\"body-1\">\n            Вы уверены, что хотите выполнить это действие? Отменить его после подтверждения будет нельзя.\n          </Text>\n        </Dialog.Body>\n        <Dialog.Footer\n          textButtonApply=\"Подтвердить\"\n          textButtonCancel=\"Отменить\"\n          onClickButtonApply={handleConfirm}\n          onClickButtonCancel={handleCancel}\n          propsButtonApply={{ qa: 'confirm-button' }}\n          propsButtonCancel={{ qa: 'cancel-button' }}\n        />\n      </Dialog>\n    </div>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "(ls node_modules/.bin | grep -i -E 'playwright|puppeteer'; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null) ; echo \"---\"; head -40 __agent_eval__/run.mjs",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 162,
+      "outputTokens": 2240,
+      "cacheReadTokens": 122010,
+      "cacheWriteTokens": 10072,
+      "totalTokens": 134484
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

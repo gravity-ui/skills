@@ -1,0 +1,94 @@
+/* Рамка занимает всю область родителя. Корень графика лежит в .cpu-chart-plot абсолютно,
+   чтобы canvas не мог «раздуть» контейнер и зациклить ResizeObserver. */
+.cpu-chart-frame {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+.cpu-chart-toolbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  height: 28px;
+}
+
+.cpu-chart-plot {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+/* Корень Yagr. Цвета осей и сетки Yagr читает из этих переменных в момент отрисовки,
+   поэтому привязываем их к токенам Gravity UI: график следует теме приложения. */
+.cpu-chart.yagr {
+  position: absolute;
+  inset: 0;
+  --yagr-font-family: var(--g-font-family-sans);
+  --yagr-background: transparent;
+  --yagr-grid: var(--g-color-line-generic);
+  --yagr-axis-stroke: var(--g-color-text-secondary);
+
+  background: transparent;
+}
+
+.cpu-chart-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.cpu-chart-overlay_column {
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+/* Tooltip Yagr рендерится в document.body, поэтому стилизуется глобально токенами Gravity. */
+.yagr-tooltip.cpu-chart-tooltip {
+  background: var(--g-color-base-float);
+  color: var(--g-color-text-primary);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px var(--g-color-sfx-shadow);
+  font-family: var(--g-font-family-sans);
+  font-size: 12px;
+  line-height: 16px;
+  padding: 8px 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cpu-chart-tooltip__time {
+  color: var(--g-color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.cpu-chart-tooltip__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Ключ серии — короткий штрих цвета линии, а не залитый квадрат. */
+.cpu-chart-tooltip__key {
+  display: inline-block;
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.cpu-chart-tooltip__value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cpu-chart-tooltip__name {
+  color: var(--g-color-text-secondary);
+}

@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 192.55,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 22616,
+    "outputTokens": 3000,
+    "cacheReadTokens": 230016,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 575,
+    "totalTokens": 255632
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- files ---\\\\n' && rg --files -g '\"'!*node_modules*'\"' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- routing excerpt ---\\\\n' && sed -n '1,90p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- traps dropdown ---\\\\n' && rg -n -C 3 \\\"Dropdown|Button view|variant\\\" .agents/skills/gravity-ui/rules/hallucination-traps.md && printf '\\\\n--- uikit dropdown docs ---\\\\n' && rg -n -C 5 \\\"Dropdown\\\" node_modules/@gravity-ui/uikit/build/docs/components/Dropdown.md 2>/dev/null || rg -n -C 5 \\\"Dropdown\\\" node_modules/@gravity-ui/uikit/build/docs -g '*.md' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- README dropdown ---'; rg -n -C 6 \\\"Dropdown\\\" node_modules/@gravity-ui/uikit/README.md | head -120; printf '%s\\\\n' '--- declaration files ---'; find node_modules/@gravity-ui/uikit -iname '*Dropdown*' -maxdepth 5 | head -30; printf '%s\\\\n' '--- dropdown types ---'; rg -n \\\"DropdownMenu|DropdownProps|type Dropdown|declare .*Dropdown\\\" node_modules/@gravity-ui/uikit/dist/*.d.ts node_modules/@gravity-ui/uikit/dist/**/*.d.ts 2>/dev/null | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts; printf '\\\\n--- context ---\\\\n'; cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenuContext.d.ts; printf '\\\\n--- exports ---\\\\n'; rg -n \\\"DropdownMenu|components/DropdownMenu\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts; printf '\\\\n--- button types ---\\\\n'; rg -n \\\"interface ButtonProps|type ButtonProps|view\\\\?\\\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts; rg -n \"DropdownMenu\" node_modules/@gravity-ui/uikit/build/esm/index.js node_modules/@gravity-ui/uikit/build/esm/*.js | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n-}\n+import React from 'react';\n+import { Button, DropdownMenu, Text } from '@gravity-ui/uikit';\n+\n+const actions = [\n+  {\n+    id: 'duplicate',\n+    text: 'Дублировать',\n+  },\n+  {\n+    id: 'rename',\n+    text: 'Переименовать',\n+  },\n+  {\n+    id: 'delete',\n+    text: 'Удалить',\n+  },\n+] as const;\n+\n+export function App() {\n+  const [selectedAction, setSelectedAction] = React.useState<string>();\n+\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <DropdownMenu\n+        size=\\\"m\\\"\n+        items={actions.map((action) => ({\n+          action: () => setSelectedAction(action.text),\n+          text: action.text,\n+        }))}\n+        renderSwitcher={(props) => (\n+          <Button {...props} size=\\\"m\\\" view=\\\"action\\\">\n+            Действия\n+          </Button>\n+        )}\n+      />\n+\n+      {selectedAction ? (\n+        <div style={{ marginTop: 12 }}>\n+          <Text variant=\\\"body-1\\\">Выбрано действие: {selectedAction}</Text>\n+        </div>\n+      ) : null}\n+    </div>\n+  );\n+}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/menu-check.test.jsx <<'EOF'\nimport { describe, expect, it } from 'vitest';\nimport { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';\nimport React from 'react';\nimport { App } from './src/App';\n\ndescribe('actions menu', () => {\n  it('opens action list and selects an action', async () => {\n    render(<App />);\n    fireEvent.click(screen.getByRole('button', { name: 'Действия' }));\n    expect(await screen.findByRole('menu')).toBeInTheDocument();\n    fireEvent.click(screen.getByRole('menuitem', { name: 'Переименовать' }));\n    await waitFor(() => expect(screen.getByText('Выбрано действие: Переименовать')).toBeInTheDocument());\n    cleanup();\n  });\n});\nEOF\nnpx vitest run /tmp/menu-check.test.jsx --root .\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p .tmp-check && cp /tmp/menu-check.test.jsx .tmp-check/menu-check.test.jsx && npx vitest run .tmp-check/menu-check.test.jsx'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'rmdir .tmp-check && rm /tmp/menu-check.test.jsx && git diff -- src/App.tsx'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"require('fs').rmSync('.tmp-check', {recursive: true})\\\" && node -e \\\"require('fs').rmSync('/tmp/menu-check.test.jsx')\\\" && git diff -- src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 22616,
+      "outputTokens": 3000,
+      "cacheReadTokens": 230016,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 575,
+      "totalTokens": 255632
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

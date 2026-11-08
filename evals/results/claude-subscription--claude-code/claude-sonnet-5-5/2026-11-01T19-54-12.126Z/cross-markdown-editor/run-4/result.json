@@ -1,0 +1,90 @@
+{
+  "status": "failed",
+  "duration": 335.947,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 18,
+    "outputTokens": 5682,
+    "cacheReadTokens": 174130,
+    "cacheWriteTokens": 12407,
+    "totalTokens": 192237
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 9,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 9,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "git ls-files | head -50 && cat package.json 2>/dev/null && ls",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json; ls __agent_eval__; ls node_modules | head -50; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -iE \"mark|remark|unified|mdast|micromark|react-markdown|marked|yfm|diplodoc|codemirror|uiw\"; ls node_modules/@uiw node_modules/@gravity-ui; ls node_modules/@gravity-ui/uikit/build 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "timeout 60 npm view react-markdown version 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "npm install react-markdown remark-gfm 2>&1 | tail -5 && git diff package.json"
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cat > src/MarkdownField.tsx <<'EOF'\nimport React from 'react';\nimport ReactMarkdown from 'react-markdown';\nimport remarkGfm from 'remark-gfm';\nimport { Text, TextArea } from '@gravity-ui/uikit';\n\nimport './MarkdownField.css';\n\nexport interface MarkdownFieldProps {\n  value: string;\n  onChange: (value: string) => void;\n  label?: string;\n  placeholder?: string;\n  minRows?: number;\n  name?: string;\n}\n\n/** Текстовое поле с Markdown-разметкой и живым превью рядом. */\nexport function MarkdownField({\n  value,\n  onChange,\n  label,\n  placeholder,\n  minRows = 12,\n  name,\n}: MarkdownFieldProps) {\n  const id = React.useId();\n  const previewId = `${id}-preview`;\n\n  return (\n    <div className=\"md-field\">\n      {label && (\n        <label htmlFor={id}>\n          <Text variant=\"subheader-2\">{label}</Text>\n        </label>\n      )}\n      <div className=\"md-field__panes\">\n        <TextArea\n          id={id}\n          name={name}\n          className=\"md-field__editor\"\n          size=\"l\"\n          value={value}\n          onUpdate={onChange}\n          placeholder={placeholder}\n          minRows={minRows}\n          controlProps={{ 'aria-describedby': previewId, spellCheck: false }}\n        />\n        <div\n          id={previewId}\n          className=\"md-field__preview\"\n          role=\"region\"\n          aria-label=\"Предпросмотр\"\n          aria-live=\"polite\"\n          style={{ minHeight: `${minRows * 1.5 + 1.5}em` }}\n        >\n          {value.trim() ? (\n            <ReactMarkdown\n              remarkPlugins={[remarkGfm]}\n              components={{\n                a: ({ node, ...props }) => (\n                  <a {...props} target=\"_blank\" rel=\"noopener noreferrer\" />\n                ),\n              }}\n            >\n              {value}\n            </ReactMarkdown>\n          ) : (\n            <Text color=\"secondary\">Здесь появится предпросмотр</Text>\n          )}\n        </div>\n      </div>\n    </div>\n  );\n}\nEOF\ncat > src/MarkdownField.css <<'EOF'\n.md-field {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n}\n\n.md-field__panes {\n  display: grid;\n  grid-template-columns: repeat(2, minmax(0, 1fr));\n  gap: 16px;\n  align-items: stretch;\n}\n\n@media (max-width: 720px) {\n  .md-field__panes {\n    grid-template-columns: minmax(0, 1fr);\n  }\n}\n\n.md-field__editor textarea {\n  font-family: var(--g-font-family-monospace, monospace);\n}\n\n.md-field__preview {\n  box-sizing: border-box;\n  padding: 12px 16px;\n  overflow: auto;\n  overflow-wrap: anywhere;\n  border: 1px solid var(--g-color-line-generic);\n  border-radius: var(--g-border-radius-l, 8px);\n  background: var(--g-color-base-background);\n  color: var(--g-color-text-primary);\n  font-size: var(--g-text-body-2-font-size);\n  line-height: var(--g-text-body-2-line-height);\n}\n\n.md-field__preview > :first-child { margin-top: 0; }\n.md-field__preview > :last-child { margin-bottom: 0; }\n\n.md-field__preview h1,\n.md-field__preview h2,\n.md-field__preview h3,\n.md-field__preview h4 {\n  margin: 1em 0 0.5em;\n  line-height: 1.25;\n}\n.md-field__preview h1 { font-size: 1.8em; }\n.md-field__preview h2 { font-size: 1.5em; }\n.md-field__preview h3 { font-size: 1.25em; }\n.md-field__preview h4 { font-size: 1.1em; }\n\n.md-field__preview p,\n.md-field__preview ul,\n.md-field__preview ol,\n.md-field__preview blockquote,\n.md-field__preview pre,\n.md-field__preview table {\n  margin: 0 0 0.8em;\n}\n\n.md-field__preview ul,\n.md-field__preview ol { padding-left: 1.5em; }\n\n.md-field__preview a { color: var(--g-color-text-link); }\n\n.md-field__preview blockquote {\n  padding: 0 12px;\n  border-left: 3px solid var(--g-color-line-brand);\n  color: var(--g-color-text-secondary);\n}\n\n.md-field__preview code {\n  padding: 1px 4px;\n  border-radius: 4px;\n  background: var(--g-color-base-generic);\n  font-family: var(--g-font-family-monospace, monospace);\n  font-size: 0.9em;\n}\n\n.md-field__preview pre {\n  padding: 12px;\n  overflow: auto;\n  border-radius: 8px;\n  background: var(--g-color-base-generic);\n}\n.md-field__preview pre code { padding: 0; background: none; }\n\n.md-field__preview table { border-collapse: collapse; }\n.md-field__preview th,\n.md-field__preview td {\n  padding: 4px 10px;\n  border: 1px solid var(--g-color-line-generic);\n}\n\n.md-field__preview hr {\n  border: 0;\n  border-top: 1px solid var(--g-color-line-generic);\n}\n\n.md-field__preview img { max-width: 100%; }\nEOF\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { Button, Text, TextInput } from '@gravity-ui/uikit';\n\nimport { MarkdownField } from './MarkdownField';\n\nconst INITIAL_TEXT = `# Заголовок\n\nТекст с **жирным**, *курсивом*, ~~зачёркнутым~~ и \\`кодом\\`.\n\n- пункт списка\n- ещё один\n\n> Цитата\n\n[Ссылка](https://gravity-ui.com)\n`;\n\nexport function App() {\n  const [title, setTitle] = React.useState('');\n  const [text, setText] = React.useState(INITIAL_TEXT);\n  const [submitted, setSubmitted] = React.useState<{ title: string; text: string } | null>(null);\n\n  const handleSubmit = (event: React.FormEvent) => {\n    event.preventDefault();\n    setSubmitted({ title, text });\n  };\n\n  return (\n    <form\n      onSubmit={handleSubmit}\n      style={{ padding: 24, maxWidth: 1100, display: 'flex', flexDirection: 'column', gap: 16 }}\n    >\n      <Text variant=\"header-1\">Новая заметка</Text>\n\n      <TextInput\n        name=\"title\"\n        size=\"l\"\n        label=\"Название\"\n        value={title}\n        onUpdate={setTitle}\n      />\n\n      <MarkdownField\n        name=\"text\"\n        label=\"Текст (Markdown)\"\n        value={text}\n        onChange={setText}\n        placeholder=\"Пишите в Markdown…\"\n      />\n\n      <div>\n        <Button type=\"submit\" view=\"action\" size=\"l\">\n          Сохранить\n        </Button>\n      </div>\n\n      {submitted && (\n        <Text color=\"secondary\">\n          Отправлено: «{submitted.title || 'без названия'}», {submitted.text.length} символов\n        </Text>\n      )}\n    </form>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && cat > /tmp/ssr.test.tsx <<'EOF'\nimport React from 'react';\nimport { renderToString } from 'react-dom/server';\nimport { test, expect } from 'vitest';\nimport { MarkdownField } from '/home/sandbox/workspace/src/MarkdownField';\n\ntest('renders markdown', () => {\n  const html = renderToString(\n    <MarkdownField value={'# Hi\\n\\n**bold** <script>alert(1)</script>\\n\\n[a](https://x.y)'} onChange={() => {}} />,\n  );\n  console.log(html.slice(html.indexOf('md-field__preview')));\n  expect(html).toContain('<h1>Hi</h1>');\n  expect(html).toContain('<strong>bold</strong>');\n  expect(html).not.toContain('<script>');\n});\nEOF\ncp /tmp/ssr.test.tsx src/__tmp.test.tsx && npx vitest run src/__tmp.test.tsx 2>&1 | tail -25; rm -f src/__tmp.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cp /tmp/ssr.test.tsx src/__tmp.test.tsx && cat > /tmp/vt.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()], test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ncp /tmp/vt.config.ts ./vt.tmp.config.ts && npx vitest run --config vt.tmp.config.ts src/__tmp.test.tsx 2>&1 | tail -25; rm -f src/__tmp.test.tsx vt.tmp.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 18,
+      "outputTokens": 5682,
+      "cacheReadTokens": 174130,
+      "cacheWriteTokens": 12407,
+      "totalTokens": 192237
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

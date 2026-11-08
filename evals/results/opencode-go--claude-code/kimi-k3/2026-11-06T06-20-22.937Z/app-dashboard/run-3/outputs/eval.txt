@@ -1,0 +1,931 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 39991ms
+   × imports @gravity-ui/navigation 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 0ms
+     → expected 'import {useMemo, useState} from \'rea…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 39986ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: Neither required package is present: package.json and package-lock.json contain only @gravity-ui/uikit (no @gravity-ui/navigation or @gravity-ui/table). src/components/Sidebar.tsx is a hand-rolled <aside> with plain <button> items instead of AsideHeader, and src/components/OrdersTable.tsx is a hand-rolled <table> with manual checkbox selection, HTML5 drag events and manual grouping rather than @gravity-ui/table's useTable, ColumnReorderingProvider and row grouping.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  06:27:40
+   Duration  40.13s (transform 32ms, setup 17ms, collect 15ms, tests 39.99s, environment 0ms, prepare 38ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected 'import {useMemo, useState} from \'rea…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+"import {useMemo, useState} from 'react';
+import {Card, Text} from '@gravity-ui/uikit';
+
+import {Sidebar, SECTIONS, type SectionId} from './components/Sidebar';
+import {OrdersTable} from './components/OrdersTable';
+import {ORDERS, formatAmount} from './data/orders';
+import './styles.css';
+
+function StatTile({title, value, hint}: {title: string; value: string; hint?: string}) {
+  return (
+    <Card className=\"stat-tile\" view=\"outlined\">
+      <Text color=\"secondary\" variant=\"body-1\">
+        {title}
+      </Text>
+      <Text variant=\"display-1\" className=\"stat-tile__value\">
+        {value}
+      </Text>
+      {hint && (
+        <Text color=\"secondary\" variant=\"caption-1\">
+          {hint}
+        </Text>
+      )}
+    </Card>
+  );
+}
+
+function HomeSection() {
+  const stats = useMemo(() => {
+    const total = ORDERS.length;
+    const revenue = ORDERS.filter((o) => o.status !== 'cancelled').reduce(
+      (s, o) => s + o.amount,
+      0,
+    );
+    const active = ORDERS.filter(
+      (o) => o.status === 'new' || o.status === 'processing',
+    ).length;
+    return {
+      total,
+      revenue,
+      active,
+      average: total ? Math.round(revenue / Math.max(total, 1)) : 0,
+    };
+  }, []);
+
+  return (
+    <>
+      <div className=\"stat-tiles\">
+        <StatTile title=\"Всего заказов\" value={String(stats.total)} hint=\"за всё время\" />
+        <StatTile title=\"Выручка\" value={formatAmount(stats.revenue)} hint=\"без отменённых\" />
+        <StatTile title=\"Активные заказы\" value={String(stats.active)} hint=\"новые + в обработке\" />
+        <StatTile title=\"Средний чек\" value={formatAmount(stats.average)} />
+      </div>
+      <OrdersTable />
+    </>
+  );
+}
+
+function PlaceholderSection({title, description}: {title: string; description: string}) {
+  return (
+    <Card view=\"outlined\" className=\"placeholder\">
+      <Text variant=\"subheader-3\">{title}</Text>
+      <Text color=\"secondary\">{description}</Text>
+    </Card>
+  );
+}
+
+export function App() {
+  const [section, setSection] = useState<SectionId>('orders');
+  const [collapsed, setCollapsed] = useState(false);
+
+  const activeTitle = SECTIONS.find((s) => s.id === section)?.title ?? '';
+
+  return (
+    <div className=\"layout\">
+      <Sidebar
+        active={section}
+        collapsed={collapsed}
+        onNavigate={setSection}
+        onToggleCollapsed={() => setCollapsed((c) => !c)}
+      />
+      <main className=\"main\">
+        <header className=\"main__header\">
+          <Text variant=\"header-1\">{activeTitle}</Text>
+        </header>
+        {section === 'home' && <HomeSection />}
+        {section === 'orders' && <OrdersTable />}
+        {section === 'users' && (
+          <PlaceholderSection
+            title=\"Пользователи\"
+            description=\"Раздел управления пользователями. Здесь будет список аккаунтов, роли и права доступа.\"
+          />
+        )}
+        {section === 'settings' && (
+          <PlaceholderSection
+            title=\"Настройки\"
+            description=\"Раздел настроек админки: профиль, уведомления, интеграции.\"
+          />
+        )}
+      </main>
+    </div>
+  );
+}
+
+
+import {useMemo, useState} from 'react';
+import {Button, Checkbox, Icon, Label, Switch, Text} from '@gravity-ui/uikit';
+import {ChevronDown, ChevronRight, Grip} from '@gravity-ui/icons';
+
+import {
+  ORDERS,
+  STATUS_META,
+  STATUS_ORDER,
+  formatAmount,
+  formatDate,
+  type Order,
+  type OrderStatus,
+} from '../data/orders';
+
+type ColumnId = 'id' | 'customer' | 'email' | 'date' | 'items' | 'amount' | 'status';
+
+interface ColumnDef {
+  id: ColumnId;
+  title: string;
+  align?: 'left' | 'right' | 'center';
+  render: (order: Order) => React.ReactNode;
+}
+
+const ALL_COLUMNS: ColumnDef[] = [
+  {id: 'id', title: 'Заказ', render: (o) => <Text variant=\"code-1\">{o.id}</Text>},
+  {id: 'customer', title: 'Клиент', render: (o) => o.customer},
+  {
+    id: 'email',
+    title: 'Email',
+    render: (o) => <Text color=\"secondary\">{o.email}</Text>,
+  },
+  {id: 'date', title: 'Дата', render: (o) => formatDate(o.date)},
+  {id: 'items', title: 'Позиции', align: 'right', render: (o) => o.items},
+  {id: 'amount', title: 'Сумма', align: 'right', render: (o) => formatAmount(o.amount)},
+  {
+    id: 'status',
+    title: 'Статус',
+    render: (o) => (
+      <Label theme={STATUS_META[o.status].theme}>{STATUS_META[o.status].label}</Label>
+    ),
+  },
+];
+
+export function OrdersTable() {
+  const [columnOrder, setColumnOrder] = useState<ColumnId[]>(
+    ALL_COLUMNS.map((c) => c.id),
+  );
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
+  const [grouped, setGrouped] = useState(true);
+  const [collapsedGroups, setCollapsedGroups] = useState<ReadonlySet<OrderStatus>>(
+    new Set(),
+  );
+  const [dragColumn, setDragColumn] = useState<ColumnId | null>(null);
+  const [dropTarget, setDropTarget] = useState<ColumnId | null>(null);
+
+  const columns = useMemo(
+    () =>
+      columnOrder
+        .map((id) => ALL_COLUMNS.find((c) => c.id === id))
+        .filter((c): c is ColumnDef => Boolean(c)),
+    [columnOrder],
+  );
+
+  // --- selection ---
+  const toggleRow = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const allSelected = selected.size === ORDERS.length;
+  const someSelected = selected.size > 0 && !allSelected;
+
+  const toggleAll = () => {
+    setSelected(allSelected ? new Set() : new Set(ORDERS.map((o) => o.id)));
+  };
+
+  // --- column drag & drop ---
+  const handleDrop = (targetId: ColumnId) => {
+    if (!dragColumn || dragColumn === targetId) return;
+    setColumnOrder((prev) => {
+      const next = prev.filter((id) => id !== dragColumn);
+      next.splice(next.indexOf(targetId), 0, dragColumn);
+      return next;
+    });
+  };
+
+  // --- grouping ---
+  const groups = useMemo(() => {
+    const byStatus = new Map<OrderStatus, Order[]>();
+    for (const status of STATUS_ORDER) byStatus.set(status, []);
+    for (const order of ORDERS) byStatus.get(order.status)!.push(order);
+    return STATUS_ORDER.map((status) => ({
+      status,
+      orders: byStatus.get(status)!,
+      total: byStatus.get(status)!.reduce((sum, o) => sum + o.amount, 0),
+    })).filter((g) => g.orders.length > 0);
+  }, []);
+
+  const toggleGroup = (status: OrderStatus) => {
+    setCollapsedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(status)) next.delete(status);
+      else next.add(status);
+      return next;
+    });
+  };
+
+  const renderRow = (order: Order) => {
+    const isSelected = selected.has(order.id);
+    return (
+      <tr
+        key={order.id}
+        className={`orders-table__row${isSelected ? ' orders-table__row_selected' : ''}`}
+        onClick={() => toggleRow(order.id)}
+      >
+        <td
+          className=\"orders-table__cell orders-table__cell_check\"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Checkbox
+            checked={isSelected}
+            onChange={() => toggleRow(order.id)}
+            aria-label={`Выбрать заказ ${order.id}`}
+          />
+        </td>
+        {columns.map((col) => (
+          <td
+            key={col.id}
+            className=\"orders-table__cell\"
+            style={{textAlign: col.align ?? 'left'}}
+          >
+            {col.render(order)}
+          </td>
+        ))}
+      </tr>
+    );
+  };
+
+  return (
+    <div className=\"orders-table\">
+      <div className=\"orders-table__toolbar\">
+        <div className=\"orders-table__toolbar-info\">
+          <Text variant=\"subheader-2\">Заказы</Text>
+          <Text color=\"secondary\">
+            {selected.size > 0
+              ? `Выбрано: ${selected.size} из ${ORDERS.length}`
+              : `Всего: ${ORDERS.length}`}
+          </Text>
+        </div>
+        <div className=\"orders-table__toolbar-controls\">
+          <Switch
+            checked={grouped}
+            onUpdate={setGrouped}
+            content=\"Группировать по статусу\"
+          />
+          {selected.size > 0 && (
+            <Button view=\"flat\" size=\"m\" onClick={() => setSelected(new Set())}>
+              Снять выделение
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className=\"orders-table__scroll\">
+        <table className=\"orders-table__table\">
+          <thead>
+            <tr>
+              <th className=\"orders-table__head-cell orders-table__cell_check\">
+                <Checkbox
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onChange={toggleAll}
+                  aria-label=\"Выбрать все заказы\"
+                />
+              </th>
+              {columns.map((col) => (
+                <th
+                  key={col.id}
+                  className={`orders-table__head-cell orders-table__head-cell_draggable${
+                    dropTarget === col.id && dragColumn !== col.id
+                      ? ' orders-table__head-cell_drop-target'
+                      : ''
+                  }${dragColumn === col.id ? ' orders-table__head-cell_dragging' : ''}`}
+                  style={{textAlign: col.align ?? 'left'}}
+                  draggable
+                  onDragStart={(e) => {
+                    setDragColumn(col.id);
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', col.id);
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    setDropTarget(col.id);
+                  }}
+                  onDragLeave={() => setDropTarget((t) => (t === col.id ? null : t))}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleDrop(col.id);
+                    setDragColumn(null);
+                    setDropTarget(null);
+                  }}
+                  onDragEnd={() => {
+                    setDragColumn(null);
+                    setDropTarget(null);
+                  }}
+                  title=\"Перетащите, чтобы изменить порядок колонок\"
+                >
+                  <span className=\"orders-table__head-content\">
+                    <Icon data={Grip} size={14} className=\"orders-table__grip\" />
+                    {col.title}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {grouped
+              ? groups.map((group) => {
+                  const collapsed = collapsedGroups.has(group.status);
+                  const meta = STATUS_META[group.status];
+                  return [
+                    <tr
+                      key={`group-${group.status}`}
+                      className=\"orders-table__group-row\"
+                      onClick={() => toggleGroup(group.status)}
+                    >
+                      <td colSpan={columns.length + 1} className=\"orders-table__group-cell\">
+                        <Icon
+                          data={collapsed ? ChevronRight : ChevronDown}
+                          size={16}
+                        />
+                        <Label theme={meta.theme}>{meta.label}</Label>
+                        <Text color=\"secondary\">
+                          {group.orders.length} заказ(ов) · {formatAmount(group.total)}
+                        </Text>
+                      </td>
+                    </tr>,
+                    ...(collapsed ? [] : group.orders.map(renderRow)),
+                  ];
+                })
+              : ORDERS.map(renderRow)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+
+import {Button, Icon, Text, Tooltip} from '@gravity-ui/uikit';
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  Gear,
+  House,
+  Persons,
+  Receipt,
+} from '@gravity-ui/icons';
+
+export type SectionId = 'home' | 'users' | 'orders' | 'settings';
+
+export const SECTIONS: Array<{id: SectionId; title: string; icon: typeof House}> = [
+  {id: 'home', title: 'Главная', icon: House},
+  {id: 'users', title: 'Пользователи', icon: Persons},
+  {id: 'orders', title: 'Заказы', icon: Receipt},
+  {id: 'settings', title: 'Настройки', icon: Gear},
+];
+
+interface SidebarProps {
+  active: SectionId;
+  collapsed: boolean;
+  onNavigate: (id: SectionId) => void;
+  onToggleCollapsed: () => void;
+}
+
+export function Sidebar({active, collapsed, onNavigate, onToggleCollapsed}: SidebarProps) {
+  return (
+    <aside className={`sidebar${collapsed ? ' sidebar_collapsed' : ''}`}>
+      <div className=\"sidebar__logo\">
+        <div className=\"sidebar__logo-mark\">A</div>
+        {!collapsed && (
+          <Text variant=\"subheader-2\" className=\"sidebar__logo-text\">
+            Админка
+          </Text>
+        )}
+      </div>
+
+      <nav className=\"sidebar__nav\">
+        {SECTIONS.map(({id, title, icon}) => {
+          const isActive = id === active;
+          const button = (
+            <button
+              key={id}
+              type=\"button\"
+              className={`sidebar__item${isActive ? ' sidebar__item_active' : ''}`}
+              onClick={() => onNavigate(id)}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <Icon data={icon} size={18} />
+              {!collapsed && <span className=\"sidebar__item-label\">{title}</span>}
+            </button>
+          );
+          return collapsed ? (
+            <Tooltip key={id} content={title} placement=\"right\">
+              {button}
+            </Tooltip>
+          ) : (
+            button
+          );
+        })}
+      </nav>
+
+      <div className=\"sidebar__footer\">
+        <Tooltip
+          content={collapsed ? 'Развернуть меню' : 'Свернуть меню'}
+          placement=\"right\"
+        >
+          <Button view=\"flat\" size=\"l\" onClick={onToggleCollapsed} className=\"sidebar__toggle\">
+            <Button.Icon>
+              <Icon data={collapsed ? ChevronsRight : ChevronsLeft} size={18} />
+            </Button.Icon>
+            {!collapsed && 'Свернуть'}
+          </Button>
+        </Tooltip>
+      </div>
+    </aside>
+  );
+}
+
+
+export type OrderStatus = 'new' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface Order {
+  id: string;
+  customer: string;
+  email: string;
+  date: string; // ISO date
+  items: number;
+  amount: number; // RUB
+  status: OrderStatus;
+}
+
+export const STATUS_ORDER: OrderStatus[] = [
+  'new',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+];
+
+export const STATUS_META: Record<
+  OrderStatus,
+  {label: string; theme: 'info' | 'warning' | 'normal' | 'success' | 'danger'}
+> = {
+  new: {label: 'Новый', theme: 'info'},
+  processing: {label: 'В обработке', theme: 'warning'},
+  shipped: {label: 'Отправлен', theme: 'normal'},
+  delivered: {label: 'Доставлен', theme: 'success'},
+  cancelled: {label: 'Отменён', theme: 'danger'},
+};
+
+const CUSTOMERS: Array<[string, string]> = [
+  ['Иван Петров', 'ivan.petrov@example.com'],
+  ['Мария Сидорова', 'maria.s@example.com'],
+  ['Алексей Козлов', 'a.kozlov@example.com'],
+  ['Елена Волкова', 'elena.volkova@example.com'],
+  ['Дмитрий Орлов', 'd.orlov@example.com'],
+  ['Ольга Смирнова', 'olga.smirnova@example.com'],
+  ['Сергей Морозов', 's.morozov@example.com'],
+  ['Анна Лебедева', 'anna.lebedeva@example.com'],
+  ['Николай Соколов', 'n.sokolov@example.com'],
+  ['Татьяна Попова', 't.popova@example.com'],
+];
+
+// Deterministic pseudo-random so the demo data is stable between reloads.
+function seeded(index: number, salt: number) {
+  const x = Math.sin(index * 127.1 + salt * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+export const ORDERS: Order[] = Array.from({length: 32}, (_, i) => {
+  const n = i + 1;
+  const [customer, email] = CUSTOMERS[i % CUSTOMERS.length];
+  const day = 1 + Math.floor(seeded(i, 1) * 27);
+  const month = 1 + Math.floor(seeded(i, 2) * 10);
+  const status = STATUS_ORDER[Math.floor(seeded(i, 3) * STATUS_ORDER.length)];
+  return {
+    id: `ORD-${String(10240 + n).padStart(5, '0')}`,
+    customer,
+    email,
+    date: `2026-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`,
+    items: 1 + Math.floor(seeded(i, 4) * 8),
+    amount: Math.round((900 + seeded(i, 5) * 48100) / 10) * 10,
+    status,
+  };
+});
+
+export const formatAmount = (value: number) =>
+  new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'RUB',
+    maximumFractionDigits: 0,
+  }).format(value);
+
+export const formatDate = (iso: string) =>
+  new Date(`${iso}T00:00:00`).toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--g-color-base-background);
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+  flex: 0 0 auto;
+  width: 232px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-background);
+  transition: width 0.2s ease;
+  overflow: hidden;
+}
+
+.sidebar_collapsed {
+  width: 68px;
+}
+
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  min-height: 64px;
+}
+
+.sidebar__logo-mark {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--g-color-text-light-primary);
+  background: var(--g-color-base-brand);
+}
+
+.sidebar__logo-text {
+  white-space: nowrap;
+}
+
+.sidebar__nav {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--g-color-text-secondary);
+  font: inherit;
+  font-size: var(--g-text-body-2-font-size);
+  line-height: var(--g-text-body-2-line-height);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar_collapsed .sidebar__item {
+  justify-content: center;
+  padding: 9px;
+}
+
+.sidebar__item:hover {
+  background: var(--g-color-base-simple-hover);
+  color: var(--g-color-text-primary);
+}
+
+.sidebar__item_active,
+.sidebar__item_active:hover {
+  background: var(--g-color-base-selection);
+  color: var(--g-color-text-primary);
+}
+
+.sidebar__item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar__footer {
+  padding: 8px;
+  border-top: 1px solid var(--g-color-line-generic);
+}
+
+.sidebar_collapsed .sidebar__toggle {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ---------- Main ---------- */
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 24px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main__header {
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- Stat tiles ---------- */
+
+.stat-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.stat-tile {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-tile__value {
+  color: var(--g-color-text-primary);
+}
+
+.placeholder {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+
+/* ---------- Orders table ---------- */
+
+.orders-table {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.orders-table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.orders-table__toolbar-info {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.orders-table__toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.orders-table__scroll {
+  overflow: auto;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  background: var(--g-color-base-background);
+}
+
+.orders-table__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.orders-table__head-cell {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 14px;
+  background: var(--g-color-base-generic);
+  border-bottom: 1px solid var(--g-color-line-generic);
+  font-size: var(--g-text-body-1-font-size);
+  font-weight: 500;
+  color: var(--g-color-text-secondary);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.orders-table__head-cell_draggable {
+  cursor: grab;
+}
+
+.orders-table__head-cell_dragging {
+  opacity: 0.4;
+}
+
+.orders-table__head-cell_drop-target {
+  box-shadow: inset 2px 0 0 var(--g-color-line-brand);
+  background: var(--g-color-base-selection);
+}
+
+.orders-table__head-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.orders-table__grip {
+  color: var(--g-color-text-hint);
+}
+
+.orders-table__cell {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--g-color-line-generic-solid);
+  font-size: var(--g-text-body-1-font-size);
+  color: var(--g-color-text-primary);
+  white-space: nowrap;
+}
+
+.orders-table__cell_check {
+  width: 44px;
+  text-align: center;
+}
+
+.orders-table__row {
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.orders-table__row:hover {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders-table__row_selected,
+.orders-table__row_selected:hover {
+  background: var(--g-color-base-selection);
+}
+
+.orders-table__group-row {
+  cursor: pointer;
+  background: var(--g-color-base-float-announcement);
+}
+
+.orders-table__group-cell {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--g-color-line-generic);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.orders-table__group-cell > * {
+  vertical-align: middle;
+}
+
+.orders-table__group-cell .g-icon {
+  margin-right: 6px;
+}
+
+.orders-table__group-cell .g-label {
+  margin-right: 10px;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: Neither required package is present: package.json and package-lock.json contain only @gravity-ui/uikit (no @gravity-ui/navigation or @gravity-ui/table). src/components/Sidebar.tsx is a hand-rolled <aside> with plain <button> items instead of AsideHeader, and src/components/OrdersTable.tsx is a hand-rolled <table> with manual checkbox selection, HTML5 drag events and manual grouping rather than @gravity-ui/table's useTable, ColumnReorderingProvider and row grouping.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

@@ -1,0 +1,71 @@
+{
+  "status": "failed",
+  "duration": 861.836,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 10,
+    "outputTokens": 2194,
+    "cacheReadTokens": 87696,
+    "cacheWriteTokens": 7780,
+    "totalTokens": 97680
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 4,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 4,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package-lock.json | head -20",
+        "success": true
+      },
+      {
+        "command": "cat index.html package.json vite.config.ts tsconfig.json .gitignore; find src __agent_eval__ -type f | head -50; for f in $(find src -type f); do echo \"--- $f\"; cat $f; done",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { Button, Card, Container, Flex, Text } from '@gravity-ui/uikit';\n\nconst SIGNUP_URL = '#'; // TODO: подставить реальную ссылку на регистрацию\n\nconst BENEFITS = [\n  {\n    title: 'Учёт в один клик',\n    text: 'Запускайте таймер на задаче и забудьте о нём. Никаких таблиц и ручного заполнения в конце недели.',\n  },\n  {\n    title: 'Понятная картина по команде',\n    text: 'Видно, сколько времени уходит на проекты и клиентов, — без опросов и уточняющих сообщений.',\n  },\n  {\n    title: 'Честные оценки и планы',\n    text: 'Реальные данные о затраченных часах помогают точнее оценивать сроки и распределять нагрузку.',\n  },\n];\n\nexport function App() {\n  return (\n    <main>\n      <Container maxWidth=\"l\">\n        <Flex direction=\"column\" gap={10} style={{ padding: '80px 0' }}>\n          <Flex direction=\"column\" gap={4} alignItems=\"center\" style={{ textAlign: 'center' }}>\n            <Text as=\"h1\" variant=\"display-2\">\n              Учёт времени команды без лишней рутины\n            </Text>\n            <Text as=\"p\" variant=\"body-3\" color=\"secondary\" style={{ maxWidth: 640 }}>\n              Простой инструмент, который показывает, на что уходит рабочее время, — чтобы команда\n              планировала спокойнее, а руководитель видел реальную картину.\n            </Text>\n          </Flex>\n\n          <Flex gap={4} wrap>\n            {BENEFITS.map(({ title, text }) => (\n              <Card\n                key={title}\n                view=\"outlined\"\n                type=\"container\"\n                style={{ flex: '1 1 260px', padding: 24 }}\n              >\n                <Flex direction=\"column\" gap={2}>\n                  <Text as=\"h2\" variant=\"subheader-3\">\n                    {title}\n                  </Text>\n                  <Text as=\"p\" color=\"secondary\">\n                    {text}\n                  </Text>\n                </Flex>\n              </Card>\n            ))}\n          </Flex>\n\n          <Flex direction=\"column\" gap={4} alignItems=\"center\" style={{ textAlign: 'center' }}>\n            <Text as=\"p\" variant=\"header-2\">\n              Начните считать время уже сегодня\n            </Text>\n            <Button view=\"action\" size=\"xl\" href={SIGNUP_URL}>\n              Попробовать бесплатно\n            </Button>\n          </Flex>\n        </Flex>\n      </Container>\n    </main>\n  );\n}\nEOF\nsed -i 's/lang=\"en\"/lang=\"ru\"/; s#<title>.*</title>#<title>Учёт времени для команд</title>#' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 10,
+      "outputTokens": 2194,
+      "cacheReadTokens": 87696,
+      "cacheWriteTokens": 7780,
+      "totalTokens": 97680
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

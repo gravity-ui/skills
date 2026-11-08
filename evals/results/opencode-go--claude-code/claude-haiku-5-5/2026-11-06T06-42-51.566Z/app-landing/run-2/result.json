@@ -1,0 +1,102 @@
+{
+  "status": "failed",
+  "duration": 277.51,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 26,
+    "outputTokens": 9974,
+    "cacheReadTokens": 341686,
+    "cacheWriteTokens": 21038,
+    "totalTokens": 372724
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 1,
+      "file_edit": 1,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/index.html"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5",
+        "success": true
+      },
+      {
+        "command": "cat package.json && echo ---- && cat index.html && echo ---- && cat vite.config.ts && echo ---- && cat tsconfig.json && echo ---- && cat .gitignore && echo ---- && find src __agent_eval__ -type f | head -50 && echo ---- && for f in $(find src -type f); do echo \"== $f\"; cat \"$f\"; done",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/ | head -30 && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/esm/components/ 2>/dev/null | head -80; ls node_modules/.bin | grep -E '^(tsc|vite)$'",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build && cat esm/components/Button/Button.d.ts | head -60; echo ----; cat esm/components/Text/Text.d.ts | head -60; echo ----; cat esm/components/Card/Card.d.ts | head -40; echo ----; ls esm/components/layout 2>/dev/null; grep -rn \"Title\" esm/components/index.d.ts esm/index.d.ts 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"variant\" components/Text/text/text.d.ts | head -5; cat components/Text/text/text.d.ts | head -40; echo ----; cat components/Button/constants.d.ts; echo ----; sed -n 1,40p components/layout/Container/Container.d.ts 2>/dev/null; echo ----; grep -n \"export\" components/layout/index.d.ts; echo ----; cat components/layout/Flex/Flex.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules | grep -i -E \"^playwright|^puppeteer\" ; echo \"exit: done\"",
+        "success": true
+      },
+      {
+        "command": "npm run build >/dev/null 2>&1 && (npx vite preview --port 4173 --strictPort >/tmp/preview.log 2>&1 &) && sleep 3 && curl -s localhost:4173 | head -12 && echo && JS=$(curl -s localhost:4173 | grep -o 'assets/index-[^\"]*\\.js' | head -1) && curl -s \"localhost:4173/$JS\" | grep -o -E \"Учёт в один клик|Видно загрузку команды|Отчёты без ручной работы|Попробуйте на своей команде|Начать работу\" | sort | uniq -c; pkill -f \"vite preview\" ; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "for p in $(ps -eo pid,args | grep \"vite preview\" | grep -v grep | awk '{print $1}'); do kill $p; done; sleep 1; ps -eo args | grep \"vite preview\" | grep -v grep || echo \"preview server stopped\"",
+        "success": true
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" localhost:4173 || true; for d in /proc/[0-9]*; do if tr '\\0' ' ' < $d/cmdline 2>/dev/null | grep -q \"vite preview\"; then echo \"killing ${d#/proc/}\"; kill ${d#/proc/}; fi; done; sleep 1; curl -s -o /dev/null -w \"%{http_code}\\n\" localhost:4173 || echo \"port 4173 closed\"",
+        "success": false
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" --max-time 3 localhost:4173; echo \"curl exit: $?\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 26,
+      "outputTokens": 9974,
+      "cacheReadTokens": 341686,
+      "cacheWriteTokens": 21038,
+      "totalTokens": 372724
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

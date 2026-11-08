@@ -1,0 +1,379 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (4 tests | 2 failed) 11777ms
+   ✓ imports @gravity-ui/uikit 1ms
+   ✓ no @tanstack/react-table dependency 0ms
+   × no raw HTML <table> 2ms
+     → expected '.data-table-page {\n  padding: 24px;\…' not to match /<table[\s>]/
+   × judge: implements the task with the intended Gravity UI API 11774ms
+     → [judge:environment] FAIL — The data table is @gravity-ui/uikit's Table with column sorting (withTableSorting or an equivalent uikit mechanism), checkbox row selection (withTableSelection with selectedIds/onSelectionChange or equivalent) and pagination through uikit's Pagination component driving the displayed slice of rows.
+  reason: src/App.tsx imports uikit Checkbox and Pagination, but renders a hand-rolled HTML table with manual sorting/selection rather than @gravity-ui/uikit Table composed with withTableSorting/withTableSelection; no equivalent uikit table mechanism is present.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  13:56:00
+   Duration  11.94s (transform 27ms, setup 13ms, collect 12ms, tests 11.78s, environment 0ms, prepare 51ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no raw HTML <table>
+AssertionError: expected '.data-table-page {\n  padding: 24px;\…' not to match /<table[\s>]/
+
+[32m- Expected:[39m 
+/<table[\s>]/
+
+[31m+ Received:[39m 
+".data-table-page {
+  padding: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.data-table-title {
+  margin: 0 0 16px;
+}
+
+.data-table {
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  overflow: auto;
+  background: var(--g-color-base-generic);
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--g-color-line-generic);
+}
+
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--g-color-base-generic-accent);
+  color: var(--g-color-text-primary);
+}
+
+.data-table__cell_sortable {
+  padding: 0;
+}
+
+.data-table__sort-button {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.data-table__sort-button:disabled {
+  cursor: default;
+}
+
+.data-table__arrow {
+  opacity: 0.25;
+}
+
+.data-table__arrow_active {
+  opacity: 1;
+  color: var(--g-color-text-brand);
+}
+
+.data-table__row_selected {
+  background: var(--g-color-base-selection);
+}
+
+.data-table__cell_selection {
+  width: 44px;
+  padding-right: 0;
+}
+
+.data-table-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.data-table-footer__selection {
+  color: var(--g-color-text-secondary);
+}
+
+
+import React, { useMemo, useState } from 'react';
+import { ArrowToggle, Checkbox, Label, Pagination } from '@gravity-ui/uikit';
+import './App.css';
+
+type SortDirection = 'asc' | 'desc';
+
+interface Employee {
+  id: number;
+  name: string;
+  team: string;
+  role: string;
+  active: boolean;
+}
+
+interface Column<K extends keyof Employee> {
+  key: K;
+  title: string;
+  sortable?: boolean;
+}
+
+const columns: Column<keyof Employee>[] = [
+  { key: 'name', title: 'Имя', sortable: true },
+  { key: 'team', title: 'Команда', sortable: true },
+  { key: 'role', title: 'Роль', sortable: true },
+  { key: 'active', title: 'Статус', sortable: true },
+];
+
+const employees: Employee[] = [
+  { id: 1, name: 'Анна Ковалева', team: 'Design', role: 'Product Designer', active: true },
+  { id: 2, name: 'Борис Лебедев', team: 'Frontend', role: 'Frontend Developer', active: true },
+  { id: 3, name: 'Вера Гурьева', team: 'Backend', role: 'Backend Developer', active: false },
+  { id: 4, name: 'Глеб Морозов', team: 'Mobile', role: 'iOS Developer', active: true },
+  { id: 5, name: 'Дина Ахметова', team: 'Frontend', role: 'UI Developer', active: false },
+  { id: 6, name: 'Егор Стрелков', team: 'QA', role: 'QA Engineer', active: true },
+  { id: 7, name: 'Жанна Рудакова', team: 'Design', role: 'UX Researcher', active: false },
+  { id: 8, name: 'Захар Ильин', team: 'Backend', role: 'Go Developer', active: true },
+  { id: 9, name: 'Ирина Ким', team: 'Analytics', role: 'Data Analyst', active: true },
+  { id: 10, name: 'Кирилл Ясенев', team: 'Mobile', role: 'Android Developer', active: false },
+  { id: 11, name: 'Лида Ветрова', team: 'Frontend', role: 'Frontend Developer', active: true },
+  { id: 12, name: 'Марк Дорохов', team: 'QA', role: 'Automation QA', active: true },
+];
+
+const pageSizeOptions = [5, 10, 20];
+
+export function App() {
+  const [sort, setSort] = useState<{ key: keyof Employee; direction: SortDirection } | null>(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+
+  const sortedEmployees = useMemo(() => {
+    if (!sort) {
+      return employees;
+    }
+
+    const sorted = [...employees].sort((left, right) => {
+      const leftValue = left[sort.key];
+      const rightValue = right[sort.key];
+
+      if (typeof leftValue === 'boolean' && typeof rightValue === 'boolean') {
+        return Number(leftValue) - Number(rightValue);
+      }
+
+      return String(leftValue).localeCompare(String(rightValue), 'ru', { sensitivity: 'base' });
+    });
+
+    return sort.direction === 'asc' ? sorted : sorted.reverse();
+  }, [sort]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedEmployees.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const pageEmployees = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return sortedEmployees.slice(startIndex, startIndex + pageSize);
+  }, [currentPage, pageSize, sortedEmployees]);
+  const currentPageIds = pageEmployees.map(({ id }) => id);
+  const selectedOnPage = currentPageIds.filter((id) => selectedIds.has(id)).length;
+  const allOnPageSelected = selectedOnPage === currentPageIds.length && currentPageIds.length > 0;
+  const someOnPageSelected = selectedOnPage > 0 && !allOnPageSelected;
+
+  const handleSort = (key: keyof Employee) => {
+    setSort((currentSort) => {
+      if (!currentSort || currentSort.key !== key) {
+        return { key, direction: 'asc' };
+      }
+
+      if (currentSort.direction === 'asc') {
+        return { key, direction: 'desc' };
+      }
+
+      return null;
+    });
+    setPage(1);
+  };
+
+  const toggleRow = (id: number) => {
+    setSelectedIds((currentIds) => {
+      const nextIds = new Set(currentIds);
+
+      if (nextIds.has(id)) {
+        nextIds.delete(id);
+      } else {
+        nextIds.add(id);
+      }
+
+      return nextIds;
+    });
+  };
+
+  const togglePage = () => {
+    setSelectedIds((currentIds) => {
+      const nextIds = new Set(currentIds);
+
+      if (allOnPageSelected) {
+        currentPageIds.forEach((id) => nextIds.delete(id));
+      } else {
+        currentPageIds.forEach((id) => nextIds.add(id));
+      }
+
+      return nextIds;
+    });
+  };
+
+  const handlePaginationUpdate = (nextPage: number, nextPageSize: number) => {
+    setPage(nextPage);
+    setPageSize(nextPageSize);
+  };
+
+  return (
+    <div className=\"data-table-page\">
+      <h1 className=\"data-table-title\">Команда</h1>
+      <div className=\"data-table\">
+        <table>
+          <thead>
+            <tr>
+              <th className=\"data-table__cell data-table__cell_selection\">
+                <Checkbox
+                  checked={allOnPageSelected}
+                  indeterminate={someOnPageSelected}
+                  onUpdate={togglePage}
+                  onChange={togglePage}
+                  title=\"Выбрать строки на странице\"
+                />
+              </th>
+              {columns.map((column) => {
+                const isActive = sort?.key === column.key;
+                const direction = isActive && sort.direction === 'desc' ? 'top' : 'bottom';
+
+                return (
+                  <th
+                    key={column.key}
+                    className={`data-table__cell${column.sortable ? ' data-table__cell_sortable' : ''}`}
+                  >
+                    <button
+                      type=\"button\"
+                      className=\"data-table__sort-button\"
+                      onClick={column.sortable ? () => handleSort(column.key) : undefined}
+                      disabled={!column.sortable}
+                    >
+                      {column.title}
+                      {column.sortable ? (
+                        <ArrowToggle
+                          direction={direction}
+                          className={`data-table__arrow${isActive ? ' data-table__arrow_active' : ''}`}
+                        />
+                      ) : null}
+                    </button>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {pageEmployees.map((employee) => {
+              const isSelected = selectedIds.has(employee.id);
+
+              return (
+                <tr key={employee.id} className={isSelected ? 'data-table__row_selected' : undefined}>
+                  <td className=\"data-table__cell data-table__cell_selection\">
+                    <Checkbox
+                      checked={isSelected}
+                      onUpdate={() => toggleRow(employee.id)}
+                      onChange={() => toggleRow(employee.id)}
+                      title={`Выбрать ${employee.name}`}
+                    />
+                  </td>
+                  <td className=\"data-table__cell\">{employee.name}</td>
+                  <td className=\"data-table__cell\">{employee.team}</td>
+                  <td className=\"data-table__cell\">{employee.role}</td>
+                  <td className=\"data-table__cell\">
+                    <Label theme={employee.active ? 'success' : 'warning'}>
+                      {employee.active ? 'Активен' : 'Не активен'}
+                    </Label>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <div className=\"data-table-footer\">
+        <div className=\"data-table-footer__selection\">
+          Выбрано строк: <strong>{selectedIds.size}</strong>
+        </div>
+        <Pagination
+          page={currentPage}
+          pageSize={pageSize}
+          total={sortedEmployees.length}
+          pageSizeOptions={pageSizeOptions}
+          onUpdate={handlePaginationUpdate}
+        />
+      </div>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:68:19
+     66| // A hand-built lowercase <table> means sorting/selection/pagination w…
+     67| test("no raw HTML <table>", () => {
+     68|   expect(src).not.toMatch(new RegExp("<table[\\s>]"));
+       |                   ^
+     69| });
+     70| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The data table is @gravity-ui/uikit's Table with column sorting (withTableSorting or an equivalent uikit mechanism), checkbox row selection (withTableSelection with selectedIds/onSelectionChange or equivalent) and pagination through uikit's Pagination component driving the displayed slice of rows.
+  reason: src/App.tsx imports uikit Checkbox and Pagination, but renders a hand-rolled HTML table with manual sorting/selection rather than @gravity-ui/uikit Table composed with withTableSorting/withTableSelection; no equivalent uikit table mechanism is present.
+ ❯ EVAL.ts:75:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

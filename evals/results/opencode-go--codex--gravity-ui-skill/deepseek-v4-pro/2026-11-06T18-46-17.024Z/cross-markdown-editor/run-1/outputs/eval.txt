@@ -1,0 +1,166 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 1 failed) 12975ms
+   ✓ depends on @gravity-ui/markdown-editor 1ms
+   ✓ imports @gravity-ui/markdown-editor 0ms
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 2ms
+     → expected '.markdown-form-preview .yfm {\n  max-…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   ✓ judge: implements the task with the intended Gravity UI API  12971ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  19:03:09
+   Duration  13.13s (transform 32ms, setup 13ms, collect 18ms, tests 12.97s, environment 0ms, prepare 32ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected '.markdown-form-preview .yfm {\n  max-…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+".markdown-form-preview .yfm {
+  max-width: 100%;
+}
+
+.markdown-form-preview .yfm > :first-child {
+  margin-top: 0;
+}
+
+.markdown-form-preview .yfm > :last-child {
+  margin-bottom: 0;
+}
+
+
+import {useCallback, useEffect, useMemo, useState} from 'react';
+
+import transform from '@diplodoc/transform';
+import {
+  MarkdownEditorView,
+  type MarkdownEditorMdOptions,
+  type RenderPreviewParams,
+  useMarkdownEditor,
+} from '@gravity-ui/markdown-editor';
+import {Box, Text, useThemeValue} from '@gravity-ui/uikit';
+
+import './App.css';
+
+const PREVIEW_DEBOUNCE_MS = 150;
+const DEFAULT_MARKDOWN = `# Заголовок
+
+Введите текст с **разметкой**, чтобы увидеть форматирование справа:
+
+- списки
+- \\`код\\`
+- [ссылки](https://gravity-ui.com)
+`;
+
+function LiveMarkdownPreview({getValue}: Pick<RenderPreviewParams, 'getValue'>) {
+  const [html, setHtml] = useState('');
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setHtml(transform(getValue()).result.html);
+    }, PREVIEW_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [getValue]);
+
+  return <div className=\"yfm\" dangerouslySetInnerHTML={{__html: html}} />;
+}
+
+export function App() {
+  const themeValue = useThemeValue();
+  const renderPreview = useCallback(
+    ({getValue}: RenderPreviewParams) => <LiveMarkdownPreview getValue={getValue} />,
+    [],
+  );
+
+  const md = useMemo<MarkdownEditorMdOptions>(
+    () => ({breaks: true, linkify: true}),
+    [],
+  );
+
+  const editor = useMarkdownEditor({
+    md,
+    initial: {
+      markup: DEFAULT_MARKDOWN,
+      mode: 'markup',
+      splitModeEnabled: true,
+    },
+    markupConfig: {
+      renderPreview,
+      splitMode: 'horizontal',
+    },
+  });
+
+  return (
+    <Box spacing={{p: 6}} maxWidth={1100}>
+      <Box spacing={{mb: 4}}>
+        <Text variant=\"header-1\">Markdown</Text>
+        <Text variant=\"body-1\" color=\"secondary\">
+          Пишите с разметкой — форматирование появляется сразу.
+        </Text>
+      </Box>
+
+      <Box
+        className={`g-root g-root_theme_${themeValue} markdown-form-preview`}
+        overflow=\"hidden\"
+        minHeight={520}
+      >
+        <MarkdownEditorView
+          editor={editor}
+          stickyToolbar
+          autofocus
+          settingsVisible
+        />
+      </Box>
+    </Box>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

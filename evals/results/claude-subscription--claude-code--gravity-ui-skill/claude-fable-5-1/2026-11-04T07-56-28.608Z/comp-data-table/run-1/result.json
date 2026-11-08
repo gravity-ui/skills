@@ -1,0 +1,100 @@
+{
+  "status": "passed",
+  "duration": 1131.129,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 386,
+    "outputTokens": 9857,
+    "cacheReadTokens": 518977,
+    "cacheWriteTokens": 39480,
+    "totalTokens": 568700
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 12,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----\" && ls -la && cat package.json 2>/dev/null && echo \"-----\" && cat AGENTS.md && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md && echo \"----- table entry\" && rg -n -C 6 -i 'gravity-ui/table|data grid|DataTable' .agents/skills/gravity-ui/references/package-routing.md | head -120 && echo \"----- src\" && cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts && echo \"----- traps\" && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo \"----- installed\" && ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | rg '\"version\"' && ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Table withTableSorting withTableSelection Pagination 2>&1 | head -80; echo \"----- docs dirs\"; ls node_modules/@gravity-ui/uikit/ ; ls node_modules/@gravity-ui/uikit/build/docs node_modules/@gravity-ui/uikit/dist/docs 2>&1 | head; find node_modules/@gravity-ui/uikit -name 'README.md' | head",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; echo \"== Table.d.ts\"; cat $U/Table/Table.d.ts; echo \"== withTableSorting\"; cat $U/Table/hoc/withTableSorting/withTableSorting.d.ts; echo \"== withTableSelection\"; cat $U/Table/hoc/withTableSelection/withTableSelection.d.ts; echo \"== Pagination\"; cat $U/Pagination/Pagination.d.ts $U/Pagination/types.d.ts 2>/dev/null; echo \"== Table index\"; cat $U/Table/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; echo \"== sorting impl meta\"; rg -n 'meta|defaultSortOrder|disableDataSorting' $U/Table/hoc/withTableSorting/withTableSorting.js | head -30; echo \"== selection impl\"; rg -n 'meta|getRowDescriptor|disabled|getRowId' $U/Table/hoc/withTableSelection/withTableSelection.js | head -20; echo \"== online docs (major 7)\"; curl -sS -m 20 -o /tmp/uikit7.txt -w 'HTTP %{http_code} bytes %{size_download}\\n' https://gravity-ui.com/llms/uikit/7/llms.txt; rg -n -i -C 3 'withTableSorting|withTableSelection' /tmp/uikit7.txt | head -80",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; sed -n 30,75p $U/Table/hoc/withTableSorting/withTableSorting.js; echo \"== getRowId\"; rg -n -A 12 'static getRowId' $U/Table/Table.js; echo \"== exports check\"; rg -n -o 'Label|Flex|Text|Button|Card|Checkbox|Pagination|Table' $U/index.d.ts | sort -u | head -20; echo \"== Label view\"; rg -n 'theme\\?:' $U/Label/Label.d.ts",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; sed -n 84,112p $U/Table/hoc/withTableSelection/withTableSelection.js; echo \"== hoc index\"; cat $U/Table/hoc/index.d.ts; echo \"== Flex/Text/Label quick\"; rg -n 'direction\\?|gap\\?' $U/layout/Flex/Flex.d.ts | head -4; rg -n \"variant\\?|color\\?\" $U/Text/Text.d.ts $U/Text/text.d.ts 2>/dev/null | head -4; rg -n \"size\\?\" $U/Label/Label.d.ts | head -2",
+        "success": true
+      },
+      {
+        "command": "cat > src/data.ts <<'EOF'\nexport type EmployeeStatus = 'active' | 'vacation' | 'blocked';\n\nexport interface Employee {\n  id: string;\n  name: string;\n  email: string;\n  department: string;\n  status: EmployeeStatus;\n  salary: number;\n  hiredAt: string; // ISO date\n}\n\nconst FIRST_NAMES = [\n  'Анна', 'Иван', 'Мария', 'Пётр', 'Елена', 'Дмитрий', 'Ольга', 'Сергей',\n  'Наталья', 'Алексей', 'Татьяна', 'Андрей', 'Юлия', 'Михаил', 'Екатерина', 'Николай',\n];\nconst LAST_NAMES = [\n  'Иванова', 'Петров', 'Смирнова', 'Кузнецов', 'Попова', 'Васильев', 'Соколова', 'Михайлов',\n  'Новикова', 'Фёдоров', 'Морозова', 'Волков', 'Алексеева', 'Лебедев', 'Семёнова', 'Егоров',\n];\nconst DEPARTMENTS = ['Разработка', 'Дизайн', 'Маркетинг', 'Продажи', 'Поддержка', 'Финансы'];\nconst STATUSES: EmployeeStatus[] = ['active', 'active', 'active', 'vacation', 'blocked'];\n\n/** Deterministic pseudo-random generator so the dataset is stable between renders. */\nfunction createRandom(seed: number) {\n  let state = seed;\n  return () => {\n    state = (state * 1664525 + 1013904223) % 4294967296;\n    return state / 4294967296;\n  };\n}\n\nexport function generateEmployees(count: number): Employee[] {\n  const random = createRandom(42);\n  const pick = <T,>(list: T[]) => list[Math.floor(random() * list.length)];\n\n  return Array.from({ length: count }, (_, index) => {\n    const firstName = pick(FIRST_NAMES);\n    const lastName = pick(LAST_NAMES);\n    const hired = new Date(2015, 0, 1);\n    hired.setDate(hired.getDate() + Math.floor(random() * 3600));\n\n    return {\n      id: String(index + 1),\n      name: `${firstName} ${lastName}`,\n      email: `user${index + 1}@example.com`,\n      department: pick(DEPARTMENTS),\n      status: pick(STATUSES),\n      salary: 60_000 + Math.round(random() * 240) * 1000,\n      hiredAt: hired.toISOString().slice(0, 10),\n    };\n  });\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { useMemo, useState } from 'react';\nimport {\n  Button,\n  Flex,\n  Label,\n  Pagination,\n  Table,\n  Text,\n  withTableSelection,\n  withTableSorting,\n} from '@gravity-ui/uikit';\nimport type { TableColumnConfig, TableSortState } from '@gravity-ui/uikit';\n\nimport { generateEmployees } from './data';\nimport type { Employee, EmployeeStatus } from './data';\n\nconst EmployeesTable = withTableSelection(withTableSorting<Employee>(Table));\n\nconst PAGE_SIZE_OPTIONS = [10, 20, 50];\n\nconst STATUS_LABELS: Record<EmployeeStatus, { text: string; theme: 'success' | 'warning' | 'danger' }> = {\n  active: { text: 'Работает', theme: 'success' },\n  vacation: { text: 'В отпуске', theme: 'warning' },\n  blocked: { text: 'Заблокирован', theme: 'danger' },\n};\n\nconst currencyFormat = new Intl.NumberFormat('ru-RU', {\n  style: 'currency',\n  currency: 'RUB',\n  maximumFractionDigits: 0,\n});\nconst dateFormat = new Intl.DateTimeFormat('ru-RU');\n\nconst compareStrings = (a: string, b: string) => a.localeCompare(b, 'ru');\n\n/** Comparators for every sortable column; each one sorts in ascending order. */\nconst COMPARATORS: Partial<Record<keyof Employee, (a: Employee, b: Employee) => number>> = {\n  name: (a, b) => compareStrings(a.name, b.name),\n  email: (a, b) => compareStrings(a.email, b.email),\n  department: (a, b) => compareStrings(a.department, b.department),\n  status: (a, b) => compareStrings(STATUS_LABELS[a.status].text, STATUS_LABELS[b.status].text),\n  salary: (a, b) => a.salary - b.salary,\n  hiredAt: (a, b) => a.hiredAt.localeCompare(b.hiredAt),\n};\n\nconst columns: TableColumnConfig<Employee>[] = [\n  { id: 'name', name: 'Сотрудник', primary: true, meta: { sort: true } },\n  { id: 'email', name: 'Email', meta: { sort: true } },\n  { id: 'department', name: 'Отдел', meta: { sort: true } },\n  {\n    id: 'status',\n    name: 'Статус',\n    meta: { sort: true },\n    template: (item) => {\n      const { text, theme } = STATUS_LABELS[item.status];\n      return <Label theme={theme} size=\"xs\">{text}</Label>;\n    },\n  },\n  {\n    id: 'salary',\n    name: 'Оклад',\n    align: 'end',\n    meta: { sort: true, defaultSortOrder: 'desc' },\n    template: (item) => currencyFormat.format(item.salary),\n  },\n  {\n    id: 'hiredAt',\n    name: 'Дата найма',\n    align: 'end',\n    meta: { sort: true },\n    template: (item) => dateFormat.format(new Date(item.hiredAt)),\n  },\n];\n\nconst employees = generateEmployees(57);\n\nfunction sortEmployees(data: Employee[], sortState: TableSortState): Employee[] {\n  if (sortState.length === 0) {\n    return data;\n  }\n  return data.slice().sort((a, b) => {\n    for (const { column, order } of sortState) {\n      const compare = COMPARATORS[column as keyof Employee];\n      if (!compare) {\n        continue;\n      }\n      const result = compare(a, b);\n      if (result !== 0) {\n        return order === 'asc' ? result : -result;\n      }\n    }\n    return 0;\n  });\n}\n\nexport function App() {\n  const [sortState, setSortState] = useState<TableSortState>([{ column: 'name', order: 'asc' }]);\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[0]);\n  const [selectedIds, setSelectedIds] = useState<string[]>([]);\n\n  const sortedEmployees = useMemo(() => sortEmployees(employees, sortState), [sortState]);\n\n  const pageItems = useMemo(() => {\n    const start = (page - 1) * pageSize;\n    return sortedEmployees.slice(start, start + pageSize);\n  }, [sortedEmployees, page, pageSize]);\n\n  const handlePaginationUpdate = (nextPage: number, nextPageSize: number) => {\n    const lastPage = Math.max(1, Math.ceil(employees.length / nextPageSize));\n    setPageSize(nextPageSize);\n    setPage(Math.min(Math.max(1, nextPage), lastPage));\n  };\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 'var(--g-spacing-6)' }}>\n      <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={4}>\n        <Text variant=\"header-1\">Сотрудники</Text>\n        <Flex alignItems=\"center\" gap={3} style={{ flexShrink: 0 }}>\n          <Text color=\"secondary\">\n            Выбрано: {selectedIds.length} из {employees.length}\n          </Text>\n          <Button view=\"outlined\" disabled={selectedIds.length === 0} onClick={() => setSelectedIds([])}>\n            Снять выделение\n          </Button>\n        </Flex>\n      </Flex>\n\n      <div style={{ overflowX: 'auto', maxWidth: '100%' }}>\n        <EmployeesTable\n          data={pageItems}\n          columns={columns}\n          width=\"max\"\n          getRowDescriptor={(item) => ({ id: item.id })}\n          sortState={sortState}\n          onSortStateChange={setSortState}\n          selectedIds={selectedIds}\n          onSelectionChange={setSelectedIds}\n          isRowSelectionDisabled={(item) => item.status === 'blocked'}\n          emptyMessage=\"Нет данных\"\n        />\n      </div>\n\n      <Flex alignItems=\"center\" justifyContent=\"space-between\" gap={4} wrap>\n        <Text color=\"secondary\">\n          Показано {pageItems.length === 0 ? 0 : (page - 1) * pageSize + 1}–\n          {(page - 1) * pageSize + pageItems.length} из {employees.length}\n        </Text>\n        <Pagination\n          page={page}\n          pageSize={pageSize}\n          total={employees.length}\n          pageSizeOptions={PAGE_SIZE_OPTIONS}\n          onUpdate={handlePaginationUpdate}\n          compact={false}\n        />\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -40; echo \"tsc exit: ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "npx vite build 2>&1 | tail -15; echo \"build exit: ${PIPESTATUS[0]}\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 386,
+      "outputTokens": 9857,
+      "cacheReadTokens": 518977,
+      "cacheWriteTokens": 39480,
+      "totalTokens": 568700
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

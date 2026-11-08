@@ -1,0 +1,120 @@
+{
+  "status": "passed",
+  "duration": 375.568,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 34,
+    "outputTokens": 9306,
+    "cacheReadTokens": 445074,
+    "cacheWriteTokens": 26938,
+    "totalTokens": 481352
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 2
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/i18n/LangProvider.tsx",
+      "/home/sandbox/workspace/src/i18n/keyset.ts",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git ls-files && cat package.json && cat CLAUDE.md 2>/dev/null | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json; ls node_modules | head; ls node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep -E '\"(version|main|module|exports)\"' ; ls build/esm | head -30; grep -rn \"lang\" build/esm/components/utils/configure.d.ts build/esm/index.d.ts 2>/dev/null; ls build/esm/components/utils | head -50; ls ../i18n; cat ../i18n/package.json | grep version",
+        "success": true
+      },
+      {
+        "command": "ls build/esm/i18n; cat build/esm/i18n/*.d.ts; grep -rln \"configure\\|getConfig\\|subscribeConfigure\" build/esm/index.d.ts build/esm/components/utils/*.d.ts; grep -rn \"export\" build/esm/index.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"lang\\|Lang\" build/esm/components/theme/*.d.ts build/esm/components/theme/**/*.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cat build/esm/i18n/addComponentKeysets.js build/esm/components/theme/useLang.js build/esm/utils/configure.js; sed -n 1,80p build/esm/components/theme/ThemeProvider.js",
+        "success": true
+      },
+      {
+        "command": "grep -n '\"./i18n\"' -A4 package.json; cat build/esm/components/Pagination/i18n/en.json build/esm/components/Pagination/i18n/ru.json 2>/dev/null; ls build/esm/components/Pagination/i18n/; grep -n \"interface SegmentedRadioGroupProps\" -A12 build/esm/components/SegmentedRadioGroup/*.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/i18n && grep -n \"plural\\|Plural\\|{{\" README.md | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 - <<'EOF'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\\n\",\"\")\ns=s.replace(\"import { App } from './App';\",\"import { App } from './App';\\nimport { LangProvider } from './i18n/LangProvider';\")\ns=s.replace('<ThemeProvider theme=\"light\">','<LangProvider theme=\"light\">').replace('</ThemeProvider>','</LangProvider>')\nopen(p,'w').write(s)\nEOF\ncat src/main.tsx; npm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -5; ls node_modules | grep -iE \"playwright|puppeteer|jsdom|testing-library|happy\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/i18ncheck && cat > /tmp/i18ncheck/check.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport * as React from 'react';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { appI18n } from '/home/sandbox/workspace/src/i18n/keyset';\n\nfunction Probe({ count }: { count: number }) {\n  const { t } = appI18n.useTranslation();\n  return <span>{t('title')}|{t('label_items', { count })}|{t('greeting', { name: 'Ann' })}</span>;\n}\nconst render = (lang: string, count: number) =>\n  renderToString(<ThemeProvider theme=\"light\" lang={lang}><Probe count={count} /></ThemeProvider>);\n\ntest('app keysets', () => {\n  console.log(render('en', 1), render('en', 5));\n  console.log([1, 3, 5, 21, 1.5].map((c) => render('ru', c)).join('\\n'));\n});\n\ntest('full app in ru', async () => {\n  (globalThis as any).window = { localStorage: { getItem: () => null, setItem() {} }, navigator: { language: 'ru-RU' } };\n  const { App } = await import('/home/sandbox/workspace/src/App');\n  const { LangProvider } = await import('/home/sandbox/workspace/src/i18n/LangProvider');\n  const html = renderToString(<LangProvider><App /></LangProvider>);\n  expect(html).toContain('Добро пожаловать');\n  expect(html).toContain('Следующая'); // Pagination's own keyset\n  console.log(html.replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' '));\n});\nEOF\nnpx vitest run --root / /tmp/i18ncheck/check.test.tsx 2>&1 | grep -v \"^$\" | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -e \"s#/home/sandbox/workspace/src#../src#g\" /tmp/i18ncheck/check.test.tsx > ./tmp-i18n-check.test.tsx && timeout 100 npx vitest run tmp-i18n-check.test.tsx 2>&1 | grep -v \"^$\" | head -40; rm -f tmp-i18n-check.test.tsx",
+        "success": true
+      },
+      {
+        "command": "sed -e \"s#/home/sandbox/workspace/src#../src#g\" /tmp/i18ncheck/check.test.tsx > ./tmp-i18n-check.test.tsx && cat > tmp-vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ntimeout 100 npx vitest run -c tmp-vitest.config.ts tmp-i18n-check.test.tsx 2>&1 | grep -v \"^$\" | head -40; rm -f tmp-i18n-check.test.tsx tmp-vitest.config.ts",
+        "success": true
+      },
+      {
+        "command": "sed -e \"s#/home/sandbox/workspace/src#./src#g\" /tmp/i18ncheck/check.test.tsx > ./tmp-i18n-check.test.tsx && cat > tmp-vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ntimeout 100 npx vitest run -c tmp-vitest.config.ts tmp-i18n-check.test.tsx 2>&1 | grep -v \"^$\" | head -40; rm -f tmp-i18n-check.test.tsx tmp-vitest.config.ts; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; rm -rf dist /tmp/i18ncheck",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 34,
+      "outputTokens": 9306,
+      "cacheReadTokens": 445074,
+      "cacheWriteTokens": 26938,
+      "totalTokens": 481352
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "status": "passed",
+  "duration": 395.288,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 54,
+    "outputTokens": 11344,
+    "cacheReadTokens": 815198,
+    "cacheWriteTokens": 30981,
+    "totalTokens": 857577
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 25,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 26,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git ls-files | head -100 && cat package.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx && echo ---- && cat src/main.tsx && echo ---- && cat index.html && echo ---- && cat tsconfig.json vite.config.ts src/vite-env.d.ts .gitignore && ls node_modules 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/esm/components | head -80 && grep -ril \"calendar\" node_modules/@gravity-ui/uikit/build/esm/components --include=*.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -ril \"calendar\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts | head; npm view @gravity-ui/date-components version peerDependencies dependencies 2>&1 | tail -30; npm view @gravity-ui/date-components@latest peerDependencies 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json 2>/dev/null | tail -40; for v in 3.0.0 3.1.0 4.0.0 4.1.0 4.2.0; do echo \"== $v\"; npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null; done",
+        "success": false
+      },
+      {
+        "command": "npm view @gravity-ui/date-utils@2 version 2>/dev/null | tail -3; npm view @gravity-ui/date-components@4.1.0 dependencies --json 2>/dev/null; npm install --save-exact @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cat package.json && ls node_modules/@gravity-ui/ && ls node_modules/@gravity-ui/date-components/dist 2>/dev/null | head; cat node_modules/@gravity-ui/date-components/package.json | grep -E '\"(main|module|types)\"'; find node_modules/@gravity-ui/date-components -name \"*.d.ts\" | grep -iE \"calendar/index|DatePicker/index|index.d.ts\" | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components/dist/esm && ls components && cat components/Calendar/index.d.ts 2>/dev/null; cat components/Calendar/Calendar.d.ts 2>/dev/null; cat components/Calendar/types.d.ts 2>/dev/null | head -80",
+        "success": true
+      },
+      {
+        "command": "cat components/CalendarView/hooks/types.d.ts | head -60; sed -n 1,80p components/CalendarView/hooks/useCalendarState.d.ts; grep -n \"dateTime\\|export\" ../../../../date-utils/dist/esm/index.d.ts 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && ls date-components/dist/docs 2>/dev/null | head; ls date-components/ ; grep -rn \"dateTime\\b\" date-utils/dist/esm/index.d.ts | head -5; grep -rln \"export declare function dateTime\\|dateTime(\" date-utils/dist/esm --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "ls date-utils/ && cat date-utils/package.json | grep -E '\"(main|module|types)\"'; cat date-components/dist/docs/INDEX.md | head -60; ls date-components/dist/docs/components 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components/dist/docs/components && cat Calendar.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-utils/build && grep -E \"export\" index.d.ts | head -30; grep -rn \"loadLocale\" --include=*.d.ts . | head -5; grep -rn \"Russian\\|'ru'\" ../../date-components/dist/docs/components/*.md | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit; echo \"tsc exit $?\"; git status --short; git diff --stat",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && (which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; ls node_modules | grep -i -E \"^playwright|puppeteer\" ) ; echo done",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/ssr.mjs <<'EOF'\nimport { createServer } from '/home/sandbox/workspace/node_modules/vite/dist/node/index.js';\nconst server = await createServer({ root: '/home/sandbox/workspace', server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });\ntry {\n  const React = (await server.ssrLoadModule('react')).default;\n  const { renderToString } = await server.ssrLoadModule('react-dom/server');\n  const { ThemeProvider } = await server.ssrLoadModule('@gravity-ui/uikit');\n  const { App } = await server.ssrLoadModule('/src/App.tsx');\n  const html = renderToString(React.createElement(ThemeProvider, { theme: 'light' }, React.createElement(App)));\n  console.log('rendered length', html.length);\n  console.log('has calendar:', /Select a date/.test(html), /No date selected/.test(html));\n  console.log(html.slice(0, 400));\n} catch (e) { console.error('FAIL', e); process.exitCode = 1; } finally { await server.close(); }\nEOF\ncd /home/sandbox/workspace && node /tmp/smoke/ssr.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cat > /tmp/smoke/ssr.mjs <<'EOF'\nimport React from '/home/sandbox/workspace/node_modules/react/index.js';\nimport { renderToString } from '/home/sandbox/workspace/node_modules/react-dom/server.js';\nimport { createServer } from '/home/sandbox/workspace/node_modules/vite/dist/node/index.js';\nconst server = await createServer({ root: '/home/sandbox/workspace', server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });\ntry {\n  const { ThemeProvider } = await server.ssrLoadModule('@gravity-ui/uikit');\n  const { App } = await server.ssrLoadModule('/src/App.tsx');\n  const html = renderToString(React.createElement(ThemeProvider, { theme: 'light' }, React.createElement(App)));\n  console.log('rendered length', html.length);\n  console.log('has heading:', /Select a date/.test(html), '| empty state:', /No date selected/.test(html), '| grid cells:', (html.match(/role=\"gridcell\"|<td/g) || []).length);\n} catch (e) { console.error('FAIL', e); process.exitCode = 1; } finally { await server.close(); }\nEOF\ncd /home/sandbox/workspace && node /tmp/smoke/ssr.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s#appType: 'custom', logLevel: 'error' }#appType: 'custom', logLevel: 'error', ssr: { noExternal: [/@gravity-ui/] } }#\" /tmp/smoke/ssr.mjs && node /tmp/smoke/ssr.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/smoke && timeout 170 npm init -y >/dev/null 2>&1; timeout 160 npm install playwright@1.47.2 --silent 2>&1 | tail -3; timeout 300 npx playwright install chromium 2>&1 | tail -3; echo \"exit $?\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/smoke && timeout 300 npx playwright install chromium 2>&1 | grep -v \"^\\s*at \" | head -15; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5179 --strictPort > /tmp/smoke/vite.log 2>&1 &) ; sleep 4; cat > /tmp/smoke/e2e.mjs <<'EOF'\nimport { chromium } from '/tmp/smoke/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 900, height: 700 } });\nconst errors = [];\npage.on('console', m => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.text()); });\npage.on('pageerror', e => errors.push('PAGEERROR ' + e.message));\nawait page.goto('http://localhost:5179/', { waitUntil: 'networkidle' });\nawait page.waitForSelector('text=No date selected');\nconst cells = page.locator('[role=\"gridcell\"], td[role=\"gridcell\"], button[role=\"gridcell\"]');\nconsole.log('gridcells:', await cells.count());\n// click the 15th day if present\nconst target = page.getByRole('button', { name: /15/ }).first();\nawait page.screenshot({ path: '/tmp/smoke/before.png' });\ntry { await target.click({ timeout: 3000 }); } catch (e) { console.log('click fallback:', e.message.split('\\n')[0]); await page.locator('.g-calendar-day, [class*=\"cell\"]').nth(14).click({ timeout: 3000 }).catch(e => console.log('fallback2 fail')); }\nawait page.waitForTimeout(300);\nconsole.log('text after click:', await page.locator('p, span, div').filter({ hasText: /^Selected:|^No date selected$/ }).allInnerTexts());\nawait page.screenshot({ path: '/tmp/smoke/after.png' });\nconsole.log('errors:', errors.slice(0, 10));\nawait browser.close();\nEOF\ntimeout 120 node /tmp/smoke/e2e.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/smoke && timeout 120 node e2e.mjs 2>&1 | grep -v \"║\" | head -12; ls ~/.cache/ms-playwright/chromium-1134/ 2>/dev/null; cat vite.log | tail -3",
+        "success": true
+      },
+      {
+        "command": "ldconfig -p | grep -E \"libnss3|libgbm|libasound\" | head -3; sudo -n true 2>&1 && echo SUDO_OK; head -5 /tmp/smoke/vite.log; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5179/",
+        "success": true
+      },
+      {
+        "command": "git diff package.json && cat src/App.tsx && npm run build >/tmp/smoke/build.log 2>&1; echo \"build exit $?\"; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 54,
+      "outputTokens": 11344,
+      "cacheReadTokens": 815198,
+      "cacheWriteTokens": 30981,
+      "totalTokens": 857577
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "status": "failed",
+  "duration": 355.69,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 194,
+    "outputTokens": 3385,
+    "cacheReadTokens": 144628,
+    "cacheWriteTokens": 9903,
+    "totalTokens": 158110
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 6,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 6,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git log --oneline -3",
+        "success": true
+      },
+      {
+        "command": "cat index.html; echo ---; ls -R src; echo ---; for f in src/*; do echo \"== $f\"; cat \"$f\"; done; echo ---; cat tsconfig.json vite.config.ts .gitignore; echo ---; ls __agent_eval__; ls node_modules/@gravity-ui/uikit/build/esm/components | head -80",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/layout && grep -oE \"variant\\?: [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts | head -3 && grep -oE \"'[a-z-]+'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | sort -u | tr '\\n' ' '; echo; grep -oE \"view\\?: [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head; grep -oE \"size\\?: [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -2",
+        "success": true
+      },
+      {
+        "command": "grep -rhoE \"'(display|header|subheader|body|caption|code)-[0-9]+'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/ | sort -u | tr '\\n' ' '; echo; grep -rhoE \"type ButtonView = [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Button/; grep -rhoE \"type ButtonSize = [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Button/; grep -oE \"(view|size|theme)\\?: [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; grep -oE \"color\\?: [^;]+\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; grep -rhoE \"'(primary|secondary|complementary|hint|info|positive|warning|danger|utility|misc|brand|link|dark-primary|light-primary|inverted-primary)'\" node_modules/@gravity-ui/uikit/build/esm/components/Text/colorText | sort -u | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport { Button, Card, Container, Flex, Text } from '@gravity-ui/uikit';\n\nconst benefits = [\n  {\n    title: 'Учёт в один клик',\n    text: 'Таймер запускается из любой задачи. Ничего не нужно заполнять вручную — время само привязывается к проекту.',\n  },\n  {\n    title: 'Прозрачная команда',\n    text: 'Руководитель видит загрузку каждого сотрудника за день и неделю без лишних созвонов и отчётов.',\n  },\n  {\n    title: 'Отчёты для клиентов',\n    text: 'Экспорт в CSV и PDF по проекту или клиенту. Выставляйте счета на основе реальных часов.',\n  },\n];\n\nexport function App() {\n  return (\n    <Container maxWidth=\"m\" style={{ padding: '64px 16px' }}>\n      <Flex direction=\"column\" gap={10} as=\"main\">\n        <Flex direction=\"column\" gap={4} alignItems=\"center\" as=\"section\" style={{ textAlign: 'center' }}>\n          <Text as=\"h1\" variant=\"display-3\">\n            Учёт времени команды без лишней бюрократии\n          </Text>\n          <Text as=\"p\" variant=\"body-3\" color=\"secondary\" style={{ maxWidth: 560 }}>\n            Трекер, который сотрудники не забывают включать. Запускайте таймер, следите за загрузкой и\n            закрывайте проекты в срок.\n          </Text>\n          <Button view=\"action\" size=\"xl\" href=\"#start\">\n            Попробовать бесплатно\n          </Button>\n        </Flex>\n\n        <Flex gap={4} wrap as=\"section\">\n          {benefits.map((b) => (\n            <Card key={b.title} view=\"outlined\" style={{ flex: '1 1 240px', padding: 24 }}>\n              <Flex direction=\"column\" gap={2}>\n                <Text as=\"h2\" variant=\"subheader-3\">\n                  {b.title}\n                </Text>\n                <Text as=\"p\" variant=\"body-2\" color=\"secondary\">\n                  {b.text}\n                </Text>\n              </Flex>\n            </Card>\n          ))}\n        </Flex>\n\n        <Flex direction=\"column\" gap={4} alignItems=\"center\" as=\"section\" id=\"start\" style={{ textAlign: 'center' }}>\n          <Text as=\"h2\" variant=\"header-2\">\n            Начните учитывать время уже сегодня\n          </Text>\n          <Text as=\"p\" variant=\"body-2\" color=\"secondary\">\n            Бесплатно для команд до 5 человек. Без карты.\n          </Text>\n          <Button view=\"action\" size=\"xl\" href=\"#start\">\n            Создать аккаунт\n          </Button>\n        </Flex>\n      </Flex>\n    </Container>\n  );\n}\nEOF\nsed -i 's/lang=\"en\"/lang=\"ru\"/; s|<title>Gravity UI eval</title>|<title>Трекер времени для команд</title>|' index.html\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 194,
+      "outputTokens": 3385,
+      "cacheReadTokens": 144628,
+      "cacheWriteTokens": 9903,
+      "totalTokens": 158110
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

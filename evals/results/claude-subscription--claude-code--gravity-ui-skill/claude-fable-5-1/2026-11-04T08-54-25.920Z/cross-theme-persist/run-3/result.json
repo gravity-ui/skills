@@ -1,0 +1,92 @@
+{
+  "status": "passed",
+  "duration": 749.29,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 322,
+    "outputTokens": 10267,
+    "cacheReadTokens": 363707,
+    "cacheWriteTokens": 30977,
+    "totalTokens": 405273
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 8,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 10,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"=== TREE ===\" && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "cat package.json AGENTS.md src/App.tsx src/main.tsx index.html tsconfig.json && echo \"=== routing head ===\" && sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md && echo \"=== traps theming ===\" && rg -n -C 4 -i 'ThemeProvider|theme' .agents/skills/gravity-ui/rules/hallucination-traps.md | head -120 && echo \"=== node_modules uikit ===\" && ls node_modules/@gravity-ui/ 2>/dev/null && cat node_modules/@gravity-ui/uikit/package.json 2>/dev/null | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/docs node_modules/@gravity-ui/uikit/dist/docs 2>&1 | head -5; echo \"=== inspect ===\"; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme SegmentedRadioGroup Switch 2>&1 | head -60; echo \"=== icons version ===\"; grep '\"version\"' node_modules/@gravity-ui/icons/package.json; echo \"=== ThemeProvider d.ts ===\"; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useTheme.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeValue.d.ts 2>&1; echo \"=== theme index ===\"; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "echo \"=== SegmentedRadioGroup ===\"; ls node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/ 2>&1; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts 2>&1; echo \"=== ThemeContext ===\"; cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeContext.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeType.d.ts; echo \"=== Text/Flex ===\"; rg -n \"variant\\?|export type TextProps|TEXT_VARIANTS\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts 2>&1 | head -20; echo \"=== jsdom/vitest ===\"; ls node_modules | grep -E '^(jsdom|happy-dom)$'; ls vitest.config.* 2>/dev/null; echo \"=== online docs ===\"; curl -sS -m 20 https://gravity-ui.com/llms/uikit/7/llms.txt -o /tmp/uikit7.txt; echo \"exit=$? size=$(wc -c </tmp/uikit7.txt 2>/dev/null)\"; head -c 300 /tmp/uikit7.txt",
+        "success": true
+      },
+      {
+        "command": "echo \"=== ControlGroupProps ===\"; rg -n -A 14 \"export interface ControlGroupProps|export interface ControlProps|export interface ControlGroupOption\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts; echo \"=== theming.md ThemeProvider ===\"; rg -n -C 6 \"useTheme|ThemeProvider|document.body|theme=\" .agents/skills/gravity-ui/references/theming.md | head -120; echo \"=== README required setup ===\"; rg -n -A 12 -i \"Required setup|## Usage\" node_modules/@gravity-ui/uikit/README.md | head -40",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/theme && cat > src/theme/themeStorage.ts <<'EOF'\nimport type {Theme} from '@gravity-ui/uikit';\n\nexport const THEME_STORAGE_KEY = 'app-theme';\n\nexport const DEFAULT_THEME: Theme = 'light';\n\nconst KNOWN_THEMES: readonly Theme[] = ['light', 'dark', 'light-hc', 'dark-hc', 'system'];\n\nexport function isTheme(value: unknown): value is Theme {\n    return typeof value === 'string' && (KNOWN_THEMES as readonly string[]).includes(value);\n}\n\nfunction getStorage(): Storage | null {\n    try {\n        return typeof localStorage === 'undefined' ? null : localStorage;\n    } catch {\n        // Access to localStorage can throw (e.g. blocked third-party storage).\n        return null;\n    }\n}\n\n/** Returns the persisted theme, or `null` if nothing valid is stored. */\nexport function readStoredTheme(): Theme | null {\n    const storage = getStorage();\n    if (!storage) {\n        return null;\n    }\n    try {\n        const raw = storage.getItem(THEME_STORAGE_KEY);\n        return isTheme(raw) ? raw : null;\n    } catch {\n        return null;\n    }\n}\n\nexport function writeStoredTheme(theme: Theme): void {\n    const storage = getStorage();\n    if (!storage) {\n        return;\n    }\n    try {\n        storage.setItem(THEME_STORAGE_KEY, theme);\n    } catch {\n        // Quota exceeded / private mode — persisting is best-effort.\n    }\n}\nEOF\ncat > src/theme/AppThemeProvider.tsx <<'EOF'\nimport * as React from 'react';\nimport {ThemeProvider} from '@gravity-ui/uikit';\nimport type {Theme} from '@gravity-ui/uikit';\n\nimport {DEFAULT_THEME, THEME_STORAGE_KEY, isTheme, readStoredTheme, writeStoredTheme} from './themeStorage';\n\ninterface AppThemeContextValue {\n    theme: Theme;\n    setTheme: (theme: Theme) => void;\n}\n\nconst AppThemeContext = React.createContext<AppThemeContextValue | undefined>(undefined);\n\n/**\n * Owns the application theme: restores it from localStorage on mount,\n * persists every change, and feeds the value into uikit's `ThemeProvider`.\n * Must be the outermost `ThemeProvider` so the theme class lands on `<body>`.\n */\nexport function AppThemeProvider({children}: React.PropsWithChildren) {\n    const [theme, setThemeState] = React.useState<Theme>(() => readStoredTheme() ?? DEFAULT_THEME);\n\n    const setTheme = React.useCallback((next: Theme) => {\n        setThemeState(next);\n        writeStoredTheme(next);\n    }, []);\n\n    // Keep multiple open tabs in sync.\n    React.useEffect(() => {\n        const onStorage = (event: StorageEvent) => {\n            if (event.key !== THEME_STORAGE_KEY) {\n                return;\n            }\n            setThemeState(isTheme(event.newValue) ? event.newValue : DEFAULT_THEME);\n        };\n        window.addEventListener('storage', onStorage);\n        return () => window.removeEventListener('storage', onStorage);\n    }, []);\n\n    const value = React.useMemo(() => ({theme, setTheme}), [theme, setTheme]);\n\n    return (\n        <AppThemeContext.Provider value={value}>\n            <ThemeProvider theme={theme}>{children}</ThemeProvider>\n        </AppThemeContext.Provider>\n    );\n}\n\nexport function useAppTheme(): AppThemeContextValue {\n    const context = React.useContext(AppThemeContext);\n    if (!context) {\n        throw new Error('useAppTheme must be used inside <AppThemeProvider>');\n    }\n    return context;\n}\nEOF\ncat > src/ThemeSwitcher.tsx <<'EOF'\nimport {SegmentedRadioGroup} from '@gravity-ui/uikit';\nimport type {Theme} from '@gravity-ui/uikit';\n\nimport {useAppTheme} from './theme/AppThemeProvider';\n\nconst OPTIONS: {value: Theme; content: string}[] = [\n    {value: 'light', content: 'Светлая'},\n    {value: 'dark', content: 'Тёмная'},\n    {value: 'system', content: 'Системная'},\n];\n\nexport function ThemeSwitcher() {\n    const {theme, setTheme} = useAppTheme();\n\n    return (\n        <SegmentedRadioGroup<Theme>\n            aria-label=\"Тема оформления\"\n            size=\"m\"\n            value={theme}\n            onUpdate={setTheme}\n            options={OPTIONS}\n        />\n    );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {Flex, Text, useThemeValue} from '@gravity-ui/uikit';\n\nimport {ThemeSwitcher} from './ThemeSwitcher';\n\nexport function App() {\n    const themeValue = useThemeValue();\n\n    return (\n        <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)'}}>\n            <Text variant=\"header-1\">Переключатель темы</Text>\n            <ThemeSwitcher />\n            <Text variant=\"body-1\" color=\"secondary\">\n                Выбор сохраняется в localStorage и восстанавливается после перезагрузки. Текущая тема:{' '}\n                <Text variant=\"code-inline-1\">{themeValue}</Text>\n            </Text>\n        </Flex>\n    );\n}\nEOF\ncat > src/main.tsx <<'EOF'\n// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\nimport { AppThemeProvider } from './theme/AppThemeProvider';\n\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    {/* AppThemeProvider wraps uikit's ThemeProvider and persists the theme in localStorage. */}\n    <AppThemeProvider>\n      <App />\n    </AppThemeProvider>\n  </React.StrictMode>,\n);\nEOF\ncat > src/theme/themeStorage.test.ts <<'EOF'\nimport {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';\n\nimport {DEFAULT_THEME, THEME_STORAGE_KEY, readStoredTheme, writeStoredTheme} from './themeStorage';\n\nfunction createMemoryStorage(): Storage {\n    const data = new Map<string, string>();\n    return {\n        get length() {\n            return data.size;\n        },\n        clear: () => data.clear(),\n        getItem: (key) => data.get(key) ?? null,\n        key: (index) => Array.from(data.keys())[index] ?? null,\n        removeItem: (key) => void data.delete(key),\n        setItem: (key, value) => void data.set(key, String(value)),\n    };\n}\n\ndescribe('themeStorage', () => {\n    beforeEach(() => {\n        vi.stubGlobal('localStorage', createMemoryStorage());\n    });\n\n    afterEach(() => {\n        vi.unstubAllGlobals();\n    });\n\n    it('returns null when nothing is stored', () => {\n        expect(readStoredTheme()).toBeNull();\n    });\n\n    it('round-trips a theme', () => {\n        writeStoredTheme('dark');\n        expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');\n        expect(readStoredTheme()).toBe('dark');\n    });\n\n    it('ignores unknown stored values', () => {\n        localStorage.setItem(THEME_STORAGE_KEY, 'neon');\n        expect(readStoredTheme()).toBeNull();\n    });\n\n    it('does not throw when storage is unavailable', () => {\n        vi.stubGlobal('localStorage', undefined);\n        expect(() => writeStoredTheme('dark')).not.toThrow();\n        expect(readStoredTheme()).toBeNull();\n        expect(DEFAULT_THEME).toBe('light');\n    });\n});\nEOF\necho \"=== typecheck+build ===\"; npm run build 2>&1 | tail -25; echo \"=== tests ===\"; npx vitest run 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 322,
+      "outputTokens": 10267,
+      "cacheReadTokens": 363707,
+      "cacheWriteTokens": 30977,
+      "totalTokens": 405273
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

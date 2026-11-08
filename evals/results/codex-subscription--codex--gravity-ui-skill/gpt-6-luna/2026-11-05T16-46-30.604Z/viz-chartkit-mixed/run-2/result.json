@@ -1,0 +1,182 @@
+{
+  "status": "failed",
+  "duration": 885.419,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 59080,
+    "outputTokens": 11132,
+    "cacheReadTokens": 1322368,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 3519,
+    "totalTokens": 1392580
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 25,
+      "web_fetch": 0,
+      "web_search": 1,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 26,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n---FILES---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'vite.config.*' -g 'webpack.config.*' -g 'tsconfig*' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md && rg -n -C 3 'chart|visualiz' .agents/skills/gravity-ui/references/package-routing.md && cat package.json && sed -n '1,240p' src/App.tsx && sed -n '1,160p' src/main.tsx && rg --files src\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -A24 '\"'^## YAGR|''^## ChartKit|''^## Charts'\"' .agents/skills/gravity-ui/references/package-routing.md && rg --files -g 'package-lock.json' -g 'yarn.lock' -g 'pnpm-lock.yaml' && rg -n -C 3 'Button|Segmented|Select|ThemeProvider|typography' .agents/skills/gravity-ui/rules/hallucination-traps.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install @gravity-ui/chartkit'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -p \\\"JSON.stringify({chartkit:require('./node_modules/@gravity-ui/chartkit/package.json').version, dependencies:require('./node_modules/@gravity-ui/chartkit/package.json').dependencies, peerDependencies:require('./node_modules/@gravity-ui/chartkit/package.json').peerDependencies},null,2)\\\" && ls node_modules/@gravity-ui/chartkit && find node_modules/@gravity-ui/chartkit -path '*/docs/INDEX.md' -o -name README.md | head -10 && sed -n '1,220p' node_modules/@gravity-ui/chartkit/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' node_modules/@gravity-ui/chartkit/build/docs/INDEX.md && printf '\\\\n---CHARTS INDEX---\\\\n' && sed -n '1,220p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/docs/INDEX.md && printf '\\\\n---EXPORTS/TYPES---\\\\n' && node -p \\\"JSON.stringify(require('./node_modules/@gravity-ui/chartkit/package.json').exports,null,2)\\\" && rg -n 'type: .line.|series:|axes:|YagrPlugin|GravityChartsPlugin|type Chart' node_modules/@gravity-ui/chartkit/build/docs/INDEX.md node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/docs -g '*.md' | head -90\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \".agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button SegmentedRadioGroup RadioButton Switch Text && rg -n 'YagrPlugin|type Yagr|interface.*Yagr|export.*YagrPlugin|plugins:' node_modules/@gravity-ui/chartkit/build -g '*.d.ts' | head -100 && find node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/yagr -maxdepth 3 -type f \\\\( -name 'README.md' -o -name '*.d.ts' \\\\) | head -25\"",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc \"bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button SegmentedRadioGroup RadioButton Switch Text; rg -n 'YagrPlugin|type Yagr|interface.*Yagr|export.*YagrPlugin|plugins:' node_modules/@gravity-ui/chartkit/build -g '*.d.ts' | head -100; find node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/yagr -maxdepth 4 -type f \\\\( -name 'README.md' -o -name '*.d.ts' \\\\) | head -25\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/types.d.ts; cat node_modules/@gravity-ui/chartkit/build/index.d.ts; cat node_modules/@gravity-ui/chartkit/build/types.d.ts 2>/dev/null; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; rg -n 'export.*TextProps|type TextProps|className.*Text' node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; ls node_modules/@gravity-ui/yagr && rg -n 'type YagrConfig|interface YagrConfig|series:|data:' node_modules/@gravity-ui/yagr -g '*.d.ts' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/index.d.ts; cat node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.d.ts; cat node_modules/@gravity-ui/chartkit/build/types.d.ts; sed -n '35,105p' node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts; rg -n 'graphs:|timeline:|libraryConfig' node_modules/@gravity-ui/chartkit -g '*.md' -g '*.tsx' | head -80; rg -n 'type.*Text|variant\\\\??:' node_modules/@gravity-ui/uikit/build/esm/components/Text/TextBase.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Text/*.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/chartkit/build/types/index.d.ts; sed -n '1,110p' node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/types.d.ts; sed -n '1,110p' node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts; rg -n 'interface RawSerieData|type RawSerieData' node_modules/@gravity-ui/yagr/dist -g '*.d.ts' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '290,320p' node_modules/@gravity-ui/yagr/dist/YagrCore/types.d.ts; cat node_modules/@gravity-ui/chartkit/build/types/widget.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/types/ControlGroup.d.ts 2>/dev/null || rg -n 'interface ControlGroupProps|type ControlGroupProps' node_modules/@gravity-ui/uikit/build/esm/components -g '*.d.ts' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'export interface ChartData|type ChartData|interface ChartData' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist -g '*.d.ts' | head -20; rg -n -C 2 'xAxis\\\\??:|yAxis\\\\??:' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist -g '*.d.ts' | head -50; sed -n '1,110p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-types.md; sed -n '1,80p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/docs/guides/series-types/line.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '41,110p' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts; rg -n 'interface ChartData|xAxis\\\\??' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts | head -30; rg -n 'interface ControlGroupProps' -A35 node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'interface ChartXAxis|type ChartXAxis|interface ChartYAxis' node_modules/@gravity-ui/chartkit/node_modules/@gravity-ui/charts/dist/esm -g '*.d.ts' | head -20; sed -n '1,110p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/index.js; cat node_modules/@gravity-ui/chartkit/build/plugins/gravity-charts/index.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -- '--g-color-base-generic-accent|--g-color-base-positive-light|--g-color-sfx-shadow|--g-color-text-secondary|--g-color-line-warning|--g-color-base-positive-heavy' node_modules/@gravity-ui/uikit/build -g '*.css' | head -50; git status --short; cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'color:|theme|colors|graphs' node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer node_modules/@gravity-ui/chartkit/build/plugins/yagr -g '*.js' | head -100; rg -n -- '--g-color-base-background|--g-color-base-positive-heavy|--g-color-line-positive|--g-color-text-hint' node_modules/@gravity-ui/uikit/build/esm/styles -g '*.css' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '85,125p' node_modules/@gravity-ui/chartkit/build/plugins/yagr/renderer/utils.js; rg -n 'g-color|--g-|color.*theme|theme:' node_modules/@gravity-ui/yagr/dist -g '*.js' | head -50; rg -n -- '--g-color-base-background|--g-color-base-positive-heavy|--g-color-line-positive|--g-color-text-hint' node_modules/@gravity-ui/uikit/build -g '*.css' | head -50\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -- '--g-color-base-positive-heavy|--g-color-line-positive|--g-color-base-positive-light|--g-color-base-float|--g-color-base-background|--g-color-line-generic' node_modules/@gravity-ui/uikit/build/esm/styles node_modules/@gravity-ui/uikit/styles -g '*.css' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git clean -fd -- dist'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff -- src/App.tsx src/App.css package.json package-lock.json | head -280; git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'SERIE_COLOR|color =|color:' node_modules/@gravity-ui/yagr/dist/YagrCore -g '*.js' | head -45; rg -n 'DARK_DEFAULT_LINE_COLOR|LIGHT_DEFAULT_LINE_COLOR|SERIE_COLOR' node_modules/@gravity-ui/yagr/dist/YagrCore -g '*.js' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/yagr/dist/YagrCore/utils/colors.js; sed -n '1,55p' node_modules/@gravity-ui/yagr/dist/YagrCore/utils/series.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build > /tmp/viz-chartkit-build.log 2>&1 && tail -12 /tmp/viz-chartkit-build.log && git clean -fd -- dist'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 59080,
+      "outputTokens": 11132,
+      "cacheReadTokens": 1322368,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 3519,
+      "totalTokens": 1392580
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

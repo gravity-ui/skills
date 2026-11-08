@@ -1,0 +1,108 @@
+{
+  "status": "passed",
+  "duration": 328.58,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 28,
+    "outputTokens": 11236,
+    "cacheReadTokens": 548362,
+    "cacheWriteTokens": 35967,
+    "totalTokens": 595593
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 3,
+      "file_write": 2,
+      "file_edit": 3,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 19,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme-storage.ts",
+      "/home/sandbox/workspace/src/AppThemeProvider.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && ls -la && cat package.json 2>/dev/null; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | grep -v '.agents/' | head -100",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx; echo ----; cat src/main.tsx; echo ----; cat src/vite-env.d.ts; echo ----; cat index.html; echo ----; cat AGENTS.md; echo ----; cat tsconfig.json vite.config.ts .gitignore; echo ----; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls .agents/skills/gravity-ui/references .agents/skills/gravity-ui/rules",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----; rg -n -C 4 -i \"ThemeProvider|theme=|'system'|localStorage|scoped|rootClassName|Select|Switch\" .agents/skills/gravity-ui/references/theming.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/scripts/inspect-package.sh 2>/dev/null | head -5; ls node_modules/@gravity-ui/uikit/; ls node_modules/@gravity-ui/uikit/build | head -50; cat node_modules/@gravity-ui/uikit/build/components/theme/ThemeProvider.d.ts 2>/dev/null || find node_modules/@gravity-ui/uikit/build -name \"ThemeProvider*.d.ts\" | head",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit; cat $U/build/esm/components/theme/ThemeProvider.d.ts; echo ----; ls $U/build/esm/components/theme/; cat $U/build/esm/components/theme/index.d.ts 2>/dev/null; echo ----; grep -n -i \"theme\" $U/build/esm/components/theme/*.d.ts | head -60; echo ----; cat $U/build/esm/components/RadioButton/RadioButton.d.ts 2>/dev/null | head -80; echo ----; ls $U/build/esm/components | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; cat $U/Radio/SegmentedRadioGroup/*.d.ts 2>/dev/null || find $U -path \"*SegmentedRadioGroup*\" -name \"*.d.ts\" | head; echo ----; find $U -name \"SegmentedRadioGroup.d.ts\" -o -name \"types.d.ts\" -path \"*Segmented*\" | head; echo ----; cat $(find $U -name \"SegmentedRadioGroup.d.ts\" | head -1); echo ----; grep -rn \"SegmentedRadioGroup\" node_modules/@gravity-ui/uikit/README.md | head -5",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; cat $U/types.d.ts | head -80; echo ----; cat $U/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; echo ----; rg -n -C 12 \"SegmentedRadioGroup\" node_modules/@gravity-ui/uikit/README.md | head -60; rg -n -i \"required setup\" -A 12 node_modules/@gravity-ui/uikit/README.md | head -30",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm/components; cat $U/layout/Flex/Flex.d.ts 2>/dev/null | head -40; ls $U/layout; cat $U/Text/Text.d.ts | head -30; cat node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && ls node_modules | grep -E \"^(jsdom|happy-dom)$\"; ls node_modules/.bin | grep -E \"^(vitest|tsx)$\"; node -v",
+        "success": true
+      },
+      {
+        "command": "cat > src/theme-storage.tmp.test.ts <<'EOF'\nimport { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';\nimport { loadTheme, saveTheme, THEME_STORAGE_KEY } from './theme-storage';\n\nfunction makeStorage(initial: Record<string, string> = {}) {\n  const data: Record<string, string> = { ...initial };\n  return {\n    data,\n    getItem: (k: string) => (k in data ? data[k] : null),\n    setItem: (k: string, v: string) => { data[k] = String(v); },\n  };\n}\n\ndescribe('theme storage', () => {\n  beforeEach(() => { vi.stubGlobal('window', {}); });\n  afterEach(() => { vi.unstubAllGlobals(); });\n\n  it('defaults to light when nothing stored', () => {\n    (globalThis as any).window.localStorage = makeStorage();\n    expect(loadTheme()).toBe('light');\n  });\n  it('restores each valid stored value', () => {\n    for (const t of ['light', 'dark', 'system']) {\n      (globalThis as any).window.localStorage = makeStorage({ [THEME_STORAGE_KEY]: t });\n      expect(loadTheme()).toBe(t);\n    }\n  });\n  it('falls back on invalid stored value', () => {\n    (globalThis as any).window.localStorage = makeStorage({ [THEME_STORAGE_KEY]: 'blue' });\n    expect(loadTheme()).toBe('light');\n  });\n  it('falls back when localStorage throws', () => {\n    (globalThis as any).window.localStorage = { getItem: () => { throw new Error('denied'); }, setItem: () => { throw new Error('denied'); } };\n    expect(loadTheme()).toBe('light');\n    expect(() => saveTheme('dark')).not.toThrow();\n  });\n  it('round-trips through saveTheme/loadTheme', () => {\n    const s = makeStorage();\n    (globalThis as any).window.localStorage = s;\n    saveTheme('dark');\n    expect(s.data[THEME_STORAGE_KEY]).toBe('dark');\n    expect(loadTheme()).toBe('dark');\n  });\n});\nEOF\nnpx vitest run src/theme-storage.tmp.test.ts 2>&1 | tail -25; rm -f src/theme-storage.tmp.test.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 28,
+      "outputTokens": 11236,
+      "cacheReadTokens": 548362,
+      "cacheWriteTokens": 35967,
+      "totalTokens": 595593
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 3 failed) 61298ms
+   ✓ imports @gravity-ui/dashkit 1ms
+   ✓ @gravity-ui/dashkit in package.json 0ms
+   × no direct react-grid-layout import 4ms
+     → expected true to be false // Object.is equality
+   × react-grid-layout not a direct dep 0ms
+     → expected true to be false // Object.is equality
+   ✓ no hand-rolled CSS grid layout 0ms
+   ✓ no hand-rolled CSS-file grid 0ms
+   × judge: implements the task with the intended Gravity UI API 61292ms
+     → [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: The grid itself is a single DashKit (src/Dashboard.tsx renders <DashKit config={config} editMode={canEdit} onChange={handleChange}/> with plugins registered via DashKit.reloadPlugins in src/dashkit-setup.ts), but the project also pulls react-grid-layout in directly: package.json declares dependencies "react-grid-layout": "^1.5.4" and "react-resizable": "^3.2.0" (explicitly added, though both are transitive deps of @gravity-ui/dashkit), and src/dashkit-setup.ts directly imports 'react-grid-layout/css/styles.css' and 'react-resizable/css/styles.css' even though DashKit already bundles those styles in build/esm/components/GridItem/GridItem.css. The criterion's explicit failure mode ('a direct react-grid-layout fails') is therefore triggered.
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  14:15:03
+   Duration  61.50s (transform 32ms, setup 13ms, collect 20ms, tests 61.30s, environment 0ms, prepare 45ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no direct react-grid-layout import
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:68:52
+     66| // Directly importing react-grid-layout signals a self-made grid inste…
+     67| test("no direct react-grid-layout import", () => {
+     68|   expect(importsPackage(src, "react-grid-layout")).toBe(false);
+       |                                                    ^
+     69| });
+     70| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  EVAL.ts > react-grid-layout not a direct dep
+AssertionError: expected true to be false // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+ ❯ EVAL.ts:73:47
+     71| // Declaring react-grid-layout as a direct dependency indicates the mo…
+     72| test("react-grid-layout not a direct dep", () => {
+     73|   expect(dependsOn(src, "react-grid-layout")).toBe(false);
+       |                                               ^
+     74| });
+     75| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: The grid itself is a single DashKit (src/Dashboard.tsx renders <DashKit config={config} editMode={canEdit} onChange={handleChange}/> with plugins registered via DashKit.reloadPlugins in src/dashkit-setup.ts), but the project also pulls react-grid-layout in directly: package.json declares dependencies "react-grid-layout": "^1.5.4" and "react-resizable": "^3.2.0" (explicitly added, though both are transitive deps of @gravity-ui/dashkit), and src/dashkit-setup.ts directly imports 'react-grid-layout/css/styles.css' and 'react-resizable/css/styles.css' even though DashKit already bundles those styles in build/esm/components/GridItem/GridItem.css. The criterion's explicit failure mode ('a direct react-grid-layout fails') is therefore triggered.
+ ❯ EVAL.ts:94:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

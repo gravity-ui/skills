@@ -1,0 +1,199 @@
+{
+  "status": "failed",
+  "duration": 1727.994,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 53154,
+    "outputTokens": 20835,
+    "cacheReadTokens": 2221568,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 4153,
+    "totalTokens": 2295557
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 30,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 30,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!vendor'\"' -g '\"'!dist'\"' -g '\"'!*lock*'\"' -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g 'README*'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' && cat package.json && cat src/App.tsx && cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '/(Toaster|Button|Icon|Switch)/|toaster' | head -60 && cat tsconfig.json && cat index.html && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts && rg 'playwright' package-lock.json | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { useEffect, useRef, useState } from 'react';\nimport { Button, Select } from '@gravity-ui/uikit';\nimport './App.css';\n\ntype NoticeType = 'success' | 'info' | 'error';\ntype Notice = { id: number; type: NoticeType; duration: number };\nconst messages = {\n  success: { title: 'Всё получилось\"'!'\"', text: 'Изменения сохранены. Можно двигаться дальше.', label: 'Успех', icon: 'check' },\n  info: { title: 'Кстати, есть новости', text: 'Всё готово к работе. Попробуйте что-нибудь новое.', label: 'Информация', icon: 'info' },\n  error: { title: 'Что-то пошло не так', text: 'Не удалось сохранить изменения. Попробуйте ещё раз.', label: 'Ошибка', icon: 'alert' },\n} as const;\n\nfunction Glyph({ name, size = 20 }: { name: string; size?: number }) {\n  return <svg width={size} height={size} viewBox=\\\"0 0 24 24\\\" fill=\\\"none\\\" stroke=\\\"currentColor\\\" strokeWidth=\\\"1.7\\\" strokeLinecap=\\\"round\\\" strokeLinejoin=\\\"round\\\" aria-hidden=\\\"true\\\">\n    {name === 'bell' && <><path d=\\\"M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z\\\" /><path d=\\\"M10 21h4\\\" /></>}\n    {name === 'check' && <path d=\\\"m6 12 4 4 8-8\\\" />}\n    {name === 'info' && <><circle cx=\\\"12\\\" cy=\\\"12\\\" r=\\\"9\\\" /><path d=\\\"M12 11v6m0-10v.1\\\" /></>}\n    {name === 'alert' && <><path d=\\\"m10.3 4-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0Z\\\" /><path d=\\\"M12 9v4m0 4v.1\\\" /></>}\n    {name === 'close' && <path d=\\\"m6 6 12 12M18 6 6 18\\\" />}\n    {name === 'arrow' && <path d=\\\"M5 12h14m-6-6 6 6-6 6\\\" />}\n    {name === 'clock' && <><circle cx=\\\"12\\\" cy=\\\"12\\\" r=\\\"9\\\" /><path d=\\\"M12 7v5l3 2\\\" /></>}\n    {name === 'spark' && <path d=\\\"m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z\\\" />}\n  </svg>;\n}\n\nexport function App() {\n  const [type, setType] = useState<NoticeType>('success');\n  const [duration, setDuration] = useState(5);\n  const [notice, setNotice] = useState<Notice | null>(null);\n  const [closing, setClosing] = useState(false);\n  const nextId = useRef(0);\n\n  useEffect(() => {\n    if (\"'!notice) return;\n    const timer = window.setTimeout(() => setClosing(true), notice.duration * 1000);\n    return () => window.clearTimeout(timer);\n  }, [notice]);\n  useEffect(() => {\n    if (!closing) return;\n    const timer = window.setTimeout(() => { setNotice(null); setClosing(false); }, 220);\n    return () => window.clearTimeout(timer);\n  }, [closing]);\n  useEffect(() => {\n    if (!notice) return;\n    const dismiss = (event: KeyboardEvent) => { if (event.key === '\"'Escape') setClosing(true); };\n    window.addEventListener('keydown', dismiss);\n    return () => window.removeEventListener('keydown', dismiss);\n  }, [notice]);\n\n  function showNotice() {\n    setClosing(false);\n    setNotice({ id: ++nextId.current, type, duration });\n  }\n\n  return (\n    <div className=\\\"app-shell\\\">\n      <header className=\\\"site-header\\\">\n        <a className=\\\"brand\\\" href=\\\"./\\\" aria-label=\\\"ping — на главную\\\"><span className=\\\"brand-icon\\\"><Glyph name=\\\"bell\\\" size={20} /></span>ping<span className=\\\"brand-period\\\">.</span></a>\n        <span className=\\\"header-caption\\\">Маленькие детали. Приятный опыт.</span>\n        <span className=\\\"component-badge\\\"><span /> UI playground</span>\n      </header>\n      <main>\n        <div className=\\\"intro\\\">\n          <div className=\\\"eyebrow\\\"><span /> ПРОСТО И ВОВРЕМЯ</div>\n          <h1>Хорошие новости.<br /><span>Без лишнего шума.</span></h1>\n          <p className=\\\"intro-description\\\">Одно нажатие — и вы в курсе. Лёгкие уведомления,<br className=\\\"desktop-break\\\" /> которые появляются по делу и исчезают сами.</p>\n          <div className=\\\"intro-decoration\\\" aria-hidden=\\\"true\\\"><div className=\\\"decoration-orbit\\\" /><div className=\\\"decoration-bell\\\"><Glyph name=\\\"bell\\\" size={37} /><span /></div><span className=\\\"little-spark\\\">✳</span><span className=\\\"little-dot\\\" /></div>\n        </div>\n        <section className=\\\"playground\\\" aria-label=\\\"Настройка уведомления\\\">\n          <div className=\\\"playground-toolbar\\\"><div className=\\\"toolbar-title\\\"><span className=\\\"window-dots\\\"><i /><i /><i /></span><span>Ваша маленькая песочница</span></div><span className=\\\"live-badge\\\"><span /> Интерактивно</span></div>\n          <div className=\\\"preview-area\\\">\n            <div className=\\\"grid-pattern\\\" />\n            <span className=\\\"preview-label\\\">ПРЕДПРОСМОТР</span>\n            <div className=\\\"preview-content\\\">\n              <div className={\"'`sample-toast ${type}`}>\n                <span className=\"notice-icon\"><Glyph name={messages[type].icon} size={21} /></span>\n                <div className=\"sample-copy\"><strong>{messages[type].title}</strong><span>{messages[type].text}</span></div>\n                <span className=\"sample-close\"><Glyph name=\"close\" size={15} /></span>\n                <span className=\"sample-progress\" />\n              </div>\n              <span className=\"preview-hint\">Немного внимания. И ничего лишнего.</span>\n            </div>\n            <span className=\"preview-caption\"><span /> Так будет выглядеть ваше уведомление</span>\n          </div>\n          <div className=\"playground-controls\">\n            <div className=\"type-control\"><label id=\"type-label\">Тип уведомления</label><Select aria-labelledby=\"type-label\" value={[type]} onUpdate={value => setType(value[0] as NoticeType)} options={Object.entries(messages).map(([value, message]) => ({ value, content: message.label }))} size=\"l\" renderSelectedOption={option => <span className={`select-content ${option.value}`}><span />{option.content}</span>} /></div>\n            <div className=\"duration-control\"><span id=\"duration-label\">Время на экране</span><div className=\"duration-options\" role=\"group\" aria-labelledby=\"duration-label\">{[3, 5, 8].map(value => <button key={value} className={duration === value ? '\"'selected' : ''} aria-pressed={duration === value} onClick={() => setDuration(value)}>{value} сек</button>)}</div></div>\n            <div className=\\\"autoclose-note\\\"><Glyph name=\\\"clock\\\" size={18} /><span>Исчезнет само.<br /><strong>Всё предусмотрено.</strong></span></div>\n          </div>\n        </section>\n        <div className=\\\"feature-row\\\">\n          <div><span className=\\\"feature-icon\\\"><Glyph name=\\\"spark\\\" size={18} /></span><span>Появляется плавно</span></div>\n          <div><span className=\\\"feature-icon\\\"><Glyph name=\\\"clock\\\" size={18} /></span><span>Исчезает вовремя</span></div>\n          <div><span className=\\\"feature-icon\\\"><Glyph name=\\\"check\\\" size={18} /></span><span>Не отвлекает от главного</span></div>\n        </div>\n        <footer className=\\\"page-footer\\\"><span>Сделано с вниманием к деталям</span><span>Меньше шума, больше смысла <span className=\\\"footer-spark\\\">✳</span></span></footer>\n      </main>\n      <div className=\\\"corner-action\\\"><span className=\\\"action-hint\\\">Попробуйте — это приятно <span>↘</span></span><Button view=\\\"action\\\" size=\\\"xl\\\" className=\\\"show-notification\\\" onClick={showNotice}><Glyph name=\\\"bell\\\" size={19} /><span>Показать уведомление</span><Glyph name=\\\"arrow\\\" size={18} /></Button></div>\n      <div className=\\\"toast-region\\\" role=\\\"region\\\" aria-label=\\\"Уведомления\\\" aria-live=\\\"polite\\\" aria-atomic=\\\"true\\\">\n        {notice && <div key={notice.id} className={\"'`live-toast ${notice.type} ${closing ? '\"'is-closing' : ''}\"'`} role=\"status\"><span className=\"notice-icon\"><Glyph name={messages[notice.type].icon} size={22} /></span><div className=\"sample-copy\"><strong>{messages[notice.type].title}</strong><span>{messages[notice.type].text}</span></div><button className=\"dismiss-toast\" aria-label=\"Закрыть уведомление\" onClick={() => setClosing(true)}><Glyph name=\"close\" size={17} /></button><span className=\"toast-progress\" style={{ animationDuration: `${notice.duration}s` }} /></div>}\n      </div>\n    </div>\n  );\n}\nEOF\ncat > src/App.css <<'\"'EOF'\n:root{font-family:Inter,\\\"Helvetica Neue\\\",Arial,sans-serif;color:#282b29;background:#f8f9f6;font-synthesis:none;-webkit-font-smoothing:antialiased;font-weight:400}\n*{box-sizing:border-box}body{margin:0;min-width:360px}.app-shell{min-height:100vh;background:#f8f9f6}.site-header{height:88px;border-bottom:1px solid #e6e8e2;display:flex;align-items:center;gap:36px;padding:0 5.6%;background:#fcfcfa}.brand{display:flex;align-items:center;color:#282b29;text-decoration:none;font-size:30px;font-weight:750;letter-spacing:-1.5px}.brand-icon{display:grid;place-items:center;background:#e7edb9;width:34px;height:36px;border-radius:11px;margin-right:10px;transform:rotate(-9deg);color:#454e24}.brand-icon svg{transform:rotate(9deg)}.brand-period{color:#8a9b3e}.header-caption{font-size:12px;color:#8b8e85;letter-spacing:.05px}.component-badge{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:11px;color:#697258;background:#eff2e7;border:1px solid #e2e7d5;border-radius:20px;padding:6px 11px}.component-badge>span,.live-badge>span,.preview-caption>span{width:5px;height:5px;display:inline-block;border-radius:50%;background:#82945b}main{max-width:1000px;margin:auto;padding:55px 24px 105px}.intro{position:relative;margin-bottom:35px}.eyebrow{font-size:10px;letter-spacing:1.8px;font-weight:650;color:#7e846f;display:flex;align-items:center;gap:8px;margin-bottom:19px}.eyebrow>span{height:6px;width:6px;background:#9aa76c;border-radius:50%}h1{font-size:49px;line-height:1.15;letter-spacing:-2.1px;font-weight:600;margin:0 0 18px}h1>span{color:#989e8d}.intro-description{color:#83877e;font-size:14px;line-height:1.8;margin:0;letter-spacing:.02px}.intro-decoration{position:absolute;width:180px;height:180px;right:41px;top:10px}.decoration-orbit{position:absolute;inset:3px;border:1px dashed #dce2cd;border-radius:50%;transform:rotate(-20deg)}.decoration-orbit:after{content:\\\"\\\";position:absolute;inset:21px;border:1px solid #e8ecde;border-radius:50%}.decoration-bell{position:absolute;inset:45px;background:#e9edce;border:5px solid #f4f5ea;border-radius:26px;display:grid;place-items:center;transform:rotate(-12deg);box-shadow:0 8px 20px #596b2710;color:#69743a}.decoration-bell>span{position:absolute;right:12px;top:11px;width:11px;height:11px;background:#d48960;border:3px solid #e9edce;border-radius:50%}.little-spark{position:absolute;right:6px;top:14px;color:#8c9b54;font-size:30px}.little-dot{position:absolute;width:9px;height:9px;border-radius:50%;background:#d9dfbc;left:13px;bottom:20px}.playground{border:1px solid #e0e4da;border-radius:15px;overflow:hidden;background:#fff;box-shadow:0 5px 15px #25311303}.playground-toolbar{height:53px;padding:0 23px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8ebe3;background:#fdfefb}.toolbar-title{display:flex;align-items:center;gap:19px;color:#818679;font-size:11px}.window-dots{display:flex;gap:5px}.window-dots i{width:6px;height:6px;border-radius:50%;background:#dfe3d6}.window-dots i:first-child{background:#c6cfb5}.live-badge{display:flex;align-items:center;gap:6px;color:#849071;font-size:10px}.preview-area{height:266px;position:relative;background:#f8faf5;display:flex;align-items:center;justify-content:center;overflow:hidden}.grid-pattern{position:absolute;inset:0;background-image:radial-gradient(#bbc6a6 0.7px,transparent 0.7px);background-size:18px 18px;opacity:.35;mask-image:radial-gradient(ellipse at center,black 10%,transparent 76%)}.preview-label{position:absolute;top:22px;left:24px;font-size:8px;letter-spacing:1.4px;color:#9da590}.preview-content{z-index:1;width:400px;max-width:calc(100% - 40px);padding-top:8px;text-align:center}.sample-toast{position:relative;display:flex;align-items:flex-start;gap:12px;background:#fff;padding:20px 19px 24px;border:1px solid #e7eae1;border-radius:11px;text-align:left;box-shadow:0 5px 10px #36452a05,0 14px 32px #36452a08;overflow:hidden;transform:rotate(-2deg);transition:transform .25s}.sample-toast:hover{transform:rotate(0)}.notice-icon{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border-radius:10px;background:var(--notice-bg);color:var(--notice-color)}.success{--notice-bg:#edf4e5;--notice-color:#729354;--progress-color:#b7c995}.info{--notice-bg:#eaf0fb;--notice-color:#6588bd;--progress-color:#95b4df}.error{--notice-bg:#fcece7;--notice-color:#c9765e;--progress-color:#dfad9e}.sample-copy{display:flex;flex-direction:column;gap:5px;min-width:0}.sample-copy strong{font-size:13px;font-weight:600;line-height:1.5}.sample-copy>span{font-size:10px;line-height:1.65;color:#8a8e83}.sample-close{color:#b1b5a9;margin-left:auto;flex-shrink:0;margin-top:2px}.sample-progress{position:absolute;bottom:0;left:0;width:65%;height:3px;background:var(--progress-color)}.preview-hint{display:block;margin-top:24px;font-size:11px;color:#9ba38e}.preview-caption{position:absolute;bottom:19px;right:23px;display:flex;align-items:center;gap:6px;color:#a0a794;font-size:9px}.preview-caption>span{width:4px;height:4px;background:#a7b38c}.playground-controls{display:flex;align-items:center;padding:23px 26px;gap:34px;border-top:1px solid #e8ebe3}.type-control,.duration-control{display:flex;flex-direction:column;gap:9px}.type-control label,.duration-control>span{font-size:10px;color:#818679}.type-control{width:232px}.type-control .g-select-control{--g-border-radius-m:7px;--g-color-line-generic:#e2e6da;--g-color-base-generic:transparent}.select-content{display:flex;align-items:center;gap:8px;font-size:12px}.select-content>span{width:6px;height:6px;border-radius:50%;background:var(--notice-color)}.duration-options{display:flex;gap:4px;padding:3px;border-radius:7px;border:1px solid #e8eae2;background:#f4f5f0;height:36px}.duration-options button{border:0;background:none;padding:0 16px;white-space:nowrap;font-size:11px;cursor:pointer;border-radius:4px;color:#93998a;font-family:inherit}.duration-options button.selected{background:#fff;box-shadow:0 1px 4px #34402c12;color:#515b3e}.duration-options button:hover{color:#37452a}.autoclose-note{margin-left:auto;display:flex;align-items:center;gap:10px;color:#939b86;padding-top:19px}.autoclose-note span{font-size:10px;line-height:1.7}.autoclose-note strong{font-weight:400;color:#a4a99c}.feature-row{display:flex;justify-content:center;gap:55px;margin:28px 0 46px}.feature-row>div{display:flex;align-items:center;gap:9px;color:#8b9281;font-size:11px}.feature-icon{display:grid;place-items:center;color:#98a481}.page-footer{border-top:1px solid #e3e7db;padding-top:21px;display:flex;justify-content:space-between;color:#a1a796;font-size:10px}.footer-spark{display:inline-block;margin-left:7px;color:#9ca87d;font-size:16px;vertical-align:middle}.corner-action{position:fixed;bottom:27px;right:30px;z-index:10;display:flex;align-items:center;gap:20px}.action-hint{color:#959d87;font-size:11px}.action-hint>span{display:inline-block;font-size:22px;margin-left:8px;transform:translateY(4px)}.show-notification.g-button{--g-button-background-color:#e4ecbd;--g-button-background-color-hover:#d9e5a7;--g-button-background-color-active:#cfdc99;--g-button-text-color:#46512e;--g-button-text-color-hover:#354220;--g-button-border-radius:11px;box-shadow:0 4px 10px #4c5a2010;height:49px}.show-notification .g-button__text{display:flex;align-items:center;gap:11px;font-weight:500;font-size:12px;padding:0 5px}.show-notification .g-button__text>svg:last-child{margin-left:8px}.toast-region{position:fixed;bottom:95px;right:30px;z-index:20;width:390px;max-width:calc(100vw - 32px)}.live-toast{display:flex;align-items:flex-start;gap:12px;position:relative;padding:20px 16px 24px 20px;background:white;border:1px solid #e2e7da;border-radius:12px;box-shadow:0 12px 40px #27371c16,0 2px 8px #27371c08;overflow:hidden;animation:toast-in .3s cubic-bezier(.2,.8,.3,1) both}.live-toast .sample-copy>span{font-size:11px}.dismiss-toast{display:grid;place-items:center;flex-shrink:0;margin-left:auto;padding:4px;border:0;border-radius:4px;color:#929989;background:transparent;cursor:pointer}.dismiss-toast:hover{background:#f1f3eb;color:#414a34}.toast-progress{position:absolute;left:0;bottom:0;width:100%;height:3px;background:var(--progress-color);transform-origin:left;animation:countdown linear forwards}.live-toast.is-closing{animation:toast-out .22s ease-in both}button:focus-visible,a:focus-visible{outline:2px solid #839556;outline-offset:4px}@keyframes countdown{to{transform:scaleX(0)}}@keyframes toast-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes toast-out{to{opacity:0;transform:translateY(10px)}}\n@media(min-width:1450px){main{padding-top:75px}.intro{margin-bottom:43px}.preview-area{height:300px}.feature-row{margin-bottom:55px}}\n@media(max-width:700px){.site-header{height:72px;padding:0 22px}.header-caption{display:none}.component-badge{font-size:10px}main{padding:38px 20px 140px}.intro{margin-bottom:29px}h1{font-size:39px;letter-spacing:-1.6px}.intro-description{font-size:12px}.intro-decoration{display:none}.playground-toolbar{padding:0 15px}.toolbar-title{gap:10px;font-size:10px}.live-badge{font-size:9px}.preview-area{height:255px}.preview-content{max-width:calc(100% - 36px)}.sample-toast{padding:18px 13px 22px;gap:10px}.sample-copy>span{font-size:10px}.sample-copy strong{font-size:12px}.preview-caption{right:15px;font-size:8px}.playground-controls{flex-wrap:wrap;padding:20px 17px;gap:17px}.type-control{width:calc(50% - 9px)}.duration-control{flex:1}.duration-options button{padding:0 11px;flex:1}.autoclose-note{display:none}.feature-row{gap:16px;justify-content:space-between;margin:24px 0 30px}.feature-row>div{flex-direction:column;gap:7px;text-align:center;font-size:9px}.page-footer{gap:16px;line-height:1.6;font-size:9px}.page-footer>span:last-child{text-align:right}.corner-action{right:18px;bottom:20px}.action-hint{display:none}.toast-region{right:18px;bottom:84px}.desktop-break{display:none}.preview-label{left:17px}}\n@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto\"'!important;transition:none!important}.live-toast{animation-duration:.01s}.live-toast.is-closing{animation-duration:.01s}.sample-toast{transform:none}}\nEOF\npython3 - <<'\"'PY'\nfrom pathlib import Path\np=Path('index.html')\ns=p.read_text().replace('lang=\\\"en\\\"','lang=\\\"ru\\\"').replace('<title>Gravity UI eval</title>','<meta name=\\\"theme-color\\\" content=\\\"#f8f9f6\\\" />\\\\n    <meta name=\\\"description\\\" content=\\\"Лёгкие уведомления, которые появляются по делу и исчезают сами.\\\" />\\\\n    <title>ping. — Маленькие уведомления</title>')\np.write_text(s)\nPY\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) {try {console.log(p,import.meta.resolve(p))}catch{}}\\\" && rg --files /home/sandbox /tmp /usr/bin /opt -g '*playwright*' -g '*chrom*' -g '\"'!node_modules/**'\"' -g '\"'!proc/**'\"' -g '\"'!sys/**'\"' 2>/dev/null | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm install --prefix /tmp/ping-browser --no-audit --no-fund playwright && /tmp/ping-browser/node_modules/.bin/playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run dev -- --host 0.0.0.0'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm exec --yes --package=prettier -- prettier --write src/App.tsx src/App.css index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'background-color|background.*action|g-button__text|border-radius' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css | head -45 && git diff --stat\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,150p' src/App.tsx && sed -n '1,65p' src/App.css && cat .gitignore && cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/ping-browser/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nimport assert from 'node:assert/strict';\nconst browser = await chromium.launch({headless: true, args: ['--no-sandbox']});\nconst page = await browser.newPage({viewport: {width: 1440, height: 1080}});\nconst errors = [];\npage.on('pageerror', error => errors.push(error.message));\nawait page.goto('http://localhost:5176');\nawait page.getByRole('heading', {name: 'Хорошие новости. Без лишнего шума.'}).waitFor();\nawait page.screenshot({path: '/tmp/ping-desktop.png', fullPage: true});\nawait page.clock.install();\nconst show = page.getByRole('button', {name: 'Показать уведомление'});\nconst toast = page.locator('.live-toast');\nassert.equal(await toast.count(), 0);\nawait show.click();\nassert.equal(await toast.count(), 1);\nassert.match(await toast.innerText(), /Всё получилось/);\nawait page.clock.runFor(4900);\nassert.equal(await toast.count(), 1);\nawait page.clock.runFor(400);\nassert.equal(await toast.count(), 0);\nawait page.getByRole('button', {name: '3 сек', exact: true}).click();\nawait show.click();\nawait page.clock.runFor(2000);\nawait show.click();\nawait page.clock.runFor(1500);\nassert.equal(await toast.count(), 1, 'Click resets the auto-dismiss timer');\nawait page.clock.runFor(1800);\nassert.equal(await toast.count(), 0);\nawait show.click();\nawait page.getByRole('button', {name: 'Закрыть уведомление'}).click();\nawait page.clock.runFor(250);\nassert.equal(await toast.count(), 0);\nawait show.click();\nawait page.keyboard.press('Escape');\nawait page.clock.runFor(250);\nassert.equal(await toast.count(), 0);\nawait page.getByRole('combobox').click();\nawait page.getByRole('option', {name: 'Ошибка', exact:true}).click();\nawait show.click();\nassert.match(await toast.innerText(), /Что-то пошло не так/);\nawait page.screenshot({path: '/tmp/ping-toast.png', fullPage: true});\nawait page.setViewportSize({width: 390, height: 844});\nawait page.screenshot({path: '/tmp/ping-mobile.png', fullPage: true});\nassert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, 'No horizontal overflow on mobile');\nconst bounds = await show.boundingBox();\nassert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 390);\nassert.deepEqual(errors, []);\nconsole.log('PASS: display, default 5-second auto-dismiss, timer reset, manual close, Escape, type selection, mobile layout, no browser errors.');\nawait browser.close();\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && rg -n 'g-button__text|font-family' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css node_modules/@gravity-ui/uikit/build/esm/components/ThemeProvider/ThemeProvider.css | head -15\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '380,420p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css && rg -n 'aria.*label|role:|role=' node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.js | head -15\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('node:fs');const p='/tmp/ping-browser/check.mjs';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('chromium.launch({headless: true,','chromium.launch({executablePath: chromium.executablePath(), headless: true,'));\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'node /tmp/ping-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'which apt-get; which sudo; id; cat /etc/os-release; ls /usr/lib/aarch64-linux-gnu | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ldd /home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome | rg 'not found'; ls /var/lib/apt/lists | head; which curl; which dpkg-deb\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'mkdir -p /tmp/ping-browser/debs /tmp/ping-browser/libs && cd /tmp/ping-browser/debs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libcups2 libxkbcommon0 libasound2 libgbm1 libcairo2 libpango-1.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libatspi2.0-0 libdrm2 libpixman-1-0 libthai0 libdatrie1 libfribidi0 libgraphite2-3 libharfbuzz0b libwayland-server0 libavahi-client3 libavahi-common3 && for archive in *.deb; do dpkg-deb -x \"$archive\" /tmp/ping-browser/libs; done'"
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('node:fs');fs.rmSync('dist',{recursive:true,force:true});\\\" && git diff --check\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"LD_LIBRARY_PATH=/tmp/ping-browser/libs/usr/lib/aarch64-linux-gnu ldd /home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome | rg 'not found' || true\nLD_LIBRARY_PATH=/tmp/ping-browser/libs/usr/lib/aarch64-linux-gnu node /tmp/ping-browser/check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/ping-browser/debs && apt-get download libfontconfig1 libfreetype6 libpng16-16 libxcb-shm0 libxcb-render0 libxrender1 libxi6 && for archive in *.deb; do dpkg-deb -x \"$archive\" /tmp/ping-browser/libs; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'LD_LIBRARY_PATH=/tmp/ping-browser/libs/usr/lib/aarch64-linux-gnu:/tmp/ping-browser/libs/lib/aarch64-linux-gnu node /tmp/ping-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'DEBUG=pw:browser LD_LIBRARY_PATH=/tmp/ping-browser/libs/usr/lib/aarch64-linux-gnu:/tmp/ping-browser/libs/lib/aarch64-linux-gnu node /tmp/ping-browser/check.mjs'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cd /tmp/ping-browser/debs && apt-get download libsqlite3-0 fontconfig-config fonts-dejavu-core && for archive in *.deb; do dpkg-deb -x \"$archive\" /tmp/ping-browser/libs; done'"
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/ping-browser/fonts.conf <<'EOF'\n<?xml version=\\\"1.0\\\"?>\n<\"'!DOCTYPE fontconfig SYSTEM \"urn:fontconfig:fonts.dtd\">\n<fontconfig><dir>/tmp/ping-browser/libs/usr/share/fonts/truetype/dejavu</dir><cachedir>/tmp/ping-browser/font-cache</cachedir></fontconfig>\nEOF'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const fs=require('node:fs');const p='/tmp/ping-browser/check.mjs';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace(\\\\\\\"name: 'Хорошие новости. Без лишнего шума.'\\\\\\\",\\\\\\\"name: /Хорошие новости/\\\\\\\"));\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'FONTCONFIG_FILE=/tmp/ping-browser/fonts.conf LD_LIBRARY_PATH=/tmp/ping-browser/libs/usr/lib/aarch64-linux-gnu:/tmp/ping-browser/libs/lib/aarch64-linux-gnu node /tmp/ping-browser/check.mjs'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 53154,
+      "outputTokens": 20835,
+      "cacheReadTokens": 2221568,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 4153,
+      "totalTokens": 2295557
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "status": "passed",
+  "duration": 460.408,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 68,
+    "outputTokens": 16416,
+    "cacheReadTokens": 1160944,
+    "cacheWriteTokens": 33512,
+    "totalTokens": 1210940
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 2,
+      "shell": 28,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 33,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.tsx",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/tmp/e2e/check.mjs"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in package.json index.html src/App.tsx src/main.tsx src/vite-env.d.ts vite.config.ts tsconfig.json .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done",
+        "success": true
+      },
+      {
+        "command": "ls -la && ls node_modules 2>/dev/null | head -3; node -v; npm -v",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep '\"version\"' && ls && find . -path '*Theme*' -name '*.d.ts' | grep -v node_modules | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/theme && cat ThemeProvider.d.ts ThemeProvider.js 2>/dev/null; ls; cat getThemeType.d.ts useThemeType.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat components/theme/types.d.ts components/theme/constants.js; grep -n \"ThemeProvider\\|useThemeType\\|useThemeValue\" components/theme/index.d.ts; grep -rn \"export.*RadioButton\\|export \\* from './components'\" index.d.ts components/index.d.ts 2>/dev/null | head; ls components | grep -i radio; cat components/controls/RadioButton/RadioButton.d.ts 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "cat components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts; cat components/SegmentedRadioGroup/index.d.ts 2>/dev/null; grep -n \"SegmentedRadioGroup\\|ThemeProvider\" index.d.ts components/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && grep -n \"ControlGroupProps\\|ControlGroupOption\" -A12 types.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright; python3 -c \"import playwright\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && npm init -y >/dev/null && timeout 300 npm i playwright@1 --no-audit --no-fund 2>&1 | tail -3 && timeout 400 npx playwright install --with-deps chromium 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 400 npx playwright install chromium 2>&1 | tail -5; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5173 --strictPort > /tmp/e2e/vite.log 2>&1 &) ; sleep 4; cat /tmp/e2e/vite.log | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 180 node check.mjs 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "ls /usr/lib/aarch64-linux-gnu 2>/dev/null | grep -i -E \"glib|nss3|atk\" | head; ls /lib/aarch64-linux-gnu 2>/dev/null | grep -i glib | head -3; find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; id -u",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/debs && cd /tmp/debs && timeout 120 apt-get download libglib2.0-0t64 libpcre2-8-0 libffi8 2>&1 | tail -3; ls",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && cat /etc/os-release | head -2; (timeout 120 apt-get download libglib2.0-0 2>&1 | tail -2); ls; ls /var/lib/apt/lists 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && dpkg -x libglib2.0-0_*.deb /tmp/debs/root && find /tmp/debs/root -name \"libglib-2.0.so*\" | head -2 && H=$(ls -d ~/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64) && LD_LIBRARY_PATH=/tmp/debs/root/usr/lib/aarch64-linux-gnu ldd $H/chrome-headless-shell | grep \"not found\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && timeout 300 apt-get download libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libx11-6 libxcomposite1 libxdamage1 libxext6 libxfixes3 libxrandr2 libgbm1 libxcb1 libxkbcommon0 libasound2 libatspi2.0-0 libcups2 libpango-1.0-0 libcairo2 libxrender1 libxi6 libxcursor1 libxss1 libpangocairo-1.0-0 libexpat1 libfontconfig1 libfreetype6 libpng16-16 libpixman-1-0 libxcb-shm0 libxcb-render0 libxshmfence1 libdrm2 libwayland-client0 libxtst6 libxau6 libxdmcp6 libgcc-s1 libstdc++6 libbsd0 libmd0 libnettle8 libgnutls30 libhogweed6 libtasn1-6 libp11-kit0 libidn2-0 libunistring2 libffi8 libpcre2-8-0 libmount1 libselinux1 libblkid1 libsystemd0 libcap2 libgmp10 libsqlite3-0 libuuid1 libz3-4 libzstd1 libjpeg62-turbo liblcms2-2 libwebp7 libharfbuzz0b libthai0 libdatrie1 libgraphite2-3 libfribidi0 libxinerama1 libxkbfile1 libasyncns0 libflac12 libogg0 libvorbis0a libvorbisenc2 libsndfile1 libpulse0 libcap2 2>&1 | tail -2; for f in *.deb; do dpkg -x \"$f\" /tmp/debs/root; done; H=$(ls -d ~/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64); LD_LIBRARY_PATH=/tmp/debs/root/usr/lib/aarch64-linux-gnu ldd $H/chrome-headless-shell | grep \"not found\"; echo done",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && timeout 200 apt-get download libdbus-1-3 libwayland-server0 2>&1 | tail -1; for f in libdbus-1-3*.deb libwayland-server0*.deb; do dpkg -x \"$f\" /tmp/debs/root; done; H=$(ls -d ~/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64); LD_LIBRARY_PATH=/tmp/debs/root/usr/lib/aarch64-linux-gnu ldd $H/chrome-headless-shell | grep \"not found\"; echo ok",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && ls | grep -i dbus; timeout 200 apt-get download libdbus-1-3 2>&1 | tail -2; ls /tmp/debs/root/usr/lib/aarch64-linux-gnu | grep -i dbus; find /tmp/debs/root -name \"libdbus*\" | head",
+        "success": true
+      },
+      {
+        "command": "H=$(ls -d ~/.cache/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-linux-arm64); export LD_LIBRARY_PATH=/tmp/debs/root/usr/lib/aarch64-linux-gnu:/tmp/debs/root/lib/aarch64-linux-gnu; LD_LIBRARY_PATH=$LD_LIBRARY_PATH ldd $H/chrome-headless-shell | grep \"not found\"; echo \"missing-check-done\"; cd /tmp/e2e && LD_LIBRARY_PATH=$LD_LIBRARY_PATH timeout 200 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "export LD_LIBRARY_PATH=/tmp/debs/root/usr/lib/aarch64-linux-gnu:/tmp/debs/root/lib/aarch64-linux-gnu; cd /tmp/e2e && timeout 200 node check.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite --port 5173\" ; cd /home/sandbox/workspace && git status --short && git diff --stat && ls",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if grep -q \"vite\" $p/cmdline 2>/dev/null && grep -q \"5173\" $p/cmdline 2>/dev/null; then kill $(basename $p) && echo \"killed $(basename $p)\"; fi; done; echo ok",
+        "success": true
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5173/ || echo \"server down\"",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *vite*) echo \"$(basename $p): $c\"; kill $(basename $p);; esac; done; sleep 1; curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5173/ || echo \"server down\"",
+        "success": false
+      },
+      {
+        "command": "curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5173/ || echo \"server down\"; cd /home/sandbox/workspace && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 68,
+      "outputTokens": 16416,
+      "cacheReadTokens": 1160944,
+      "cacheWriteTokens": 33512,
+      "totalTokens": 1210940
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

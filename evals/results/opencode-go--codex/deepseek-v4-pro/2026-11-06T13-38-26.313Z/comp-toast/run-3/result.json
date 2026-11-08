@@ -1,0 +1,157 @@
+{
+  "status": "passed",
+  "duration": 319.936,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 16243,
+    "outputTokens": 3358,
+    "cacheReadTokens": 153088,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1083,
+    "totalTokens": 172689
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 20,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'ls -la'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la src/'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ | head -20'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toaster.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/types.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/hooks/useToaster.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Button/index.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"export.*from\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head -5'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat << 'PATCH' | patch -p0\n*** Begin Patch\n*** Update File: src/main.tsx\n@@ -1,7 +1,7 @@\n // Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n // Implement the requested feature in App.tsx (you may add sibling files).\n import '@gravity-ui/uikit/styles/fonts.css';\n import '@gravity-ui/uikit/styles/styles.css';\n \n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { ThemeProvider, Toaster, ToasterComponent, ToasterProvider } from '@gravity-ui/uikit';\n \n import { App } from './App';\n+\n+const toaster = new Toaster();\n \n ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n   <React.StrictMode>\n     <ThemeProvider theme=\"light\">\n-      <App />\n+      <ToasterProvider toaster={toaster}>\n+        <App />\n+        <ToasterComponent />\n+      </ToasterProvider>\n     </ThemeProvider>\n   </React.StrictMode>,\n );\n*** End Patch\n*** Begin Patch\n*** Update File: src/App.tsx\n@@ -1,3 +1,12 @@\n // Implement the requested feature here (and may add sibling files).\n+import { Button, useToaster } from '\"'@gravity-ui/uikit';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const toaster = useToaster();\n+\n+  const showToast = () => {\n+    toaster.add({ name: 'demo', title: 'Уведомление', content: 'Это всплывающее уведомление\"'!'\"', autoHiding: 3000 });\n+  };\n+\n+  return <Button style={{ position: 'fixed', bottom: 24, right: 24 }} view=\\\"action\\\" size=\\\"l\\\" onClick={showToast}>Показать уведомление</Button>;\n }\n*** End Patch\nPATCH\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/main.tsx << 'EOF'\n// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).\n// Implement the requested feature in App.tsx (you may add sibling files).\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider, Toaster, ToasterComponent, ToasterProvider } from '@gravity-ui/uikit';\n\nimport { App } from './App';\n\nconst toaster = new Toaster();\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\">\n      <ToasterProvider toaster={toaster}>\n        <App />\n        <ToasterComponent />\n      </ToasterProvider>\n    </ThemeProvider>\n  </React.StrictMode>,\n);\nEOF'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx << 'EOF'\n// Implement the requested feature here (and may add sibling files).\nimport { Button, useToaster } from '@gravity-ui/uikit';\n\nexport function App() {\n  const toaster = useToaster();\n\n  const showToast = () => {\n    toaster.add({\n      name: 'demo',\n      title: 'Уведомление',\n      content: 'Это всплывающее уведомление\"'!'\"',\n      autoHiding: 3000,\n    });\n  };\n\n  return (\n    <Button\n      style={{ position: 'fixed', bottom: 24, right: 24 }}\n      view=\\\"action\\\"\n      size=\\\"l\\\"\n      onClick={showToast}\n    >\n      Показать уведомление\n    </Button>\n  );\n}\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 16243,
+      "outputTokens": 3358,
+      "cacheReadTokens": 153088,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1083,
+      "totalTokens": 172689
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

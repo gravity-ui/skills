@@ -1,0 +1,529 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (9 tests | 4 failed) 9158ms
+   × depends on @gravity-ui/markdown-editor 4ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/markdown-editor 1ms
+     → expected false to be true // Object.is equality
+   ✓ no @uiw/react-md-editor 0ms
+   ✓ no react-markdown DIY preview 0ms
+   ✓ no raw textarea input 0ms
+   × no dangerouslySetInnerHTML preview 1ms
+     → expected 'import { useMemo, useState } from \'r…' not to match /dangerouslySetInnerHTML/
+   ✓ no @mdxeditor/editor dependency 0ms
+   ✓ no react-simplemde-editor dependency 0ms
+   × judge: implements the task with the intended Gravity UI API 9152ms
+     → [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The markdown field is a plain @gravity-ui/uikit TextArea (src/App.tsx:48) with a hand-rolled custom markdown parser (src/markdown.tsx) rendered into a separate preview pane; @gravity-ui/markdown-editor is absent from package.json and never imported, so useMarkdownEditor/MarkdownEditorView are unused. This is exactly the forbidden raw textarea + custom preview approach.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 5 passed (9)
+   Start at  09:10:50
+   Duration  9.45s (transform 62ms, setup 22ms, collect 22ms, tests 9.16s, environment 0ms, prepare 74ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > depends on @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The canonical Gravity markdown-with-live-preview widget must be dec…
+     54| test("depends on @gravity-ui/markdown-editor", () => {
+     55|   expect(dependsOn(src, "@gravity-ui/markdown-editor")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/markdown-editor
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:62
+     58| // Confirms the code actually pulls the editor from the correct Gravit…
+     59| test("imports @gravity-ui/markdown-editor", () => {
+     60|   expect(importsPackage(src, "@gravity-ui/markdown-editor")).toBe(true…
+       |                                                              ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no dangerouslySetInnerHTML preview
+AssertionError: expected 'import { useMemo, useState } from \'r…' not to match /dangerouslySetInnerHTML/
+
+[32m- Expected:[39m 
+/dangerouslySetInnerHTML/
+
+[31m+ Received:[39m 
+"import { useMemo, useState } from 'react';
+import { Card, Text, TextArea } from '@gravity-ui/uikit';
+
+import { renderMarkdown } from './markdown';
+import './app.css';
+
+const INITIAL_VALUE = `# Привет, Markdown!
+
+Пишите текст слева — **форматирование** появится справа *сразу*.
+
+## Что поддерживается
+
+- **Жирный** и *курсивный* текст
+- ~~Зачёркнутый~~ текст и \\`inline-код\\`
+- Списки, цитаты и [ссылки](https://gravity-ui.com)
+
+> Цитата оформляется автоматически.
+
+\\`\\`\\`
+// И блоки кода тоже
+const hello = 'world';
+\\`\\`\\`
+`;
+
+export function App() {
+  const [value, setValue] = useState(INITIAL_VALUE);
+
+  const preview = useMemo(() => renderMarkdown(value), [value]);
+
+  return (
+    <div className=\"page\">
+      <Card className=\"form-card\" view=\"raised\">
+        <h1 className=\"form-title\">
+          <Text variant=\"header-1\">Новая заметка</Text>
+        </h1>
+        <div className=\"form-subtitle\">
+          <Text variant=\"body-1\" color=\"secondary\">
+            Текст с markdown-разметкой форматируется на лету
+          </Text>
+        </div>
+
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div className=\"editor-grid\">
+            <div>
+              <label className=\"field-label\" htmlFor=\"md-field\">
+                <Text variant=\"subheader-2\">Текст</Text>
+              </label>
+              <TextArea
+                id=\"md-field\"
+                value={value}
+                onUpdate={setValue}
+                rows={16}
+                size=\"l\"
+                placeholder=\"Введите текст с markdown-разметкой…\"
+              />
+              <Text className=\"field-hint\" variant=\"caption-1\" color=\"secondary\">
+                # заголовок, **жирный**, *курсив*, `код`, - список, &gt; цитата
+              </Text>
+            </div>
+
+            <div>
+              <Text className=\"field-label\" variant=\"subheader-2\">
+                Предпросмотр
+              </Text>
+              <div className=\"preview-pane\" aria-live=\"polite\">
+                {value.trim() ? (
+                  preview
+                ) : (
+                  <span className=\"preview-empty\">Здесь появится форматированный текст…</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
+}
+
+
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 32px 24px;
+  background: var(--g-color-base-background);
+}
+
+.form-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.form-title {
+  margin: 0 0 4px;
+}
+
+.form-subtitle {
+  margin-bottom: 24px;
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 800px) {
+  .editor-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 6px;
+}
+
+.preview-pane {
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 8px;
+  padding: 16px 20px;
+  background: var(--g-color-base-generic-ultralight);
+  min-height: 240px;
+  overflow-wrap: break-word;
+}
+
+.preview-empty {
+  color: var(--g-color-text-secondary);
+}
+
+/* Rendered markdown */
+.md-heading {
+  margin: 16px 0 8px;
+  line-height: 1.25;
+}
+.md-heading:first-child {
+  margin-top: 0;
+}
+.md-p {
+  margin: 8px 0;
+  line-height: 1.55;
+}
+.md-inline-code {
+  background: var(--g-color-base-misc-light);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+.md-code-block {
+  background: var(--g-color-base-misc-light);
+  border-radius: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+.md-quote {
+  margin: 8px 0;
+  padding: 4px 16px;
+  border-left: 4px solid var(--g-color-line-brand);
+  color: var(--g-color-text-secondary);
+  background: var(--g-color-base-generic-ultralight);
+  border-radius: 0 8px 8px 0;
+}
+.md-list {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+.md-hr {
+  border: none;
+  border-top: 1px solid var(--g-color-line-generic);
+  margin: 16px 0;
+}
+.preview-pane a {
+  color: var(--g-color-text-link);
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+import { describe, expect, it } from 'vitest';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+import { renderMarkdown } from './markdown';
+
+function html(source: string): string {
+  return renderToStaticMarkup(<>{renderMarkdown(source)}</>);
+}
+
+describe('renderMarkdown', () => {
+  it('renders headings and inline formatting', () => {
+    const out = html('# Title\\n\\n**bold** *em* ~~strike~~ `code`');
+    expect(out).toContain('<h1');
+    expect(out).toContain('Title');
+    expect(out).toContain('<strong>bold</strong>');
+    expect(out).toContain('<em>em</em>');
+    expect(out).toContain('<s>strike</s>');
+    expect(out).toContain('<code');
+  });
+
+  it('renders lists, quote and fenced code', () => {
+    const out = html('- a\\n- b\\n\\n1. one\\n\\n> quote\\n\\n```\\nx = 1\\n```');
+    expect(out).toContain('<ul');
+    expect(out).toContain('<li>a</li>');
+    expect(out).toContain('<ol');
+    expect(out).toContain('<blockquote');
+    expect(out).toContain('<pre');
+    expect(out).toContain('x = 1');
+  });
+
+  it('renders safe links and escapes raw HTML', () => {
+    const out = html('[ok](https://example.com) <script>alert(1)</script>');
+    expect(out).toContain('href=\"https://example.com\"');
+    expect(out).not.toContain('<script>');
+    expect(out).toContain('&lt;script&gt;');
+  });
+
+  it('renders horizontal rule and soft line breaks', () => {
+    const out = html('line1\\nline2\\n\\n---');
+    expect(out).toContain('<br/>');
+    expect(out).toContain('<hr');
+  });
+});
+
+
+import React from 'react';
+
+/**
+ * Minimal, dependency-free Markdown renderer.
+ * Produces React elements directly (no dangerouslySetInnerHTML), so user input
+ * can never inject markup. Supports: headings, bold/italic/strikethrough,
+ * inline code, fenced code blocks, links, lists, blockquotes, hr, paragraphs.
+ */
+
+function isSafeUrl(url: string): boolean {
+  return /^(https?:\\/\\/|mailto:|#|\\/)/i.test(url.trim());
+}
+
+const INLINE_SOURCE =
+  '(`[^`]+`)|(\\\\*\\\\*[^*]+\\\\*\\\\*)|(__[^_]+__)|(\\\\*[^*]+\\\\*)|(_[^_]+_)|(~~[^~]+~~)|(\\\\[[^\\\\]]+\\\\]\\\\([^)\\\\s]+\\\\))';
+
+export function renderInline(text: string): React.ReactNode[] {
+  // Fresh regex per call: renderInline recurses (bold/italic contents), and a
+  // shared global regex's lastIndex would be clobbered by the inner scan.
+  const re = new RegExp(INLINE_SOURCE, 'g');
+  const nodes: React.ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    const tok = m[0];
+    if (tok.startsWith('`')) {
+      nodes.push(
+        <code key={key++} className=\"md-inline-code\">
+          {tok.slice(1, -1)}
+        </code>,
+      );
+    } else if (tok.startsWith('**') || tok.startsWith('__')) {
+      nodes.push(<strong key={key++}>{renderInline(tok.slice(2, -2))}</strong>);
+    } else if (tok.startsWith('~~')) {
+      nodes.push(<s key={key++}>{renderInline(tok.slice(2, -2))}</s>);
+    } else if (tok.startsWith('*') || tok.startsWith('_')) {
+      nodes.push(<em key={key++}>{renderInline(tok.slice(1, -1))}</em>);
+    } else {
+      const lm = /^\\[([^\\]]+)\\]\\(([^)\\s]+)\\)$/.exec(tok);
+      if (lm && isSafeUrl(lm[2])) {
+        nodes.push(
+          <a key={key++} href={lm[2]} target=\"_blank\" rel=\"noreferrer noopener\">
+            {renderInline(lm[1])}
+          </a>,
+        );
+      } else {
+        nodes.push(tok);
+      }
+    }
+    last = m.index + tok.length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
+const BLOCK_START_RE =
+  /^(#{1,6}\\s|```|>\\s?|\\s*[-*+]\\s|\\s*\\d+[.)]\\s|\\s*(?:-{3,}|\\*{3,}|_{3,})\\s*$)/;
+
+export function renderMarkdown(source: string): React.ReactNode[] {
+  const lines = source.replace(/\\r\\n?/g, '\\n').split('\\n');
+  const blocks: React.ReactNode[] = [];
+  let i = 0;
+  let key = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (/^\\s*$/.test(line)) {
+      i++;
+      continue;
+    }
+
+    // Fenced code block
+    if (/^```\\w*\\s*$/.test(line)) {
+      const buf: string[] = [];
+      i++;
+      while (i < lines.length && !/^```\\s*$/.test(lines[i])) {
+        buf.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing fence (or run off EOF)
+      blocks.push(
+        <pre key={key++} className=\"md-code-block\">
+          <code>{buf.join('\\n')}</code>
+        </pre>,
+      );
+      continue;
+    }
+
+    // Heading
+    const h = /^(#{1,6})\\s+(.*)$/.exec(line);
+    if (h) {
+      const level = h[1].length;
+      blocks.push(
+        React.createElement(
+          `h${level}`,
+          { key: key++, className: 'md-heading' },
+          renderInline(h[2].trim()),
+        ),
+      );
+      i++;
+      continue;
+    }
+
+    // Horizontal rule
+    if (/^\\s*(?:-{3,}|\\*{3,}|_{3,})\\s*$/.test(line)) {
+      blocks.push(<hr key={key++} className=\"md-hr\" />);
+      i++;
+      continue;
+    }
+
+    // Blockquote (consecutive '>' lines, rendered recursively)
+    if (/^>\\s?/.test(line)) {
+      const buf: string[] = [];
+      while (i < lines.length && /^>\\s?/.test(lines[i])) {
+        buf.push(lines[i].replace(/^>\\s?/, ''));
+        i++;
+      }
+      blocks.push(
+        <blockquote key={key++} className=\"md-quote\">
+          {renderMarkdown(buf.join('\\n'))}
+        </blockquote>,
+      );
+      continue;
+    }
+
+    // Unordered list
+    if (/^\\s*[-*+]\\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\\s*[-*+]\\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\\s*[-*+]\\s+/, ''));
+        i++;
+      }
+      blocks.push(
+        <ul key={key++} className=\"md-list\">
+          {items.map((it, idx) => (
+            <li key={idx}>{renderInline(it)}</li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+
+    // Ordered list
+    if (/^\\s*\\d+[.)]\\s+/.test(line)) {
+      const items: string[] = [];
+      while (i < lines.length && /^\\s*\\d+[.)]\\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\\s*\\d+[.)]\\s+/, ''));
+        i++;
+      }
+      blocks.push(
+        <ol key={key++} className=\"md-list\">
+          {items.map((it, idx) => (
+            <li key={idx}>{renderInline(it)}</li>
+          ))}
+        </ol>,
+      );
+      continue;
+    }
+
+    // Paragraph (until blank line or next block construct)
+    const buf: string[] = [];
+    while (i < lines.length && !/^\\s*$/.test(lines[i]) && !BLOCK_START_RE.test(lines[i])) {
+      buf.push(lines[i]);
+      i++;
+    }
+    const para: React.ReactNode[] = [];
+    buf.forEach((l, idx) => {
+      if (idx > 0) para.push(<br key={`br-${idx}`} />);
+      para.push(...renderInline(l));
+    });
+    blocks.push(
+      <p key={key++} className=\"md-p\">
+        {para}
+      </p>,
+    );
+  }
+
+  return blocks;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:82:19
+     80| // Injecting a self-parsed markdown string via dangerouslySetInnerHTML…
+     81| test("no dangerouslySetInnerHTML preview", () => {
+     82|   expect(src).not.toMatch(new RegExp("dangerouslySetInnerHTML"));
+       |                   ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The markdown field is @gravity-ui/markdown-editor: an editor created with the useMarkdownEditor hook and rendered with MarkdownEditorView, giving live formatting as the user types. A raw textarea with a custom preview or a foreign markdown editor fails.
+  reason: The markdown field is a plain @gravity-ui/uikit TextArea (src/App.tsx:48) with a hand-rolled custom markdown parser (src/markdown.tsx) rendered into a separate preview pane; @gravity-ui/markdown-editor is absent from package.json and never imported, so useMarkdownEditor/MarkdownEditorView are unused. This is exactly the forbidden raw textarea + custom preview approach.
+ ❯ EVAL.ts:99:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

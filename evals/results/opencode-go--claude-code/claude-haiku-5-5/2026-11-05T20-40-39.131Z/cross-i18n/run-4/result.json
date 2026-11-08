@@ -1,0 +1,168 @@
+{
+  "status": "passed",
+  "duration": 769.886,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 64,
+    "outputTokens": 25870,
+    "cacheReadTokens": 1308966,
+    "cacheWriteTokens": 48203,
+    "totalTokens": 1383103
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 23,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 4,
+      "file_edit": 0,
+      "shell": 27,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 31,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/i18n/translations.ts",
+      "/home/sandbox/workspace/src/i18n/LanguageProvider.tsx",
+      "/home/sandbox/workspace/src/i18n/LanguageSwitcher.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html tsconfig.json vite.config.ts .gitignore src/main.tsx src/App.tsx src/vite-env.d.ts && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "(npm ci 2>&1 | tail -15) && ls node_modules/@gravity-ui/uikit/build/esm/components | head -80",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head -60; cat node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head -30; grep -n \"ThemeProvider\" -A3 node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/build/esm/components/theme/; (npx tsc --noEmit && echo TSC_OK) 2>&1 | tail -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat components/theme/types.d.ts | head -40; grep -rn \"LangOptions\" -A6 components/theme/types.d.ts | head -20; ls i18n 2>/dev/null | head; grep -rln \"ru\" i18n 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cat i18n/i18n.d.ts | head -30; cat i18n/addComponentKeysets.js | head -30; cat components/theme/ThemeProvider.d.ts | head -6; grep -rn \"LangOptions\" --include=*.d.ts . | head -3",
+        "success": true
+      },
+      {
+        "command": "cat components/theme/useLang.d.ts; cat components/theme/useLang.js | head -20; grep -rn \"keyset\\|lang\" components/Select/Select.js | head -5; grep -rln \"addComponentKeysets\" components | head -20",
+        "success": true
+      },
+      {
+        "command": "cat utils/configure.d.ts; grep -n \"configure\" index.d.ts; grep -n \"lang\" utils/configure.js | head; ls components/Dialog/i18n/; cat components/Dialog/i18n/index.js | head -5; cat components/Dialog/i18n/ru.json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat components/Text/Text.d.ts | head -30; grep -n \"view\\|size\" components/Button/Button.d.ts | head -10; cat components/controls/types.d.ts 2>/dev/null | head -30; grep -n \"ControlGroupOption\" -A8 components/types.d.ts | head -30; cat components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"display-1\\|header-2\" components/Text/text/*.d.ts | head -5; grep -n \"onUpdate\" components/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/i18n-check && cat > src/i18n/translations.check.test.ts <<'EOF'\nimport { describe, expect, it } from 'vitest';\nimport { translate, translations, type Language, type MessageKey } from './translations';\n\ndescribe('translate', () => {\n  it('plain strings and fallbacks', () => {\n    expect(translate('en', 'counter.reset')).toBe('Reset');\n    expect(translate('ru', 'counter.reset')).toBe('Сбросить');\n  });\n  it('russian plurals', () => {\n    const ru = (n: number) => translate('ru', 'counter.clicks', { count: n });\n    expect([0, 1, 2, 4, 5, 11, 21, 22, 25, 101, 111].map(ru)).toEqual([\n      '0 кликов', '1 клик', '2 клика', '4 клика', '5 кликов', '11 кликов',\n      '21 клик', '22 клика', '25 кликов', '101 клик', '111 кликов',\n    ]);\n  });\n  it('english plurals', () => {\n    expect(translate('en', 'counter.clicks', { count: 0 })).toBe('0 clicks');\n    expect(translate('en', 'counter.clicks', { count: 1 })).toBe('1 click');\n  });\n  it('every key exists in both languages', () => {\n    const keys = Object.keys(translations.en) as MessageKey[];\n    for (const lang of ['en', 'ru'] as Language[]) {\n      for (const k of keys) expect(translations[lang][k], `${lang}:${k}`).toBeTruthy();\n    }\n  });\n});\nEOF\nnpx vitest run src/i18n 2>&1 | tail -25; rm -f src/i18n/translations.check.test.ts; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls playwright puppeteer 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/i18n-check && (npm init -y >/dev/null && npm i playwright@1 --silent 2>&1 | tail -3 && timeout 240 npx playwright install chromium 2>&1 | tail -3) ; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5179 --strictPort > /tmp/i18n-check/vite.log 2>&1 &) && sleep 4 && cat > /tmp/i18n-check/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 900, height: 700 } });\nconst errors = [];\npage.on('pageerror', (e) => errors.push(String(e)));\npage.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });\nawait page.goto('http://localhost:5179/', { waitUntil: 'networkidle' });\nconst snap = async (label) => {\n  const data = await page.evaluate(() => ({\n    lang: document.documentElement.lang,\n    title: document.title,\n    body: document.body.innerText,\n    stored: localStorage.getItem('app-language'),\n  }));\n  console.log(`--- ${label}`, JSON.stringify({ lang: data.lang, title: data.title, stored: data.stored }));\n  console.log(data.body.split('\\n').filter(Boolean).join(' | '));\n};\nawait snap('initial');\nawait page.getByRole('radio', { name: 'Русский' }).click({ force: true }).catch(async () => page.getByText('Русский').click());\nawait page.getByRole('button', { name: 'Увеличить' }).click();\nawait page.getByRole('button', { name: 'Увеличить' }).click();\nawait page.getByRole('button', { name: 'Увеличить' }).click();\nawait page.getByRole('button', { name: 'Увеличить' }).click();\nawait page.getByRole('button', { name: 'Увеличить' }).click();\nawait snap('ru after 5 clicks');\nawait page.reload({ waitUntil: 'networkidle' });\nawait snap('ru after reload (persisted, count reset)');\nawait page.getByText('English').click();\nawait snap('en after switching back');\nawait page.screenshot({ path: '/tmp/i18n-check/en.png' });\nawait page.getByText('Русский').click();\nawait page.screenshot({ path: '/tmp/i18n-check/ru.png' });\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\ncd /tmp/i18n-check && node check.mjs; tail -3 /tmp/i18n-check/vite.log",
+        "success": true
+      },
+      {
+        "command": "(sudo -n apt-get install -y -q libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 >/tmp/i18n-check/apt.log 2>&1 || (apt-get update -q >/dev/null 2>&1 && sudo -n apt-get install -y -q libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libdbus-1-3 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 >>/tmp/i18n-check/apt.log 2>&1)); echo exit=$?; tail -3 /tmp/i18n-check/apt.log",
+        "success": true
+      },
+      {
+        "command": "whoami; (apt-get install -y -q libglib2.0-0 >/tmp/i18n-check/apt2.log 2>&1; echo exit=$?; tail -2 /tmp/i18n-check/apt2.log); ls /usr/lib/aarch64-linux-gnu/libglib-2.0.so.0 2>/dev/null; find / -name \"libglib-2.0.so.0*\" 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite --port 5179\" ; cp package.json /tmp/i18n-check/package.json.bak && cp package-lock.json /tmp/i18n-check/package-lock.json.bak && npm i --no-save jsdom@25 @testing-library/react@16 @testing-library/dom@10 --silent 2>&1 | tail -3; git status --short; cat > src/App.check.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { act, fireEvent, render, screen, cleanup } from '@testing-library/react';\nimport { afterEach, describe, expect, it } from 'vitest';\nimport { App } from './App';\n\nafterEach(() => { cleanup(); localStorage.clear(); });\n\ndescribe('language switch', () => {\n  it('switches UI, plurals, html lang, title and gravity strings; persists across mounts', async () => {\n    const { unmount } = render(<App />);\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('en');\n\n    await act(async () => { fireEvent.click(screen.getByText('Русский')); });\n    expect(screen.getByText('Привет, мир!')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('ru');\n    expect(document.title).toBe('Gravity UI eval');\n    expect(localStorage.getItem('app-language')).toBe('ru');\n    expect(screen.getByText('0 кликов')).toBeTruthy();\n    expect(screen.getByRole('radiogroup', { name: 'Язык интерфейса' })).toBeTruthy();\n\n    for (let i = 0; i < 2; i++) await act(async () => { fireEvent.click(screen.getByText('Увеличить')); });\n    expect(screen.getByText('2 клика')).toBeTruthy();\n\n    await act(async () => { fireEvent.click(screen.getByText('English')); });\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n    expect(screen.getByText('2 clicks')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('en');\n    expect(localStorage.getItem('app-language')).toBe('en');\n\n    unmount();\n    await act(async () => { fireEvent.click(screen.getByText('English')) }).catch(() => {});\n  });\n\n  it('restores stored language on mount and ignores invalid stored values', async () => {\n    localStorage.setItem('app-language', 'ru');\n    const first = render(<App />);\n    expect(screen.getByText('Привет, мир!')).toBeTruthy();\n    first.unmount();\n    localStorage.setItem('app-language', 'de');\n    render(<App />);\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n  });\n});\nEOF\nnpx vitest run src/App.check.test.tsx 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.check.config.mts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { css: true, server: { deps: { inline: [/@gravity-ui/] } } },\n});\nEOF\nnpx vitest run --config vitest.check.config.mts src/App.check.test.tsx 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "sed -i '/unmount();/{n;d}' src/App.check.test.tsx && sed -i 's/^    unmount();$/    unmount();/' src/App.check.test.tsx && npx vitest run --config vitest.check.config.mts src/App.check.test.tsx 2>&1 | grep -v \"^\\s*$\" | head -60",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.debug.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { cleanup, render, screen } from '@testing-library/react';\nimport { it } from 'vitest';\nimport { App } from './App';\nit('debug', () => {\n  localStorage.setItem('app-language', 'ru');\n  const first = render(<App />);\n  console.log('after first render stored =', localStorage.getItem('app-language'));\n  first.unmount();\n  console.log('after unmount stored =', localStorage.getItem('app-language'));\n  localStorage.setItem('app-language', 'de');\n  console.log('after set de stored =', localStorage.getItem('app-language'));\n  render(<App />);\n  console.log('after second render stored =', localStorage.getItem('app-language'), 'hasEN', !!screen.queryByText('Hello, world!'));\n  cleanup();\n});\nEOF\nnpx vitest run --config vitest.check.config.mts src/App.debug.test.tsx 2>&1 | grep -E \"stored|passed|failed\" ; rm src/App.debug.test.tsx",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,40p src/App.check.test.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.check.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { act, fireEvent, render, screen, cleanup } from '@testing-library/react';\nimport { afterEach, describe, expect, it } from 'vitest';\nimport { App } from './App';\n\nafterEach(() => { cleanup(); localStorage.clear(); });\n\ndescribe('language switch', () => {\n  it('switches UI, plurals, html lang, title and gravity strings; persists', async () => {\n    render(<App />);\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('en');\n\n    await act(async () => { fireEvent.click(screen.getByText('Русский')); });\n    expect(screen.getByText('Привет, мир!')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('ru');\n    expect(document.title).toBe('Gravity UI eval');\n    expect(localStorage.getItem('app-language')).toBe('ru');\n    expect(screen.getByText('0 кликов')).toBeTruthy();\n    expect(screen.getByRole('radiogroup', { name: 'Язык интерфейса' })).toBeTruthy();\n\n    for (let i = 0; i < 2; i++) await act(async () => { fireEvent.click(screen.getByText('Увеличить')); });\n    expect(screen.getByText('2 клика')).toBeTruthy();\n\n    await act(async () => { fireEvent.click(screen.getByText('English')); });\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n    expect(screen.getByText('2 clicks')).toBeTruthy();\n    expect(document.documentElement.lang).toBe('en');\n    expect(localStorage.getItem('app-language')).toBe('en');\n  });\n\n  it('restores stored language on mount and ignores invalid stored values', () => {\n    localStorage.setItem('app-language', 'ru');\n    const first = render(<App />);\n    expect(screen.getByText('Привет, мир!')).toBeTruthy();\n    first.unmount();\n\n    localStorage.setItem('app-language', 'de');\n    render(<App />);\n    expect(screen.getByText('Hello, world!')).toBeTruthy();\n  });\n});\nEOF\nnpx vitest run --config vitest.check.config.mts src/App.check.test.tsx 2>&1 | grep -E \"✓|×|→|Tests|Test Files|Error\" | head -20",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s#import { App } from './App';#import { getConfig } from '@gravity-ui/uikit';\\nimport { App } from './App';#\" src/App.check.test.tsx && sed -i \"s#    expect(localStorage.getItem('app-language')).toBe('ru');#    expect(localStorage.getItem('app-language')).toBe('ru');\\n    expect(getConfig().lang).toBe('ru');#\" src/App.check.test.tsx && sed -i \"s#    expect(localStorage.getItem('app-language')).toBe('en');#    expect(localStorage.getItem('app-language')).toBe('en');\\n    expect(getConfig().lang).toBe('en');#\" src/App.check.test.tsx && npx vitest run --config vitest.check.config.mts src/App.check.test.tsx 2>&1 | grep -E \"✓|×|→|Tests |Error\" | head",
+        "success": true
+      },
+      {
+        "command": "rm -f src/App.check.test.tsx vitest.check.config.mts && rm -rf dist && for p in /proc/[0-9]*; do if grep -q \"vite\" $p/cmdline 2>/dev/null && grep -q \"5179\" $p/cmdline 2>/dev/null; then kill ${p#/proc/} && echo killed ${p#/proc/}; fi; done; npm ci >/tmp/i18n-check/ci.log 2>&1; echo ci_exit=$?; cmp package-lock.json /tmp/i18n-check/package-lock.json.bak && echo lock_unchanged; cmp package.json /tmp/i18n-check/package.json.bak && echo pkg_unchanged; npm run build 2>&1 | tail -4; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "(curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:5179/ || echo \"port 5179 closed\"); ls src/i18n; git diff --stat; wc -l src/i18n/*",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *vite*) echo \"${p#/proc/}: $c\";; esac; done; echo done",
+        "success": true
+      },
+      {
+        "command": "kill 4363 4376 4377 2>/dev/null; sleep 1; for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < $p/cmdline 2>/dev/null); case \"$c\" in *\"bin/vite\"*) echo \"still: ${p#/proc/}\";; esac; done; echo checked",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 64,
+      "outputTokens": 25870,
+      "cacheReadTokens": 1308966,
+      "cacheWriteTokens": 48203,
+      "totalTokens": 1383103
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

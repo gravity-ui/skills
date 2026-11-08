@@ -1,0 +1,92 @@
+{
+  "status": "failed",
+  "duration": 204.941,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 17279,
+    "outputTokens": 2304,
+    "cacheReadTokens": 81325,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 563,
+    "totalTokens": 100908
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc 'find /home/sandbox/workspace -type f | head -80'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat /home/sandbox/workspace/package.json'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npm install marked'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /home/sandbox/workspace/src/App.tsx <<'EOF'\nimport { useState, useMemo } from 'react';\nimport { Card, TextArea } from '@gravity-ui/uikit';\nimport { marked } from 'marked';\n\nconst mdStyle: React.CSSProperties = {\n  display: 'grid',\n  gridTemplateColumns: '1fr 1fr',\n  gap: 16,\n  height: '100vh',\n  padding: 16,\n  boxSizing: 'border-box',\n};\n\nconst paneStyle: React.CSSProperties = {\n  display: 'flex',\n  flexDirection: 'column',\n  overflow: 'hidden',\n};\n\nconst previewStyle: React.CSSProperties = {\n  flex: 1,\n  overflow: 'auto',\n  padding: 16,\n  lineHeight: 1.6,\n};\n\nconst placeholder = \"'`# Привет!'\"\\\\n\\\\nПиши **Markdown** и сразу смотри результат.\\\\n\\\\n- списки\\\\n- *курсив*\\\\n- ~~зачёркнутый~~\\\\n\\\\n\\\\\"'`'\"\\\\\"'`'\"\\\\\"'`js'\"\\\\nconsole.log('code block');\\\\n\\\\\"'`'\"\\\\\"'`'\"\\\\\"'``;\n\nexport function App() {\n  const [text, setText] = useState(placeholder);\n\n  const html = useMemo(() => {\n    return marked.parse(text) as string;\n  }, [text]);\n\n  return (\n    <div style={mdStyle}>\n      <div style={paneStyle}>\n        <TextArea\n          value={text}\n          onUpdate={setText}\n          minRows={10}\n          controlProps={{ style: { flex: 1, resize: '\"'none', fontFamily: 'monospace' } }}\n        />\n      </div>\n      <div style={paneStyle}>\n        <Card style={previewStyle}>\n          <div dangerouslySetInnerHTML={{ __html: html }} />\n        </Card>\n      </div>\n    </div>\n  );\n}\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cd /home/sandbox/workspace && npx tsc --noEmit 2>&1'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 17279,
+      "outputTokens": 2304,
+      "cacheReadTokens": 81325,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 563,
+      "totalTokens": 100908
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

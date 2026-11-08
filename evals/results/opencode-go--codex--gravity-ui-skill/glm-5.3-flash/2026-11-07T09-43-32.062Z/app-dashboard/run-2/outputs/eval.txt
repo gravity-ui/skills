@@ -1,0 +1,384 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 2 failed) 8097ms
+   ✓ imports @gravity-ui/navigation 1ms
+   ✓ imports @gravity-ui/table 0ms
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 5ms
+     → expected '.dashboard {\n  display: flex;\n  min…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 8090ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The table uses @gravity-ui/table's useTable, Checkbox row selection, ColumnReorderingProvider, and grouping, but the left navigation in src/App.tsx is a hand-rolled <aside> containing uikit Buttons; @gravity-ui/navigation's AsideHeader is not used.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 6 passed (8)
+   Start at  09:48:04
+   Duration  8.30s (transform 39ms, setup 20ms, collect 19ms, tests 8.10s, environment 0ms, prepare 60ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected '.dashboard {\n  display: flex;\n  min…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+".dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: var(--g-color-base-simple);
+  color: var(--g-color-text-primary);
+}
+
+.dashboard__aside {
+  flex: 0 0 240px;
+  width: 240px;
+  border-right: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-background);
+  transition: flex-basis 0.2s ease, width 0.2s ease;
+}
+
+.dashboard__aside_collapsed {
+  flex-basis: 64px;
+  width: 64px;
+}
+
+.dashboard__aside-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  padding: 16px 12px;
+}
+
+.dashboard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dashboard__title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--g-color-text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dashboard__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard__nav-item {
+  width: 100%;
+}
+
+.dashboard__nav-item .dashboard__nav-label {
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+.dashboard__main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 32px;
+}
+
+.dashboard__heading {
+  margin: 0 0 20px;
+  color: var(--g-color-text-primary);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.dashboard__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dashboard__table-card {
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  background: var(--g-color-base-background);
+}
+
+.dashboard__status {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+
+import React from 'react';
+
+import {Button, Checkbox, Flex, Label, Select, Text} from '@gravity-ui/uikit';
+import {ColumnReorderingProvider, Table, useRowSelectionFixedHandler, useTable} from '@gravity-ui/table';
+import type {ColumnDef, ExpandedState, GroupingState, RowSelectionState} from '@gravity-ui/table/tanstack';
+import {Gear, House, ListCheck, Person, ShoppingCart} from '@gravity-ui/icons';
+
+import './App.css';
+import {orderStatusLabels, orders, type Order, type OrderStatus} from './ordersData';
+
+type SectionId = 'home' | 'users' | 'orders' | 'settings';
+
+const sections: Array<{id: SectionId; title: string; icon: (props: React.SVGProps<SVGSVGElement>) => React.JSX.Element;}> = [
+  {id: 'home', title: 'Главная', icon: House},
+  {id: 'users', title: 'Пользователи', icon: Person},
+  {id: 'orders', title: 'Заказы', icon: ShoppingCart},
+  {id: 'settings', title: 'Настройки', icon: Gear},
+];
+
+const statusLenses: Record<OrderStatus, 'info' | 'warning' | 'success' | 'danger' | 'normal'> = {
+  new: 'info',
+  processing: 'warning',
+  shipped: 'normal',
+  completed: 'success',
+  cancelled: 'danger',
+};
+
+const statusOptions = Object.entries(orderStatusLabels).map(([value, content]) => ({value, content}));
+
+const selectionColumn: ColumnDef<Order, unknown> = {
+  id: '_select',
+  header: ({table}) => (
+    <Checkbox
+      checked={table.getIsAllRowsSelected()}
+      indeterminate={table.getIsSomeRowsSelected()}
+      onChange={table.getToggleAllRowsSelectedHandler()}
+    />
+  ),
+  cell: ({row}) => (
+    <Checkbox
+      checked={row.getIsSelected()}
+      indeterminate={row.getIsSomeSelected()}
+      disabled={!row.getCanSelect()}
+      onChange={row.getToggleSelectedHandler()}
+    />
+  ),
+  size: 40,
+  minSize: 40,
+  enableResizing: false,
+  enableSorting: false,
+};
+
+export function App() {
+  const [activeSection, setActiveSection] = React.useState<SectionId>('orders');
+  const [collapsed, setCollapsed] = React.useState(false);
+  const [grouping, setGrouping] = React.useState<GroupingState>([]);
+  const [expanded, setExpanded] = React.useState<ExpandedState>({});
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [columnOrder, setColumnOrder] = React.useState<string[]>([]);
+
+  const columns = React.useMemo<ColumnDef<Order>[]>(
+    () => [
+      selectionColumn,
+      {
+        id: 'status',
+        accessorKey: 'status',
+        header: 'Статус',
+        cell: ({getValue, row}) =>
+          row.getIsGrouped() ? (
+            `${orderStatusLabels[getValue<OrderStatus>()]} · ${row.subRows.length}`
+          ) : (
+            <Label theme={statusLenses[getValue<OrderStatus>()]} className=\"dashboard__status\">
+              {orderStatusLabels[getValue<OrderStatus>()]}
+            </Label>
+          ),
+        enableGrouping: true,
+      },
+      {id: 'id', accessorKey: 'id', header: 'Заказ', size: 120},
+      {id: 'customer', accessorKey: 'customer', header: 'Клиент'},
+      {
+        id: 'amount',
+        accessorKey: 'amount',
+        header: 'Сумма',
+        cell: ({getValue, row}) =>
+          row.getIsGrouped() ? null : `${getValue<number>().toLocaleString('ru-RU')} ₽`,
+      },
+      {id: 'createdAt', accessorKey: 'createdAt', header: 'Создан'},
+    ],
+    [],
+  );
+
+  const fixedRowSelectionHandler = useRowSelectionFixedHandler({
+    rowSelection,
+    setRowSelection,
+    tableData: orders,
+    getSubRows: () => undefined,
+    getRowId: (order) => order.id,
+  });
+
+  const table = useTable({
+    columns,
+    data: orders,
+    getRowId: (order) => order.id,
+    enableGrouping: true,
+    enableExpanding: grouping.length > 0,
+    enableRowSelection: true,
+    enableMultiRowSelection: true,
+    enableSubRowSelection: true,
+    enableSorting: true,
+    onRowSelectionChange: fixedRowSelectionHandler,
+    onGroupingChange: setGrouping,
+    onExpandedChange: setExpanded,
+    state: {grouping, expanded, rowSelection, columnOrder},
+    onColumnOrderChange: setColumnOrder,
+    getRowCanExpand: grouping.length > 0 ? () => true : undefined,
+  });
+
+  const selectedCount = Object.values(rowSelection).filter(Boolean).length;
+
+  return (
+    <div className=\"dashboard\">
+      <aside className={collapsed ? 'dashboard__aside dashboard__aside_collapsed' : 'dashboard__aside'}>
+        <div className=\"dashboard__aside-inner\">
+          <div className=\"dashboard__top\">
+            {!collapsed && <div className=\"dashboard__title\">Админка</div>}
+            <Button view=\"flat-secondary\" size=\"s\" onClick={() => setCollapsed(!collapsed)}>
+              <ListCheck />
+            </Button>
+          </div>
+          <nav className=\"dashboard__nav\">
+            {sections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <Button
+                  key={section.id}
+                  size=\"m\"
+                  view={activeSection === section.id ? 'normal' : 'flat'}
+                  className=\"dashboard__nav-item\"
+                  onClick={() => setActiveSection(section.id)}
+                >
+                  <Icon />
+                  {!collapsed && <span className=\"dashboard__nav-label\">{section.title}</span>}
+                </Button>
+              );
+            })}
+          </nav>
+        </div>
+      </aside>
+      <main className=\"dashboard__main\">
+        <h1 className=\"dashboard__heading\">Заказы</h1>
+        <div className=\"dashboard__toolbar\">
+          <Flex gap=\"4\" alignItems=\"center\">
+            <Text variant=\"body-2\">Группировка по статусу</Text>
+            <Select
+              size=\"m\"
+              width={180}
+              value={grouping}
+              options={statusOptions}
+              onUpdate={(value) => {
+                setGrouping(value as GroupingState);
+                setExpanded({});
+              }}
+            />
+          </Flex>
+          <Button view=\"outlined\" size=\"m\" disabled={selectedCount === 0}>
+            Выбрано: {selectedCount}
+          </Button>
+        </div>
+        <div className=\"dashboard__table-card\">
+          <ColumnReorderingProvider
+            table={table}
+            onReorder={({columnOrder: nextColumnOrder}) => setColumnOrder(nextColumnOrder)}
+          >
+            <Table table={table} />
+          </ColumnReorderingProvider>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+export type OrderStatus = 'new' | 'processing' | 'shipped' | 'completed' | 'cancelled';
+
+export type Order = {
+  id: string;
+  customer: string;
+  status: OrderStatus;
+  amount: number;
+  createdAt: string;
+};
+
+export const orderStatusLabels: Record<OrderStatus, string> = {
+  new: 'Новый',
+  processing: 'В работе',
+  shipped: 'Отправлен',
+  completed: 'Завершён',
+  cancelled: 'Отменён',
+};
+
+export const orders: Order[] = [
+  {id: 'ORD-1042', customer: 'Анна Соколова', status: 'new', amount: 24900, createdAt: '2026-11-05'},
+  {id: 'ORD-1041', customer: 'Павел Ким', status: 'processing', amount: 82500, createdAt: '2026-11-04'},
+  {id: 'ORD-1040', customer: 'Мария Орлова', status: 'shipped', amount: 11300, createdAt: '2026-11-04'},
+  {id: 'ORD-1039', customer: 'Дмитрий Волков', status: 'completed', amount: 56700, createdAt: '2026-11-03'},
+  {id: 'ORD-1038', customer: 'Елена Морозова', status: 'new', amount: 43900, createdAt: '2026-11-02'},
+  {id: 'ORD-1037', customer: 'Сергей Белов', status: 'cancelled', amount: 19400, createdAt: '2026-11-02'},
+  {id: 'ORD-1036', customer: 'Ирина Лаврова', status: 'processing', amount: 78100, createdAt: '2026-11-01'},
+  {id: 'ORD-1035', customer: 'Никита Гринёв', status: 'completed', amount: 32800, createdAt: '2026-10-31'},
+  {id: 'ORD-1034', customer: 'Ольга Тарасова', status: 'shipped', amount: 65000, createdAt: '2026-10-30'},
+  {id: 'ORD-1033', customer: 'Артём Жуков', status: 'new', amount: 15600, createdAt: '2026-10-29'},
+];
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The table uses @gravity-ui/table's useTable, Checkbox row selection, ColumnReorderingProvider, and grouping, but the left navigation in src/App.tsx is a hand-rolled <aside> containing uikit Buttons; @gravity-ui/navigation's AsideHeader is not used.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

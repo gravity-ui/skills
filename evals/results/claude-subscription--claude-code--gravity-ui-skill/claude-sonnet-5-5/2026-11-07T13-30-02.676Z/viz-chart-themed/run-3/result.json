@@ -1,0 +1,112 @@
+{
+  "status": "passed",
+  "duration": 191.842,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 30,
+    "outputTokens": 5064,
+    "cacheReadTokens": 472538,
+    "cacheWriteTokens": 32632,
+    "totalTokens": 510264
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 2,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat package.json; ls; ls node_modules/@gravity-ui 2>/dev/null; ls .agents/skills/gravity-ui .agents/skills/gravity-ui/references; rg -n -C 4 -i \"chart\" .agents/skills/gravity-ui/references/package-routing.md | head -150",
+        "success": true
+      },
+      {
+        "command": "find src __agent_eval__ -type f | head -30; cat src/*.tsx | head -150; cat AGENTS.md | head -30; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/charts 2>&1 | tail -15; grep '\"version\"' node_modules/@gravity-ui/charts/package.json; ls node_modules/@gravity-ui/charts node_modules/@gravity-ui/charts/dist/docs 2>/dev/null | head -40; grep -n '\"peerDependencies\"' -A8 node_modules/@gravity-ui/charts/package.json",
+        "success": false
+      },
+      {
+        "command": "npm view @gravity-ui/charts versions --json | tr -d '\\n ' | head -c 1500; echo; for v in 1.30.0 1.20.0; do echo $v; npm view @gravity-ui/charts@$v peerDependencies --json; done",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/charts versions --json | tr -d '\\n ' | grep -o '\"1\\.[0-9]*\\.[0-9]*\"' | tail -3; for v in $(npm view @gravity-ui/charts versions --json | tr -d '\\n ' | grep -o '1\\.[0-9]*\\.[0-9]*' | tail -3); do echo $v; npm view @gravity-ui/charts@$v peerDependencies.@gravity-ui/uikit; done",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/charts@^1.73.0 2>&1 | tail -8; grep '\"version\"' node_modules/@gravity-ui/charts/package.json; ls node_modules/@gravity-ui/charts/dist/docs 2>/dev/null | head; ls node_modules/@gravity-ui/charts; grep -n \"Required setup\" -i -A15 node_modules/@gravity-ui/charts/README.md | head -50",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/docs && cat INDEX.md | head -60; cat get-started.md | head -80; ls guides; rg -n -i \"theme|dark\" --glob '*.md' . | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/.agents/skills/gravity-ui && rg -n -C 3 -i \"theme\" rules/hallucination-traps.md | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/charts/dist/docs && cat guides/theming.md | head -80; ls guides/series-types; sed -n 1,60p guides/series-types/line.md 2>/dev/null; cd /home/sandbox/workspace; rg -n \"useThemeValue|useTheme\\b\" node_modules/@gravity-ui/uikit/build/esm/components/theme/*.d.ts | head",
+        "success": true
+      },
+      {
+        "command": ".agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Card Text 2>&1 | head -30; sed -n 1,50p node_modules/@gravity-ui/uikit/build/docs/components/SegmentedRadioGroup.md 2>/dev/null | head -5; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Card Text 2>&1 | head -30; cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -30; cat node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -8",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 30,
+      "outputTokens": 5064,
+      "cacheReadTokens": 472538,
+      "cacheWriteTokens": 32632,
+      "totalTokens": 510264
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

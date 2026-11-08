@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 703.047,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 706,
+    "outputTokens": 25277,
+    "cacheReadTokens": 1015611,
+    "cacheWriteTokens": 47865,
+    "totalTokens": 1089459
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 5,
+      "file_edit": 3,
+      "shell": 14,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 22,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/data.ts",
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/DataTable.test.ts",
+      "/home/sandbox/workspace/src/sortData.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html vite.config.ts tsconfig.json .gitignore && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/uikit/build/esm/components/Table/ node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/ node_modules/@gravity-ui/uikit/build/esm/components/Pagination/ 2>&1; echo ----; cat node_modules/@gravity-ui/uikit/build/esm/components/Table/Table.d.ts",
+        "success": true
+      },
+      {
+        "command": "B=node_modules/@gravity-ui/uikit/build/esm/components; cat $B/Table/hoc/withTableSorting/withTableSorting.d.ts; echo ----; cat $B/Table/hoc/withTableSelection/withTableSelection.d.ts; echo ----; cat $B/Pagination/types.d.ts; echo ----; cat $B/Pagination/Pagination.d.ts; echo ----; cat $B/Table/hoc/withTableSorting/withTableSorting.js",
+        "success": true
+      },
+      {
+        "command": "B=node_modules/@gravity-ui/uikit/build/esm/components; cat $B/Table/hoc/withTableSelection/withTableSelection.js; echo ----; grep -n \"static getRowId\" -A 12 $B/Table/Table.js; echo ----; ls $B | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "B=node_modules/@gravity-ui/uikit/build/esm/components; grep -n \"Flex\" $B/layout/index.d.ts | head -3; grep -n \"theme?\" $B/Label/Label.d.ts; grep -n \"LabelTheme\\|export type\" $B/Label/Label.d.ts | head; grep -n \"variant\" $B/Text/Text.d.ts | head -3; grep -n \"TEXT_VARIANTS\\|'body-\\|'subheader-\\|'header-\" $B/Text/constants.d.ts | head -12",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome; ls ~/.cache/ms-playwright 2>/dev/null; npm ls playwright puppeteer 2>/dev/null | grep -E \"playwright|puppeteer\"; node -e \"require.resolve('playwright')\" 2>&1 | head -1; echo \"jsdom:\"; ls node_modules | grep -iE \"^(jsdom|happy-dom|@testing-library)$\") 2>&1",
+        "success": true
+      },
+      {
+        "command": "npx vitest run 2>&1 | tail -30 && npx tsc --noEmit && echo TSC_OK",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re\np='src/DataTable.tsx'\ns=open(p).read()\nstart=s.index('export type SortComparator<T>')\nend=s.index('function useControllableState')\ns=s[:start]+\"export type { DataTableColumn, SortComparator } from './sortData';\\n\\n\"+s[end:]\ns=s.replace(\"\"\"import type {\n  TableColumnConfig,\n  TableDataItem,\n  TableProps,\n  TableSortState,\n  WithTableSelectionProps,\n  WithTableSortingProps,\n} from '@gravity-ui/uikit';\n\"\"\",\"\"\"import type {\n  TableColumnConfig,\n  TableDataItem,\n  TableProps,\n  TableSortState,\n  WithTableSelectionProps,\n  WithTableSortingProps,\n} from '@gravity-ui/uikit';\n\nimport { sortData } from './sortData';\nimport type { DataTableColumn } from './sortData';\n\"\"\")\nopen(p,'w').write(s)\nEOF\nsed -i \"s#import { sortData } from './DataTable';\\nimport type { DataTableColumn } from './DataTable';##\" src/DataTable.test.ts\nsed -i \"s#from './DataTable';#from './sortData';#\" src/DataTable.test.ts\ngit mv -f src/DataTable.test.ts src/sortData.test.ts 2>/dev/null || mv src/DataTable.test.ts src/sortData.test.ts\nsed -n '1,30p' src/DataTable.tsx; echo ...; grep -n \"sortData\\|DataTableColumn\" src/DataTable.tsx src/sortData.test.ts",
+        "success": true
+      },
+      {
+        "command": "npx vitest run 2>&1 | tail -25 && npm run build 2>&1 | tail -8 && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cat > .ssr-check.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './src/App';\n\nconst html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\nconst count = (re: RegExp) => (html.match(re) || []).length;\nconsole.log('bytes', html.length);\nconsole.log('rows', count(/<tr[^>]*class=\"g-table__row/g));\nconsole.log('checkboxes', count(/g-table__selection-checkbox/g));\nconsole.log('sortable headers', count(/g-table__sort[ \"]/g));\nconsole.log('pagination', count(/g-pagination/g) > 0);\nconsole.log('has names', html.includes('Имя') && html.includes('Оклад'));\nconsole.log('range label', (html.match(/1–10 из 57/) || [])[0]);\nEOF\nnpx vite-node .ssr-check.tsx 2>&1 | tail -15; rm -f .ssr-check.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > .ssr-check.tsx <<'EOF'\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './src/App';\n\nconst html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\nconst count = (re: RegExp) => (html.match(re) || []).length;\nconsole.log('bytes', html.length);\nconsole.log('body rows', count(/<tr class=\"g-table__row/g));\nconsole.log('checkboxes', count(/g-table__selection-checkbox/g));\nconsole.log('sortable headers', count(/class=\"g-table__sort[ \"]/g));\nconsole.log('pagination', count(/class=\"g-pagination[ \"]/g) > 0);\nconsole.log('page buttons', count(/g-pagination__page/g));\nconsole.log('has headers', html.includes('Имя') && html.includes('Оклад') && html.includes('Дата найма'));\nconsole.log('range label', (html.match(/1–10 из 57/) || ['MISSING'])[0]);\nconsole.log('sort active (name asc)', count(/g-table__sort_active/g));\nEOF\nnpx vite-node --options.deps.inline '@gravity-ui/uikit' .ssr-check.tsx 2>&1 | tail -15; rm -f .ssr-check.tsx",
+        "success": true
+      },
+      {
+        "command": "cd /home/node/.claude/projects/-home-sandbox-workspace/memory && cat > user-language-russian.md <<'EOF'\n---\nname: user-language-russian\ndescription: User writes requests in Russian; reply and UI copy should be in Russian\nmetadata:\n  type: user\n---\n\nThe user writes in Russian (e.g. \"Сделай таблицу данных с сортировкой...\"). Replies, code comments for them, and UI text in demo components should be in Russian unless they switch languages.\nEOF\necho \"- [User writes in Russian](user-language-russian.md) — reply and UI copy in Russian\" >> MEMORY.md; cat MEMORY.md",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 706,
+      "outputTokens": 25277,
+      "cacheReadTokens": 1015611,
+      "cacheWriteTokens": 47865,
+      "totalTokens": 1089459
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

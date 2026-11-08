@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "duration": 1046.016,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 418,
+    "outputTokens": 11809,
+    "cacheReadTokens": 610828,
+    "cacheWriteTokens": 45806,
+    "totalTokens": 668861
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 2,
+      "shell": 11,
+      "web_fetch": 1,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 15,
+    "webFetches": [
+      {
+        "url": "https://gravity-ui.com/llms/uikit/7/llms.txt",
+        "success": true
+      }
+    ],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/ProfileSettingsPage.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo ---- && ls -R .agents/skills/gravity-ui | head -50 && echo ---- && cat package.json && echo ---- && ls -la && cat AGENTS.md",
+        "success": true
+      },
+      {
+        "command": "ls -R src index.html tsconfig.json vite.config.ts __agent_eval__ && echo ---- && cat src/* index.html tsconfig.json vite.config.ts 2>/dev/null; echo ----; head -80 .agents/skills/gravity-ui/references/package-routing.md; echo ----; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/dist/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/; echo ----; ls node_modules/@gravity-ui/uikit/; echo ----; bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit TextInput Select Switch Checkbox Button Avatar Text Flex Box Card Label 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build && B=esm/components; for f in TextInput/TextInput.d.ts controls/types.d.ts Select/types.d.ts Switch/Switch.d.ts Checkbox/Checkbox.d.ts Avatar/types/main.d.ts Button/Button.d.ts Text/Text.d.ts layout/Flex/Flex.d.ts layout/Box/Box.d.ts layout/types.d.ts Card/Card.d.ts Divider/Divider.d.ts; do echo \"=== $f\"; sed -n '1,200p' $B/$f 2>/dev/null | grep -vE '^\\s*(\\*|/\\*\\*|\\*/)' | head -120; done 2>&1 | head -500; ls $B/Avatar $B/Select | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat components/TextInput/TextInput.d.ts; echo \"=== types\"; grep -n -A12 'ControlProps\\b' components/types.d.ts | head -60; grep -n -B2 -A8 'ControlGroupOption' components/types.d.ts | head -30; echo \"=== avatar\"; cat components/Avatar/types/common.d.ts components/Avatar/AvatarImage/types.d.ts components/Avatar/AvatarText/types.d.ts 2>/dev/null || ls components/Avatar/AvatarImage components/Avatar/AvatarText components/Avatar/types; echo \"=== text\"; cat components/Text/text/text.d.ts components/Text/colorText/colorText.d.ts | grep -vE '^\\s*(\\*|/\\*\\*|\\*/)'; echo \"=== hooks\"; ls hooks | grep -i file; cat hooks/useFileInput/useFileInput.d.ts 2>/dev/null; echo \"=== index exports\"; grep -n -iE 'useFileInput|FormRow|Label|Avatar' index.d.ts components/index.d.ts hooks/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cat components/controls/TextInput/TextInput.d.ts | grep -vE '^\\s*(\\*|/\\*\\*|\\*/)'; grep -n 'useFileInput\\|export \\* from \"./hooks' index.d.ts; grep -n -A3 'spacing' ../../../../../.agents/skills/gravity-ui/references/layout.md | head -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && cat > src/ProfileSettingsPage.tsx <<'EOF'\nimport * as React from 'react';\nimport {\n  Avatar,\n  Box,\n  Button,\n  Card,\n  Checkbox,\n  Divider,\n  Flex,\n  Select,\n  Switch,\n  Text,\n  TextInput,\n  useFileInput,\n} from '@gravity-ui/uikit';\n\nexport interface ProfileSettings {\n  name: string;\n  email: string;\n  avatarFile: File | null;\n  language: string;\n  timezone: string;\n  twoFactorEnabled: boolean;\n  notifications: {\n    productNews: boolean;\n    systemAlerts: boolean;\n    weeklyDigest: boolean;\n  };\n}\n\nexport interface ProfileSettingsPageProps {\n  initialValues?: Partial<ProfileSettings>;\n  /** Текущий аватар пользователя (URL), пока не загружен новый. */\n  avatarUrl?: string;\n  onSave?: (values: ProfileSettings) => void;\n  onCancel?: () => void;\n}\n\nconst DEFAULT_VALUES: ProfileSettings = {\n  name: '',\n  email: '',\n  avatarFile: null,\n  language: 'ru',\n  timezone: 'Europe/Moscow',\n  twoFactorEnabled: false,\n  notifications: {\n    productNews: true,\n    systemAlerts: true,\n    weeklyDigest: false,\n  },\n};\n\nconst LANGUAGE_OPTIONS = [\n  {value: 'ru', content: 'Русский'},\n  {value: 'en', content: 'English'},\n  {value: 'de', content: 'Deutsch'},\n  {value: 'es', content: 'Español'},\n  {value: 'fr', content: 'Français'},\n  {value: 'tr', content: 'Türkçe'},\n  {value: 'zh', content: '中文'},\n];\n\nconst TIMEZONE_OPTIONS = [\n  {value: 'Pacific/Honolulu', content: '(UTC−10:00) Гонолулу'},\n  {value: 'America/Los_Angeles', content: '(UTC−08:00) Лос-Анджелес'},\n  {value: 'America/New_York', content: '(UTC−05:00) Нью-Йорк'},\n  {value: 'America/Sao_Paulo', content: '(UTC−03:00) Сан-Паулу'},\n  {value: 'UTC', content: '(UTC+00:00) UTC'},\n  {value: 'Europe/London', content: '(UTC+00:00) Лондон'},\n  {value: 'Europe/Berlin', content: '(UTC+01:00) Берлин'},\n  {value: 'Europe/Kaliningrad', content: '(UTC+02:00) Калининград'},\n  {value: 'Europe/Moscow', content: '(UTC+03:00) Москва'},\n  {value: 'Europe/Samara', content: '(UTC+04:00) Самара'},\n  {value: 'Asia/Yekaterinburg', content: '(UTC+05:00) Екатеринбург'},\n  {value: 'Asia/Almaty', content: '(UTC+06:00) Алматы'},\n  {value: 'Asia/Novosibirsk', content: '(UTC+07:00) Новосибирск'},\n  {value: 'Asia/Krasnoyarsk', content: '(UTC+07:00) Красноярск'},\n  {value: 'Asia/Irkutsk', content: '(UTC+08:00) Иркутск'},\n  {value: 'Asia/Shanghai', content: '(UTC+08:00) Шанхай'},\n  {value: 'Asia/Yakutsk', content: '(UTC+09:00) Якутск'},\n  {value: 'Asia/Tokyo', content: '(UTC+09:00) Токио'},\n  {value: 'Asia/Vladivostok', content: '(UTC+10:00) Владивосток'},\n  {value: 'Asia/Magadan', content: '(UTC+11:00) Магадан'},\n  {value: 'Asia/Kamchatka', content: '(UTC+12:00) Петропавловск-Камчатский'},\n];\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction getInitials(name: string): string {\n  const parts = name.trim().split(/\\s+/).filter(Boolean);\n  if (parts.length === 0) {\n    return '?';\n  }\n  return parts\n    .slice(0, 2)\n    .map((part) => part[0]!.toUpperCase())\n    .join('');\n}\n\ninterface FieldProps {\n  label: string;\n  htmlFor?: string;\n  hint?: React.ReactNode;\n  children: React.ReactNode;\n}\n\n/** Подпись + контрол. Подпись слева на широких экранах, сверху — на узких. */\nfunction Field({label, htmlFor, hint, children}: FieldProps) {\n  return (\n    <Flex direction={{xs: 'column', m: 'row'}} gap={{xs: 1, m: 4}} alignItems={{m: 'flex-start'}}>\n      <Box width={{xs: '100%', m: 200} as never} style={{flexShrink: 0}}>\n        <Text as=\"label\" variant=\"body-1\" {...(htmlFor ? {htmlFor} : {})}>\n          {label}\n        </Text>\n      </Box>\n      <Flex direction=\"column\" gap={1} style={{flex: 1, minWidth: 0}}>\n        {children}\n        {hint ? (\n          <Text variant=\"caption-2\" color=\"secondary\">\n            {hint}\n          </Text>\n        ) : null}\n      </Flex>\n    </Flex>\n  );\n}\n\nfunction SectionTitle({children}: {children: React.ReactNode}) {\n  return <Text variant=\"subheader-2\">{children}</Text>;\n}\n\nexport function ProfileSettingsPage({\n  initialValues,\n  avatarUrl,\n  onSave,\n  onCancel,\n}: ProfileSettingsPageProps) {\n  const initial = React.useMemo<ProfileSettings>(\n    () => ({\n      ...DEFAULT_VALUES,\n      ...initialValues,\n      notifications: {...DEFAULT_VALUES.notifications, ...initialValues?.notifications},\n    }),\n    [initialValues],\n  );\n\n  const [values, setValues] = React.useState<ProfileSettings>(initial);\n  const [errors, setErrors] = React.useState<{name?: string; email?: string}>({});\n  const [avatarPreview, setAvatarPreview] = React.useState<string | undefined>(undefined);\n\n  // Превью выбранного файла через object URL; освобождаем при замене/размонтировании.\n  React.useEffect(() => {\n    if (!values.avatarFile) {\n      setAvatarPreview(undefined);\n      return undefined;\n    }\n    const url = URL.createObjectURL(values.avatarFile);\n    setAvatarPreview(url);\n    return () => URL.revokeObjectURL(url);\n  }, [values.avatarFile]);\n\n  const handleFiles = React.useCallback((files: File[]) => {\n    const file = files[0];\n    if (file) {\n      setValues((prev) => ({...prev, avatarFile: file}));\n    }\n  }, []);\n\n  const {controlProps: fileControlProps, triggerProps: fileTriggerProps} = useFileInput({\n    onUpdate: handleFiles,\n  });\n\n  const update = <K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) => {\n    setValues((prev) => ({...prev, [key]: value}));\n  };\n\n  const updateNotification = (key: keyof ProfileSettings['notifications'], checked: boolean) => {\n    setValues((prev) => ({\n      ...prev,\n      notifications: {...prev.notifications, [key]: checked},\n    }));\n  };\n\n  const validate = (): boolean => {\n    const next: typeof errors = {};\n    if (!values.name.trim()) {\n      next.name = 'Укажите имя';\n    }\n    if (!values.email.trim()) {\n      next.email = 'Укажите email';\n    } else if (!EMAIL_RE.test(values.email.trim())) {\n      next.email = 'Некорректный email';\n    }\n    setErrors(next);\n    return Object.keys(next).length === 0;\n  };\n\n  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (!validate()) {\n      return;\n    }\n    onSave?.({...values, name: values.name.trim(), email: values.email.trim()});\n  };\n\n  const handleCancel = () => {\n    setValues(initial);\n    setErrors({});\n    onCancel?.();\n  };\n\n  const currentAvatarUrl = avatarPreview ?? avatarUrl;\n\n  return (\n    <Box as=\"main\" spacing={{p: 6}} maxWidth={760} style={{marginInline: 'auto'}}>\n      <form onSubmit={handleSubmit} noValidate>\n        <Flex direction=\"column\" gap={6}>\n          <Flex direction=\"column\" gap={1}>\n            <Text as=\"h1\" variant=\"header-1\" style={{margin: 0}}>\n              Настройки профиля\n            </Text>\n            <Text variant=\"body-1\" color=\"secondary\">\n              Личные данные, язык интерфейса, безопасность и уведомления.\n            </Text>\n          </Flex>\n\n          <Card type=\"container\" view=\"outlined\" size=\"l\">\n            <Flex direction=\"column\" gap={5}>\n              <SectionTitle>Основное</SectionTitle>\n\n              <Field label=\"Аватар\" hint=\"PNG, JPG или WebP\">\n                <Flex alignItems=\"center\" gap={3} wrap>\n                  {currentAvatarUrl ? (\n                    <Avatar\n                      size=\"xl\"\n                      imgUrl={currentAvatarUrl}\n                      alt={values.name || 'Аватар'}\n                      style={{flexShrink: 0}}\n                    />\n                  ) : (\n                    <Avatar\n                      size=\"xl\"\n                      text={getInitials(values.name)}\n                      theme=\"brand\"\n                      style={{flexShrink: 0}}\n                    />\n                  )}\n                  <input {...fileControlProps} accept=\"image/png,image/jpeg,image/webp\" />\n                  <Flex gap={2} wrap>\n                    <Button view=\"outlined\" size=\"m\" {...fileTriggerProps}>\n                      Загрузить\n                    </Button>\n                    {values.avatarFile ? (\n                      <Button view=\"flat\" size=\"m\" onClick={() => update('avatarFile', null)}>\n                        Убрать\n                      </Button>\n                    ) : null}\n                  </Flex>\n                  {values.avatarFile ? (\n                    <Text variant=\"caption-2\" color=\"secondary\" ellipsis style={{minWidth: 0}}>\n                      {values.avatarFile.name}\n                    </Text>\n                  ) : null}\n                </Flex>\n              </Field>\n\n              <Field label=\"Имя\" htmlFor=\"profile-name\">\n                <TextInput\n                  id=\"profile-name\"\n                  name=\"name\"\n                  size=\"l\"\n                  value={values.name}\n                  onUpdate={(value) => update('name', value)}\n                  placeholder=\"Иван Иванов\"\n                  autoComplete=\"name\"\n                  validationState={errors.name ? 'invalid' : undefined}\n                  errorMessage={errors.name}\n                  errorPlacement=\"outside\"\n                />\n              </Field>\n\n              <Field label=\"Email\" htmlFor=\"profile-email\">\n                <TextInput\n                  id=\"profile-email\"\n                  name=\"email\"\n                  type=\"email\"\n                  size=\"l\"\n                  value={values.email}\n                  onUpdate={(value) => update('email', value)}\n                  placeholder=\"name@example.com\"\n                  autoComplete=\"email\"\n                  validationState={errors.email ? 'invalid' : undefined}\n                  errorMessage={errors.email}\n                  errorPlacement=\"outside\"\n                />\n              </Field>\n\n              <Divider />\n              <SectionTitle>Локализация</SectionTitle>\n\n              <Field label=\"Язык интерфейса\">\n                <Select\n                  size=\"l\"\n                  width=\"max\"\n                  name=\"language\"\n                  aria-label=\"Язык интерфейса\"\n                  options={LANGUAGE_OPTIONS}\n                  value={[values.language]}\n                  onUpdate={([value]) => value && update('language', value)}\n                />\n              </Field>\n\n              <Field label=\"Часовой пояс\">\n                <Select\n                  size=\"l\"\n                  width=\"max\"\n                  name=\"timezone\"\n                  aria-label=\"Часовой пояс\"\n                  filterable\n                  filterPlaceholder=\"Поиск города\"\n                  options={TIMEZONE_OPTIONS}\n                  value={[values.timezone]}\n                  onUpdate={([value]) => value && update('timezone', value)}\n                />\n              </Field>\n\n              <Divider />\n              <SectionTitle>Безопасность</SectionTitle>\n\n              <Field\n                label=\"Двухфакторная авторизация\"\n                hint=\"При входе потребуется код из приложения-аутентификатора.\"\n              >\n                <Switch\n                  size=\"l\"\n                  name=\"twoFactorEnabled\"\n                  checked={values.twoFactorEnabled}\n                  onUpdate={(checked) => update('twoFactorEnabled', checked)}\n                >\n                  {values.twoFactorEnabled ? 'Включена' : 'Выключена'}\n                </Switch>\n              </Field>\n\n              <Divider />\n              <SectionTitle>Email-уведомления</SectionTitle>\n\n              <Field label=\"Присылать на почту\">\n                <Flex direction=\"column\" gap={2}>\n                  <Checkbox\n                    size=\"l\"\n                    name=\"productNews\"\n                    checked={values.notifications.productNews}\n                    onUpdate={(checked) => updateNotification('productNews', checked)}\n                  >\n                    Новости продукта\n                  </Checkbox>\n                  <Checkbox\n                    size=\"l\"\n                    name=\"systemAlerts\"\n                    checked={values.notifications.systemAlerts}\n                    onUpdate={(checked) => updateNotification('systemAlerts', checked)}\n                  >\n                    Системные алерты\n                  </Checkbox>\n                  <Checkbox\n                    size=\"l\"\n                    name=\"weeklyDigest\"\n                    checked={values.notifications.weeklyDigest}\n                    onUpdate={(checked) => updateNotification('weeklyDigest', checked)}\n                  >\n                    Дайджест за неделю\n                  </Checkbox>\n                </Flex>\n              </Field>\n            </Flex>\n          </Card>\n\n          <Flex gap={3} justifyContent=\"flex-end\" wrap>\n            <Button view=\"flat\" size=\"l\" type=\"button\" onClick={handleCancel}>\n              Отмена\n            </Button>\n            <Button view=\"action\" size=\"l\" type=\"submit\">\n              Сохранить\n            </Button>\n          </Flex>\n        </Flex>\n      </form>\n    </Box>\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {ProfileSettingsPage} from './ProfileSettingsPage';\n\nexport function App() {\n  return (\n    <ProfileSettingsPage\n      initialValues={{\n        name: 'Анна Петрова',\n        email: 'anna.petrova@example.com',\n        language: 'ru',\n        timezone: 'Europe/Moscow',\n      }}\n      onSave={(values) => console.log('save', values)}\n      onCancel={() => console.log('cancel')}\n    />\n  );\n}\nEOF\nnpx tsc --noEmit 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "grep -n -iE '^\\| *`?(xs|s|m|l|xl)`? *\\|' .agents/skills/gravity-ui/references/layout.md | head; grep -n -i 'breakpoint' .agents/skills/gravity-ui/references/layout.md | head -5",
+        "success": true
+      },
+      {
+        "command": "sed -n 144,153p .agents/skills/gravity-ui/references/layout.md",
+        "success": true
+      },
+      {
+        "command": "cat > src/ProfileSettingsPage.css <<'EOF'\n/* Подпись поля: на узких экранах во всю ширину, с брейкпоинта m (≥768px) — фиксированная колонка. */\n.profile-settings__label {\n  flex-shrink: 0;\n  width: 100%;\n}\n\n@media (min-width: 768px) {\n  .profile-settings__label {\n    width: 200px;\n  }\n}\nEOF\npython3 - <<'EOF'\nimport re,io\np='src/ProfileSettingsPage.tsx'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"\"\"} from '@gravity-ui/uikit';\n\"\"\",\"\"\"} from '@gravity-ui/uikit';\n\nimport './ProfileSettingsPage.css';\n\"\"\",1)\ns=s.replace(\"\"\"      <Box width={{xs: '100%', m: 200} as never} style={{flexShrink: 0}}>\"\"\",\"\"\"      <Box className=\"profile-settings__label\">\"\"\",1)\nopen(p,'w',encoding='utf-8').write(s)\nEOF\ngrep -n 'profile-settings__label\\|as never' src/ProfileSettingsPage.tsx; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -8 && rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 418,
+      "outputTokens": 11809,
+      "cacheReadTokens": 610828,
+      "cacheWriteTokens": 45806,
+      "totalTokens": 668861
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T15:38:57.368Z",
+    "by": "claude-subscription--claude-code--gravity-ui-skill",
+    "previousStatus": "passed"
+  }
+}

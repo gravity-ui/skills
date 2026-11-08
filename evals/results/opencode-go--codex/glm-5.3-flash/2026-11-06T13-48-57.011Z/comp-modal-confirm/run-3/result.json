@@ -1,0 +1,117 @@
+{
+  "status": "passed",
+  "duration": 465.335,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 6041,
+    "outputTokens": 1957,
+    "cacheReadTokens": 144896,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 167,
+    "totalTokens": 152894
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g 'index.html' -g 'src/**' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/App.tsx && printf '\\\\n--- package.json ---\\\\n' && cat package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/main.tsx && printf '\\\\n--- index.html ---\\\\n' && cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"export .*Modal|ModalDialog\\\" node_modules/@gravity-ui/uikit/build -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts && rg \"interface ModalProps\" -A20 node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"<Modal\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' -g '*.js' | head -10; rg \\\"DialogFooter\\\" node_modules/@gravity-ui/uikit/build/esm/components -g '*.d.ts' | head -10\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n-}\n+import { useState } from 'react';\n+import { Button, Dialog } from '@gravity-ui/uikit';\n+\n+export function App() {\n+  const [isDialogOpen, setIsDialogOpen] = useState(false);\n+\n+  const closeDialog = () => setIsDialogOpen(false);\n+\n+  const handleConfirm = () => {\n+    closeDialog();\n+  };\n+\n+  return (\n+    <div style={{ padding: 24 }}>\n+      <Button view=\\\"normal\\\" size=\\\"m\\\" onClick={() => setIsDialogOpen(true)}>\n+        Открыть окно\n+      </Button>\n+\n+      <Dialog\n+        open={isDialogOpen}\n+        onClose={closeDialog}\n+        size=\\\"s\\\"\n+        aria-labelledby=\\\"confirm-dialog-title\\\"\n+        aria-describedby=\\\"confirm-dialog-description\\\"\n+      >\n+        <Dialog.Header id=\\\"confirm-dialog-title\\\">Подтверждение</Dialog.Header>\n+        <Dialog.Body id=\\\"confirm-dialog-description\\\">\n+          <div>Здесь находится нужный текст.</div>\n+        </Dialog.Body>\n+        <Dialog.Footer\n+          onClickButtonCancel={closeDialog}\n+          onClickButtonApply={handleConfirm}\n+          textButtonCancel=\\\"Отменить\\\"\n+          textButtonApply=\\\"Подтвердить\\\"\n+        />\n+      </Dialog>\n+    </div>\n+  );\n+}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"command -v apply-patch || true; find / -name 'apply_patch' -type f -perm -111 2>/dev/null | head -5\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Dialog } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [isDialogOpen, setIsDialogOpen] = useState(false);\n\n  const closeDialog = () => setIsDialogOpen(false);\n\n  const handleConfirm = () => {\n    closeDialog();\n  };\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Button view=\\\"normal\\\" size=\\\"m\\\" onClick={() => setIsDialogOpen(true)}>\n        Открыть окно\n      </Button>\n\n      <Dialog\n        open={isDialogOpen}\n        onClose={closeDialog}\n        size=\\\"s\\\"\n        aria-labelledby=\\\"confirm-dialog-title\\\"\n        aria-describedby=\\\"confirm-dialog-description\\\"\n      >\n        <Dialog.Header id=\\\"confirm-dialog-title\\\">Подтверждение</Dialog.Header>\n        <Dialog.Body id=\\\"confirm-dialog-description\\\">\n          <div>Здесь находится нужный текст.</div>\n        </Dialog.Body>\n        <Dialog.Footer\n          onClickButtonCancel={closeDialog}\n          onClickButtonApply={handleConfirm}\n          textButtonCancel=\\\"Отменить\\\"\n          textButtonApply=\\\"Подтвердить\\\"\n        />\n      </Dialog>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogHeader/DialogHeader.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogBody/DialogBody.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, Dialog } from '@gravity-ui/uikit';\n\nexport function App() {\n  const [isDialogOpen, setIsDialogOpen] = useState(false);\n\n  const closeDialog = () => setIsDialogOpen(false);\n\n  const handleConfirm = () => {\n    closeDialog();\n  };\n\n  return (\n    <div style={{ padding: 24 }}>\n      <Button view=\\\"normal\\\" size=\\\"m\\\" onClick={() => setIsDialogOpen(true)}>\n        Открыть окно\n      </Button>\n\n      <Dialog\n        open={isDialogOpen}\n        onClose={closeDialog}\n        size=\\\"s\\\"\n        aria-label=\\\"Подтверждение действия\\\"\n        aria-describedby=\\\"confirm-dialog-description\\\"\n      >\n        <Dialog.Header caption=\\\"Подтверждение\\\" />\n        <Dialog.Body>\n          <div id=\\\"confirm-dialog-description\\\">Здесь находится нужный текст.</div>\n        </Dialog.Body>\n        <Dialog.Footer\n          onClickButtonCancel={closeDialog}\n          onClickButtonApply={handleConfirm}\n          textButtonCancel=\\\"Отменить\\\"\n          textButtonApply=\\\"Подтвердить\\\"\n        />\n      </Dialog>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 6041,
+      "outputTokens": 1957,
+      "cacheReadTokens": 144896,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 167,
+      "totalTokens": 152894
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

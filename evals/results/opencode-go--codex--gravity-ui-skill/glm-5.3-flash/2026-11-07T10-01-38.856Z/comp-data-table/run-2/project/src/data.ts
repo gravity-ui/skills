@@ -1,0 +1,61 @@
+export type Employee = {
+  id: string;
+  name: string;
+  role: string;
+  team: string;
+  experience: number;
+  salary: number;
+};
+
+export const employees: Employee[] = [
+  {id: '1', name: 'Alice Johnson', role: 'Product Manager', team: 'Product', experience: 6, salary: 145000},
+  {id: '2', name: 'Bob Chen', role: 'Frontend Engineer', team: 'Web', experience: 3, salary: 118000},
+  {id: '3', name: 'Carla Mendes', role: 'Backend Engineer', team: 'Platform', experience: 8, salary: 152000},
+  {id: '4', name: 'Daniil Petrov', role: 'Data Engineer', team: 'Analytics', experience: 5, salary: 135000},
+  {id: '5', name: 'Emma Wilson', role: 'Designer', team: 'Design', experience: 4, salary: 112000},
+  {id: '6', name: 'Fedor Sokolov', role: 'DevOps Engineer', team: 'Platform', experience: 7, salary: 148000},
+  {id: '7', name: 'Grace Liu', role: 'QA Engineer', team: 'Quality', experience: 2, salary: 92000},
+  {id: '8', name: 'Hugo Martin', role: 'Backend Engineer', team: 'Payments', experience: 9, salary: 168000},
+  {id: '9', name: 'Irina Volkova', role: 'Product Analyst', team: 'Product', experience: 3, salary: 108000},
+  {id: '10', name: 'James O\'Brien', role: 'Frontend Engineer', team: 'Web', experience: 5, salary: 128000},
+  {id: '11', name: 'Ksenia Morozova', role: 'Security Engineer', team: 'Platform', experience: 6, salary: 145000},
+  {id: '12', name: 'Lucas Almeida', role: 'Data Scientist', team: 'Analytics', experience: 4, salary: 138000},
+  {id: '13', name: 'Maria Ivanova', role: 'Project Manager', team: 'Delivery', experience: 8, salary: 150000},
+  {id: '14', name: 'Nikita Orlov', role: 'Mobile Engineer', team: 'Mobile', experience: 2, salary: 105000},
+  {id: '15', name: 'Olga Petrova', role: 'Backend Engineer', team: 'Payments', experience: 7, salary: 142000},
+  {id: '16', name: 'Pavel Kravtsov', role: 'DevOps Engineer', team: 'Platform', experience: 5, salary: 132000},
+  {id: '17', name: 'Quinn Davis', role: 'UX Researcher', team: 'Design', experience: 3, salary: 104000},
+  {id: '18', name: 'Roman Fedorov', role: 'Frontend Engineer', team: 'Web', experience: 6, salary: 135000},
+  {id: '19', name: 'Sofia Ricci', role: 'QA Engineer', team: 'Quality', experience: 4, salary: 98000},
+  {id: '20', name: 'Timur Gadzhiev', role: 'Mobile Engineer', team: 'Mobile', experience: 5, salary: 120000},
+  {id: '21', name: 'Ulyana Sidorova', role: 'Data Analyst', team: 'Analytics', experience: 2, salary: 94000},
+  {id: '22', name: 'Victor Soloviev', role: 'Backend Engineer', team: 'Payments', experience: 10, salary: 175000},
+  {id: '23', name: 'Wendy Zhang', role: 'Product Manager', team: 'Product', experience: 5, salary: 138000},
+  {id: '24', name: 'Xavier Moreau', role: 'Security Engineer', team: 'Platform', experience: 8, salary: 155000},
+  {id: '25', name: 'Yulia Kuznetsova', role: 'UX Designer', team: 'Design', experience: 6, salary: 122000},
+  {id: '26', name: 'Zachary Taylor', role: 'Frontend Engineer', team: 'Web', experience: 4, salary: 122000},
+  {id: '27', name: 'Anna Belova', role: 'Project Manager', team: 'Delivery', experience: 3, salary: 118000},
+  {id: '28', name: 'Boris Volkov', role: 'Data Scientist', team: 'Analytics', experience: 9, salary: 162000},
+  {id: '29', name: 'Clara Schmidt', role: 'UX Researcher', team: 'Design', experience: 2, salary: 96000},
+  {id: '30', name: 'Dmitry Ivanov', role: 'Mobile Engineer', team: 'Mobile', experience: 7, salary: 140000},
+  {id: '31', name: 'Elena Sokolova', role: 'Backend Engineer', team: 'Platform', experience: 6, salary: 146000},
+  {id: '32', name: 'Frank Miller', role: 'QA Engineer', team: 'Quality', experience: 6, salary: 105000},
+  {id: '33', name: 'Galina Morozova', role: 'Data Engineer', team: 'Analytics', experience: 4, salary: 128000},
+  {id: '34', name: 'Henry Wilson', role: 'DevOps Engineer', team: 'Platform', experience: 3, salary: 118000},
+  {id: '35', name: 'Ivan Chernov', role: 'Frontend Engineer', team: 'Web', experience: 8, salary: 150000},
+  {id: '36', name: 'Julia Petrova', role: 'Product Manager', team: 'Product', experience: 4, salary: 130000},
+  {id: '37', name: 'Kirill Smirnov', role: 'Backend Engineer', team: 'Payments', experience: 5, salary: 135000},
+  {id: '38', name: 'Laura Bianchi', role: 'UX Designer', team: 'Design', experience: 7, salary: 128000},
+  {id: '39', name: 'Mikhail Fedotov', role: 'Mobile Engineer', team: 'Mobile', experience: 3, salary: 112000},
+  {id: '40', name: 'Natalia Kozlova', role: 'Data Analyst', team: 'Analytics', experience: 5, salary: 118000},
+  {id: '41', name: 'Oleg Ivanov', role: 'Security Engineer', team: 'Platform', experience: 4, salary: 132000},
+  {id: '42', name: 'Paula Ferreira', role: 'QA Engineer', team: 'Quality', experience: 3, salary: 95000},
+  {id: '43', name: 'Roman Petrov', role: 'Data Scientist', team: 'Analytics', experience: 6, salary: 148000},
+  {id: '44', name: 'Sergey Volkov', role: 'Backend Engineer', team: 'Platform', experience: 9, salary: 158000},
+  {id: '45', name: 'Tatiana Lebedeva', role: 'UX Researcher', team: 'Design', experience: 5, salary: 108000},
+  {id: '46', name: 'Umarov Rustam', role: 'DevOps Engineer', team: 'Platform', experience: 6, salary: 140000},
+  {id: '47', name: 'Veronika Antonova', role: 'Product Manager', team: 'Product', experience: 7, salary: 145000},
+  {id: '48', name: 'William Turner', role: 'Mobile Engineer', team: 'Mobile', experience: 4, salary: 122000},
+  {id: '49', name: 'Xenia Fedorova', role: 'Data Engineer', team: 'Analytics', experience: 8, salary: 150000},
+  {id: '50', name: 'Yuri Gagarin', role: 'Security Engineer', team: 'Platform', experience: 5, salary: 138000},
+];

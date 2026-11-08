@@ -1,0 +1,158 @@
+{
+  "status": "passed",
+  "duration": 580.563,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 64,
+    "outputTokens": 34322,
+    "cacheReadTokens": 1550897,
+    "cacheWriteTokens": 60705,
+    "totalTokens": 1645988
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 14,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 4,
+      "file_edit": 11,
+      "shell": 24,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 40,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/tmp/e2e/probe.mjs",
+      "/tmp/e2e/entry.jsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5 && cat package.json 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore && echo --- && cat index.html && echo --- && cat tsconfig.json && echo --- && cat vite.config.ts && echo --- && find src -type f | xargs -I{} sh -c 'echo \"=== {}\"; cat \"{}\"' && echo --- && ls __agent_eval__ && ls node_modules | head -100 && ls node_modules/@gravity-ui 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | head -40 && ls && ls build 2>/dev/null | head -5; ls components | tr '\\n' ' '; echo; ls components/Table 2>/dev/null; ls components/Pagination 2>/dev/null; ls components/Checkbox 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && ls components | tr '\\n' ' '; echo; echo ---; ls components/Table 2>/dev/null; ls components/Pagination 2>/dev/null; ls components/Checkbox 2>/dev/null; echo ---; grep -o \"export[^;]*\" index.d.ts | head -5; grep -n \"Table\\|Pagination\\|Checkbox\" index.d.ts components/index.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat Table/Table.d.ts && echo ---- && cat Table/index.d.ts && ls Table/hoc && echo ---- && cat Table/hoc/*.d.ts 2>/dev/null | head -80 && echo ---- && cat Pagination/Pagination.d.ts && echo ---- && cat Checkbox/Checkbox.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc && cat withTableSelection/withTableSelection.d.ts withTableSorting/withTableSorting.d.ts && echo ---- && cat withTableSelection/withTableSelection.js && echo ---- && cat withTableSorting/withTableSorting.js | head -150 && echo ---- && cat ../../Pagination/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && grep -n \"getRowId\" -A12 Table/Table.js | head -50; echo ----; grep -n \"static getRowId\" -A8 Table/Table.js; echo ----; cat Table/hoc/withTableSorting/SortIndicator/SortIndicator.d.ts; cd /home/sandbox/workspace && npx tsc -v && node -v",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "which chromium chromium-browser google-chrome firefox 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls /home/sandbox/workspace/node_modules | grep -i -E \"playwright|puppeteer|jsdom|happy-dom\" ; npm ls -g --depth=0 2>/dev/null | grep -i -E \"playwright|puppeteer\" ; echo done",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/e2e && cd /tmp/e2e && timeout 170 npm init -y >/dev/null 2>&1; timeout 170 npm install playwright@1 --no-audit --no-fund 2>&1 | tail -3; timeout 170 npx playwright install chromium 2>&1 | tail -3; echo exit=$?",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5173 --strictPort --host 127.0.0.1 > /tmp/e2e/vite.log 2>&1 &) ; sleep 6; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/; tail -5 /tmp/e2e/vite.log",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 120 node probe.mjs 2>&1 | head -120",
+        "success": true
+      },
+      {
+        "command": "id -u; (sudo -n true 2>/dev/null && echo SUDO_OK) || echo NO_SUDO; ls /usr/lib/aarch64-linux-gnu/ 2>/dev/null | grep -i -E \"libglib|libnss3\" | head; find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3; find / -name \"libnss3.so\" 2>/dev/null | head -2",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 170 npm install jsdom@25 esbuild@0.24 --no-audit --no-fund 2>&1 | tail -2; ls node_modules | grep -E \"^(jsdom|esbuild)$\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && python3 - <<'EOF'\nimport re\np='/tmp/e2e/entry.jsx'\ns=open(p,encoding='utf-8').read()\ns=s.replace(\"check('page 2 ids differ (first row name differs from page 1 first row)', rowNames()[0] !== firstSelectedName || true);\\n\",\"\")\ns=s.replace(\"check('third click resets sort (order restored: first row id 1)', rowNames()[0] === 'Анна Иванова' && true);\",\n\"check('third click resets sort (original order: row 2 is \\\"Борис Петров\\\")', rowNames()[1] === 'Борис Петров', rowNames().slice(0,3).join(' | '));\")\ns=s.replace(\"check('sorting resets pagination to page 1', pageButton(1)?.getAttribute('aria-current') !== null || rows().length === 10);\",\n\"const pgText = (document.querySelector('[class*=pagination]')?.textContent ?? '').replace(/\\\\s+/g, ' ');\\ncheck('sorting resets pagination to page 1 (range starts at 1)', /^\\\\s*1\\\\b/.test(pgText) || pgText.includes('1 – 10') || pgText.includes('1-10'), pgText.slice(0, 80));\")\ns=s.replace(\"// --- Selection callback & stale-free count ---\\nconst got = [];\\n\",\"\")\nopen(p,'w',encoding='utf-8').write(s)\nEOF\ngrep -n \"resets\\|Борис\\|pgText\" entry.jsx | head; cat > /tmp/e2e/build.mjs <<'EOF'\nimport * as esbuild from 'esbuild';\nawait esbuild.build({\n  entryPoints: ['/tmp/e2e/entry.jsx'],\n  bundle: true, platform: 'node', format: 'esm', outfile: '/tmp/e2e/bundle.mjs',\n  jsx: 'automatic', loader: { '.css': 'empty', '.ts': 'ts', '.tsx': 'tsx' },\n  nodePaths: ['/home/sandbox/workspace/node_modules', '/tmp/e2e/node_modules'],\n  external: ['jsdom'], logLevel: 'warning',\n  banner: { js: \"import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);\" },\n});\nconsole.log('built');\nEOF\ncd /tmp/e2e && timeout 120 node build.mjs",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 120 node build.mjs && timeout 120 node bundle.mjs 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 120 node build.mjs && timeout 120 node bundle.mjs 2>&1 | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 120 node build.mjs && timeout 120 node bundle.mjs 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/e2e && timeout 120 node build.mjs && timeout 120 node bundle.mjs 2>&1 | grep -E \"FAIL|reset|console.error|ERR\" ; echo \"exit=$?\"",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite --port 5173\" ; rm -rf dist && git status --short && git diff --stat && echo --- && npm run build 2>&1 | grep -E \"error|built in\" ; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if grep -q \"vite\" \"$p/cmdline\" 2>/dev/null && grep -q \"5173\" \"$p/cmdline\" 2>/dev/null; then echo \"killing ${p#/proc/}\"; kill \"${p#/proc/}\" 2>/dev/null; fi; done; sleep 1; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/ || echo \"server stopped\"",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do c=$(tr '\\0' ' ' < \"$p/cmdline\" 2>/dev/null); case \"$c\" in *vite*) echo \"${p#/proc/}: $c\";; esac; done",
+        "success": true
+      },
+      {
+        "command": "kill 5507 5506 5493 2>/dev/null; sleep 1; curl -s -o /dev/null -w \"%{http_code}\\n\" http://127.0.0.1:5173/ || echo \"server stopped\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 64,
+      "outputTokens": 34322,
+      "cacheReadTokens": 1550897,
+      "cacheWriteTokens": 60705,
+      "totalTokens": 1645988
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

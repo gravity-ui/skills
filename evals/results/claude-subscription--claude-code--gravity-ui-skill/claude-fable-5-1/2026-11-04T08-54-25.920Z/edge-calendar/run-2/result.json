@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 389.258,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 418,
+    "outputTokens": 5344,
+    "cacheReadTokens": 530779,
+    "cacheWriteTokens": 34955,
+    "totalTokens": 571496
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"=== TREE ===\" && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100 && echo \"=== PKG ===\" && cat package.json",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md && echo \"=== CALENDAR ENTRIES ===\" && grep -n -i -C 4 'date-components\\|calendar' .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,120p && echo \"=== APP ===\" && cat src/App.tsx src/main.tsx index.html AGENTS.md && echo \"=== TRAPS ===\" && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo \"=== NODE_MODULES ===\" && ls node_modules/@gravity-ui 2>/dev/null; cat node_modules/@gravity-ui/uikit/package.json 2>/dev/null | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/date-components @gravity-ui/date-utils 2>&1 | tail -5 && echo \"=== VERSIONS ===\" && grep '\"version\"' node_modules/@gravity-ui/date-components/package.json node_modules/@gravity-ui/date-utils/package.json && echo \"=== PEERS ===\" && node -e \"const p=require('./node_modules/@gravity-ui/date-components/package.json');console.log(JSON.stringify(p.peerDependencies,null,1))\" && echo \"=== DOCS ===\" && ls node_modules/@gravity-ui/date-components/dist/docs node_modules/@gravity-ui/date-components/build/docs 2>&1 | head; ls node_modules/@gravity-ui/date-components/",
+        "success": false
+      },
+      {
+        "command": "sed -n 1,60p /home/node/.npm/_logs/2026-11-04T08_59_30_028Z-eresolve-report.txt; npm view @gravity-ui/date-components version peerDependencies 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components versions --json 2>/dev/null | tr -d '[]\",' | tr -s ' \\n' ' ' | fold -w 200; echo; for v in 4.0.0 3.3.0 3.0.0; do echo \"--- $v\"; npm view @gravity-ui/date-components@$v peerDependencies 2>/dev/null; done",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components@4.1.0 peerDependencies 2>/dev/null && npm install @gravity-ui/date-components@^4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -3 && echo \"=== VERSIONS ===\" && node -e \"for (const p of ['date-components','date-utils']) console.log(p, require('./node_modules/@gravity-ui/'+p+'/package.json').version)\" && echo \"=== DOCS ===\" && ls node_modules/@gravity-ui/date-components/ && ls node_modules/@gravity-ui/date-components/dist/docs node_modules/@gravity-ui/date-components/build/docs 2>&1 | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components; echo \"=== README (setup) ===\"; grep -n -i -A 12 'install\\|required setup\\|usage' $D/README.md | head -60; echo \"=== INDEX ===\"; cat $D/dist/docs/INDEX.md | head -80; echo \"=== COMPONENTS ===\"; ls $D/dist/docs/components; echo \"=== CALENDAR DOC ===\"; cat $D/dist/docs/components/Calendar/README.md 2>/dev/null || find $D/dist/docs -iname '*calendar*'",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components; wc -l $D/dist/docs/components/Calendar.md; cat $D/dist/docs/components/Calendar.md; echo \"=== CSS FILES ===\"; find $D/dist -maxdepth 2 -name '*.css' | head; echo \"=== PACKAGE EXPORTS/style ===\"; node -e \"const p=require('./$D/package.json');console.log(p.main,p.module,JSON.stringify(p.exports||null,null,1), p.sideEffects)\"; echo \"=== date-utils dateTime sig ===\"; grep -n 'export declare function dateTime\\|export declare const dateTime' -A 6 node_modules/@gravity-ui/date-utils/build/*.d.ts node_modules/@gravity-ui/date-utils/build/**/*.d.ts 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/date-components/dist/esm; ls $D/components/Calendar/; grep -n 'onUpdate\\|value?:\\|selectionMode\\|CalendarProps' $D/components/Calendar/Calendar.d.ts $D/components/Calendar/hooks/*.d.ts $D/components/Calendar/types.d.ts 2>/dev/null | head -30; echo \"=== DateTime.format ===\"; grep -n '    format(' -A 2 node_modules/@gravity-ui/date-utils/build/typings/dateTime.d.ts | head; echo \"=== uikit Text variants ===\"; grep -n 'TEXT_VARIANTS\\|header-1\\|subheader' node_modules/@gravity-ui/uikit/build/esm/components/Text/text/text.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "grep -n 'onUpdate\\|value?:\\|defaultValue' node_modules/@gravity-ui/date-components/dist/esm/components/CalendarView/hooks/types.d.ts node_modules/@gravity-ui/date-components/dist/esm/components/types/*.d.ts 2>/dev/null | head -12",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport {useState} from 'react';\nimport {Calendar} from '@gravity-ui/date-components';\nimport type {DateTime} from '@gravity-ui/date-utils';\nimport {Flex, Text} from '@gravity-ui/uikit';\n\nexport function App() {\n  const [date, setDate] = useState<DateTime | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{padding: 'var(--g-spacing-6)'}}>\n      <Text variant=\"header-1\" as=\"h1\" id=\"date-calendar-title\">\n        Выбор даты\n      </Text>\n\n      <Flex direction=\"column\" gap={2} style={{alignSelf: 'flex-start'}}>\n        <Calendar\n          aria-labelledby=\"date-calendar-title\"\n          value={date}\n          onUpdate={setDate}\n          size=\"l\"\n        />\n\n        <Text variant=\"body-2\" color={date ? 'primary' : 'secondary'} aria-live=\"polite\">\n          {date ? `Выбранная дата: ${date.format('DD.MM.YYYY')}` : 'Дата не выбрана'}\n        </Text>\n      </Flex>\n    </Flex>\n  );\n}\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "git status --short && grep -n 'gravity-ui' package.json && cat .gitignore",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 418,
+      "outputTokens": 5344,
+      "cacheReadTokens": 530779,
+      "cacheWriteTokens": 34955,
+      "totalTokens": 571496
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

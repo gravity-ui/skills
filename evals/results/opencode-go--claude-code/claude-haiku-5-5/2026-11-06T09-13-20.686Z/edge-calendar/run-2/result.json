@@ -1,0 +1,137 @@
+{
+  "status": "passed",
+  "duration": 384.278,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 44,
+    "outputTokens": 9725,
+    "cacheReadTokens": 689053,
+    "cacheWriteTokens": 37327,
+    "totalTokens": 736149
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 1,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 20,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status && git log --oneline | head && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200",
+        "success": true
+      },
+      {
+        "command": "cat package.json index.html src/App.tsx src/main.tsx src/vite-env.d.ts vite.config.ts tsconfig.json .gitignore && echo ---- && cat __agent_eval__/run.mjs",
+        "success": true
+      },
+      {
+        "command": "npm ci 2>&1 | tail -5 && ls node_modules/@gravity-ui/ && cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && grep -ril \"calendar\" node_modules/@gravity-ui/uikit/build/esm --include=*.d.ts | head -20; ls node_modules/@gravity-ui/uikit/build/esm/components | head -100",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components version peerDependencies dependencies 2>&1 | head -60; npm view @gravity-ui/date-components versions --json 2>/dev/null | tail -5",
+        "success": true
+      },
+      {
+        "command": "for v in $(npm view @gravity-ui/date-components versions --json 2>/dev/null | tr -d '[],\"' | grep -E '^[0-9]'); do echo \"$v $(npm view @gravity-ui/date-components@$v peerDependencies --json 2>/dev/null | tr -d '\\n ' )\"; done 2>/dev/null | grep -i 'uikit' | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-components@3.4.2 peerDependencies --json 2>/dev/null; npm view @gravity-ui/date-components@4.0.0 peerDependencies --json 2>/dev/null; npm view @gravity-ui/date-components@4.1.0 peerDependencies --json 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/date-utils@'^2.6.0' version 2>/dev/null | tail -2; npm view @gravity-ui/date-components@4.1.0 dependencies --json 2>/dev/null; npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 --save-exact=false 2>&1 | grep -v \"npm warn\" | tail -5; git diff --stat",
+        "success": true
+      },
+      {
+        "command": "git diff package.json && ls node_modules/@gravity-ui/ && ls node_modules/@gravity-ui/date-components/dist 2>/dev/null | head -30; cat node_modules/@gravity-ui/date-components/package.json | grep -E '\"(main|module|types|typings)\"'; ls node_modules/@gravity-ui/date-components/",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components && ls dist/esm; cat dist/esm/index.d.ts | head -60; ls docs | head; grep -rl \"Calendar\" dist/esm --include=*.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components/dist/esm/components && cat DatePicker/DatePicker.d.ts; ls DatePicker; cat DatePicker/types.d.ts 2>/dev/null | head -80; cat index.d.ts",
+        "success": true
+      },
+      {
+        "command": "cat DatePicker/hooks/datePickerStateFactory.d.ts; ls Calendar; cat Calendar/index.d.ts; cat Calendar/Calendar.d.ts 2>/dev/null; grep -rn \"export\" Calendar/Calendar.d.ts 2>/dev/null | head; cat DatePicker/index.d.ts; grep -rn \"CalendarCommonProps\" -A20 Calendar/types.d.ts 2>/dev/null | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui && sed -n 1,200p date-components/README.md | head -150; echo ----; cat date-utils/package.json | grep -E '\"version\"|\"main\"|\"module\"'; grep -n \"export\" date-utils/dist/esm/index.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components/dist/docs && ls -R | head -50; cat INDEX.md 2>/dev/null | head -120",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-components/dist/docs/components && cat Calendar.md | head -150; echo ======; sed -n 1,120p DatePicker.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-utils && ls; cat package.json | grep -E '\"(types|typings|main|module)\"'; find . -name \"*.d.ts\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/date-utils/build && cat typings/dateTime.d.ts | head -80; cat dateTime/format.d.ts; cat dateTime/index.d.ts; cat constants/format.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && (which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g --depth=0 2>/dev/null | grep -i playwright); git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > src/__smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport React from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('renders calendar', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Select a date');\n  expect(html).toContain('No date selected');\n  console.log('has grid:', /role=\"grid\"|gridcell/.test(html), 'len', html.length);\n});\nEOF\ntimeout 180 npx vitest run src/__smoke.test.tsx 2>&1 | tail -30; rm -f src/__smoke.test.tsx; rm -rf /tmp/smoke",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport React from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('renders calendar', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Select a date');\n  expect(html).toContain('No date selected');\n  console.log('has grid:', /role=\"grid\"|gridcell/.test(html), 'len', html.length);\n});\nEOF\ncat > vitest.smoke.config.mjs <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({ plugins: [react()], test: { css: false, server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ntimeout 180 npx vitest run --config vitest.smoke.config.mjs src/__smoke.test.tsx 2>&1 | grep -v \"npm warn\" | tail -30; rm -f src/__smoke.test.tsx vitest.smoke.config.mjs; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44,
+      "outputTokens": 9725,
+      "cacheReadTokens": 689053,
+      "cacheWriteTokens": 37327,
+      "totalTokens": 736149
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

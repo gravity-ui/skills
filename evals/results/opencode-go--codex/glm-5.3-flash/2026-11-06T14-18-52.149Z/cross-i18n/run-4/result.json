@@ -1,0 +1,177 @@
+{
+  "status": "failed",
+  "duration": 422.586,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 41312,
+    "outputTokens": 19423,
+    "cacheReadTokens": 492475,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 13327,
+    "totalTokens": 553210
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 16,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 24,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 24,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '\"'!node_modules/**'\"' | head -100 && printf '\\\\n--- root ---\\\\n' && ls -la\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- files ---\\\\n' && rg --files src __agent_eval__ -g '\"'!node_modules/**'\"' && printf '\\\\n--- src contents ---\\\\n' && for f in \"'$(rg --files src); do echo \"### $f\"; sed -n '\"'1,240p' \\\"\"'$f\"; done'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat index.html && printf '\\\\n--- eval ---\\\\n' && sed -n '1,260p' __agent_eval__/run.mjs\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"@gravity-ui/i18n|i18next|ThemeProvider\\\" node_modules/@gravity-ui/uikit/package.json node_modules/@gravity-ui/uikit -g '*.d.ts' -m 1 | head -60\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts && printf '\\\\n--- exports ---\\\\n' && rg \\\"const I18N|function register|registerKeysets\\\" node_modules/@gravity-ui/i18n/build/esm -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/i18n/build/esm/index.d.ts && printf '\\\\n--- theme i18n docs ---\\\\n' && rg -n \\\"export function|setLang|registerKeysets\\\" node_modules/@gravity-ui/i18n/build/esm/I18n.d.ts node_modules/@gravity-ui/uikit/build/esm/i18n/i18n.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const m=require('@gravity-ui/uikit'); console.log(Object.keys(m).filter(k=>/Segment|Select|Button|Tabs|Lang/i.test(k)).join('\\\\n'))\\\" && sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.d.ts && printf '\\\\n--- Segment type ---\\\\n' && cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedControls/SegmentedControls.d.ts 2>/dev/null || cat node_modules/@gravity-ui/uikit/build/esm/components/controls/SegmentedControls/SegmentedControls.d.ts 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit/build/esm/components -g '*Segment*' -g '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts | rg \"Segment|Tabs|Select|Button|LanguageIcon|Globe\" | head -50'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/i18n.ts\n+import { I18N } from '@gravity-ui/i18n';\n+\n+export type AppLanguage = 'en' | 'ru';\n+\n+export const appLanguages: AppLanguage[] = ['en', 'ru'];\n+\n+export const defaultAppLanguage: AppLanguage = 'en';\n+\n+export const appI18n = new I18N({ lang: defaultAppLanguage, fallbackLang: 'en' });\n+\n+appI18n.registerKeysets('en', {\n+  app: {\n+    title: 'Gravity UI demo',\n+    description: 'Use the switcher to change the interface language.',\n+    language: 'Interface language',\n+    english: 'English',\n+    russian: 'Russian',\n+  },\n+});\n+\n+appI18n.registerKeysets('ru', {\n+  app: {\n+    title: 'Демонстрация Gravity UI',\n+    description: 'Используйте переключатель, чтобы изменить язык интерфейса.',\n+    language: 'Язык интерфейса',\n+    english: 'Английский',\n+    russian: 'Русский',\n+  },\n+});\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import React from 'react';\n+import { SegmentedRadioGroup } from '@gravity-ui/uikit';\n+\n+import { appI18n, appLanguages, type AppLanguage } from './i18n';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [language, setLanguage] = React.useState<AppLanguage>('en');\n+\n+  appI18n.setLang(language);\n+  const t = appI18n.keyset('app');\n+\n+  const languageOptions = appLanguages.map((languageOption) => (\n+    <SegmentedRadioGroup.Option\n+      key={languageOption}\n+      value={languageOption}\n+      content={t(languageOption)}\n+    />\n+  ));\n+\n+  return (\n+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>\n+      <SegmentedRadioGroup\n+        value={language}\n+        onUpdate={(nextLanguage) => setLanguage(nextLanguage as AppLanguage)}\n+        aria-label={t('language')}\n+      >\n+        {languageOptions}\n+      </SegmentedRadioGroup>\n+      <h1>{t('title')}</h1>\n+      <p>{t('description')}</p>\n+    </div>\n+  );\n }\n*** Update File: src/main.tsx\n@@\n import { ThemeProvider } from '@gravity-ui/uikit';\n \n+import { defaultAppLanguage } from './i18n';\n import { App } from './App';\n@@\n-    <ThemeProvider theme=\\\"light\\\">\n+    <ThemeProvider theme=\\\"light\\\" lang={defaultAppLanguage} fallbackLang=\\\"en\\\">\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || true; find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git apply <<'PATCH'\n*** Begin Patch\n*** Add File: src/i18n.ts\n+import { I18N } from '@gravity-ui/i18n';\n+\n+export type AppLanguage = 'en' | 'ru';\n+\n+export const appLanguages: AppLanguage[] = ['en', 'ru'];\n+\n+export const defaultAppLanguage: AppLanguage = 'en';\n+\n+export const appI18n = new I18N({ lang: defaultAppLanguage, fallbackLang: 'en' });\n+\n+appI18n.registerKeysets('en', {\n+  app: {\n+    title: 'Gravity UI demo',\n+    description: 'Use the switcher to change the interface language.',\n+    language: 'Interface language',\n+    english: 'English',\n+    russian: 'Russian',\n+  },\n+});\n+\n+appI18n.registerKeysets('ru', {\n+  app: {\n+    title: 'Демонстрация Gravity UI',\n+    description: 'Используйте переключатель, чтобы изменить язык интерфейса.',\n+    language: 'Язык интерфейса',\n+    english: 'Английский',\n+    russian: 'Русский',\n+  },\n+});\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n+import React from 'react';\n+import { SegmentedRadioGroup } from '@gravity-ui/uikit';\n+\n+import { appI18n, appLanguages, type AppLanguage } from './i18n';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [language, setLanguage] = React.useState<AppLanguage>('en');\n+\n+  appI18n.setLang(language);\n+  const t = appI18n.keyset('app');\n+\n+  const languageOptions = appLanguages.map((languageOption) => (\n+    <SegmentedRadioGroup.Option\n+      key={languageOption}\n+      value={languageOption}\n+      content={t(languageOption)}\n+    />\n+  ));\n+\n+  return (\n+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>\n+      <SegmentedRadioGroup\n+        value={language}\n+        onUpdate={(nextLanguage) => setLanguage(nextLanguage as AppLanguage)}\n+        aria-label={t('language')}\n+      >\n+        {languageOptions}\n+      </SegmentedRadioGroup>\n+      <h1>{t('title')}</h1>\n+      <p>{t('description')}</p>\n+    </div>\n+  );\n }\n*** Update File: src/main.tsx\n@@\n import { ThemeProvider } from '@gravity-ui/uikit';\n \n+import { defaultAppLanguage } from './i18n';\n import { App } from './App';\n@@\n-    <ThemeProvider theme=\\\"light\\\">\n+    <ThemeProvider theme=\\\"light\\\" lang={defaultAppLanguage} fallbackLang=\\\"en\\\">\n*** End Patch\nPATCH\n\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/language-switch.patch <<'PATCH'\ndiff --git a/src/i18n.ts b/src/i18n.ts\nnew file mode 100644\nindex 0000000..e69de29\n--- /dev/null\n+++ b/src/i18n.ts\n@@ -0,0 +1,29 @@\n+import { I18N } from '@gravity-ui/i18n';\n+\n+export type AppLanguage = 'en' | 'ru';\n+\n+export const appLanguages: AppLanguage[] = ['en', 'ru'];\n+\n+export const defaultAppLanguage: AppLanguage = 'en';\n+\n+export const appI18n = new I18N({ lang: defaultAppLanguage, fallbackLang: 'en' });\n+\n+appI18n.registerKeysets('en', {\n+  app: {\n+    title: 'Gravity UI demo',\n+    description: 'Use the switcher to change the interface language.',\n+    language: 'Interface language',\n+    english: 'English',\n+    russian: 'Russian',\n+  },\n+});\n+\n+appI18n.registerKeysets('ru', {\n+  app: {\n+    title: 'Демонстрация Gravity UI',\n+    description: 'Используйте переключатель, чтобы изменить язык интерфейса.',\n+    language: 'Язык интерфейса',\n+    english: 'Английский',\n+    russian: 'Русский',\n+  },\n+});\ndiff --git a/src/App.tsx b/src/App.tsx\nindex e69de29..1111111 100644\n--- a/src/App.tsx\n+++ b/src/App.tsx\n@@ -1 +1,38 @@\n-// Implement the requested feature here (and may add sibling files).\n+import React from 'react';\n+import { SegmentedRadioGroup } from '@gravity-ui/uikit';\n+\n+import { appI18n, appLanguages, type AppLanguage } from './i18n';\n+\n export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n+  const [language, setLanguage] = React.useState<AppLanguage>('en');\n+\n+  appI18n.setLang(language);\n+  const t = appI18n.keyset('app');\n+\n+  const languageOptions = appLanguages.map((languageOption) => (\n+    <SegmentedRadioGroup.Option\n+      key={languageOption}\n+      value={languageOption}\n+      content={t(languageOption)}\n+    />\n+  ));\n+\n+  return (\n+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>\n+      <SegmentedRadioGroup\n+        value={language}\n+        onUpdate={(nextLanguage) => setLanguage(nextLanguage as AppLanguage)}\n+        aria-label={t('language')}\n+      >\n+        {languageOptions}\n+      </SegmentedRadioGroup>\n+      <h1>{t('title')}</h1>\n+      <p>{t('description')}</p>\n+    </div>\n+  );\n }\ndiff --git a/src/main.tsx b/src/main.tsx\nindex e69de29..2222222 100644\n--- a/src/main.tsx\n+++ b/src/main.tsx\n@@\n import { ThemeProvider } from '@gravity-ui/uikit';\n \n+import { defaultAppLanguage } from './i18n';\n import { App } from './App';\n@@\n-    <ThemeProvider theme=\\\"light\\\">\n+    <ThemeProvider theme=\\\"light\\\" lang={defaultAppLanguage} fallbackLang=\\\"en\\\">\nPATCH\ngit apply /tmp/language-switch.patch\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && printf '\\\\n--- App ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- i18n ---\\\\n' && ls -l src/i18n.ts 2>/dev/null || true && cat src/i18n.ts 2>/dev/null || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/i18n.ts <<'EOF'\nimport { I18N } from '@gravity-ui/i18n';\n\nexport type AppLanguage = 'en' | 'ru';\n\nexport const appLanguages: AppLanguage[] = ['en', 'ru'];\n\nexport const defaultAppLanguage: AppLanguage = 'en';\n\nexport const appI18n = new I18N({ lang: defaultAppLanguage, fallbackLang: 'en' });\n\nappI18n.registerKeysets('en', {\n  app: {\n    title: 'Gravity UI demo',\n    description: 'Use the switcher to change the interface language.',\n    language: 'Interface language',\n    english: 'English',\n    russian: 'Russian',\n  },\n});\n\nappI18n.registerKeysets('ru', {\n  app: {\n    title: 'Демонстрация Gravity UI',\n    description: 'Используйте переключатель, чтобы изменить язык интерфейса.',\n    language: 'Язык интерфейса',\n    english: 'Английский',\n    russian: 'Русский',\n  },\n});\nEOF\n\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\n\nimport { appI18n, appLanguages, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = React.useState<AppLanguage>('en');\n\n  appI18n.setLang(language);\n  const t = appI18n.keyset('app');\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>\n      <SegmentedRadioGroup\n        value={language}\n        onUpdate={(nextLanguage) => setLanguage(nextLanguage as AppLanguage)}\n        aria-label={t('language')}\n      >\n        {appLanguages.map((languageOption) => (\n          <SegmentedRadioGroup.Option\n            key={languageOption}\n            value={languageOption}\n            content={t(languageOption)}\n          />\n        ))}\n      </SegmentedRadioGroup>\n      <h1>{t('title')}</h1>\n      <p>{t('description')}</p>\n    </div>\n  );\n}\nEOF\n\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nimport { defaultAppLanguage } from './i18n';\nimport { App } from './App';\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\" lang={defaultAppLanguage} fallbackLang=\"en\">\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>,\n);\nEOF\n\nnpm run build && git diff -- src'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg \"SegmentedRadioGroup|option|control\" node_modules/@gravity-ui/uikit/styles/styles.css node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/*.css | head -30'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"SegmentedRadioGroup\" node_modules/@gravity-ui/uikit/styles/styles.css | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"mv src/i18n.ts src/i18n.tsx && cat > src/i18n.tsx <<'EOF'\nimport React, { createContext, useContext, useEffect, useMemo, useState } from 'react';\nimport { I18N } from '@gravity-ui/i18n';\n\nexport type AppLanguage = 'en' | 'ru';\nexport const appLanguages: AppLanguage[] = ['en', 'ru'];\nexport const defaultAppLanguage: AppLanguage = 'en';\n\nexport const appI18n = new I18N({ lang: defaultAppLanguage, fallbackLang: 'en' });\n\nappI18n.registerKeysets('en', {\n  app: {\n    title: 'Gravity UI demo',\n    description: 'Use the switcher to change the interface language.',\n    language: 'Interface language',\n    english: 'English',\n    russian: 'Russian',\n  },\n});\n\nappI18n.registerKeysets('ru', {\n  app: {\n    title: 'Демонстрация Gravity UI',\n    description: 'Используйте переключатель, чтобы изменить язык интерфейса.',\n    language: 'Язык интерфейса',\n    english: 'Английский',\n    russian: 'Русский',\n  },\n});\n\ninterface AppLanguageContextValue {\n  language: AppLanguage;\n  setLanguage: (language: AppLanguage) => void;\n}\n\nconst AppLanguageContext = createContext<AppLanguageContextValue>({\n  language: defaultAppLanguage,\n  setLanguage: () => {},\n});\n\nexport function AppLanguageProvider({ children }: { children: React.ReactNode }) {\n  const [language, setLanguage] = useState<AppLanguage>(defaultAppLanguage);\n\n  useEffect(() => {\n    appI18n.setLang(language);\n    document.documentElement.lang = language;\n  }, [language]);\n\n  const contextValue = useMemo(() => ({ language, setLanguage }), [language]);\n\n  return <AppLanguageContext.Provider value={contextValue}>{children}</AppLanguageContext.Provider>;\n}\n\nexport function useAppLanguage() {\n  return useContext(AppLanguageContext);\n}\nEOF\n\ncat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { SegmentedRadioGroup } from '@gravity-ui/uikit';\n\nimport { appI18n, appLanguages, useAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const { language, setLanguage } = useAppLanguage();\n  const t = appI18n.keyset('app');\n\n  return (\n    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>\n      <SegmentedRadioGroup\n        value={language}\n        onUpdate={(nextLanguage) => setLanguage(nextLanguage as AppLanguage)}\n        aria-label={t('language')}\n      >\n        {appLanguages.map((languageOption) => (\n          <SegmentedRadioGroup.Option\n            key={languageOption}\n            value={languageOption}\n            content={t(languageOption)}\n          />\n        ))}\n      </SegmentedRadioGroup>\n      <h1>{t('title')}</h1>\n      <p>{t('description')}</p>\n    </div>\n  );\n}\nEOF\n\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nimport { AppLanguageProvider, useAppLanguage } from './i18n';\nimport { App } from './App';\n\nfunction AppRoot() {\n  const { language } = useAppLanguage();\n\n  return (\n    <ThemeProvider theme=\\\"light\\\" lang={language} fallbackLang=\\\"en\\\">\n      <App />\n    </ThemeProvider>\n  );\n}\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <AppLanguageProvider>\n      <AppRoot />\n    </AppLanguageProvider>\n  </React.StrictMode>,\n);\nEOF\n\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/  const contextValue = useMemo\\\\(\\\\(\\\\) => \\\\(\\\\{ language, setLanguage \\\\}\\\\), \\\\[language\\\\]\\\\);/  appI18n.setLang(language);\\\\n\\\\n  const contextValue = useMemo(() => ({ language, setLanguage }), [language]);/\\\" src/i18n.tsx\nperl -0pi -e \\\"s/  useEffect\\\\(\\\\(\\\\) => \\\\{\\\\n    appI18n.setLang\\\\(language\\\\);/  useEffect(() => {\\\\n/\\\" src/i18n.tsx\nnpm run build\nprintf '\\\\n--- i18n.tsx ---\\\\n'\ncat src/i18n.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/  useEffect\\\\(\\\\(\\\\) => \\\\{\\\\n\\\\n/  useEffect(() => {\\\\n/\\\" src/i18n.tsx\ncat .gitignore\ngit status --short\ngit diff --check\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --stat && printf '\\\\n--- i18n ---\\\\n' && nl -ba src/i18n.tsx && printf '\\\\n--- App ---\\\\n' && nl -ba src/App.tsx && printf '\\\\n--- main ---\\\\n' && nl -ba src/main.tsx && printf '\\\\n--- status ---\\\\n' && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"perl -0pi -e \\\"s/  useEffect\\\\(\\\\(\\\\) => \\\\{\\\\n    document\\\\.documentElement\\\\.lang = language;\\\\n  \\\\}, \\\\[language\\\\]\\\\);\\\\n\\\\n  appI18n\\\\.setLang\\\\(language\\\\);\\\\n\\\\n  const contextValue = useMemo\\\\(\\\\(\\\\) => \\\\(\\\\{ language, setLanguage \\\\}\\\\), \\\\[language\\\\]\\\\);/  useEffect(() => {\\\\n    document.documentElement.lang = language;\\\\n  }, [language]);\\\\n\\\\n  const contextValue = useMemo(() => {\\\\n    appI18n.setLang(language);\\\\n    return { language, setLanguage };\\\\n  }, [language]);/\\\" src/i18n.tsx\nnode -e \\\"import('node:fs').then(({ rmSync }) => rmSync('dist', { recursive: true }))\\\"\nnpm run build\nnode -e \\\"import('node:fs').then(({ rmSync }) => rmSync('dist', { recursive: true }))\\\"\ngit diff --check\ngit status --short\nprintf '\\\\n--- i18n final ---\\\\n'\nsed -n '35,60p' src/i18n.tsx\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 41312,
+      "outputTokens": 19423,
+      "cacheReadTokens": 492475,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 13327,
+      "totalTokens": 553210
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

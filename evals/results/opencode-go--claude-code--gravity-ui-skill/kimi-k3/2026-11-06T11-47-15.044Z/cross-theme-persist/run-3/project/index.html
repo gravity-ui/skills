@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gravity UI eval</title>
+  </head>
+  <body>
+    <script>
+      // Restore the saved theme before first paint to avoid a flash of the
+      // default theme on reload. Keep the key in sync with src/themeStorage.ts.
+      (function () {
+        try {
+          var theme = window.localStorage.getItem('app-theme');
+          if (theme === 'light' || theme === 'dark') {
+            document.body.classList.add('g-root', 'g-root_theme_' + theme);
+          }
+        } catch (e) {
+          // localStorage unavailable — ThemeProvider applies the default theme.
+        }
+      })();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

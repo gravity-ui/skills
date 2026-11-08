@@ -1,0 +1,139 @@
+{
+  "status": "passed",
+  "duration": 1083.222,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 674,
+    "outputTokens": 14243,
+    "cacheReadTokens": 1069971,
+    "cacheWriteTokens": 57840,
+    "totalTokens": 1142728
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 21,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ---; ls -R /home/sandbox/workspace/.agents/skills/gravity-ui; echo ---; cat /home/sandbox/workspace/AGENTS.md",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ---; grep -n -i -C 3 'markdown\\|editor' .agents/skills/gravity-ui/references/package-routing.md | head -120; echo ---PKG; cat package.json; echo ---TREE; find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts; echo ---TRAPS; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ---ME; ls node_modules/@gravity-ui/; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; echo ---LOCK; grep -c '\"node_modules/' package-lock.json; grep -n 'markdown-editor' package-lock.json | head -3",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/markdown-editor version peerDependencies --json 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/markdown-editor @gravity-ui/components @diplodoc/transform @diplodoc/cut-extension @diplodoc/file-extension @diplodoc/html-extension @diplodoc/tabs-extension @diplodoc/latex-extension @diplodoc/mermaid-extension @diplodoc/quote-link-extension @diplodoc/folding-headings-extension markdown-it highlight.js lowlight katex 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/components@\">=4.10.0\" version peerDependencies.@gravity-ui/uikit --json 2>&1 | grep -E '\"version\"|uikit' | paste - - | tail -20",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/markdown-editor @gravity-ui/components@4.23.1 @diplodoc/transform @diplodoc/cut-extension @diplodoc/file-extension @diplodoc/html-extension @diplodoc/tabs-extension @diplodoc/latex-extension @diplodoc/mermaid-extension @diplodoc/quote-link-extension @diplodoc/folding-headings-extension markdown-it highlight.js lowlight katex 2>&1 | tail -8; echo ---; grep -A30 '\"dependencies\"' package.json; echo ---; grep '\"version\"' node_modules/@gravity-ui/markdown-editor/package.json node_modules/@gravity-ui/uikit/package.json",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor; ls $M; ls $M/dist/docs 2>/dev/null | head; ls $M/build/docs 2>/dev/null | head; echo ---README; sed -n 1,200p $M/README.md",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/docs; cat $M/INDEX.md | head -120; echo ---GUIDES; ls $M/guides; echo ---GREP; grep -rn -i -C 3 'initial\\|change\\|styles.css\\|import .*css' $M/INDEX.md | head -80",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor; echo ---CRA; cat $M/build/docs/guides/how-to-add-editor-with-create-react-app.md | head -90; echo ---PKG-EXPORTS; grep -n -A4 '\"\\./styles' $M/package.json | head -30; ls $M/build/esm/*.css $M/build/cjs/*.css $M/build/styles 2>/dev/null; echo ---TYPES; find $M/build/esm -name 'useMarkdownEditor.d.ts' -o -name 'types.d.ts' -path '*bundle*' | head; echo ---HOOK; cat $(find $M/build/esm -name 'useMarkdownEditor.d.ts' | head -1); echo ---OPTS; grep -n -B2 -A50 'export type MarkdownEditorOptions\\|export interface MarkdownEditorOptions' $M/build/esm/bundle/useMarkdownEditor.d.ts $M/build/esm/bundle/types.d.ts 2>/dev/null | head -120",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; T=$M/bundle/types.d.ts; echo ---INITIAL; grep -n -A14 'export type MarkdownEditorInitialOptions' $T; echo ---MD; grep -n -A14 'export type MarkdownEditorMdOptions' $T; echo ---MODE; grep -rn 'export type MarkdownEditorMode\\|export type MarkupString' $M/bundle/*.d.ts $M/*.d.ts | head; echo ---INSTANCE; grep -n -A40 'export type MarkdownEditorInstance\\|export interface MarkdownEditorInstance' $M/bundle/editor-public-types.d.ts | head -60; echo ---EVENTS; grep -n -B1 -A25 'EventMap\\b.*=\\|interface EventMap\\|type EventMap' $M/bundle/editor-public-types.d.ts $M/bundle/Editor.d.ts 2>/dev/null | head -60; echo ---VIEW; grep -n -A40 'export type MarkdownEditorViewProps\\|export interface MarkdownEditorViewProps' $M/bundle/MarkdownEditorView.d.ts | head -60; echo ---STYLES; ls $M/styles; echo ---TOASTER; grep -rln 'useToaster' $M --include=*.js | head -3; echo ---PREVIEW; sed -n 1,80p node_modules/@gravity-ui/markdown-editor/build/docs/guides/how-to-add-preview.md",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; echo ---EVENTMAP; grep -rn -A20 'export type EventMap\\|export interface EventMap' $M/bundle/*.d.ts | head -40; echo ---COMMON; grep -rn -A8 'export interface CommonEditor\\|export type CommonEditor' $M/bundle/*.d.ts $M/core/*.d.ts 2>/dev/null | head -20; echo ---VIEWPROPS; sed -n 1,19p $M/bundle/MarkdownEditorView.d.ts; echo ---USETOASTER; grep -n -B3 -A3 'useToaster' $M/bundle/MarkdownEditorView.js | head -30; echo ---UIKIT-TOASTER; grep -n 'Toaster' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.d.ts 2>/dev/null | head; echo ---CSS-DOCS; grep -rn 'styles/' node_modules/@gravity-ui/markdown-editor/build/docs/ | head; grep -rn 'styles.css\\|\\.css' node_modules/@gravity-ui/markdown-editor/build/docs/guides/how-to-add-editor-with-nextjs.md | head",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm; echo ---USETOASTER; cat $U/components/Toaster/hooks/useToaster.d.ts; cat $U/components/Toaster/hooks/useToaster.js; ls $U/components/Toaster/; echo ---TOASTER-INDEX; cat $U/components/Toaster/index.d.ts; echo ---COMMON; grep -rn -B2 -A12 'interface CommonEditor' node_modules/@gravity-ui/markdown-editor/build/esm --include=*.d.ts | head -30; echo ---TEXTINPUT; grep -n 'value\\|onUpdate\\|label\\|placeholder\\|size\\|errorMessage\\|validationState' $U/components/controls/TextInput/TextInput.d.ts $U/components/controls/types.d.ts 2>/dev/null | head -30; echo ---BUTTON; grep -n 'view?\\|size?\\|type?\\|loading' $U/components/Button/Button.d.ts | head; echo ---FLEX; grep -n 'direction\\|gap\\|alignItems' $U/components/layout/Flex/Flex.d.ts | head; echo ---TEXT; grep -n 'variant' $U/components/Text/Text.d.ts $U/components/Text/text/text.d.ts 2>/dev/null | head -5; echo ---CARD; grep -n 'view?\\|type?\\|size?' $U/components/Card/Card.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; T=$M/bundle/types.d.ts; echo ---MARKUPCFG; grep -n -A30 'export type MarkdownEditorMarkupConfig' $T | head -45; echo ---RENDERPREVIEW; grep -rn -A8 'export type RenderPreview' $M/bundle/*.d.ts | head -20; echo ---INDEX-EXPORTS; grep -n 'YfmStaticView\\|RenderPreview\\|MarkupString\\|useMarkdownEditor\\|MarkdownEditorView\\|configure' $M/index.d.ts $M/bundle/index.d.ts $M/view/index.d.ts 2>/dev/null | head -20; echo ---YFMSTATIC; cat $(find $M -name 'YfmStaticView.d.ts' | head -1); echo ---TRANSFORM; grep -n -A12 'declare function transform\\|export default\\|^export' node_modules/@diplodoc/transform/lib/index.d.ts | head -40; echo ---TOASTERPROVIDER; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Provider/ToasterProvider.d.ts; grep -n -A6 'declare class Toaster' node_modules/@gravity-ui/uikit/build/esm/components/Toaster/Toaster.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ToasterComponent/ToasterComponent.d.ts | head -12",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; grep -n 'YfmStaticView\\|RenderPreview\\|MarkupString\\|MarkdownEditorSplitMode\\|MarkdownEditorOptions\\|MarkdownEditorInstance' $M/index.d.ts $M/view/index.d.ts $M/view/components/index.d.ts $M/bundle/index.d.ts 2>/dev/null | head -15; echo ---SPLIT; grep -rn 'export type MarkdownEditorSplitMode' $M/bundle/*.d.ts; echo ---OUTPUT; grep -n -A6 'interface OutputType\\|type OutputType' node_modules/@diplodoc/transform/lib/typings.d.ts | head -12; grep -n 'html:' node_modules/@diplodoc/transform/lib/typings.d.ts | head -3",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; cat $M/index.d.ts; echo ---VIEW; grep -rn 'YfmStaticView' $M/index.d.ts $M/view/*.d.ts $M/view/components/*.d.ts 2>/dev/null | head -5",
+        "success": true
+      },
+      {
+        "command": "M=node_modules/@gravity-ui/markdown-editor/build/esm; cat $M/view/index.d.ts; grep -rn 'YfmStaticView\\|YfmHtml' $M/view/components/index.d.ts $M/view/components/YfmHtml/index.d.ts 2>/dev/null | head; grep -n 'export.*type' $M/bundle/index.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cat > src/MarkdownField.tsx <<'EOF'\nimport {useCallback, useEffect, useId, useState} from 'react';\nimport transform from '@diplodoc/transform';\nimport {\n    MarkdownEditorView,\n    YfmStaticView,\n    useMarkdownEditor,\n    type MarkupString,\n    type RenderPreview,\n} from '@gravity-ui/markdown-editor';\nimport {Text} from '@gravity-ui/uikit';\n\nexport interface MarkdownFieldProps {\n    label: string;\n    /** Начальное значение в markdown-разметке */\n    defaultValue?: MarkupString;\n    /** Вызывается при каждом изменении содержимого; передаёт актуальную markdown-разметку */\n    onUpdate?: (value: MarkupString) => void;\n    /** Вызывается по Ctrl/Cmd+Enter внутри редактора */\n    onSubmit?: (value: MarkupString) => void;\n    autofocus?: boolean;\n}\n\n/**\n * Поле формы для ввода текста с markdown-разметкой.\n *\n * По умолчанию открывается в WYSIWYG-режиме: пользователь набирает текст с markdown-синтаксисом\n * (`# заголовок`, `**жирный**`, `- список`) и сразу видит результат форматирования.\n * В режиме разметки (переключатель в тулбаре) доступен split-view с живым превью.\n */\nexport function MarkdownField({\n    label,\n    defaultValue = '',\n    onUpdate,\n    onSubmit,\n    autofocus,\n}: MarkdownFieldProps) {\n    const labelId = useId();\n\n    const renderPreview = useCallback<RenderPreview>(\n        ({getValue, md}) => <MarkdownPreview getValue={getValue} md={md} />,\n        [],\n    );\n\n    const editor = useMarkdownEditor({\n        md: {html: false, linkify: true, breaks: true},\n        initial: {markup: defaultValue, mode: 'wysiwyg', splitModeEnabled: true},\n        markupConfig: {renderPreview, splitMode: 'horizontal'},\n    });\n\n    useEffect(() => {\n        const changeHandler = () => onUpdate?.(editor.getValue());\n        const submitHandler = () => onSubmit?.(editor.getValue());\n\n        editor.on('change', changeHandler);\n        editor.on('submit', submitHandler);\n        return () => {\n            editor.off('change', changeHandler);\n            editor.off('submit', submitHandler);\n        };\n    }, [editor, onUpdate, onSubmit]);\n\n    return (\n        <div>\n            <Text as=\"div\" id={labelId} variant=\"body-1\" color=\"secondary\" style={{marginBottom: 'var(--g-spacing-1)'}}>\n                {label}\n            </Text>\n            <div\n                role=\"group\"\n                aria-labelledby={labelId}\n                style={{\n                    minHeight: 320,\n                    border: '1px solid var(--g-color-line-generic)',\n                    borderRadius: 'var(--g-border-radius-m)',\n                    overflow: 'hidden',\n                }}\n            >\n                <MarkdownEditorView editor={editor} stickyToolbar autofocus={autofocus} />\n            </div>\n        </div>\n    );\n}\n\ninterface MarkdownPreviewProps {\n    getValue: () => MarkupString;\n    md: Parameters<RenderPreview>[0]['md'];\n}\n\nconst PREVIEW_DEBOUNCE_MS = 200;\n\n/** Превью для режима разметки: рендерит текущий markdown в HTML с небольшой задержкой */\nfunction MarkdownPreview({getValue, md}: MarkdownPreviewProps) {\n    const [html, setHtml] = useState('');\n\n    useEffect(() => {\n        const timer = window.setTimeout(() => {\n            const {result} = transform(getValue(), {\n                allowHTML: md.html,\n                breaks: md.breaks,\n                linkify: md.linkify,\n                linkifyTlds: md.linkifyTlds,\n                needToSanitizeHtml: true,\n            });\n            setHtml(result.html);\n        }, PREVIEW_DEBOUNCE_MS);\n        return () => window.clearTimeout(timer);\n    });\n\n    return <YfmStaticView html={html} mods={{'no-list-reset': true}} />;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {useCallback, useState} from 'react';\nimport {configure as configureMarkdownEditor, type MarkupString} from '@gravity-ui/markdown-editor';\nimport {\n    Button,\n    Flex,\n    Text,\n    TextInput,\n    Toaster,\n    ToasterComponent,\n    ToasterProvider,\n    configure as configureUikit,\n    useToaster,\n} from '@gravity-ui/uikit';\n\nimport {MarkdownField} from './MarkdownField';\n\nconfigureUikit({lang: 'ru'});\nconfigureMarkdownEditor({lang: 'ru'});\n\nconst toaster = new Toaster();\n\nconst INITIAL_DESCRIPTION: MarkupString = `# Описание\n\nНапишите текст с **markdown**-разметкой — форматирование применяется сразу.\n\n- пункт списка\n- ещё один пункт`;\n\ninterface FormValues {\n    title: string;\n    description: MarkupString;\n}\n\nfunction ArticleForm() {\n    const {add} = useToaster();\n    const [values, setValues] = useState<FormValues>({title: '', description: INITIAL_DESCRIPTION});\n\n    const handleDescriptionUpdate = useCallback((description: MarkupString) => {\n        setValues((prev) => ({...prev, description}));\n    }, []);\n\n    const handleSubmit = useCallback(\n        (event?: React.FormEvent<HTMLFormElement>) => {\n            event?.preventDefault();\n            add({\n                name: 'form-submitted',\n                title: 'Форма отправлена',\n                content: `Заголовок: ${values.title || '—'}, описание: ${values.description.length} символов`,\n                theme: 'success',\n            });\n        },\n        [add, values],\n    );\n\n    const titleInvalid = values.title.trim() === '';\n\n    return (\n        <form onSubmit={handleSubmit} noValidate>\n            <Flex direction=\"column\" gap={4}>\n                <Text variant=\"header-1\">Новая статья</Text>\n\n                <TextInput\n                    label=\"Заголовок\"\n                    placeholder=\"Введите заголовок\"\n                    value={values.title}\n                    onUpdate={(title) => setValues((prev) => ({...prev, title}))}\n                    validationState={titleInvalid ? 'invalid' : undefined}\n                    errorMessage={titleInvalid ? 'Обязательное поле' : undefined}\n                />\n\n                <MarkdownField\n                    label=\"Описание\"\n                    defaultValue={INITIAL_DESCRIPTION}\n                    onUpdate={handleDescriptionUpdate}\n                    onSubmit={() => handleSubmit()}\n                />\n\n                <Flex gap={2}>\n                    <Button type=\"submit\" view=\"action\" size=\"l\" disabled={titleInvalid}>\n                        Сохранить\n                    </Button>\n                    <Button type=\"reset\" view=\"flat\" size=\"l\" onClick={() => setValues({title: '', description: ''})}>\n                        Очистить\n                    </Button>\n                </Flex>\n            </Flex>\n        </form>\n    );\n}\n\nexport function App() {\n    return (\n        <ToasterProvider toaster={toaster}>\n            <ToasterComponent />\n            <div style={{maxWidth: 960, margin: '0 auto', padding: 'var(--g-spacing-6)'}}>\n                <ArticleForm />\n            </div>\n        </ToasterProvider>\n    );\n}\nEOF\necho ---CSS; grep -n 'import' node_modules/@gravity-ui/markdown-editor/build/esm/styles/styles.css | head; ls node_modules/@diplodoc/transform/dist/css/ 2>/dev/null; echo ---TSC; npx tsc --noEmit 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s/^import {useCallback, useState} from 'react';/import {type FormEvent, useCallback, useState} from 'react';/; s/event?: React.FormEvent<HTMLFormElement>/event?: FormEvent<HTMLFormElement>/\" src/App.tsx && grep -n 'FormEvent' src/App.tsx; echo ---YFMCSS; grep -rln 'yfm.css\\|@diplodoc/transform/dist/css' node_modules/@gravity-ui/markdown-editor/build/esm --include=*.js --include=*.css | head -5; echo ---BUILD; npm run build 2>&1 | grep -v 'allow-scripts' | tail -15",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; echo ---; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 674,
+      "outputTokens": 14243,
+      "cacheReadTokens": 1069971,
+      "cacheWriteTokens": 57840,
+      "totalTokens": 1142728
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

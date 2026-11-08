@@ -1,0 +1,144 @@
+/*
+ * All chart colors come from Gravity UI theme tokens (var(--g-color-*)),
+ * so the chart re-renders correctly under both `g-root_theme_light` and
+ * `g-root_theme_dark` without any JS theme branching.
+ *
+ * Series color: Gravity private blue step, validated with the dataviz
+ * palette validator against both theme surfaces:
+ *   light (#fff):    blue-600-solid #348BDC — contrast 3.6:1 PASS
+ *   dark  (#221D22): blue-500-solid #348BDC — contrast 4.6:1 PASS
+ * (The dark theme's own blue-600 #4AA1F2 is slightly too light for the
+ * dark lightness band, hence the scoped override below.)
+ */
+.themed-line-chart {
+  --tlc-series: var(--g-color-private-blue-600-solid);
+  --tlc-grid: var(--g-color-line-generic);
+  --tlc-axis: var(--g-color-infographics-axis);
+  --tlc-axis-text: var(--g-color-text-secondary);
+  --tlc-value-text: var(--g-color-text-primary);
+  --tlc-tooltip-bg: var(--g-color-infographics-tooltip-bg);
+  --tlc-tooltip-text: var(--g-color-text-primary);
+  --tlc-tooltip-border: var(--g-color-line-generic);
+  --tlc-surface: var(--g-color-base-background);
+
+  position: relative;
+  width: 100%;
+}
+
+.g-root_theme_dark .themed-line-chart,
+.g-root_theme_dark-hc .themed-line-chart {
+  --tlc-series: var(--g-color-private-blue-500-solid);
+}
+
+.themed-line-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.themed-line-chart__grid {
+  stroke: var(--tlc-grid);
+  stroke-width: 1;
+}
+
+.themed-line-chart__axis {
+  stroke: var(--tlc-axis);
+  stroke-width: 1;
+}
+
+.themed-line-chart__tick {
+  fill: var(--tlc-axis-text);
+  font-size: 12px;
+}
+
+.themed-line-chart__line {
+  fill: none;
+  stroke: var(--tlc-series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.themed-line-chart__last-value {
+  fill: var(--tlc-value-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.themed-line-chart__crosshair {
+  stroke: var(--tlc-grid);
+  stroke-width: 1;
+}
+
+.themed-line-chart__hover-marker {
+  fill: var(--tlc-series);
+  stroke: var(--tlc-surface);
+  stroke-width: 2;
+}
+
+.themed-line-chart__tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: var(--tlc-tooltip-bg);
+  color: var(--tlc-tooltip-text);
+  border: 1px solid var(--tlc-tooltip-border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.themed-line-chart__tooltip--start {
+  transform: translate(-12%, calc(-100% - 12px));
+}
+
+.themed-line-chart__tooltip--end {
+  transform: translate(-88%, calc(-100% - 12px));
+}
+
+.themed-line-chart__tooltip-label {
+  color: var(--tlc-axis-text);
+  font-size: 12px;
+}
+
+.themed-line-chart__tooltip-value {
+  font-weight: 600;
+}
+
+.themed-line-chart__table-toggle {
+  margin-top: 8px;
+  color: var(--tlc-axis-text);
+  font-size: 13px;
+}
+
+.themed-line-chart__table-toggle summary {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.themed-line-chart__table {
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 13px;
+  color: var(--tlc-value-text);
+}
+
+.themed-line-chart__table th,
+.themed-line-chart__table td {
+  border: 1px solid var(--tlc-tooltip-border);
+  padding: 4px 12px;
+  text-align: right;
+}
+
+.themed-line-chart__table th:first-child,
+.themed-line-chart__table td:first-child {
+  text-align: left;
+}
+
+.themed-line-chart__table th {
+  color: var(--tlc-axis-text);
+  font-weight: 600;
+}

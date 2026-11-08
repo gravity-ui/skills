@@ -1,0 +1,195 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (5 tests | 2 failed) 28118ms
+   ✓ imports @gravity-ui/uikit 1ms
+   × no raw HTML button 3ms
+     → expected 'import { useMemo, useState } from \'r…' not to match /<button[\s>]/
+   ✓ no foreign UI kit (MUI) 0ms
+   ✓ no other foreign UI kit 0ms
+   × judge: implements the task with the intended Gravity UI API 28114ms
+     → [judge:environment] FAIL — The app is wrapped in @gravity-ui/uikit's ThemeProvider whose `theme` prop is driven by React state and toggled through a Gravity control (Button, Switch, SegmentedRadioGroup or similar), and navigation between the 2–3 pages is built from Gravity components (Tabs, Button, Link, AsideHeader or similar), not raw <button>/<a>. Any routing approach (react-router, hash or state) is acceptable.
+  reason: src/main.tsx wraps <App /> in ThemeProvider with a hard-coded theme="light", while src/App.tsx only toggles local .dark CSS state via a native <button>; the Gravity theme is not state-driven. Page navigation in src/App.tsx uses raw <button> elements for nav items and a raw <a> brand link, with no Gravity navigation components.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  13:53:57
+   Duration  28.28s (transform 32ms, setup 17ms, collect 14ms, tests 28.12s, environment 0ms, prepare 36ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no raw HTML button
+AssertionError: expected 'import { useMemo, useState } from \'r…' not to match /<button[\s>]/
+
+[32m- Expected:[39m 
+/<button[\s>]/
+
+[31m+ Received:[39m 
+"import { useMemo, useState } from 'react';
+import './app.css';
+
+type Page = 'home' | 'tasks' | 'notes';
+type Task = { id: number; title: string; project: string; time: string; done: boolean; color: string };
+
+const initialTasks: Task[] = [
+  { id: 1, title: 'Подготовить мудборд для проекта', project: 'Ребрендинг', time: '10:00', done: false, color: 'violet' },
+  { id: 2, title: 'Созвониться с командой', project: 'Команда', time: '11:30', done: false, color: 'blue' },
+  { id: 3, title: 'Отправить макеты на ревью', project: 'Мобильное приложение', time: '14:00', done: false, color: 'orange' },
+  { id: 4, title: 'Разобрать входящие письма', project: 'Личное', time: '16:30', done: true, color: 'green' },
+];
+
+const Icon = ({ name, size = 20 }: { name: string; size?: number }) => {
+  const paths: Record<string, React.ReactNode> = {
+    home: <><path d=\"m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z\" /></>,
+    check: <><path d=\"m5 12 4 4L19 6\" /></>,
+    note: <><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\" /><path d=\"M14 2v6h6M8 13h8M8 17h8\" /></>,
+    sun: <><circle cx=\"12\" cy=\"12\" r=\"4\" /><path d=\"M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42\" /></>,
+    moon: <path d=\"M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z\" />,
+    search: <><circle cx=\"11\" cy=\"11\" r=\"7\" /><path d=\"m20 20-4-4\" /></>,
+    plus: <><path d=\"M12 5v14M5 12h14\" /></>,
+    arrow: <><path d=\"M5 12h14m-7-7 7 7-7 7\" /></>,
+    calendar: <><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\" /><path d=\"M16 3v4M8 3v4M3 11h18\" /></>,
+    more: <><circle cx=\"5\" cy=\"12\" r=\"1\" /><circle cx=\"12\" cy=\"12\" r=\"1\" /><circle cx=\"19\" cy=\"12\" r=\"1\" /></>,
+    spark: <><path d=\"m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3Z\" /><path d=\"m19 14 1 2.5 2.5 1-2.5 1L19 21l-1-2.5-2.5-1 2.5-1L19 14Z\" /></>,
+  };
+  return <svg width={size} height={size} viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.7\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\">{paths[name]}</svg>;
+};
+
+export function App() {
+  const [page, setPage] = useState<Page>('home');
+  const [dark, setDark] = useState(false);
+  const [tasks, setTasks] = useState(initialTasks);
+  const [filter, setFilter] = useState<'Все' | 'Активные' | 'Готовые'>('Все');
+  const [search, setSearch] = useState('');
+  const [showNewTask, setShowNewTask] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [savedNotes, setSavedNotes] = useState<string[]>([]);
+
+  const addNote = () => {
+    if (!newTitle.trim()) return;
+    setSavedNotes((current) => [newTitle.trim(), ...current]);
+    setNewTitle('');
+    setShowNewTask(false);
+  };
+  const todayLabel = new Intl.DateTimeFormat('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date()).toLocaleUpperCase('ru-RU');
+  const weekStart = new Date();
+  weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+  const weekDays = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(weekStart);
+    date.setDate(weekStart.getDate() + index);
+    return { label: new Intl.DateTimeFormat('ru-RU', { weekday: 'short' }).format(date).replace('.', ''), date: date.getDate(), today: date.toDateString() === new Date().toDateString() };
+  });
+  const weekRange = `${weekStart.getDate()} — ${new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6).getDate()} ${new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 6))}`;
+
+  const completed = tasks.filter((task) => task.done).length;
+  const visibleTasks = useMemo(() => tasks.filter((task) => {
+    const matchesFilter = filter === 'Все' || (filter === 'Активные' ? !task.done : task.done);
+    return matchesFilter && task.title.toLowerCase().includes(search.toLowerCase());
+  }), [tasks, filter, search]);
+  const toggleTask = (id: number) => setTasks((current) => current.map((task) => task.id === id ? { ...task, done: !task.done } : task));
+  const addTask = () => {
+    if (!newTitle.trim()) return;
+    setTasks((current) => [{ id: Date.now(), title: newTitle.trim(), project: 'Личное', time: 'Сегодня', done: false, color: 'green' }, ...current]);
+    setNewTitle('');
+    setShowNewTask(false);
+    setPage('tasks');
+  };
+
+  const navItems: { id: Page; label: string; icon: string }[] = [
+    { id: 'home', label: 'Обзор', icon: 'home' },
+    { id: 'tasks', label: 'Мои задачи', icon: 'check' },
+    { id: 'notes', label: 'Заметки', icon: 'note' },
+  ];
+
+  return <div className={`app-shell ${dark ? 'dark' : ''}`}>
+    <aside className=\"sidebar\">
+      <a className=\"brand\" href=\"#home\" onClick={(e) => { e.preventDefault(); setPage('home'); }}><span className=\"brand-mark\"><Icon name=\"spark\" size={19} /></span><span>точка</span></a>
+      <div className=\"workspace-label\">РАБОЧЕЕ ПРОСТРАНСТВО</div>
+      <nav className=\"side-nav\" aria-label=\"Основная навигация\">
+        {navItems.map((item) => <button className={`nav-item ${page === item.id ? 'selected' : ''}`} key={item.id} onClick={() => setPage(item.id)}><Icon name={item.icon} /><span>{item.label}</span>{item.id === 'tasks' && <span className=\"nav-count\">{tasks.filter((task) => !task.done).length}</span>}</button>)}
+      </nav>
+      <div className=\"sidebar-bottom\">
+        <div className=\"upgrade-card\"><div className=\"upgrade-icon\"><Icon name=\"spark\" size={18} /></div><strong>День в фокусе</strong><p>Небольшие шаги приводят к большим результатам.</p><button onClick={() => setPage('tasks')}>К задачам <Icon name=\"arrow\" size={15} /></button></div>
+        <div className=\"profile\"><div className=\"avatar\">А</div><div className=\"profile-copy\"><strong>Александра</strong><span>Личный аккаунт</span></div><button className=\"icon-button profile-more\" aria-label=\"Настройки профиля\"><Icon name=\"more\" /></button></div>
+      </div>
+    </aside>
+
+    <main className=\"main-area\">
+      <header className=\"topbar\"><div className=\"breadcrumb\">Моё пространство <span>/</span> <strong>{page === 'home' ? 'Обзор' : page === 'tasks' ? 'Мои задачи' : 'Заметки'}</strong></div><div className=\"top-actions\"><label className=\"search-box\"><Icon name=\"search\" size={18} /><input aria-label=\"Поиск\" placeholder=\"Поиск\" value={search} onChange={(e) => setSearch(e.target.value)} /><kbd>⌘ K</kbd></label><button className=\"theme-toggle\" onClick={() => setDark(!dark)} aria-label={dark ? 'Включить светлую тему' : 'Включить тёмную тему'} title={dark ? 'Светлая тема' : 'Тёмная тема'}><Icon name={dark ? 'sun' : 'moon'} size={18} /></button><div className=\"top-avatar\">А</div></div></header>
+
+      <div className=\"page-content\">
+        {page === 'home' && <>
+          <section className=\"welcome-row\"><div><div className=\"eyebrow\">{todayLabel}</div><h1>Доброе утро, Александра <span className=\"wave\">✳</span></h1><p className=\"lead\">Сегодня отличный день, чтобы сделать что-то важное.</p></div><button className=\"primary-button\" onClick={() => setShowNewTask(true)}><Icon name=\"plus\" size={18} /> Новая задача</button></section>
+          <section className=\"stats-grid\">
+            <div className=\"stat-card\"><div className=\"stat-top\"><span>Задачи на сегодня</span><span className=\"stat-icon purple\"><Icon name=\"check\" size={18} /></span></div><div className=\"stat-number\">{tasks.filter((task) => !task.done).length}<span> задачи</span></div><div className=\"stat-foot\"><span className=\"trend\">↗ 2</span> больше, чем вчера</div></div>
+            <div className=\"stat-card\"><div className=\"stat-top\"><span>Выполнено за неделю</span><span className=\"stat-icon peach\"><Icon name=\"spark\" size={18} /></span></div><div className=\"stat-number\">12<span> задач</span></div><div className=\"stat-foot\"><span className=\"trend\">↗ 18%</span> к прошлой неделе</div></div>
+            <div className=\"stat-card focus-stat\"><div className=\"stat-top\"><span>Фокус на сегодня</span><span className=\"stat-icon mint\"><Icon name=\"calendar\" size={18} /></span></div><div className=\"stat-number\">3<span> ч 20 мин</span></div><div className=\"focus-bar\"><span /></div><div className=\"stat-foot\">Из запланированных 5 часов</div></div>
+          </section>
+          <section className=\"content-grid\"><div className=\"panel task-panel\"><div className=\"panel-heading\"><div><h2>План на сегодня</h2><p>Ваш список дел на вторник</p></div><button className=\"text-button\" onClick={() => setPage('tasks')}>Все задачи <Icon name=\"arrow\" size={16} /></button></div><div className=\"task-list\">{tasks.slice(0, 4).map((task) => <TaskRow key={task.id} task={task} onToggle={toggleTask} />)}</div><button className=\"add-row\" onClick={() => setShowNewTask(true)}><span><Icon name=\"plus\" size={16} /></span> Добавить задачу</button></div>
+            <div className=\"panel week-panel\"><div className=\"panel-heading\"><div><h2>Эта неделя</h2><p>{weekRange}</p></div><button className=\"icon-button\" aria-label=\"Открыть календарь\"><Icon name=\"more\" /></button></div><div className=\"week-days\">{weekDays.map(({ label, date, today })=><div className={`week-day ${today?'today':''}`} key={label}><span>{label}</span><b>{date}</b><i className={today?'active-dot':''} /></div>)}</div><div className=\"week-divider\" /><div className=\"upcoming-title\"><span>ПРЕДСТОЯЩЕЕ</span><span>2 события</span></div><div className=\"event\"><div className=\"event-time\">10:00</div><div className=\"event-line purple-line\"/><div><strong>Дизайн-синк</strong><span>Команда продукта · 30 мин</span></div></div><div className=\"event\"><div className=\"event-time\">14:30</div><div className=\"event-line orange-line\"/><div><strong>Обсуждение концепции</strong><span>Студия · 1 час</span></div></div></div></section>
+          <section className=\"quote-strip\"><div className=\"quote-mark\">“</div><div><strong>Сосредоточься на прогрессе, а не на совершенстве.</strong><span>Твой маленький шаг сегодня — это большой результат завтра.</span></div><span className=\"quote-spark\">✳</span></section>
+        </>}
+
+        {page === 'tasks' && <><section className=\"welcome-row page-heading\"><div><div className=\"eyebrow\">ВАШ СПИСОК ДЕЛ</div><h1>Мои задачи</h1><p className=\"lead\">Двигайтесь к важному в своём темпе.</p></div><button className=\"primary-button\" onClick={() => setShowNewTask(true)}><Icon name=\"plus\" size={18} /> Новая задача</button></section><section className=\"panel full-panel\"><div className=\"panel-heading\"><div><h2>Все задачи <span className=\"heading-count\">{tasks.length}</span></h2><p>{completed} из {tasks.length} задач выполнено</p></div><div className=\"filter-tabs\">{(['Все','Активные','Готовые'] as const).map((item) => <button key={item} className={filter === item ? 'active' : ''} onClick={() => setFilter(item)}>{item}</button>)}</div></div><div className=\"task-list full-task-list\">{visibleTasks.length ? visibleTasks.map((task) => <TaskRow key={task.id} task={task} onToggle={toggleTask} />) : <div className=\"empty-state\">Задач не найдено. Попробуйте изменить поиск или фильтр.</div>}</div><button className=\"add-row\" onClick={() => setShowNewTask(true)}><span><Icon name=\"plus\" size={16} /></span> Добавить задачу</button></section><div className=\"task-tip\"><span className=\"tip-icon\"><Icon name=\"spark\" size={17} /></span><span><strong>Небольшой совет</strong> Разбейте большую задачу на несколько маленьких — так начать будет проще.</span></div></>}
+
+        {page === 'notes' && <><section className=\"welcome-row page-heading\"><div><div className=\"eyebrow\">МЫСЛИ И ИДЕИ</div><h1>Заметки</h1><p className=\"lead\">Место, где можно сохранить важное.</p></div><button className=\"primary-button\" onClick={() => setShowNewTask(true)}><Icon name=\"plus\" size={18} /> Новая заметка</button></section><section className=\"notes-grid\"><article className=\"note-card note-lilac\"><div className=\"note-meta\"><span>ИДЕИ</span><button className=\"icon-button\" aria-label=\"Дополнительно\"><Icon name=\"more\" /></button></div><h2>Идеи для летней коллекции</h2><p>Лёгкие ткани, природные оттенки и простые формы. Добавить больше воздуха и меньше визуального шума.</p><div className=\"note-bottom\"><span>Сегодня, 09:42</span><span className=\"note-pin\">✳</span></div></article><article className=\"note-card note-yellow\"><div className=\"note-meta\"><span>ЛИЧНОЕ</span><button className=\"icon-button\" aria-label=\"Дополнительно\"><Icon name=\"more\" /></button></div><h2>На этой неделе</h2><p>Сходить на выставку в субботу<br/>Купить цветы домой<br/>Позвонить бабушке</p><div className=\"note-bottom\"><span>Вчера, 18:20</span><span className=\"note-pin\">✳</span></div></article><article className=\"note-card note-mint\"><div className=\"note-meta\"><span>РАБОТА</span><button className=\"icon-button\" aria-label=\"Дополнительно\"><Icon name=\"more\" /></button></div><h2>Вопросы к брейншторму</h2><p>Что мы хотим, чтобы люди почувствовали?<br/>Как сделать опыт проще?<br/>Что можно убрать?</p><div className=\"note-bottom\"><span>12 мая, 14:05</span><span className=\"note-pin\">✳</span></div></article>{savedNotes.map((note, index) => <article className=\"note-card note-lilac\" key={`${note}-${index}`}><div className=\"note-meta\"><span>НОВАЯ ЗАМЕТКА</span><span className=\"note-pin\">✳</span></div><h2>{note}</h2><div className=\"note-bottom\"><span>Только что</span></div></article>)}<button className=\"new-note-card\" onClick={() => setShowNewTask(true)}><span><Icon name=\"plus\" size={20} /></span><strong>Создать заметку</strong><small>Запишите новую идею</small></button></section></>}
+      </div>
+    </main>
+    {showNewTask && <div className=\"modal-backdrop\" onClick={() => setShowNewTask(false)}><form className=\"new-task-modal\" onClick={(e) => e.stopPropagation()} onSubmit={(e) => { e.preventDefault(); page === 'notes' ? addNote() : addTask(); }}><button type=\"button\" className=\"modal-close\" onClick={() => setShowNewTask(false)}>×</button><div className=\"eyebrow\">{page === 'notes' ? 'НОВАЯ ЗАМЕТКА' : 'НОВАЯ ЗАДАЧА'}</div><h2>{page === 'notes' ? 'О чём хотите записать?' : 'Что нужно сделать?'}</h2><input autoFocus value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder={page === 'notes' ? 'Например, идея для проекта' : 'Например, подготовить презентацию'} /><div className=\"modal-actions\"><button type=\"button\" className=\"secondary-button\" onClick={() => setShowNewTask(false)}>Отмена</button><button className=\"primary-button\" type=\"submit\">{page === 'notes' ? 'Сохранить заметку' : 'Добавить задачу'}</button></div></form></div>}
+  </div>;
+}
+
+function TaskRow({ task, onToggle }: { task: Task; onToggle: (id: number) => void }) {
+  return <div className={`task-row ${task.done ? 'is-done' : ''}`}><button className={`task-check ${task.done ? 'checked' : ''}`} onClick={() => onToggle(task.id)} aria-label={task.done ? 'Вернуть задачу в активные' : 'Отметить задачу выполненной'}>{task.done && <Icon name=\"check\" size={14} />}</button><div className={`project-dot ${task.color}`} /><div className=\"task-copy\"><strong>{task.title}</strong><span>{task.project}</span></div><span className=\"task-time\">{task.time}</span><button className=\"icon-button task-more\" aria-label=\"Дополнительно\"><Icon name=\"more\" size={19} /></button></div>;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{font-family:'DM Sans',sans-serif;color:#24232b;background:#f7f6f8;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}body{margin:0;min-width:320px}.app-shell{--bg:#f7f6f8;--surface:#fff;--surface-soft:#fbfafc;--ink:#25232d;--muted:#92909c;--line:#eeedf1;--purple:#7655db;--purple-soft:#f0ebff;--shadow:0 2px 10px rgba(37,30,57,.035);min-height:100vh;background:var(--bg);color:var(--ink);transition:background .2s,color .2s}.app-shell.dark{--bg:#17161c;--surface:#211f28;--surface-soft:#292732;--ink:#f2eff8;--muted:#a19dab;--line:#373440;--purple:#a48afa;--purple-soft:#352e48;--shadow:0 2px 10px rgba(0,0,0,.12)}button,input{font:inherit}button{color:inherit;cursor:pointer}.sidebar{position:fixed;inset:0 auto 0 0;width:248px;background:var(--surface);border-right:1px solid var(--line);padding:28px 16px 18px;display:flex;flex-direction:column;z-index:2}.brand{display:flex;align-items:center;gap:10px;margin:0 0 52px 8px;color:var(--ink);text-decoration:none;font:800 23px 'Manrope',sans-serif;letter-spacing:-1.2px}.brand-mark{width:29px;height:29px;border-radius:10px;background:#7655db;color:white;display:grid;place-items:center}.workspace-label,.eyebrow{font-size:10px;font-weight:700;letter-spacing:1.2px;color:#a5a2ad}.workspace-label{padding:0 10px;margin-bottom:12px}.side-nav{display:flex;flex-direction:column;gap:5px}.nav-item{display:flex;align-items:center;gap:12px;width:100%;height:45px;padding:0 11px;border:0;border-radius:9px;background:transparent;color:#85828f;text-align:left;font-size:13px;font-weight:500;transition:.18s}.nav-item:hover{background:var(--surface-soft);color:var(--ink)}.nav-item.selected{background:var(--purple-soft);color:var(--purple);font-weight:700}.nav-count{margin-left:auto;font-size:11px;color:var(--purple);background:rgba(118,85,219,.1);border-radius:6px;padding:2px 7px}.sidebar-bottom{margin-top:auto}.upgrade-card{background:linear-gradient(145deg,#f3efff,#f8f6ff);border:1px solid #eee8ff;border-radius:13px;padding:16px;margin:0 1px 18px}.dark .upgrade-card{background:linear-gradient(145deg,#302a40,#282432);border-color:#3b334c}.upgrade-icon{width:31px;height:31px;display:grid;place-items:center;background:#fff;border-radius:9px;color:#805ce2;margin-bottom:14px}.dark .upgrade-icon{background:#393149}.upgrade-card strong{font-size:12px}.upgrade-card p{font-size:11px;line-height:1.6;color:#898493;margin:6px 0 12px}.upgrade-card button{display:flex;align-items:center;gap:6px;background:none;border:0;padding:0;color:#7655db;font-size:11px;font-weight:700}.profile{padding:15px 5px 0;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}.avatar,.top-avatar{border-radius:50%;display:grid;place-items:center;background:#f3d9c8;color:#754d3c;font-weight:700}.avatar{width:34px;height:34px;font-size:13px}.profile-copy{display:flex;flex-direction:column;gap:3px}.profile-copy strong{font-size:11px}.profile-copy span{font-size:10px;color:var(--muted)}.profile-more{margin-left:auto}.main-area{margin-left:248px;min-height:100vh}.topbar{height:70px;padding:0 48px;border-bottom:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:space-between}.breadcrumb{font-size:11px;color:#aaa7b1}.breadcrumb span{margin:0 9px;color:#d1ced7}.breadcrumb strong{color:var(--ink);font-weight:600}.top-actions{display:flex;align-items:center;gap:15px}.search-box{height:34px;width:207px;display:flex;align-items:center;gap:8px;padding:0 9px;color:#aaa7b1;background:var(--surface-soft);border:1px solid var(--line);border-radius:8px}.search-box input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:11px}.search-box input::placeholder{color:#aaa7b1}.search-box kbd{font-size:9px;white-space:nowrap;border:1px solid var(--line);border-radius:4px;padding:2px 4px;color:#aaa7b1;background:var(--surface)}.theme-toggle,.icon-button{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:#85818f;transition:.15s}.theme-toggle:hover,.icon-button:hover{color:var(--purple);border-color:#d8cdfa}.top-avatar{width:31px;height:31px;font-size:12px}.page-content{max-width:1190px;margin:0 auto;padding:40px 48px 54px}.welcome-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:29px}.eyebrow{margin-bottom:9px}.welcome-row h1{font:700 27px 'Manrope',sans-serif;letter-spacing:-.8px;margin:0 0 7px}.wave{font-size:20px;color:#e8a66f;margin-left:4px}.lead{font-size:12px;color:var(--muted);margin:0}.primary-button{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 15px;border:0;border-radius:8px;background:#7655db;color:white;font-size:11px;font-weight:700;box-shadow:0 4px 9px rgba(118,85,219,.16);transition:.18s}.primary-button:hover{background:#6544c9;transform:translateY(-1px)}.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-bottom:21px}.stat-card,.panel{border:1px solid var(--line);border-radius:12px;background:var(--surface);box-shadow:var(--shadow)}.stat-card{padding:17px 18px 15px;min-height:130px}.stat-top{display:flex;align-items:center;justify-content:space-between;color:#777481;font-size:11px;font-weight:500}.stat-icon{width:31px;height:31px;border-radius:9px;display:grid;place-items:center}.purple{background:#f0ebff;color:#805cdf}.peach{background:#fff0e7;color:#e89a61}.mint{background:#e6f7f1;color:#54ac8d}.dark .stat-icon.purple{background:#352e48}.dark .stat-icon.peach{background:#413128}.dark .stat-icon.mint{background:#233a35}.stat-number{margin-top:6px;font:700 25px 'Manrope',sans-serif;letter-spacing:-.7px}.stat-number span{font:500 12px 'DM Sans',sans-serif;letter-spacing:0;color:#888592}.stat-foot{font-size:10px;color:#9a97a2;margin-top:5px}.trend{color:#59a98a;font-weight:700;margin-right:4px}.focus-bar{height:5px;border-radius:5px;background:#eeeaf4;margin-top:9px;overflow:hidden}.focus-bar span{display:block;width:67%;height:100%;background:#59b194;border-radius:5px}.focus-stat .stat-foot{margin-top:7px}.content-grid{display:grid;grid-template-columns:1.42fr 1fr;gap:17px}.panel{padding:20px 20px 15px}.panel-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px}.panel-heading h2{font:700 14px 'Manrope',sans-serif;letter-spacing:-.2px;margin:0 0 5px}.panel-heading p{font-size:10px;color:var(--muted);margin:0}.text-button{display:flex;align-items:center;gap:7px;border:0;background:none;color:#7655db;font-size:10px;font-weight:700;padding:3px 0}.task-list{display:flex;flex-direction:column}.task-row{height:57px;display:flex;align-items:center;gap:11px;border-top:1px solid var(--line)}.task-check{width:17px;height:17px;flex:0 0 17px;border:1.5px solid #d6d2dd;border-radius:50%;background:transparent;padding:0;display:grid;place-items:center;color:white}.task-check:hover{border-color:#8b6ce3}.task-check.checked{background:#7455d6;border-color:#7455d6}.project-dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}.project-dot.violet{background:#a58aeb}.project-dot.blue{background:#72a8e4}.project-dot.orange{background:#efa975}.project-dot.green{background:#65b99a}.task-copy{display:flex;flex-direction:column;gap:4px;min-width:0}.task-copy strong{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.task-copy span{font-size:9px;color:#a09da8}.task-time{font-size:10px;color:#898692;margin-left:auto;white-space:nowrap}.task-more{width:26px;height:28px;border:0;background:transparent}.is-done .task-copy strong{text-decoration:line-through;color:#aaa7b1}.add-row{height:37px;width:100%;display:flex;align-items:center;gap:9px;border:0;background:transparent;color:#96929f;font-size:10px;text-align:left;padding:0 1px}.add-row span{display:grid;place-items:center;width:19px;height:19px;border:1px dashed #c9c4d0;border-radius:6px;color:#8c8796}.add-row:hover{color:var(--purple)}.week-panel{padding-bottom:18px}.week-days{display:flex;justify-content:space-between;margin:21px 0 15px}.week-day{display:flex;flex-direction:column;align-items:center;gap:7px;font-size:9px;color:#a19eaa}.week-day b{font-size:11px;font-weight:500;color:#5e5b67;width:26px;height:26px;display:grid;place-items:center;border-radius:50%}.dark .week-day b{color:#dedbe4}.week-day.today b{background:#7655db;color:white;font-weight:700}.week-day i{width:3px;height:3px;border-radius:50%;background:#ccc7d2}.week-day i.active-dot{background:#7655db}.week-divider{height:1px;background:var(--line);margin:0 -2px 15px}.upcoming-title{display:flex;justify-content:space-between;color:#a09da8;font-size:9px;letter-spacing:.7px;font-weight:700;margin-bottom:8px}.upcoming-title span+span{letter-spacing:0;font-weight:500}.event{height:46px;display:flex;align-items:center;gap:10px}.event-time{width:34px;font-size:9px;color:#9996a1}.event-line{width:2px;height:25px;border-radius:2px}.purple-line{background:#9a7be8}.orange-line{background:#efae7a}.event div:last-child{display:flex;flex-direction:column;gap:4px}.event strong{font-size:10px;font-weight:600}.event span{font-size:9px;color:#a09da8}.quote-strip{display:flex;align-items:center;gap:13px;border:1px solid #eee9fa;background:linear-gradient(100deg,#f5f1ff,#faf8ff);border-radius:11px;padding:13px 18px;margin-top:17px}.dark .quote-strip{background:linear-gradient(100deg,#2c2638,#25222d);border-color:#393344}.quote-mark{font:700 36px Georgia,serif;color:#a188e9;height:32px;line-height:1}.quote-strip div:nth-child(2){display:flex;flex-direction:column;gap:4px}.quote-strip strong{font-size:10px;font-weight:600}.quote-strip span{font-size:9px;color:#9995a3}.quote-strip .quote-spark{margin-left:auto;font-size:19px;color:#b7a3ed}.page-heading{margin-bottom:29px}.full-panel{padding:22px 24px 14px}.heading-count{display:inline-grid;place-items:center;width:21px;height:21px;border-radius:6px;margin-left:5px;background:var(--purple-soft);font:600 10px 'DM Sans',sans-serif;color:var(--purple)}.filter-tabs{display:flex;align-items:center;gap:3px;background:var(--surface-soft);padding:3px;border:1px solid var(--line);border-radius:8px}.filter-tabs button{border:0;border-radius:6px;background:transparent;color:#8e8b96;padding:7px 11px;font-size:10px}.filter-tabs button.active{background:var(--surface);color:var(--purple);box-shadow:0 1px 4px rgba(20,15,32,.08);font-weight:700}.full-task-list{margin-top:12px}.full-task-list .task-row{height:66px}.empty-state{padding:34px;text-align:center;color:var(--muted);font-size:12px}.task-tip{display:flex;align-items:center;gap:11px;margin-top:16px;padding:14px 17px;border-radius:10px;background:#f0f8f5;color:#8b948f;font-size:10px}.dark .task-tip{background:#202d29}.tip-icon{display:grid;place-items:center;width:30px;height:30px;border-radius:8px;background:#fff;color:#59aa8b}.dark .tip-icon{background:#2c3a34}.task-tip strong{color:#555e58;margin-right:5px}.notes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.note-card{min-height:228px;border-radius:12px;padding:19px 20px 15px;display:flex;flex-direction:column;border:1px solid transparent}.note-lilac{background:#f0ebfb;border-color:#e8e0f9}.note-yellow{background:#fff6df;border-color:#f8edcf}.note-mint{background:#eaf5ef;border-color:#dfede5}.dark .note-lilac{background:#302b3c;border-color:#3a3448}.dark .note-yellow{background:#383328;border-color:#443d30}.dark .note-mint{background:#27352f;border-color:#34433b}.note-meta{display:flex;align-items:center;justify-content:space-between;color:#9993a4;font-size:9px;font-weight:700;letter-spacing:.8px}.note-meta .icon-button{border:0;background:transparent;width:26px;height:26px}.note-card h2{font:700 16px 'Manrope',sans-serif;margin:20px 0 9px;letter-spacing:-.3px}.note-card p{font-size:11px;line-height:1.8;color:#77727f;margin:0;white-space:pre-line}.dark .note-card p{color:#b9b4c0}.note-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:16px;color:#a09ba7;font-size:9px}.note-pin{font-size:14px;color:#a78ce5}.new-note-card{min-height:228px;border:1px dashed #d9d4df;border-radius:12px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#8e8997}.new-note-card>span{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--purple-soft);color:var(--purple);margin-bottom:2px}.new-note-card strong{font-size:11px;color:var(--ink)}.new-note-card small{font-size:10px;color:var(--muted)}.new-note-card:hover{border-color:#9e85e4}.modal-backdrop{position:fixed;inset:0;background:rgba(25,20,35,.38);display:grid;place-items:center;z-index:10;padding:18px}.new-task-modal{position:relative;width:min(100%,430px);padding:28px;border-radius:15px;background:var(--surface);box-shadow:0 20px 70px rgba(0,0,0,.2)}.modal-close{position:absolute;right:15px;top:10px;border:0;background:transparent;color:var(--muted);font-size:24px}.new-task-modal h2{font:700 20px 'Manrope',sans-serif;margin:0 0 17px}.new-task-modal input{width:100%;height:42px;border:1px solid var(--line);background:var(--surface-soft);border-radius:8px;padding:0 12px;color:var(--ink);outline:0;font-size:12px}.new-task-modal input:focus{border-color:#a58bea;box-shadow:0 0 0 3px #7655db20}.modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.secondary-button{height:38px;padding:0 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:11px}
+
+@media(max-width:1050px){.sidebar{width:215px}.main-area{margin-left:215px}.page-content{padding:34px 30px}.topbar{padding:0 30px}.content-grid{grid-template-columns:1fr}.week-panel{min-height:250px}.week-days{max-width:440px}.stats-grid{gap:10px}.stat-card{padding:15px}}@media(max-width:720px){.sidebar{width:64px;padding:20px 8px}.brand{margin:0 auto 38px;font-size:0}.brand-mark{width:34px;height:34px}.workspace-label,.nav-item span,.upgrade-card,.profile-copy,.profile-more{display:none}.side-nav{align-items:center}.nav-item{justify-content:center;padding:0;width:45px}.sidebar-bottom{display:flex;justify-content:center}.profile{border:0;padding:0}.avatar{width:34px}.main-area{margin-left:64px}.topbar{height:60px;padding:0 17px}.breadcrumb{font-size:10px}.top-actions{gap:8px}.search-box{width:34px;padding:0;justify-content:center;border:0;background:transparent}.search-box input,.search-box kbd{display:none}.search-box:focus-within{position:absolute;right:98px;width:180px;padding:0 9px;background:var(--surface);border:1px solid var(--line)}.search-box:focus-within input{display:block}.page-content{padding:28px 17px 40px}.welcome-row{align-items:flex-start;gap:16px;flex-direction:column}.welcome-row h1{font-size:23px}.welcome-row .primary-button{align-self:flex-start}.stats-grid{grid-template-columns:1fr}.stat-card{min-height:110px}.content-grid{gap:12px}.panel{padding:17px 14px 12px}.task-row{gap:8px}.task-copy strong{font-size:10px}.task-time{font-size:9px}.task-more{width:20px}.week-panel{min-height:0}.quote-strip{padding:11px}.quote-strip strong{line-height:1.5}.notes-grid{grid-template-columns:1fr}.note-card,.new-note-card{min-height:200px}.full-panel{padding:17px 12px}.panel-heading{gap:10px;flex-wrap:wrap}.filter-tabs{order:3;width:100%}.filter-tabs button{flex:1}.full-task-list .task-row{height:63px}}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:64:19
+     62| // The theme switcher (and other controls) must use Gravity components…
+     63| test("no raw HTML button", () => {
+     64|   expect(src).not.toMatch(new RegExp("<button[\\s>]"));
+       |                   ^
+     65| });
+     66| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The app is wrapped in @gravity-ui/uikit's ThemeProvider whose `theme` prop is driven by React state and toggled through a Gravity control (Button, Switch, SegmentedRadioGroup or similar), and navigation between the 2–3 pages is built from Gravity components (Tabs, Button, Link, AsideHeader or similar), not raw <button>/<a>. Any routing approach (react-router, hash or state) is acceptable.
+  reason: src/main.tsx wraps <App /> in ThemeProvider with a hard-coded theme="light", while src/App.tsx only toggles local .dark CSS state via a native <button>; the Gravity theme is not state-driven. Page navigation in src/App.tsx uses raw <button> elements for nav items and a raw <a> brand link, with no Gravity navigation components.
+ ❯ EVAL.ts:81:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

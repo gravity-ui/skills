@@ -1,0 +1,156 @@
+{
+  "status": "failed",
+  "duration": 887.979,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 51649,
+    "outputTokens": 18461,
+    "cacheReadTokens": 814976,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 2011,
+    "totalTokens": 885086
+  },
+  "model": "gpt-6.1-sol",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 21,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!package-lock.json'\"' -g '\"'!yarn.lock'\"' -g '\"'!pnpm-lock.yaml'\"' -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'index.html' -g 'README*' -g '*config*' -g 'components/**' -g 'public/**'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ls -la; find .. -name AGENTS.md -print; cat package.json; cat src/App.tsx; cat src/main.tsx; cat index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files node_modules/@gravity-ui/uikit | rg '/(Toast|Toaster|Select|SegmentedRadioGroup|TextInput|Button)/.*(d.ts|README)' | head -55; cat tsconfig.json; rg --files node_modules | rg 'playwright|puppeteer' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/TextInput/TextInput.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts | head -100; cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -100'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'controlProps|inputProps|maxLength|id\\\\??:' node_modules/@gravity-ui/uikit/build/esm/components/controls -g '*.d.ts'; ls /tmp; node -e \\\"for (const p of ['playwright','@playwright/test','puppeteer']) {try {console.log(p,import.meta.resolve(p))}catch{}}\\\"; rg -n '\\\\-\\\\-g-button-(background|text|border)|\\\\-\\\\-g-text-input' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"python3 - <<'PY'\np='src/App.tsx'\ns=open(p).read().replace('maxLength={120}', 'controlProps={{maxLength: 120}}')\nopen(p,'w').write(s)\nPY\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm exec --yes --package=@playwright/test -- playwright --version'"
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg --files /home/node/.npm/_npx /home/sandbox/.npm/_npx /root/.npm/_npx 2>/dev/null | rg '/playwright/package.json\"'$|/playwright-core/package.json$'\"' | head; ls -la /home/node/.cache/ms-playwright; npm run dev -- --host 0.0.0.0\""
+      },
+      {
+        "command": "/bin/bash -lc 'npm exec --yes --package=@playwright/test -- playwright install chromium'"
+      },
+      {
+        "command": "/bin/bash -lc \"git diff --stat; sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.css; rg -n 'g-text-input.*control|g-text-input.*border|g-select-control' node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.css node_modules/@gravity-ui/uikit/build/esm/components/Select/components/SelectControl/SelectControl.css | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short; sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.css; rg -n 'g-text-input__control|g-text-input' node_modules/@gravity-ui/uikit/build/esm/components/controls/TextInput/TextInput.js | head -10\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm exec --yes --package=prettier -- prettier --write src/App.tsx src/styles.css index.html'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > /tmp/signal-check.mjs <<'EOF'\nimport { chromium } from '/home/node/.npm/_npx/420ff84f11983ee5/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch({headless: true, args: ['--no-sandbox']});\nconst page = await browser.newPage({viewport: {width: 1440, height: 1000}});\nconst errors = [];\npage.on('pageerror', error => errors.push(error.message));\nawait page.goto('http://localhost:5173');\nawait page.evaluate(() => document.fonts.ready);\nawait page.screenshot({path:'/tmp/signal-desktop.png', fullPage:true});\nawait page.clock.install();\nconst trigger = page.getByRole('button', {name: /Показать уведомление/});\nawait trigger.click();\nif (await page.locator('.live-toast').count() \"'!== 1) throw Error('\"'Toast did not appear');\nawait page.clock.fastForward(4000);\nawait trigger.click();\nawait page.clock.fastForward(2000);\nif (await page.locator('.live-toast').count() \"'!== 1) throw Error('\"'Repeat click did not reset timer');\nawait page.clock.fastForward(3100);\nif (await page.locator('.live-toast').count() \"'!== 0) throw Error('\"'Toast did not disappear');\nawait page.getByRole('button', {name:'Ошибка', exact:true}).click();\nawait page.getByLabel('Текст сообщения').fill('Проверка уведомления');\nawait page.getByRole('combobox').click();\nawait page.getByRole('option', {name: '3 секунды', exact:true}).click();\nawait trigger.click();\nif (\"'!(await page.locator('\"'.live-toast').innerText()).includes('Проверка уведомления')) throw Error('Custom text not applied');\nif (\"'!(await page.locator('\"'.live-toast').innerText()).includes('Что-то пошло не так')) throw Error('Type not applied');\nawait page.clock.fastForward(3100);\nif (await page.locator('.live-toast').count() \"'!== 0) throw Error('\"'Duration setting not applied');\nawait trigger.click();\nawait page.getByRole('button', {name: 'Закрыть уведомление', exact:true}).click();\nif (await page.locator('.live-toast').count() \"'!== 0) throw Error('\"'Manual dismissal failed');\nawait page.setViewportSize({width:390,height:844});\nawait page.screenshot({path:'/tmp/signal-mobile.png', fullPage:true});\nconst overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);\nif (overflow) throw Error('Mobile horizontal overflow');\nif (errors.length) throw Error(errors.join('\\\\n'));\nconsole.log('PASS: show, auto-dismiss, timer reset, custom message, type, duration, close, mobile layout, no runtime errors.');\nawait browser.close();\nEOF\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'font-family|g-color-base-brand|g-font-family-sans' node_modules/@gravity-ui/uikit/build/esm/components/ThemeProvider/ThemeProvider.css node_modules/@gravity-ui/uikit/styles/styles.css | head -18; cat .gitignore; git diff --check; npm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build; git diff --check'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'role:|role=|combobox|listbox' node_modules/@gravity-ui/uikit/build/esm/components/Select/components/SelectControl/SelectControl.js node_modules/@gravity-ui/uikit/build/esm/components/Select/hooks/*.js node_modules/@gravity-ui/uikit/build/esm/hooks/useSelect/*.js | head -25; ls /home/node/.cache/ms-playwright\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls /home/node/.cache/ms-playwright/chromium-1248/chrome-linux-arm64; sed -i \\\"s/headless: true, args:/headless: true, executablePath: '\\\\/home\\\\/node\\\\/.cache\\\\/ms-playwright\\\\/chromium-1248\\\\/chrome-linux-arm64\\\\/chrome', args:/\\\" /tmp/signal-check.mjs; node /tmp/signal-check.mjs\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat /etc/os-release; command -v apt-get; command -v sudo; id; ls /usr/lib | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short; git diff --check'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 51649,
+      "outputTokens": 18461,
+      "cacheReadTokens": 814976,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 2011,
+      "totalTokens": 885086
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

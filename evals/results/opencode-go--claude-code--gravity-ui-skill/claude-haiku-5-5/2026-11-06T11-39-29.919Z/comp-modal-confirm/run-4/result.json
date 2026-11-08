@@ -1,0 +1,115 @@
+{
+  "status": "passed",
+  "duration": 259.917,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 32,
+    "outputTokens": 7604,
+    "cacheReadTokens": 554850,
+    "cacheWriteTokens": 34296,
+    "totalTokens": 596782
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 1,
+      "file_edit": 0,
+      "shell": 14,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 16,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && ls -la && cat package.json 2>/dev/null; find . -path ./node_modules -prune -o -type f -print | grep -v \"^./.git/\" | head -100",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx; echo ----; cat src/main.tsx; echo ----; cat src/vite-env.d.ts; echo ----; cat tsconfig.json; echo ----; cat AGENTS.md; echo ----; cat .gitignore; echo ----; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; echo ----; cat .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": "sed -n 150,400p .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -60; echo ----; ls node_modules/@gravity-ui/uikit/; ls node_modules/@gravity-ui/uikit/dist 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "rg -n -i \"modal|dialog|confirm\" .agents/skills/gravity-ui/references/package-routing.md | head -30; echo ----; ls node_modules/@gravity-ui/uikit/build | head -50; echo ----; rg -n -i \"dialog|modal\" node_modules/@gravity-ui/uikit/README.md | head; echo ----; ls node_modules/@gravity-ui/uikit/build/esm/components/Dialog 2>/dev/null; ls node_modules/@gravity-ui/uikit/build/esm/components/Modal 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "sed -n 25,40p .agents/skills/gravity-ui/references/package-routing.md; echo ....; sed -n 165,185p .agents/skills/gravity-ui/references/package-routing.md; echo ....; rg -n -B2 -A8 \"ConfirmDialog|components\\`|@gravity-ui/components\" .agents/skills/gravity-ui/references/package-routing.md | head -80",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/components version peerDependencies dependencies 2>&1 | head -60",
+        "success": true
+      },
+      {
+        "command": "for v in $(npm view @gravity-ui/components versions --json 2>/dev/null | tr -d '[],\" ' | grep -E '^[0-9]' | sort -V | tail -40); do echo \"$v $(npm view @gravity-ui/components@$v peerDependencies.@gravity-ui/uikit 2>/dev/null)\"; done",
+        "success": true
+      },
+      {
+        "command": "npm install --save-exact @gravity-ui/components@4.23.1 2>&1 | tail -15 && node -e 'console.log(require(\"./node_modules/@gravity-ui/components/package.json\").version)' && git diff --stat",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/components; ls $P; ls $P/dist/docs 2>/dev/null || ls $P/build/docs 2>/dev/null; rg -l \"ConfirmDialog\" $P --glob '*.d.ts' | head; echo ----; rg -n \"ConfirmDialog\" $P/README.md | head",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/components/build/esm/components/ConfirmDialog; cat $P/ConfirmDialog.d.ts; echo ----; cat $P/index.d.ts; echo ----; grep -n \"ConfirmDialog\" node_modules/@gravity-ui/components/build/esm/components/index.d.ts; echo ----; rg -n \"ConfirmDialog\" node_modules/@gravity-ui/components/build/esm/index.d.ts 2>/dev/null; ls node_modules/@gravity-ui/components/build/esm | head -30",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/components/build/esm/index.d.ts; echo ----; cat node_modules/@gravity-ui/components/build/esm/components/ConfirmDialog/ConfirmDialog.js 2>/dev/null | head -60; ls node_modules/@gravity-ui/components/build/esm/components/ConfirmDialog/; echo ----; rg -n \"open|onClose|title\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/Dialog.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp && curl -sS -m 20 https://gravity-ui.com/llms/components/4/llms.txt -o /tmp/gui-components-4.txt -w \"%{http_code}\\n\" 2>&1; wc -c /tmp/gui-components-4.txt 2>/dev/null; rg -n -i \"ConfirmDialog\" /tmp/gui-components-4.txt 2>/dev/null | head -20",
+        "success": true
+      },
+      {
+        "command": "wc -l node_modules/@gravity-ui/components/README.md && rg -n -i -A6 \"setup|install|style\" node_modules/@gravity-ui/components/README.md | head -60; echo ----; rg -n \"textButtonApply|textButtonCancel|onClickButtonApply|onClickButtonCancel|propsButtonApply|propsButtonCancel|preset\" node_modules/@gravity-ui/uikit/build/esm/components/Dialog/DialogFooter/DialogFooter.d.ts | head -20",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit; echo \"tsc exit=$?\"; npx vite build --outDir /tmp/gui-build-check --emptyOutDir 2>&1 | tail -8; echo \"vite exit=${PIPESTATUS[0]}\"",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 32,
+      "outputTokens": 7604,
+      "cacheReadTokens": 554850,
+      "cacheWriteTokens": 34296,
+      "totalTokens": 596782
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

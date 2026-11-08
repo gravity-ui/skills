@@ -1,0 +1,108 @@
+{
+  "status": "passed",
+  "duration": 1514.801,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 386,
+    "outputTokens": 17590,
+    "cacheReadTokens": 473093,
+    "cacheWriteTokens": 40843,
+    "totalTokens": 531912
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 12,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && echo \"---\" && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "echo \"=== App.tsx ===\" && cat src/App.tsx && echo \"=== main.tsx ===\" && cat src/main.tsx && echo \"=== index.html ===\" && cat index.html && echo \"=== vite.config.ts ===\" && cat vite.config.ts && echo \"=== tsconfig ===\" && cat tsconfig.json && echo \"=== run.mjs ===\" && cat __agent_eval__/run.mjs && echo \"=== installed uikit version ===\" && cat node_modules/@gravity-ui/uikit/package.json | grep -E '\"version\"|\"main\"|\"module\"|\"types\"' && echo \"=== git log ===\" && git log --oneline -5",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm && ls $U/components/theme/ && echo \"=== theme index ===\" && cat $U/components/theme/index.d.ts && echo \"=== types ===\" && cat $U/components/theme/types.d.ts && echo \"=== ThemeProvider ===\" && cat $U/components/theme/ThemeProvider.d.ts && echo \"=== hooks ===\" && for f in $U/components/theme/use*.d.ts $U/components/theme/getThemeType.d.ts $U/components/theme/ThemeContext.d.ts $U/components/theme/ThemeSettingsContext.d.ts; do echo \"--- $f\"; cat \"$f\"; done",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm && echo \"=== ThemeProvider.js ===\" && cat $U/components/theme/ThemeProvider.js && echo \"=== dom-helpers ===\" && cat $U/components/theme/dom-helpers.js && echo \"=== components available ===\" && ls $U/components | tr '\\n' ' ' && echo && echo \"=== icons pkg? ===\" && ls node_modules/@gravity-ui/ && echo \"=== Switch props ===\" && cat $U/components/Switch/Switch.d.ts && cat $U/components/Controls/types.d.ts 2>/dev/null | head -60 && echo \"=== SegmentedRadioGroup ===\" && cat $U/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null | head -60 && echo \"=== npm latest ===\" && timeout 20 npm view @gravity-ui/uikit version dist-tags 2>&1 | head -5",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/uikit8 && cd /tmp/uikit8 && timeout 90 npm pack @gravity-ui/uikit@8.0.0 --silent 2>&1 | tail -1 && tar -xzf gravity-ui-uikit-8.0.0.tgz && echo \"=== v8 theme index ===\" && cat package/build/esm/components/theme/index.d.ts && echo \"=== v8 types ===\" && cat package/build/esm/components/theme/types.d.ts && echo \"=== v8 ThemeProvider ===\" && cat package/build/esm/components/theme/ThemeProvider.d.ts && echo \"=== v8 useTheme ===\" && cat package/build/esm/components/theme/useTheme.d.ts && echo \"=== v8 CHANGELOG 8.0.0 breaking ===\" && awk '/^## \\[8\\.0\\.0\\]/{p=1} p&&/^## \\[7\\./{exit} p' package/CHANGELOG.md | head -120",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm && V8=/tmp/uikit8/package/build/esm && echo \"=== icons pkg ===\" && grep '\"version\"' node_modules/@gravity-ui/icons/package.json && ls node_modules/@gravity-ui/icons/ | head -5 && grep -lE '^(Sun|Moon|Display)\\b' -r node_modules/@gravity-ui/icons/index.d.ts 2>/dev/null; grep -E \"Sun|Moon|Display\" node_modules/@gravity-ui/icons/index.d.ts | head -20 && echo \"=== Icon.d.ts (v7) ===\" && cat $U/components/Icon/Icon.d.ts && echo \"=== Button.d.ts (v7) ===\" && sed -n '1,60p' $U/components/Button/Button.d.ts && echo \"=== ControlProps v7 ===\" && grep -n -A12 'interface ControlProps' $U/components/types.d.ts && echo \"=== deprecated markers v7 ===\" && grep -rl '@deprecated' $U/components/{Switch,Button,Icon,SegmentedRadioGroup,Text,Card,RadioButton} 2>/dev/null; grep -rn '@deprecated' $U/components/index.d.ts $U/components/RadioButton/*.d.ts 2>/dev/null | head && echo \"=== v8 components ===\" && ls $V8/components | tr '\\n' ' ' && echo && echo \"=== v8 Switch ===\" && cat $V8/components/Switch/Switch.d.ts && echo \"=== v8 Icon ===\" && cat $V8/components/Icon/Icon.d.ts && echo \"=== v8 Button props head ===\" && sed -n '1,50p' $V8/components/Button/Button.d.ts && echo \"=== v8 SegmentedRadioGroup ===\" && cat $V8/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts && echo \"=== v8 package root ===\" && ls /tmp/uikit8/package && grep -n '\"react\"' -A2 /tmp/uikit8/package/package.json | head",
+        "success": true
+      },
+      {
+        "command": "grep -n -A8 '\"dependencies\"' node_modules/@gravity-ui/uikit/package.json | head -12 && grep -n -A3 '\"peerDependencies\"' node_modules/@gravity-ui/uikit/package.json && echo \"=== g-root css ===\" && grep -o '\\.g-root{[^}]*}' node_modules/@gravity-ui/uikit/styles/styles.css | head -3; grep -o 'body{[^}]*}' node_modules/@gravity-ui/uikit/styles/styles.css | head -2; grep -rn \"g-root\\b\" node_modules/@gravity-ui/uikit/styles/*.css | head -5 && echo \"=== Card/Text d.ts ===\" && grep -n \"view?\\|type?\\|size?\\|theme?\" node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts | head && grep -n \"variant?\\|color?\" node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts | head -4 && echo \"=== Flex ===\" && ls node_modules/@gravity-ui/uikit/build/esm/components/layout/ && echo \"=== @types/react version ===\" && grep '\"version\"' node_modules/@types/react/package.json && ls node_modules | grep -iE 'jsdom|testing-library' || echo \"no jsdom/testing-library\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/theme && cat > src/theme/AppThemeProvider.tsx <<'EOF'\nimport * as React from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport type { ThemeType } from '@gravity-ui/uikit';\n\n/**\n * Начиная с @gravity-ui/uikit v6 (и без изменений в v7/v8) `ThemeProvider`\n * полностью контролируемый: тема передаётся пропом `theme`, а хук `useTheme()`\n * возвращает только текущее значение — сеттера в библиотеке больше нет.\n * Поэтому состояние темы живёт здесь, в приложении, а `ThemeProvider` лишь\n * получает его как проп.\n */\n\nconst STORAGE_KEY = 'app-theme';\n\nexport interface AppThemeContextValue {\n  /** Выбранная пользователем тема. */\n  theme: ThemeType;\n  setTheme: (theme: ThemeType) => void;\n  toggleTheme: () => void;\n}\n\nconst AppThemeContext = React.createContext<AppThemeContextValue | undefined>(undefined);\n\nfunction isThemeType(value: unknown): value is ThemeType {\n  return value === 'light' || value === 'dark';\n}\n\nfunction readInitialTheme(): ThemeType {\n  if (typeof window === 'undefined') {\n    return 'light';\n  }\n  try {\n    const stored = window.localStorage.getItem(STORAGE_KEY);\n    if (isThemeType(stored)) {\n      return stored;\n    }\n  } catch {\n    // localStorage может быть недоступен (приватный режим, запрет cookies) — игнорируем.\n  }\n  if (typeof window.matchMedia === 'function') {\n    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';\n  }\n  return 'light';\n}\n\nexport interface AppThemeProviderProps {\n  children?: React.ReactNode;\n  /** Тема по умолчанию, если в хранилище ничего нет. По умолчанию — системная. */\n  defaultTheme?: ThemeType;\n}\n\nexport function AppThemeProvider({ children, defaultTheme }: AppThemeProviderProps) {\n  const [theme, setThemeState] = React.useState<ThemeType>(() => defaultTheme ?? readInitialTheme());\n\n  const setTheme = React.useCallback((next: ThemeType) => {\n    setThemeState(next);\n    try {\n      window.localStorage.setItem(STORAGE_KEY, next);\n    } catch {\n      // см. комментарий в readInitialTheme\n    }\n  }, []);\n\n  const toggleTheme = React.useCallback(() => {\n    setThemeState((prev) => {\n      const next: ThemeType = prev === 'dark' ? 'light' : 'dark';\n      try {\n        window.localStorage.setItem(STORAGE_KEY, next);\n      } catch {\n        // см. комментарий в readInitialTheme\n      }\n      return next;\n    });\n  }, []);\n\n  const value = React.useMemo<AppThemeContextValue>(\n    () => ({ theme, setTheme, toggleTheme }),\n    [theme, setTheme, toggleTheme],\n  );\n\n  return (\n    <AppThemeContext.Provider value={value}>\n      <ThemeProvider theme={theme}>{children}</ThemeProvider>\n    </AppThemeContext.Provider>\n  );\n}\n\nexport function useAppTheme(): AppThemeContextValue {\n  const ctx = React.useContext(AppThemeContext);\n  if (!ctx) {\n    throw new Error('useAppTheme должен вызываться внутри <AppThemeProvider>');\n  }\n  return ctx;\n}\nEOF\ncat > src/theme/ThemeSwitcher.tsx <<'EOF'\nimport { Flex, Icon, Switch, useThemeType } from '@gravity-ui/uikit';\nimport type { SwitchProps } from '@gravity-ui/uikit';\nimport { Moon, Sun } from '@gravity-ui/icons';\n\nimport { useAppTheme } from './AppThemeProvider';\n\nexport interface ThemeSwitcherProps {\n  size?: SwitchProps['size'];\n  /** Показывать подпись рядом с иконкой. */\n  showLabel?: boolean;\n  className?: string;\n}\n\n/**\n * Переключатель светлой/тёмной темы.\n *\n * Текущее значение читается через `useThemeType()` из uikit — он возвращает\n * 'light' | 'dark' для любой реальной темы (в т.ч. контрастных `*-hc`).\n * Запись идёт через наш контекст, потому что `ThemeProvider` контролируемый.\n */\nexport function ThemeSwitcher({ size = 'm', showLabel = true, className }: ThemeSwitcherProps) {\n  const themeType = useThemeType();\n  const { setTheme } = useAppTheme();\n  const isDark = themeType === 'dark';\n  const label = isDark ? 'Тёмная тема' : 'Светлая тема';\n\n  return (\n    <Switch\n      className={className}\n      size={size}\n      checked={isDark}\n      onUpdate={(checked) => setTheme(checked ? 'dark' : 'light')}\n      title={label}\n      controlProps={{ 'aria-label': showLabel ? undefined : label }}\n      qa=\"theme-switcher\"\n    >\n      <Flex alignItems=\"center\" gap={1}>\n        <Icon data={isDark ? Moon : Sun} size={16} />\n        {showLabel ? label : null}\n      </Flex>\n    </Switch>\n  );\n}\nEOF\ncat > src/theme/index.ts <<'EOF'\nexport { AppThemeProvider, useAppTheme } from './AppThemeProvider';\nexport type { AppThemeContextValue, AppThemeProviderProps } from './AppThemeProvider';\nexport { ThemeSwitcher } from './ThemeSwitcher';\nexport type { ThemeSwitcherProps } from './ThemeSwitcher';\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Button, Card, Flex, Label, Text, useThemeValue } from '@gravity-ui/uikit';\n\nimport { AppThemeProvider, ThemeSwitcher } from './theme';\n\nfunction Page() {\n  const themeValue = useThemeValue();\n\n  return (\n    <Flex direction=\"column\" gap={4} style={{ padding: 24, minHeight: '100vh' }}>\n      <Flex as=\"header\" alignItems=\"center\" justifyContent=\"space-between\" gap={4}>\n        <Text variant=\"header-1\">Gravity UI</Text>\n        <ThemeSwitcher />\n      </Flex>\n\n      <Card view=\"outlined\" type=\"container\" style={{ padding: 16, maxWidth: 480 }}>\n        <Flex direction=\"column\" gap={3}>\n          <Text variant=\"subheader-2\">Текущая тема</Text>\n          <Flex alignItems=\"center\" gap={2}>\n            <Text color=\"secondary\">themeValue:</Text>\n            <Label theme=\"info\" size=\"s\" qa=\"current-theme\">\n              {themeValue}\n            </Label>\n          </Flex>\n          <Text color=\"secondary\">\n            Выбор сохраняется в localStorage и восстанавливается при перезагрузке. Если\n            сохранённого значения нет, берётся системная тема.\n          </Text>\n          <Flex gap={2} wrap>\n            <Button view=\"action\">Action</Button>\n            <Button view=\"normal\">Normal</Button>\n            <Button view=\"outlined\">Outlined</Button>\n            <Button view=\"flat\">Flat</Button>\n          </Flex>\n        </Flex>\n      </Card>\n    </Flex>\n  );\n}\n\nexport function App() {\n  return (\n    <AppThemeProvider>\n      <Page />\n    </AppThemeProvider>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\n\nimport { App } from './App';\n\n// ThemeProvider из uikit контролируемый (проп `theme`, без сеттера в хуках),\n// поэтому он рендерится внутри App через AppThemeProvider — там же живёт\n// состояние выбранной темы. См. src/theme/AppThemeProvider.tsx.\nReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>,\n);\nEOF\nnpm pkg set 'dependencies.@gravity-ui/icons=^2.23.1' && grep -A5 '\"dependencies\"' package.json && echo \"=== build ===\" && npm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls node_modules/.bin 2>/dev/null | grep -iE 'playwright|puppeteer'; ls ~/.cache/ms-playwright 2>/dev/null) || echo \"no browser\"; echo \"=== gitignore ===\" && cat .gitignore && echo \"=== lock sync ===\" && timeout 90 npm install --package-lock-only --ignore-scripts --no-audit --no-fund 2>&1 | tail -3 && grep -c '\"node_modules/@gravity-ui/icons\"' package-lock.json && echo \"=== git status ===\" && git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cat > src/theme/ThemeSwitcher.test.tsx <<'EOF'\nimport { describe, expect, it } from 'vitest';\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\n\nimport { AppThemeProvider, ThemeSwitcher } from './index';\n\ndescribe('ThemeSwitcher', () => {\n  it('рендерит выключенный Switch для светлой темы', () => {\n    const html = renderToStaticMarkup(\n      <AppThemeProvider defaultTheme=\"light\">\n        <ThemeSwitcher />\n      </AppThemeProvider>,\n    );\n    expect(html).toContain('data-qa=\"theme-switcher\"');\n    expect(html).toContain('Светлая тема');\n    expect(html).not.toMatch(/checked=\"\"/);\n  });\n\n  it('рендерит включённый Switch для тёмной темы', () => {\n    const html = renderToStaticMarkup(\n      <AppThemeProvider defaultTheme=\"dark\">\n        <ThemeSwitcher />\n      </AppThemeProvider>,\n    );\n    expect(html).toContain('Тёмная тема');\n    expect(html).toMatch(/checked=\"\"/);\n  });\n\n  it('работает вложенно во внешний ThemeProvider (scoped-режим uikit)', () => {\n    const html = renderToStaticMarkup(\n      <ThemeProvider theme=\"light\">\n        <AppThemeProvider defaultTheme=\"dark\">\n          <ThemeSwitcher />\n        </AppThemeProvider>\n      </ThemeProvider>,\n    );\n    expect(html).toContain('g-root_theme-dark');\n    expect(html).toContain('Тёмная тема');\n  });\n\n  it('бросает понятную ошибку вне AppThemeProvider', () => {\n    expect(() =>\n      renderToStaticMarkup(\n        <ThemeProvider theme=\"light\">\n          <ThemeSwitcher />\n        </ThemeProvider>,\n      ),\n    ).toThrow(/AppThemeProvider/);\n  });\n});\nEOF\nnpm pkg set scripts.test=\"vitest run\" && npx vitest run 2>&1 | tail -20 && echo \"=== tsc ===\" && npx tsc --noEmit && echo tsc ok && git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\n\nexport default defineConfig({\n  plugins: [react()],\n  test: {\n    // uikit импортирует .css внутри ESM-модулей — для Node их нужно прогонять через Vite.\n    server: { deps: { inline: [/@gravity-ui\\//] } },\n  },\n});\nEOF\nnpx vitest run 2>&1 | tail -20 && echo \"=== full build ===\" && npm run build 2>&1 | tail -4 && rm -rf dist && git status --short",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s/g-root_theme-dark/g-root_theme_dark/\" src/theme/ThemeSwitcher.test.tsx && npx vitest run 2>&1 | tail -8 && rm -rf dist && git status --short && git diff --stat",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 386,
+      "outputTokens": 17590,
+      "cacheReadTokens": 473093,
+      "cacheWriteTokens": 40843,
+      "totalTokens": 531912
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T16:59:16.958Z",
+    "by": "claude-subscription--claude-code",
+    "previousStatus": "passed"
+  }
+}

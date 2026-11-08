@@ -1,0 +1,312 @@
+{
+  "status": "passed",
+  "duration": 329.26,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 166136,
+    "outputTokens": 11391,
+    "cacheReadTokens": 1480896,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1102,
+    "totalTokens": 1658423
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 37,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 51,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 51,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- FILES ---\\\\n' && rg --files -g '\"'!node_modules'\"' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- package.json ---\\\\n' && cat package.json && printf '\\\\n--- src ---\\\\n' && sed -n '1,240p' src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/i18n && printf '\\\\n--- installed versions ---\\\\n' && node -p \\\"require('./node_modules/@gravity-ui/i18n/package.json').version\\\" && node -p \\\"require('./node_modules/@gravity-ui/uikit/package.json').version\\\" && printf '\\\\n--- i18n docs/readme ---\\\\n' && ls node_modules/@gravity-ui/i18n && (sed -n '1,220p' node_modules/@gravity-ui/i18n/README.md || true)\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s\\\\n' '--- uikit configure ---' && rg -n \\\"function configure|declare function configure|type Lang|lang\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts' | head -40 && printf '%s\\\\n' '--- i18n exports/types ---' && node -p \\\"require('./node_modules/@gravity-ui/i18n/package.json').exports\\\" && rg -n \\\"setLang|registerKeysets|type Lang|I18N\\\" node_modules/@gravity-ui/i18n/build -g '*.d.ts' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,60p' node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts && sed -n '1,60p' node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts && sed -n '60,110p' node_modules/@gravity-ui/i18n/build/esm/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.d.ts && sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/Select/Select.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/Select/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' node_modules/@gravity-ui/uikit/build/esm/components/Select/Option.d.ts && sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/Select/tech-components.d.ts && rg -n \\\"onUpdate\\\" node_modules/@gravity-ui/uikit/build/esm/hooks/useSelect/types.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Select/tech-components.d.ts; printf '\\\\n--- useSelect types ---\\\\n'; sed -n '1,140p' node_modules/@gravity-ui/uikit/build/esm/hooks/useSelect/types.d.ts; printf '\\\\n--- uikit readme i18n config ---\\\\n'; rg -n \\\"configure\\\\(|lang:\\\" node_modules/@gravity-ui/uikit/README.md | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '70,115p' node_modules/@gravity-ui/uikit/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"npm install @gravity-ui/i18n && npm view @gravity-ui/i18n version peerDependencies --json && node -e \\\"const p=require('./package.json'); console.log(p.dependencies)\\\"\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/i18n.ts\n+import { I18N } from '@gravity-ui/i18n';\n+import { configure, type Lang } from '@gravity-ui/uikit';\n+\n+export type AppLanguage = Lang;\n+\n+export const appLanguages: AppLanguage[] = ['en', 'ru'];\n+\n+export const languageNames: Record<AppLanguage, string> = {\n+  en: 'English',\n+  ru: 'Русский',\n+};\n+\n+const en = {\n+  app: {\n+    language: 'Language',\n+    content: 'Application content',\n+  },\n+};\n+\n+const ru = {\n+  app: {\n+    language: 'Язык интерфейса',\n+    content: 'Содержимое приложения',\n+  },\n+};\n+\n+const i18n = new I18N();\n+\n+for (const language of appLanguages) {\n+  i18n.registerKeysets(language, language === 'en' ? en : ru);\n+}\n+\n+i18n.setLang('en');\n+configure({ lang: 'en' });\n+\n+export function setAppLanguage(language: AppLanguage): void {\n+  i18n.setLang(language);\n+  configure({ lang: language });\n+}\n+\n+export { i18n };\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n-}\n+import { useLang, useTheme, Select } from '@gravity-ui/uikit';\n+import { useMemo, useState } from 'react';\n+\n+import { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n+\n+export function App() {\n+  const [language, setLanguage] = useState<AppLanguage>('en');\n+  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n+  const { lang } = useLang();\n+  const theme = useTheme();\n+\n+  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n+\n+  const handleLanguageChange = (value: string[]) => {\n+    const nextLanguage = value[0] as AppLanguage;\n+    setLanguage(nextLanguage);\n+    setSelectedLanguage([nextLanguage]);\n+    setAppLanguage(nextLanguage);\n+  };\n+\n+  return (\n+    <div\n+      style={{\n+        padding: 24,\n+        minHeight: '100vh',\n+        boxSizing: 'border-box',\n+        color: 'var(--g-color-text-primary)',\n+        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n+      }}\n+    >\n+      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n+        <span>{keyset('language')}</span>\n+        <Select\n+          value={selectedLanguage}\n+          onUpdate={handleLanguageChange}\n+          options={appLanguages.map((language) => ({\n+            value: language,\n+            text: languageNames[language],\n+          }))}\n+        />\n+      </label>\n+      <p>{keyset('content')}</p>\n+    </div>\n+  );\n+}\n*** Update File: src/main.tsx\n@@\n import '@gravity-ui/uikit/styles/fonts.css';\n import '@gravity-ui/uikit/styles/styles.css';\n \n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { configure, ThemeProvider } from '@gravity-ui/uikit';\n \n import { App } from './App';\n \n+configure({ lang: 'en' });\n+\n ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n*** End Patch\nPATCH\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Add File: src/i18n.ts\n+import { I18N } from '@gravity-ui/i18n';\n+import { configure, type Lang } from '@gravity-ui/uikit';\n+\n+export type AppLanguage = Lang;\n+\n+export const appLanguages: AppLanguage[] = ['en', 'ru'];\n+\n+export const languageNames: Record<AppLanguage, string> = {\n+  en: 'English',\n+  ru: 'Русский',\n+};\n+\n+const en = {\n+  app: {\n+    language: 'Language',\n+    content: 'Application content',\n+  },\n+};\n+\n+const ru = {\n+  app: {\n+    language: 'Язык интерфейса',\n+    content: 'Содержимое приложения',\n+  },\n+};\n+\n+const i18n = new I18N();\n+\n+for (const language of appLanguages) {\n+  i18n.registerKeysets(language, language === 'en' ? en : ru);\n+}\n+\n+i18n.setLang('en');\n+configure({ lang: 'en' });\n+\n+export function setAppLanguage(language: AppLanguage): void {\n+  i18n.setLang(language);\n+  configure({ lang: language });\n+}\n+\n+export { i18n };\n*** Update File: src/App.tsx\n@@\n-// Implement the requested feature here (and may add sibling files).\n-export function App() {\n-  return <div style={{ padding: 24 }}>{/* TODO: implement the requested component */}</div>;\n-}\n+import { Select, useLang, useTheme } from '@gravity-ui/uikit';\n+import { useMemo, useState } from 'react';\n+\n+import { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n+\n+export function App() {\n+  const [language, setLanguage] = useState<AppLanguage>('en');\n+  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n+  const { lang } = useLang();\n+  const theme = useTheme();\n+\n+  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n+\n+  const handleLanguageChange = (value: string[]) => {\n+    const nextLanguage = value[0] as AppLanguage;\n+    setLanguage(nextLanguage);\n+    setSelectedLanguage([nextLanguage]);\n+    setAppLanguage(nextLanguage);\n+  };\n+\n+  return (\n+    <div\n+      style={{\n+        padding: 24,\n+        minHeight: '100vh',\n+        boxSizing: 'border-box',\n+        color: 'var(--g-color-text-primary)',\n+        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n+      }}\n+    >\n+      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n+        <span>{keyset('language')}</span>\n+        <Select\n+          value={selectedLanguage}\n+          onUpdate={handleLanguageChange}\n+          options={appLanguages.map((language) => ({\n+            value: language,\n+            text: languageNames[language],\n+          }))}\n+        />\n+      </label>\n+      <p>{keyset('content')}</p>\n+    </div>\n+  );\n+}\n*** Update File: src/main.tsx\n@@\n import React from 'react';\n import ReactDOM from 'react-dom/client';\n-import { ThemeProvider } from '@gravity-ui/uikit';\n+import { configure, ThemeProvider } from '@gravity-ui/uikit';\n \n import { App } from './App';\n \n+configure({ lang: 'en' });\n+\n ReactDOM.createRoot(document.getElementById('root')\"'!).render(\n*** End Patch\nPATCH\nnpm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff -- src/App.tsx src/main.tsx src/i18n.ts && printf '\\\\n--- git status ---\\\\n' && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/App.tsx && cat src/main.tsx && ls src'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/i18n.ts <<'EOF'\nimport { I18N } from '@gravity-ui/i18n';\nimport { configure, type Lang } from '@gravity-ui/uikit';\n\nexport type AppLanguage = Lang;\n\nexport const appLanguages: AppLanguage[] = ['en', 'ru'];\n\nexport const languageNames: Record<AppLanguage, string> = {\n  en: 'English',\n  ru: 'Русский',\n};\n\nconst en = {\n  app: {\n    language: 'Language',\n    content: 'Application content',\n  },\n};\n\nconst ru = {\n  app: {\n    language: 'Язык интерфейса',\n    content: 'Содержимое приложения',\n  },\n};\n\nconst i18n = new I18N();\n\nfor (const language of appLanguages) {\n  i18n.registerKeysets(language, language === 'en' ? en : ru);\n}\n\ni18n.setLang('en');\nconfigure({ lang: 'en' });\n\nexport function setAppLanguage(language: AppLanguage): void {\n  i18n.setLang(language);\n  configure({ lang: language });\n}\n\nexport { i18n };\nEOF\ncat > src/App.tsx <<'EOF'\nimport { Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>('en');\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { configure, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { App } from './App';\n\nconfigure({ lang: 'en' });\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>,\n);\nEOF\nnpm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export declare enum Lang|const Lang|Lang\\\\[\\\" node_modules/@gravity-ui/uikit/build/esm/utils -g '*.d.ts' -g '*.js' | head -40 && cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/utils/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/export type AppLanguage = Lang;/export type AppLanguage = (typeof Lang)[keyof typeof Lang];/; s/import { configure, type Lang } from '@gravity-ui\\\\/uikit';/import { configure, Lang } from '@gravity-ui\\\\/uikit';/\\\" src/i18n.ts\nsed -i \\\"s/language === 'en' ? en : ru/language === Lang.En ? en : ru/\\\" src/i18n.ts\nsed -i \\\"s/i18n.setLang('en');/i18n.setLang(Lang.En);/; s/configure({ lang: 'en' });/configure({ lang: Lang.En });/\\\" src/i18n.ts\nsed -i \\\"s/useState<AppLanguage>('en')/useState<AppLanguage>(Lang.En)/\\\" src/App.tsx\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,40p' src/i18n.ts && printf '\\\\n--- App ---\\\\n' && sed -n '1,30p' src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export .*Lang|declare const Lang|Lang\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -30 && sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/utils/types.d.ts && rg -n \\\"useLang\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/import { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from '.\\\\/i18n';/import { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from '.\\\\/i18n';\\\\nimport { Lang } from '@gravity-ui\\\\/uikit';/\\\" src/App.tsx\n# restore explicit union type for language names\nsed -i \\\"s/export type AppLanguage = (typeof Lang)\\\\[keyof typeof Lang\\\\];/export type AppLanguage = Lang.En | Lang.Ru;/\\\" src/i18n.ts\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/i18n.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/utils/configure.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/utils/types.d.ts && rg -n \\\"Lang =|const Lang|type Lang\\\" node_modules/@gravity-ui/uikit/build/esm -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/i18n.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -i \\\"s/export const appLanguages: AppLanguage\\\\[\\\\] = \\\\['en', 'ru'\\\\];/export const appLanguages: AppLanguage[] = [Lang.En, Lang.Ru];/\\\" src/i18n.ts && sed -i \\\"s/en: 'English',/en: 'English',/; s/ru: 'Русский',/ru: 'Русский',/\\\" src/i18n.ts && sed -i \\\"s/export const languageNames: Record<AppLanguage, string> = {/export const languageNames: Record<AppLanguage, string> = {/\\\" src/i18n.ts && sed -n '1,12p' src/i18n.ts && npm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat package.json && git diff -- src/App.tsx src/main.tsx src/i18n.ts package.json && ls src'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba src/main.tsx && nl -ba src/App.tsx && nl -ba src/i18n.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/i18n.ts && echo '---' && cat src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\ncat src/App.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git diff -- src/App.tsx src/main.tsx src/i18n.ts && printf '\\\\n--- status ---\\\\n' && git status --short && printf '\\\\n--- files ---\\\\n' && ls -l src && printf '\\\\n--- App ---\\\\n' && cat src/App.tsx && printf '\\\\n--- i18n ---\\\\n' && cat src/i18n.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/i18n.ts <<'EOF'\nimport { I18N } from '@gravity-ui/i18n';\nimport { configure, Lang } from '@gravity-ui/uikit';\n\nexport type AppLanguage = Lang.En | Lang.Ru;\n\nexport const appLanguages: AppLanguage[] = [Lang.En, Lang.Ru];\n\nexport const languageNames: Record<AppLanguage, string> = {\n  en: 'English',\n  ru: 'Русский',\n};\n\nconst en = {\n  app: {\n    language: 'Language',\n    content: 'Application content',\n  },\n};\n\nconst ru = {\n  app: {\n    language: 'Язык интерфейса',\n    content: 'Содержимое приложения',\n  },\n};\n\nconst i18n = new I18N();\n\nfor (const language of appLanguages) {\n  i18n.registerKeysets(language, language === Lang.En ? en : ru);\n}\n\ni18n.setLang(Lang.En);\nconfigure({ lang: Lang.En });\n\nexport function setAppLanguage(language: AppLanguage): void {\n  i18n.setLang(language);\n  configure({ lang: language });\n}\n\nexport { i18n };\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat src/i18n.ts && cat src/App.tsx && cat src/main.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"printf '%s' '' > src/App.tsx\nprintf '%s' '' > src/main.tsx\nprintf '%s' '' > src/i18n.ts\ncat src/App.tsx; cat src/main.tsx; cat src/i18n.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/i18n.ts <<'EOF'\nimport { I18N } from '@gravity-ui/i18n';\nimport { configure, Lang } from '@gravity-ui/uikit';\n\nexport type AppLanguage = Lang.En | Lang.Ru;\n\nexport const appLanguages: AppLanguage[] = [Lang.En, Lang.Ru];\n\nexport const languageNames: Record<AppLanguage, string> = {\n  en: 'English',\n  ru: 'Русский',\n};\n\nconst en = {\n  app: {\n    language: 'Language',\n    content: 'Application content',\n  },\n};\n\nconst ru = {\n  app: {\n    language: 'Язык интерфейса',\n    content: 'Содержимое приложения',\n  },\n};\n\nconst i18n = new I18N();\n\nfor (const language of appLanguages) {\n  i18n.registerKeysets(language, language === Lang.En ? en : ru);\n}\n\ni18n.setLang(Lang.En);\nconfigure({ lang: Lang.En });\n\nexport function setAppLanguage(language: AppLanguage): void {\n  i18n.setLang(language);\n  configure({ lang: language });\n}\n\nexport { i18n };\nEOF\nwc -l src/i18n.ts && cat src/i18n.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat src/App.tsx && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\ncat > src/main.tsx <<'EOF'\nimport '@gravity-ui/uikit/styles/fonts.css';\nimport '@gravity-ui/uikit/styles/styles.css';\n\nimport React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport { configure, ThemeProvider } from '@gravity-ui/uikit';\n\nimport { App } from './App';\n\nconfigure({ lang: 'en' });\n\nReactDOM.createRoot(document.getElementById('root')\"'!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>,\n);\nEOF\ncat src/App.tsx && printf '\"'\\\\n--- main ---\\\\n' && cat src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"truncate -s 0 src/App.tsx && cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'truncate -s 0 src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'truncate -s 0 src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'truncate -s 0 src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'truncate -s 0 src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport { Lang, Select, useLang, useTheme } from '@gravity-ui/uikit';\nimport { useMemo, useState } from 'react';\n\nimport { appLanguages, i18n, languageNames, setAppLanguage, type AppLanguage } from './i18n';\n\nexport function App() {\n  const [language, setLanguage] = useState<AppLanguage>(Lang.En);\n  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([language]);\n  const { lang } = useLang();\n  const theme = useTheme();\n\n  const keyset = useMemo(() => i18n.keyset('app'), [lang]);\n\n  const handleLanguageChange = (value: string[]) => {\n    const nextLanguage = value[0] as AppLanguage;\n    setLanguage(nextLanguage);\n    setSelectedLanguage([nextLanguage]);\n    setAppLanguage(nextLanguage);\n  };\n\n  return (\n    <div\n      style={{\n        padding: 24,\n        minHeight: '100vh',\n        boxSizing: 'border-box',\n        color: 'var(--g-color-text-primary)',\n        background: theme === 'dark' ? 'var(--g-color-base-background)' : undefined,\n      }}\n    >\n      <label style={{ display: 'grid', gap: 8, maxWidth: 320 }}>\n        <span>{keyset('language')}</span>\n        <Select\n          value={selectedLanguage}\n          onUpdate={handleLanguageChange}\n          options={appLanguages.map((language) => ({\n            value: language,\n            text: languageNames[language],\n          }))}\n        />\n      </label>\n      <p>{keyset('content')}</p>\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"nl -ba src/App.tsx | tail -20 && printf '\\\\n--- i18n ---\\\\n' && nl -ba src/i18n.ts | tail -20 && printf '\\\\n--- main ---\\\\n' && nl -ba src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && printf '\\\\n--- final files ---\\\\n' && cat src/App.tsx && printf '\\\\n--- i18n ---\\\\n' && cat src/i18n.ts && printf '\\\\n--- main ---\\\\n' && cat src/main.tsx && printf '\\\\n--- build ---\\\\n' && npm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff --check && git diff --stat'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 166136,
+      "outputTokens": 11391,
+      "cacheReadTokens": 1480896,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1102,
+      "totalTokens": 1658423
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

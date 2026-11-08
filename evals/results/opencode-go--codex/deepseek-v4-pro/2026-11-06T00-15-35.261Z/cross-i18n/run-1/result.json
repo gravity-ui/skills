@@ -1,0 +1,122 @@
+{
+  "status": "failed",
+  "duration": 311.203,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 7387,
+    "outputTokens": 6765,
+    "cacheReadTokens": 205184,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1757,
+    "totalTokens": 219336
+  },
+  "model": "deepseek-v4-pro",
+  "o11y": {
+    "totalTurns": 2,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -c \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' -g '\"'!build'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"cat package.json && echo '--- App.tsx ---' && cat src/App.tsx && echo '--- main.tsx ---' && cat src/main.tsx && echo '--- index.html ---' && cat index.html && echo '--- tsconfig ---' && cat tsconfig.json && echo '--- vite ---' && cat vite.config.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"ls node_modules/@gravity-ui/uikit/build/esm/components 2>/dev/null | head -50; echo '---'; rg --files node_modules/@gravity-ui/uikit | rg 'index' | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts 2>/dev/null; echo '--- Button ---'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; echo '--- Select types? ---'; rg -n \\\"export.*Select\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"echo '--- Card ---'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; echo '--- Text ---'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; echo '--- Flex ---'; sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/Flex/Flex.d.ts; echo '--- Segmented Option ---'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; echo '--- types ControlGroupOption ---'; rg -n \\\"ControlGroupOption\\\" node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -5\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"ls node_modules/@gravity-ui/uikit/build/esm/components/layout 2>/dev/null; echo '--- Flex ---'; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts 2>/dev/null; echo '--- spacing ---'; rg -n \\\"export.*Flex|export.*Container\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"cat > src/i18n.ts <<'EOF'\nexport type Language = 'en' | 'ru';\n\nexport const LANGUAGES: Array<{value: Language; label: string}> = [\n    {value: 'en', label: 'English'},\n    {value: 'ru', label: 'Русский'},\n];\n\nexport interface Translation {\n    languageLabel: string;\n    title: string;\n    subtitle: string;\n    statProjects: string;\n    statTasks: string;\n    statMembers: string;\n    action: string;\n    updated: string;\n}\n\nexport const translations: Record<Language, Translation> = {\n    en: {\n        languageLabel: 'Interface language',\n        title: 'Project dashboard',\n        subtitle: 'An overview of your workspace, current tasks and the team.',\n        statProjects: 'Projects',\n        statTasks: 'Active tasks',\n        statMembers: 'Team members',\n        action: 'Create project',\n        updated: 'Updated just now',\n    },\n    ru: {\n        languageLabel: 'Язык интерфейса',\n        title: 'Панель проекта',\n        subtitle: 'Обзор рабочего пространства, текущих задач и команды.',\n        statProjects: 'Проекты',\n        statTasks: 'Активные задачи',\n        statMembers: 'Участники команды',\n        action: 'Создать проект',\n        updated: 'Обновлено только что',\n    },\n};\nEOF\ncat > src/LanguageContext.tsx <<'EOF'\nimport React, {createContext, useContext, useEffect, useMemo, useState} from 'react';\n\nimport {translations, type Language, type Translation} from './i18n';\n\ninterface LanguageContextValue {\n    language: Language;\n    setLanguage: (language: Language) => void;\n    t: Translation;\n}\n\nconst STORAGE_KEY = 'app-language';\n\nfunction readInitialLanguage(): Language {\n    try {\n        const saved = window.localStorage.getItem(STORAGE_KEY);\n        if (saved === 'en' || saved === 'ru') {\n            return saved;\n        }\n    } catch {\n        // localStorage can be unavailable; fall back to the default language.\n    }\n\n    return 'en';\n}\n\nconst LanguageContext = createContext<LanguageContextValue | null>(null);\n\nexport function LanguageProvider({children}: {children: React.ReactNode}) {\n    const [language, setLanguage] = useState<Language>(readInitialLanguage);\n\n    useEffect(() => {\n        document.documentElement.lang = language;\n\n        try {\n            window.localStorage.setItem(STORAGE_KEY, language);\n        } catch {\n            // Ignore storage errors in restricted environments.\n        }\n    }, [language]);\n\n    const value = useMemo<LanguageContextValue>(\n        () => ({language, setLanguage, t: translations[language]}),\n        [language],\n    );\n\n    return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;\n}\n\nexport function useLanguage(): LanguageContextValue {\n    const context = useContext(LanguageContext);\n\n    if (\"'!context) {\n        throw new Error('\"'useLanguage must be used within a LanguageProvider');\n    }\n\n    return context;\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport {\n    Button,\n    Card,\n    Flex,\n    SegmentedRadioGroup,\n    Text,\n} from '@gravity-ui/uikit';\n\nimport {LANGUAGES} from './i18n';\nimport {LanguageProvider, useLanguage} from './LanguageContext';\n\nfunction Dashboard() {\n    const {language, setLanguage, t} = useLanguage();\n\n    return (\n        <Flex centerContent style={{minHeight: '100vh', padding: 24}}>\n            <Card view=\\\"raised\\\" style={{width: 640, maxWidth: '100%'}}>\n                <Flex direction=\\\"column\\\" gap=\\\"6\\\">\n                    <Flex\n                        justifyContent=\\\"space-between\\\"\n                        alignItems=\\\"flex-start\\\"\n                        gap=\\\"4\\\"\n                        wrap\n                    >\n                        <Flex direction=\\\"column\\\" gap=\\\"2\\\">\n                            <Text variant=\\\"header-2\\\">{t.title}</Text>\n                            <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n                                {t.subtitle}\n                            </Text>\n                        </Flex>\n\n                        <Flex direction=\\\"column\\\" gap=\\\"2\\\">\n                            <Text variant=\\\"caption-1\\\" color=\\\"secondary\\\">\n                                {t.languageLabel}\n                            </Text>\n                            <SegmentedRadioGroup\n                                name=\\\"language\\\"\n                                value={language}\n                                onUpdate={setLanguage}\n                                options={LANGUAGES}\n                                size=\\\"m\\\"\n                            />\n                        </Flex>\n                    </Flex>\n\n                    <Flex gap=\\\"3\\\" wrap>\n                        {[\n                            {value: '12', label: t.statProjects},\n                            {value: '28', label: t.statTasks},\n                            {value: '9', label: t.statMembers},\n                        ].map((stat) => (\n                            <Card\n                                key={stat.label}\n                                type=\\\"selection\\\"\n                                view=\\\"outlined\\\"\n                                style={{flex: '1 1 140px'}}\n                            >\n                                <Flex direction=\\\"column\\\" gap=\\\"1\\\" style={{padding: 16}}>\n                                    <Text variant=\\\"display-2\\\">{stat.value}</Text>\n                                    <Text variant=\\\"body-1\\\" color=\\\"secondary\\\">\n                                        {stat.label}\n                                    </Text>\n                                </Flex>\n                            </Card>\n                        ))}\n                    </Flex>\n\n                    <Flex\n                        justifyContent=\\\"space-between\\\"\n                        alignItems=\\\"center\\\"\n                        gap=\\\"3\\\"\n                        wrap\n                    >\n                        <Button view=\\\"action\\\" size=\\\"l\\\">\n                            {t.action}\n                        </Button>\n                        <Text variant=\\\"caption-1\\\" color=\\\"secondary\\\">\n                            {t.updated}\n                        </Text>\n                    </Flex>\n                </Flex>\n            </Card>\n        </Flex>\n    );\n}\n\nexport function App() {\n    return (\n        <LanguageProvider>\n            <Dashboard />\n        </LanguageProvider>\n    );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"rg -n \\\"function useRadioGroup|useRadioGroup\\\" node_modules/@gravity-ui/uikit/build/esm/hooks/private -g '*.js' | head; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/hooks/private/useRadioGroup.js 2>/dev/null\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -c 'cat node_modules/@gravity-ui/uikit/build/esm/hooks/private/useRadioGroup/useRadioGroup.js'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('src/App.tsx')\ns=p.read_text()\ns=s.replace(\\\"                                options={LANGUAGES}\\\\n\\\", \\\"                                options={LANGUAGES.map(({value, label}) => ({value, content: label}))}\\\\n\\\")\np.write_text(s)\nPY\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -c \"sed -i 's/options={LANGUAGES}/options={LANGUAGES.map(({value, label}) => ({value, content: label}))}/' src/App.tsx\ngrep -n \\\"options=\\\" src/App.tsx\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 7387,
+      "outputTokens": 6765,
+      "cacheReadTokens": 205184,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1757,
+      "totalTokens": 219336
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

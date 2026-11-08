@@ -1,0 +1,110 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 5 failed) 18695ms
+   × imports @gravity-ui/dashkit 3ms
+     → expected false to be true // Object.is equality
+   × @gravity-ui/dashkit in package.json 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct react-grid-layout import 0ms
+   ✓ react-grid-layout not a direct dep 0ms
+   × no hand-rolled CSS grid layout 0ms
+     → expected false to be true // Object.is equality
+   × no hand-rolled CSS-file grid 0ms
+     → expected false to be true // Object.is equality
+   × judge: implements the task with the intended Gravity UI API 18690ms
+     → [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: The widget grid is hand-rolled: src/App.tsx renders widgets in a CSS grid using explicit gridColumn/gridRow styles and implements pointer-based drag handling itself. package.json does not include @gravity-ui/dashkit, and the code has no DashKit registration or editMode usage.
+
+ Test Files  1 failed (1)
+      Tests  5 failed | 2 passed (7)
+   Start at  18:56:33
+   Duration  18.85s (transform 29ms, setup 15ms, collect 14ms, tests 18.70s, environment 0ms, prepare 43ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/dashkit
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:54
+     53| // DashKit is the canonical Gravity library for a configurable, drag-a…
+     54| test("imports @gravity-ui/dashkit", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                      ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  EVAL.ts > @gravity-ui/dashkit in package.json
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:60:49
+     58| // The dashboard-grid dependency must be declared, confirming the mode…
+     59| test("@gravity-ui/dashkit in package.json", () => {
+     60|   expect(dependsOn(src, "@gravity-ui/dashkit")).toBe(true);
+       |                                                 ^
+     61| });
+     62| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  EVAL.ts > no hand-rolled CSS grid layout
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:82:93
+     80| 
+     81| test("no hand-rolled CSS grid layout", () => {
+     82|   expect(usesDashKit || !new RegExp("gridTemplate(Columns|Rows|Areas)?…
+       |                                                                                             ^
+     83| });
+     84| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  EVAL.ts > no hand-rolled CSS-file grid
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:87:91
+     85| // The camelCase check only catches JS inline styles; a самописная сет…
+     86| test("no hand-rolled CSS-file grid", () => {
+     87|   expect(usesDashKit || !new RegExp("grid-template-(columns|rows|areas…
+       |                                                                                           ^
+     88| });
+     89| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The widget grid is a single @gravity-ui/dashkit DashKit driven by a config, with widgets registered through DashKit.registerPlugins or DashKit.reloadPlugins and free dragging/resizing enabled through its editMode prop. A hand-rolled grid or a direct react-grid-layout fails.
+  reason: The widget grid is hand-rolled: src/App.tsx renders widgets in a CSS grid using explicit gridColumn/gridRow styles and implements pointer-based drag handling itself. package.json does not include @gravity-ui/dashkit, and the code has no DashKit registration or editMode usage.
+ ❯ EVAL.ts:94:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+

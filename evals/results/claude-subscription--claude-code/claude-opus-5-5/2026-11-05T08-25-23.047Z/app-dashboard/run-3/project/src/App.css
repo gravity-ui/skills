@@ -1,0 +1,381 @@
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.app {
+    display: flex;
+    height: 100vh;
+    background: var(--g-color-base-background);
+    color: var(--g-color-text-primary);
+}
+
+.app__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Боковая навигация ---------- */
+
+.sidebar {
+    --sidebar-width: 232px;
+
+    flex: none;
+    width: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-2);
+    padding: var(--g-spacing-3) var(--g-spacing-2);
+    box-sizing: border-box;
+    background: var(--g-color-base-generic-ultralight);
+    border-inline-end: 1px solid var(--g-color-line-generic);
+    overflow: hidden;
+    transition: width 0.2s ease;
+}
+
+.sidebar_collapsed {
+    --sidebar-width: 56px;
+}
+
+.sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-3);
+    height: 40px;
+    padding-inline-start: 4px;
+    margin-block-end: var(--g-spacing-2);
+    white-space: nowrap;
+}
+
+.sidebar__logo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--g-color-base-brand);
+    color: var(--g-color-text-brand-contrast);
+    font-weight: 600;
+}
+
+.sidebar__brand-name {
+    font-size: var(--g-text-subheader-2-font-size);
+    font-weight: 600;
+}
+
+.sidebar__nav {
+    flex: 1;
+}
+
+.sidebar__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-3);
+    width: 100%;
+    height: 36px;
+    padding: 0 11px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    color: var(--g-color-text-primary);
+    font: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.sidebar__item:hover {
+    background: var(--g-color-base-simple-hover);
+}
+
+.sidebar__item:focus-visible {
+    outline: 2px solid var(--g-color-line-focus);
+    outline-offset: -2px;
+}
+
+.sidebar__item_active,
+.sidebar__item_active:hover {
+    background: var(--g-color-base-selection);
+    font-weight: 500;
+}
+
+.sidebar__icon {
+    flex: none;
+}
+
+.sidebar__label {
+    transition: opacity 0.15s ease;
+}
+
+.sidebar_collapsed .sidebar__label,
+.sidebar_collapsed .sidebar__brand-name {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar__toggle {
+    color: var(--g-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .sidebar__label {
+        transition: none;
+    }
+}
+
+/* ---------- Заглушки разделов ---------- */
+
+.stub {
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-2);
+    padding: var(--g-spacing-6);
+}
+
+.stub h1,
+.orders h1 {
+    margin: 0;
+}
+
+/* ---------- Заказы ---------- */
+
+.orders {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.orders__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--g-spacing-3);
+    padding: var(--g-spacing-5) var(--g-spacing-6) var(--g-spacing-4);
+}
+
+.orders__title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--g-spacing-3);
+}
+
+.orders__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--g-spacing-3);
+}
+
+.orders__search {
+    width: 300px;
+}
+
+.orders__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-3);
+    min-height: 44px;
+    padding: 0 var(--g-spacing-6);
+    border-block-start: 1px solid var(--g-color-line-generic);
+}
+
+/* Таблица — единственная прокручиваемая область, поэтому её шапка может быть sticky. */
+.orders-table {
+    flex: 1;
+    min-height: 0;
+    padding: 0 var(--g-spacing-3);
+    display: flex;
+    flex-direction: column;
+}
+
+.orders-table__grid {
+    flex: 1;
+    min-height: 0;
+}
+
+.orders-table__grid .g-table__head .g-table__cell {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 3;
+    background: var(--g-color-base-background);
+    box-shadow: inset 0 -1px 0 var(--g-color-line-generic);
+}
+
+.orders-table__grid .g-table__head .g-table__cell_sticky_end {
+    z-index: 4;
+}
+
+.orders-table__number {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.orders-table__grid .g-table__cell_align_end {
+    font-variant-numeric: tabular-nums;
+}
+
+.orders-table__checkbox {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+/* Выделенные строки. Для sticky-ячейки (шестерёнка) фон должен быть непрозрачным. */
+.orders-table .g-table__body .orders-row_selected {
+    background: var(--g-color-base-selection);
+}
+
+.orders-table .g-table__body .orders-row_selected:hover {
+    background: var(--g-color-base-selection-hover);
+}
+
+.orders-table .g-table__body .orders-row_selected .g-table__cell_sticky_end {
+    background: linear-gradient(var(--g-color-base-selection), var(--g-color-base-selection)),
+        var(--g-color-base-background);
+}
+
+.orders-table .g-table__body .orders-row_selected:hover .g-table__cell_sticky_end {
+    background: linear-gradient(var(--g-color-base-selection-hover), var(--g-color-base-selection-hover)),
+        var(--g-color-base-background);
+}
+
+/* Строки-группы: подпись живёт в первой ячейке и визуально растягивается на всю ширину. */
+.orders-table .g-table__body .orders-group-row,
+.orders-table .g-table__body .orders-group-row .g-table__cell_sticky_end {
+    background: var(--g-color-base-generic-ultralight);
+}
+
+.orders-table .g-table__body .orders-group-row:hover,
+.orders-table .g-table__body .orders-group-row:hover .g-table__cell_sticky_end {
+    background: var(--g-color-base-simple-hover-solid);
+}
+
+.orders-table .orders-group-row .g-table__cell {
+    overflow: visible;
+    padding-block: 6px;
+}
+
+.orders-group {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-2);
+    white-space: nowrap;
+}
+
+.orders-group__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.orders-group__toggle:hover {
+    background: var(--g-color-base-simple-hover);
+}
+
+.orders-group__toggle:focus-visible {
+    outline: 2px solid var(--g-color-line-focus);
+}
+
+/* Заголовки колонок, которые можно перетаскивать. «Ручка» стоит со стороны, противоположной
+   выравниванию, чтобы текст заголовка оставался вровень с содержимым колонки. */
+.orders-th {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    cursor: grab;
+    user-select: none;
+}
+
+.orders-th_align-end {
+    justify-content: flex-end;
+}
+
+.orders-th:focus-visible {
+    outline: 2px solid var(--g-color-line-focus);
+    outline-offset: 2px;
+}
+
+.orders-th__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.orders-th__grip {
+    flex: none;
+    color: var(--g-color-text-secondary);
+    opacity: 0;
+    transition: opacity 0.1s;
+}
+
+.orders-th_align-end .orders-th__grip {
+    order: -1;
+}
+
+.orders-th:hover .orders-th__grip,
+.orders-th:focus-visible .orders-th__grip {
+    opacity: 1;
+}
+
+.orders-table_dragging .orders-th {
+    cursor: grabbing;
+}
+
+.orders-table .orders-col_dragging {
+    opacity: 0.45;
+}
+
+.orders-table .orders-col_drop-before {
+    box-shadow: inset 2px 0 0 var(--g-color-line-brand);
+}
+
+.orders-table .orders-col_drop-after {
+    box-shadow: inset -2px 0 0 var(--g-color-line-brand);
+}
+
+.orders-table__grid .g-table__head .orders-col_drop-before {
+    box-shadow:
+        inset 2px 0 0 var(--g-color-line-brand),
+        inset 0 -1px 0 var(--g-color-line-generic);
+}
+
+.orders-table__grid .g-table__head .orders-col_drop-after {
+    box-shadow:
+        inset -2px 0 0 var(--g-color-line-brand),
+        inset 0 -1px 0 var(--g-color-line-generic);
+}

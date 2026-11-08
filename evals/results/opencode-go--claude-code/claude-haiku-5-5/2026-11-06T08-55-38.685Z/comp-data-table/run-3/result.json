@@ -1,0 +1,119 @@
+{
+  "status": "passed",
+  "duration": 420.609,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 42,
+    "outputTokens": 23868,
+    "cacheReadTokens": 796651,
+    "cacheWriteTokens": 43524,
+    "totalTokens": 864085
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 6,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 3,
+      "file_edit": 2,
+      "shell": 15,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 20,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/employees.ts",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && cat package.json 2>/dev/null | head -60; find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in src/App.tsx src/main.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; do echo \"=== $f\"; cat \"$f\"; echo; done; ls node_modules/@gravity-ui/ 2>/dev/null; ls node_modules | wc -l",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && cat package.json | grep -E '\"version\"|\"main\"|\"types\"' ; ls; ls build 2>/dev/null | head; grep -rl \"Pagination\\|Checkbox\" --include=*.d.ts . | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && cat components/index.d.ts | tr ',' '\\n' | head -150; echo; ls /home/sandbox/workspace/node_modules | grep -i -E \"table|gravity\"; cat components/Checkbox/Checkbox.d.ts; cat components/Pagination/Pagination.d.ts; cat components/Pagination/types.d.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls Table; cat Table/index.d.ts; cat Table/Table.d.ts 2>/dev/null; cat Table/types.d.ts 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc && ls; cat index.d.ts; for f in withTableSorting withTableSelection; do echo \"== $f\"; cat $f/index.d.ts 2>/dev/null || cat $f.d.ts; done; ls withTableSorting withTableSelection 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cat withTableSelection/withTableSelection.d.ts withTableSorting/withTableSorting.d.ts; echo ====; cat withTableSelection/withTableSelection.js | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table/hoc/withTableSorting && cat withTableSorting.js | head -200; ls SortIndicator",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Table && grep -n \"static getRowId\" -A 12 Table.js; grep -n \"getRowDescriptor\" Table.js | head; cat hoc/withTableSorting/SortIndicator/SortIndicator.d.ts 2>/dev/null; cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Pagination/Pagination.js | head -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "(which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; ls node_modules | grep -i -E \"^playwright|puppeteer|jsdom|testing-library\") ; echo \"exit $?\"",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/ssr-check && cat > /tmp/ssr-check/entry.tsx <<'EOF'\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\nconst html = renderToStaticMarkup(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\nconst count = (re: RegExp) => (html.match(re) || []).length;\nconsole.log('length', html.length);\nconsole.log('sort buttons (role=button in header):', count(/role=\"button\"/g));\nconsole.log('checkboxes:', count(/type=\"checkbox\"/g));\nconsole.log('rows (tbody tr):', count(/<tbody[\\s\\S]*?<\\/tbody>/g) ? (html.match(/<tbody[\\s\\S]*?<\\/tbody>/)![0].match(/<tr/g) || []).length : 0);\nconsole.log('toolbar text:', (html.match(/Выбрано:[^<]*/) || [])[0]);\nconsole.log('pagination present:', html.includes('pagination'));\nconsole.log('first row name:', (html.match(/Сотрудник|class=\"[^\"]*table__cell[^\"]*\"[^>]*>([^<]+)</) || [])[0]);\nEOF\ncd /tmp/ssr-check && NODE_PATH=/home/sandbox/workspace/node_modules /home/sandbox/workspace/node_modules/.bin/esbuild entry.tsx --bundle --platform=node --format=esm --jsx=automatic --loader:.css=empty --outfile=/tmp/ssr-check/out.mjs --log-level=warning --external:react --external:react-dom 2>&1 | tail -20; cd /tmp/ssr-check && NODE_PATH=/home/sandbox/workspace/node_modules node out.mjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/ssr-check && NODE_PATH=/home/sandbox/workspace/node_modules /home/sandbox/workspace/node_modules/.bin/esbuild entry.tsx --bundle --platform=node --format=cjs --jsx=automatic --loader:.css=empty --outfile=/tmp/ssr-check/out.cjs --log-level=warning --define:process.env.NODE_ENV='\"development\"' 2>&1 | tail -20; node /tmp/ssr-check/out.cjs 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist /tmp/ssr-check && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 42,
+      "outputTokens": 23868,
+      "cacheReadTokens": 796651,
+      "cacheWriteTokens": 43524,
+      "totalTokens": 864085
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

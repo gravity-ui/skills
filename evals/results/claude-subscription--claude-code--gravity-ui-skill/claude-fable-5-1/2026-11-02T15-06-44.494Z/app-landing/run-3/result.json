@@ -1,0 +1,139 @@
+{
+  "status": "passed",
+  "duration": 827.819,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 674,
+    "outputTokens": 11893,
+    "cacheReadTokens": 1073762,
+    "cacheWriteTokens": 51962,
+    "totalTokens": 1138291
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 21,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo ---- && ls -la && cat AGENTS.md && cat package.json 2>/dev/null; ls .agents/skills/gravity-ui/",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p .agents/skills/gravity-ui/references/package-routing.md; echo ----RULES; cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo ----SRC; ls -R src; cat index.html src/*.ts* tsconfig.json vite.config.ts .gitignore; echo ----VER; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/ | head -20",
+        "success": true
+      },
+      {
+        "command": "rg -n -C 12 'page-constructor' .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,80p; echo ----ICONS; ls node_modules/@gravity-ui/icons/package.json && grep '\"version\"' node_modules/@gravity-ui/icons/package.json",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/page-constructor version peerDependencies 2>&1 | head -40",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/page-constructor @diplodoc/transform 2>&1 | tail -15 && grep '\"version\"' node_modules/@gravity-ui/page-constructor/package.json && ls node_modules/@gravity-ui/page-constructor/ && ls node_modules/@gravity-ui/page-constructor/build/docs 2>/dev/null | head; ls node_modules/@gravity-ui/page-constructor/dist/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/page-constructor/build/docs; cat $D/INDEX.md | head -120; echo ----LS; ls $D/blocks $D/guides $D/sub-blocks; echo ----README; rg -n -i -C 3 'required setup|styles\\.css|import .*styles|PageConstructorProvider' node_modules/@gravity-ui/page-constructor/README.md | head -80",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/page-constructor/build/docs; echo ====HEADER; cat $D/blocks/Header.md; echo ====EXTFEAT; cat $D/blocks/ExtendedFeatures.md; echo ====BANNER; cat $D/blocks/Banner.md",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/page-constructor; echo ====README-PROPS; sed -n 118,175p $P/README.md; echo ====VITE; rg -n -i -C 8 'vite' $P/README.md | head -60; echo ====ANIMATED; rg -n -C 3 'animated' $P/README.md | head -40; echo ====BTN-TYPES; rg -n -A 14 'export interface ButtonProps' $P/build/esm/models/constructor-items/common.d.ts | head -40; rg -n -B2 -A 10 'export interface TitleProps|export interface TitleItemBaseProps|export type ThemedColor|export type ButtonTheme|export type ButtonSize' $P/build/esm/models/constructor-items/common.d.ts | head -80; echo ====BANNER-COLOR; rg -n -C 4 'color' $P/build/esm/sub-blocks/BannerCard/BannerCard.js | head -40; echo ====SASS; ls node_modules/sass/package.json 2>/dev/null && grep '\"version\"' node_modules/sass/package.json; ls node_modules/vite-plugin-dynamic-import 2>/dev/null | head -2",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/page-constructor/build/esm; echo ====ANIM; rg -n 'animated' $P/containers/PageConstructor/PageConstructor.js $P/components/BlockBase/BlockBase.js $P/components/AnimateBlock/AnimateBlock.js 2>/dev/null | head -20; echo ====BTN; rg -n -C 3 \"theme\" $P/components/Button/Button.js | head -50; echo ====BANNERCSS; rg -n -A 3 'theme_(light|dark)' node_modules/@gravity-ui/page-constructor/build/esm/sub-blocks/BannerCard/BannerCard.css | head -30; echo ====UIKIT-HOOK; rg -n 'useThemeType|useThemeValue' node_modules/@gravity-ui/uikit/build/esm/components/theme/index.d.ts",
+        "success": true
+      },
+      {
+        "command": "npm install -D sass vite-plugin-dynamic-import 2>&1 | grep -v 'allow-scripts\\|audit\\|^$' | tail -5; grep '\"version\"' node_modules/sass/package.json node_modules/vite-plugin-dynamic-import/package.json",
+        "success": true
+      },
+      {
+        "command": "cat > vite.config.ts <<'EOF'\nimport { defineConfig } from 'vite';\nimport react from '@vitejs/plugin-react';\nimport dynamicImport from 'vite-plugin-dynamic-import';\n\nexport default defineConfig({\n  plugins: [\n    react(),\n    // Required by @gravity-ui/page-constructor for its dynamic block imports under Vite.\n    dynamicImport({\n      filter: (id) => id.includes('/node_modules/@gravity-ui/page-constructor'),\n    }),\n  ],\n});\nEOF\ncat > src/App.css <<'EOF'\n/* page-constructor grid does not ship a box-sizing reset; without it the\n   container padding overflows the viewport horizontally. */\n*,\n*::before,\n*::after {\n  box-sizing: border-box;\n}\n\nbody {\n  margin: 0;\n}\nEOF\ncat > src/content.ts <<'EOF'\nimport type { PageContent } from '@gravity-ui/page-constructor';\n\nexport const content: PageContent = {\n  // No entrance animations anywhere on the page.\n  animated: false,\n  blocks: [\n    {\n      type: 'header-block',\n      centered: true,\n      width: 'm',\n      verticalOffset: 'l',\n      overtitle: 'Учёт времени для небольших команд',\n      title: 'Знайте, куда уходит время вашей команды',\n      description:\n        'Таймтрекер без лишних настроек: один клик, чтобы начать, и понятный отчёт в конце недели. Для команд от 2 до 50 человек.',\n      buttons: [\n        { text: 'Попробовать бесплатно', theme: 'action', url: '#start' },\n        { text: 'Как это работает', theme: 'outlined', url: '#features' },\n      ],\n    },\n    {\n      type: 'extended-features-block',\n      anchor: { text: 'Преимущества', url: 'features' },\n      title: { text: 'Три причины начать сегодня' },\n      items: [\n        {\n          title: 'Старт за одну минуту',\n          text: 'Создайте команду, пригласите коллег по ссылке и запускайте таймер. Без обучения, инструкций и внедрения.',\n        },\n        {\n          title: 'Отчёты, которые читают',\n          text: 'Сводка по проектам, людям и неделям формируется автоматически. Один экспорт в CSV или PDF для клиента и бухгалтерии.',\n        },\n        {\n          title: 'Честная цена для маленьких',\n          text: 'Фиксированная подписка на команду, а не плата за каждого участника. Приглашайте фрилансеров и подрядчиков бесплатно.',\n        },\n      ],\n    },\n    {\n      type: 'banner-block',\n      anchor: { text: 'Начать', url: 'start' },\n      title: 'Начните считать время уже сегодня',\n      subtitle: '14 дней бесплатно, без карты и обязательств.',\n      color: 'var(--g-color-base-brand)',\n      theme: 'dark',\n      button: {\n        text: 'Создать команду',\n        theme: 'normal-contrast',\n        url: '#start',\n      },\n    },\n  ],\n};\nEOF\ncat > src/App.tsx <<'EOF'\nimport '@gravity-ui/page-constructor/styles/styles.scss';\nimport './App.css';\n\nimport { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';\nimport { useThemeType } from '@gravity-ui/uikit';\n\nimport { content } from './content';\n\nexport function App() {\n  // Keep page-constructor in sync with the uikit ThemeProvider wired in main.tsx.\n  const theme = useThemeType();\n\n  return (\n    <PageConstructorProvider theme={theme}>\n      <PageConstructor content={content} />\n    </PageConstructorProvider>\n  );\n}\nEOF\necho written; P=node_modules/@gravity-ui/page-constructor/build/esm; rg -n 'isAnimationEnabled' $P/constants.js $P/containers/PageConstructor/PageConstructor.js | head -3; rg -n -A3 'export interface AnchorProps' $P/models/constructor-items/common.d.ts; rg -n 'export declare function useThemeType' node_modules/@gravity-ui/uikit/build/esm/components/theme/useThemeType.d.ts",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/page-constructor/build/esm; rg -n -B1 -A4 'export declare enum Theme\\b|export (declare )?(type|enum) Theme ' $P/models/common.d.ts $P/models/*.d.ts | head -20; rg -n 'Theme' $P/index.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "P=node_modules/@gravity-ui/page-constructor/build/esm; rg -n \"Theme\" $P/index.d.ts $P/models/index.d.ts | head; sed -i \"s|import { PageConstructor, PageConstructorProvider } from '@gravity-ui/page-constructor';|import { PageConstructor, PageConstructorProvider, Theme } from '@gravity-ui/page-constructor';|; s|<PageConstructorProvider theme={theme}>|<PageConstructorProvider theme={theme === 'dark' ? Theme.Dark : Theme.Light}>|\" src/App.tsx && cat src/App.tsx && npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rg -n \"~\" node_modules/@gravity-ui/page-constructor/styles/*.scss | head -20",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\nimport re,io\np='vite.config.ts'\ns=open(p).read()\ns=s.replace(\"\"\"export default defineConfig({\n  plugins: [\"\"\",\"\"\"export default defineConfig({\n  resolve: {\n    // page-constructor's SCSS imports uikit/diplodoc CSS with a webpack-style `~` prefix.\n    alias: [{ find: /^~(?=@)/, replacement: '' }],\n  },\n  plugins: [\"\"\")\nopen(p,'w').write(s)\nEOF\ncat vite.config.ts && npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "sed -i \"s|^export default defineConfig({|export default defineConfig({\\n  resolve: {\\n    // page-constructor CSS imports uikit/diplodoc styles with a webpack-style \\`~\\` prefix.\\n    alias: [{ find: /^~(?=@)/, replacement: '' }],\\n  },|\" vite.config.ts && cat vite.config.ts && npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v '^\\s*at ' | sed -n 1,20p; echo ====USES; rg -n \"from 'url'\" node_modules/@gravity-ui/page-constructor/build/esm --glob '*.js' | head; echo ====PKG-URL; ls node_modules/url/package.json 2>/dev/null && grep '\"version\"' node_modules/url/package.json",
+        "success": false
+      },
+      {
+        "command": "npm run build 2>&1 | grep -v '^\\s*at ' | grep -i -B2 -A6 'error\\|url' | sed -n 1,40p",
+        "success": true
+      },
+      {
+        "command": "npm install url 2>&1 | grep -i 'added\\|error' | head -3; grep '\"version\"' node_modules/url/package.json; npm run build 2>&1 | grep -v '^\\s*at \\|DEPRECATION\\|sass-lang\\|^\\s*[╷│╵]\\|^$\\|root stylesheet\\|repetitive' | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short && git diff package.json",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 674,
+      "outputTokens": 11893,
+      "cacheReadTokens": 1073762,
+      "cacheWriteTokens": 51962,
+      "totalTokens": 1138291
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

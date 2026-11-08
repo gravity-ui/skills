@@ -1,0 +1,134 @@
+{
+  "status": "passed",
+  "duration": 411.956,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 50,
+    "outputTokens": 18426,
+    "cacheReadTokens": 1308959,
+    "cacheWriteTokens": 60404,
+    "totalTokens": 1387839
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 15,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 2,
+      "file_edit": 2,
+      "shell": 18,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 24,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/vite.config.ts"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/App.css",
+      "/home/sandbox/workspace/vite.config.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "find .agents -type f | head -100 && echo --- && cat .agents/skills/gravity-ui/SKILL.md && echo --- && ls -la && cat AGENTS.md | head -100",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/references/package-routing.md | head -120 && echo ---- && cat .agents/skills/gravity-ui/rules/hallucination-traps.md && echo ---- && cat package.json tsconfig.json vite.config.ts index.html && find src -type f && cat src/* 2>/dev/null | head -150; ls node_modules/@gravity-ui/",
+        "success": true
+      },
+      {
+        "command": "grep -n -i -A12 \"page-constructor\" .agents/skills/gravity-ui/references/package-routing.md | sed -n 1,80p; echo ----; for p in uikit icons i18n; do echo $p; node -p \"require('./node_modules/@gravity-ui/$p/package.json').version\"; done; ls node_modules/@gravity-ui/uikit/build | head -30; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null; echo ----; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -40; echo; git status --short",
+        "success": true
+      },
+      {
+        "command": "timeout 60 npm view @gravity-ui/page-constructor version peerDependencies dependencies 2>&1 | head -80; echo ---; timeout 60 npm view @gravity-ui/page-constructor@latest version 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npm install @gravity-ui/page-constructor@^8.24.1 @diplodoc/transform@^4.28.2 2>&1 | grep -v \"Unknown env config\" | tail -20; node -p \"['@gravity-ui/page-constructor','@diplodoc/transform','@gravity-ui/uikit'].map(p=>p+'@'+require('./node_modules/'+p+'/package.json').version).join('\\n')\"; ls node_modules/@gravity-ui/page-constructor/; ls node_modules/@gravity-ui/page-constructor/dist/docs 2>/dev/null; ls node_modules/@gravity-ui/page-constructor/build/docs 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/build/docs && cat INDEX.md; echo ----; ls -R . | head -80",
+        "success": true
+      },
+      {
+        "command": "cat blocks/Header.md; echo; echo =====; cat blocks/ExtendedFeatures.md; echo; echo =====; cat blocks/Banner.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor && node -p \"require('./package.json').main + ' | ' + JSON.stringify(require('./package.json').exports ? Object.keys(require('./package.json').exports) : null)\"; ls build | head; grep -rhoE \"export (declare )?(type|interface|const|function) (PageConstructor[A-Za-z]*|ContentProps|Content[A-Za-z]*)\" build --include=*.d.ts | sort -u | head -30; echo ---; ls /home/sandbox/workspace/node_modules/sass >/dev/null 2>&1 && echo \"sass present\" || echo \"sass MISSING\"; grep -n '\"sass\"\\|sass-embedded' package.json /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/package.json",
+        "success": true
+      },
+      {
+        "command": "awk 'NR<=230 && /\"(dependencies|devDependencies|peerDependencies)\"/{s=$0} NR==227{print s; print \"line227: \" $0}' package.json; grep -rn \"content\" build/esm/**/PageConstructor*.d.ts 2>/dev/null | head; f=$(grep -rl \"interface PageConstructorProps\" build --include=*.d.ts | head -1); echo \"$f\"; grep -n -A12 \"interface PageConstructorProps\" \"$f\"; grep -rn \"export type ContentProps\\|export type PageConstructorContent\\|export type ContentLayoutBlockModel\" build --include=*.d.ts | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 300 npm install -D sass@^1.63.6 2>&1 | grep -v \"Unknown env config\\|allow-scripts\" | tail -4; node -p \"require('./node_modules/sass/package.json').version\"; grep -n -A30 '\"dependencies\"' package.json | head -40; cd node_modules/@gravity-ui/page-constructor && grep -rn \"PageContent\\b\" build/cjs/index.d.ts build/cjs/*.d.ts 2>/dev/null | head -3; grep -rln \"export type PageContent \" build --include=*.d.ts | head -2",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 300 npm run build 2>&1 | grep -v \"Unknown env config\" | tail -60",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/styles && ls; grep -rn \"~@gravity-ui\\|@import\" *.scss | head -30; echo ---; cat ../package.json | grep -n \"\\\"vite\\|vite-plugin\" ; cd /home/sandbox/workspace && grep -rn \"~@gravity-ui/uikit\" node_modules/@gravity-ui/page-constructor/build/esm 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npm run build 2>&1 | grep -v \"Unknown env config\\|DEPRECATION\\|More info\\|╷\\|╵\\|│\\|^\\s*$\\|root stylesheet\\|@import\\|omitted\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/page-constructor/build/esm && cat utils/url.js; echo ---; grep -rln \"from 'url'\" . | head; echo ---; grep -rn \"from 'url'\" . | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 300 npm install -D url@^0.11.4 2>&1 | grep -i \"added\\|error\" | head -3; node -p \"require('./node_modules/url/package.json').version\"; ls node_modules/url/",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npm run build 2>&1 | grep -v \"Unknown env config\\|DEPRECATION\\|More info\\|╷\\|╵\\|│\\|^\\s*$\\|root stylesheet\\|@import\\|omitted\\|node_modules/@gravity-ui/page-constructor/styles\" | tail -40; echo \"EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; echo ---; git status --short; echo ---; git diff -- package.json vite.config.ts | head -80",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 50,
+      "outputTokens": 18426,
+      "cacheReadTokens": 1308959,
+      "cacheWriteTokens": 60404,
+      "totalTokens": 1387839
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

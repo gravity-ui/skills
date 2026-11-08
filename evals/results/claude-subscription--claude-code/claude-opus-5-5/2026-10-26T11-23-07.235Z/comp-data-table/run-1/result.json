@@ -1,0 +1,114 @@
+{
+  "status": "passed",
+  "duration": 636.072,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.310 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 34,
+    "outputTokens": 16763,
+    "cacheReadTokens": 586492,
+    "cacheWriteTokens": 35559,
+    "totalTokens": 638848
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 5,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 6,
+      "file_edit": 2,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 21,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/dataTableUtils.ts",
+      "/home/sandbox/workspace/src/DataTable.tsx",
+      "/home/sandbox/workspace/src/DataTable.css",
+      "/home/sandbox/workspace/src/employees.ts",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/dataTableUtils.test.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null; git ls-files | head -50; cat README* 2>/dev/null | head -30",
+        "success": true
+      },
+      {
+        "command": "cat src/*.tsx src/vite-env.d.ts index.html tsconfig.json vite.config.ts .gitignore; ls __agent_eval__; ls node_modules/@gravity-ui/; ls node_modules/@gravity-ui/uikit/build/esm/components/ | head -100",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && ls Table Table/hoc Table/hoc/*; cat Table/hoc/withTableSorting/withTableSorting.d.ts Table/hoc/withTableSelection/withTableSelection.d.ts; cat Pagination/types.d.ts Pagination/Pagination.d.ts; cat Table/Table.d.ts | head -150; ls ../../../ | head",
+        "success": true
+      },
+      {
+        "command": "cat Table/hoc/withTableSorting/withTableSorting.js Table/hoc/withTableSelection/withTableSelection.js; cat Pagination/Pagination.js | head -60",
+        "success": true
+      },
+      {
+        "command": "grep -n \"static getRowId\" -A 12 Table/Table.js; cat Table/hoc/withTableSelection/withTableSelection.css; grep -n \"export\" Table/index.d.ts Table/hoc/index.d.ts; cat ../../../package.json | grep -n '\"exports\"' -A5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -30 && npx vitest run 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='src/DataTable.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"const EnhancedTable = withTableSelection<TableDataItem>(withTableSorting<TableDataItem>(Table));\"\"\",\"\"\"const EnhancedTable = withTableSelection<TableDataItem, WithTableSortingProps>(\n    withTableSorting<TableDataItem>(Table),\n);\"\"\")\ns=s.replace(\"\"\"    TableSortState,\n} from '@gravity-ui/uikit';\"\"\",\"\"\"    TableSortState,\n    WithTableSortingProps,\n} from '@gravity-ui/uikit';\"\"\")\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "ls node_modules | grep -i -E \"playwright|puppeteer|jsdom|happy\"; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { it, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nit('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const rows = (html.match(/<tr class=\"g-table__row/g) || []).length;\n  const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n  const sortable = (html.match(/g-table__sort /g) || []).length + (html.match(/g-table__sort\"/g) || []).length;\n  console.log({ rows, checkboxes, sortable, range: html.match(/1<!-- -->–<!-- -->10<!-- --> из <!-- -->87/)?.[0] });\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run src/__smoke.test.tsx 2>&1 | grep -E \"rows|✓|✗|FAIL|Error\" ; rm src/__smoke.test.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { it, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nit('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const rows = (html.match(/<tr class=\"g-table__row/g) || []).length;\n  const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n  const sortable = (html.match(/role=\"button\" tabindex=\"0\" class=\"g-table__sort/g) || []).length;\n  const first = html.match(/emp-\\d{3}<\\/td><td[^>]*>([^<]+)/)?.[1];\n  console.log(JSON.stringify({ rows, checkboxes, sortable, first, footer: /из <!-- -->87/.test(html) }));\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run src/__smoke.test.tsx --server.deps.inline=@gravity-ui/uikit 2>&1 | grep -E \"rows|✓|×|FAIL|Error\" ; rm src/__smoke.test.tsx",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/vitest.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { root: '/home/sandbox/workspace', include: ['src/__smoke.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ncat > src/__smoke.test.tsx <<'EOF'\nimport { it, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nit('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const rows = (html.match(/<tr class=\"g-table__row/g) || []).length;\n  const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n  const sortable = (html.match(/class=\"g-table__sort/g) || []).length;\n  const names = [...html.matchAll(/emp-\\d{3}<\\/td><td[^>]*>([^<]+)/g)].map(m => m[1]).slice(0, 4);\n  console.log(JSON.stringify({ rows, checkboxes, sortable, names, footer: /из <!-- -->87/.test(html) }));\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run --config /tmp/smoke/vitest.config.ts 2>&1 | grep -E \"rows|✓|×|FAIL|Error\" ; rm src/__smoke.test.tsx; rm -rf /tmp/smoke",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.smoke.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { include: ['src/__smoke.test.tsx'], server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ncat > src/__smoke.test.tsx <<'EOF'\nimport { it, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\nit('renders', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  const rows = (html.match(/<tr class=\"g-table__row/g) || []).length;\n  const checkboxes = (html.match(/type=\"checkbox\"/g) || []).length;\n  const sortable = (html.match(/class=\"g-table__sort/g) || []).length;\n  const names = [...html.matchAll(/emp-\\d{3}<\\/td><td[^>]*>([^<]+)/g)].map(m => m[1]).slice(0, 4);\n  console.log(JSON.stringify({ rows, checkboxes, sortable, names, footer: /из <!-- -->87/.test(html) }));\n  expect(rows).toBe(10);\n});\nEOF\nnpx vitest run --config vitest.smoke.config.ts 2>&1 | grep -E \"rows|✓|×|FAIL|Error\" ; rm src/__smoke.test.tsx vitest.smoke.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 34,
+      "outputTokens": 16763,
+      "cacheReadTokens": 586492,
+      "cacheWriteTokens": 35559,
+      "totalTokens": 638848
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "status": "failed",
+  "duration": 343.866,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.319 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 78,
+    "outputTokens": 38864,
+    "cacheReadTokens": 2683493,
+    "cacheWriteTokens": 99011,
+    "totalTokens": 2821446
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 30,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 9,
+      "file_edit": 3,
+      "shell": 29,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 43,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/widget/types.ts",
+      "/home/sandbox/workspace/src/widget/palette.ts",
+      "/home/sandbox/workspace/src/widget/adapters.ts",
+      "/home/sandbox/workspace/src/widget/engines/SalesLineEngine.tsx",
+      "/home/sandbox/workspace/src/widget/engines/MonitoringEngine.tsx",
+      "/home/sandbox/workspace/src/widget/TimeSeriesWidget.tsx",
+      "/home/sandbox/workspace/src/widget/index.ts",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/widget/adapters.test.ts"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && echo \"---\" && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -200 && echo \"---\" && cat package.json 2>/dev/null; cat AGENTS.md 2>/dev/null | head -100",
+        "success": true
+      },
+      {
+        "command": "sed -n '1,80p' .agents/skills/gravity-ui/references/package-routing.md && echo \"--- GREP charts/chartkit ---\" && rg -n -C 4 -i 'chartkit|@gravity-ui/charts|timeseries|time series|line chart' .agents/skills/gravity-ui/references/package-routing.md | head -150 && echo \"--- SRC ---\" && cat src/App.tsx src/main.tsx src/vite-env.d.ts index.html vite.config.ts tsconfig.json && echo \"--- node_modules gravity ---\" && ls node_modules/@gravity-ui/",
+        "success": true
+      },
+      {
+        "command": "rg -n -C 3 -i 'yagr' .agents/skills/gravity-ui/references/package-routing.md | head -60; echo \"--- npm view ---\"; npm view @gravity-ui/charts version peerDependencies 2>&1 | head -40; npm view @gravity-ui/yagr version peerDependencies 2>&1 | head -40; echo \"--- git status / lock ---\"; git status --short | head; ls node_modules | head -50 | tr '\\n' ' '",
+        "success": true
+      },
+      {
+        "command": "npm view @gravity-ui/charts versions --json 2>/dev/null | tr -d '\\n ' | head -c 2000; echo; for v in $(npm view @gravity-ui/charts versions --json 2>/dev/null | tr -d '[]\", ' | tail -12); do echo -n \"charts@$v peers: \"; npm view @gravity-ui/charts@$v peerDependencies --json 2>/dev/null | tr -d '\\n ' ; echo; done; echo \"--- yagr ---\"; npm view @gravity-ui/yagr versions --json 2>/dev/null | tr -d '\\n ' | tail -c 600; echo; npm view @gravity-ui/yagr@5.3.1 peerDependencies dependencies --json 2>/dev/null; echo \"--- uikit installed ---\"; node -p \"require('./node_modules/@gravity-ui/uikit/package.json').version\"",
+        "success": true
+      },
+      {
+        "command": "npm install --save-exact @gravity-ui/charts@1.73.0 @gravity-ui/yagr@5.3.1 2>&1 | grep -v 'npm warn Unknown env config' | tail -20; echo \"--- installed ---\"; node -p \"['charts','yagr','uikit'].map(p=>p+'@'+require('./node_modules/@gravity-ui/'+p+'/package.json').version).join(' ')\"; echo \"--- deps of charts ---\"; node -p \"JSON.stringify(require('./node_modules/@gravity-ui/charts/package.json').dependencies)\"; git diff --stat -- package.json",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/charts/ node_modules/@gravity-ui/yagr/ ; ls node_modules/@gravity-ui/charts/dist/docs node_modules/@gravity-ui/charts/build/docs node_modules/@gravity-ui/yagr/dist/docs node_modules/@gravity-ui/yagr/build/docs 2>&1 | head -40; echo \"--- README charts ---\"; wc -l node_modules/@gravity-ui/charts/README.md node_modules/@gravity-ui/yagr/README.md",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/charts/dist/docs/INDEX.md | head -80; echo \"=== get-started ===\"; cat node_modules/@gravity-ui/charts/dist/docs/get-started.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/yagr/README.md; echo \"=== yagr typings ===\"; ls node_modules/@gravity-ui/yagr/typings node_modules/@gravity-ui/yagr/dist | head -40; node -p \"const p=require('./node_modules/@gravity-ui/yagr/package.json'); JSON.stringify({main:p.main,module:p.module,types:p.types,exports:p.exports,style:p.style,sideEffects:p.sideEffects},null,1)\"",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/yagr/dist/react.d.ts; echo \"=== index.d.ts ===\"; cat node_modules/@gravity-ui/yagr/dist/index.d.ts | head -60; echo \"=== types.d.ts (timeline/series/theme/ Config) ===\"; rg -n 'timeline|export (type|interface) (Config|YagrConfig|Series|Settings|Theme|Axis)|theme|height|width|adaptive|tooltip' node_modules/@gravity-ui/yagr/dist/types.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/yagr/dist/YagrCore; ls $D | head -50; echo \"=== MinimalValidConfig / types ===\"; rg -n 'MinimalValidConfig|export (interface|type) (Config|Settings|Series|Axis|Timeline|ValidConfig|Scale)' $D/types.d.ts | head -40",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/yagr/dist/YagrCore; sed -n '1,110p' $D/types.d.ts; echo \"=== series ===\"; sed -n '230,300p' $D/types.d.ts; echo \"=== common/other key config ===\"; rg -n 'export interface YagrConfig|timeline|theme|adaptive|height|nolegend|legend|cursor|tooltip|dataSpan|Plugins|plugins|axes|scales' $D/types.d.ts | head -60",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/yagr/dist/YagrCore; sed -n '160,230p' $D/types.d.ts; echo \"=== YagrTheme ===\"; rg -n 'YagrTheme' -A4 $D/types.d.ts | head -20; rg -n 'YagrTheme' node_modules/@gravity-ui/yagr/dist -l | head; echo \"=== RawSerieData ===\"; sed -n '300,302p' $D/types.d.ts; echo \"=== legend/cursor opts ===\"; sed -n '1,40p' $D/plugins/legend/legend.d.ts 2>/dev/null | head -40",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/rules/hallucination-traps.md; echo \"=== charts dist ===\"; ls node_modules/@gravity-ui/charts/dist | head -30; echo \"=== Chart props ===\"; rg -n 'export (declare )?(const|function|interface|type) (Chart\\b|ChartProps|ChartData|ChartKitProps)' node_modules/@gravity-ui/charts/dist --glob '*.d.ts' | head -20",
+        "success": true
+      },
+      {
+        "command": "sed -n '1,40p' node_modules/@gravity-ui/charts/dist/esm/components/index.d.ts; echo \"=== ChartData ===\"; sed -n '35,60p' node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts; echo \"=== docs: list ===\"; ls node_modules/@gravity-ui/charts/dist/docs/guides | head -60; ls node_modules/@gravity-ui/charts/dist/docs/guides/axes 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "D=node_modules/@gravity-ui/charts/dist/docs; ls $D/series-types; echo \"=== axis-types (head) ===\"; sed -n '1,90p' $D/guides/axes/axis-types.md; echo \"=== line series (head) ===\"; sed -n '1,70p' $D/series-types/line.md 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "rg -n 'xAxis|yAxis' node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts | head -12; echo \"=== datetime example in docs ===\"; rg -n -B3 -A25 \"type: 'datetime'\" node_modules/@gravity-ui/charts/dist/docs/examples.md node_modules/@gravity-ui/charts/dist/docs/guides/axes/axis-labels.md 2>/dev/null | head -80; echo \"=== series type line / area in types ===\"; ls node_modules/@gravity-ui/charts/dist/esm/core/types/ | head -40",
+        "success": true
+      },
+      {
+        "command": "sed -n '95,110p' node_modules/@gravity-ui/charts/dist/esm/core/types/index.d.ts; rg -n 'export interface ChartXAxis|export interface ChartYAxis|export interface LineSeries|export interface ChartSeries|export interface ChartLineSeries|export type ChartSeriesData|export interface ChartSeriesDataItem' -A12 node_modules/@gravity-ui/charts/dist/esm/core/types/chart/*.d.ts | head -120",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit SegmentedRadioGroup Loader Text Flex Card useThemeType ThemeProvider 2>&1 | head -80; echo \"=== css side effects ===\"; rg -n \"index.css|\\.css'\" node_modules/@gravity-ui/yagr/dist/react.mjs node_modules/@gravity-ui/yagr/dist/yagr.mjs 2>/dev/null | head -5; rg -l \"\\.css\" node_modules/@gravity-ui/charts/dist/esm/index.js 2>/dev/null | head -3; rg -n \"css\" node_modules/@gravity-ui/charts/dist/docs/guides/theming.md | head -8",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit; rg -n \"export declare const (SegmentedRadioGroup|Loader|useThemeType|Card)\\b|export \\{[^}]*\\bSegmentedRadioGroup\\b\" $U/build --glob '*.d.ts' 2>/dev/null | head -10; rg -n \"useThemeType\" $U/build --glob '*.d.ts' | head -5; echo \"=== SegmentedRadioGroup props ===\"; F=$(rg -l \"SegmentedRadioGroupProps\" $U/build --glob '*.d.ts' | head -1); echo \"file=$F\"; rg -n \"interface SegmentedRadioGroupProps\" -A25 $F | head -40; echo \"=== yagr react css ===\"; grep -c \"css\" node_modules/@gravity-ui/yagr/dist/react.mjs; grep -o 'import[^;]*\\.css[^;]*' node_modules/@gravity-ui/yagr/dist/*.mjs | head -3; grep -o 'import[^;]*\\.css[^;]*' node_modules/@gravity-ui/charts/dist/esm/index.js | head -3; echo \"=== charts theming css mention ===\"; ls node_modules/@gravity-ui/charts/dist/esm | head",
+        "success": true
+      },
+      {
+        "command": "U=node_modules/@gravity-ui/uikit/build/esm; F=$(rg -l \"interface ControlGroupProps\" $U --glob '*.d.ts' | head -1); echo \"file=$F\"; rg -n \"interface ControlGroupProps\" -A22 $F | head -40; rg -n \"ThemeType\\b\" $U/components/theme/*.d.ts | head -4; echo \"=== Loader props ===\"; rg -n \"size\\?\" $U/components/Loader/Loader.d.ts | head -3; echo \"=== yagr index.css head ===\"; head -c 300 node_modules/@gravity-ui/yagr/dist/index.css; echo; echo \"=== charts LineSeries connectNulls? ===\"; rg -n \"connectNulls|spanGaps|nullValue|null\" node_modules/@gravity-ui/charts/dist/esm/core/types/chart/line.d.ts | head -8",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.319/f661ef338bd1a6dfcca2b89320f88f24/dataviz && sed -n '1,200p' references/palette.md | head -220; echo \"=== validator usage ===\"; node scripts/validate_palette.js --help 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.319/f661ef338bd1a6dfcca2b89320f88f24/dataviz && P=\"#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4,#008300,#6250d6,#e34948\"; node scripts/validate_palette.js \"$P\" --mode light 2>&1 | tail -40; echo \"===== DARK =====\"; D=\"#3987e5,#d95926,#199e70,#c98500,#d55181,#008300,#9085e9,#e66767\"; node scripts/validate_palette.js \"$D\" --mode dark 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "C=node_modules/@gravity-ui/charts/dist/esm; rg -n \"legend\\?:|enabled\\?: boolean\" $C/core/types/index.d.ts | head -5; rg -n \"export interface ChartLegend\" -A12 $C/core/types/chart/*.d.ts | head -20; sed -n '118,135p' $C/core/types/chart/line.d.ts; echo \"=== yagr timeline/timeMultiplier and tooltip default ===\"; rg -n \"timeMultiplier\" node_modules/@gravity-ui/yagr/dist/YagrCore/defaults.js | head -3; rg -n \"legend|show\" node_modules/@gravity-ui/yagr/dist/YagrCore/defaults.js | head -8",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | head -60; echo \"TSC_EXIT=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "rg -n \"ThemeType\" node_modules/@gravity-ui/uikit/build/esm/components/theme/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | grep -v 'npm warn' | head -60; echo \"TSC_EXIT=${PIPESTATUS[0]}\"; npm run build 2>&1 | grep -v 'npm warn' | tail -40",
+        "success": true
+      },
+      {
+        "command": "npx vitest run 2>&1 | grep -v 'npm warn' | tail -40; echo \"--- lazy split check: index chunk must not contain chart engine code ---\"; for f in dist/assets/index-*.js; do echo \"$f: uplot=$(grep -c 'uPlot' $f) d3=$(grep -c 'd3-' $f)\"; done",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | grep -v 'npm warn'; echo \"TSC_EXIT=${PIPESTATUS[0]}\"; npm run build 2>&1 | grep -E 'built in|error|Error' ; echo \"--- git ---\"; git status --short; cat .gitignore; git diff -- package.json",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 78,
+      "outputTokens": 38864,
+      "cacheReadTokens": 2683493,
+      "cacheWriteTokens": 99011,
+      "totalTokens": 2821446
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

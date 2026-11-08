@@ -1,0 +1,107 @@
+{
+  "status": "passed",
+  "duration": 489.134,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 23482,
+    "outputTokens": 3443,
+    "cacheReadTokens": 351616,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1346,
+    "totalTokens": 378541
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n---FILES---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g '*Theme*' -g '*theme*' -g '*App*' -g '*app*' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n--- relevant catalog matches ---\\\\n' && rg -n -i -C 2 'theme|theming|uikit' .agents/skills/gravity-ui/references/package-routing.md | head -100 && printf '\\\\n--- package/app ---\\\\n' && cat package.json && sed -n '1,240p' src/App.tsx && printf '\\\\n--- theme refs ---\\\\n' && rg -n 'ThemeProvider|theme|Theme' src\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider Switch Button && printf '\\\\n--- crosscutting ---\\\\n' && rg -n -C 3 'ThemeProvider|theme|Switch|Button' .agents/skills/gravity-ui/rules/hallucination-traps.md && printf '\\\\n--- main and tree ---\\\\n' && sed -n '1,160p' src/main.tsx && rg --files src\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \".agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider Switch Button; printf '\\\\n--- crosscutting ---\\\\n'; rg -n -C 3 'ThemeProvider|theme|Switch|Button' .agents/skills/gravity-ui/rules/hallucination-traps.md; printf '\\\\n--- main and tree ---\\\\n'; sed -n '1,160p' src/main.tsx; rg --files src\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider Switch Button; printf '\\\\n--- docs files ---\\\\n'; rg --files node_modules/@gravity-ui/uikit | rg '(README|docs/.+\\\\.md|ThemeProvider|Switch)' | head -100; printf '\\\\n--- props declarations ---\\\\n'; rg -n 'ThemeProvider|interface SwitchProps|type SwitchProps|declare.*Switch|interface ButtonProps|type ButtonProps' node_modules/@gravity-ui/uikit --glob '*.d.ts' | head -100; printf '\\\\n--- root instructions ---\\\\n'; cat AGENTS.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 4 'ThemeProvider|Switch|theme|Required setup' node_modules/@gravity-ui/uikit/README.md | head -140; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts; sed -n '1,80p' node_modules/@gravity-ui/uikit/build/esm/components/Switch/Switch.d.ts; sed -n '1,90p' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/Control/Control.d.ts 2>/dev/null\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n 'interface ControlProps|type ControlProps|onUpdate\\\\??:|checked\\\\??:' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts node_modules/@gravity-ui/uikit/build/esm/components --glob '*.d.ts' | head -80; sed -n '52,120p' node_modules/@gravity-ui/uikit/README.md; rg -n 'ThemeProvider.*theme|theme.*ThemeProvider' node_modules/@gravity-ui/uikit/build/esm --glob '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git diff -- src/App.tsx src/main.tsx && git status --short'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"require('node:fs').rmSync('dist', {recursive: true, force: true})\\\" && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 23482,
+      "outputTokens": 3443,
+      "cacheReadTokens": 351616,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1346,
+      "totalTokens": 378541
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

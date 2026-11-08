@@ -1,0 +1,162 @@
+{
+  "status": "passed",
+  "duration": 356.796,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 60,
+    "outputTokens": 13958,
+    "cacheReadTokens": 990058,
+    "cacheWriteTokens": 34592,
+    "totalTokens": 1038668
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 8,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 2,
+      "file_edit": 1,
+      "shell": 26,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 29,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/__tmp_toast.test.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -path ./.git -prune -o -type f -print | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in package.json index.html tsconfig.json vite.config.ts .gitignore src/App.tsx src/main.tsx src/vite-env.d.ts; do echo \"=== $f\"; cat \"$f\"; echo; done",
+        "success": true
+      },
+      {
+        "command": "ls node_modules 2>/dev/null | head -3; node -v; npm -v; (npm ci --no-audit --no-fund 2>&1 | tail -5)",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; ls node_modules/@gravity-ui/uikit/build/esm/components/Toaster/ 2>/dev/null; ls node_modules/@gravity-ui/uikit/build/esm/components | head -80; cat node_modules/@gravity-ui/uikit/build/esm/components/Toaster/index.d.ts 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && cat Toaster.d.ts types.d.ts hooks/useToaster.d.ts ToasterComponent/ToasterComponent.d.ts Provider/ToasterProvider.d.ts 2>/dev/null; ls ToasterComponent Provider hooks",
+        "success": true
+      },
+      {
+        "command": "cat hooks/useToaster.js Provider/ToasterProvider.js ToasterComponent/ToasterComponent.js Toaster.js | head -250; cat constants.js",
+        "success": true
+      },
+      {
+        "command": "grep -rn \"autoHiding\" --include=*.js . | grep -v map | head; grep -n \"autoHiding\\|export\" ../Button/Button.d.ts | head -5; cat ../Button/Button.d.ts | head -60; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm && grep -n \"Toaster\" components/index.d.ts index.d.ts 2>/dev/null; grep -n \"DEFAULT_TIMEOUT\" components/Toaster/Toast/Toast.js | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -25",
+        "success": true
+      },
+      {
+        "command": "(ls ~/.cache/ms-playwright 2>/dev/null; which chromium chromium-browser google-chrome firefox 2>/dev/null; ls node_modules | grep -i -E \"playwright|puppeteer|jsdom|happy\" ; echo done)",
+        "success": true
+      },
+      {
+        "command": "cd /tmp && mkdir -p pwcheck && cd pwcheck && npm init -y >/dev/null && timeout 240 npm i playwright@1 --no-audit --no-fund 2>&1 | tail -2 && timeout 280 npx playwright install chromium 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "(nohup npx vite --port 5173 --strictPort --host 127.0.0.1 > /tmp/vite.log 2>&1 &) ; sleep 4; cat /tmp/vite.log | tail -5\ncat > /tmp/pwcheck/check.mjs <<'EOF'\nimport { chromium } from 'playwright';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 1000, height: 700 } });\nconst errors = [];\npage.on('pageerror', e => errors.push(e.message));\npage.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });\nawait page.goto('http://127.0.0.1:5173/', { waitUntil: 'networkidle' });\nconst btn = page.getByRole('button', { name: 'Показать уведомление' });\nconst box = await btn.boundingBox();\nconsole.log('button box', box, 'viewport 1000x700');\nawait btn.click();\nawait page.waitForTimeout(400);\nconst texts = await page.locator('text=Кнопка нажата').allTextContents();\nconsole.log('after 1st click:', texts);\nawait page.screenshot({ path: '/tmp/pwcheck/after-click.png' });\nawait btn.click();\nawait page.waitForTimeout(300);\nconsole.log('after 2nd click:', await page.locator('text=Кнопка нажата').allTextContents());\nawait page.waitForTimeout(4500);\nconsole.log('after 5s (should be gone):', await page.locator('text=Кнопка нажата').allTextContents());\nawait page.screenshot({ path: '/tmp/pwcheck/after-hide.png' });\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\ncd /tmp/pwcheck && timeout 120 node check.mjs",
+        "success": false
+      },
+      {
+        "command": "(sudo -n true 2>/dev/null && echo SUDO_OK) ; (timeout 200 sudo -n apt-get install -y -q libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 >/tmp/apt.log 2>&1; echo exit=$?; tail -3 /tmp/apt.log)",
+        "success": true
+      },
+      {
+        "command": "whoami; id -u; (timeout 200 apt-get install -y -q libglib2.0-0 >/tmp/apt.log 2>&1; echo exit=$?; tail -2 /tmp/apt.log); find / -name \"libglib-2.0.so*\" 2>/dev/null | head -3",
+        "success": true
+      },
+      {
+        "command": "cp package.json /tmp/pkg.bak && cp package-lock.json /tmp/lock.bak && timeout 280 npm i --no-save --no-audit --no-fund jsdom@25 2>&1 | tail -2; cmp -s package.json /tmp/pkg.bak && echo pkg-unchanged; cmp -s package-lock.json /tmp/lock.bak && echo lock-unchanged",
+        "success": true
+      },
+      {
+        "command": "cat > src/__tmp_toast.test.tsx <<'EOF'\n// @vitest-environment jsdom\nimport { describe, it, expect, beforeAll } from 'vitest';\nimport * as React from 'react';\nimport { createRoot } from 'react-dom/client';\nimport { act } from 'react';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\n(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;\n\nbeforeAll(() => {\n  if (!window.matchMedia) {\n    window.matchMedia = (q: string) => ({\n      matches: false, media: q, onchange: null,\n      addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return false; },\n    }) as any;\n  }\n});\n\nconst sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));\n\ndescribe('notify button', () => {\n  it('shows toast on click and hides it after timeout', async () => {\n    const container = document.createElement('div');\n    document.body.appendChild(container);\n    const root = createRoot(container);\n    await act(async () => {\n      root.render(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n    });\n    const btn = Array.from(document.querySelectorAll('button')).find((b) => b.textContent?.includes('Показать уведомление'))!;\n    expect(btn).toBeTruthy();\n    const count = () => document.body.textContent!.split('Кнопка нажата').length - 1;\n    expect(count()).toBe(0);\n\n    await act(async () => { btn.click(); });\n    expect(count()).toBe(1);\n    expect(document.body.textContent).toContain('Кнопка нажата 1 раз');\n    expect(document.body.textContent).toContain('Уведомление');\n\n    await act(async () => { btn.click(); });\n    expect(count()).toBe(2);\n\n    // still visible before autohide (4s)\n    await act(async () => { await sleep(2000); });\n    expect(count()).toBe(2);\n\n    // gone after autohide (plus leave-animation time)\n    await act(async () => { await sleep(3500); });\n    expect(count()).toBe(0);\n    root.unmount();\n  }, 15000);\n});\nEOF\ntimeout 200 npx vitest run src/__tmp_toast.test.tsx 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.tmp.config.mts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({ test: { server: { deps: { inline: [/@gravity-ui/] } } } });\nEOF\ntimeout 200 npx vitest run -c vitest.tmp.config.mts src/__tmp_toast.test.tsx 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && sed -n 1,140p Toast/Toast.js",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/hooks/private && ls; cat useCloseOnTimeout/*.js 2>/dev/null || grep -rl \"useCloseOnTimeout\" . | head -3",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components/Toaster && cat ToastList/ToastList.js | head -120",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && python3 - <<'EOF'\nimport re\np='src/__tmp_toast.test.tsx'\ns=open(p).read()\ns=s.replace(\"\"\"    // gone after autohide (plus leave-animation time)\n    await act(async () => { await sleep(3500); });\n    expect(count()).toBe(0);\"\"\",\"\"\"    // autohide fired: toasts are leaving (exit CSS class applied).\n    await act(async () => { await sleep(2500); });\n    const toastEls = Array.from(document.querySelectorAll('[data-toast]')) as HTMLElement[];\n    expect(toastEls.length).toBe(2);\n    const exiting = toastEls.map((el) => el.parentElement!.className + ' ' + el.className);\n    console.log('exit classes:', exiting);\n    expect(exiting.every((c) => /exit/.test(c))).toBe(true);\n    // jsdom never fires animationend; emulate end of the exit animation so the list removes them.\n    await act(async () => { toastEls.forEach((el) => el.dispatchEvent(new Event('animationend'))); await sleep(50); });\n    expect(count()).toBe(0);\"\"\")\nopen(p,'w').write(s)\nEOF\ntimeout 200 npx vitest run -c vitest.tmp.config.mts src/__tmp_toast.test.tsx 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npx vitest run -c vitest.tmp.config.mts src/__tmp_toast.test.tsx 2>&1 | grep -v \"npm warn\" | tail -40",
+        "success": true
+      },
+      {
+        "command": "pkill -f \"vite --port 5173\" ; rm -f src/__tmp_toast.test.tsx vitest.tmp.config.mts && rm -rf dist && timeout 200 npm prune --no-audit --no-fund 2>&1 | grep -v \"npm warn\" | tail -2; cmp -s package.json /tmp/pkg.bak && echo pkg-unchanged; cmp -s package-lock.json /tmp/lock.bak && echo lock-unchanged; git status --short; timeout 200 npm run build 2>&1 | grep -E \"built|error\" ; rm -rf dist; git status --short",
+        "success": true
+      },
+      {
+        "command": "for p in /proc/[0-9]*; do if tr '\\0' ' ' < $p/cmdline 2>/dev/null | grep -q \"vite --port 5173\"; then kill ${p#/proc/} && echo killed ${p#/proc/}; fi; done; cd /home/sandbox/workspace && git diff --stat && cat src/App.tsx",
+        "success": false
+      },
+      {
+        "command": "git diff --stat && ls src && cat src/App.tsx",
+        "success": true
+      },
+      {
+        "command": "timeout 200 npm run build 2>&1 | grep -E \"built|error|TS[0-9]\" ; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 60,
+      "outputTokens": 13958,
+      "cacheReadTokens": 990058,
+      "cacheWriteTokens": 34592,
+      "totalTokens": 1038668
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

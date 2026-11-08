@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "duration": 273.387,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.316 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 322,
+    "outputTokens": 5940,
+    "cacheReadTokens": 277807,
+    "cacheWriteTokens": 21122,
+    "totalTokens": 305191
+  },
+  "model": "claude-fable-5-1",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "ls -la && cat package.json 2>/dev/null && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -50",
+        "success": true
+      },
+      {
+        "command": "cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts __agent_eval__/run.mjs .gitignore; ls node_modules/@gravity-ui/uikit/build/esm/components | grep -i -E 'dropdown|menu|popup|button' ",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,200p node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts; echo ----; grep -n \"switcher\\|renderSwitcher\\|items\\|size\\|popupProps\\|defaultSwitcherProps\" node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts; echo ----; ls node_modules/@gravity-ui/icons >/dev/null 2>&1 && echo \"icons installed\" || echo \"no icons pkg\"; ls node_modules/@gravity-ui/uikit/build/esm/components/Icon 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "grep -n \"SwitcherProps\" -A6 node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts | head -30; grep -n '\"@gravity-ui/icons\"' node_modules/@gravity-ui/uikit/package.json; grep -n \"theme\\|disabled\\|selected\" node_modules/@gravity-ui/uikit/build/esm/components/Menu/MenuItem.d.ts | head; ls node_modules/@gravity-ui/icons/ | grep -iE '^(Pencil|Copy|TrashBin|ArrowUpFromSquare|Ellipsis|ChevronDown|Plus)\\.' ",
+        "success": true
+      },
+      {
+        "command": "cat > src/ActionsMenu.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Button, DropdownMenu, type DropdownMenuItem } from '@gravity-ui/uikit';\n\nexport type ActionId = 'edit' | 'duplicate' | 'share' | 'archive' | 'delete';\n\nexport interface ActionsMenuProps {\n  /** Текст на кнопке-переключателе. */\n  label?: string;\n  /** Вызывается при выборе пункта меню. */\n  onAction?: (action: ActionId) => void;\n}\n\n/**\n * Кнопка, по клику на которую раскрывается список действий.\n * Пункты сгруппированы: основные действия и отдельно — опасное «Удалить».\n */\nexport function ActionsMenu({ label = 'Действия', onAction }: ActionsMenuProps) {\n  const [open, setOpen] = useState(false);\n\n  const run = (action: ActionId) => () => onAction?.(action);\n\n  const items: (DropdownMenuItem | DropdownMenuItem[])[] = [\n    [\n      { text: 'Редактировать', action: run('edit') },\n      { text: 'Дублировать', action: run('duplicate') },\n      { text: 'Поделиться', action: run('share') },\n    ],\n    [\n      { text: 'Архивировать', action: run('archive') },\n      { text: 'Удалить', theme: 'danger', action: run('delete') },\n    ],\n  ];\n\n  return (\n    <DropdownMenu\n      items={items}\n      size=\"m\"\n      open={open}\n      onOpenToggle={setOpen}\n      popupProps={{ placement: 'bottom-start' }}\n      renderSwitcher={(switcherProps) => (\n        <Button\n          {...switcherProps}\n          view=\"action\"\n          size=\"m\"\n          aria-haspopup=\"menu\"\n          aria-expanded={open}\n        >\n          {label} {open ? '▴' : '▾'}\n        </Button>\n      )}\n    />\n  );\n}\nEOF\ncat > src/App.tsx <<'EOF'\nimport { useState } from 'react';\nimport { Text } from '@gravity-ui/uikit';\n\nimport { ActionsMenu, type ActionId } from './ActionsMenu';\n\nconst ACTION_LABELS: Record<ActionId, string> = {\n  edit: 'Редактировать',\n  duplicate: 'Дублировать',\n  share: 'Поделиться',\n  archive: 'Архивировать',\n  delete: 'Удалить',\n};\n\nexport function App() {\n  const [last, setLast] = useState<ActionId | null>(null);\n\n  return (\n    <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>\n      <ActionsMenu onAction={setLast} />\n      <Text color=\"secondary\">\n        {last ? `Выбрано действие: ${ACTION_LABELS[last]}` : 'Нажмите кнопку, чтобы открыть список действий'}\n      </Text>\n    </div>\n  );\n}\nEOF\ngrep -n \"onOpenToggle\\|open?\" node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts; npm run build 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && (ls node_modules/playwright* node_modules/puppeteer* 2>/dev/null | head -3; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null) ; echo \"---\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/smoke && cat > /tmp/smoke/smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from '/home/sandbox/workspace/src/App';\n\ntest('App renders the actions button', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Действия');\n  expect(html).toContain('aria-haspopup=\"menu\"');\n});\nEOF\nnpx vitest run --root /tmp/smoke --dir /tmp/smoke 2>&1 | tail -12; rm -rf /tmp/smoke",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders the actions button', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Действия');\n  expect(html).toContain('aria-haspopup=\"menu\"');\n});\nEOF\nnpx vitest run src/__smoke.test.tsx 2>&1 | tail -8; rm -f src/__smoke.test.tsx; git status --short",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders the actions button', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Действия');\n  expect(html).toContain('aria-haspopup=\"menu\"');\n});\nEOF\nnpx vitest run src/__smoke.test.tsx 2>&1 | grep -v \"^$\" | head -30; rm -f src/__smoke.test.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > src/__smoke.test.tsx <<'EOF'\nimport { test, expect } from 'vitest';\nimport { renderToString } from 'react-dom/server';\nimport { ThemeProvider } from '@gravity-ui/uikit';\nimport { App } from './App';\n\ntest('App renders the actions button', () => {\n  const html = renderToString(<ThemeProvider theme=\"light\"><App /></ThemeProvider>);\n  expect(html).toContain('Действия');\n  expect(html).toContain('aria-haspopup=\"menu\"');\n});\nEOF\ncat > __vitest.smoke.config.ts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nimport react from '@vitejs/plugin-react';\nexport default defineConfig({\n  plugins: [react()],\n  test: { environment: 'node', css: false, server: { deps: { inline: [/@gravity-ui/] } } },\n});\nEOF\nnpx vitest run --config __vitest.smoke.config.ts src/__smoke.test.tsx 2>&1 | grep -v \"^$\" | head -30; rm -f src/__smoke.test.tsx __vitest.smoke.config.ts; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 322,
+      "outputTokens": 5940,
+      "cacheReadTokens": 277807,
+      "cacheWriteTokens": 21122,
+      "totalTokens": 305191
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,238 @@
+/*
+ * Theme-bound chart tokens.
+ * Everything resolves from Gravity UI variables (--g-color-*), which the
+ * ThemeProvider flips by stamping .g-root_theme_light / .g-root_theme_dark
+ * on the root — so the chart follows the current app theme with no JS.
+ * Only the six categorical series steps are hardcoded; they are validated
+ * against the actual Gravity UI surfaces (#ffffff light / #221d22 dark)
+ * with validate_palette.js in both modes.
+ */
+.lc-root {
+  --lc-surface: var(--g-color-base-background);
+  --lc-ink: var(--g-color-text-primary);
+  --lc-ink-secondary: var(--g-color-text-secondary);
+  --lc-ink-muted: var(--g-color-text-hint);
+  --lc-gridline: var(--g-color-line-generic-solid);
+  --lc-axis: var(--g-color-line-generic-accent);
+  --lc-tip-bg: var(--g-color-base-float);
+  --lc-tip-border: var(--g-color-line-generic-solid);
+  --lc-focus: var(--g-color-line-focus);
+
+  color: var(--lc-ink);
+  font-family: var(--g-text-body-font-family, system-ui, -apple-system, 'Segoe UI', sans-serif);
+}
+
+/* Categorical slots 1–3, fixed order (blue, orange, aqua) — never cycled. */
+.g-root_theme_light .lc-root,
+.g-root_theme_light-hc .lc-root {
+  --lc-series-1: #2a78d6;
+  --lc-series-2: #eb6834;
+  --lc-series-3: #1baf7a;
+}
+
+.g-root_theme_dark .lc-root,
+.g-root_theme_dark-hc .lc-root {
+  --lc-series-1: #3987e5;
+  --lc-series-2: #d95926;
+  --lc-series-3: #199e70;
+}
+
+.lc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+
+.lc-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.lc-subtitle {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--lc-ink-secondary);
+}
+
+/* Legend: line keys mirror the mark; names wear text tokens, never the series color. */
+.lc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lc-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.lc-key {
+  flex: none;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.lc-plot {
+  position: relative;
+  border-radius: 6px;
+}
+
+.lc-plot:focus-visible {
+  outline: 2px solid var(--lc-focus);
+  outline-offset: 4px;
+}
+
+.lc-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lc-grid {
+  stroke: var(--lc-gridline);
+  stroke-width: 1;
+}
+
+.lc-axis-line {
+  stroke: var(--lc-axis);
+  stroke-width: 1;
+}
+
+.lc-tick {
+  fill: var(--lc-ink-secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.lc-cross-line {
+  stroke: var(--lc-gridline);
+  stroke-width: 1;
+}
+
+.lc-end-label {
+  font-size: 12px;
+}
+
+.lc-end-name {
+  fill: var(--lc-ink-secondary);
+}
+
+.lc-end-value {
+  fill: var(--lc-ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-overlay {
+  fill: transparent;
+}
+
+/* Crosshair tooltip: one tooltip, every series; value leads, name follows. */
+.lc-tip {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  min-width: 150px;
+  max-width: 220px;
+  padding: 8px 10px;
+  border: 1px solid var(--lc-tip-border);
+  border-radius: 8px;
+  background: var(--lc-tip-bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.lc-tip-title {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.lc-tip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lc-tip-key {
+  flex: none;
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+}
+
+.lc-tip-name {
+  flex: 1;
+  color: var(--lc-ink-secondary);
+}
+
+.lc-tip-value {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-foot {
+  margin-top: 4px;
+}
+
+.lc-table-wrap {
+  margin-top: 8px;
+  overflow-x: auto;
+}
+
+.lc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.lc-table th,
+.lc-table td {
+  padding: 6px 16px 6px 0;
+  border-bottom: 1px solid var(--lc-gridline);
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-table thead th {
+  color: var(--lc-ink-secondary);
+  font-weight: 400;
+}
+
+.lc-table tbody th {
+  color: var(--lc-ink-secondary);
+  font-weight: 400;
+}
+
+.lc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

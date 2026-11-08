@@ -1,0 +1,92 @@
+{
+  "status": "failed",
+  "duration": 436.305,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 30514,
+    "outputTokens": 5650,
+    "cacheReadTokens": 130304,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 559,
+    "totalTokens": 166468
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 7,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 7,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' -g '\"'!dist'\"' | head -200\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && sed -n '1,240p' src/App.tsx && sed -n '1,200p' src/main.tsx\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport {useState} from 'react';\nimport {VisualizationWidget} from './VisualizationWidget';\nimport './styles.css';\n\nconst sales = [\n  {time: '09:00', value: 24}, {time: '10:00', value: 31}, {time: '11:00', value: 28},\n  {time: '12:00', value: 40}, {time: '13:00', value: 35}, {time: '14:00', value: 47},\n  {time: '15:00', value: 43}, {time: '16:00', value: 58}, {time: '17:00', value: 52},\n  {time: '18:00', value: 68}, {time: '19:00', value: 62}, {time: '20:00', value: 76},\n];\n\nconst monitoring = Array.from({length: 180}, (_, index) => {\n  const base = 54 + Math.sin(index / 9) * 11 + Math.sin(index / 2.8) * 4;\n  const spike = index > 123 && index < 129 ? 25 : 0;\n  return {time: \"'`${String(Math.floor(index / 6)).padStart(2, '\"'0')}:\"'${String((index % 6) * 10).padStart(2, '\"'0')}\"'`, value: Math.max(8, Math.min(96, base + spike))};\n});\n\nexport function App() {\n  const [range, setRange] = useState('\"'Сегодня');\n  return <main className=\\\"page-shell\\\">\n    <header className=\\\"topbar\\\"><a className=\\\"brand\\\" href=\\\"#\\\"><span className=\\\"brand-mark\\\">N</span> northstar<span className=\\\"brand-dash\\\">/</span>analytics</a><div className=\\\"topbar-right\\\"><span className=\\\"status-dot\\\"/> Все системы работают <span className=\\\"avatar\\\">М</span></div></header>\n    <section className=\\\"page-heading\\\"><div><div className=\\\"eyebrow\\\">ОБЗОР ДАННЫХ <span>•</span> ПРОДУКТ</div><h1>Аналитика</h1><p>Отслеживайте динамику продаж и состояние инфраструктуры.</p></div><div className=\\\"range-control\\\">{['Сегодня', '7 дней', '30 дней'].map((item) => <button key={item} className={range === item ? 'range-active' : ''} onClick={() => setRange(item)}>{item}</button>)}</div></section>\n    <section className=\\\"metric-row\\\">\n      <article className=\\\"metric-card\\\"><div className=\\\"metric-label\\\">Выручка <span className=\\\"metric-icon\\\">↗</span></div><div className=\\\"metric-value\\\">₽ 284 650</div><div className=\\\"metric-foot\\\"><span className=\\\"positive\\\">↑ 12,8%</span> к прошлому периоду</div></article>\n      <article className=\\\"metric-card\\\"><div className=\\\"metric-label\\\">Заказы <span className=\\\"metric-icon\\\">▤</span></div><div className=\\\"metric-value\\\">1 248</div><div className=\\\"metric-foot\\\"><span className=\\\"positive\\\">↑ 8,2%</span> к прошлому периоду</div></article>\n      <article className=\\\"metric-card\\\"><div className=\\\"metric-label\\\">Средний чек <span className=\\\"metric-icon\\\">◎</span></div><div className=\\\"metric-value\\\">₽ 2 281</div><div className=\\\"metric-foot\\\"><span className=\\\"negative\\\">↓ 1,4%</span> к прошлому периоду</div></article>\n      <article className=\\\"metric-card\\\"><div className=\\\"metric-label\\\">Конверсия <span className=\\\"metric-icon\\\">⌁</span></div><div className=\\\"metric-value\\\">3,64%</div><div className=\\\"metric-foot\\\"><span className=\\\"positive\\\">↑ 0,6%</span> к прошлому периоду</div></article>\n    </section>\n    <VisualizationWidget title=\\\"Динамика\\\" subtitle=\\\"Продажи и состояние мониторинга в одном виджете\\\" salesData={sales} monitoringData={monitoring} />\n  </main>;\n}\nEOF\ncat > src/VisualizationWidget.tsx <<'EOF'\nimport {Suspense, lazy, useState} from 'react';\n\nconst SalesChart = lazy(() => import('./charts/SalesChart'));\nconst MonitoringChart = lazy(() => import('./charts/MonitoringChart'));\n\nexport type ChartPoint = {time: string; value: number};\nexport type VisualizationMode = 'sales' | 'monitoring';\ntype Props = {title: string; subtitle?: string; salesData: ChartPoint[]; monitoringData: ChartPoint[]};\n\nexport function VisualizationWidget({title, subtitle, salesData, monitoringData}: Props) {\n  const [mode, setMode] = useState<VisualizationMode>('sales');\n  const isSales = mode === 'sales';\n  const activeData = isSales ? salesData : monitoringData;\n  const latest = activeData.at(-1)?.value ?? 0;\n  return <section className=\\\"chart-card\\\" aria-labelledby=\\\"visualization-title\\\">\n    <div className=\\\"chart-header\\\"><div><h2 id=\\\"visualization-title\\\">{title}</h2>{subtitle && <p>{subtitle}</p>}</div><div className=\\\"chart-actions\\\"><div className=\\\"mode-switch\\\" role=\\\"tablist\\\" aria-label=\\\"Режим визуализации\\\">\n      <button role=\\\"tab\\\" aria-selected={isSales} className={isSales ? 'mode-active' : ''} onClick={() => setMode('sales')}><span className=\\\"tab-glyph\\\">⌁</span> Продажи</button>\n      <button role=\\\"tab\\\" aria-selected={\"'!isSales} className={!isSales ? '\"'mode-active' : ''} onClick={() => setMode('monitoring')}><span className=\\\"tab-glyph\\\">▦</span> Мониторинг</button>\n    </div><button className=\\\"icon-button\\\" aria-label=\\\"Дополнительные действия\\\">···</button></div></div>\n    <div className=\\\"chart-summary\\\"><div><span className=\\\"summary-label\\\">{isSales ? 'Продажи за сегодня' : 'Средняя нагрузка'}</span><div className=\\\"summary-value\\\">{isSales ? '₽ 76 420' : \"'`${latest.toFixed(1)}%`} <span className=\"summary-change\">↑ 12,8%</span></div></div><div className=\"chart-legend\"><span className=\"legend-dot primary\"/>{isSales ? '\"'Выручка' : 'CPU'}{\"'!isSales && <><span className=\"legend-dot secondary\"/>Память<span className=\"legend-dash\"/>Порог</>}</div></div>\n    <div className=\"plot-area\" key={mode}><Suspense fallback={<div className=\"chart-loading\">Загружаем визуализацию…</div>}>{isSales ? <SalesChart data={salesData}/> : <MonitoringChart data={monitoringData}/>}</Suspense></div>\n  </section>;\n}\nEOF\nmkdir -p src/charts\ncat > src/charts/SalesChart.tsx <<'\"'EOF'\nimport type {ChartPoint} from '../VisualizationWidget';\nexport default function SalesChart({data}: {data: ChartPoint[]}) {\n  const w = 860, h = 280, left = 42, right = 16, top = 14, bottom = 34;\n  const max = Math.ceil(Math.max(...data.map((p) => p.value)) / 20) * 20;\n  const x = (i: number) => left + i * (w - left - right) / Math.max(1, data.length - 1);\n  const y = (v: number) => top + (h - top - bottom) * (1 - v / max);\n  const line = data.map((p, i) => \"'`${i ? '\"'L' : 'M'} \"'${x(i)} ${y(p.value)}`).join('\"' ');\n  const area = \"'`${line} L ${x(data.length - 1)} ${h - bottom} L ${x(0)} ${h - bottom} Z`;\n  return <svg viewBox={`0 0 ${w} ${h}`} className=\"chart-svg\" role=\"img\" aria-label=\"Линейный график продаж\">\n    {[0, .25, .5, .75, 1].map((ratio) => {const val = max * ratio; return <g key={ratio}><line x1={left} x2={w-right} y1={y(val)} y2={y(val)} className=\"grid-line\"/><text x={left-10} y={y(val)+4} textAnchor=\"end\" className=\"axis-label\">{val}</text></g>})}\n    <path d={area} className=\"sales-area\"/><path d={line} className=\"sales-line\"/>\n    {data.map((p, i) => <g key={`${p.time}-${i}`}><circle cx={x(i)} cy={y(p.value)} r=\"3.5\" className=\"sales-point\"/><title>{p.time}: ₽{p.value} тыс.</title></g>)}\n    {data.filter((_, i) => i % 2 === 0 || i === data.length - 1).map((p) => <text key={p.time} x={x(data.indexOf(p))} y={h-8} textAnchor=\"middle\" className=\"axis-label\">{p.time}</text>)}\n  </svg>;\n}\nEOF\ncat > src/charts/MonitoringChart.tsx <<'\"'EOF'\nimport type {ChartPoint} from '../VisualizationWidget';\nexport default function MonitoringChart({data}: {data: ChartPoint[]}) {\n  const w = 860, h = 280, left = 42, right = 16, top = 14, bottom = 34;\n  const x = (i: number) => left + i * (w - left - right) / Math.max(1, data.length - 1);\n  const y = (v: number) => top + (h - top - bottom) * (1 - v / 100);\n  const line = data.map((p, i) => \"'`${i ? '\"'L' : 'M'} \"'${x(i)} ${y(p.value)}`).join('\"' ');\n  const memory = data.map((p, i) => {const value = Math.max(8, Math.min(90, p.value * .76 + Math.sin(i / 3) * 8)); return \"'`${i ? '\"'L' : 'M'} \"'${x(i)} ${y(value)}`}).join('\"' ');\n  const tickIndexes = [0, Math.floor((data.length-1)/4), Math.floor((data.length-1)/2), Math.floor(3*(data.length-1)/4), data.length-1];\n  return <svg viewBox={\"'`0 0 ${w} ${h}`} className=\"chart-svg\" role=\"img\" aria-label=\"Плотный временной ряд мониторинга\">\n    {[0, 25, 50, 75, 100].map((val) => <g key={val}><line x1={left} x2={w-right} y1={y(val)} y2={y(val)} className=\"grid-line\"/><text x={left-10} y={y(val)+4} textAnchor=\"end\" className=\"axis-label\">{val}%</text></g>)}\n    <line x1={left} x2={w-right} y1={y(80)} y2={y(80)} className=\"threshold-line\"/><path d={memory} className=\"monitor-line secondary-line\"/><path d={line} className=\"monitor-line\"/>\n    {tickIndexes.map((i) => <text key={i} x={x(i)} y={h-8} textAnchor=\"middle\" className=\"axis-label\">{data[i]?.time}</text>)}\n  </svg>;\n}\nEOF'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/styles.css <<'EOF'\n:root{font-family:Inter,-apple-system,BlinkMacSystemFont,\\\"Segoe UI\\\",sans-serif;color:#1c2434;background:#f5f7fa;font-synthesis:none;text-rendering:optimizeLegibility}*{box-sizing:border-box}body{margin:0;min-width:320px}.page-shell{max-width:1280px;margin:0 auto;padding:0 38px 60px}.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8ebf0}.brand{font-size:15px;font-weight:720;letter-spacing:-.3px;color:#252d3b;text-decoration:none;display:flex;align-items:center;gap:7px}.brand-mark{display:grid;place-items:center;width:25px;height:25px;border-radius:7px;background:#4e6af3;color:white;font-size:14px;font-weight:800}.brand-dash{color:#9ca5b3;margin-left:-5px}.topbar-right{display:flex;align-items:center;gap:9px;color:#647084;font-size:12px}.status-dot{width:7px;height:7px;border-radius:50%;background:#2db783;box-shadow:0 0 0 3px #e1f5ed}.avatar{margin-left:12px;width:29px;height:29px;display:grid;place-items:center;border-radius:50%;background:#e5e9ff;color:#5264cf;font-size:12px;font-weight:700}.page-heading{display:flex;align-items:flex-end;justify-content:space-between;margin:35px 0 24px}.eyebrow{font-size:10px;letter-spacing:1.2px;font-weight:700;color:#919aaa}.eyebrow span{padding:0 6px;color:#b3bbc6}h1{font-size:29px;line-height:1.2;margin:9px 0 6px;letter-spacing:-.8px} .page-heading p{margin:0;color:#828c9b;font-size:13px}.range-control{display:flex;gap:2px;background:#edf0f4;padding:3px;border-radius:8px}.range-control button{border:0;background:transparent;color:#717b8c;padding:7px 12px;font-size:11px;border-radius:6px;cursor:pointer}.range-control button.range-active{background:white;color:#303a4b;box-shadow:0 1px 3px #17243b12;font-weight:600}.metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.metric-card,.chart-card{background:#fff;border:1px solid #e9edf2;border-radius:10px;box-shadow:0 2px 8px #1c2b4206}.metric-card{padding:17px 18px 15px;min-height:119px}.metric-label{display:flex;align-items:center;justify-content:space-between;color:#737e8e;font-size:11px}.metric-icon{font-size:15px;color:#a1aabb}.metric-value{font-size:23px;font-weight:650;letter-spacing:-.55px;margin:9px 0 7px;color:#222b3c}.metric-foot{font-size:10px;color:#9aa3b0}.positive{color:#1da778;font-weight:650;margin-right:4px}.negative{color:#dc7b61;font-weight:650;margin-right:4px}.chart-card{padding:21px 22px 14px}.chart-header{display:flex;justify-content:space-between;align-items:flex-start}.chart-header h2{font-size:16px;letter-spacing:-.2px;margin:0 0 5px;font-weight:650}.chart-header p{font-size:11px;color:#8c95a3;margin:0}.chart-actions{display:flex;align-items:center;gap:11px}.mode-switch{display:flex;gap:2px;background:#f1f3f7;padding:3px;border-radius:7px}.mode-switch button{display:flex;align-items:center;gap:6px;border:0;background:transparent;color:#778192;border-radius:5px;padding:7px 11px;font-size:11px;cursor:pointer;transition:background .15s,color .15s}.mode-switch button.mode-active{background:#fff;color:#3645b8;font-weight:650;box-shadow:0 1px 3px #26385b17}.tab-glyph{font-size:14px;line-height:10px}.icon-button{border:0;background:transparent;color:#8892a1;font-size:20px;letter-spacing:1px;cursor:pointer}.chart-summary{display:flex;align-items:flex-end;justify-content:space-between;margin:23px 0 4px}.summary-label{font-size:10px;color:#939cab}.summary-value{font-size:21px;font-weight:650;letter-spacing:-.4px;margin-top:5px}.summary-change{font-size:10px;letter-spacing:0;color:#169b6e;background:#eaf8f2;border-radius:4px;padding:4px 6px;vertical-align:4px;margin-left:4px}.chart-legend{display:flex;align-items:center;gap:7px;font-size:10px;color:#778191;padding-bottom:3px}.legend-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-left:10px}.legend-dot:first-child{margin-left:0}.legend-dot.primary{background:#586bf3}.legend-dot.secondary{background:#9aa9f9}.legend-dash{width:11px;border-top:1.5px dashed #e28d75;display:inline-block;margin-left:9px}.plot-area{height:291px;width:100%;padding-top:3px}.chart-svg{display:block;width:100%;height:100%;overflow:visible}.grid-line{stroke:#edf0f4;stroke-width:1}.axis-label{fill:#a0a8b4;font:10px Inter,-apple-system,sans-serif}.sales-area{fill:url(#unused);fill:#586bf30a}.sales-line{fill:none;stroke:#586bf3;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}.sales-point{fill:#fff;stroke:#586bf3;stroke-width:2}.monitor-line{fill:none;stroke:#586bf3;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}.secondary-line{stroke:#9aa9f9;stroke-width:1.5}.threshold-line{stroke:#e5a08b;stroke-width:1;stroke-dasharray:5 5}.chart-loading{height:100%;display:grid;place-items:center;color:#929baa;font-size:12px}@media(max-width:760px){.page-shell{padding:0 18px 36px}.metric-row{grid-template-columns:repeat(2,1fr)}.page-heading{align-items:flex-start;gap:16px;flex-direction:column}.chart-card{padding:17px 14px 12px}.chart-header{gap:12px;flex-direction:column}.chart-actions{width:100%;justify-content:space-between}.chart-summary{margin-top:18px}.plot-area{height:245px}.mode-switch button{padding:7px 8px}.chart-legend{font-size:9px}.metric-card{padding:14px}.metric-value{font-size:20px}}@media(max-width:410px){.topbar-right{font-size:0}.status-dot{font-size:initial}.range-control button{padding:7px 9px}.summary-value{font-size:18px}}\nEOF\n\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && nl -ba src/VisualizationWidget.tsx | sed -n '1,100p' && nl -ba src/App.tsx | sed -n '1,90p'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'find dist -type f -delete && find dist -depth -type d -empty -delete && git status --short'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 30514,
+      "outputTokens": 5650,
+      "cacheReadTokens": 130304,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 559,
+      "totalTokens": 166468
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

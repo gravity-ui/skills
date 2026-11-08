@@ -1,0 +1,122 @@
+{
+  "status": "failed",
+  "duration": 274.106,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 44169,
+    "outputTokens": 2371,
+    "cacheReadTokens": 123264,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 487,
+    "totalTokens": 169804
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 7,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!node_modules'\"' | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json && printf '\\\\n--- App.tsx ---\\\\n' && cat src/App.tsx && printf '\\\\n--- main.tsx ---\\\\n' && cat src/main.tsx && printf '\\\\n--- index.html ---\\\\n' && cat index.html\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg \\\"declare function (Button|Modal)|const Button|const Modal\\\" node_modules/@gravity-ui/uikit -g '*.d.ts' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts && rg \"open\" node_modules/@gravity-ui/uikit/build/esm/components/Modal/Modal.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts && rg -n \\\"onDestroy|destroyOnClose|disablePortal\\\" node_modules/@gravity-ui/uikit/build/esm/components/Modal -g '*.d.ts'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'rg -n \"uncontrolled|open.*required|children\" node_modules/@gravity-ui/uikit/build/esm/components/Modal/*.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Modal/**/*.d.ts'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n+import React from 'react';\n+import { Button, Modal } from '@gravity-ui/uikit';\n+\n+const styles = {\n+  page: { padding: 24 } as React.CSSProperties,\n+  content: { padding: 24, maxWidth: 420 } as React.CSSProperties,\n+  title: { margin: 0, fontSize: 20, fontWeight: 600 } as React.CSSProperties,\n+  text: { margin: '12px 0 24px' } as React.CSSProperties,\n+  actions: { display: 'flex', justifyContent: 'flex-end', gap: 8 } as React.CSSProperties,\n+};\n+\n+export function App() {\n+  const [isModalOpen, setIsModalOpen] = React.useState(false);\n+\n+  const closeModal = React.useCallback(() => setIsModalOpen(false), []);\n+\n+  return (\n+    <div style={styles.page}>\n+      <Button view=\\\"action\\\" size=\\\"m\\\" onClick={() => setIsModalOpen(true)}>\n+        Открыть подтверждение\n+      </Button>\n+\n+      {isModalOpen && (\n+        <Modal open onClose={closeModal}>\n+          <div style={styles.content}>\n+            <h2 style={styles.title}>Подтвердите действие</h2>\n+            <p style={styles.text}>\n+              Это модальное окно подтверждения. Подтвердите действие или отмените его, если оно выполнено по ошибке.\n+            </p>\n+            <div style={styles.actions}>\n+              <Button view=\\\"flat-secondary\\\" size=\\\"m\\\" onClick={closeModal}>\n+                Отменить\n+              </Button>\n+              <Button view=\\\"action\\\" size=\\\"m\\\" onClick={closeModal}>\n+                Подтвердить\n+              </Button>\n+            </div>\n+          </div>\n+        </Modal>\n+      )}\n+    </div>\n+  );\n+}\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'command -v apply_patch || find / -name apply_patch -type f 2>/dev/null | head'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat > src/App.tsx <<'EOF'\nimport React from 'react';\nimport { Button, Modal } from '@gravity-ui/uikit';\n\nconst styles = {\n  page: { padding: 24 } as React.CSSProperties,\n  content: { padding: 24, maxWidth: 420 } as React.CSSProperties,\n  title: { margin: 0, fontSize: 20, fontWeight: 600 } as React.CSSProperties,\n  text: { margin: '12px 0 24px' } as React.CSSProperties,\n  actions: { display: 'flex', justifyContent: 'flex-end', gap: 8 } as React.CSSProperties,\n};\n\nexport function App() {\n  const [isModalOpen, setIsModalOpen] = React.useState(false);\n\n  const closeModal = React.useCallback(() => setIsModalOpen(false), []);\n\n  return (\n    <div style={styles.page}>\n      <Button view=\\\"action\\\" size=\\\"m\\\" onClick={() => setIsModalOpen(true)}>\n        Открыть подтверждение\n      </Button>\n\n      {isModalOpen && (\n        <Modal open onClose={closeModal}>\n          <div style={styles.content}>\n            <h2 style={styles.title}>Подтвердите действие</h2>\n            <p style={styles.text}>\n              Это модальное окно подтверждения. Подтвердите действие или отмените его, если оно выполнено по ошибке.\n            </p>\n            <div style={styles.actions}>\n              <Button view=\\\"flat-secondary\\\" size=\\\"m\\\" onClick={closeModal}>\n                Отменить\n              </Button>\n              <Button view=\\\"action\\\" size=\\\"m\\\" onClick={closeModal}>\n                Подтвердить\n              </Button>\n            </div>\n          </div>\n        </Modal>\n      )}\n    </div>\n  );\n}\nEOF\nnpm run build\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'ps aux | rg -n \"chromedriver|chrome\" || true'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"pgrep -laf 'chromedriver|chrome' || echo 'no browser tooling found'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls /usr/bin | rg -i 'chrom|firefox' || true; ls /usr/local/bin | rg -i 'chrom|firefox' || true\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'nl -ba src/App.tsx'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 44169,
+      "outputTokens": 2371,
+      "cacheReadTokens": 123264,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 487,
+      "totalTokens": 169804
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "status": "passed",
+  "duration": 731.967,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 51617,
+    "outputTokens": 3385,
+    "cacheReadTokens": 432640,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 1073,
+    "totalTokens": 487642
+  },
+  "model": "gpt-6-luna",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 11,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n---FILES---\\\\n' && rg --files -g '\"'!node_modules'\"' | head -80\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,100p' .agents/skills/gravity-ui/references/package-routing.md && printf '\\\\n---PACKAGE---\\\\n' && cat package.json && printf '\\\\n---APP---\\\\n' && sed -n '1,240p' src/App.tsx && printf '\\\\n---MAIN---\\\\n' && cat src/main.tsx && printf '\\\\n---TRAPS---\\\\n' && rg -n -C 3 'Button view|Menu|Dropdown|Popup|Icon data' .agents/skills/gravity-ui/rules/hallucination-traps.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc '.agents/skills/gravity-ui/scripts/inspect-package.sh uikit Button DropdownMenu Menu Popup'",
+        "success": false,
+        "exitCode": 126
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit && find node_modules/@gravity-ui/uikit -maxdepth 4 -path '*/docs/INDEX.md' -o -name README.md | head -20; test -d node_modules/@gravity-ui/uikit && node -p \\\"require('./node_modules/@gravity-ui/uikit/package.json').version\\\"; rg -n -C 3 'DropdownMenu|Menu' node_modules/@gravity-ui/uikit/build/docs | head -100\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 5 'DropdownMenu|Menu|Popup|Button' node_modules/@gravity-ui/uikit/README.md | head -120; rg -n 'DropdownMenu|Menu' node_modules/@gravity-ui/uikit/build | head -80; sed -n '1,240p' node_modules/@gravity-ui/uikit/package.json\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/index.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenuItem.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/Button/index.d.ts; sed -n '1,120p' node_modules/@gravity-ui/uikit/README.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts; cat node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/types.d.ts; sed -n '1,200p' node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.js\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n -C 2 'g-spacing-6|g-color-line-generic|g-color-base-float|border-radius|elevation' .agents/skills/gravity-ui/references/theming.md .agents/skills/gravity-ui/rules/hallucination-traps.md | head -100; rg -n 'subheader-2|body-2' node_modules/@gravity-ui/uikit/build/esm/components/Text\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --short && git diff -- src/App.tsx src/App.css'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"require('node:fs').rmSync('dist', {recursive: true, force: true})\\\"\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 51617,
+      "outputTokens": 3385,
+      "cacheReadTokens": 432640,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 1073,
+      "totalTokens": 487642
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

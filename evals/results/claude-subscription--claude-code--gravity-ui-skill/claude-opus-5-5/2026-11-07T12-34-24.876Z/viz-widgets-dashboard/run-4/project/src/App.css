@@ -1,0 +1,135 @@
+/* Дашборд: только семантические --g-* токены и CSS API DashKit, без цветовых литералов. */
+
+.dashboard-page {
+    --dashkit-grid-item-border-radius: var(--g-border-radius-l);
+    --dashkit-placeholder-color: var(--g-color-base-brand);
+    --dashkit-placeholder-opacity: 0.15;
+
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: var(--g-spacing-6) var(--g-spacing-6) var(--g-spacing-8);
+    background: var(--g-color-base-background);
+}
+
+/* В режиме редактирования снизу висит fixed ActionPanel — оставляем под него место. */
+.dashboard-page_edit {
+    padding-bottom: calc(var(--g-spacing-10) * 3);
+}
+
+.dashboard-page__header {
+    margin-bottom: var(--g-spacing-5);
+}
+
+.dashboard-page__heading {
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.dashboard-page__controls {
+    flex-shrink: 0;
+}
+
+.dashboard-page__empty {
+    padding: var(--g-spacing-6);
+    margin-bottom: var(--g-spacing-4);
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page {
+        padding: var(--g-spacing-4);
+    }
+}
+
+/* ---------- Рамка виджета ---------- */
+
+.widget {
+    --g-card-border-radius: var(--g-border-radius-l);
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-3);
+    height: 100%;
+    padding: var(--g-spacing-4);
+    overflow: hidden;
+    background: var(--g-color-base-float);
+}
+
+.widget__title {
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.widget__body {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+.widget__empty {
+    height: 100%;
+    min-height: 48px;
+    text-align: center;
+}
+
+/* ---------- Метрика ---------- */
+
+.metric__value {
+    /* Пропорциональные цифры для крупного числа. */
+    font-variant-numeric: proportional-nums;
+    white-space: nowrap;
+}
+
+.metric__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--g-spacing-1);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ---------- Цели ---------- */
+
+.goal__name {
+    flex: 1;
+    min-width: 0;
+}
+
+.goal__value {
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Заказы ---------- */
+
+.orders__scroll {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.orders__table {
+    min-width: 420px;
+}
+
+.tabular {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ---------- Заметка ---------- */
+
+.note__text {
+    margin: 0;
+}
+
+/* В мобильной раскладке DashKit виджеты идут в одну колонку с авто-высотой. */
+@media (max-width: 768px) {
+    .widget {
+        height: auto;
+    }
+
+    .widget__body {
+        overflow: visible;
+    }
+}

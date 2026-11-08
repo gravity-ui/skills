@@ -1,0 +1,182 @@
+{
+  "status": "passed",
+  "duration": 378.681,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.167.0"
+  },
+  "usage": {
+    "inputTokens": 144009,
+    "outputTokens": 8769,
+    "cacheReadTokens": 738944,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 392,
+    "totalTokens": 891722
+  },
+  "model": "glm-5.3-flash",
+  "o11y": {
+    "totalTurns": 9,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 25,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 25,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/SKILL.md && printf '\\\\n--- FILES ---\\\\n' && rg --files -g 'AGENTS.md' -g 'package.json' -g '\"'!node_modules'\"' | sort\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,180p' .agents/skills/gravity-ui/references/package-routing.md; printf '\\\\n--- PACKAGE ---\\\\n'; cat package.json; printf '\\\\n--- TRAPS ---\\\\n'; sed -n '1,220p' .agents/skills/gravity-ui/rules/hallucination-traps.md; printf '\\\\n--- THEMING ---\\\\n'; sed -n '1,220p' .agents/skills/gravity-ui/references/theming.md\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat package.json; printf '\\\\n--- FILES ---\\\\n'; rg --files -g '\"'!node_modules'\"' | sort; printf '\\\\n--- UIKIT VERSION/DOCS ---\\\\n'; node -p \\\"require('@gravity-ui/uikit/package.json').version\\\"; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null | head; printf '\\\\n--- SETUP ---\\\\n'; rg -n \\\"Required setup|ThemeProvider|import '@gravity-ui/uikit\\\" node_modules/@gravity-ui/uikit/README.md node_modules/@gravity-ui/uikit/build/docs -g '*.md' | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"const p=require('fs').readFileSync('node_modules/@gravity-ui/uikit/package.json','utf8'); const j=JSON.parse(p); console.log(j.version); console.log(JSON.stringify(j.exports,null,2))\\\"; printf '\\\\n--- README ---\\\\n'; sed -n '35,120p' node_modules/@gravity-ui/uikit/README.md; printf '\\\\n--- CURRENT ---\\\\n'; cat src/App.tsx src/main.tsx index.html tsconfig.json vite.config.ts; printf '\\\\n--- TYPES ---\\\\n'; find node_modules/@gravity-ui/uikit -maxdepth 3 -name '*.d.ts' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"export \\\\* from|declare function|declare const|interface TabsProps|type TabsProps|interface ButtonProps|Flex|Text|Card|Switch|SegmentedRadioGroup\\\" node_modules/@gravity-ui/uikit/build/esm/index.d.ts | head -100; printf '\\\\n--- COMPONENT DIRS ---\\\\n'; find node_modules/@gravity-ui/uikit/build/esm -maxdepth 2 -type d | rg \\\"components/(Tabs|Button|Flex|Text|Card|SegmentedRadioGroup|ThemeProvider)\\\" | head -40\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'for d in Tabs Button Flex Text Card SegmentedRadioGroup ThemeProvider Icon Switch; do echo \"--- $d\"; find node_modules/@gravity-ui/uikit/build/esm/components/$d -name '\"'*.d.ts' -maxdepth 2 -print -exec sed -n '1,160p' {} \\\\; 2>/dev/null | head -120; done\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/uikit/build/esm/components | rg '\"'^(Tabs|Flex|Text|Card|ThemeProvider|Space|Layout)'\"' ; printf '\\\\n--- d.ts ---\\\\n'; for d in Tabs Flex Text Card ThemeProvider; do find node_modules/@gravity-ui/uikit/build/esm -type f -iname \\\"*\"'$d*.d.ts\" | head -5; done; printf '\"'\\\\n--- exports ---\\\\n'; rg -n '\\\"(Tabs|Flex|Text|Card|ThemeProvider)\\\"' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts node_modules/@gravity-ui/uikit/build/esm/index.d.ts\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'for f in node_modules/@gravity-ui/uikit/build/esm/components/legacy/Tabs/Tabs.d.ts node_modules/@gravity-ui/uikit/build/esm/components/legacy/Tabs/TabsItem.d.ts node_modules/@gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts; do echo ---$f; sed -n '\"'1,180p' \"'$f; done; echo '\"'--- text'; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/Text/Text.d.ts; echo '--- index'; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"echo tabs; sed -n '1,200p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/index.d.ts; sed -n '1,220p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/Tabs.d.ts; echo card; sed -n '1,200p' node_modules/@gravity-ui/uikit/build/esm/components/Card/Card.d.ts; echo themeprops; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,240p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/types.d.ts; echo '--- tablist'; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/TabList/TabList.d.ts; echo '--- tab'; sed -n '1,160p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/Tab/Tab.d.ts\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,140p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/TabList.d.ts; sed -n '1,100p' node_modules/@gravity-ui/uikit/build/esm/components/tabs/Tab.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"cat .agents/skills/gravity-ui/references/icons.md; ls node_modules/@gravity-ui/icons 2>/dev/null | head; rg -n \\\"SunIcon|MoonIcon\\\" node_modules/@gravity-ui/icons -g '*.d.ts' | head -10\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node -e \\\"console.log(JSON.parse(require('fs').readFileSync('node_modules/@gravity-ui/icons/package.json','utf8')).version)\\\"; ls node_modules/@gravity-ui/icons | rg -i 'sun|moon|theme|palette|house|home|user|chart|gear|bolt|star' | head -30\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls node_modules/@gravity-ui/icons | rg -i '\"'^(Moon|Sun|SunMoon|Brightness|Light|Dark|Theme)'\"' | head -20; ls node_modules/@gravity-ui/icons | rg -i '(User|Person|Home|House)' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n '\\\"@gravity-ui/icons\\\"' package-lock.json | head -5; npm ls @gravity-ui/icons\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import {House, Moon, PersonGear, Sun} from '@gravity-ui/icons';\n+import {House, Moon, Sun} from '@gravity-ui/icons';\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n \\\"Badge\\\" node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts; ls node_modules/@gravity-ui/uikit/build/esm/components | rg -i 'badge|tag|label' | head -20\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Label/Label.d.ts; sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Progress/Progress.d.ts; apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/App.tsx\n@@\n-import {House, Moon, PersonGear, Sun} from '@gravity-ui/icons';\n+import {House, Moon, Sun} from '@gravity-ui/icons';\n*** Update File: src/pages/ProjectsPage.tsx\n@@\n-import {Badge, Button, Card, Flex, Progress, Text} from '@gravity-ui/uikit';\n+import {Label, Progress, Flex, Text} from '@gravity-ui/uikit';\n@@\n-                                <Badge theme=\\\"info\\\">{project.status}</Badge>\n+                                <Label theme=\\\"info\\\">{project.status}</Label>\n*** End Patch\nPATCH\"",
+        "success": false,
+        "exitCode": 127
+      },
+      {
+        "command": "/bin/bash -lc \"sed -n '1,120p' node_modules/@gravity-ui/uikit/build/esm/components/Progress/types.d.ts; sed -n '1,180p' node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/types.d.ts 2>/dev/null; sed -n '1,150p' node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"apply_patch <<'PATCH'\n*** Begin Patch\n*** Update File: src/pages/ProjectsPage.tsx\n@@\n-import {Label, Progress, Flex, Text} from '@gravity-ui/uikit';\n+import {Card, Flex, Label, Progress, Text} from '@gravity-ui/uikit';\n*** End Patch\nPATCH\nnpm run build\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"rg -n '#[0-9a-fA-F]{3,8}\\\\b|dark:' src --glob '*.css' --glob '*.tsx'; npm ls @gravity-ui/icons; git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .gitignore 2>/dev/null || true'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'git status --porcelain=v1 src'",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 144009,
+      "outputTokens": 8769,
+      "cacheReadTokens": 738944,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 392,
+      "totalTokens": 891722
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

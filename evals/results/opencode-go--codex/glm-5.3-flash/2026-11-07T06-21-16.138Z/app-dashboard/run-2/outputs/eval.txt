@@ -1,0 +1,483 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (8 tests | 4 failed) 14645ms
+   × imports @gravity-ui/navigation 3ms
+     → expected false to be true // Object.is equality
+   × imports @gravity-ui/table 0ms
+     → expected false to be true // Object.is equality
+   ✓ no direct @tanstack/react-table dep 0ms
+   ✓ no direct @tanstack/react-table import 0ms
+   ✓ no @gravity-ui/react-data-table 0ms
+   × no hand-rolled <aside> sidebar 1ms
+     → expected '// Implement the requested feature he…' not to match /<aside(?![\w])/
+   ✓ no direct @dnd-kit import 0ms
+   × judge: implements the task with the intended Gravity UI API 14640ms
+     → [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The app imports only @gravity-ui/uikit and hand-rolls an <aside> navigation in src/App.tsx, with no @gravity-ui/navigation dependency or AsideHeader. Its table is @gravity-ui/uikit's generic Table without useTable, ColumnReorderingProvider, or Gravity table row grouping; checkbox selection and native HTML5 column drag reordering are implemented manually.
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  06:25:38
+   Duration  14.85s (transform 51ms, setup 21ms, collect 24ms, tests 14.64s, environment 0ms, prepare 71ms)
+
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "dangerously-allow-all-builds". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/navigation
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:55:57
+     53| // The collapsible admin sidebar must come from the navigation package…
+     54| test("imports @gravity-ui/navigation", () => {
+     55|   expect(importsPackage(src, "@gravity-ui/navigation")).toBe(true);
+       |                                                         ^
+     56| });
+     57| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  EVAL.ts > imports @gravity-ui/table
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ EVAL.ts:61:52
+     59| // Row selection + column DnD + grouping require the specialized table…
+     60| test("imports @gravity-ui/table", () => {
+     61|   expect(importsPackage(src, "@gravity-ui/table")).toBe(true);
+       |                                                    ^
+     62| });
+     63| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  EVAL.ts > no hand-rolled <aside> sidebar
+AssertionError: expected '// Implement the requested feature he…' not to match /<aside(?![\w])/
+
+[32m- Expected:[39m 
+/<aside(?![\w])/
+
+[31m+ Received:[39m 
+"// Implement the requested feature here (and may add sibling files).
+import React, { useMemo, useState } from 'react';
+import { Button, Flex, Label, SegmentedRadioGroup, Switch, Table, Checkbox } from '@gravity-ui/uikit';
+import type { TableColumnConfig } from '@gravity-ui/uikit';
+import { House, Person, ShoppingCart, Receipt, Gear, ChevronLeft, ChevronRight } from '@gravity-ui/icons';
+import './dashboard.css';
+
+interface Order {
+  id: string;
+  order: string;
+  customer: string;
+  amount: number;
+  status: StatusKey;
+  createdAt: string;
+}
+
+type StatusKey = 'new' | 'processing' | 'paid' | 'shipped' | 'done';
+
+type LabelTheme = 'normal' | 'info' | 'danger' | 'warning' | 'success' | 'utility' | 'unknown' | 'clear';
+
+const STATUSES: Record<StatusKey, { label: string; theme: LabelTheme }> = {
+  new: { label: 'Новый', theme: 'info' },
+  processing: { label: 'В работе', theme: 'warning' },
+  paid: { label: 'Оплачен', theme: 'normal' },
+  shipped: { label: 'Отправлен', theme: 'success' },
+  done: { label: 'Завершен', theme: 'success' },
+};
+
+const ORDERS: Order[] = [
+  { id: '1', order: '#10241', customer: 'Алина Соколова', amount: 12400, status: 'new', createdAt: '2026-11-07' },
+  { id: '2', order: '#10240', customer: 'Марк Иванов', amount: 4800, status: 'processing', createdAt: '2026-11-06' },
+  { id: '3', order: '#10239', customer: 'Полина Орлова', amount: 21500, status: 'paid', createdAt: '2026-11-06' },
+  { id: '4', order: '#10238', customer: 'Дмитрий Ветров', amount: 7600, status: 'shipped', createdAt: '2026-11-05' },
+  { id: '5', order: '#10237', customer: 'Егор Смирнов', amount: 9900, status: 'done', createdAt: '2026-11-05' },
+  { id: '6', order: '#10236', customer: 'Ирина Громова', amount: 34000, status: 'new', createdAt: '2026-11-04' },
+  { id: '7', order: '#10235', customer: 'Артем Кузнецов', amount: 5200, status: 'processing', createdAt: '2026-11-03' },
+];
+
+interface ColumnDef {
+  id: keyof Omit<Order, 'id'>;
+  name: string;
+}
+
+const ALL_COLUMNS: ColumnDef[] = [
+  { id: 'order', name: 'Заказ' },
+  { id: 'customer', name: 'Клиент' },
+  { id: 'amount', name: 'Сумма' },
+  { id: 'createdAt', name: 'Дата' },
+  { id: 'status', name: 'Статус' },
+];
+
+type NavKey = 'home' | 'users' | 'orders' | 'settings';
+
+const NAV_ITEMS: { key: NavKey; label: string; icon: React.ReactNode }[] = [
+  { key: 'home', label: 'Главная', icon: <House /> },
+  { key: 'users', label: 'Пользователи', icon: <Person /> },
+  { key: 'orders', label: 'Заказы', icon: <ShoppingCart /> },
+  { key: 'settings', label: 'Настройки', icon: <Gear /> },
+];
+
+export function App() {
+  const [collapsed, setCollapsed] = useState(false);
+  const [nav, setNav] = useState<NavKey>('orders');
+  const [columns, setColumns] = useState(ALL_COLUMNS);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [grouping, setGrouping] = useState<'none' | 'by-status'>('none');
+  const [dragging, setDragging] = useState<keyof Omit<Order, 'id'> | null>(null);
+  const [dropTarget, setDropTarget] = useState<keyof Omit<Order, 'id'> | null>(null);
+
+  const moveColumn = (from: NonNullable<typeof dragging>, to: NonNullable<typeof dropTarget>) => {
+    if (from === to) return;
+    const fromIndex = columns.findIndex((col) => col.id === from);
+    const toIndex = columns.findIndex((col) => col.id === to);
+    const moved = columns[fromIndex];
+    const next = [...columns];
+    next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setColumns(next);
+    setDragging(null);
+    setDropTarget(null);
+  };
+
+  const rowSelectionState = selected.length ? (selected.length === ORDERS.length ? 'all' : 'some') : 'none';
+  const toggleAllRows = () => setSelected(rowSelectionState === 'all' ? [] : ORDERS.map((o) => o.id));
+  const toggleRow = (id: string) =>
+    setSelected(selected.includes(id) ? selected.filter((sid) => sid !== id) : [...selected, id]);
+
+  const dataTableColumns: TableColumnConfig<Order>[] = [
+    {
+      id: '__select',
+      name: () => (
+        <Checkbox
+          checked={rowSelectionState !== 'none'}
+          indeterminate={rowSelectionState === 'some'}
+          onChange={toggleAllRows}
+        />
+      ),
+      template: (item) => (
+        <Checkbox checked={selected.includes(item.id)} onChange={() => toggleRow(item.id)} />
+      ),
+      width: 44,
+    },
+    ...columns.map((col) => ({
+      id: col.id,
+      name: () => (
+        <span
+          className={dragging === col.id ? 'order-column-dragged' : ''}
+          draggable
+          onDragStart={() => setDragging(col.id)}
+          onDragOver={(e) => { e.preventDefault(); setDropTarget(col.id); }}
+          onDrop={() => dragging && moveColumn(dragging, col.id)}
+          onDragEnd={() => { setDragging(null); setDropTarget(null); }}
+        >
+          {col.name}
+        </span>
+      ),
+      template:
+        col.id === 'status'
+          ? (item: Order) => <Label theme={STATUSES[item.status].theme}>{STATUSES[item.status].label}</Label>
+          : col.id === 'amount'
+            ? (item: Order) => `${item.amount.toLocaleString('ru-RU')} ₽`
+            : undefined,
+    })),
+  ];
+
+  const navLabels = (key: NavKey) => NAV_ITEMS.find((item) => item.key === key)?.label ?? '';
+
+  const ordersByStatus = useMemo(() => {
+    if (grouping === 'none') return null;
+    return (['new', 'processing', 'paid', 'shipped', 'done'] as StatusKey[])
+      .map((status) => ({ status, orders: ORDERS.filter((order) => order.status === status) }))
+      .filter((group) => group.orders.length > 0);
+  }, [grouping]);
+
+  return (
+    <Flex className=\"admin-shell\">
+      <aside className={`admin-sidebar ${collapsed ? 'admin-sidebar--collapsed' : ''}`}>
+        <div className=\"admin-sidebar-header\">
+          <Button view=\"flat\" onClick={() => setCollapsed(!collapsed)}>
+            {collapsed ? <ChevronRight /> : <ChevronLeft />}
+          </Button>
+          {!collapsed && <span className=\"admin-brand\">Admin</span>}
+        </div>
+        <nav className=\"admin-nav\">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.key}
+              className={`admin-nav-item ${nav === item.key ? 'admin-nav-item--active' : ''}`}
+              onClick={() => setNav(item.key)}
+              title={item.label}
+            >
+              {item.icon}
+              {!collapsed && <span className=\"admin-nav-label\">{item.label}</span>}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <main className=\"admin-main\">
+        <div className=\"admin-toolbar\">
+          <div>
+            <h1 className=\"admin-toolbar-title\">{navLabels(nav)}</h1>
+            <div className=\"admin-subtitle\">Заказы клиентов · {ORDERS.length} записей</div>
+          </div>
+          <Flex gap=\"6\" alignItems=\"center\">
+            <SegmentedRadioGroup
+              value={grouping}
+              onUpdate={(value) => setGrouping(value)}
+              options={[
+                { value: 'none', content: 'Плоский список' },
+                { value: 'by-status', content: 'По статусам' },
+              ]}
+            />
+          </Flex>
+        </div>
+
+        <div className=\"admin-table-card\">
+          <Flex alignItems=\"center\" justifyContent=\"space-between\" className=\"admin-subtitle\" style={{ marginBottom: 12 }}>
+            <span>Перетащите заголовки колонок, чтобы изменить порядок.</span>
+            {selected.length > 0 && <Label theme=\"success\">Выбрано: {selected.length}</Label>}
+          </Flex>
+
+          {grouping === 'none' ? (
+            <Table<Order>
+              columns={dataTableColumns}
+              data={ORDERS}
+              onRowClick={(item) => toggleRow(item.id)}
+              getRowDescriptor={(item) => ({ id: item.id, classNames: selected.includes(item.id) ? ['order-row--selected'] : [] })}
+              emptyMessage=\"Нет данных\"
+              stickyHorizontalScroll
+            />
+          ) : (
+            ordersByStatus?.map(({ status, orders }) => (
+              <div key={status} className=\"order-group\">
+                <div className=\"order-group-header\">
+                  <Label theme={STATUSES[status].theme}>{STATUSES[status].label}</Label>
+                  <span className=\"admin-subtitle\">{orders.length}</span>
+                </div>
+                <Table<Order>
+                  columns={dataTableColumns}
+                  data={orders}
+                  onRowClick={(item) => toggleRow(item.id)}
+                  getRowDescriptor={(item) => ({ id: item.id, classNames: selected.includes(item.id) ? ['order-row--selected'] : [] })}
+                  emptyMessage=\"Нет заказов\"
+                  stickyHorizontalScroll
+                />
+              </div>
+            ))
+          )}
+
+          <div className=\"admin-footer\">
+            <span>{selected.length ? `Выделено ${selected.length} из ${ORDERS.length}` : 'Нет активного выделения'}</span>
+            <span>Группировка: {grouping === 'none' ? 'нет' : 'по статусу'}</span>
+          </div>
+        </div>
+      </main>
+    </Flex>
+  );
+}
+
+
+.admin-shell {
+  height: 100vh;
+  background: var(--g-color-base-generic);
+}
+
+.admin-sidebar {
+  width: 240px;
+  padding: 20px 12px;
+  border-right: 1px solid var(--g-color-line-generic);
+  background: var(--g-color-base-float);
+  transition: width .18s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.admin-sidebar--collapsed {
+  width: 72px;
+}
+
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.admin-brand {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--g-color-text-primary);
+  white-space: nowrap;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--g-color-text-secondary);
+  white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+
+.admin-nav-item:hover,
+.admin-nav-item--active {
+  background: var(--g-color-base-selection);
+  color: var(--g-color-text-link);
+}
+
+.admin-nav-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  overflow: auto;
+}
+
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.admin-toolbar-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--g-color-text-primary);
+}
+
+.admin-subtitle {
+  margin-top: 4px;
+  color: var(--g-color-text-secondary);
+}
+
+.admin-table-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--g-color-base-float);
+  border: 1px solid var(--g-color-line-generic);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+}
+
+.order-table {
+  --g-table-border-color: var(--g-color-line-generic);
+  --g-table-border-radius: 10px;
+  --g-table-selected-background: var(--g-color-base-selection);
+  user-select: none;
+}
+
+.order-table th {
+  cursor: grab;
+  user-select: none;
+}
+
+.order-table th .order-column-dragged {
+  opacity: .45;
+}
+
+.order-table th .order-column-target {
+  box-shadow: inset 2px 0 0 var(--g-color-line-brand);
+}
+
+.order-row--selected {
+  background: var(--g-color-base-selection) !important;
+}
+
+.admin-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  color: var(--g-color-text-hint);
+}
+.order-group {
+  margin-bottom: 20px;
+}
+
+.order-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:84:19
+     82| // A raw <aside> means a self-written nav instead of AsideHeader. `(?!…
+     83| test("no hand-rolled <aside> sidebar", () => {
+     84|   expect(src).not.toMatch(new RegExp("<aside(?![\\w])"));
+       |                   ^
+     85| });
+     86| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The admin dashboard is built on Gravity UI: the left navigation is @gravity-ui/navigation's AsideHeader driven by menu items and able to collapse to icons (compact mode), and the central table is @gravity-ui/table built with the useTable hook with checkbox row selection, drag-to-reorder columns (ColumnReorderingProvider) and row grouping. A hand-rolled sidebar or a different table library fails.
+  reason: The app imports only @gravity-ui/uikit and hand-rolls an <aside> navigation in src/App.tsx, with no @gravity-ui/navigation dependency or AsideHeader. Its table is @gravity-ui/uikit's generic Table without useTable, ColumnReorderingProvider, or Gravity table row grouping; checkbox selection and native HTML5 column drag reordering are implemented manually.
+ ❯ EVAL.ts:98:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+

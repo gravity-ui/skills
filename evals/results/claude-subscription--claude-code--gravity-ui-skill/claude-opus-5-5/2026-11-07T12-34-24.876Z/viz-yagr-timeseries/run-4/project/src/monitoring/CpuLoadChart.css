@@ -1,0 +1,80 @@
+.cpu-load-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-3);
+    min-width: 0;
+    padding: var(--g-spacing-4) var(--g-spacing-5);
+}
+
+.cpu-load-chart__header {
+    flex-shrink: 0;
+}
+
+.cpu-load-chart__heading {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cpu-load-chart__heading h2,
+.cpu-load-chart__hint {
+    margin: 0;
+}
+
+.cpu-load-chart__status {
+    flex-shrink: 0;
+}
+
+.cpu-load-chart__value {
+    /* Keeps the header from shifting when the value changes. */
+    font-variant-numeric: tabular-nums;
+    min-width: 7ch;
+    text-align: end;
+}
+
+/* Plot area: stretches to the container width; height adapts to the viewport. */
+.cpu-load-chart__plot {
+    position: relative;
+    min-width: 0;
+    height: clamp(260px, 50vh, 560px);
+}
+
+.cpu-load-chart__canvas {
+    position: absolute;
+    inset: 0;
+}
+
+.cpu-load-chart__overlay {
+    position: absolute;
+    inset: 0;
+}
+
+/*
+ * Yagr theming through Gravity UI semantic tokens. Specificity (two classes) is higher
+ * than Yagr's own `.yagr_theme_*`, so the values follow the uikit theme, including
+ * the high-contrast variants.
+ */
+.cpu-load-chart__canvas > .yagr {
+    --yagr-background: transparent;
+    --yagr-grid: var(--g-color-line-generic);
+    --yagr-axis-stroke: var(--g-color-text-secondary);
+    --yagr-font-family: var(--g-text-body-font-family);
+}
+
+.cpu-load-chart__canvas > .yagr .u-select {
+    background: var(--g-color-base-info-light);
+}
+
+/* The tooltip renders into document.body, under .g-root, so the tokens are available. */
+.yagr-tooltip.cpu-load-chart__tooltip {
+    --yagr-tooltip-font-family: var(--g-text-body-font-family);
+    color: var(--g-color-text-primary);
+    background-color: var(--g-color-base-float);
+    border-radius: var(--g-border-radius-m);
+    box-shadow: 0 1px 6px var(--g-color-sfx-shadow);
+    font-variant-numeric: tabular-nums;
+}
+
+.yagr-tooltip.cpu-load-chart__tooltip .__title {
+    font-size: var(--g-text-body-1-font-size);
+    font-weight: 600;
+}

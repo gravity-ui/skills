@@ -1,0 +1,190 @@
+{
+  "status": "passed",
+  "duration": 350.454,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 70,
+    "outputTokens": 26684,
+    "cacheReadTokens": 2144730,
+    "cacheWriteTokens": 91022,
+    "totalTokens": 2262506
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 24,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 2,
+      "file_edit": 0,
+      "shell": 33,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 35,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/MarkdownField.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat /home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md; echo ---; find /home/sandbox/workspace/.agents/skills/gravity-ui -type f | head -100; echo ---; cd /home/sandbox/workspace && git ls-files | head -100; ls -la",
+        "success": true
+      },
+      {
+        "command": "cat package.json; echo ---; cat src/App.tsx; echo ---; cat src/main.tsx; echo ---; cat tsconfig.json vite.config.ts index.html AGENTS.md; echo ---; ls node_modules/@gravity-ui/; for p in node_modules/@gravity-ui/*; do echo \"$p $(node -p \"require('./$p/package.json').version\" 2>/dev/null)\"; done",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/references/package-routing.md | head -120; echo ---; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "grep -n -i -A8 \"markdown-editor\" .agents/skills/gravity-ui/references/package-routing.md | head -80; echo ---; cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -40; echo ---; npm view @gravity-ui/markdown-editor version peerDependencies 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "timeout 500 npm install @gravity-ui/markdown-editor@^15 2>&1 | tail -30; echo \"exit=$?\"; node -p \"require('./node_modules/@gravity-ui/markdown-editor/package.json').version\"; cat package.json | head -30",
+        "success": true
+      },
+      {
+        "command": "for v in 4.24.1 4.23.0 4.22.0 4.20.0 4.18.0 4.15.0 4.10.0; do echo \"$v: $(npm view @gravity-ui/components@$v peerDependencies.@gravity-ui/uikit 2>/dev/null)\"; done; npm view @gravity-ui/components versions --json 2>/dev/null | tail -40 | tr -d '\\n '; echo",
+        "success": true
+      },
+      {
+        "command": "timeout 500 npm install @gravity-ui/markdown-editor@^15 @gravity-ui/components@4.23.0 2>&1 | tail -15; echo \"exit=${PIPESTATUS[0]}\"; for p in uikit components markdown-editor; do node -p \"'$p '+require('./node_modules/@gravity-ui/$p/package.json').version\"; done; git diff --stat",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/markdown-editor/; ls node_modules/@gravity-ui/markdown-editor/dist/docs 2>/dev/null; ls node_modules/@gravity-ui/markdown-editor/build/docs 2>/dev/null; wc -l node_modules/@gravity-ui/markdown-editor/README.md; sed -n '1,200p' node_modules/@gravity-ui/markdown-editor/README.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/docs && wc -l INDEX.md; ls guides; sed -n '1,220p' INDEX.md",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/docs/guides && cat how-to-add-preview.md; echo ---; cat how-to-add-editor-with-create-react-app.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor && cat package.json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{const p=JSON.parse(s);console.log(p.main,p.module,JSON.stringify(p.exports??null).slice(0,600),p.types,p.typings)})'; ls build | head -30; grep -rn \"initialSplitModeEnabled\\|renderPreview\\|initialEditorMode\\|splitMode\" build --include=*.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm && sed -n '1,140p' bundle/types.d.ts; echo ---; cat index.d.ts; echo ---; grep -rn \"export.*YfmStaticView\\|export.*SplitModePreview\\|export.*RenderPreview\\|export type RenderPreview\" --include=*.d.ts . | head; echo ---; grep -rn \"MarkdownEditorSplitMode\\b\" --include=*.d.ts . | head -3; grep -rn \"type MarkdownEditorSplitMode\\|type MarkupString\\|initialToolbarVisible\\|initialEditorMode\" --include=*.d.ts . | head",
+        "success": true
+      },
+      {
+        "command": "sed -n '140,220p' bundle/types.d.ts; echo ---; cat view/components/YfmHtml/YfmStaticView.d.ts; echo ---; grep -rln \"export declare function useMarkdownEditor\\|export declare const useMarkdownEditor\" --include=*.d.ts . ; cd /home/sandbox/workspace; for p in @diplodoc/transform markdown-it highlight.js katex lowlight @gravity-ui/components; do echo \"$p: $(node -p \"try{require('./node_modules/$p/package.json').version}catch(e){'MISSING'}\")\"; done",
+        "success": true
+      },
+      {
+        "command": "timeout 500 npm install lowlight@^3 highlight.js@^11.8 2>&1 | grep -v \"npm warn\" | tail -5; for p in lowlight highlight.js; do echo \"$p: $(node -p \"require('./node_modules/$p/package.json').version\")\"; done; cat node_modules/@gravity-ui/markdown-editor/build/esm/bundle/useMarkdownEditor.d.ts; grep -n \"transform\" node_modules/@gravity-ui/markdown-editor/build/esm/index.d.ts node_modules/@gravity-ui/markdown-editor/build/esm/*/index.d.ts 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm && cat bundle/editor-public-types.d.ts | head -120; echo ---; grep -rn \"export declare const MarkdownEditorView\\|export type MarkdownEditorViewProps\\|MarkdownEditorViewProps = \" --include=*.d.ts . | head -5",
+        "success": true
+      },
+      {
+        "command": "cat bundle/MarkupEditorView.d.ts | head -30; grep -rn \"ViewProps = \\|type ViewProps\" --include=*.d.ts . | head -3; grep -rn \"getValue\\|export type CommonEditor\" common/index.d.ts core/*.d.ts 2>/dev/null | head -8; grep -rln \"CommonEditor\" --include=*.d.ts . | head -3",
+        "success": true
+      },
+      {
+        "command": "cat bundle/MarkdownEditorView.d.ts; echo ---; cat common/index.d.ts | head -30; echo ---; grep -n \"submit\\|change\" bundle/events.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules && grep -rn \"renderPreview\" @gravity-ui/markdown-editor/build/esm --include=*.js | head -15; echo ---; cat @diplodoc/transform/package.json | node -e 'let s=\"\";process.stdin.on(\"data\",d=>s+=d).on(\"end\",()=>{const p=JSON.parse(s);console.log(p.types,p.typings,p.main,p.module)})'; ls @diplodoc/transform/lib 2>/dev/null | head; find @diplodoc/transform -name \"index.d.ts\" -maxdepth 3 | head -3",
+        "success": true
+      },
+      {
+        "command": "sed -n '55,75p' @gravity-ui/markdown-editor/build/esm/bundle/SplitModeView.js; echo ---; grep -n \"change\" @gravity-ui/markdown-editor/build/esm/bundle/SplitModeView.js | head -5; echo ---; cat @gravity-ui/markdown-editor/build/esm/bundle/MarkdownEditorView.js | sed -n '1,20p' | cut -c1-300; echo ---; grep -n \"export\" @diplodoc/transform/lib/index.d.ts | head -20; echo ---; grep -rn \"export declare function transform\\|export declare const transform\\|export type TransformOptions\\|allowHTML\\|needToSanitizeHtml\" @diplodoc/transform/lib/index.d.ts @diplodoc/transform/lib/*.d.ts 2>/dev/null | head -10",
+        "success": true
+      },
+      {
+        "command": "sed -n '25,60p' @diplodoc/transform/lib/typings.d.ts; cat @diplodoc/transform/lib/index.d.ts | head -30; echo ---; grep -rn \"YfmHtml\" @gravity-ui/markdown-editor/build/esm/view/index.d.ts @gravity-ui/markdown-editor/build/esm/view/components/index.d.ts 2>/dev/null; grep -rln \"YfmStaticView\" @gravity-ui/markdown-editor/build/esm --include=index.d.ts | head; echo ---; grep -n \"import.*transform\\|from '@diplodoc\" @gravity-ui/markdown-editor/build/esm/bundle/*.js | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/markdown-editor/build/esm && cat bundle/useMarkdownEditor.js | head -40; echo ---; grep -n \"MarkdownEditorMode =\" bundle/preset-base-types.d.ts; grep -rn \"export.*configure\" configure.d.ts 2>/dev/null; cd /home/sandbox/workspace && node -e \"console.log(Object.keys(require('./node_modules/@gravity-ui/uikit/build/cjs/index.js')).includes('configure'))\" 2>&1 | tail -1",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules && cat @gravity-ui/uikit/build/esm/configure/index.d.ts 2>/dev/null | head -20 || grep -rl \"export declare const configure\" @gravity-ui/uikit/build/esm --include=*.d.ts | head -2; grep -rn \"export declare const configure\\|lang?:\" @gravity-ui/uikit/build/esm --include=*.d.ts | head -5; grep -rn \"direction\" @gravity-ui/uikit/build/esm/components/layout/Flex/Flex.d.ts 2>/dev/null | head -3; grep -rln \"type ButtonProps\" @gravity-ui/uikit/build/esm --include=*.d.ts | head -2; grep -rn \"RenderPreview\\|MarkdownEditorMdOptions\\|MarkupString\" @gravity-ui/markdown-editor/build/esm/index.d.ts @gravity-ui/markdown-editor/build/esm/bundle/index.d.ts | head -4",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npm run build 2>&1 | tail -40; echo \"exit=${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "cat .gitignore; echo ---; grep -n \"process\\.\" node_modules/@diplodoc/transform/lib/plugins/utils.js | head -5; grep -n \"require(\\|process\" node_modules/@diplodoc/transform/lib/index.js | head -20; echo ---; grep -n \"require('fs')\\|require(\\\"fs\\\")\\|require('path')\\|require('url')\" node_modules/@diplodoc/transform/lib/utilsFS.js node_modules/@diplodoc/transform/lib/index.js | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@diplodoc/transform/lib && grep -rn \"process\\.\\(env\\|cwd\\|platform\\|version\\)\" --include=*.js . | grep -v \"\\.map\" | head -15; echo ---; grep -rln \"process\" --include=*.js . | grep -v map | head -20",
+        "success": true
+      },
+      {
+        "command": "grep -n \"process\" md.js sanitize.js plugins/utils.js frontmatter.js plugins/code.js plugins/links/index.js | cut -c1-200 | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/vite/dist/node && grep -rn \"externalized for browser compatibility\" chunks/*.js | head -5 | cut -c1-400; echo ---; grep -rn -A12 \"function createProxyForBrowserExternal\\|__vite-browser-external\" chunks/*.js | grep -n \"Proxy\\|throw\\|export default\\|module.exports\\|warn\" | head -20 | cut -c1-300",
+        "success": true
+      },
+      {
+        "command": "sed -n '46225,46260p' chunks/dep-BK3b2jBa.js | cut -c1-260; echo ...; sed -n '46980,47000p' chunks/dep-BK3b2jBa.js | cut -c1-260",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@diplodoc/transform && node -e 'const p=require(\"./package.json\");console.log(JSON.stringify({browser:p.browser,exports:p.exports,main:p.main},null,1))' | head -40; ls; echo; cd /home/sandbox/workspace && npm view process@0.11.10 version 2>/dev/null",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@diplodoc/transform && ls -la dist | head; grep -n \"dist\\|browser\" README.md | head -20",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && node -e '\nconst transform = require(\"@diplodoc/transform\");\nconst {result} = transform(\"# Заголовок\\n\\n**жирный** и *курсив*\\n\\n- пункт 1\\n- пункт 2\\n\\n`code`\", {allowHTML: false});\nconsole.log(result.html.slice(0, 400));\n' 2>&1 | head -20; rm -rf dist; git status --short; git diff package.json",
+        "success": true
+      },
+      {
+        "command": "timeout 500 npm install @diplodoc/transform@^4.43.0 2>&1 | grep -v \"npm warn\" | tail -3; node -p \"require('./node_modules/@diplodoc/transform/package.json').version\"; npm run build 2>&1 | grep -E \"error|✓ built|tsc\" ; echo \"exit=${PIPESTATUS[0]}\"; rm -rf dist; git diff package.json | grep \"^+\" ",
+        "success": true
+      },
+      {
+        "command": "timeout 500 npm install @gravity-ui/components@4.23.0 --save-exact 2>&1 | grep -iE \"ERESOLVE|error\" | head -3; grep -n \"components\\|uikit\\\"\" package.json; node -p \"require('./node_modules/@gravity-ui/components/package.json').version\"; npm run build 2>&1 | grep -E \"error|✓ built\"; echo \"exit=${PIPESTATUS[0]}\"; rm -rf dist",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 70,
+      "outputTokens": 26684,
+      "cacheReadTokens": 2144730,
+      "cacheWriteTokens": 91022,
+      "totalTokens": 2262506
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,125 @@
+import { FormEvent, ReactNode, useState } from 'react';
+
+const starterText = `# Новая заметка\n\nНачните писать **текст** слева — форматирование появится здесь сразу.\n\n## Что можно использовать\n\n- **Жирный текст** и *курсив*\n- Ссылки, например [Gravity UI](https://gravity-ui.com)\n- Цитаты и блоки кода\n\n> Хорошая идея начинается с заметки.\n\n\`\`\`js\nconst idea = 'превратить в дело';\n\`\`\``;
+
+function renderInline(text: string): ReactNode[] {
+  const pattern = /(\*\*.+?\*\*|__.+?__|~~.+?~~|\*[^*\n]+\*|_[^_\n]+_|`[^`]+`|\[[^\]]+\]\([^)]+\))/g;
+  const parts = text.split(pattern).filter(Boolean);
+
+  return parts.map((part, index) => {
+    if ((part.startsWith('**') && part.endsWith('**')) || (part.startsWith('__') && part.endsWith('__'))) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('~~') && part.endsWith('~~')) return <del key={index}>{part.slice(2, -2)}</del>;
+    if ((part.startsWith('*') && part.endsWith('*')) || (part.startsWith('_') && part.endsWith('_'))) {
+      return <em key={index}>{part.slice(1, -1)}</em>;
+    }
+    if (part.startsWith('`') && part.endsWith('`')) return <code key={index}>{part.slice(1, -1)}</code>;
+    const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    if (link) {
+      const safeHref = /^(https?:|mailto:|\/|#)/i.test(link[2]) ? link[2] : '#';
+      return <a href={safeHref} key={index} target={safeHref.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{link[1]}</a>;
+    }
+    return part;
+  });
+}
+
+function MarkdownPreview({ source }: { source: string }) {
+  const lines = source.split('\n');
+  const nodes: ReactNode[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    if (!line.trim()) { i += 1; continue; }
+    const fence = line.match(/^\s*```(\w*)\s*$/);
+    if (fence) {
+      const code: string[] = [];
+      i += 1;
+      while (i < lines.length && !/^\s*```\s*$/.test(lines[i])) code.push(lines[i++]);
+      if (i < lines.length) i += 1;
+      nodes.push(<pre key={`code-${i}`}><code>{code.join('\n')}</code></pre>);
+      continue;
+    }
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const level = heading[1].length;
+      const content = renderInline(heading[2]);
+      const Tag = `h${level}` as keyof JSX.IntrinsicElements;
+      nodes.push(<Tag key={`heading-${i}`}>{content}</Tag>);
+      i += 1;
+      continue;
+    }
+    if (/^\s*>/.test(line)) {
+      const quote: string[] = [];
+      while (i < lines.length && /^\s*>/.test(lines[i])) quote.push(lines[i++].replace(/^\s*>\s?/, ''));
+      nodes.push(<blockquote key={`quote-${i}`}>{quote.map((item, n) => <p key={n}>{renderInline(item)}</p>)}</blockquote>);
+      continue;
+    }
+    if (/^\s*([-*+]\s+|\d+\.\s+)/.test(line)) {
+      const ordered = /^\s*\d+\./.test(line);
+      const items: string[] = [];
+      while (i < lines.length && /^\s*([-*+]\s+|\d+\.\s+)/.test(lines[i])) items.push(lines[i++].replace(/^\s*(?:[-*+]\s+|\d+\.\s+)/, ''));
+      const List = ordered ? 'ol' : 'ul';
+      nodes.push(<List key={`list-${i}`}>{items.map((item, n) => <li key={n}>{renderInline(item)}</li>)}</List>);
+      continue;
+    }
+    const paragraph = [line];
+    i += 1;
+    while (i < lines.length && lines[i].trim() && !/^(#{1,6}\s|\s*>|\s*([-*+]\s+|\d+\.\s+)|\s*```)/.test(lines[i])) paragraph.push(lines[i++]);
+    nodes.push(<p key={`paragraph-${i}`}>{paragraph.map((part, n) => <span key={n}>{n > 0 && <br />}{renderInline(part)}</span>)}</p>);
+  }
+
+  return nodes.length ? <div className="markdown-content">{nodes}</div> : <p className="empty-preview">Ваш отформатированный текст появится здесь</p>;
+}
+
+export function App() {
+  const [title, setTitle] = useState('Идея для нового проекта');
+  const [markdown, setMarkdown] = useState(starterText);
+  const [saved, setSaved] = useState(false);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 2500);
+  }
+
+  return (
+    <main className="page-shell">
+      <style>{styles}</style>
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="Лист — на главную"><span className="brand-mark">л</span><span>лист</span></a>
+        <div className="topbar-note"><span className="status-dot" /> Все изменения сохраняются автоматически</div>
+        <button className="avatar" aria-label="Профиль пользователя">А</button>
+      </header>
+
+      <section className="workspace" id="top">
+        <div className="breadcrumbs"><span>Мои заметки</span><span className="crumb-separator">/</span><span className="current-crumb">Новая заметка</span></div>
+        <div className="heading-row">
+          <div><div className="eyebrow">РАБОЧЕЕ ПРОСТРАНСТВО</div><h1>Создать заметку</h1><p className="intro">Запишите мысль. Оформите её так, как удобно вам.</p></div>
+          <div className="heading-icon" aria-hidden="true">✳</div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="title-field"><label htmlFor="note-title">Название заметки</label><input id="note-title" value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Например, идея для проекта" /></div>
+          <section className="editor-card" aria-label="Редактор заметки">
+            <div className="editor-heading"><div><h2>Текст заметки</h2><p>Пишите на Markdown — форматирование видно сразу</p></div><span className="live-badge"><span /> LIVE</span></div>
+            <div className="panes">
+              <div className="pane input-pane"><div className="pane-label"><span className="pencil-icon">⌁</span> РЕДАКТОР <span className="markdown-label">MARKDOWN</span></div><textarea aria-label="Текст заметки в Markdown" spellCheck={false} value={markdown} onChange={(event) => setMarkdown(event.target.value)} placeholder={'# Заголовок\n\nНапишите что-нибудь...'} /><div className="editor-footer"><span>Поддерживается Markdown</span><span>{markdown.length} символов</span></div></div>
+              <div className="pane preview-pane"><div className="pane-label"><span className="eye-icon">◉</span> ПРЕДПРОСМОТР <span className="rendered-label">ОТОБРАЖЕНИЕ</span></div><article className="preview-body" aria-live="polite"><MarkdownPreview source={markdown} /></article><div className="editor-footer"><span>Так будет выглядеть заметка</span><span className="preview-check">✓ Обновлено</span></div></div>
+            </div>
+            <div className="format-hint"><span className="hint-spark">✦</span><span><strong>Быстрое форматирование</strong><span className="hint-examples"><kbd>**жирный**</kbd> &nbsp; <kbd>*курсив*</kbd> &nbsp; <kbd># заголовок</kbd> &nbsp; <kbd>`код`</kbd></span></span></div>
+          </section>
+          <div className="form-actions"><span className="privacy-note"><span>◉</span> Видна только вам</span><div className="action-buttons"><button className="cancel-button" type="button" onClick={() => { setTitle(''); setMarkdown(''); }}>Очистить</button><button className="save-button" type="submit">{saved ? '✓ Сохранено' : 'Сохранить заметку'} {!saved && <span>↗</span>}</button></div></div>
+        </form>
+        <footer className="page-footer"><span>лист <span className="footer-separator">·</span> пространство для мыслей</span><span>Напишите что-нибудь хорошее сегодня.</span></footer>
+      </section>
+    </main>
+  );
+}
+
+const styles = `
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{font-family:'DM Sans',sans-serif;color:#252823;background:#f5f6f2;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px;background:#f5f6f2}.page-shell{min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#edf3e8 0,transparent 52%),#f5f6f2}.topbar{height:72px;border-bottom:1px solid #e7e9e2;display:flex;align-items:center;justify-content:space-between;padding:0 max(32px,calc((100vw - 1120px)/2));background:rgba(255,255,255,.46)}.brand{display:flex;align-items:center;gap:10px;color:#263b31;text-decoration:none;font-family:Manrope,sans-serif;font-size:20px;font-weight:800;letter-spacing:-.8px}.brand-mark{width:29px;height:29px;display:grid;place-items:center;border-radius:9px;background:#385743;color:#fff;font-size:19px;font-family:Georgia,serif;font-weight:400}.topbar-note{display:flex;align-items:center;gap:8px;color:#858a80;font-size:12px}.status-dot{width:7px;height:7px;border-radius:50%;background:#80a88a;box-shadow:0 0 0 3px #e8f1e8}.avatar{width:32px;height:32px;border:1px solid #e0e5dc;border-radius:50%;background:#eaf0e6;color:#4b664e;font-weight:700}.workspace{max-width:1000px;margin:0 auto;padding:31px 20px 24px}.breadcrumbs{display:flex;gap:10px;align-items:center;color:#959a90;font-size:12px}.crumb-separator{color:#c7cbc2}.current-crumb{color:#62695f}.heading-row{margin-top:30px;margin-bottom:29px;display:flex;justify-content:space-between;align-items:center}.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.4px;color:#8e9e88;font-weight:500}.heading-row h1{font:700 30px/1.2 Manrope,sans-serif;letter-spacing:-1px;margin:8px 0 7px;color:#26352b}.intro{font-size:14px;color:#83897f;margin:0}.heading-icon{width:53px;height:53px;border:1px solid #e4e9df;border-radius:17px;display:grid;place-items:center;background:#fbfcf9;color:#789078;font-size:25px}.title-field{margin-bottom:21px}.title-field label{display:block;font-size:12px;font-weight:700;color:#444c43;margin-bottom:8px}.title-field input{width:100%;height:47px;border:1px solid #e4e7df;border-radius:9px;background:#fff;padding:0 15px;font:500 14px 'DM Sans',sans-serif;color:#32392f;outline:none;box-shadow:0 2px 4px #263c2510;transition:border .15s,box-shadow .15s}.title-field input:focus,.input-pane textarea:focus{border-color:#8ba88d;box-shadow:0 0 0 3px #7ca27e20}.editor-card{border:1px solid #e2e6dd;border-radius:13px;overflow:hidden;background:#fff;box-shadow:0 5px 22px #283c2610}.editor-heading{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 23px;border-bottom:1px solid #e9ece6}.editor-heading h2{font:700 14px Manrope,sans-serif;margin:0 0 4px;color:#303b31}.editor-heading p{margin:0;font-size:11px;color:#959a90}.live-badge{display:flex;align-items:center;gap:7px;border:1px solid #e2eadf;border-radius:20px;padding:6px 9px;color:#718571;font:500 9px 'DM Mono',monospace;letter-spacing:.5px}.live-badge span{width:6px;height:6px;border-radius:50%;background:#7ca380}.panes{display:grid;grid-template-columns:1fr 1fr;min-height:390px}.pane{min-width:0;display:flex;flex-direction:column}.input-pane{background:#fbfcfa;border-right:1px solid #e9ece6}.pane-label{height:46px;display:flex;align-items:center;padding:0 20px;gap:8px;color:#606a5e;font:500 9px 'DM Mono',monospace;letter-spacing:.7px;border-bottom:1px solid #edf0ea}.pencil-icon,.eye-icon{font-size:16px;color:#78917b;line-height:1}.markdown-label,.rendered-label{margin-left:auto;border-radius:4px;padding:4px 6px;background:#f0f3ed;color:#99a194;font-size:8px;letter-spacing:.3px}.rendered-label{background:#eef4ed;color:#84a085}.input-pane textarea{resize:vertical;flex:1;min-height:290px;width:100%;border:0;outline:0;background:transparent;padding:20px 21px;color:#455044;font:13px/1.8 'DM Mono',monospace;tab-size:2}.editor-footer{height:35px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;color:#a1a69e;font-size:10px;border-top:1px solid #edf0ea}.preview-check{color:#81a287}.preview-body{flex:1;padding:18px 23px 20px;overflow:auto;color:#424940;font-size:13px;line-height:1.75}.markdown-content h1,.markdown-content h2,.markdown-content h3,.markdown-content h4,.markdown-content h5,.markdown-content h6{font-family:Manrope,sans-serif;color:#28382d;line-height:1.3;letter-spacing:-.4px}.markdown-content h1{font-size:23px;margin:0 0 14px}.markdown-content h2{font-size:17px;margin:22px 0 8px}.markdown-content h3{font-size:15px;margin:18px 0 7px}.markdown-content h4,.markdown-content h5,.markdown-content h6{font-size:14px;margin:15px 0 6px}.markdown-content p{margin:0 0 13px}.markdown-content ul,.markdown-content ol{padding-left:21px;margin:7px 0 15px}.markdown-content li{padding-left:3px;margin:4px 0}.markdown-content li::marker{color:#84a087}.markdown-content a{color:#64816a;text-decoration:underline;text-decoration-color:#c6d4c3;text-underline-offset:3px}.markdown-content blockquote{border-left:3px solid #a4b89f;margin:15px 0;padding:1px 0 1px 13px;color:#788174}.markdown-content blockquote p{margin:0}.markdown-content code{padding:2px 5px;border-radius:4px;background:#f0f3ed;color:#55725a;font:11px 'DM Mono',monospace}.markdown-content pre{background:#f2f4ef;border:1px solid #e7ebe3;border-radius:7px;padding:12px 14px;overflow:auto;font:11px/1.6 'DM Mono',monospace;color:#576252}.markdown-content pre code{padding:0;background:none;color:inherit}.markdown-content del{color:#969c91}.empty-preview{margin:0;color:#b1b6ac;font-size:13px;font-style:italic}.format-hint{min-height:57px;display:flex;align-items:center;gap:12px;padding:10px 21px;border-top:1px solid #e9ece6;background:#fcfdfa;color:#7d8579;font-size:10px}.hint-spark{width:24px;height:24px;display:grid;place-items:center;border-radius:7px;background:#edf3ea;color:#789477;font-size:13px}.format-hint strong{display:block;color:#626d60;font-size:10px;margin-bottom:4px}.hint-examples{color:#9aa095}.hint-examples kbd{font:10px 'DM Mono',monospace;color:#7d8877}.form-actions{display:flex;align-items:center;justify-content:space-between;margin-top:19px}.privacy-note{display:flex;align-items:center;gap:7px;color:#93998f;font-size:11px}.privacy-note span{font-size:13px;color:#8ba08a}.action-buttons{display:flex;gap:9px}.cancel-button,.save-button{height:39px;border-radius:8px;padding:0 15px;font:600 12px 'DM Sans',sans-serif;cursor:pointer;transition:transform .15s,background .15s}.cancel-button{background:transparent;border:1px solid #e1e5dc;color:#747b71}.cancel-button:hover{background:#eef1eb}.save-button{border:1px solid #385743;background:#385743;color:#fff;box-shadow:0 3px 7px #38574328}.save-button:hover{background:#2f4c38;transform:translateY(-1px)}.save-button span{margin-left:10px;font-size:14px}.page-footer{display:flex;justify-content:space-between;margin-top:48px;border-top:1px solid #e7e9e2;padding-top:15px;color:#a0a59d;font-size:10px}.footer-separator{padding:0 5px;color:#c4c9bf}
+@media(max-width:650px){.topbar{height:60px;padding:0 18px}.topbar-note{display:none}.workspace{padding:24px 14px}.heading-row{margin-top:24px}.heading-row h1{font-size:26px}.heading-icon{width:43px;height:43px}.panes{grid-template-columns:1fr}.input-pane{border-right:0;border-bottom:1px solid #e9ece6}.input-pane textarea{min-height:250px}.preview-body{min-height:250px}.editor-heading{padding:0 16px}.pane-label{padding:0 16px}.page-footer{margin-top:32px;gap:14px}.page-footer span:last-child{text-align:right}.format-hint{padding:10px 14px}.hint-examples{display:block;margin-top:4px;line-height:1.8}}
+`;

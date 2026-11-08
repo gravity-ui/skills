@@ -1,0 +1,351 @@
+:root {
+  --sidebar-width: 240px;
+  --sidebar-width-collapsed: 64px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--g-color-base-generic-ultralight, var(--g-color-base-generic));
+  color: var(--g-color-text-primary);
+}
+
+/* ---------- layout ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100%;
+  transition: grid-template-columns 0.2s ease;
+}
+
+.layout_collapsed {
+  grid-template-columns: var(--sidebar-width-collapsed) minmax(0, 1fr);
+}
+
+.layout__main {
+  min-width: 0;
+  padding: 24px 32px 96px;
+}
+
+.layout__placeholder {
+  display: flex;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.layout__placeholder-icon {
+  color: var(--g-color-text-hint);
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 16px 12px;
+  background: var(--g-color-base-background);
+  border-inline-end: 1px solid var(--g-color-line-generic);
+  overflow: hidden;
+}
+
+.sidebar_collapsed {
+  padding-inline: 10px;
+  align-items: center;
+}
+
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 20px;
+  min-width: 0;
+}
+
+.sidebar_collapsed .sidebar__logo {
+  padding-inline: 0;
+}
+
+.sidebar__logo-mark {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: var(--g-color-base-brand);
+  color: var(--g-color-text-brand-contrast, #fff);
+  font-weight: 600;
+}
+
+.sidebar__nav {
+  flex: 1;
+  width: 100%;
+}
+
+.sidebar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--g-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.sidebar_collapsed .sidebar__item {
+  width: 44px;
+  justify-content: center;
+  padding: 0;
+}
+
+.sidebar__item:hover {
+  background: var(--g-color-base-simple-hover);
+  color: var(--g-color-text-primary);
+}
+
+.sidebar__item:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: -2px;
+}
+
+.sidebar__item_active,
+.sidebar__item_active:hover {
+  background: var(--g-color-base-selection);
+  color: var(--g-color-text-primary);
+  font-weight: 500;
+}
+
+.sidebar__item-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar__footer {
+  width: 100%;
+  padding-top: 12px;
+  border-block-start: 1px solid var(--g-color-line-generic);
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- orders page ---------- */
+
+.orders {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orders__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.orders__title {
+  margin: 0;
+}
+
+.orders__description {
+  margin: 4px 0 0;
+}
+
+.orders__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.orders__search {
+  width: 360px;
+  max-width: 100%;
+}
+
+.orders__search-icon {
+  margin-inline-start: 8px;
+  color: var(--g-color-text-hint);
+}
+
+.orders__toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.orders__hint {
+  margin-top: -8px;
+}
+
+.orders__single,
+.orders__group {
+  background: var(--g-color-base-background);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.orders__single .g-table,
+.orders__group-body .g-table {
+  width: 100%;
+}
+
+.orders__table {
+  width: 100%;
+}
+
+.orders__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orders__group-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: start;
+}
+
+.orders__group-head:hover {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders__group-head:focus-visible {
+  outline: 2px solid var(--g-color-line-focus);
+  outline-offset: -2px;
+}
+
+.orders__group-selected {
+  margin-inline-start: auto;
+}
+
+.orders__group-body {
+  border-block-start: 1px solid var(--g-color-line-generic);
+}
+
+.orders__empty {
+  padding: 48px;
+  text-align: center;
+  background: var(--g-color-base-background);
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 12px;
+}
+
+.orders__customer {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* table header drag & drop */
+
+.orders__header {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: -4px -8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: grab;
+  user-select: none;
+}
+
+.orders__header:hover {
+  background: var(--g-color-base-simple-hover);
+}
+
+.orders__header:hover .orders__grip {
+  opacity: 1;
+}
+
+.orders__header_dragging {
+  cursor: grabbing;
+  opacity: 0.5;
+}
+
+.orders__grip {
+  color: var(--g-color-text-hint);
+  opacity: 0.4;
+  transition: opacity 0.15s;
+}
+
+.g-table__cell.orders__col_over {
+  box-shadow: inset 3px 0 0 var(--g-color-line-brand);
+  background: var(--g-color-base-selection);
+}
+
+.g-table__cell.orders__col_dragging {
+  opacity: 0.45;
+}
+
+.orders__table .g-table__row {
+  cursor: pointer;
+}
+
+/* bulk actions */
+
+.orders__actions {
+  position: fixed;
+  inset-inline-start: calc(var(--sidebar-width) + 24px);
+  inset-inline-end: 24px;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.layout_collapsed .orders__actions {
+  inset-inline-start: calc(var(--sidebar-width-collapsed) + 24px);
+}
+
+.orders__actions > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 900px) {
+  .layout__main {
+    padding: 16px;
+  }
+
+  .orders__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

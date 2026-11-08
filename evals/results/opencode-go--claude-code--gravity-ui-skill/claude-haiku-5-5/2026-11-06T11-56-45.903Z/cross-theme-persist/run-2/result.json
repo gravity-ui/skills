@@ -1,0 +1,110 @@
+{
+  "status": "passed",
+  "duration": 304.054,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 28,
+    "outputTokens": 11673,
+    "cacheReadTokens": 560269,
+    "cacheWriteTokens": 42615,
+    "totalTokens": 614585
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 2,
+      "file_write": 3,
+      "file_edit": 0,
+      "shell": 12,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 17,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/theme.ts",
+      "/home/sandbox/workspace/src/main.tsx",
+      "/home/sandbox/workspace/src/App.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "cat .agents/skills/gravity-ui/SKILL.md && echo \"-----\" && find .agents -type f && echo \"-----\" && cat AGENTS.md | head -100 && echo \"-----\" && ls -la && git status --short",
+        "success": true
+      },
+      {
+        "command": "cat package.json && echo ----- && find src -type f | xargs ls -la && echo ----- && for f in src/*; do [ -f \"$f\" ] && { echo \"== $f\"; cat \"$f\"; }; done; echo -----; cat index.html tsconfig.json vite.config.ts .gitignore; echo -----; cat .agents/skills/gravity-ui/rules/hallucination-traps.md",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/references/theming.md | head -250 && echo ----- && cat .agents/skills/gravity-ui/references/package-routing.md | head -80",
+        "success": true
+      },
+      {
+        "command": "cat .agents/skills/gravity-ui/scripts/inspect-package.sh | head -60; echo -----; .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme RadioButton Select Segmented 2>&1 | head -120; echo -----; ls node_modules/@gravity-ui/uikit/build/docs 2>/dev/null; cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "bash .agents/skills/gravity-ui/scripts/inspect-package.sh uikit ThemeProvider useTheme RadioButton 2>&1 | head -60; echo -----; ls node_modules/@gravity-ui/uikit/; ls node_modules/@gravity-ui/uikit/build | head -50; echo ----; find node_modules/@gravity-ui/uikit -path '*docs*' | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit && grep -n -i \"theme\" README.md | head -40; echo ----; find build/esm -name \"*.d.ts\" | grep -i -E \"theme|RadioButton|Segmented\" | head -30",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat theme/ThemeProvider.d.ts theme/types.d.ts theme/useTheme.d.ts theme/useThemeValue.d.ts theme/ThemeContext.d.ts; echo ----; cat SegmentedRadioGroup/SegmentedRadioGroup.d.ts SegmentedRadioGroup/SegmentedRadioGroupOption.d.ts; echo ----; sed -n 1,80p theme/ThemeProvider.js 2>/dev/null || ls theme",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,200p Select/Select.d.ts | grep -n -E \"interface|value|onUpdate|options|label|placeholder|size|width|multiple|disabled|title\" | head -60; echo ----; grep -n -A12 \"interface ControlGroupProps\\|interface ControlGroupOption\\|interface ControlProps\" types.d.ts | head -60; echo ----; grep -n \"export\" Select/index.d.ts Select/*.d.ts | head -20; echo; cat /home/sandbox/workspace/node_modules/typescript/package.json | grep '\"version\"'",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,80p Select/types.d.ts | grep -n -E \"value|onUpdate|options|title|size|width|multiple|placeholder|label\" ; grep -n -E \"^\\s+(value|onUpdate|options|size|width|placeholder|title|label|defaultValue|renderSelectedOption)\\??:\" Select/types.d.ts",
+        "success": true
+      },
+      {
+        "command": "sed -n 95,112p Select/types.d.ts; grep -rn \"SelectOption\\b\" Select/index.d.ts | head -3; grep -n \"export\" Select/index.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && npx tsc --noEmit; echo \"tsc exit: $?\"; npx vite build 2>&1 | tail -8; echo \"build exit: ${PIPESTATUS[0]}\"",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && cat > src/theme.tmp.test.ts <<'EOF'\nimport { describe, it, expect, beforeEach, vi } from 'vitest';\nimport { readStoredTheme, writeStoredTheme, THEME_STORAGE_KEY, DEFAULT_THEME } from './theme';\n\nfunction makeStorage(initial: Record<string, string> = {}) {\n  const data: Record<string, string> = { ...initial };\n  return {\n    data,\n    getItem: (k: string) => (k in data ? data[k] : null),\n    setItem: (k: string, v: string) => { data[k] = String(v); },\n  };\n}\n\ndescribe('theme storage', () => {\n  let storage: ReturnType<typeof makeStorage>;\n  beforeEach(() => {\n    storage = makeStorage();\n    vi.stubGlobal('window', { localStorage: storage });\n  });\n\n  it('defaults to light when nothing stored', () => {\n    expect(DEFAULT_THEME).toBe('light');\n    expect(readStoredTheme()).toBe('light');\n  });\n\n  it('restores every valid stored theme', () => {\n    for (const t of ['light', 'dark', 'light-hc', 'dark-hc', 'system']) {\n      storage.data[THEME_STORAGE_KEY] = t;\n      expect(readStoredTheme()).toBe(t);\n    }\n  });\n\n  it('ignores invalid stored values', () => {\n    storage.data[THEME_STORAGE_KEY] = 'neon';\n    expect(readStoredTheme()).toBe('light');\n    storage.data[THEME_STORAGE_KEY] = '';\n    expect(readStoredTheme()).toBe('light');\n  });\n\n  it('round-trips through write then read', () => {\n    writeStoredTheme('dark-hc');\n    expect(storage.data[THEME_STORAGE_KEY]).toBe('dark-hc');\n    expect(readStoredTheme()).toBe('dark-hc');\n  });\n\n  it('does not throw when localStorage is unavailable', () => {\n    vi.stubGlobal('window', {\n      get localStorage() { throw new Error('SecurityError'); },\n    });\n    expect(readStoredTheme()).toBe('light');\n    expect(() => writeStoredTheme('dark')).not.toThrow();\n  });\n});\nEOF\nnpx vitest run src/theme.tmp.test.ts 2>&1 | tail -25; rm -f src/theme.tmp.test.ts; ls src",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 28,
+      "outputTokens": 11673,
+      "cacheReadTokens": 560269,
+      "cacheWriteTokens": 42615,
+      "totalTokens": 614585
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

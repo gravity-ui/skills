@@ -1,0 +1,103 @@
+{
+  "status": "passed",
+  "duration": 455.614,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 24,
+    "outputTokens": 3848,
+    "cacheReadTokens": 364708,
+    "cacheWriteTokens": 27433,
+    "totalTokens": 396013
+  },
+  "model": "claude-sonnet-5-5",
+  "o11y": {
+    "totalTurns": 3,
+    "toolCalls": {
+      "file_read": 1,
+      "file_write": 0,
+      "file_edit": 1,
+      "shell": 11,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 13,
+    "webFetches": [],
+    "filesRead": [
+      "/home/sandbox/workspace/.agents/skills/gravity-ui/SKILL.md"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/main.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -a && cat package.json && cat AGENTS.md && ls .agents/skills/gravity-ui -R | head -50",
+        "success": true
+      },
+      {
+        "command": "sed -n 1,60p .agents/skills/gravity-ui/references/package-routing.md; grep -n -i -C3 \"calendar\\|date-components\\|date-utils\" .agents/skills/gravity-ui/references/package-routing.md | head -120",
+        "success": true
+      },
+      {
+        "command": "find src -type f | head -30 && cat src/*.tsx | head -80; ls node_modules/@gravity-ui; cat .agents/skills/gravity-ui/rules/hallucination-traps.md | head -150",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"'; npm view @gravity-ui/date-components versions --json | tail -15; npm view @gravity-ui/date-components peerDependencies; npm view @gravity-ui/date-components@latest version",
+        "success": true
+      },
+      {
+        "command": "for v in 4.1.0 4.0.0 3.4.2 3.3.2; do echo \"== $v\"; npm view @gravity-ui/date-components@$v peerDependencies --json; done",
+        "success": true
+      },
+      {
+        "command": "npm install @gravity-ui/date-components@4.1.0 @gravity-ui/date-utils@^2.6.0 2>&1 | tail -8; ls node_modules/@gravity-ui/date-components; ls node_modules/@gravity-ui/date-components/build/docs 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "ls node_modules/@gravity-ui/date-components/dist; ls node_modules/@gravity-ui/date-components/dist/docs 2>/dev/null; grep -n -i -B2 -A25 \"required setup\\|calendar\" node_modules/@gravity-ui/date-components/README.md | head -120; ls node_modules/@gravity-ui/date-components/dist/components/Calendar; cat node_modules/@gravity-ui/date-components/dist/components/Calendar/Calendar.d.ts",
+        "success": false
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/date-components/dist/docs/INDEX.md | head -60; ls -R node_modules/@gravity-ui/date-components/dist/docs | head -30; sed -n 60,95p node_modules/@gravity-ui/date-components/README.md",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/date-components/dist/docs/components/Calendar.md",
+        "success": true
+      },
+      {
+        "command": "cat > src/App.tsx <<'EOF'\nimport {useState} from 'react';\nimport {Calendar} from '@gravity-ui/date-components';\nimport type {DateTime} from '@gravity-ui/date-utils';\nimport {Flex, Text} from '@gravity-ui/uikit';\n\nexport function App() {\n  const [date, setDate] = useState<DateTime | null>(null);\n\n  return (\n    <Flex direction=\"column\" gap={4} alignItems=\"flex-start\" style={{padding: 24}}>\n      <Text variant=\"header-1\">Выбор даты</Text>\n      <Calendar value={date} onUpdate={setDate} aria-label=\"Календарь\" />\n      <Text variant=\"body-1\" color=\"secondary\">\n        {date ? `Выбрана дата: ${date.format('DD.MM.YYYY')}` : 'Дата не выбрана'}\n      </Text>\n    </Flex>\n  );\n}\nEOF\npython3 - <<'EOF'\np='src/main.tsx'\ns=open(p).read()\ns=s.replace(\"import { ThemeProvider } from '@gravity-ui/uikit';\",\"import { ThemeProvider } from '@gravity-ui/uikit';\\nimport { settings } from '@gravity-ui/date-utils';\")\ns=s.replace(\"\"\"ReactDOM.createRoot(document.getElementById('root')!).render(\n  <React.StrictMode>\n    <ThemeProvider theme=\"light\">\n      <App />\n    </ThemeProvider>\n  </React.StrictMode>,\n);\"\"\",\"\"\"settings.loadLocale('ru').then(() => {\n  ReactDOM.createRoot(document.getElementById('root')!).render(\n    <React.StrictMode>\n      <ThemeProvider theme=\"light\" lang=\"ru\">\n        <App />\n      </ThemeProvider>\n    </React.StrictMode>,\n  );\n});\"\"\")\nopen(p,'w').write(s)\nEOF\nnpm run build 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit && echo TSC_OK; npm run build 2>&1 | grep -i -E \"error|built in\"; git status --short; rm -rf dist; git status --short | grep dist",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 24,
+      "outputTokens": 3848,
+      "cacheReadTokens": 364708,
+      "cacheWriteTokens": 27433,
+      "totalTokens": 396013
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

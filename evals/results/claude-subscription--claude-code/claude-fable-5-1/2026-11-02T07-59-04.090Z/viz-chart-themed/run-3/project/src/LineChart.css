@@ -1,0 +1,195 @@
+/*
+ * Every color below is a Gravity UI theme token, so the chart re-skins itself
+ * when the surrounding ThemeProvider switches between light and dark.
+ * Series colors come from Gravity's own hue ramps; the dark-theme steps were
+ * picked separately so they sit in the dark lightness band and clear 3:1 on
+ * the dark surface (validated, not eyeballed).
+ */
+.line-chart {
+  --chart-surface: var(--g-color-base-background);
+  --chart-grid: var(--g-color-line-generic);
+  --chart-axis: var(--g-color-infographics-axis);
+  --chart-crosshair: var(--g-color-line-generic-accent);
+  --chart-text-primary: var(--g-color-text-primary);
+  --chart-text-secondary: var(--g-color-text-secondary);
+  --chart-text-muted: var(--g-color-text-hint);
+  --chart-series-1: var(--g-color-private-blue-600-solid);
+  --chart-series-2: var(--g-color-private-orange-600-solid);
+  --chart-series-3: var(--g-color-private-purple-600-solid);
+
+  position: relative;
+  width: 100%;
+  font-family: var(--g-text-body-font-family);
+  color: var(--chart-text-primary);
+}
+
+.g-root_theme_dark .line-chart,
+.g-root_theme_dark-hc .line-chart {
+  --chart-series-1: var(--g-color-private-blue-550-solid);
+  --chart-series-2: var(--g-color-private-orange-600-solid);
+  --chart-series-3: var(--g-color-private-purple-600-solid);
+}
+
+.line-chart__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.line-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.line-chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--chart-text-secondary);
+}
+
+.line-chart__legend-key {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--series-color);
+}
+
+.line-chart__plot {
+  position: relative;
+  width: 100%;
+}
+
+.line-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  border-radius: 8px;
+  outline: none;
+}
+
+.line-chart__svg:focus-visible {
+  box-shadow: 0 0 0 2px var(--g-color-line-focus);
+}
+
+.line-chart__grid {
+  stroke: var(--chart-grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.line-chart__axis {
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.line-chart__tick {
+  fill: var(--chart-text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.line-chart__line {
+  fill: none;
+  stroke: var(--series-color);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.line-chart__end-marker {
+  fill: var(--series-color);
+  stroke: var(--chart-surface);
+  stroke-width: 2;
+}
+
+.line-chart__end-label {
+  fill: var(--chart-text-secondary);
+  font-size: 12px;
+}
+
+.line-chart__crosshair {
+  stroke: var(--chart-crosshair);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+  pointer-events: none;
+}
+
+.line-chart__hover-marker {
+  fill: var(--series-color);
+  stroke: var(--chart-surface);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.line-chart__hit-area {
+  fill: transparent;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.line-chart__tooltip {
+  position: absolute;
+  top: 8px;
+  z-index: 1;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 1px solid var(--g-color-line-generic);
+  border-radius: 8px;
+  background: var(--g-color-base-float);
+  box-shadow: 0 4px 12px var(--g-color-sfx-shadow);
+  color: var(--chart-text-primary);
+  font-size: 13px;
+  line-height: 18px;
+  pointer-events: none;
+}
+
+.line-chart__tooltip-title {
+  margin-bottom: 4px;
+  color: var(--chart-text-secondary);
+}
+
+.line-chart__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.line-chart__tooltip-key {
+  flex: none;
+  width: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--series-color);
+}
+
+.line-chart__tooltip-value {
+  min-width: 36px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--chart-text-primary);
+}
+
+.line-chart__tooltip-name {
+  color: var(--chart-text-secondary);
+}
+
+.line-chart__table {
+  margin-top: 4px;
+}
+
+.line-chart__table-value {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,200 @@
+{
+  "status": "failed",
+  "duration": 1173.828,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 98,
+    "outputTokens": 66338,
+    "cacheReadTokens": 3648871,
+    "cacheWriteTokens": 108101,
+    "totalTokens": 3823408
+  },
+  "model": "claude-opus-5-5",
+  "o11y": {
+    "totalTurns": 10,
+    "toolCalls": {
+      "file_read": 6,
+      "file_write": 11,
+      "file_edit": 3,
+      "shell": 32,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 1
+    },
+    "totalToolCalls": 53,
+    "webFetches": [],
+    "filesRead": [
+      "/tmp/shot1.png",
+      "/tmp/shot2-dragging.png",
+      "/tmp/shot3.png",
+      "/tmp/shot5-mobile.png",
+      "/tmp/flow.png"
+    ],
+    "filesModified": [
+      "/home/sandbox/workspace/src/grid/layout.ts",
+      "/home/sandbox/workspace/src/grid/layout.test.ts",
+      "/home/sandbox/workspace/src/grid/GridLayout.tsx",
+      "/home/sandbox/workspace/src/data.ts",
+      "/home/sandbox/workspace/src/charts/LineChart.tsx",
+      "/home/sandbox/workspace/src/charts/BarList.tsx",
+      "/home/sandbox/workspace/src/charts/SegmentedBar.tsx",
+      "/home/sandbox/workspace/src/widgets.tsx",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/dashboard.css"
+    ],
+    "shellCommands": [
+      {
+        "command": "ls -la && git log --stat | head -30 && cat package.json 2>/dev/null; head -c 600 package-lock.json",
+        "success": true
+      },
+      {
+        "command": "cat src/*.ts* index.html vite.config.ts tsconfig.json .gitignore; ls __agent_eval__; ls node_modules node_modules/@gravity-ui",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.318/96d04e7f37e0f02162c84e6ec8fe474c/dataviz && cat references/palette.md references/marks-and-anatomy.md references/interaction.md | head -400",
+        "success": true
+      },
+      {
+        "command": "cat /tmp/claude-1000/bundled-skills/2.1.318/96d04e7f37e0f02162c84e6ec8fe474c/dataviz/references/anti-patterns.md | head -120; ls node_modules/@gravity-ui/uikit/build/esm/components | tr '\\n' ' '; echo; ls node_modules/@gravity-ui/icons | head; ls node_modules/@gravity-ui/icons/*.js 2>/dev/null | wc -l",
+        "success": true
+      },
+      {
+        "command": "for i in GripHorizontal Grip ArrowsRotateLeft Plus Xmark Pencil Check ChevronsExpandToLines ArrowUpRightFromSquare TrashBin LayoutCells; do ls node_modules/@gravity-ui/icons/$i.js 2>/dev/null; done; grep -o 'view?: [^;]*' node_modules/@gravity-ui/uikit/build/esm/components/Button/Button.d.ts | head -3; grep -n \"interface SegmentedRadioGroupProps\\|export\" node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts | head; grep -n \"theme\\|view\\|type\" node_modules/@gravity-ui/uikit/build/esm/components/Label/Label.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/claude-1000/bundled-skills/2.1.318/96d04e7f37e0f02162c84e6ec8fe474c/dataviz && node scripts/validate_palette.js \"#2a78d6,#eb6834,#1baf7a,#eda100,#e87ba4\" --mode light --surface \"#ffffff\" 2>&1 | tail -30; cd /home/sandbox/workspace; sed -n 1,80p node_modules/@gravity-ui/uikit/build/esm/components/DropdownMenu/DropdownMenu.d.ts | grep -n \"items\\|renderSwitcher\\|switcher\" ; grep -n \"columns\\|data\\|emptyMessage\" node_modules/@gravity-ui/uikit/build/esm/components/Table/Table.d.ts | head",
+        "success": true
+      },
+      {
+        "command": "npx vitest run 2>&1 | tail -30",
+        "success": true
+      },
+      {
+        "command": "python3 - <<'EOF'\np='src/grid/GridLayout.tsx'\ns=open(p).read()\ndef rep(a,b):\n    global s\n    assert a in s, a[:60]\n    s=s.replace(a,b)\nrep(\"\"\"export interface ItemControls {\n  /** Spread on the element that starts a drag (pointer) and moves/resizes by keyboard. */\n  handleProps: React.HTMLAttributes<HTMLElement>;\"\"\",\"\"\"export interface ItemControls {\n  /** Spread on the area that starts a pointer drag (e.g. the widget header). */\n  dragAreaProps: React.HTMLAttributes<HTMLElement>;\n  /** Spread on a focusable handle (mark it `data-grid-handle`): arrows move, Shift+arrows resize. */\n  handleProps: React.HTMLAttributes<HTMLElement>;\"\"\")\nrep(\"\"\"  const interaction = React.useRef<Interaction | null>(null);\"\"\",\"\"\"  const interaction = React.useRef<Interaction | null>(null);\n  const previewRef = React.useRef<Layout | null>(null);\n  const showPreview = (next: Layout | null) => {\n    previewRef.current = next;\n    setPreview(next);\n  };\"\"\")\nrep(\"\"\"      setPreview(moveItem(\"\"\",\"\"\"      showPreview(moveItem(\"\"\")\nrep(\"\"\"      setPreview(\n        resizeItem(\"\"\",\"\"\"      showPreview(\n        resizeItem(\"\"\")\nrep(\"\"\"      setGhost(null);\n      setPreview((current) => {\n        if (commit && act && current) {\n          onLayoutChange(current);\n          const it = current.find((l) => l.i === act.id);\n          if (it) setAnnouncement(describe(it));\n        }\n        return null;\n      });\n    },\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n    [onLayoutChange],\n  );\"\"\",\"\"\"      const current = previewRef.current;\n      setGhost(null);\n      showPreview(null);\n      if (commit && act && current) {\n        onLayoutChange(current);\n        const it = current.find((l) => l.i === act.id);\n        if (it) setAnnouncement(describe(it));\n      }\n    },\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n    [onLayoutChange, getItemLabel],\n  );\"\"\")\nrep(\"\"\"    setPreview(layout);\n    setGhost\"\"\",\"\"\"    showPreview(layout);\n    setGhost\"\"\")\nrep(\"\"\"    } else if (d[1] > 0) {\n      // Moving down must jump past the neighbour below, otherwise gravity snaps it back.\n      const below = layout\n        .filter((o) => o.i !== item.i && o.x < item.x + item.w && o.x + o.w > item.x && o.y >= item.y + item.h)\n        .sort((a, b) => a.y - b.y)[0];\n      next = moveItem(layout, item.i, item.x, below ? below.y + below.h - item.h + 1 : item.y + 1, cols);\n      if (below && next.find((it) => it.i === item.i)!.y <= item.y) {\n        next = moveItem(layout, item.i, item.x, below.y + below.h, cols);\n      }\n    } else {\"\"\",\"\"\"    } else if (d[1] > 0) {\n      // Gravity snaps a one-row nudge back, so step further until the item really moves down.\n      next = layout;\n      for (let y = item.y + 1; y <= bottom(layout); y++) {\n        const candidate = moveItem(layout, item.i, item.x, y, cols);\n        if (candidate.find((it) => it.i === item.i)!.y > item.y) {\n          next = candidate;\n          break;\n        }\n      }\n    } else {\"\"\")\nrep(\"\"\"style={{ height: Math.max(it.h, it.minH ?? 1) * rowHeight + (it.h - 1) * gap }}>\n            {renderItem(it, { handleProps: {}, editable: false, active: false })}\"\"\",\"\"\"style={{ height: it.h * rowHeight + (it.h - 1) * gap }}>\n            {renderItem(it, { dragAreaProps: {}, handleProps: {}, editable: false, active: false })}\"\"\")\nrep(\"\"\"                handleProps: {\n                  onPointerDown: begin('move', it),\n                  onKeyDown: onHandleKeyDown(it),\"\"\",\"\"\"                dragAreaProps: { onPointerDown: begin('move', it) },\n                handleProps: {\n                  onKeyDown: onHandleKeyDown(it),\"\"\")\nopen(p,'w').write(s)\nEOF",
+        "success": true
+      },
+      {
+        "command": "cat > src/useElementSize.ts <<'EOF'\nimport React from 'react';\n\n/** Callback ref + live content-box size (works when the observed node is swapped). */\nexport function useElementSize<T extends HTMLElement>() {\n  const [node, setNode] = React.useState<T | null>(null);\n  const [size, setSize] = React.useState({ width: 0, height: 0 });\n\n  React.useLayoutEffect(() => {\n    if (!node) return;\n    const measure = () => {\n      const { width, height } = node.getBoundingClientRect();\n      setSize((prev) =>\n        Math.abs(prev.width - width) < 0.5 && Math.abs(prev.height - height) < 0.5 ? prev : { width, height },\n      );\n    };\n    measure();\n    const ro = new ResizeObserver(measure);\n    ro.observe(node);\n    return () => ro.disconnect();\n  }, [node]);\n\n  return [setNode, size] as const;\n}\nEOF\ncat > src/grid/grid.css <<'EOF'\n.grid-layout {\n  position: relative;\n  transition: height 0.2s ease;\n}\n\n.grid-layout_stacked {\n  display: flex;\n  flex-direction: column;\n}\n\n.grid-layout:not(.grid-layout_stacked) > .grid-item {\n  position: absolute;\n  top: 0;\n  left: 0;\n  transition:\n    transform 0.2s ease,\n    width 0.2s ease,\n    height 0.2s ease;\n}\n\n.grid-layout > .grid-item.grid-item_active {\n  z-index: 3;\n  transition: none;\n}\n\n.grid-placeholder {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1;\n  border-radius: 12px;\n  background: var(--g-color-base-info-light);\n  outline: 2px dashed var(--g-color-line-info);\n  outline-offset: -2px;\n  transition:\n    transform 0.15s ease,\n    width 0.15s ease,\n    height 0.15s ease;\n}\n\n.grid-resize-handle {\n  position: absolute;\n  right: 0;\n  bottom: 0;\n  width: 20px;\n  height: 20px;\n  cursor: nwse-resize;\n  touch-action: none;\n  z-index: 2;\n}\n\n.grid-resize-handle::after {\n  content: '';\n  position: absolute;\n  right: 5px;\n  bottom: 5px;\n  width: 8px;\n  height: 8px;\n  border-right: 2px solid var(--g-color-line-generic-accent);\n  border-bottom: 2px solid var(--g-color-line-generic-accent);\n  border-bottom-right-radius: 3px;\n  opacity: 0;\n  transition: opacity 0.15s;\n}\n\n.grid-item:hover > .grid-resize-handle::after,\n.grid-item_resize > .grid-resize-handle::after {\n  opacity: 1;\n}\n\nbody.grid-dragging,\nbody.grid-dragging * {\n  cursor: grabbing !important;\n  user-select: none;\n}\n\nbody.grid-resizing,\nbody.grid-resizing * {\n  cursor: nwse-resize !important;\n  user-select: none;\n}\n\n.grid-sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n  clip: rect(0 0 0 0);\n  white-space: nowrap;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .grid-layout,\n  .grid-layout > .grid-item,\n  .grid-placeholder {\n    transition: none;\n  }\n}\nEOF\ngrep -c \"g-color-base-info-light\\|g-color-line-info\\b\\|g-color-line-generic-accent\\|g-color-base-float\\b\\|g-color-line-generic\\b\\|g-color-text-complementary\\|g-color-base-generic-hover\" node_modules/@gravity-ui/uikit/styles/styles.css; for v in g-color-base-info-light g-color-line-info g-color-line-generic-accent g-color-base-float g-color-line-generic g-color-text-complementary g-color-text-positive g-color-text-danger g-color-base-generic g-color-base-background g-shadow g-color-base-float-hover; do printf \"%s: \" $v; grep -c -- \"--$v:\" node_modules/@gravity-ui/uikit/styles/styles.css; done",
+        "success": true
+      },
+      {
+        "command": "for i in ListUl Table ChartColumn ChartLine ChartAreaStacked LayoutHeaderCellsLarge Eye EyeSlash ArrowUp ArrowDown ArrowRotateLeft GripVertical Grip CirclePlus SquarePlus; do printf \"%s \" $i; ls node_modules/@gravity-ui/icons/$i.js >/dev/null 2>&1 && echo ok || echo -; done; grep -n \"options\\|value\\|onUpdate\" node_modules/@gravity-ui/uikit/build/esm/components/controls/types.d.ts 2>/dev/null | head; ls node_modules/@gravity-ui/uikit/build/esm/components/controls",
+        "success": true
+      },
+      {
+        "command": "mkdir -p src/charts && cat > src/format.ts <<'EOF'\nconst full = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });\nconst compact = new Intl.NumberFormat('ru-RU', { notation: 'compact', maximumFractionDigits: 1 });\nconst percent = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 1, minimumFractionDigits: 1 });\nconst dayMonth = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' });\nconst weekdayDate = new Intl.DateTimeFormat('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' });\nconst time = new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' });\n\nexport const fmt = {\n  int: (n: number) => full.format(n),\n  /** Auto-compact for headline figures: 1 284 / 12,9 тыс. / 4,2 млн */\n  compact: (n: number) => (Math.abs(n) < 10_000 ? full.format(n) : compact.format(n)),\n  rub: (n: number) => `${fmt.compact(n)} ₽`,\n  rubFull: (n: number) => `${full.format(n)} ₽`,\n  pct: (n: number) => `${percent.format(n)} %`,\n  signedPct: (n: number) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${percent.format(Math.abs(n))} %`,\n  day: (d: Date) => dayMonth.format(d),\n  longDay: (d: Date) => weekdayDate.format(d),\n  time: (d: Date) => time.format(d),\n};\n\n/** Axis ticks: in full under 10 000, compact on an axis that reaches it — one style per axis. */\nexport function axisFormatter(max: number) {\n  return max >= 10_000 ? (n: number) => compact.format(n) : (n: number) => full.format(n);\n}\n\n/** \"Nice\" ticks from 0: steps of 1 / 2 / 2.5 / 5 × 10^k. */\nexport function niceTicks(max: number, count = 4): number[] {\n  if (max <= 0) return [0, 1];\n  const raw = max / count;\n  const mag = 10 ** Math.floor(Math.log10(raw));\n  const step = [1, 2, 2.5, 5, 10].map((m) => m * mag).find((s) => s >= raw)!;\n  const ticks: number[] = [];\n  for (let v = 0; v < max + step * 0.999; v += step) ticks.push(Math.round(v * 1e6) / 1e6);\n  return ticks;\n}\nEOF\ncat > src/charts/ChartTooltip.tsx <<'EOF'\nimport React from 'react';\n\ninterface Props {\n  /** Anchor point relative to the positioned chart wrapper. */\n  x: number;\n  y: number;\n  containerWidth: number;\n  children: React.ReactNode;\n}\n\n/** Floating readout inside a `position: relative` chart wrapper; flips left near the right edge. */\nexport function ChartTooltip({ x, y, containerWidth, children }: Props) {\n  const flip = x > containerWidth / 2;\n  return (\n    <div\n      className=\"chart-tooltip\"\n      role=\"status\"\n      style={{\n        top: Math.max(0, y),\n        ...(flip ? { right: containerWidth - x + 12 } : { left: x + 12 }),\n      }}\n    >\n      {children}\n    </div>\n  );\n}\n\nexport function TooltipRow({ color, value, label, shape = 'line' }: { color?: string; value: string; label: string; shape?: 'line' | 'rect' }) {\n  return (\n    <div className=\"chart-tooltip__row\">\n      {color && <span className={`chart-key chart-key_${shape}`} style={{ background: color }} />}\n      <span className=\"chart-tooltip__value\">{value}</span>\n      <span className=\"chart-tooltip__label\">{label}</span>\n    </div>\n  );\n}\nEOF",
+        "success": true
+      },
+      {
+        "command": "cat > src/charts/StatTile.tsx <<'EOF'\nimport React from 'react';\nimport { ArrowDown, ArrowUp } from '@gravity-ui/icons';\nimport { Icon } from '@gravity-ui/uikit';\n\nimport { useElementSize } from '../useElementSize';\nimport { fmt } from '../format';\nimport { ChartTooltip } from './ChartTooltip';\n\ninterface Props {\n  value: number;\n  previous: number;\n  trend: number[];\n  format: (n: number) => string;\n  comparison: string;\n  /** Whether a rise is good news (revenue) or bad news (e.g. churn). */\n  upIsGood?: boolean;\n  trendLabel: string;\n}\n\nexport function StatTile({ value, previous, trend, format, comparison, upIsGood = true, trendLabel }: Props) {\n  const delta = previous ? ((value - previous) / previous) * 100 : 0;\n  const good = delta === 0 ? null : delta > 0 === upIsGood;\n  return (\n    <div className=\"stat\">\n      <div className=\"stat__value\">{format(value)}</div>\n      <div className=\"stat__delta\">\n        <span className={`stat__change${good === null ? '' : good ? ' stat__change_good' : ' stat__change_bad'}`}>\n          {delta !== 0 && <Icon data={delta > 0 ? ArrowUp : ArrowDown} size={14} />}\n          {fmt.signedPct(delta)}\n        </span>\n        <span className=\"stat__comparison\">{comparison}</span>\n      </div>\n      <Sparkline values={trend} format={format} label={trendLabel} />\n    </div>\n  );\n}\n\nfunction Sparkline({ values, format, label }: { values: number[]; format: (n: number) => string; label: string }) {\n  const [ref, { width, height }] = useElementSize<HTMLDivElement>();\n  const [hover, setHover] = React.useState<number | null>(null);\n  const pad = 6;\n  const min = Math.min(...values);\n  const max = Math.max(...values);\n  const x = (i: number) => pad + (i / Math.max(1, values.length - 1)) * (width - pad * 2);\n  const y = (v: number) => pad + (1 - (v - min) / (max - min || 1)) * (height - pad * 2);\n  const last = values.length - 1;\n  const ok = width > 20 && height > 16;\n\n  return (\n    <div ref={ref} className=\"stat__spark\">\n      {ok && (\n        <svg\n          width={width}\n          height={height}\n          role=\"img\"\n          aria-label={label}\n          onPointerMove={(e) => {\n            const px = e.clientX - e.currentTarget.getBoundingClientRect().left;\n            setHover(Math.max(0, Math.min(last, Math.round(((px - pad) / (width - pad * 2)) * last))));\n          }}\n          onPointerLeave={() => setHover(null)}\n        >\n          <path\n            d={values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('')}\n            className=\"stat__spark-line\"\n          />\n          {hover !== null && hover !== last && (\n            <circle cx={x(hover)} cy={y(values[hover])} r={4} className=\"stat__spark-hover chart-dot\" />\n          )}\n          <circle cx={x(last)} cy={y(values[last])} r={4} className=\"stat__spark-current chart-dot\" />\n        </svg>\n      )}\n      {ok && hover !== null && (\n        <ChartTooltip x={x(hover)} y={0} containerWidth={width}>\n          <div className=\"chart-tooltip__row\">\n            <span className=\"chart-tooltip__value\">{format(values[hover])}</span>\n            <span className=\"chart-tooltip__label\">\n              {hover === last ? 'последний отрезок' : `отрезок ${hover + 1} из ${values.length}`}\n            </span>\n          </div>\n        </ChartTooltip>\n      )}\n    </div>\n  );\n}\nEOF\ncat > src/charts/Meter.tsx <<'EOF'\nimport { fmt } from '../format';\n\ninterface Props {\n  actual: number;\n  target: number;\n  caption: string;\n}\n\n/** Progress toward a target: fill on a lighter step of the same ramp. */\nexport function Meter({ actual, target, caption }: Props) {\n  const ratio = target ? actual / target : 0;\n  const pct = Math.round(ratio * 100);\n  return (\n    <div className=\"meter\">\n      <div className=\"meter__head\">\n        <span className=\"meter__value\">{pct} %</span>\n        <span className=\"meter__caption\">{caption}</span>\n      </div>\n      <div\n        className=\"meter__track\"\n        role=\"meter\"\n        aria-valuemin={0}\n        aria-valuemax={target}\n        aria-valuenow={actual}\n        aria-valuetext={`${pct} % — ${fmt.rubFull(actual)} из ${fmt.rubFull(target)}`}\n      >\n        <div className=\"meter__fill\" style={{ width: `${Math.min(100, ratio * 100)}%` }} />\n      </div>\n      <div className=\"meter__foot\">\n        <span>{fmt.rub(actual)}</span>\n        <span>цель {fmt.rub(target)}</span>\n      </div>\n    </div>\n  );\n}\nEOF\ncat > src/charts/DataTable.tsx <<'EOF'\nimport { Table, type TableColumnConfig } from '@gravity-ui/uikit';\n\nexport interface TableView {\n  columns: { id: string; name: string; align?: 'start' | 'end' }[];\n  rows: Record<string, string>[];\n}\n\n/** The table view every chart offers, so no value is reachable only by hover. */\nexport function DataTable({ view }: { view: TableView }) {\n  const columns: TableColumnConfig<Record<string, string>>[] = view.columns.map((c) => ({\n    id: c.id,\n    name: c.name,\n    align: c.align ?? 'start',\n  }));\n  return (\n    <div className=\"data-table\">\n      <Table columns={columns} data={view.rows} width=\"max\" />\n    </div>\n  );\n}\nEOF",
+        "success": true
+      },
+      {
+        "command": "sed -i 's/stroke={s.color}/style={{ stroke: s.color }}/; s/fill={s.color}/style={{ fill: s.color }}/g' src/charts/LineChart.tsx && grep -n \"s.color\" src/charts/LineChart.tsx",
+        "success": true
+      },
+      {
+        "command": "cat > src/charts/DataTable.tsx <<'EOF'\nimport React from 'react';\nimport { Table, type TableColumnConfig } from '@gravity-ui/uikit';\n\ntype Row = Record<string, string>;\n\nexport interface TableView {\n  columns: { id: string; name: string; align?: 'start' | 'end' }[];\n  rows: Row[];\n}\n\ninterface Props {\n  view: TableView;\n  renderCell?: Record<string, (value: string, row: Row) => React.ReactNode>;\n}\n\n/** Plain table; also the table view every chart offers, so no value is reachable only by hover. */\nexport function DataTable({ view, renderCell = {} }: Props) {\n  const columns: TableColumnConfig<Row>[] = view.columns.map((c) => ({\n    id: c.id,\n    name: c.name,\n    align: c.align ?? 'start',\n    template: renderCell[c.id] ? (row) => renderCell[c.id](row[c.id], row) : undefined,\n  }));\n  return (\n    <div className=\"data-table\">\n      <Table columns={columns} data={view.rows} width=\"max\" />\n    </div>\n  );\n}\nEOF",
+        "success": true
+      },
+      {
+        "command": "npx tsc --noEmit 2>&1 | head -30",
+        "success": true
+      },
+      {
+        "command": "for v in g-color-text-hint g-color-base-simple-hover g-color-line-focus; do printf \"%s: \" $v; grep -c -- \"--$v:\" node_modules/@gravity-ui/uikit/styles/styles.css; done; npm run build 2>&1 | tail -6; which chromium chromium-browser google-chrome 2>/dev/null; ls ~/.cache/ms-playwright 2>/dev/null; npm ls -g 2>/dev/null | head",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/pw && cd /tmp/pw && npm init -y >/dev/null && timeout 120 npm i playwright@1 2>&1 | tail -2 && timeout 300 npx playwright install --with-deps chromium 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pw && timeout 300 npx playwright install chromium 2>&1 | tail -3; ls ~/.cache/ms-playwright",
+        "success": true
+      },
+      {
+        "command": "(npx vite --port 5179 --strictPort > /tmp/vite.log 2>&1 &) ; sleep 3; mkdir -p /tmp/pwscripts && cat > /tmp/pwscripts/shot.mjs <<'EOF'\nimport { chromium } from '/tmp/pw/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch();\nconst page = await browser.newPage({ viewport: { width: 1360, height: 1100 } });\nconst errors = [];\npage.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.text()); });\npage.on('pageerror', (e) => errors.push(String(e)));\nawait page.goto('http://localhost:5179/');\nawait page.evaluate(() => localStorage.clear());\nawait page.reload();\nawait page.waitForTimeout(800);\nawait page.screenshot({ path: '/tmp/shot1.png', fullPage: true });\n\nconst box = async (title) => page.locator('section.widget', { hasText: title }).first().boundingBox();\n// Drag \"Выручка по категориям\" to the top-left\nconst src = await box('Выручка по категориям');\nawait page.mouse.move(src.x + 120, src.y + 20);\nawait page.mouse.down();\nawait page.mouse.move(src.x - 400, src.y - 100, { steps: 10 });\nawait page.mouse.move(40, 250, { steps: 10 });\nawait page.waitForTimeout(300);\nawait page.screenshot({ path: '/tmp/shot2-dragging.png', fullPage: true });\nawait page.mouse.up();\nawait page.waitForTimeout(400);\n// Resize \"Посещаемость\" narrower via bottom-right handle\nconst t = await box('Посещаемость');\nawait page.mouse.move(t.x + t.width - 6, t.y + t.height - 6);\nawait page.mouse.down();\nawait page.mouse.move(t.x + t.width - 300, t.y + t.height + 60, { steps: 12 });\nawait page.mouse.up();\nawait page.waitForTimeout(400);\n// hover the line chart\nconst svg = page.locator('section.widget', { hasText: 'Посещаемость' }).locator('svg.chart__svg');\nconst sb = await svg.boundingBox();\nawait page.mouse.move(sb.x + sb.width * 0.5, sb.y + sb.height * 0.5);\nawait page.waitForTimeout(200);\nawait page.screenshot({ path: '/tmp/shot3.png', fullPage: true });\nconsole.log('stored:', await page.evaluate(() => localStorage.getItem('viz-dashboard:v1')));\n// Persist check\nawait page.reload(); await page.waitForTimeout(600);\nawait page.screenshot({ path: '/tmp/shot4-reload.png', fullPage: true });\n// narrow viewport\nawait page.setViewportSize({ width: 420, height: 900 });\nawait page.waitForTimeout(500);\nawait page.screenshot({ path: '/tmp/shot5-mobile.png', fullPage: false });\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\nnode /tmp/pwscripts/shot.mjs",
+        "success": false
+      },
+      {
+        "command": "B=/home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell; ldd $B | grep \"not found\"; cat /etc/os-release | head -2; ls /var/lib/apt/lists | head -3",
+        "success": true
+      },
+      {
+        "command": "mkdir -p /tmp/debs /tmp/libroot && cd /tmp/debs && apt-get download libglib2.0-0 libnspr4 libnss3 libatk1.0-0 libdbus-1-3 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libxkbcommon0 libasound2 libatspi2.0-0 libwayland-server0 libdrm2 libffi8 libpcre2-8-0 libsystemd0 libxi6 libxext6 libxrender1 libx11-6 libxcb1 libxau6 libxdmcp6 libbsd0 libmd0 2>&1 | tail -3; for f in *.deb; do dpkg -x $f /tmp/libroot; done; B=/home/node/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell; LD_LIBRARY_PATH=/tmp/libroot/usr/lib/aarch64-linux-gnu:/tmp/libroot/lib/aarch64-linux-gnu ldd $B | grep \"not found\"",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwscripts && LD_LIBRARY_PATH=/tmp/libroot/usr/lib/aarch64-linux-gnu:/tmp/libroot/lib/aarch64-linux-gnu node shot.mjs 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "cat /tmp/vite.log | tail -5; curl -s localhost:5179 | head -3; cd /tmp/pwscripts && cat > t.mjs <<'EOF'\nimport { chromium } from '/tmp/pw/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch({ args: ['--disable-gpu', '--no-zygote', '--single-process'], logger: { isEnabled: () => true, log: (n, s, m) => { if (/err/.test(m)) console.log(m); } } });\nconst page = await browser.newPage();\nawait page.goto('about:blank');\nconsole.log('ok');\nawait browser.close();\nEOF\nLD_LIBRARY_PATH=/tmp/libroot/usr/lib/aarch64-linux-gnu:/tmp/libroot/lib/aarch64-linux-gnu timeout 60 node t.mjs 2>&1 | tail -15",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwscripts && sed -i \"s|chromium.launch()|chromium.launch({ args: ['--disable-gpu', '--no-zygote', '--single-process'] })|\" shot.mjs && LD_LIBRARY_PATH=/tmp/libroot/usr/lib/aarch64-linux-gnu:/tmp/libroot/lib/aarch64-linux-gnu timeout 80 node shot.mjs 2>&1 | tail -20",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwscripts && cat > t2.mjs <<'EOF'\nimport { chromium } from '/tmp/pw/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch({ args: ['--disable-gpu', '--no-zygote', '--single-process'] });\nconst page = await browser.newPage();\nawait page.setContent('<p>hello</p>');\nconsole.log('content ok');\nawait page.goto('http://localhost:5179/');\nconsole.log('goto ok');\nawait browser.close();\nEOF\nDEBUG=pw:browser LD_LIBRARY_PATH=/tmp/libroot/usr/lib/aarch64-linux-gnu:/tmp/libroot/lib/aarch64-linux-gnu timeout 60 node t2.mjs 2>&1 | grep -v \"^\\s*$\" | grep -iv \"dbus\\|gcm\\|fontconfig warn\" | tail -15",
+        "success": true
+      },
+      {
+        "command": "ls /tmp/libroot/usr/lib/aarch64-linux-gnu/nss; ldd /tmp/libroot/usr/lib/aarch64-linux-gnu/nss/libsoftokn3.so | grep \"not found\"; cd /tmp/debs && apt-get download libsqlite3-0 >/dev/null 2>&1; dpkg -x libsqlite3-0*.deb /tmp/libroot; cd /tmp/pwscripts && L=/tmp/libroot/usr/lib/aarch64-linux-gnu; LD_LIBRARY_PATH=$L:$L/nss:/tmp/libroot/lib/aarch64-linux-gnu timeout 60 node t2.mjs 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/pwscripts && L=/tmp/libroot/usr/lib/aarch64-linux-gnu; LD_LIBRARY_PATH=$L:/tmp/libroot/lib/aarch64-linux-gnu timeout 80 node shot.mjs 2>&1 | tail -8",
+        "success": true
+      },
+      {
+        "command": "cd /tmp/debs && apt-get download fonts-dejavu-core libfontconfig1 libfreetype6 libpng16-16 libexpat1 libbrotli1 >/dev/null 2>&1; for f in fonts-dejavu*.deb libfont*.deb libfree*.deb libpng*.deb libexpat*.deb libbrotli*.deb; do dpkg -x $f /tmp/libroot; done; cat > /tmp/libroot/fonts.conf <<'EOF'\n<?xml version=\"1.0\"?><!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">\n<fontconfig><dir>/tmp/libroot/usr/share/fonts</dir><cachedir>/tmp/libroot/fccache</cachedir>\n<alias><family>sans-serif</family><prefer><family>DejaVu Sans</family></prefer></alias>\n<alias><family>system-ui</family><prefer><family>DejaVu Sans</family></prefer></alias></fontconfig>\nEOF\nls /tmp/libroot/usr/share/fonts/truetype/dejavu | head -3; cd /tmp/pwscripts && L=/tmp/libroot/usr/lib/aarch64-linux-gnu; FONTCONFIG_FILE=/tmp/libroot/fonts.conf LD_LIBRARY_PATH=$L:/tmp/libroot/lib/aarch64-linux-gnu timeout 80 node shot.mjs 2>&1 | tail -3",
+        "success": true
+      },
+      {
+        "command": "cat >> src/dashboard.css <<'EOF'\n\n.widget__header:not(.widget__header_draggable) .widget__title {\n  padding-left: 10px;\n}\n\n/* One-column mode is read-only, so the drag hint would only mislead. */\n@media (max-width: 767px) {\n  .dashboard {\n    padding: 16px;\n  }\n  .dashboard__hint {\n    display: none;\n  }\n}\nEOF\ncat > /tmp/pwscripts/flow.mjs <<'EOF'\nimport { chromium } from '/tmp/pw/node_modules/playwright/index.mjs';\nconst browser = await chromium.launch({ args: ['--disable-gpu', '--no-zygote', '--single-process'] });\nconst page = await browser.newPage({ viewport: { width: 1360, height: 1000 } });\nconst errors = [];\npage.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.text()); });\npage.on('pageerror', (e) => errors.push(String(e)));\nawait page.goto('http://localhost:5179/');\nawait page.evaluate(() => localStorage.clear());\nawait page.reload(); await page.waitForTimeout(600);\nconst lay = async () => JSON.parse(await page.evaluate(() => localStorage.getItem('viz-dashboard:v1'))).layout.map(l => `${l.i}@${l.x},${l.y} ${l.w}x${l.h}`).join(' | ');\nconsole.log('start  :', await lay());\n// remove \"Заказы\"\nawait page.getByRole('button', { name: 'Убрать виджет «Заказы»' }).click();\nawait page.waitForTimeout(300);\nconsole.log('removed:', await lay());\n// add back\nawait page.getByRole('button', { name: 'Добавить виджет' }).click();\nawait page.getByRole('menuitem', { name: 'Заказы' }).click();\nawait page.waitForTimeout(300);\nconsole.log('added  :', await lay());\n// keyboard: move \"Выполнение плана\" up and left, resize wider\nconst grip = page.getByRole('button', { name: 'Переместить виджет «Выполнение плана»' });\nawait grip.focus();\nawait page.keyboard.press('ArrowUp');\nawait page.keyboard.press('ArrowLeft');\nawait page.keyboard.press('Shift+ArrowDown');\nawait page.waitForTimeout(300);\nconsole.log('keys   :', await lay());\nconsole.log('live   :', await page.locator('[aria-live]').textContent());\nconsole.log('focus still on grip:', await grip.evaluate((el) => el === document.activeElement));\n// Escape cancels drag\nconst before = await lay();\nconst b = await page.locator('section.widget', { hasText: 'Средний чек' }).boundingBox();\nawait page.mouse.move(b.x + 150, b.y + 20); await page.mouse.down();\nawait page.mouse.move(60, 600, { steps: 8 });\nawait page.keyboard.press('Escape'); await page.mouse.up(); await page.waitForTimeout(300);\nconsole.log('esc unchanged:', before === await lay());\n// table view + 7d range\nawait page.getByRole('button', { name: 'Показать таблицей' }).first().click();\nawait page.getByRole('radio', { name: '7 дней' }).click({ force: true });\nawait page.waitForTimeout(500);\nawait page.screenshot({ path: '/tmp/flow.png', fullPage: true });\nconsole.log('errors:', errors);\nawait browser.close();\nEOF\ncd /tmp/pwscripts && L=/tmp/libroot/usr/lib/aarch64-linux-gnu; FONTCONFIG_FILE=/tmp/libroot/fonts.conf LD_LIBRARY_PATH=$L:/tmp/libroot/lib/aarch64-linux-gnu timeout 80 node flow.mjs 2>&1 | tail -14",
+        "success": true
+      },
+      {
+        "command": "npx vitest run 2>&1 | grep -E \"Tests|passed|failed\"; npm run build 2>&1 | tail -2; pkill -f \"vite --port 5179\"; git status --short",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && for p in /proc/[0-9]*; do grep -qa \"vite.*5179\" $p/cmdline 2>/dev/null && kill ${p#/proc/} 2>/dev/null; done; echo done",
+        "success": false
+      },
+      {
+        "command": "ls; git status --short | head -3",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 98,
+      "outputTokens": 66338,
+      "cacheReadTokens": 3648871,
+      "cacheWriteTokens": 108101,
+      "totalTokens": 3823408
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

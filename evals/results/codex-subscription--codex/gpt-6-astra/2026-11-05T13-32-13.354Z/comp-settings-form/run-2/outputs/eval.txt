@@ -1,0 +1,1910 @@
+
+ RUN  v3.2.7 /home/sandbox/workspace
+
+ ❯ EVAL.ts (7 tests | 2 failed) 19090ms
+   ✓ imports @gravity-ui/uikit 1ms
+   × no raw HTML select 3ms
+     → expected 'import { useRef, useState, type FormE…' not to match /<select[\s>]/
+   ✓ no raw text input 0ms
+   ✓ no Toggle component 0ms
+   ✓ no foreign UI libs 0ms
+   ✓ no Dropdown component 0ms
+   × judge: implements the task with the intended Gravity UI API 19086ms
+     → [judge:environment] FAIL — The profile settings form is built from @gravity-ui/uikit controls: TextInput for name and email, Select for interface language and timezone, Switch for the two-factor toggle, Checkbox for each email-notification option, and Button for Save and Cancel. Raw HTML text inputs/selects or hand-rolled toggles fail. The avatar upload is the exception: a native file input (ideally hidden behind uikit's useFileInput and a Gravity Button) is the documented way and passes.
+  reason: src/App.tsx builds the profile form with native <input> controls for name/email, two raw <select> elements for language/timezone, a checkbox styled as a switch for two-factor, raw checkbox inputs for email options, and native <button> elements for Save/Cancel. It imports no @gravity-ui/uikit controls, so the criterion fails despite the native avatar file input being acceptable.
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  14:30:31
+   Duration  19.25s (transform 35ms, setup 17ms, collect 16ms, tests 19.09s, environment 0ms, prepare 42ms)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  EVAL.ts > no raw HTML select
+AssertionError: expected 'import { useRef, useState, type FormE…' not to match /<select[\s>]/
+
+[32m- Expected:[39m 
+/<select[\s>]/
+
+[31m+ Received:[39m 
+"import { useRef, useState, type FormEvent, type ReactNode } from \"react\";
+import \"./styles.css\";
+
+type IconName =
+  | \"grid\"
+  | \"user\"
+  | \"shield\"
+  | \"bell\"
+  | \"chevron\"
+  | \"upload\"
+  | \"check\"
+  | \"globe\"
+  | \"help\"
+  | \"arrow\"
+  | \"close\"
+  | \"lock\";
+function Icon({
+  name,
+  size = 20,
+  className = \"\",
+}: {
+  name: IconName;
+  size?: number;
+  className?: string;
+}) {
+  const paths: Record<IconName, ReactNode> = {
+    grid: (
+      <>
+        <rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\" />
+        <rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"2\" />
+        <rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\" />
+        <rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"2\" />
+      </>
+    ),
+    user: (
+      <>
+        <circle cx=\"12\" cy=\"8\" r=\"3.5\" />
+        <path d=\"M5 21v-2a7 7 0 0 1 14 0v2\" />
+      </>
+    ),
+    shield: (
+      <>
+        <path d=\"m12 3 8 3v6c0 4.5-5 8-8 9-3-1-8-4.5-8-9V6z\" />
+        <path d=\"m8.5 12 2.3 2.3 4.7-4.7\" />
+      </>
+    ),
+    bell: (
+      <>
+        <path d=\"M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4\" />
+      </>
+    ),
+    chevron: <path d=\"m9 5 7 7-7 7\" />,
+    upload: (
+      <>
+        <path d=\"M12 16V3m-4 4 4-4 4 4M4 15v5h16v-5\" />
+      </>
+    ),
+    check: <path d=\"m5 12 4 4L19 6\" />,
+    globe: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <ellipse cx=\"12\" cy=\"12\" rx=\"4\" ry=\"9\" />
+        <path d=\"M3 12h18\" />
+      </>
+    ),
+    help: (
+      <>
+        <circle cx=\"12\" cy=\"12\" r=\"9\" />
+        <path d=\"M9.5 8a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4m0 4h.01\" />
+      </>
+    ),
+    arrow: <path d=\"M5 12h14m-5-5 5 5-5 5\" />,
+    close: <path d=\"m6 6 12 12M6 18 18 6\" />,
+    lock: (
+      <>
+        <rect x=\"5\" y=\"10\" width=\"14\" height=\"11\" rx=\"3\" />
+        <path d=\"M8 10V7a4 4 0 0 1 8 0v3m-4 4v3\" />
+      </>
+    ),
+  };
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox=\"0 0 24 24\"
+      fill=\"none\"
+      stroke=\"currentColor\"
+      strokeWidth=\"1.65\"
+      strokeLinecap=\"round\"
+      strokeLinejoin=\"round\"
+      className={className}
+      aria-hidden=\"true\"
+    >
+      {paths[name]}
+    </svg>
+  );
+}
+
+type Settings = {
+  name: string;
+  email: string;
+  avatar: string;
+  language: string;
+  timezone: string;
+  twoFactor: boolean;
+  news: boolean;
+  alerts: boolean;
+  digest: boolean;
+};
+const defaults: Settings = {
+  name: \"Александр Иванов\",
+  email: \"alex.ivanov@gmail.com\",
+  avatar: \"\",
+  language: \"ru\",
+  timezone: \"Europe/Moscow\",
+  twoFactor: false,
+  news: true,
+  alerts: true,
+  digest: false,
+};
+const storageKey = \"kontur-profile-settings\";
+function loadSettings(): Settings {
+  try {
+    const value = JSON.parse(localStorage.getItem(storageKey) || \"null\");
+    return value && typeof value === \"object\"
+      ? { ...defaults, ...value }
+      : defaults;
+  } catch {
+    return defaults;
+  }
+}
+const languages = [
+  [\"ru\", \"Русский\"],
+  [\"en\", \"English\"],
+  [\"de\", \"Deutsch\"],
+  [\"es\", \"Español\"],
+  [\"fr\", \"Français\"],
+];
+const timezones = [
+  [\"Europe/Kaliningrad\", \"(UTC+02:00) Калининград\"],
+  [\"Europe/Moscow\", \"(UTC+03:00) Москва\"],
+  [\"Asia/Dubai\", \"(UTC+04:00) Дубай\"],
+  [\"Asia/Yekaterinburg\", \"(UTC+05:00) Екатеринбург\"],
+  [\"Asia/Novosibirsk\", \"(UTC+07:00) Новосибирск\"],
+  [\"Asia/Vladivostok\", \"(UTC+10:00) Владивосток\"],
+  [\"Europe/London\", \"Лондон · Europe/London\"],
+  [\"Europe/Berlin\", \"Берлин · Europe/Berlin\"],
+  [\"America/New_York\", \"Нью-Йорк · America/New_York\"],
+  [\"Asia/Tokyo\", \"(UTC+09:00) Токио\"],
+];
+
+export function App() {
+  const [saved, setSaved] = useState<Settings>(loadSettings);
+  const [form, setForm] = useState<Settings>(saved);
+  const [active, setActive] = useState(\"profile\");
+  const [toast, setToast] = useState(\"\");
+  const [error, setError] = useState(\"\");
+  const [help, setHelp] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const dirty = JSON.stringify(form) !== JSON.stringify(saved);
+  const initials =
+    form.name
+      .trim()
+      .split(/\\s+/)
+      .slice(0, 2)
+      .map((n) => n[0])
+      .join(\"\")
+      .toUpperCase() || \"АИ\";
+  function update<K extends keyof Settings>(key: K, value: Settings[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    setError(\"\");
+  }
+  function notify(message: string) {
+    setToast(message);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setToast(\"\"), 4500);
+  }
+  function save(event: FormEvent) {
+    event.preventDefault();
+    if (!form.name.trim()) {
+      setError(\"Введите имя.\");
+      return;
+    }
+    const next = { ...form, name: form.name.trim(), email: form.email.trim() };
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(next));
+      setSaved(next);
+      setForm(next);
+      setError(\"\");
+      notify(\"Настройки успешно сохранены\");
+    } catch {
+      setError(
+        \"Не удалось сохранить настройки. Попробуйте загрузить фото меньшего размера.\",
+      );
+    }
+  }
+  function upload(file?: File) {
+    if (!file) return;
+    if (![\"image/jpeg\", \"image/png\", \"image/webp\"].includes(file.type)) {
+      setError(\"Выберите изображение в формате JPG, PNG или WebP.\");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError(\"Размер изображения не должен превышать 5 МБ.\");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement(\"canvas\");
+        canvas.width = 256;
+        canvas.height = 256;
+        const ctx = canvas.getContext(\"2d\");
+        if (!ctx) {
+          setError(\"Не удалось обработать изображение.\");
+          return;
+        }
+        const side = Math.min(img.width, img.height);
+        ctx.drawImage(
+          img,
+          (img.width - side) / 2,
+          (img.height - side) / 2,
+          side,
+          side,
+          0,
+          0,
+          256,
+          256,
+        );
+        update(\"avatar\", canvas.toDataURL(\"image/webp\", 0.85));
+      };
+      img.onerror = () =>
+        setError(\"Не удалось открыть изображение. Выберите другой файл.\");
+      img.src = String(reader.result);
+    };
+    reader.onerror = () => setError(\"Не удалось прочитать файл.\");
+    reader.readAsDataURL(file);
+  }
+  const avatar = (small = false) => (
+    <div className={`avatar ${small ? \"avatar-small\" : \"\"}`}>
+      {form.avatar ? (
+        <img src={form.avatar} alt=\"Фото профиля\" />
+      ) : (
+        <span>{initials}</span>
+      )}
+    </div>
+  );
+  const navigate = (id: string) => {
+    setActive(id);
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: \"smooth\", block: \"center\" });
+  };
+
+  return (
+    <div className=\"app-shell\">
+      <aside className=\"sidebar\">
+        <a
+          className=\"brand\"
+          href=\"#profile\"
+          onClick={() => navigate(\"profile\")}
+          aria-label=\"Контур — настройки профиля\"
+        >
+          <span className=\"brand-mark\">
+            <span />
+            <span />
+            <span />
+          </span>
+          контур<span className=\"brand-dot\">.</span>
+        </a>
+        <div className=\"workspace\">
+          <span className=\"workspace-icon\">
+            <Icon name=\"grid\" size={19} />
+          </span>
+          <div>
+            <strong>Личное пространство</strong>
+            <span>Ваш рабочий уголок</span>
+          </div>
+          <span className=\"workspace-status\" />
+        </div>
+        <div className=\"nav-caption\">НАСТРОЙКИ АККАУНТА</div>
+        <nav aria-label=\"Настройки аккаунта\">
+          {(
+            [
+              { id: \"profile\", name: \"Профиль\", icon: \"user\" },
+              { id: \"security\", name: \"Безопасность\", icon: \"shield\" },
+              { id: \"notifications\", name: \"Уведомления\", icon: \"bell\" },
+            ] as const
+          ).map((item) => (
+            <button
+              key={item.id}
+              onClick={() => navigate(item.id)}
+              className={`nav-item ${active === item.id ? \"active\" : \"\"}`}
+            >
+              <Icon name={item.icon} />
+              <span>{item.name}</span>
+              {active === item.id && <span className=\"nav-dot\" />}
+            </button>
+          ))}
+        </nav>
+        <div className=\"sidebar-bottom\">
+          <div className=\"help-card\">
+            <span className=\"help-symbol\">
+              <Icon name=\"help\" size={22} />
+            </span>
+            <strong>Всё под вашим контролем</strong>
+            <p>
+              Настройте пространство так,
+              <br />
+              как удобно именно вам.
+            </p>
+            <button onClick={() => setHelp(true)}>
+              Нужна помощь? <Icon name=\"arrow\" size={16} />
+            </button>
+          </div>
+          <div className=\"sidebar-user\">
+            {avatar(true)}
+            <div>
+              <strong>{saved.name}</strong>
+              <span>Личный аккаунт</span>
+            </div>
+            <span className=\"online-dot\" />
+          </div>
+        </div>
+      </aside>
+      <div className=\"main-shell\">
+        <header className=\"topbar\">
+          <div className=\"breadcrumbs\">
+            <span>Аккаунт</span>
+            <Icon name=\"chevron\" size={13} />
+            <strong>Настройки профиля</strong>
+          </div>
+          <div className=\"topbar-right\">
+            <span className=\"personal-label\">
+              <span />
+              Личное пространство
+            </span>
+            <button
+              className=\"top-avatar\"
+              onClick={() => navigate(\"profile\")}
+              aria-label=\"Перейти к профилю\"
+            >
+              {avatar(true)}
+            </button>
+          </div>
+        </header>
+        <main>
+          <div className=\"page-heading\">
+            <div className=\"eyebrow\">ВАШ АККАУНТ</div>
+            <h1>Настройки профиля</h1>
+            <p>Управляйте личной информацией и настройте всё под себя.</p>
+          </div>
+          <div className=\"welcome-banner\">
+            <div className=\"banner-icon\">
+              <Icon name=\"user\" size={23} />
+            </div>
+            <div>
+              <strong>Ваш профиль — ваше пространство</strong>
+              <p>Актуальная информация помогает сделать работу удобнее.</p>
+            </div>
+            <div className=\"banner-art\" aria-hidden=\"true\">
+              <span className=\"art-orbit orbit-one\" />
+              <span className=\"art-orbit orbit-two\" />
+              <span className=\"art-orbit orbit-three\" />
+              <span className=\"art-shield\">
+                <Icon name=\"shield\" size={30} />
+              </span>
+              <span className=\"art-spark spark-one\">✦</span>
+              <span className=\"art-spark spark-two\">✦</span>
+            </div>
+          </div>
+          <form onSubmit={save}>
+            <div className=\"settings-card\">
+              <section
+                id=\"profile\"
+                className=\"settings-section profile-section\"
+              >
+                <div className=\"section-heading\">
+                  <h2>Личная информация</h2>
+                  <p>Так вас будут видеть другие участники.</p>
+                </div>
+                <div className=\"avatar-row\">
+                  {avatar()}
+                  <div className=\"avatar-controls\">
+                    <div className=\"avatar-buttons\">
+                      <button
+                        className=\"button button-secondary upload-button\"
+                        type=\"button\"
+                        onClick={() => fileRef.current?.click()}
+                      >
+                        <Icon name=\"upload\" size={16} />
+                        Загрузить фото
+                      </button>
+                      {form.avatar && (
+                        <button
+                          className=\"remove-photo\"
+                          type=\"button\"
+                          onClick={() => update(\"avatar\", \"\")}
+                        >
+                          Удалить
+                        </button>
+                      )}
+                    </div>
+                    <span>JPG, PNG или WebP. Не больше 5 МБ.</span>
+                  </div>
+                  <input
+                    ref={fileRef}
+                    type=\"file\"
+                    accept=\"image/jpeg,image/png,image/webp\"
+                    hidden
+                    aria-label=\"Загрузить аватар\"
+                    onChange={(event) => {
+                      upload(event.target.files?.[0]);
+                      event.target.value = \"\";
+                    }}
+                  />
+                </div>
+                <div className=\"field-grid\">
+                  <label className=\"field\">
+                    <span>Имя</span>
+                    <input
+                      required
+                      maxLength={80}
+                      autoComplete=\"name\"
+                      value={form.name}
+                      onChange={(e) => update(\"name\", e.target.value)}
+                      placeholder=\"Ваше имя\"
+                    />
+                  </label>
+                  <label className=\"field\">
+                    <span>
+                      Email{\" \"}
+                      <span className=\"field-lock\">
+                        <Icon name=\"lock\" size={12} />
+                        Только для вас
+                      </span>
+                    </span>
+                    <input
+                      required
+                      type=\"email\"
+                      autoComplete=\"email\"
+                      maxLength={254}
+                      value={form.email}
+                      onChange={(e) => update(\"email\", e.target.value)}
+                      placeholder=\"you@example.com\"
+                    />
+                  </label>
+                </div>
+              </section>
+              <section className=\"settings-section regional-section\">
+                <div className=\"section-heading\">
+                  <h2>Язык и регион</h2>
+                  <p>Для привычного и комфортного интерфейса.</p>
+                </div>
+                <div className=\"field-grid\">
+                  <label className=\"field\">
+                    <span>Язык интерфейса</span>
+                    <div className=\"select-wrap\">
+                      <Icon name=\"globe\" size={17} />
+                      <select
+                        value={form.language}
+                        onChange={(e) => update(\"language\", e.target.value)}
+                      >
+                        {languages.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                      <Icon name=\"chevron\" size={13} className=\"select-arrow\" />
+                    </div>
+                  </label>
+                  <label className=\"field\">
+                    <span>Часовой пояс</span>
+                    <div className=\"select-wrap timezone-select\">
+                      <select
+                        value={form.timezone}
+                        onChange={(e) => update(\"timezone\", e.target.value)}
+                      >
+                        {timezones.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                      <Icon name=\"chevron\" size={13} className=\"select-arrow\" />
+                    </div>
+                  </label>
+                </div>
+                <p className=\"field-hint\">
+                  Часовой пояс используется для отображения времени событий и
+                  уведомлений.
+                </p>
+              </section>
+              <section
+                id=\"security\"
+                className=\"settings-section security-section\"
+              >
+                <div className=\"section-heading\">
+                  <h2>Безопасность</h2>
+                  <p>Дополнительная защита вашего аккаунта.</p>
+                </div>
+                <div className=\"security-row\">
+                  <span className=\"security-icon\">
+                    <Icon name=\"shield\" size={23} />
+                  </span>
+                  <div className=\"security-copy\">
+                    <label htmlFor=\"two-factor\">
+                      Двухфакторная авторизация{\" \"}
+                      <span className=\"recommended\">Рекомендуем</span>
+                    </label>
+                    <p>Подтверждайте вход с помощью дополнительного кода.</p>
+                  </div>
+                  <input
+                    className=\"switch\"
+                    id=\"two-factor\"
+                    type=\"checkbox\"
+                    role=\"switch\"
+                    checked={form.twoFactor}
+                    onChange={(e) => update(\"twoFactor\", e.target.checked)}
+                  />
+                </div>
+              </section>
+              <section
+                id=\"notifications\"
+                className=\"settings-section notifications-section\"
+              >
+                <div className=\"section-heading\">
+                  <h2>Email-уведомления</h2>
+                  <p>Выберите, какие письма вы хотите получать.</p>
+                </div>
+                <div className=\"notification-options\">
+                  {(
+                    [
+                      {
+                        key: \"news\",
+                        title: \"Новости продукта\",
+                        description:
+                          \"Новые функции, улучшения и важные обновления.\",
+                      },
+                      {
+                        key: \"alerts\",
+                        title: \"Системные алерты\",
+                        description:
+                          \"Важные события и информация о вашем аккаунте.\",
+                      },
+                      {
+                        key: \"digest\",
+                        title: \"Дайджест за неделю\",
+                        description:
+                          \"Главное за прошедшую неделю в одном письме.\",
+                      },
+                    ] as const
+                  ).map((item) => (
+                    <label className=\"checkbox-row\" key={item.key}>
+                      <input
+                        type=\"checkbox\"
+                        checked={form[item.key]}
+                        onChange={(e) => update(item.key, e.target.checked)}
+                      />
+                      <span className=\"checkbox-visual\">
+                        <Icon name=\"check\" size={12} />
+                      </span>
+                      <span className=\"checkbox-copy\">
+                        <strong>{item.title}</strong>
+                        <span>{item.description}</span>
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </section>
+            </div>
+            {error && (
+              <div role=\"alert\" className=\"error-message\">
+                {error}
+              </div>
+            )}
+            <footer className=\"form-footer\">
+              <span className={`save-hint ${dirty ? \"has-changes\" : \"\"}`}>
+                <Icon name={dirty ? \"user\" : \"lock\"} size={14} />
+                {dirty
+                  ? \"Есть несохранённые изменения\"
+                  : \"Ваши данные надёжно защищены\"}
+              </span>
+              <div className=\"footer-actions\">
+                <button
+                  className=\"button button-secondary cancel-button\"
+                  type=\"button\"
+                  onClick={() => {
+                    setForm(saved);
+                    setError(\"\");
+                    notify(\"Изменения отменены\");
+                  }}
+                >
+                  Отмена
+                </button>
+                <button className=\"button button-primary\" type=\"submit\">
+                  <Icon name=\"check\" size={17} />
+                  Сохранить
+                </button>
+              </div>
+            </footer>
+          </form>
+          <div className=\"page-bottom\">
+            <span>Маленькие настройки. Большой комфорт.</span>
+            <span>
+              Сделано для вас <span className=\"tiny-star\">✳</span>
+            </span>
+          </div>
+        </main>
+      </div>
+      {toast && (
+        <div role=\"status\" className=\"toast\">
+          <span>
+            <Icon name=\"check\" size={18} />
+          </span>
+          {toast}
+          <button onClick={() => setToast(\"\")} aria-label=\"Закрыть уведомление\">
+            <Icon name=\"close\" size={16} />
+          </button>
+        </div>
+      )}
+      {help && (
+        <div className=\"modal-backdrop\" onClick={() => setHelp(false)}>
+          <div
+            className=\"help-modal\"
+            onKeyDown={(event) => {
+              if (event.key === \"Escape\") setHelp(false);
+              if (event.key === \"Tab\") {
+                const buttons =
+                  event.currentTarget.querySelectorAll<HTMLButtonElement>(
+                    \"button\",
+                  );
+                const first = buttons[0];
+                const last = buttons[buttons.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                  event.preventDefault();
+                  last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                  event.preventDefault();
+                  first.focus();
+                }
+              }
+            }}
+            role=\"dialog\"
+            aria-modal=\"true\"
+            aria-labelledby=\"help-title\"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              autoFocus
+              className=\"modal-close\"
+              aria-label=\"Закрыть справку\"
+              onClick={() => setHelp(false)}
+            >
+              <Icon name=\"close\" />
+            </button>
+            <span className=\"help-symbol\">
+              <Icon name=\"help\" size={25} />
+            </span>
+            <h2 id=\"help-title\">Ваш профиль, ваши настройки</h2>
+            <p>
+              Обновите имя и фото, выберите язык, часовой пояс и нужные
+              уведомления. Нажмите «Сохранить», чтобы применить изменения, или
+              «Отмена», чтобы вернуться к сохранённым значениям.
+            </p>
+            <p>
+              Настройки хранятся в этом браузере. Переключатель двухфакторной
+              авторизации сохраняет предпочтение; для защиты реального аккаунта
+              потребуется подключение сервиса авторизации.
+            </p>
+            <button
+              className=\"button button-primary\"
+              onClick={() => setHelp(false)}
+            >
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+// Preconfigured Gravity UI setup is ALREADY wired here (both CSS imports + ThemeProvider).
+// Implement the requested feature in App.tsx (you may add sibling files).
+import '@gravity-ui/uikit/styles/fonts.css';
+import '@gravity-ui/uikit/styles/styles.css';
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider } from '@gravity-ui/uikit';
+
+import { App } from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme=\"light\">
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>,
+);
+
+
+:root {
+  font-family:
+    \"Inter\",
+    -apple-system,
+    BlinkMacSystemFont,
+    \"Segoe UI\",
+    sans-serif;
+  color: #27332f;
+  background: #f8faf9;
+  font-synthesis: none;
+  font-size: 14px;
+  font-weight: 400;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button {
+  transition:
+    background 0.18s,
+    box-shadow 0.18s,
+    transform 0.18s;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #8ac5ae;
+  outline-offset: 3px;
+}
+button:disabled {
+  cursor: default;
+}
+button:active {
+  transform: translateY(1px);
+}
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 240px;
+  flex: none;
+  background: #fff;
+  border-right: 1px solid #e7ece8;
+  position: fixed;
+  inset: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 35px 20px 0;
+  z-index: 20;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  color: #253e33;
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -1.5px;
+  margin: 0 12px 39px;
+  width: fit-content;
+}
+.brand-dot {
+  color: #429575;
+}
+.brand-mark {
+  width: 29px;
+  height: 30px;
+  position: relative;
+  margin-right: 11px;
+  display: block;
+}
+.brand-mark span {
+  position: absolute;
+  width: 10px;
+  height: 27px;
+  border-radius: 3px;
+  background: #398465;
+  transform: rotate(33deg);
+  top: 1px;
+  left: 4px;
+}
+.brand-mark span:nth-child(2) {
+  left: 15px;
+  height: 18px;
+  top: 0;
+  background: #83b69b;
+}
+.brand-mark span:nth-child(3) {
+  left: 17px;
+  height: 11px;
+  top: 20px;
+  background: #398465;
+}
+.workspace {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 9px;
+  border: 1px solid #e8ece9;
+  border-radius: 9px;
+  margin-bottom: 32px;
+  background: #fcfdfc;
+}
+.workspace-icon {
+  height: 34px;
+  width: 34px;
+  background: #eef3ee;
+  color: #5d7465;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+}
+.workspace div {
+  min-width: 0;
+}
+.workspace strong {
+  font-size: 11px;
+  font-weight: 600;
+  display: block;
+  white-space: nowrap;
+}
+.workspace div > span {
+  display: block;
+  font-size: 10px;
+  color: #8a938d;
+  margin-top: 4px;
+}
+.workspace-status {
+  background: #71a287;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin-left: auto;
+}
+.nav-caption {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.25px;
+  color: #9aa19d;
+  margin: 0 13px 12px;
+}
+.nav-item {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  color: #758079;
+  font-size: 12px;
+  text-align: left;
+  margin: 3px 0;
+}
+.nav-item:hover {
+  background: #f4f7f4;
+}
+.nav-item.active {
+  background: #edf5ef;
+  color: #357653;
+  font-weight: 600;
+}
+.nav-dot {
+  height: 5px;
+  width: 5px;
+  background: #4b8e67;
+  border-radius: 50%;
+  margin-left: auto;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 80px;
+}
+.help-card {
+  background: #f7f9f6;
+  border: 1px solid #edf0e9;
+  border-radius: 9px;
+  padding: 17px 14px;
+  margin: 0 1px 24px;
+}
+.help-symbol {
+  color: #678b73;
+  display: block;
+  margin-bottom: 12px;
+}
+.help-card > strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+.help-card p {
+  font-size: 10px;
+  color: #91988f;
+  line-height: 1.8;
+  margin: 7px 0 13px;
+}
+.help-card button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #487c60;
+  font-weight: 500;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+.sidebar-user {
+  margin: 0 -20px;
+  border-top: 1px solid #edf0ec;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+}
+.sidebar-user > div:nth-child(2) {
+  overflow: hidden;
+}
+.sidebar-user strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.sidebar-user div > span:not(.avatar span) {
+  display: block;
+  font-size: 10px;
+  color: #8a948d;
+  margin-top: 4px;
+}
+.online-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #78a58b;
+  flex: none;
+  margin-left: auto;
+}
+.main-shell {
+  margin-left: 240px;
+  width: calc(100% - 240px);
+}
+.topbar {
+  height: 77px;
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid #e7ece8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 44px;
+}
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 11px;
+  color: #939b95;
+}
+.breadcrumbs strong {
+  color: #566359;
+  font-weight: 500;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+}
+.personal-label {
+  font-size: 10px;
+  color: #818c84;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.personal-label > span {
+  height: 5px;
+  width: 5px;
+  background: #81a78b;
+  border-radius: 50%;
+}
+.top-avatar {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.avatar {
+  width: 66px;
+  height: 66px;
+  background: #e8eee0;
+  color: #778a60;
+  border: 4px solid #f5f7f0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #e9eddf;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-small {
+  height: 33px;
+  width: 33px;
+  font-size: 11px;
+  border: 2px solid #f5f7f0;
+  box-shadow: 0 0 0 1px #ecefe5;
+}
+.top-avatar .avatar-small {
+  height: 32px;
+  width: 32px;
+}
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 36px 48px 22px;
+}
+.eyebrow {
+  color: #7a9584;
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 1.9px;
+  margin-bottom: 9px;
+}
+.page-heading h1 {
+  font-size: 29px;
+  font-weight: 650;
+  letter-spacing: -0.8px;
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+.page-heading > p {
+  font-size: 12px;
+  color: #8b948e;
+  margin: 0;
+}
+.welcome-banner {
+  position: relative;
+  overflow: hidden;
+  background: #eef4ed;
+  border: 1px solid #e3ebe1;
+  border-radius: 10px;
+  min-height: 83px;
+  margin: 26px 0 22px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 24px;
+}
+.banner-icon {
+  height: 42px;
+  width: 42px;
+  flex: none;
+  border: 1px solid #dce7d6;
+  background: #e5eddd;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  color: #6e8e60;
+}
+.welcome-banner strong {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4d624b;
+}
+.welcome-banner p {
+  font-size: 11px;
+  color: #8a9885;
+  margin: 7px 0 0;
+}
+.banner-art {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  width: 162px;
+  height: 100%;
+  color: #819977;
+}
+.art-orbit {
+  border: 1px solid #dce6d5;
+  position: absolute;
+  border-radius: 50%;
+  width: 115px;
+  height: 115px;
+  left: 20px;
+  top: -15px;
+  transform: rotate(-25deg);
+}
+.orbit-two {
+  height: 77px;
+  top: 4px;
+  left: -4px;
+  width: 160px;
+}
+.orbit-three {
+  height: 153px;
+  width: 75px;
+  left: 37px;
+  top: -34px;
+}
+.art-shield {
+  position: absolute;
+  left: 64px;
+  top: 27px;
+  transform: rotate(12deg);
+  color: #7f9a6f;
+}
+.art-spark {
+  position: absolute;
+  color: #a8b999;
+}
+.spark-one {
+  left: 14px;
+  top: 20px;
+  font-size: 18px;
+}
+.spark-two {
+  right: 6px;
+  bottom: 16px;
+  font-size: 13px;
+}
+.settings-card {
+  background: #fff;
+  border: 1px solid #e3e8e3;
+  border-radius: 11px;
+  box-shadow: 0 2px 3px #28392902;
+  overflow: hidden;
+}
+.settings-section {
+  padding: 24px 27px;
+  border-bottom: 1px solid #edf0ed;
+  scroll-margin-top: 20px;
+}
+.settings-section:last-child {
+  border-bottom: 0;
+}
+.section-heading h2 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.15px;
+  margin: 0 0 6px;
+}
+.section-heading p {
+  font-size: 11px;
+  color: #929992;
+  margin: 0;
+  line-height: 1.5;
+}
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 19px;
+  margin: 22px 0;
+}
+.avatar-controls > span {
+  display: block;
+  color: #9ba199;
+  font-size: 10px;
+  margin-top: 9px;
+}
+.avatar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 6px;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 11px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.button-secondary {
+  background: #fff;
+  color: #536056;
+  border: 1px solid #dde3dd;
+  box-shadow: 0 1px 2px #273b2d04;
+}
+.button-secondary:hover {
+  background: #f4f7f3;
+  border-color: #bccbbc;
+}
+.upload-button {
+  height: 31px;
+  font-size: 10px;
+  padding: 0 11px;
+}
+.remove-photo {
+  font-size: 10px;
+  color: #8a6e65;
+  border: 0;
+  background: none;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.field > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #586359;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.field-lock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: #a0a79e;
+  font-weight: 400;
+}
+.field input,
+.field select {
+  width: 100%;
+  height: 38px;
+  border: 1px solid #e0e5df;
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 12px;
+  color: #555e54;
+  font-size: 11px;
+  box-shadow: 0 1px 2px #1c291803;
+  transition: border-color 0.15s;
+}
+.field input:hover,
+.field select:hover {
+  border-color: #aab9a9;
+}
+.regional-section .field-grid {
+  margin-top: 18px;
+}
+.select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.select-wrap > svg:first-child:not(.select-arrow) {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+  color: #8e9a8b;
+}
+.select-wrap select {
+  appearance: none;
+  padding-left: 37px;
+  padding-right: 30px;
+  cursor: pointer;
+}
+.timezone-select select {
+  padding-left: 12px;
+}
+.select-arrow {
+  position: absolute;
+  right: 13px;
+  pointer-events: none;
+  transform: rotate(90deg);
+  color: #929c8e;
+}
+.field-hint {
+  font-size: 10px;
+  color: #a0a59c;
+  margin: 10px 0 0;
+}
+.security-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.security-icon {
+  height: 39px;
+  width: 39px;
+  border: 1px solid #e9eee6;
+  border-radius: 9px;
+  color: #8b9d81;
+  background: #fafbf8;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.security-copy {
+  flex: 1;
+}
+.security-copy label {
+  font-size: 11px;
+  color: #4f5a4f;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.security-copy p {
+  font-size: 10px;
+  color: #9a9f94;
+  margin: 7px 0 0;
+}
+.recommended {
+  display: inline-block;
+  font-size: 8px;
+  color: #81906b;
+  background: #f4f6ec;
+  border: 1px solid #e8ecdc;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-weight: 400;
+}
+.switch {
+  appearance: none;
+  position: relative;
+  width: 34px;
+  height: 20px;
+  border-radius: 12px;
+  background: #dde2db;
+  cursor: pointer;
+  border: 1px solid #d6ddd2;
+  flex: none;
+  transition: background 0.2s;
+}
+.switch:before {
+  content: \"\";
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px #31462a20;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  transition: transform 0.2s;
+}
+.switch:checked {
+  background: #50866a;
+  border-color: #50866a;
+}
+.switch:checked:before {
+  transform: translateX(14px);
+}
+.notification-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+.checkbox-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  width: fit-content;
+}
+.checkbox-row input {
+  position: absolute;
+  opacity: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+.checkbox-visual {
+  width: 15px;
+  height: 15px;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d7ded3;
+  background: #fff;
+  border-radius: 4px;
+  flex: none;
+}
+.checkbox-visual svg {
+  visibility: hidden;
+}
+.checkbox-row input:checked + .checkbox-visual {
+  background: #568568;
+  border-color: #568568;
+  color: #fff;
+}
+.checkbox-row input:checked + .checkbox-visual svg {
+  visibility: visible;
+}
+.checkbox-row input:focus-visible + .checkbox-visual {
+  outline: 3px solid #8ac5ae;
+  outline-offset: 3px;
+}
+.checkbox-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.checkbox-copy strong {
+  font-size: 11px;
+  font-weight: 500;
+  color: #586253;
+}
+.checkbox-copy > span {
+  font-size: 10px;
+  color: #9ba193;
+}
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+.save-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #99a18f;
+}
+.save-hint.has-changes {
+  color: #9b8552;
+}
+.footer-actions {
+  display: flex;
+  gap: 10px;
+}
+.button-primary {
+  background: #3c795c;
+  color: #fff;
+  border: 1px solid #3c795c;
+  box-shadow: 0 2px 3px #3b71581a;
+}
+.button-primary:hover {
+  background: #2f654b;
+  box-shadow: 0 3px 8px #3b715822;
+}
+.cancel-button {
+  padding: 0 20px;
+}
+.page-bottom {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #e8ece5;
+  padding-top: 17px;
+  color: #b0b6ab;
+  font-size: 9px;
+}
+.page-bottom > span:last-child {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.tiny-star {
+  font-size: 16px;
+  color: #91a084;
+}
+.error-message {
+  padding: 12px 16px;
+  border: 1px solid #e8c9c4;
+  color: #9d5349;
+  background: #fff4f0;
+  border-radius: 7px;
+  margin-top: 15px;
+  font-size: 12px;
+}
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: calc(50% + 100px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #d8e3d7;
+  padding: 15px 18px;
+  border-radius: 10px;
+  box-shadow: 0 8px 36px #233b2420;
+  z-index: 50;
+  font-size: 12px;
+  animation: appear 0.2s ease-out;
+  white-space: nowrap;
+}
+.toast > span {
+  color: #4a8563;
+  display: flex;
+}
+.toast button,
+.modal-close {
+  display: flex;
+  border: 0;
+  background: transparent;
+  color: #91a08f;
+  padding: 4px;
+}
+.toast button {
+  margin-left: 18px;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #14281b55;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+.help-modal {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 15px 60px #17291c30;
+}
+.modal-close {
+  position: absolute;
+  top: 17px;
+  right: 17px;
+}
+.help-modal h2 {
+  font-size: 20px;
+  line-height: 1.4;
+  margin-top: 14px;
+}
+.help-modal p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #7b877b;
+}
+.help-modal .button {
+  margin-top: 10px;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    margin-bottom: -8px;
+  }
+  to {
+    opacity: 1;
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 1500px) {
+  main {
+    padding-top: 42px;
+  }
+  .settings-section {
+    padding-top: 27px;
+    padding-bottom: 27px;
+  }
+}
+@media (max-width: 1100px) {
+  .sidebar {
+    width: 210px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .main-shell {
+    margin-left: 210px;
+    width: calc(100% - 210px);
+  }
+  .sidebar-user {
+    margin-left: -14px;
+    margin-right: -14px;
+    padding: 18px 14px;
+  }
+  .workspace {
+    gap: 7px;
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+  .workspace strong {
+    font-size: 10px;
+  }
+  .workspace-icon {
+    width: 30px;
+    flex: none;
+  }
+  .brand {
+    margin-left: 12px;
+  }
+  .topbar {
+    padding: 0 30px;
+  }
+  main {
+    padding: 30px;
+  }
+  .welcome-banner {
+    padding-left: 20px;
+  }
+  .banner-art {
+    right: -33px;
+    opacity: 0.65;
+  }
+  .welcome-banner > div:nth-child(2) {
+    position: relative;
+    z-index: 1;
+  }
+  .recommended {
+    font-size: 7px;
+  }
+  .security-copy label {
+    gap: 6px;
+  }
+}
+@media (max-width: 760px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    padding: 16px 20px;
+    display: block;
+    border-right: 0;
+    border-bottom: 1px solid #e7ece8;
+  }
+  .app-shell {
+    display: block;
+  }
+  .brand {
+    font-size: 25px;
+    margin: 0 0 18px;
+  }
+  .brand-mark {
+    transform: scale(0.85);
+    margin-right: 6px;
+  }
+  .workspace,
+  .nav-caption,
+  .sidebar-bottom {
+    display: none;
+  }
+  .sidebar nav {
+    display: flex;
+    gap: 6px;
+  }
+  .nav-item {
+    font-size: 11px;
+    padding: 10px 12px;
+    justify-content: center;
+    gap: 7px;
+  }
+  .nav-item svg {
+    width: 17px;
+    height: 17px;
+  }
+  .nav-dot {
+    display: none;
+  }
+  .main-shell {
+    margin: 0;
+    width: 100%;
+  }
+  .topbar {
+    height: 54px;
+    padding: 0 23px;
+  }
+  .personal-label {
+    display: none;
+  }
+  .topbar-right {
+    gap: 0;
+  }
+  main {
+    padding: 26px 20px 20px;
+  }
+  .page-heading h1 {
+    font-size: 26px;
+  }
+  .page-heading > p {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .welcome-banner {
+    margin-top: 22px;
+    padding: 17px 15px;
+    gap: 12px;
+  }
+  .welcome-banner strong {
+    font-size: 11px;
+  }
+  .welcome-banner p {
+    font-size: 10px;
+    line-height: 1.5;
+    padding-right: 10px;
+  }
+  .banner-art {
+    display: none;
+  }
+  .banner-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .settings-section {
+    padding: 22px 20px;
+  }
+  .field-grid {
+    gap: 16px;
+  }
+  .security-copy label {
+    flex-wrap: wrap;
+    font-size: 11px;
+  }
+  .security-copy p {
+    line-height: 1.6;
+  }
+  .security-row {
+    gap: 10px;
+  }
+  .security-icon {
+    width: 34px;
+    height: 36px;
+  }
+  .save-hint {
+    font-size: 9px;
+  }
+  .footer-actions {
+    gap: 7px;
+  }
+  .button {
+    padding: 0 13px;
+  }
+  .toast {
+    left: 50%;
+    max-width: 95%;
+    font-size: 11px;
+    padding: 14px;
+  }
+  .toast button {
+    margin-left: 0;
+  }
+  .recommended {
+    font-size: 8px;
+  }
+  .field-lock {
+    font-size: 8px;
+  }
+}
+@media (max-width: 440px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .avatar-row {
+    gap: 14px;
+  }
+  .field-hint {
+    line-height: 1.6;
+  }
+  .form-footer {
+    align-items: flex-start;
+    gap: 16px;
+    flex-direction: column;
+  }
+  .footer-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .save-hint {
+    font-size: 10px;
+  }
+  .page-bottom {
+    font-size: 8px;
+  }
+  .security-copy label {
+    gap: 6px;
+  }
+  .notification-options {
+    gap: 17px;
+  }
+  .welcome-banner strong {
+    font-size: 10px;
+  }
+  .page-heading h1 {
+    font-size: 25px;
+  }
+  .nav-item {
+    padding: 9px 6px;
+    font-size: 10px;
+  }
+  .checkbox-copy > span {
+    line-height: 1.5;
+  }
+  .security-icon {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+.app-shell {
+  line-height: 1.45;
+}
+.notifications-section {
+  padding-bottom: 25px;
+}
+.settings-section {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+.avatar-row {
+  margin: 18px 0;
+}
+.notification-options {
+  gap: 13px;
+}
+.field input,
+.field select {
+  font-size: 12px;
+}
+.section-heading h2 {
+  font-size: 14px;
+}
+.checkbox-copy strong,
+.security-copy label {
+  font-size: 12px;
+}
+
+
+/// <reference types=\"vite/client\" />
+"
+
+ ❯ EVAL.ts:65:19
+     63| // A raw <select> means the model skipped the Gravity Select component.
+     64| test("no raw HTML select", () => {
+     65|   expect(src).not.toMatch(new RegExp("<select[\\s>]"));
+       |                   ^
+     66| });
+     67| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  EVAL.ts > judge: implements the task with the intended Gravity UI API
+Error: [judge:environment] FAIL — The profile settings form is built from @gravity-ui/uikit controls: TextInput for name and email, Select for interface language and timezone, Switch for the two-factor toggle, Checkbox for each email-notification option, and Button for Save and Cancel. Raw HTML text inputs/selects or hand-rolled toggles fail. The avatar upload is the exception: a native file input (ideally hidden behind uikit's useFileInput and a Gravity Button) is the documented way and passes.
+  reason: src/App.tsx builds the profile form with native <input> controls for name/email, two raw <select> elements for language/timezone, a checkbox styled as a switch for two-factor, raw checkbox inputs for email options, and native <button> elements for Save/Cancel. It imports no @gravity-ui/uikit controls, so the criterion fails despite the native avatar file input being acceptable.
+ ❯ EVAL.ts:92:3
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

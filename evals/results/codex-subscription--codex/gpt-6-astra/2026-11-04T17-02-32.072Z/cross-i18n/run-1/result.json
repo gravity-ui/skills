@@ -1,0 +1,107 @@
+{
+  "status": "failed",
+  "duration": 1222.757,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "codex-cli 0.166.0"
+  },
+  "usage": {
+    "inputTokens": 38971,
+    "outputTokens": 4990,
+    "cacheReadTokens": 172288,
+    "cacheWriteTokens": 0,
+    "reasoningTokens": 261,
+    "totalTokens": 216249
+  },
+  "model": "gpt-6-astra",
+  "o11y": {
+    "totalTurns": 4,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 0,
+      "file_edit": 0,
+      "shell": 10,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 10,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [],
+    "shellCommands": [
+      {
+        "command": "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'package.json' -g '*lock*' -g 'README*' -g 'src/**' -g 'app/**' -g 'pages/**' -g 'components/**' -g 'index.html' -g 'vite.config.*' -g 'tsconfig.json'\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"ls -la && cat package.json && cat src/App.tsx && cat src/main.tsx && rg --files -g 'AGENTS.md' /home/sandbox 2>/dev/null\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"git status --short && rg -n 'configure|I18nProvider|Lang|lang:' node_modules/@gravity-ui/uikit/build/esm/i18n* node_modules/@gravity-ui/uikit/build/esm/components/Select node_modules/@gravity-ui/uikit/build/esm/components/RadioButton node_modules/@gravity-ui/uikit/build/esm/index* && cat tsconfig.json && cat index.html\"",
+        "success": false,
+        "exitCode": 2
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/theme/LangProvider.d.ts node_modules/@gravity-ui/uikit/build/esm/components/SegmentedRadioGroup/SegmentedRadioGroup.d.ts tsconfig.json index.html && rg -n 'LangProvider|SegmentedRadioGroup' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/LangProvider.js\"",
+        "success": false,
+        "exitCode": 1
+      },
+      {
+        "command": "/bin/bash -lc \"cat node_modules/@gravity-ui/uikit/build/esm/components/theme/useLang.d.ts && cat node_modules/@gravity-ui/uikit/build/esm/components/types.d.ts | head -100 && cat node_modules/@gravity-ui/uikit/build/esm/components/theme/ThemeProvider.js | head -100 && rg -n 'SegmentedRadioGroup|theme' node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'npm run build'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'NODE'\nimport ts from 'typescript';\nimport fs from 'node:fs';\nimport vm from 'node:vm';\nimport assert from 'node:assert/strict';\nconst source = ts.transpileModule(fs.readFileSync('src/i18n.ts', 'utf8'), {compilerOptions: {module: ts.ModuleKind.CommonJS}}).outputText;\nfunction load(saved, browserLanguage, blocked = false) {\n  const storage = new Map(saved === null ? [] : [['app.language', saved]]);\n  const context = {exports: {}, navigator: {language: browserLanguage}, window: {localStorage: {\n    getItem(key) { if (blocked) throw new Error('Unavailable'); return storage.get(key) ?? null; },\n    setItem(key, value) { if (blocked) throw new Error('Unavailable'); storage.set(key, value); },\n  }}};\n  vm.runInNewContext(source, context);\n  return {api: context.exports, storage};\n}\nassert.equal(load('ru', 'en-US').api.getInitialLanguage(), 'ru');\nassert.equal(load('en', 'ru-RU').api.getInitialLanguage(), 'en');\nassert.equal(load(null, 'ru-RU').api.getInitialLanguage(), 'ru');\nassert.equal(load('invalid', 'de-DE').api.getInitialLanguage(), 'en');\nconst {api, storage} = load(null, 'en-US');\nassert.equal(api.saveLanguage('ru'), true);\nassert.equal(storage.get('app.language'), 'ru');\nassert.equal(api.getInitialLanguage(), 'ru');\nassert.equal(api.saveLanguage('en'), true);\nassert.equal(api.getInitialLanguage(), 'en');\nconst blocked = load(null, 'ru-RU', true).api;\nassert.equal(blocked.getInitialLanguage(), 'ru');\nassert.equal(blocked.saveLanguage('en'), false);\nassert.deepEqual(Object.keys(api.translations.en), Object.keys(api.translations.ru));\nconsole.log('Passed: saved preference, both switch directions, browser locale, invalid preference, unavailable storage, translation completeness.');\nNODE\n\ngit diff --check && git status --short\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module <<'NODE'\nimport assert from 'node:assert/strict';\nimport {getInitialLanguage, saveLanguage, translations} from './src/i18n.ts';\nfunction setup(saved, browserLanguage, blocked = false) {\n  const storage = new Map(saved === null ? [] : [['app.language', saved]]);\n  Object.defineProperty(globalThis, 'navigator', {value: {language: browserLanguage}, configurable: true});\n  globalThis.window = {localStorage: {\n    getItem(key) { if (blocked) throw new Error('Unavailable'); return storage.get(key) ?? null; },\n    setItem(key, value) { if (blocked) throw new Error('Unavailable'); storage.set(key, value); },\n  }};\n  return storage;\n}\nsetup('ru', 'en-US');\nassert.equal(getInitialLanguage(), 'ru');\nsetup('en', 'ru-RU');\nassert.equal(getInitialLanguage(), 'en');\nsetup(null, 'ru-RU');\nassert.equal(getInitialLanguage(), 'ru');\nsetup('invalid', 'de-DE');\nassert.equal(getInitialLanguage(), 'en');\nconst storage = setup(null, 'en-US');\nassert.equal(saveLanguage('ru'), true);\nassert.equal(storage.get('app.language'), 'ru');\nassert.equal(getInitialLanguage(), 'ru');\nassert.equal(saveLanguage('en'), true);\nassert.equal(getInitialLanguage(), 'en');\nsetup(null, 'ru-RU', true);\nassert.equal(getInitialLanguage(), 'ru');\nassert.equal(saveLanguage('en'), false);\nassert.deepEqual(Object.keys(translations.en), Object.keys(translations.ru));\nconsole.log('Passed: saved preference, both switch directions, browser locale, invalid preference, unavailable storage, translation completeness.');\nNODE\n\ngit diff --check\"",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc 'cat .gitignore'",
+        "success": true,
+        "exitCode": 0
+      },
+      {
+        "command": "/bin/bash -lc \"node --input-type=module -e \\\"import {rmSync} from 'node:fs'; rmSync('dist', {recursive: true, force: true});\\\" && git diff --stat\"",
+        "success": true,
+        "exitCode": 0
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 38971,
+      "outputTokens": 4990,
+      "cacheReadTokens": 172288,
+      "cacheWriteTokens": 0,
+      "reasoningTokens": 261,
+      "totalTokens": 216249
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "status": "passed",
+  "duration": 312.646,
+  "provenance": {
+    "agentEvalVersion": "2.6.0",
+    "sandboxBackend": "docker",
+    "sandboxUser": "node",
+    "agentCliVersion": "2.1.318 (Claude Code)"
+  },
+  "usage": {
+    "inputTokens": 42,
+    "outputTokens": 30137,
+    "cacheReadTokens": 879681,
+    "cacheWriteTokens": 47237,
+    "totalTokens": 957097
+  },
+  "model": "claude-haiku-5-5",
+  "o11y": {
+    "totalTurns": 13,
+    "toolCalls": {
+      "file_read": 0,
+      "file_write": 6,
+      "file_edit": 1,
+      "shell": 13,
+      "web_fetch": 0,
+      "web_search": 0,
+      "glob": 0,
+      "grep": 0,
+      "list_dir": 0,
+      "agent_task": 0,
+      "unknown": 0
+    },
+    "totalToolCalls": 20,
+    "webFetches": [],
+    "filesRead": [],
+    "filesModified": [
+      "/home/sandbox/workspace/src/profile/model.ts",
+      "/home/sandbox/workspace/src/profile/ProfileSettingsPage.tsx",
+      "/home/sandbox/workspace/src/profile/ProfileSettingsPage.css",
+      "/home/sandbox/workspace/src/App.tsx",
+      "/home/sandbox/workspace/src/profile/model.test.ts",
+      "/home/sandbox/workspace/src/profile/ssr-smoke.test.tsx"
+    ],
+    "shellCommands": [
+      {
+        "command": "pwd && ls -la && git status --short && git log --oneline | head -5 && find . -path ./node_modules -prune -o -type f -print | grep -v '^./.git/' | head -100",
+        "success": true
+      },
+      {
+        "command": "for f in package.json tsconfig.json vite.config.ts index.html .gitignore src/App.tsx src/main.tsx src/vite-env.d.ts; do echo \"=== $f\"; cat \"$f\"; echo; done; ls node_modules | head -80; ls node_modules | wc -l",
+        "success": true
+      },
+      {
+        "command": "cat node_modules/@gravity-ui/uikit/package.json | grep '\"version\"' && ls node_modules/@gravity-ui/uikit/build/esm/components | head -100 && cat node_modules/@gravity-ui/uikit/build/esm/components/index.d.ts 2>/dev/null | head -150",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace/node_modules/@gravity-ui/uikit/build/esm/components && cat controls/index.d.ts; ls controls; echo ---; cat Switch/Switch.d.ts | head -60; echo ---; cat Checkbox/Checkbox.d.ts | head -60; echo ---; sed -n 1,80p Select/types.d.ts 2>/dev/null || ls Select",
+        "success": true
+      },
+      {
+        "command": "cat controls/TextInput/TextInput.d.ts | head -60; echo ---; grep -n \"ControlProps\" -A12 types.d.ts | head -40; echo ---; cat Avatar/Avatar.d.ts | head -40; echo ---; cat Button/Button.d.ts | head -40; echo ---; sed -n 1,30p Select/tech-components.d.ts; echo ---; grep -rn \"export\" Text/index.d.ts | head; cat Text/Text.d.ts | head -30; echo ---; cat controls/types.d.ts | head -30",
+        "success": true
+      },
+      {
+        "command": "cat Avatar/types/main.d.ts | head -40; echo ---; grep -n \"export type SelectOption\\b\" -A12 Select/types.d.ts; grep -n \"multiple\\|filterable\\|hasClear\" Select/types.d.ts | head; echo ---; grep -n \"type SelectOption<\" -A10 Select/types.d.ts | head -20; echo ---; grep -rn \"validationState\\|errorMessage\" controls/TextInput/TextInput.js | head -3; ls ../../../../../../ | head -0; cat /home/sandbox/workspace/node_modules/@gravity-ui/uikit/package.json | grep -n '\"peerDependencies\"' -A6",
+        "success": true
+      },
+      {
+        "command": "cat Avatar/AvatarImage/types.d.ts 2>/dev/null || grep -rn \"imgUrl\\|text?\" Avatar/AvatarImage/*.d.ts Avatar/AvatarText/*.d.ts Avatar/types/*.d.ts | head; echo ---; sed -n 1,30p Alert/Alert.d.ts; echo ---; grep -n \"TEXT_COLORS\" -A3 Text/colorText/colorText.d.ts | head -20; grep -n \"'positive'\\|danger\" Text/colorText/colorText.d.ts | head -5; echo ---; cat layout/index.d.ts; echo ---; cat Text/text/text.d.ts | grep -n \"variant\" | head -5",
+        "success": true
+      },
+      {
+        "command": "cd /home/sandbox/workspace && timeout 300 npm run build 2>&1 | tail -60",
+        "success": true
+      },
+      {
+        "command": "rm -rf dist && timeout 300 npx vitest run 2>&1 | tail -30; echo \"EXIT=$?\"; which chromium chromium-browser google-chrome 2>/dev/null; ls node_modules/.bin | grep -i \"playwright\\|puppeteer\" ; ls ~/.cache/ms-playwright 2>/dev/null",
+        "success": false
+      },
+      {
+        "command": "ls node_modules | grep -i \"jsdom\\|happy-dom\\|testing-library\\|playwright\" ; ls ~/.cache/ms-playwright 2>/dev/null; echo \"none-check-done\"",
+        "success": true
+      },
+      {
+        "command": "timeout 300 npx vitest run src/profile/ssr-smoke.test.tsx 2>&1 | tail -40",
+        "success": true
+      },
+      {
+        "command": "cat > vitest.smoke.config.mts <<'EOF'\nimport { defineConfig } from 'vitest/config';\nexport default defineConfig({\n  test: { server: { deps: { inline: [/@gravity-ui/] } } },\n});\nEOF\ntimeout 300 npx vitest run --config vitest.smoke.config.mts src/profile/ssr-smoke.test.tsx 2>&1 | tail -40; echo \"---\"; rm -f vitest.smoke.config.mts",
+        "success": true
+      },
+      {
+        "command": "rm -f src/profile/ssr-smoke.test.tsx && timeout 300 npm run build 2>&1 | tail -6 && rm -rf dist && timeout 300 npx vitest run 2>&1 | grep -E \"Test Files|Tests|FAIL|✓|×\" ; rm -rf dist; git status --short",
+        "success": true
+      }
+    ],
+    "errors": [],
+    "thinkingBlocks": 0,
+    "usage": {
+      "inputTokens": 42,
+      "outputTokens": 30137,
+      "cacheReadTokens": 879681,
+      "cacheWriteTokens": 47237,
+      "totalTokens": 957097
+    }
+  },
+  "outputPaths": {
+    "eval": "./outputs/eval.txt",
+    "scripts": {
+      "build": "./outputs/scripts/build.txt"
+    }
+  },
+  "rejudged": {
+    "at": "2026-11-07T15:04:50.887Z",
+    "by": "openrouter--claude-code",
+    "previousStatus": "passed"
+  }
+}
