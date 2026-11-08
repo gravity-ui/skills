@@ -61,10 +61,8 @@ What the numbers say:
 ### Browse
 
 - [`results-evals.html`](results-evals.html) — the nextjs.org/evals view: a row per model, expandable into
-  per-eval pass counts, tokens, duration, cost and screenshots of the generated UI. Open it from a local
-  checkout (it links to files under `results/`).
+  per-eval pass counts, tokens, duration and cost. Open it from a local checkout.
 - [`results-summary.md`](results-summary.md) — per experiment and model: pass rate, mean time, cost estimate.
-- [`results-screenshots.md`](results-screenshots.md) — a screenshot of every eval × model × treatment.
 - `results/<experiment>/<model>/<timestamp>/<eval>/` — the raw data, see [Layout](#layout).
 
 ## How it is measured
@@ -132,10 +130,9 @@ another checkout of the skill (default `../skills/gravity-ui`).
 
 | Command | What it does |
 |---|---|
-| `pnpm eval:run '<experiment glob>'` | Runs experiments one at a time, evals in batches of 4, then screenshots and reports |
+| `pnpm eval:run '<experiment glob>'` | Runs experiments one at a time, evals in batches of 4, then writes the reports |
 | `pnpm verify-evals [id]` | Applies `solutions/<id>` to the fixture and runs the deterministic checks |
-| `pnpm export-results` | Writes `results-summary.md`, `results-screenshots.md`, `results-evals.html` |
-| `pnpm screenshot-results` | Serves each run's build and captures it (clicks to reveal dialogs, toasts, menus, pickers) |
+| `pnpm export-results` | Writes `results-summary.md` and `results-evals.html` |
 | `pnpm rejudge-results <experiment> --evals a,b` | Re-grades stored runs against the current `EVAL.ts` without regenerating code |
 | `pnpm drop-infra-results '<glob>'` | Removes results with too few real verdicts so the next run repeats them |
 | `pnpm prune-results '<glob>' [--keep best]` | Keeps one result per model and eval: the newest, or the one with most passes |
@@ -154,17 +151,16 @@ evals/
   solutions/<id>/      reference implementation per eval (never shown to agents)
   experiments/         one file per gateway × CLI × treatment
   lib/                 experiment factory (gateways, judge, skill install), infra-outcome patterns
-  scripts/             runner wrapper, reports, screenshots, re-judge, result maintenance
+  scripts/             runner wrapper, reports, re-judge, result maintenance
   patches/             @vercel/agent-eval patch
   results/<experiment>/<model>/<timestamp>/<eval>/
     summary.json       pass rate, token usage, fingerprint
     run-N/result.json  status, duration, tokens, CLI version (rejudged runs record the previous status)
     run-N/outputs/     eval.txt (checks and the judge's reasoning), scripts/build.txt
     run-N/project/     the source files the agent wrote or changed
-    run-N/screenshot.jpg
 ```
 
-Agent transcripts, build output and lockfiles are not committed (`.gitignore`); a local run keeps them.
+Agent transcripts, build output, lockfiles and binaries are not committed (`.gitignore`); a local run keeps them.
 
 ## Add an eval
 

@@ -77,8 +77,8 @@ no hand-rolled replacement) and an LLM judge confirms the intended Gravity UI so
 
 All models together: **49% → 89%**. Without the skill agents know `@gravity-ui/uikit` and hand-write the rest
 (navigation, tables, charts, dashboards, landing pages, the markdown editor, the date picker); with it they
-route to the right package. Method, per-task numbers, screenshots of every generated UI and the harness to
-re-run it are in [`evals/`](evals/README.md).
+route to the right package. Method, per-task numbers, the code every agent wrote and the harness to re-run
+it are in [`evals/`](evals/README.md).
 
 ## License
 

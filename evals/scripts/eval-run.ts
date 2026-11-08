@@ -71,6 +71,5 @@ for (const name of experiments) {
     console.log(`##### ${new Date().toISOString()} done ${name} [${batch.join(',')}] (exit ${status})\n`);
   }
 }
-if (existsSync(join(root, 'scripts', 'screenshot-results.ts'))) run('node', ['scripts/screenshot-results.ts', ...experiments]);
 if (existsSync(join(root, 'scripts', 'export-results.ts'))) run('node', ['scripts/export-results.ts']);
 process.exitCode = failed ? 1 : 0;

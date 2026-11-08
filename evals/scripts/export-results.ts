@@ -3,7 +3,7 @@
 // Reads the newest results/<experiment>/<model>/<timestamp>/<eval>/summary.json per (experiment, model).
 import { INFRA } from '../lib/infra.ts';
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
 const resultsDir = join(root, 'results');
@@ -127,44 +127,16 @@ for (const experiment of experiments) {
 writeFileSync(join(root, 'results-summary.md'), lines.join('\n'));
 console.log(`Wrote results-summary.md (${experiments.length} experiment pair(s)).`);
 
-// results-screenshots.md — one thumbnail per eval × model × experiment (first passed run of the newest
-// result, else run-1), from the screenshot.jpg that scripts/screenshot-results.ts writes.
-function screenshotOf(evalDir: string): { path: string; passed: boolean } | null {
-  const runs = dirs(evalDir).filter((d) => d.startsWith('run-')).sort();
-  const shots = runs.filter((r) => existsSync(join(evalDir, r, 'screenshot.jpg')));
-  const passed = shots.find((r) => existsSync(join(evalDir, r, 'result.json')) && JSON.parse(readFileSync(join(evalDir, r, 'result.json'), 'utf8')).status === 'passed');
-  const run = passed ?? shots[0];
-  return run ? { path: relative(root, join(evalDir, run, 'screenshot.jpg')), passed: Boolean(passed) } : null;
-}
-const gallery = ['# Screenshots', '', 'First passed run (✓) of the newest result per eval and model, or run-1 when none passed (✗). `pnpm screenshot-results` refreshes them.', ''];
-for (const experiment of dirs(resultsDir).sort()) {
-  const byModel = latestRuns(experiment);
-  const models = [...byModel.keys()].sort();
-  const evals = [...new Set([...byModel.values()].flatMap((m) => [...m.keys()]))].sort();
-  if (!models.length) continue;
-  gallery.push(`## ${experiment}`, '', `| Eval | ${models.join(' | ')} |`, `| --- |${models.map(() => ' --- |').join('')}`);
-  for (const evalName of evals) {
-    const cells = models.map((m) => {
-      const dir = byModel.get(m)?.get(evalName);
-      const shot = dir && screenshotOf(dir);
-      return shot ? `${shot.passed ? '✓' : '✗'} <a href="${shot.path}"><img src="${shot.path}" width="240"></a>` : '—';
-    });
-    gallery.push(`| ${evalName} | ${cells.join(' | ')} |`);
-  }
-  gallery.push('');
-}
-writeFileSync(join(root, 'results-screenshots.md'), gallery.join('\n'));
-
 // results-evals.html — the nextjs.org/evals layout: one row per model (agent, mean duration, mean cost,
 // success rate without and with the skill), expandable into one row per eval with the pass counts, mean
-// input tokens, duration and cost of that eval, and its screenshots.
+// input tokens, duration and cost of that eval.
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 const fmtPct = (p: number, n: number) => (n ? `${Math.round((100 * p) / n)}%` : '—');
 const fmtSec = (s: number) => `${s.toFixed(0)}s`;
 const fmtUsd = (v: number | null) => (v === null ? '—' : `$${v.toFixed(3)}`);
 const fmtTok = (t: number) => (t >= 1e6 ? `${(t / 1e6).toFixed(1)}M` : t >= 1e3 ? `${(t / 1e3).toFixed(1)}K` : String(t));
 const PRETTY: Record<string, string> = { 'claude-subscription': 'Claude subscription', 'codex-subscription': 'ChatGPT subscription', 'opencode-go': 'OpenCode Go', openrouter: 'OpenRouter' };
-type EvalRow = { name: string; base?: { passed: number; total: number; timeouts: number }; skill?: { passed: number; total: number; timeouts: number }; tokens: number[]; seconds: number[]; costs: (number | null)[]; shots: { path: string; passed: boolean; skill: boolean }[] };
+type EvalRow = { name: string; base?: { passed: number; total: number; timeouts: number }; skill?: { passed: number; total: number; timeouts: number }; tokens: number[]; seconds: number[]; costs: (number | null)[] };
 const sections: string[] = [];
 for (const experiment of experiments) {
   const [gateway, cli] = experiment.split('--');
@@ -172,7 +144,7 @@ for (const experiment of experiments) {
   const withSkill = latestRuns(experiment + SKILL);
   for (const model of [...new Set([...base.keys(), ...withSkill.keys()])].sort()) {
     const rows = new Map<string, EvalRow>();
-    const row = (name: string) => rows.get(name) ?? rows.set(name, { name, tokens: [], seconds: [], costs: [], shots: [] }).get(name)!;
+    const row = (name: string) => rows.get(name) ?? rows.set(name, { name, tokens: [], seconds: [], costs: [] }).get(name)!;
     for (const [skill, evals] of [[false, base.get(model)], [true, withSkill.get(model)]] as const) {
       for (const [name, dir] of evals ?? []) {
         const s: Summary = JSON.parse(readFileSync(join(dir, 'summary.json'), 'utf8'));
@@ -182,8 +154,6 @@ for (const experiment of experiments) {
         r[skill ? 'skill' : 'base'] = { passed: st.passed, total: st.passed + st.failed, timeouts: st.timeouts };
         if (st.passed + st.failed) r.seconds.push(st.seconds / (st.passed + st.failed));
         if (s.usage?.runsWithUsage) { r.tokens.push(((s.usage.inputTokens ?? 0) + (s.usage.cacheReadTokens ?? 0)) / s.usage.runsWithUsage); const c = costUsd(model, s.usage); r.costs.push(c === null ? null : c / s.usage.runsWithUsage); }
-        const shot = screenshotOf(dir);
-        if (shot) r.shots.push({ ...shot, skill });
       }
     }
     if (!rows.size) continue;
@@ -197,12 +167,11 @@ for (const experiment of experiments) {
     const tok = mean(all.flatMap((r) => r.tokens));
     const detail = all.map((r) => {
       const cell = (x?: { passed: number; total: number; timeouts: number }) => (x ? `${x.passed}/${x.total}${x.timeouts ? `<small> +${x.timeouts} t/o</small>` : ''}` : '—');
-      const shots = r.shots.map((sh) => `<a href="${esc(sh.path)}" title="${sh.skill ? 'with skill' : 'baseline'}${sh.passed ? ', passed' : ', failed'}"><img src="${esc(sh.path)}" loading="lazy"></a>`).join('');
-      return `<tr><td class="ev">${esc(r.name)}</td><td>${cell(r.base)}</td><td>${cell(r.skill)}</td><td>${fmtTok(mean(r.tokens))}</td><td>${fmtSec(mean(r.seconds))}</td><td>${fmtUsd(r.costs.length && r.costs.every((c) => c !== null) ? mean(r.costs as number[]) : null)}</td><td class="shots">${shots}</td></tr>`;
+      return `<tr><td class="ev">${esc(r.name)}</td><td>${cell(r.base)}</td><td>${cell(r.skill)}</td><td>${fmtTok(mean(r.tokens))}</td><td>${fmtSec(mean(r.seconds))}</td><td>${fmtUsd(r.costs.length && r.costs.every((c) => c !== null) ? mean(r.costs as number[]) : null)}</td></tr>`;
     }).join('');
     sections.push(`<details><summary><span class="model">${esc(model)}</span><span>${esc(PRETTY[gateway] ?? gateway)}</span><span>${esc(cli)}</span><span>${fmtSec(secs)}</span><span>${fmtUsd(cost)}</span><span class="rate">${fmtPct(b.p, b.n)}${b.t ? `<small> +${b.t} t/o</small>` : ''}</span><span class="rate skill">${fmtPct(s.p, s.n)}${s.t ? `<small> +${s.t} t/o</small>` : ''}</span></summary>
 <p class="note">Model avg input tokens: ${fmtTok(tok)} (cached reads included). Runs per eval: 4; a cell is passed/run; t/o are timeouts and gateway limits, excluded from the rate.</p>
-<table><thead><tr><th>Evaluation</th><th>Base</th><th>+ skill</th><th>Avg input tokens</th><th>Avg duration</th><th>Avg cost</th><th>Screenshots (base, skill)</th></tr></thead><tbody>${detail}</tbody></table></details>`);
+<table><thead><tr><th>Evaluation</th><th>Base</th><th>+ skill</th><th>Avg input tokens</th><th>Avg duration</th><th>Avg cost</th></tr></thead><tbody>${detail}</tbody></table></details>`);
   }
 }
 writeFileSync(join(root, 'results-evals.html'), `<!doctype html><meta charset="utf-8"><title>gravity-ui skill — evals</title>
@@ -220,7 +189,6 @@ p.note{margin:0 16px 10px;color:#666;font-size:13px}
 table{width:calc(100% - 32px);margin:0 16px 16px;border:1px solid #e5e5e5;border-radius:10px;border-spacing:0;font-size:14px}
 th{text-align:left;color:#666;font-weight:500;padding:10px 12px;background:#fafafa;border-bottom:1px solid #e5e5e5}
 td{padding:9px 12px;border-bottom:1px solid #eee;white-space:nowrap}tr:last-child td{border-bottom:0}td.ev{font-family:ui-monospace,Menlo,monospace;font-size:13px}
-td.shots{white-space:normal}td.shots img{height:44px;width:70px;object-fit:cover;object-position:top;border:1px solid #ddd;border-radius:4px;margin:2px 2px 0 0;vertical-align:middle}
 </style>
 <h1>Current evals</h1><p class="sub">Latest result of every model and eval; base vs the gravity-ui skill. 17 evals × 4 runs, judged in the sandbox.</p>
 <div class="head"><span>Model</span><span>Gateway</span><span>Agent</span><span>Avg duration</span><span>Avg cost</span><span style="text-align:right">Success rate</span><span style="text-align:right">With skill</span></div>
