@@ -58,24 +58,24 @@ natively, not `AGENTS.md`).
 
 ## Evaluation
 
-Does the skill help? Ten models solved 17 Gravity UI tasks four times each without the skill and four times
+Does the skill help? Ten models solved 18 Gravity UI tasks four times each without the skill and four times
 with it. A run passes when the project builds, deterministic checks pass (the right `@gravity-ui/*` package,
 no hand-rolled replacement) and an LLM judge confirms the intended Gravity UI solution.
 
 | Model | Agent CLI | Without skill | With skill |
 |---|---|---|---|
-| Claude Sonnet 5.5 | Claude Code | 65% | 99% |
-| Claude Fable 5.1 | Claude Code | 68% | 96% |
-| Claude Opus 5.5 | Claude Code | 72% | 94% |
-| GPT-6 Astra | Codex | 28% | 91% |
-| Claude Haiku 5.5 | Claude Code | 66% | 88% |
-| DeepSeek v4 Pro | Codex | 56% | 88% |
-| GLM 5.3 Flash | Codex | 48% | 85% |
-| GPT-6.1 Sol | Codex | 25% | 85% |
-| GPT-6 Luna | Codex | 15% | 85% |
-| Kimi K3 | Claude Code | 50% | 79% |
+| Claude Sonnet 5.5 | Claude Code | 67% | 99% |
+| Claude Fable 5.1 | Claude Code | 69% | 96% |
+| Claude Opus 5.5 | Claude Code | 74% | 94% |
+| GPT-6 Astra | Codex | 32% | 92% |
+| Claude Haiku 5.5 | Claude Code | 68% | 89% |
+| DeepSeek v4 Pro | Codex | 53% | 89% |
+| GPT-6.1 Sol | Codex | 29% | 86% |
+| GPT-6 Luna | Codex | 15% | 86% |
+| GLM 5.3 Flash | Codex | 45% | 81% |
+| Kimi K3 | Claude Code | 51% | 79% |
 
-All models together: **49% → 89%**. Without the skill agents know `@gravity-ui/uikit` and hand-write the rest
+All models together: **50% → 89%**. Without the skill agents know `@gravity-ui/uikit` and hand-write the rest
 (navigation, tables, charts, dashboards, landing pages, the markdown editor, the date picker); with it they
 route to the right package. Method, per-task numbers, the code and transcript of every run and the harness to
 re-run it are in [gravity-ui/skills-evals](https://github.com/gravity-ui/skills-evals).
